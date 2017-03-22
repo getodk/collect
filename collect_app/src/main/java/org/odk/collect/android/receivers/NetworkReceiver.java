@@ -25,8 +25,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
@@ -108,7 +106,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     c.move(-1);
                     while (c.moveToNext()) {
                         Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(Long.valueOf(l));
+                        toUpload.add(l);
                     }
                 }
             } finally {
@@ -298,7 +296,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } catch (GooglePlayServicesAvailabilityException playEx) {
                 return null;
             } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
                 return null;
             } catch (GoogleAuthException e) {
                 // Failure. The call is not expected to ever succeed so it

@@ -123,13 +123,12 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         try {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
-            e.printStackTrace();
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
 
-        if (PlayServicesUtil.checkPlayServices(GeoPointMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointMapActivity.this)) {
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {

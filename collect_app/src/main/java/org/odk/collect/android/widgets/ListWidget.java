@@ -19,11 +19,9 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -177,7 +175,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
-                        e.printStackTrace();
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

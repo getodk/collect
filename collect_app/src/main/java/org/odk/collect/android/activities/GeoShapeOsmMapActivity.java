@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -99,7 +100,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
         mSaveButton = (Button) findViewById(R.id.save);
         mClearButton = (Button) findViewById(R.id.clear);
-        if (PlayServicesUtil.checkPlayServices(GeoShapeOsmMapActivity.this)) {
+        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoShapeOsmMapActivity.this)) {
 
             resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
             mMap = (MapView) findViewById(R.id.geoshape_mapview);
@@ -250,7 +251,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             Marker marker = new Marker(mMap);
             marker.setPosition(new GeoPoint(gp[0], gp[1]));
             marker.setDraggable(true);
-            marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
@@ -300,7 +301,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void upMyLocationOverlayLayers() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             overlayMyLocationLayers();
         } else {
             showGPSDisabledAlertToUser();
@@ -323,7 +324,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     private void disableMyLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mMyLocationOverlay.setEnabled(false);
             mMyLocationOverlay.disableFollowLocation();
             mMyLocationOverlay.disableMyLocation();
@@ -434,7 +435,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             Marker marker = new Marker(mMap);
             marker.setPosition(point);
             marker.setDraggable(true);
-            marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);

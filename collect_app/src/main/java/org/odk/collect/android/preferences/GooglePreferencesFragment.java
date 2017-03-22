@@ -12,6 +12,8 @@ import android.preference.PreferenceFragment;
 import android.text.InputFilter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
+import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 
@@ -46,7 +48,7 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                                 .toString());
                         String value =
                                 (String) ((ListPreference) preference).getEntryValues()[index];
-                        ((ListPreference) preference).setSummary(value);
+                        preference.setSummary(value);
                         return true;
                     }
                 });

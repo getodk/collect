@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nafundi
+ * Copyright (C) 2017 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,23 +20,34 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -46,29 +57,33 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.GoogleSheetsTask;
+import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener {
-    private final static String TAG = "SheetsUploaderActivity";
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
+
+public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener,
+        EasyPermissions.PermissionCallbacks {
+    private final static String TAG = "SheetsUploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
     private final static int GOOGLE_USER_DIALOG = 3;
-
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
-
+    protected GoogleAccountCredential mCredential;
     private ProgressDialog mProgressDialog;
     private AlertDialog mAlertDialog;
-
     private String mAlertMsg;
     private boolean mAlertShowing;
-
     private Long[] mInstancesToSend;
-
     private GoogleSheetsInstanceUploaderTask mUlTask;
 
     @Override
@@ -118,13 +133,18 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             Log.i(TAG, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
         }
 
-        runTask();
+        // Initialize credentials and service object.
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(GoogleSheetsTask.SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+        getResultsFromApi();
     }
 
     private void runTask() {
         mUlTask = (GoogleSheetsInstanceUploaderTask) getLastNonConfigurationInstance();
         if (mUlTask == null) {
-            mUlTask = new GoogleSheetsInstanceUploaderTask();
+            mUlTask = new GoogleSheetsInstanceUploaderTask(mCredential);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -147,26 +167,169 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GoogleSheetsTask.PLAYSTORE_REQUEST_CODE && resultCode == RESULT_OK) {
-            // the user got sent to the playstore
-            // it returns to this activity, but we'd rather they manually retry
-            // so we finish
-            finish();
-        } else if (requestCode == GoogleSheetsTask.USER_RECOVERABLE_REQUEST_CODE
-                && resultCode == RESULT_OK) {
-            // authorization granted, try again
-            runTask();
-        } else if (requestCode == GoogleSheetsTask.USER_RECOVERABLE_REQUEST_CODE
-                && resultCode == RESULT_CANCELED) {
-            // the user backed out
-            finish();
+    /**
+     * Attempt to call the API, after verifying that all the preconditions are
+     * satisfied. The preconditions are: Google Play Services installed, an
+     * account was selected and the device currently has online access. If any
+     * of the preconditions are not satisfied, the app will prompt the user as
+     * appropriate.
+     */
+    private void getResultsFromApi() {
+        if (!PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            PlayServicesUtil.acquireGooglePlayServices(this);
+        } else if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        } else if (!isDeviceOnline()) {
+            ToastUtils.showShortToast("No network connection available.");
         } else {
-            Log.e(TAG, "unknown request: " + requestCode + " :: result: " + resultCode);
+            runTask();
         }
     }
+
+    /**
+     * Attempts to set the account used with the API credentials. If an account
+     * name was previously saved it will use that one; otherwise an account
+     * picker dialog will be shown to the user. Note that the setting the
+     * account to use with the credentials object requires the app to have the
+     * GET_ACCOUNTS permission, which is requested here if it is not already
+     * present. The AfterPermissionGranted annotation indicates that this
+     * function will be rerun automatically whenever the GET_ACCOUNTS permission
+     * is granted.
+     */
+    @AfterPermissionGranted(GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS)
+    private void chooseAccount() {
+        if (EasyPermissions.hasPermissions(
+                this, Manifest.permission.GET_ACCOUNTS)) {
+            // ensure we have a google account selected
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String googleUsername = prefs.getString(
+                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
+            if (!googleUsername.equals("")) {
+                mCredential.setSelectedAccountName(googleUsername);
+                getResultsFromApi();
+            } else {
+                // Start a dialog from which the user can choose an account
+                startActivityForResult(
+                        mCredential.newChooseAccountIntent(),
+                        GoogleSheetsTask.REQUEST_ACCOUNT_PICKER);
+            }
+        } else {
+            // Request the GET_ACCOUNTS permission via a user dialog
+            EasyPermissions.requestPermissions(
+                    this,
+                    "This app needs to access your Google account (via Contacts).",
+                    GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS,
+                    Manifest.permission.GET_ACCOUNTS);
+        }
+    }
+
+
+    /**
+     * Called when an activity launched here (specifically, AccountPicker
+     * and authorization) exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.
+     *
+     * @param requestCode code indicating which activity result is incoming.
+     * @param resultCode  code indicating the result of the incoming
+     *                    activity result.
+     * @param data        Intent (containing result data) returned by incoming
+     *                    activity result.
+     */
+    @Override
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GoogleSheetsTask.REQUEST_GOOGLE_PLAY_SERVICES:
+                if (resultCode != RESULT_OK) {
+                    // the user got sent to the playstore
+                    // it returns to this activity, but we'd rather they manually retry
+                    // so we finish
+                    finish();
+                } else {
+                    getResultsFromApi();
+                }
+                break;
+            case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null &&
+                        data.getExtras() != null) {
+                    String accountName =
+                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        SharedPreferences prefs =
+                                PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+                        editor.apply();
+                        mCredential.setSelectedAccountName(accountName);
+                        getResultsFromApi();
+                    }
+                }
+                break;
+            case GoogleSheetsTask.REQUEST_AUTHORIZATION:
+                if (resultCode == RESULT_OK) {
+                    getResultsFromApi();
+                }
+                break;
+        }
+    }
+
+    /**
+     * Respond to requests for permissions at runtime for API 23 and above.
+     *
+     * @param requestCode  The request code passed in
+     *                     requestPermissions(android.app.Activity, String, int, String[])
+     * @param permissions  The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(
+                requestCode, permissions, grantResults, this);
+    }
+
+    /**
+     * Callback for when a permission is granted using the EasyPermissions
+     * library.
+     *
+     * @param requestCode The request code associated with the requested
+     *                    permission
+     * @param list        The requested permission list. Never null.
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        // Do nothing.
+    }
+
+    /**
+     * Callback for when a permission is denied using the EasyPermissions
+     * library.
+     *
+     * @param requestCode The request code associated with the requested
+     *                    permission
+     * @param list        The requested permission list. Never null.
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        // Do nothing.
+    }
+
+    /**
+     * Checks whether the device currently has a network connection.
+     *
+     * @return true if the device has a network connection, false otherwise.
+     */
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
 
     @Override
     protected void onStart() {
@@ -356,12 +519,26 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         mAlertDialog.show();
     }
 
-    public class GoogleSheetsInstanceUploaderTask extends
+    @Override
+    public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
+        // in interface, but not needed
+    }
+
+    private class GoogleSheetsInstanceUploaderTask extends
             GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
+
+        GoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.sheets.v4.Sheets.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("ODK-Collect")
+                    .build();
+        }
 
         @Override
         protected HashMap<String, String> doInBackground(Long... values) {
-            mResults = new HashMap<String, String>();
+            mResults = new HashMap<>();
 
             String selection = InstanceColumns._ID + "=?";
             String[] selectionArgs = new String[(values == null) ? 0 : values.length];
@@ -373,50 +550,18 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                     selectionArgs[i] = values[i].toString();
                 }
             }
-
-            String token;
             try {
-                token = authenticate(GoogleSheetsUploaderActivity.this, mGoogleUserName);
-            } catch (IOException e) {
-                // network or server error, the call is expected to succeed if
-                // you try again later. Don't attempt to call again immediately
-                // - the request is likely to fail, you'll hit quotas or
-                // back-off.
-                e.printStackTrace();
-                mResults.put("0", oauth_fail + e.getMessage());
-                return mResults;
-            } catch (GooglePlayServicesAvailabilityException playEx) {
-                Dialog alert = GooglePlayServicesUtil.getErrorDialog(
-                        playEx.getConnectionStatusCode(), GoogleSheetsUploaderActivity.this,
-                        PLAYSTORE_REQUEST_CODE);
-                alert.show();
-                return null;
+                String token = mCredential.getToken();
+
+                //Immediately invalidate so we get a differnet one if we have to try again
+                GoogleAuthUtil.invalidateToken(GoogleSheetsUploaderActivity.this, token);
+
+                uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
-                GoogleSheetsUploaderActivity.this.startActivityForResult(e.getIntent(),
-                        USER_RECOVERABLE_REQUEST_CODE);
-                e.printStackTrace();
-                return null;
-            } catch (GoogleAuthException e) {
-                // Failure. The call is not expected to ever succeed so it
-                // should not be retried.
-                e.printStackTrace();
-                mResults.put("0", oauth_fail + e.getMessage());
-                return mResults;
+                startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            } catch (IOException | GoogleAuthException e) {
             }
-
-            if (token == null) {
-                // if token is null,
-                return null;
-            }
-
-            uploadInstances(selection, selectionArgs, token);
             return mResults;
         }
     }
-
-    @Override
-    public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
-        // in interface, but not needed
-    }
-
 }

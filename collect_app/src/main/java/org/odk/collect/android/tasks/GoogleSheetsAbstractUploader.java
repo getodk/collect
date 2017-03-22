@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nafundi
+ * Copyright (C) 2017 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -20,8 +20,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
-import android.text.Html;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 
@@ -30,14 +28,8 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
-import com.google.gdata.client.spreadsheet.SpreadsheetService;
-import com.google.gdata.client.spreadsheet.WorksheetQuery;
-import com.google.gdata.data.spreadsheet.CellEntry;
-import com.google.gdata.data.spreadsheet.CellFeed;
-import com.google.gdata.data.spreadsheet.ListEntry;
-import com.google.gdata.data.spreadsheet.WorksheetEntry;
-import com.google.gdata.data.spreadsheet.WorksheetFeed;
-import com.google.gdata.util.ServiceException;
+import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -50,7 +42,6 @@ import org.odk.collect.android.picasa.PhotoEntry;
 import org.odk.collect.android.picasa.PicasaClient;
 import org.odk.collect.android.picasa.PicasaUrl;
 import org.odk.collect.android.picasa.UserFeed;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -62,10 +53,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,16 +68,13 @@ import java.util.regex.Pattern;
 public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
-    private final static String TAG = "GoogleSheetsUploadTask";
-
-    protected HashMap<String, String> mResults;
-
     protected static final String picasa_fail = "Picasa Error: ";
     protected static final String oauth_fail = "OAUTH Error: ";
     protected static final String form_fail = "Form Error: ";
-
+    private final static String TAG = "GoogleSheetsUploadTask";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
+    protected HashMap<String, String> mResults;
 
     /**
      * @param selection
@@ -153,16 +137,16 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
     }
 
     private boolean uploadOneSubmission(String id, String instanceFilePath, String jrFormId,
-            String token, String formFilePath) {
+                                        String token, String formFilePath) {
         // if the token is null fail immediately
         if (token == null) {
             mResults.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
             return false;
         }
 
-        HashMap<String, String> answersToUpload = new HashMap<String, String>();
-        HashMap<String, String> photosToUpload = new HashMap<String, String>();
-        HashMap<String, PhotoEntry> uploadedPhotos = new HashMap<String, PhotoEntry>();
+        HashMap<String, String> answersToUpload = new HashMap<>();
+        HashMap<String, String> photosToUpload = new HashMap<>();
+        HashMap<String, PhotoEntry> uploadedPhotos = new HashMap<>();
 
         HttpTransport h = AndroidHttp.newCompatibleTransport();
         GoogleCredential gc = new GoogleCredential();
@@ -178,20 +162,22 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             getColumns(formFilePath, columnNames);
         } catch (FileNotFoundException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         } catch (XmlPullParserException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         } catch (IOException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         } catch (FormException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
+            return false;
+        }
+
+        if (columnNames.size() == 0) {
+            mResults.put(id,
+                    form_fail + "No columns found in the form to upload");
             return false;
         }
 
@@ -217,7 +203,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             processInstanceXML(instanceFile, answersToUpload, photosToUpload);
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         } catch (FormException e) {
@@ -225,11 +210,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     form_fail + Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
@@ -237,7 +220,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
-            e3.printStackTrace();
         }
 
         // make sure column names in submission are legal (may be different than form)
@@ -260,7 +242,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             try {
                 albumToUse = getOrCreatePicasaAlbum(client, jrFormId);
             } catch (IOException e) {
-                e.printStackTrace();
                 GoogleAuthUtil.invalidateToken(Collect.getInstance(), token);
                 mResults.put(id, picasa_fail + e.getMessage());
                 return false;
@@ -270,7 +251,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 uploadPhotosToPicasa(photosToUpload, uploadedPhotos, client, albumToUse,
                         instanceFile);
             } catch (IOException e1) {
-                e1.printStackTrace();
                 mResults.put(id, picasa_fail + e1.getMessage());
                 return false;
             }
@@ -311,7 +291,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         // now parse the url string if we have one
         final String googleHeader = "docs.google.com/spreadsheets/d/";
-        String sheetId;
+        String spreadsheetId;
         if (urlString == null || urlString.length() < googleHeader.length()) {
             mResults.put(
                     id,
@@ -334,225 +314,173 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                                 urlString));
                 return false;
             }
-            sheetId = urlString.substring(start, end);
+            spreadsheetId = urlString.substring(start, end);
         }
 
-        SpreadsheetService service = new SpreadsheetService("ODK-Collect");
-        service.setAuthSubToken(token);
-
-        // Define the URL to request.
-        URL spreadsheetFeedURL = null;
+        Spreadsheet response = null;
         try {
-            spreadsheetFeedURL = new URL("https://spreadsheets.google.com/feeds/worksheets/"
-                    + sheetId + "/private/full");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
-        }
-
-        WorksheetQuery query = new WorksheetQuery(spreadsheetFeedURL);
-        WorksheetFeed feed = null;
-        try {
-            feed = service.query(query, WorksheetFeed.class);
+            response = mService.spreadsheets()
+                    .get(spreadsheetId)
+                    .setIncludeGridData(false)
+                    .execute();
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
-            return false;
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            if (e.getLocalizedMessage().equalsIgnoreCase("forbidden")) {
-                mResults.put(
-                        id,
-                        form_fail
-                                + Collect.getInstance().getString(
-                                R.string.google_sheets_access_denied));
-            } else {
-                mResults.put(id, form_fail + Html.fromHtml(e.getResponseBody()));
-            }
             return false;
         }
 
-        List<WorksheetEntry> spreadsheets = feed.getEntries();
-        // get the first worksheet
-        WorksheetEntry we = spreadsheets.get(0);
+        String spreadsheetName = response.getSheets().get(0).getProperties().getTitle();
+
+        List<List<Object>> values;
+        List headerFeed = null;
+
+        try {
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            if (values == null || values.size() == 0) {
+                mResults.put(id, form_fail + "No data found");
+            } else {
+                headerFeed = values.get(0);
+            }
+        } catch (IOException e) {
+            mResults.put(id, form_fail + e.getMessage());
+            return false;
+        }
 
         // check the headers....
-        URL headerFeedUrl = null;
-        try {
-            headerFeedUrl = new URI(we.getCellFeedUrl().toString()
-                    + "?min-row=1&max-row=1&min-col=1&max-col=" + we.getColCount()
-                    + "&return-empty=true").toURL();
-        } catch (MalformedURLException e1) {
-            e1.printStackTrace();
-            mResults.put(id, form_fail + e1.getMessage());
-            return false;
-        } catch (URISyntaxException e1) {
-            e1.printStackTrace();
-            mResults.put(id, form_fail + e1.getMessage());
-            return false;
-        }
-
-        CellFeed headerFeed = null;
-        try {
-            headerFeed = service.getFeed(headerFeedUrl, CellFeed.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
-        }
-
         boolean emptyheaders = true;
 
         // go through headers
         // if they're empty, resize and add
-        for (CellEntry c : headerFeed.getEntries()) {
-            if (c.getCell().getValue() != null) {
-                emptyheaders = false;
-                break;
+        if (headerFeed != null) {
+            for (Object c : headerFeed) {
+                if (c != null) {
+                    emptyheaders = false;
+                    break;
+                }
             }
         }
 
         if (emptyheaders) {
             // if the headers were empty, resize the spreadsheet
             // and add the headers
-            we.setColCount(columnNames.size());
-            try {
-                we.update();
-            } catch (IOException e2) {
-                e2.printStackTrace();
-                mResults.put(id, form_fail + e2.getMessage());
-                return false;
-            } catch (ServiceException e2) {
-                e2.printStackTrace();
-                mResults.put(id, form_fail + e2.getMessage());
-                return false;
-            } catch (UnsupportedOperationException e) {
-                e.printStackTrace();
-                mResults.put(
-                        id,
-                        form_fail
-                                + Collect.getInstance().getString(
-                                R.string.google_sheets_update_error));
-                return false;
-            }
 
-            // get the cell feed url
-            URL cellFeedUrl = null;
-            try {
-                cellFeedUrl = new URI(we.getCellFeedUrl().toString()
-                        + "?min-row=1&max-row=1&min-col=1&max-col=" + columnNames.size()
-                        + "&return-empty=true").toURL();
-            } catch (MalformedURLException e1) {
-                e1.printStackTrace();
-                mResults.put(id, form_fail + e1.getMessage());
-                return false;
-            } catch (URISyntaxException e1) {
-                e1.printStackTrace();
-                mResults.put(id, form_fail + e1.getMessage());
-                return false;
-            }
+            ArrayList<Object> list = new ArrayList<>();
+            for (String column : columnNames)
+                list.add(column);
 
-            // and the cell feed
-            CellFeed cellFeed = null;
-            try {
-                cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-                mResults.put(id, form_fail + e.getMessage());
-                return false;
-            } catch (ServiceException e) {
-                e.printStackTrace();
-                mResults.put(id, form_fail + e.getMessage());
-                return false;
-            }
+            ArrayList<List<Object>> content = new ArrayList<>();
+            content.add(list);
+            ValueRange row = new ValueRange();
+            row.setValues(content);
 
+
+            /**
+             *  Appends the data at the last row
+             *
+             *  append(spreadsheetId, range, ValueRange)
+             *
+             *  spreadsheetId   :   Unique sheet id
+             *  range           :   A1 notation range. It specifies the range within which the
+             *                      spreadsheet should be searched.
+             *              hint   "Giving only sheetName in range searches in the complete sheet"
+             *  ValueRange      :   Content that needs to be appended  (List<List<Object>>)
+             *
+             *  For more info   :   https://developers.google.com/sheets/api/reference/rest/
+             */
+
+            // Send the new row to the API for insertion.
             // write the headers
-            for (int i = 0; i < cellFeed.getEntries().size(); i++) {
-                CellEntry cell = cellFeed.getEntries().get(i);
-                String column = columnNames.get(i);
-                cell.changeInputValueLocal(column);
-                try {
-                    cell.update();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    mResults.put(id, form_fail + e.getMessage());
-                    return false;
-                } catch (ServiceException e) {
-                    e.printStackTrace();
-                    mResults.put(id, form_fail + e.getMessage());
-                    return false;
-                }
+            try {
+                mService.spreadsheets().values()
+                        .append(spreadsheetId, spreadsheetName, row)
+                        .setIncludeValuesInResponse(true)
+                        .setValueInputOption("USER_ENTERED").execute();
+            } catch (IOException e) {
+                mResults.put(id, form_fail + e.getMessage());
+                return false;
             }
         }
 
         // we may have updated the feed, so get a new one
         // update the feed
+
         try {
-            headerFeedUrl = new URI(we.getCellFeedUrl().toString()
-                    + "?min-row=1&max-row=1&min-col=1&max-col=" + we.getColCount()
-                    + "&return-empty=true").toURL();
-        } catch (MalformedURLException e3) {
-            e3.printStackTrace();
-            mResults.put(id, form_fail + e3.getMessage());
-            return false;
-        } catch (URISyntaxException e3) {
-            e3.printStackTrace();
-            mResults.put(id, form_fail + e3.getMessage());
-            return false;
-        }
-        try {
-            headerFeed = service.getFeed(headerFeedUrl, CellFeed.class);
-        } catch (IOException e2) {
-            e2.printStackTrace();
-            mResults.put(id, form_fail + e2.getMessage());
-            return false;
-        } catch (ServiceException e2) {
-            e2.printStackTrace();
-            mResults.put(id, form_fail + e2.getMessage());
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            if (values == null || values.size() == 0) {
+                mResults.put(id, form_fail + "No data found");
+                return false;
+            } else {
+                headerFeed = values.get(0);
+            }
+        } catch (IOException e) {
+            mResults.put(id, form_fail + e.getMessage());
             return false;
         }
 
-        // see if our columns match, now
-        URL cellFeedUrl = null;
-        try {
-            cellFeedUrl = new URI(we.getCellFeedUrl().toString()
-                    + "?min-row=1&max-row=1&min-col=1&max-col=" + headerFeed.getEntries().size()
-                    + "&return-empty=true").toURL();
-        } catch (MalformedURLException e1) {
-            e1.printStackTrace();
-            mResults.put(id, form_fail + e1.getMessage());
-            return false;
-        } catch (URISyntaxException e1) {
-            e1.printStackTrace();
-            mResults.put(id, form_fail + e1.getMessage());
-            return false;
+        //check if any column name is blank
+
+        boolean hasEmptyColumn = false;
+        for (Object column : headerFeed) {
+            if (column.equals("")) {
+                hasEmptyColumn = true;
+                break;
+            }
         }
-        CellFeed cellFeed = null;
+
+        // replace blank column name with a single space
+
+        if (hasEmptyColumn) {
+            ArrayList<Object> list = new ArrayList<>();
+            for (Object column : headerFeed) {
+                if (column.equals("")) {
+                    list.add(" ");
+                } else {
+                    list.add(column);
+                }
+            }
+
+            ArrayList<List<Object>> content = new ArrayList<>();
+            content.add(list);
+            ValueRange row = new ValueRange();
+            row.setValues(content);
+
+            try {
+                mService.spreadsheets().values()
+                        .update(spreadsheetId, spreadsheetName + "!A1:1", row)
+                        .setValueInputOption("USER_ENTERED").execute();
+            } catch (IOException e) {
+                mResults.put(id, form_fail + e.getMessage());
+                return false;
+            }
+        }
+
+        // we may have updated the feed, so get a new one
+        // update the feed
+
         try {
-            cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
+            if (values == null || values.size() == 0) {
+                mResults.put(id, form_fail + "No data found");
+                return false;
+            } else {
+                headerFeed = values.get(0);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
-        } catch (ServiceException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
 
         // first, get all the columns in the spreadsheet
-        ArrayList<String> sheetCols = new ArrayList<String>();
-        for (int i = 0; i < cellFeed.getEntries().size(); i++) {
-            CellEntry cell = cellFeed.getEntries().get(i);
-            sheetCols.add(cell.getPlainTextContent());
+        ArrayList<String> sheetCols = new ArrayList<>();
+        if (headerFeed != null) {
+            for (Object column : headerFeed) {
+                sheetCols.add(column.toString());
+            }
+        } else {
+            mResults.put(id, form_fail + "couldn't get header feed");
+            return false;
         }
 
-        ArrayList<String> missingColumns = new ArrayList<String>();
+        ArrayList<String> missingColumns = new ArrayList<>();
         for (String col : columnNames) {
             if (!sheetCols.contains(col)) {
                 missingColumns.add(col);
@@ -578,73 +506,69 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         // if we get here.. all has matched
         // so write the values
-        ListEntry row = new ListEntry();
 
         // add photos to answer set
-        Iterator<String> photoIterator = uploadedPhotos.keySet().iterator();
-        while (photoIterator.hasNext()) {
-            String key = photoIterator.next();
+        for (String key : uploadedPhotos.keySet()) {
             String url = uploadedPhotos.get(key).getImageLink();
             answersToUpload.put(key, url);
         }
 
-        Iterator<String> answerIterator = answersToUpload.keySet().iterator();
-        while (answerIterator.hasNext()) {
-            String path = answerIterator.next();
-            String answer = answersToUpload.get(path);
-            // Check to see if answer is a location, if so, get rid of accuracy
-            // and altitude
-            // try to match a fairly specific pattern to determine
-            // if it's a location
-            // [-]#.# [-]#.# #.# #.#
-            Pattern p = Pattern
-                    .compile(
-                            "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                                    + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
-            Matcher m = p.matcher(answer);
-            if (m.matches()) {
-                // get rid of everything after the second space
-                int firstSpace = answer.indexOf(" ");
-                int secondSpace = answer.indexOf(" ", firstSpace + 1);
-                answer = answer.substring(0, secondSpace);
-                answer = answer.replace(' ', ',');
+        ArrayList<Object> list = new ArrayList<>();
+
+        for (String path : sheetCols) {
+            String answer = "";
+            if (path.equals(" ") || !columnNames.contains(path)) {
+                //ignores the blank fields and extra fields
             }
-            row.getCustomElements().setValueLocal(TextUtils.htmlEncode(path), answer);
+            else if (columnNames.contains(path)) { // if column present in sheet
+                if (answersToUpload.containsKey(path)) {
+                    answer = answersToUpload.get(path);
+                    // Check to see if answer is a location, if so, get rid of accuracy
+                    // and altitude
+                    // try to match a fairly specific pattern to determine
+                    // if it's a location
+                    // [-]#.# [-]#.# #.# #.#
+                    Pattern p = Pattern
+                            .compile(
+                                    "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+                                            + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
+                    Matcher m = p.matcher(answer);
+                    if (m.matches()) {
+                        // get rid of everything after the second space
+                        int firstSpace = answer.indexOf(" ");
+                        int secondSpace = answer.indexOf(" ", firstSpace + 1);
+                        answer = answer.substring(0, secondSpace);
+                        answer = answer.replace(' ', ',');
+                    }
+                }
+            }
+            list.add(answer);
         }
+        ArrayList<List<Object>> content = new ArrayList<>();
+        content.add(list);
+
+        ValueRange row = new ValueRange();
+        row.setValues(content);
+
 
         // Send the new row to the API for insertion.
         try {
-            URL listFeedUrl = we.getListFeedUrl();
-            row = service.insert(listFeedUrl, row);
+            mService.spreadsheets().values()
+                    .append(spreadsheetId, spreadsheetName, row)
+                    .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
-            return false;
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            if (e.getLocalizedMessage().equalsIgnoreCase("Forbidden")) {
-                mResults.put(
-                        id,
-                        form_fail
-                                + Collect.getInstance().getString(
-                                R.string.google_sheets_access_denied));
-            } else {
-                mResults.put(id, form_fail + Html.fromHtml(e.getResponseBody()));
-            }
             return false;
         }
 
         mResults.put(id, Collect.getInstance().getString(R.string.success));
         return true;
-
     }
 
     private void uploadPhotosToPicasa(HashMap<String, String> photos,
-            HashMap<String, PhotoEntry> uploaded, PicasaClient client, AlbumEntry albumToUse,
-            File instanceFile) throws IOException {
-        Iterator<String> itr = photos.keySet().iterator();
-        while (itr.hasNext()) {
-            String key = itr.next();
+                                      HashMap<String, PhotoEntry> uploaded, PicasaClient client, AlbumEntry albumToUse,
+                                      File instanceFile) throws IOException {
+        for (String key : photos.keySet()) {
             String filename = instanceFile.getParentFile() + "/" + photos.get(key);
             File toUpload = new File(filename);
 
@@ -838,8 +762,10 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         }
     }
 
-    private void processInstanceXML(File instanceFile, HashMap<String, String> answersToUpload,
-            HashMap<String, String> photosToUpload) throws XmlPullParserException, IOException,
+    private void processInstanceXML(File instanceFile,
+                                    HashMap<String, String> answersToUpload,
+                                    HashMap<String, String> photosToUpload)
+            throws XmlPullParserException, IOException,
             FormException {
         FileInputStream in;
 
@@ -852,8 +778,10 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         in.close();
     }
 
-    private void readInstanceFeed(XmlPullParser parser, HashMap<String, String> answersToUpload,
-            HashMap<String, String> photosToUpload) throws XmlPullParserException, IOException,
+    private void readInstanceFeed(XmlPullParser parser,
+                                  HashMap<String, String> answersToUpload,
+                                  HashMap<String, String> photosToUpload)
+            throws XmlPullParserException, IOException,
             FormException {
         ArrayList<String> path = new ArrayList<String>();
 
@@ -962,7 +890,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         synchronized (this) {
             if (mStateListener != null) {
                 // update progress and total
-                mStateListener.progressUpdate(values[0].intValue(), values[1].intValue());
+                mStateListener.progressUpdate(values[0], values[1]);
             }
         }
     }
@@ -977,4 +905,29 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         return m.matches();
     }
 
+    /**
+     * Fetches the spreadsheet with the provided spreadsheetId
+     * <p>
+     * get(sheetId, range) method requires two parameters
+     * <p>
+     * since we want to search the whole sheet so we provide only the sheet name as range
+     * <p>
+     * range is in A1 notation
+     * eg. Sheet1!A1:G7
+     * <p>
+     * For more info   :   https://developers.google.com/sheets/api/reference/rest/
+     *
+     * @param spreadsheetId
+     * @param spreadsheetName
+     * @return
+     * @throws IOException
+     */
+    private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
+            throws IOException {
+        ValueRange response = mService.spreadsheets()
+                .values()
+                .get(spreadsheetId, spreadsheetName)
+                .execute();
+        return response.getValues();
+    }
 }

@@ -90,7 +90,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         mView.setPadding(0, 7, 0, 0);
 
         mLayout =
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 

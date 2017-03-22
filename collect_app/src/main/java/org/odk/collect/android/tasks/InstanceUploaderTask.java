@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -31,8 +32,11 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
+import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
@@ -77,9 +81,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
 
-    // based on http://www.sqlite.org/limits.html
-    private static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
-
     private InstanceUploaderListener mStateListener;
 
     public static class Outcome {
@@ -106,6 +107,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         Uri u = Uri.parse(urlString);
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
+        ResponseMessageParser messageParser = null;
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
             // we already issued a head request and got a response,
@@ -176,7 +178,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 return true;
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
                             outcome.mResults.put(id, fail + urlString + " " + e.toString());
                             cv.put(InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -205,42 +206,36 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     }
                 }
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Client Protocol Exception");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (ConnectTimeoutException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (UnknownHostException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (SocketTimeoutException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (HttpHostConnectException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Network Connection Refused");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
@@ -460,7 +455,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                     ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                             builder.addPart("*isIncomplete*", sb);
                         } catch (Exception e) {
-                            e.printStackTrace(); // never happens...
                         }
                         ++j; // advance over the last attachment added...
                         break;
@@ -472,12 +466,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
             // prepare response and return uploaded
             HttpResponse response = null;
+
             try {
                 Log.i(t, "Issuing POST request for " + id + " to: " + u.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
+                HttpEntity httpEntity = response.getEntity();
+                messageParser = new ResponseMessageParser(httpEntity);
                 WebUtils.discardEntityBytes(response);
-
                 Log.i(t, "Response code:" + responseCode);
                 // verify that the response was a 201 or 202.
                 // If it wasn't, the submission has failed.
@@ -491,8 +487,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
-                        outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
+                        // If response from server is valid use that else use default messaging
+                        if (messageParser.isValid()){
+                            outcome.mResults.put(id, fail + messageParser.getMessageResponse());
+                        }else{
+                            outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
+                                    + " (" + responseCode + ") at " + urlString);
+                        }
+
                     }
                     cv.put(InstanceColumns.STATUS,
                             InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -501,7 +503,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     return true;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
@@ -514,8 +515,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
-        // if it got here, it must have worked
-        outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+        // If response from server is valid use that else use default messaging
+        if (messageParser.isValid()){
+            outcome.mResults.put(id, messageParser.getMessageResponse());
+        }else{
+            // Default messaging
+            outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+        }
+
         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
         return true;
@@ -558,7 +565,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     if (isCancelled()) {
                         return false;
                     }
-                    publishProgress(c.getPosition() + 1, c.getCount());
+
+                    publishProgress(c.getPosition() + 1 + low, values.length);
                     String instance = c.getString(
                             c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
@@ -594,9 +602,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     protected Outcome doInBackground(Long... values) {
         Outcome outcome = new Outcome();
         int counter = 0;
-        while (counter * SQLITE_MAX_VARIABLE_NUMBER < values.length) {
-            int low = counter * SQLITE_MAX_VARIABLE_NUMBER;
-            int high = (counter + 1) * SQLITE_MAX_VARIABLE_NUMBER;
+        while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+            int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+            int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
             if (high > values.length) {
                 high = values.length;
             }
@@ -641,52 +649,71 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 } else {
                     mStateListener.uploadingComplete(outcome.mResults);
 
-                    StringBuilder selection = new StringBuilder();
                     Set<String> keys = outcome.mResults.keySet();
                     Iterator<String> it = keys.iterator();
-
-                    String[] selectionArgs = new String[keys.size() + 1];
-                    int i = 0;
-                    selection.append("(");
-                    while (it.hasNext()) {
-                        String id = it.next();
-                        selection.append(InstanceColumns._ID + "=?");
-                        selectionArgs[i++] = id;
-                        if (i != keys.size()) {
-                            selection.append(" or ");
+                    int count = keys.size();
+                    while(count > 0){
+                        String[] selectionArgs = null;
+                        if(count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
+                            selectionArgs = new String[
+                                    ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
+                        } else {
+                            selectionArgs = new String[count + 1];
                         }
-                    }
-                    selection.append(") and status=?");
-                    selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
-                    Cursor results = null;
-                    try {
-                        results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                        StringBuilder selection = new StringBuilder();
 
-                        if (results.getCount() > 0) {
-                            Long[] toDelete = new Long[results.getCount()];
-                            results.moveToPosition(-1);
+                        selection.append(InstanceColumns._ID + " IN (");
+                        int i = 0;
 
-                            int cnt = 0;
-                            while (results.moveToNext()) {
-                                toDelete[cnt] = results.getLong(results
-                                        .getColumnIndex(InstanceColumns._ID));
-                                cnt++;
+                        while (it.hasNext() && i < selectionArgs.length - 1){
+                            selectionArgs[i] = it.next();
+                            selection.append("?");
+
+                            if (i != selectionArgs.length - 2) {
+                                selection.append(",");
                             }
-
-                            boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
-                                    Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
-                            if (deleteFlag) {
-                                DeleteInstancesTask dit = new DeleteInstancesTask();
-                                dit.setContentResolver(Collect.getInstance().getContentResolver());
-                                dit.execute(toDelete);
-                            }
-
+                            i++;
                         }
-                    } finally {
-                        if (results != null) {
-                            results.close();
+
+                        count -= selectionArgs.length - 1;
+                        selection.append(")");
+                        selection.append(" and status=?");
+                        selectionArgs[i] = InstanceProviderAPI.STATUS_COMPLETE;
+
+                        Cursor results = null;
+                        try {
+                            results =
+                                    new InstancesDao().getInstancesCursor(selection.toString()
+                                            , selectionArgs);
+                            if (results.getCount() > 0) {
+                                Long[] toDelete = new Long[results.getCount()];
+                                results.moveToPosition(-1);
+
+                                int cnt = 0;
+                                while (results.moveToNext()) {
+                                    toDelete[cnt] = results.getLong(results
+                                            .getColumnIndex(InstanceColumns._ID));
+                                    cnt++;
+                                }
+
+                                boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
+                                        Collect.getInstance().getApplicationContext()).getBoolean(
+                                        PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
+                                if (deleteFlag) {
+                                    DeleteInstancesTask dit = new DeleteInstancesTask();
+                                    dit.setContentResolver(
+                                            Collect.getInstance().getContentResolver());
+                                    dit.execute(toDelete);
+                                }
+
+                            }
+                        } catch (SQLException e){
+                            Log.e(t, e.getMessage(), e);
+                        } finally{
+                            if (results != null) {
+                                results.close();
+                            }
                         }
                     }
                 }

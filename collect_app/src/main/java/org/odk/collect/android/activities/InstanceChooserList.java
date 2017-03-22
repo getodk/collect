@@ -68,8 +68,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         setContentView(R.layout.chooser_list_layout);
 
         String order;
-        final String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-        if (formMode != null && formMode.equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+
+        String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(R.string.review_data));
             mEditMode = true;
             mSortingOptions = new String[]{
@@ -135,7 +136,8 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                 // caller wants to view/edit a form, so launch formentryactivity
                 Intent parentIntent = this.getIntent();
                 Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                if (parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 } else {
                     intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);

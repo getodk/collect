@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,6 +34,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 
 import java.util.ArrayList;
@@ -210,23 +212,39 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // tried to close a dialog not open. don't care.
         }
 
-        StringBuilder selection = new StringBuilder();
+
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
 
-        String[] selectionArgs = new String[keys.size()];
-        int i = 0;
-        while (it.hasNext()) {
-            String id = it.next();
-            selection.append(InstanceColumns._ID + "=?");
-            selectionArgs[i++] = id;
-            if (i != keys.size()) {
-                selection.append(" or ");
-            }
-        }
-
         StringBuilder message = new StringBuilder();
-        {
+        int count = keys.size();
+        while (count > 0) {
+            String[] selectionArgs = null;
+
+            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
+                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
+            } else {
+                selectionArgs = new String[count];
+            }
+
+            StringBuilder selection = new StringBuilder();
+            selection.append(InstanceColumns._ID + " IN (");
+
+            int i = 0;
+            while (it.hasNext() && i < selectionArgs.length) {
+                selectionArgs[i] = it.next();
+                selection.append("?");
+
+                if (i != selectionArgs.length - 1) {
+                    selection.append(",");
+                }
+                i++;
+            }
+
+            selection.append(")");
+            count -= selectionArgs.length;
+
+            StringBuilder queryMessage = new StringBuilder();
             Cursor results = null;
             try {
                 results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
@@ -237,18 +255,20 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                                 results.getString(
                                         results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        message.append(name + " - " + result.get(id) + "\n\n");
+                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
                     }
-                } else {
-                    message.append(getString(R.string.no_forms_uploaded));
                 }
+            } catch (SQLException e) {
+                Log.e(TAG, e.getMessage(), e);
             } finally {
-                if (results != null) {
+                if (results != null)
                     results.close();
-                }
             }
+            message.append(queryMessage.toString());
         }
-
+        if (message.length() == 0) {
+            message.append(getString(R.string.no_forms_uploaded));
+        }
         createAlertDialog(message.toString().trim());
     }
 

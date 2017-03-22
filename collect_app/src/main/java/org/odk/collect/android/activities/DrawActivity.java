@@ -30,7 +30,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -92,7 +91,6 @@ public class DrawActivity extends Activity {
         try {
             saveFile(savepointImage);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         if (savepointImage.exists()) {
             outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
@@ -283,7 +281,6 @@ public class DrawActivity extends Activity {
             saveFile(output);
             setResult(Activity.RESULT_OK);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             setResult(Activity.RESULT_CANCELED);
         }
         this.finish();

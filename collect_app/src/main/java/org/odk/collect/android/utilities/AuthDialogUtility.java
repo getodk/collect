@@ -113,7 +113,7 @@ public class AuthDialogUtility {
                 .edit()
                 .putString(PreferenceKeys.KEY_USERNAME, userName)
                 .putString(PreferenceKeys.KEY_PASSWORD, password)
-                .commit();
+                .apply();
     }
 
     public interface AuthDialogUtilityResultListener {

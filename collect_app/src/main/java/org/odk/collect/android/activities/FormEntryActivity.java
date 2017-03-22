@@ -736,6 +736,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 ((ODKView) mCurrentView).setBinaryData(bearing);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                break;
             case HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so
                 // refresh
@@ -1161,7 +1162,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 // Create 'save' button
-                ((Button) endView.findViewById(R.id.save_exit_button))
+                 endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1278,7 +1279,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         } catch (JavaRosaException e) {
             mBackButton.setEnabled(true);
-            e.printStackTrace();
         }
     }
 
@@ -1482,7 +1482,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         // adjust which view is in the layout container...
         mStaleView = mCurrentView;
@@ -1692,7 +1692,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                         try {
                                             Thread.sleep(500);
                                         } catch (InterruptedException e) {
-                                            e.printStackTrace();
                                         }
                                         showNextView();
                                     }
@@ -2551,16 +2550,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             if (!showFirst) {
-                // we've just loaded a saved form, so start in the hierarchy
-                // view
+                // we've just loaded a saved form, so start in the hierarchy view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
-                if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                     startActivity(i);
-                    return; // so we don't show the intro screen before jumping to
-                    // the hierarchy
+                    return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
-                    if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.VIEW_SENT)) {
+                    if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
                         i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
                         startActivity(i);
                     }

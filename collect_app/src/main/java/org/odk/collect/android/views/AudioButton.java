@@ -20,7 +20,6 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.Log;
-import android.widget.ImageButton;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -76,7 +75,6 @@ public class AudioButton extends AppCompatImageButton {
                 audioFilename = ReferenceManager._().DeriveReference(URI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Log.e(t, "Invalid reference exception");
-                e.printStackTrace();
             }
 
             File audioFile = new File(audioFilename);
@@ -97,7 +95,6 @@ public class AudioButton extends AppCompatImageButton {
                 String errorMsg = c.getString(R.string.audio_file_invalid);
                 Log.e(t, errorMsg);
                 ToastUtils.showLongToast(errorMsg);
-                e.printStackTrace();
             }
 
         }
