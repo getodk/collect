@@ -310,7 +310,7 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="google_repeat_error">Les répétitions ne sont pas prises en charge par les Google Sheets en ce moment.</string>
   <string name="google_audio_error">Les fichiers audio ne sont pas pris en charge par les Google Sheets en ce moment.</string>
   <string name="google_video_error">Les fichiers vidéo ne sont pas pris en charge par les Google Sheets en ce moment.</string>
-  <string name="picasa_upload_error">Échec de téléchargement de photo qui n\'existe pas: %1$s</string>
+  <string name="media_upload_error">Échec de téléchargement de photo qui n\'existe pas: %1$s</string>
   <string name="odk_auth_auth_fail">Échec d\'authentification d\'ODK Auto-envoi. Merci de vous assurez que vos paramètres sont corrects.</string>
   <string name="odk_auto_note">Notification d\'ODK Auto-envoi</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>

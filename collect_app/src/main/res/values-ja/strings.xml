@@ -312,7 +312,7 @@
   <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
   <string name="google_audio_error">この時点では Google スプレッドシートでオーディオファイルはサポートされていません。</string>
   <string name="google_video_error">この時点では Google スプレッドシートでビデオファイルはサポートされていません。</string>
-  <string name="picasa_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
+  <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>

@@ -287,7 +287,7 @@ Escolher Imagem</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
   <string name="invalid_oauth">Modo OAuth 2 inválido</string>
-  <string name="picasa_upload_error">Falha ao carregar foto não existente: %1$s</string>
+  <string name="media_upload_error">Falha ao carregar foto não existente: %1$s</string>
   <string name="odk_auth_auth_fail">Falhar de envio automático do ODK, por favor certifique-se de que suas configurações estão corretas.</string>
   <string name="odk_auto_note">Notificação de envio automático do ODK</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>

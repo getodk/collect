@@ -299,7 +299,7 @@
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="invalid_oauth">Неверный OAuth 2 токен</string>
-  <string name="picasa_upload_error">Не удалось загрузить несуществующее фото: %1$s</string>
+  <string name="media_upload_error">Не удалось загрузить несуществующее фото: %1$s</string>
   <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке. Пожалуйста, проверьте настройки</string>
   <string name="odk_auto_note">Уведомление автоматической отправки ODK</string>
   <string name="notification_error">Ошибка отображения текста уведомления</string>

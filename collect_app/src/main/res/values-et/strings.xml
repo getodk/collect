@@ -310,7 +310,7 @@
   <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
   <string name="google_audio_error">Google Sheets ei toeta hetkel helifailide laadimist.</string>
   <string name="google_video_error">Google Sheets ei toeta hetkel videofailide laadimist.</string>
-  <string name="picasa_upload_error">Pildi %1$s üleslaadimine ebaõnestus. Fail on puudu.</string>
+  <string name="media_upload_error">Pildi %1$s üleslaadimine ebaõnestus. Fail on puudu.</string>
   <string name="odk_auth_auth_fail">ODK automaatse saatmise autentimine ebaõnnestus. Veendu, et seaded oleksid õiged. </string>
   <string name="odk_auto_note">ODK automaatse saatmise teated</string>
   <string name="notification_error">Viga teate näitamisel </string>
