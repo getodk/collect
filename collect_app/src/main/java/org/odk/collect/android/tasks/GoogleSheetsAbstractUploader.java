@@ -63,8 +63,9 @@ public abstract class GoogleSheetsAbstractUploader extends
     private static final String oauth_fail = "OAUTH Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
     private final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
-    private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+    private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
+    private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
     protected HashMap<String, String> mResults;
@@ -372,7 +373,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
                 // uploadedPhotos keeps track of the uploaded URL
                 // relative to the path
-                uploadedPhotos.put(key, "https://drive.google.com/open?id=" + uploadedFileId);
+                uploadedPhotos.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
             }
         }
         // All photos have been sent to picasa (if there were any)
