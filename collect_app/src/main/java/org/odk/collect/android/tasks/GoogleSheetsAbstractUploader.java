@@ -27,7 +27,10 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
+import com.google.api.services.sheets.v4.model.UpdateSpreadsheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.odk.collect.android.R;
@@ -155,8 +158,18 @@ public abstract class GoogleSheetsAbstractUploader extends
         // checking for write permissions to the spreadsheet
         if (!hasWritePermissonToSheet) {
             try {
+                mSpreadsheetName = getSpreadSheetName();
+
+                //// TODO: 22/3/17 Find a better way to check the write permissions 
+                List<Request> requests = new ArrayList<>();
+                requests.add(new Request()
+                        .setUpdateSpreadsheetProperties(new UpdateSpreadsheetPropertiesRequest()
+                                .setProperties(new SpreadsheetProperties().setTitle(mSpreadsheetName))
+                                .setFields("title")));
+
                 mSheetsService.spreadsheets()
-                        .batchUpdate(mSpreadsheetId, new BatchUpdateSpreadsheetRequest())
+                        .batchUpdate(mSpreadsheetId, new BatchUpdateSpreadsheetRequest()
+                                .setRequests(requests))
                         .execute();
             } catch (GoogleJsonResponseException e) {
                 Log.e(TAG, e.getMessage(), e);
@@ -170,15 +183,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 mResults.put(id, e.getMessage());
                 return false;
             }
-
             hasWritePermissonToSheet = true;
-            try {
-                mSpreadsheetName = getSpreadSheetName();
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
-                mResults.put(id, e.getMessage());
-                return false;
-            }
         }
 
         HashMap<String, String> answersToUpload = new HashMap<>();
