@@ -58,7 +58,6 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.GoogleSheetsTask;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -174,9 +173,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (!PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            PlayServicesUtil.acquireGooglePlayServices(this);
-        } else if (mCredential.getSelectedAccountName() == null) {
+        if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
@@ -239,16 +236,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case GoogleSheetsTask.REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != RESULT_OK) {
-                    // the user got sent to the playstore
-                    // it returns to this activity, but we'd rather they manually retry
-                    // so we finish
-                    finish();
-                } else {
-                    getResultsFromApi();
-                }
-                break;
             case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
                         data.getExtras() != null) {
