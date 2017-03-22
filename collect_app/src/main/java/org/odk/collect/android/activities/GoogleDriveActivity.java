@@ -94,14 +94,11 @@ import java.util.Stack;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-//import com.google.api.services.drive.model.ParentList;
-
 public class GoogleDriveActivity extends ListActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, EasyPermissions.PermissionCallbacks {
 
     private final static int PROGRESS_DIALOG = 1;
-
     private final static int GOOGLE_USER_DIALOG = 3;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
     private static final int COMPLETE_AUTHORIZATION_REQUEST_CODE = 4322;
@@ -115,11 +112,7 @@ public class GoogleDriveActivity extends ListActivity implements
     private static final String FILE_LIST_KEY = "fileList";
     private static final String PARENT_ID_KEY = "parentId";
     private static final String CURRENT_ID_KEY = "currentDir";
-    private static final String drive_fail = "Media Error: ";
-    private static final String oauth_fail = "OAUTH Error: ";
     protected GoogleAccountCredential mCredential;
-    private ProgressDialog mProgressDialog;
-    private AlertDialog mAlertDialog;
     private Button mRootButton;
     private Button mBackButton;
     private Button mDownloadButton;
@@ -267,6 +260,10 @@ public class GoogleDriveActivity extends ListActivity implements
      * account was selected and the device currently has online access. If any
      * of the preconditions are not satisfied, the app will prompt the user as
      * appropriate.
+     *
+     * Google Drive API V3
+     * Please refer to the below link for reference:
+     * https://developers.google.com/drive/v3/web/quickstart/android
      */
     private void getResultsFromApi() {
         if (!PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
@@ -379,7 +376,7 @@ public class GoogleDriveActivity extends ListActivity implements
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    getString(R.string.request_permissions_google_account),
                     GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
@@ -491,7 +488,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                mProgressDialog = new ProgressDialog(this);
+                ProgressDialog progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -504,13 +501,13 @@ public class GoogleDriveActivity extends ListActivity implements
                                 mGetFileTask.setGoogleDriveFormDownloadListener(null);
                             }
                         };
-                mProgressDialog.setTitle(getString(R.string.downloading_data));
-                mProgressDialog.setMessage(mAlertMsg);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return mProgressDialog;
+                progressDialog.setTitle(getString(R.string.downloading_data));
+                progressDialog.setMessage(mAlertMsg);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return progressDialog;
             case GOOGLE_USER_DIALOG:
                 AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
@@ -531,9 +528,9 @@ public class GoogleDriveActivity extends ListActivity implements
     private void createAlertDialog(String message) {
         Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.download_forms_result));
-        mAlertDialog.setMessage(message);
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.download_forms_result));
+        alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -547,12 +544,12 @@ public class GoogleDriveActivity extends ListActivity implements
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertShowing = true;
         mAlertMsg = message;
-        mAlertDialog.show();
+        alertDialog.show();
     }
 
     @Override
