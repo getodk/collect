@@ -93,7 +93,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             Log.w(t, "Only have " + splits.length + " alignment values");
         }
         for (int i = 0; i < 6; ++i) {
-            if (splits.length < i) {
+            if (splits.length <= i) {
                 iArray[i] = 0;
             } else {
                 iArray[i] = Integer.valueOf(splits[i]);
