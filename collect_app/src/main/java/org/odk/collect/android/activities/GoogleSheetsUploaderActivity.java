@@ -217,7 +217,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    getString(R.string.request_permissions_google_account),
                     GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
