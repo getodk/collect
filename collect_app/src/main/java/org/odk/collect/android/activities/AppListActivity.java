@@ -54,6 +54,7 @@ abstract class AppListActivity extends ListActivity {
     public static final int MENU_FILTER = MENU_SORT + 1;
 
     private static final String SELECTED_INSTANCES = "selectedInstances";
+    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -64,6 +65,8 @@ abstract class AppListActivity extends ListActivity {
     protected SimpleCursorAdapter mListAdapter;
     protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected String[] mSortingOptions;
+
+    private boolean mIsSearchBoxShown;
 
     @Override
     protected void onResume() {
@@ -78,12 +81,14 @@ abstract class AppListActivity extends ListActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, mSelectedInstances);
+        outState.putBoolean(IS_SEARCH_BOX_SHOWN, mSearchBoxLayout.getVisibility() == View.VISIBLE);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         mSelectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
+        mIsSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
     }
 
     @Override
@@ -160,6 +165,11 @@ abstract class AppListActivity extends ListActivity {
                 filter(s);
             }
         });
+
+        if (mIsSearchBoxShown) {
+            showSearchBox();
+            filter(mInputSearch.getText());
+        }
     }
 
     private void hideSearchBox() {

@@ -235,7 +235,7 @@ public class Collect extends Application {
     public void showKeyboard(View view) {
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
     @Override
