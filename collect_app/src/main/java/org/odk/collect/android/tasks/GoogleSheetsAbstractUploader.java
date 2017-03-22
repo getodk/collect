@@ -62,16 +62,16 @@ import java.util.regex.Pattern;
 public abstract class GoogleSheetsAbstractUploader extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
+    protected final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private static final String oauth_fail = "OAUTH Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
-    protected final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
     private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
     protected HashMap<String, String> mResults;
-    String mSpreadsheetName;
+    private String mSpreadsheetName;
     private String mSpreadsheetId;
     private boolean hasWritePermissonToSheet = false;
 

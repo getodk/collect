@@ -16,8 +16,16 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
@@ -32,6 +40,7 @@ import org.odk.collect.android.utilities.WebUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -79,7 +88,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     private boolean interfaceIsEnabled(Context context,
-            NetworkInfo currentNetworkInfo) {
+                                       NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -123,13 +132,20 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
+
+            GoogleAccountCredential mCredential;
+            // Initialize credentials and service object.
+            mCredential = GoogleAccountCredential.usingOAuth2(
+                    Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
+                    .setBackOff(new ExponentialBackOff());
+
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
             String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
                     context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
+                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, mCredential);
                 String googleUsername = settings.getString(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -137,7 +153,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     running = false;
                     return;
                 }
-                mGoogleSheetsUploadTask.setUserName(googleUsername);
+                mCredential.setSelectedAccountName(googleUsername);
                 mGoogleSheetsUploadTask.setUploaderListener(this);
                 mGoogleSheetsUploadTask.execute(toSendArray);
 
@@ -262,10 +278,22 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     private class GoogleSheetsAutoUploadTask extends
             GoogleSheetsAbstractUploader {
 
+        private final GoogleAccountCredential mCredential;
         private Context mContext;
 
-        public GoogleSheetsAutoUploadTask(Context c) {
+        public GoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
             mContext = c;
+            mCredential = credential;
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mSheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("ODK-Collect")
+                    .build();
+            mDriveService = new com.google.api.services.drive.Drive.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("ODK-Collect")
+                    .build();
         }
 
         @Override
@@ -284,9 +312,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            String token = null;
+            String token;
             try {
-                token = authenticate(mContext, mGoogleUserName);
+                token = mCredential.getToken();
+                GoogleAuthUtil.invalidateToken(mContext, token);
+
+                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+
+
             } catch (IOException e) {
                 // network or server error, the call is expected to succeed if
                 // you try again later. Don't attempt to call again immediately
@@ -300,6 +333,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } catch (GoogleAuthException e) {
                 // Failure. The call is not expected to ever succeed so it
                 // should not be retried.
+                return null;
+            } catch (MultipleFoldersFoundException e) {
                 return null;
             }
             mContext = null;

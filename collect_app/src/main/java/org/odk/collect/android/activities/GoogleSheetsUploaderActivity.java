@@ -158,7 +158,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
             showDialog(PROGRESS_DIALOG);
 
-            mUlTask.setUserName(googleUsername);
             mUlTask.setUploaderListener(this);
             mUlTask.execute(mInstancesToSend);
         } else {
@@ -561,7 +560,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             String token;
             try {
                 token = mCredential.getToken();
-                //Immediately invalidate so we get a differnet one if we have to try again
+                //Immediately invalidate so we get a different one if we have to try again
                 GoogleAuthUtil.invalidateToken(GoogleSheetsUploaderActivity.this, token);
 
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);

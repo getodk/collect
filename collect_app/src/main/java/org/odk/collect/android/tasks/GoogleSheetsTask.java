@@ -14,16 +14,9 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-
-import java.io.IOException;
 
 /**
  * @author carlhartung (chartung@nafundi.com)
@@ -36,15 +29,9 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private final static String TAG = "GoogleSheetsTask";
-    protected String mGoogleUserName = null;
     protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
     protected com.google.api.services.drive.Drive mDriveService = null;
     InstanceUploaderListener mStateListener;
-
-    public void setUserName(String username) {
-        mGoogleUserName = username;
-    }
 
     public void setUploaderListener(InstanceUploaderListener sl) {
         synchronized (this) {
@@ -52,19 +39,4 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
         }
     }
 
-    protected String authenticate(Context context, String mGoogleUserName) throws IOException,
-            GoogleAuthException {
-        // use google auth utils to get oauth2 token
-        String scope =
-                "https://picasaweb.google.com/data/";
-        String token;
-
-        if (mGoogleUserName == null) {
-            Log.e(TAG, "Google user not set");
-            return null;
-        }
-
-        token = GoogleAuthUtil.getToken(context, mGoogleUserName, scope);
-        return token;
-    }
 }
