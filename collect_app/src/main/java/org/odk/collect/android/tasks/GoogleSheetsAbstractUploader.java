@@ -373,7 +373,6 @@ public abstract class GoogleSheetsAbstractUploader extends
                 }
 
                 // uploadedPhotos keeps track of the uploaded URL
-                // relative to the path
                 uploadedPhotos.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
             }
         }
