@@ -122,7 +122,6 @@
   <string name="server_requires_auth">Harap login untuk otentikasi</string>
   <string name="server_url">Tautan (URL)</string>
   <string name="server_preferences">Pengaturan Server</string>
-  <string name="toggle_selected">Pilih semua</string>
   <string name="trigger">OK. Lanjut.</string>
   <string name="uploading_data">Mengirim formulir</string>
   <string name="url_error">Maaf, tautan (URL) tidak valid!</string>

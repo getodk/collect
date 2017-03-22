@@ -152,7 +152,7 @@ public class ManageForm {
              
         	} 
 		 } catch (Exception e) {
-       		 Log.e("ManageForm:isIncompleteInstance", "Error: " + e.getMessage());
+       		 Log.e("isIncompleteInstance", "Error: " + e.getMessage());
     	 }
 		c.close();
 		

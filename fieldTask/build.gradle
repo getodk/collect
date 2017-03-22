@@ -16,6 +16,8 @@ android {
         minSdkVersion(10)
         targetSdkVersion(10)
         versionCode(4009)
+        versionName getVersionName()
+        multiDexEnabled true
     }
 
     productFlavors {

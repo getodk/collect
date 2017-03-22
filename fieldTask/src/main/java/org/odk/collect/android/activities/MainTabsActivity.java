@@ -68,6 +68,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.NdefReaderTask;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
@@ -878,6 +879,7 @@ public class MainTabsActivity extends TabActivity implements
                 i.putExtra(FormEntryActivity.KEY_TASK, taskId);
                 i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
                 i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 //if (instancePath != null) {    // TODO Don't think this is needed
                 //    i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
                 //}

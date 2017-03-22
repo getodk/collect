@@ -472,6 +472,7 @@ public class Utilities {
 /*
  * Delete any tasks with that are not in the array of assignment identifiers
  * This can be used to remove tasks that have been removed from the server
+ * Do not delete repeating tasks
  */
     public static int deleteObsoleteTasks(List<TaskAssignment> assignmentsToKeep) {
 
@@ -484,7 +485,7 @@ public class Utilities {
         String [] selectArgs = new String[nIds + 1];
         selectArgs[0] = Utilities.getSource();
 
-        StringBuffer selectClause = new StringBuffer(InstanceColumns.SOURCE + " = ?");
+        StringBuffer selectClause = new StringBuffer(InstanceColumns.T_REPEAT + " = 0 and " + InstanceColumns.SOURCE + " = ?");
 
         if(nIds > 0) {
             selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");

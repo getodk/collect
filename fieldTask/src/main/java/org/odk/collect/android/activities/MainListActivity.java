@@ -42,6 +42,7 @@ import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.receivers.LocationChangedReceiver;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.Constants;
 
 import java.util.List;
@@ -195,6 +196,7 @@ public class MainListActivity extends FragmentActivity  {
 
                 // Use an explicit intent
                 Intent i = new Intent(tabsActivity, org.odk.collect.android.activities.FormEntryActivity.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 i.setData(formUri);
                 startActivity(i);
 

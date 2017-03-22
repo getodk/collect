@@ -73,6 +73,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_PASSWORD = "password";
 
 	public static final String KEY_PROTOCOL = "protocol";
+    public static final String KEY_ANALYTICS = "analytics";
 
 	// must match /res/arrays.xml
 	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";

@@ -24,7 +24,7 @@
   <string name="change_language">Ubah bahasa</string>
   <string name="change_password">Kata sandi</string>
   <string name="change_protocol_settings_default">Pengaturan Platform</string>
-  <string name="change_username">Username</string>
+  <string name="change_username">ODK Username</string>
   <string name="clearanswer_confirm">Hapus jawaban atas \"%s\"?</string>
   <string name="clear_answer">Hapus jawaban</string>
   <string name="clear_answer_ask">Hapus jawaban ini?</string>
@@ -109,27 +109,26 @@
   <string name="replace_location">Ubah lokasi</string>
   <string name="required_answer_error">Maaf, data ini dibutuhkan!</string>
   <string name="review_data">Ubah formulir tersimpan</string>
-  <string name="review_data_button">Ubah formulir tersimpan</string>
+  <string name="review_data_button">Ubah formulir tersimpan (%s)</string>
   <string name="saved_data">Belum selesai (%s)</string>
   <string name="save_all_answers">Simpan Formulir</string>
   <string name="save_enter_data_description">Anda telah selesai mengisikan \"%s\".</string>
   <string name="saving_form">Sedang menyimpan formulir</string>
   <string name="sending_items">Sedang mengirim %1$s dari %2$s total formulir</string>
   <string name="send_data">Kirim formulir ke Server</string>
-  <string name="send_data_button">Kirim formulir ke Server</string>
+  <string name="send_data_button">Kirim formulir ke Server (%s)</string>
   <string name="send_selected_data">Kirim</string>
-  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server:\n%s</string>
+  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server: %s</string>
   <string name="server_requires_auth">Harap login untuk otentikasi</string>
   <string name="server_url">Tautan (URL)</string>
   <string name="server_preferences">Pengaturan Server</string>
-  <string name="toggle_selected">Pilih semua</string>
   <string name="trigger">OK. Lanjut.</string>
   <string name="uploading_data">Mengirim formulir</string>
   <string name="url_error">Maaf, tautan (URL) tidak valid!</string>
   <string name="username">Nama pengguna</string>
   <string name="view_hierarchy">Risalah</string>
   <string name="general_preferences">Pengaturan Umum</string>
-  <string name="click_to_web">Tap untuk berkunjung ke http://www.smap.com.au</string>
+  <string name="click_to_web">Tap untuk berkunjung ke http://opendatakit.org</string>
   <string name="client">Klien</string>
   <string name="show_splash">Perlihatkan tampilan pembuka</string>
   <string name="show_splash_summary">Tampilkan pada awal aplikasi berjalan</string>
@@ -139,6 +138,7 @@
   <string name="use_odk_default">Gunakan gambar bawaan</string>
   <string name="change_splash_path">Ubah gambar</string>
   <string name="show_location">Tunjukkan lokasi</string>
+  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="go_to_location">Pilih lokasi</string>
   <string name="change_formlist_url">Tautan formulir (appended to Server URL)</string>
@@ -308,4 +308,10 @@
   <string name="change_server_url">Tautan server (URL)</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
   <string name="default_google_sheets_url"></string>
+  <!--Geo string added in feature-geofeatures branch-->
+  <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

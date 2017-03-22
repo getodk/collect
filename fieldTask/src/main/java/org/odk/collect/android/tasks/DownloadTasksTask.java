@@ -237,7 +237,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  */
                 count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_CANCELLED);
                 if(count > 0) {
-                    results.put("Cancelled Tasks", count + " deleted");
+                    results.put(Collect.getInstance().getString(R.string.smap_cancelled), count +
+                            " " + Collect.getInstance().getString(R.string.smap_deleted));
                 }
 
                 /*
@@ -366,17 +367,20 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             	 */
                 count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_REJECTED);
                 if(count > 0) {
-                    results.put("Rejected Tasks", count + " deleted");
+                    results.put(Collect.getInstance().getString(R.string.smap_rejected), count +
+                            " " + Collect.getInstance().getString(R.string.smap_deleted));
                 }
 
                 if(tr.settings !=null && tr.settings.ft_delete_submitted) {
                     count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_SUBMITTED);
                     if(count > 0) {
-                        results.put("Submitted Tasks", count + " deleted");
+                        results.put(Collect.getInstance().getString(R.string.smap_submitted), count +
+                                " " + Collect.getInstance().getString(R.string.smap_deleted));
                     }
                     count = Utilities.deleteTasksWithStatus(Utilities.STATUS_T_CLOSED);
                     if(count > 0) {
-                        results.put(" Tasks", count + " deleted");
+                        results.put(Collect.getInstance().getString(R.string.smap_closed), count +
+                                " " + Collect.getInstance().getString(R.string.smap_deleted));
                     }
                 }
 

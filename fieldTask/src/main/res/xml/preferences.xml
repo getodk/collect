@@ -30,7 +30,8 @@
 			android:dialogTitle="@string/change_password" />
 		<!-- android:password="true" -->
     </PreferenceCategory>
-    -->
+
+    <!-- smap gps trail -->
     <PreferenceCategory
         android:key="data_collection"
         android:title="@string/smap_data_collection" >
@@ -41,7 +42,8 @@
             android:summary="@string/smap_gps_trail_summary"
             android:title="@string/smap_gps_trail" />
 	</PreferenceCategory>
-	    <PreferenceCategory
+    <!-- end smap -->
+    <PreferenceCategory
         android:key="@string/autosend"
         android:title="@string/autosend" >
         <CheckBoxPreference
@@ -118,6 +120,7 @@
             android:title="@string/map_basemap_behavior" />
     </PreferenceCategory>
 
+    <!-- smap disable google analytics
     <PreferenceCategory
         android:key="@string/analytics_preferences"
         android:title="@string/analytics_preferences" >
@@ -129,6 +132,7 @@
             android:summary="@string/analytics_summary"
             android:title="@string/analytics" />
     </PreferenceCategory>
+    -->
 
     <PreferenceCategory
         android:title="@string/general_settings_about" >

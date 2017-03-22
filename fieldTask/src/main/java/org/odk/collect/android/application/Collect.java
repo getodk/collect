@@ -66,7 +66,6 @@ public class Collect extends Application {
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
-    private static Collect singleton = null;
 
     static {
         PRNGFixes.apply();
@@ -281,7 +280,7 @@ public class Collect extends Application {
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
+            //mTracker = analytics.newTracker(R.xml.global_tracker);        // smap not using this so won't resolve the missing reference
         }
         return mTracker;
     }

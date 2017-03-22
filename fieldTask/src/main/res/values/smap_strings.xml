@@ -68,4 +68,9 @@
     <string name="smap_submitting">"Submitting %1$d finalised surveys"</string>
     <string name="smap_update_task_status">"Update status of tasks on the server"</string>
     <string name="smap_status">"Status"</string>
+    <string name="smap_deleted">"deleted"</string>
+    <string name="smap_cancelled">"Cancelled Tasks"</string>
+    <string name="smap_rejected">"Rejected Tasks"</string>
+    <string name="smap_submitted">"Submitted Tasks"</string>
+    <string name="smap_closed">"Closed Tasks"</string>
 </resources>

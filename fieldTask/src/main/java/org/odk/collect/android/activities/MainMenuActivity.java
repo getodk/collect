@@ -299,7 +299,7 @@ public class MainMenuActivity extends Activity {
         mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
 
         updateButtons();
-        setupGoogleAnalytics();
+        // setupGoogleAnalytics();   smap disable
     }
 
     @Override
@@ -519,7 +519,8 @@ public class MainMenuActivity extends Activity {
     private void setupGoogleAnalytics() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);
+        //boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);        smap disable
+        boolean isAnalyticsEnabled = false;                                                                 // smap disable
         GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
         googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }
