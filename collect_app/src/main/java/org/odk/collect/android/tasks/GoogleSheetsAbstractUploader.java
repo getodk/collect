@@ -61,7 +61,6 @@ public abstract class GoogleSheetsAbstractUploader extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
     private static final String oauth_fail = "OAUTH Error: ";
-    private static final String form_fail = "Form Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
     private final static String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
@@ -165,7 +164,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         if (columnNames.size() == 0) {
             mResults.put(id,
-                    form_fail + "No columns found in the form to upload");
+                    "No columns found in the form to upload");
             return false;
         }
 
@@ -191,17 +190,17 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             processInstanceXML(instanceFile, answersToUpload, photosToUpload);
         } catch (XmlPullParserException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         } catch (FormException e) {
             mResults.put(id,
-                    form_fail + Collect.getInstance().getString(R.string.google_repeat_error));
+                    Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
         } catch (FileNotFoundException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         } catch (IOException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         }
 
@@ -260,7 +259,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     getFilesFromDrive(GOOGLE_DRIVE_ROOT_FOLDER, files, null);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mResults.put(id, form_fail + e.getMessage());
+                    mResults.put(id, e.getMessage());
                     return false;
                 }
 
@@ -270,7 +269,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     if (folder == null) {
                         folder = file;
                     } else {
-                        mResults.put(id, form_fail + files.size() + " folders found");
+                        mResults.put(id, files.size() + " folders found");
                         return false;
                     }
                 }
@@ -281,7 +280,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         folder = createFolderInDrive(GOOGLE_DRIVE_ROOT_FOLDER, null);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        mResults.put(id, form_fail + e.getMessage());
+                        mResults.put(id, e.getMessage());
                         return false;
                     }
                 }
@@ -294,7 +293,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     getFilesFromDrive(GOOGLE_DRIVE_SUBFOLDER, files, rootFolderId);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mResults.put(id, form_fail + e.getMessage());
+                    mResults.put(id, e.getMessage());
                     return false;
                 }
 
@@ -304,7 +303,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     if (folder == null) {
                         folder = file;
                     } else {
-                        mResults.put(id, form_fail + files.size() + " folders found");
+                        mResults.put(id, files.size() + " folders found");
                         return false;
                     }
                 }
@@ -315,7 +314,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         folder = createFolderInDrive(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        mResults.put(id, form_fail + e.getMessage());
+                        mResults.put(id, e.getMessage());
                         return false;
                     }
                 }
@@ -328,7 +327,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     getFilesFromDrive(jrFormId, files, subFolderId);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mResults.put(id, form_fail + e.getMessage());
+                    mResults.put(id, e.getMessage());
                     return false;
                 }
 
@@ -338,7 +337,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     if (folder == null) {
                         folder = file;
                     } else {
-                        mResults.put(id, form_fail + files.size() + " folders found");
+                        mResults.put(id, files.size() + " folders found");
                         return false;
                     }
                 }
@@ -349,7 +348,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         folder = createFolderInDrive(jrFormId, subFolderId);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        mResults.put(id, form_fail + e.getMessage());
+                        mResults.put(id, e.getMessage());
                         return false;
                     }
                 }
@@ -361,13 +360,13 @@ public abstract class GoogleSheetsAbstractUploader extends
                     uploadedFileId = uploadFileToDrive(photosToUpload, key, folder, toUpload);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    mResults.put(id, form_fail + e.getMessage());
+                    mResults.put(id, e.getMessage());
                     return false;
                 }
 
                 //checking if file was successfully uploaded
                 if (uploadedFileId == null) {
-                    mResults.put(id, form_fail + "Unable to upload the media files. Try again");
+                    mResults.put(id, "Unable to upload the media files. Try again");
                     return false;
                 }
 
@@ -413,11 +412,8 @@ public abstract class GoogleSheetsAbstractUploader extends
         final String googleHeader = "docs.google.com/spreadsheets/d/";
         String spreadsheetId;
         if (urlString == null || urlString.length() < googleHeader.length()) {
-            mResults.put(
-                    id,
-                    form_fail
-                            + Collect.getInstance().getString(R.string.invalid_sheet_id,
-                            urlString));
+            mResults.put(id, Collect.getInstance().getString(R.string.invalid_sheet_id,
+                    urlString));
             return false;
         } else {
             int start = urlString.indexOf(googleHeader) + googleHeader.length();
@@ -427,11 +423,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                 end = urlString.length();
             }
             if (start == -1 || end == -1) {
-                mResults.put(
-                        id,
-                        form_fail
-                                + Collect.getInstance().getString(R.string.invalid_sheet_id,
-                                urlString));
+                mResults.put(id, Collect.getInstance().getString(R.string.invalid_sheet_id,
+                        urlString));
                 return false;
             }
             spreadsheetId = urlString.substring(start, end);
@@ -444,7 +437,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     .setIncludeGridData(false)
                     .execute();
         } catch (IOException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         }
 
@@ -456,12 +449,12 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, form_fail + "No data found");
+                mResults.put(id, "No data found");
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         }
 
@@ -514,7 +507,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                mResults.put(id, form_fail + e.getMessage());
+                mResults.put(id, e.getMessage());
                 return false;
             }
         }
@@ -525,13 +518,13 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, form_fail + "No data found");
+                mResults.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         }
 
@@ -567,7 +560,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .update(spreadsheetId, spreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                mResults.put(id, form_fail + e.getMessage());
+                mResults.put(id, e.getMessage());
                 return false;
             }
         }
@@ -578,13 +571,13 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, form_fail + "No data found");
+                mResults.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         }
 
@@ -595,7 +588,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 sheetCols.add(column.toString());
             }
         } else {
-            mResults.put(id, form_fail + "couldn't get header feed");
+            mResults.put(id, "couldn't get header feed");
             return false;
         }
 
@@ -615,11 +608,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     missingString += ", ";
                 }
             }
-            mResults.put(
-                    id,
-                    form_fail
-                            + Collect.getInstance().getString(
-                            R.string.google_sheets_missing_columns, missingString));
+            mResults.put(id, Collect.getInstance().getString(
+                    R.string.google_sheets_missing_columns, missingString));
             return false;
         }
 
@@ -675,7 +665,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     .append(spreadsheetId, spreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
-            mResults.put(id, form_fail + e.getMessage());
+            mResults.put(id, e.getMessage());
             return false;
         }
 
