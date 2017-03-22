@@ -77,6 +77,7 @@ public abstract class GoogleSheetsAbstractUploader extends
     private String mSpreadsheetName;
     private String mSpreadsheetId;
     private boolean hasWritePermissonToSheet = false;
+    private String mSpreadsheetFileName;
 
     /**
      * @param selection
@@ -160,11 +161,12 @@ public abstract class GoogleSheetsAbstractUploader extends
             try {
                 mSpreadsheetName = getSpreadSheetName();
 
-                //// TODO: 22/3/17 Find a better way to check the write permissions 
+                //// TODO: 22/3/17 Find a better way to check the write permissions
                 List<Request> requests = new ArrayList<>();
                 requests.add(new Request()
                         .setUpdateSpreadsheetProperties(new UpdateSpreadsheetPropertiesRequest()
-                                .setProperties(new SpreadsheetProperties().setTitle(mSpreadsheetName))
+                                .setProperties(new SpreadsheetProperties()
+                                        .setTitle(mSpreadsheetFileName))
                                 .setFields("title")));
 
                 mSheetsService.spreadsheets()
@@ -569,6 +571,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .get(mSpreadsheetId)
                 .setIncludeGridData(false)
                 .execute();
+
+        mSpreadsheetFileName = response.getProperties().getTitle();
         return response.getSheets().get(0).getProperties().getTitle();
     }
 
