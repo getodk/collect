@@ -60,7 +60,6 @@ import java.util.regex.Pattern;
 public abstract class GoogleSheetsAbstractUploader extends
         GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
 
-    private static final String drive_fail = "Media Error: ";
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String form_fail = "Form Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
@@ -247,7 +246,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 if (c.getCount() != 1) {
                     c.close();
                     try {
-                        throw new FileNotFoundException(drive_fail + Collect.getInstance()
+                        throw new FileNotFoundException(Collect.getInstance()
                                 .getString(R.string.media_upload_error, filename));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
