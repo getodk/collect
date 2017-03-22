@@ -321,7 +321,7 @@
 <string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
 <string name="google_audio_error">Audio files are not supported by Google Sheets at this time.</string>
 <string name="google_video_error">Video files are not supported by Google Sheets at this time.</string>
-<string name="picasa_upload_error">Failed to upload photo that does not exist: %1$s</string>
+<string name="media_upload_error">Failed to upload photo that does not exist: %1$s</string>
 <string name="odk_auth_auth_fail">ODK Autosend authentication failure, please make sure your settings are correct</string>
 <string name="odk_auto_note">ODK Autosend Notification</string>
 <string name="notification_error">Error displaying notification text</string>

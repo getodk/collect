@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.sheets.v4.SheetsScopes;
 
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -36,10 +37,11 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
+    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS, DriveScopes.DRIVE};
     private final static String tag = "GoogleSheetsTask";
     protected String mGoogleUserName = null;
-    protected com.google.api.services.sheets.v4.Sheets mService = null;
+    protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
+    protected com.google.api.services.drive.Drive mDriveService = null;
     protected Exception mLastError = null;
     InstanceUploaderListener mStateListener;
 

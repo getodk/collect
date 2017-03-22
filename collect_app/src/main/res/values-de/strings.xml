@@ -307,7 +307,7 @@
   <string name="google_repeat_error">Wiederholungen werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="google_audio_error">Audiodateien werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="google_video_error">Videodateien werden zur Zeit von Google Sheets nicht unterstützt.</string>
-  <string name="picasa_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
+  <string name="media_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
   <string name="odk_auth_auth_fail">ODK Auto-Send Authentifizierungsfehler, bitte überprüfen Sie ihre Einstellungen</string>
   <string name="odk_auto_note">ODK Auto-Send Benachrichtigung</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
