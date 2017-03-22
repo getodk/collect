@@ -54,7 +54,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
@@ -130,18 +129,13 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         setContentView(R.layout.geotrace_google_layout);
 
-        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoTraceGoogleMapActivity.this)) {
-
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    setupMap(googleMap);
-                }
-            });
-        } else {
-            PlayServicesUtil.requestPlayServicesErrorDialog(GeoTraceGoogleMapActivity.this);
-        }
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
     }
 
     private void setupMap(GoogleMap googleMap) {
@@ -829,14 +823,4 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         }
         zoomDialog.show();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
 }

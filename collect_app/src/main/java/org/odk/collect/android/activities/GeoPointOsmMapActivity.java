@@ -38,7 +38,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
@@ -129,175 +128,169 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             return;
         }
 
-        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointOsmMapActivity.this)) {
+        mMap = (MapView) findViewById(R.id.omap);
+        mHelper = new MapHelper(this, mMap, GeoPointOsmMapActivity.this);
+        mMap.setMultiTouchControls(true);
+        mMap.setBuiltInZoomControls(true);
+        mMarker = new Marker(mMap);
+        mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
 
-            mMap = (MapView) findViewById(R.id.omap);
-            mHelper = new MapHelper(this, mMap, GeoPointOsmMapActivity.this);
-            mMap.setMultiTouchControls(true);
-            mMap.setBuiltInZoomControls(true);
-            mMarker = new Marker(mMap);
-            mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
-            mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
-
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    GeoPoint point = new GeoPoint(34.08145, -39.85007);
-                    mMap.getController().setZoom(4);
-                    mMap.getController().setCenter(point);
-                }
-            }, 100);
-
-            mLocationStatus = (TextView) findViewById(R.id.location_status);
-            mlocationInfo = (TextView) findViewById(R.id.location_info);
-
-
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            mSaveLocationButton = (Button) findViewById(R.id.accept_location);
-            mSaveLocationButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation",
-                            "OK");
-                    returnLocation();
-                }
-            });
-
-            mReloadLocationButton = (Button) findViewById(R.id.reload_location);
-            mReloadLocationButton.setEnabled(false);
-            mReloadLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mMap.getOverlays().add(mMarker);
-                    setClear = false;
-                    mLatLng = new GeoPoint(mLocation.getLatitude(), mLocation.getLongitude());
-                    mMarker.setPosition(mLatLng);
-                    mCaptureLocation = true;
-                    mIsDragged = false;
-                    zoomToPoint();
-                }
-
-            });
-
-            // Focuses on marked location
-            mShowLocationButton = ((Button) findViewById(R.id.show_location));
-            mShowLocationButton.setVisibility(View.VISIBLE);
-            mShowLocationButton.setEnabled(false);
-            mShowLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "showLocation", "onClick");
-                    showZoomDialog();
-                }
-            });
-
-            // not clickable until we have a marker set....
-            mShowLocationButton.setClickable(false);
-
-            // Menu Layer Toggle
-            mLayersButton = ((Button) findViewById(R.id.layer_menu));
-            mLayersButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mHelper.showLayersDialog(GeoPointOsmMapActivity.this);
-
-                }
-            });
-
-
-            zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
-
-            zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
-            zoomLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    zoomToLocation();
-                    mMap.invalidate();
-                    zoomDialog.dismiss();
-                }
-            });
-
-            zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
-            zoomPointButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    zoomToPoint();
-                    mMap.invalidate();
-                    zoomDialog.dismiss();
-                }
-            });
-
-            clearPointButton = (Button) findViewById(R.id.clear);
-            clearPointButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mMap.getOverlays().remove(mMarker);
-                    mMarker.remove(mMap);
-                    if (mLocation != null) {
-                        mReloadLocationButton.setEnabled(true);
-//					mLocationStatus.setVisibility(View.VISIBLE);
-                    }
-                    mLocationStatus.setVisibility(View.VISIBLE);
-                    mMap.getOverlays().remove(mMarker);
-                    mMarker.remove(mMap);
-                    setClear = true;
-                    mIsDragged = false;
-                    mCaptureLocation = false;
-                    draggable = intent_draggable;
-                    location_from_intent = false;
-                    overlayMyLocationLayers();
-                    mMap.invalidate();
-                }
-            });
-
-            Intent intent = getIntent();
-            if (intent != null && intent.getExtras() != null) {
-
-                if (intent.hasExtra(GeoPointWidget.DRAGGABLE_ONLY)) {
-                    draggable = intent.getBooleanExtra(GeoPointWidget.DRAGGABLE_ONLY, false);
-                    intent_draggable = draggable;
-                    if (!intent_draggable) {
-                        // Not Draggable, set text for Map else leave as placement-map text
-                        mlocationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
-                    }
-                }
-
-                if (intent.hasExtra(GeoPointWidget.READ_ONLY)) {
-                    read_only = intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
-                    if (read_only) {
-                        mCaptureLocation = true;
-                        clearPointButton.setEnabled(false);
-                    }
-                }
-
-                if (intent.hasExtra(GeoPointWidget.LOCATION)) {
-                    double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
-                    mLatLng = new GeoPoint(location[0], location[1]);
-                    mReloadLocationButton.setEnabled(false);
-                    mCaptureLocation = true;
-                    mIsDragged = true;
-                    draggable = false; // If data loaded, must clear first
-                    location_from_intent = true;
-
-
-                }
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                GeoPoint point = new GeoPoint(34.08145, -39.85007);
+                mMap.getController().setZoom(4);
+                mMap.getController().setCenter(point);
             }
+        }, 100);
 
-            if (mLatLng != null) {
-                mMarker.setPosition(mLatLng);
+        mLocationStatus = (TextView) findViewById(R.id.location_status);
+        mlocationInfo = (TextView) findViewById(R.id.location_info);
+
+
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        mSaveLocationButton = (Button) findViewById(R.id.accept_location);
+        mSaveLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation",
+                        "OK");
+                returnLocation();
+            }
+        });
+
+        mReloadLocationButton = (Button) findViewById(R.id.reload_location);
+        mReloadLocationButton.setEnabled(false);
+        mReloadLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 mMap.getOverlays().add(mMarker);
-                mMap.invalidate();
+                setClear = false;
+                mLatLng = new GeoPoint(mLocation.getLatitude(), mLocation.getLongitude());
+                mMarker.setPosition(mLatLng);
                 mCaptureLocation = true;
-                foundFirstLocation = true;
+                mIsDragged = false;
                 zoomToPoint();
             }
-        } else {
-            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointOsmMapActivity.this);
+
+        });
+
+        // Focuses on marked location
+        mShowLocationButton = ((Button) findViewById(R.id.show_location));
+        mShowLocationButton.setVisibility(View.VISIBLE);
+        mShowLocationButton.setEnabled(false);
+        mShowLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger()
+                        .logInstanceAction(this, "showLocation", "onClick");
+                showZoomDialog();
+            }
+        });
+
+        // not clickable until we have a marker set....
+        mShowLocationButton.setClickable(false);
+
+        // Menu Layer Toggle
+        mLayersButton = ((Button) findViewById(R.id.layer_menu));
+        mLayersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mHelper.showLayersDialog(GeoPointOsmMapActivity.this);
+
+            }
+        });
+
+
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+
+        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomToLocation();
+                mMap.invalidate();
+                zoomDialog.dismiss();
+            }
+        });
+
+        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                zoomToPoint();
+                mMap.invalidate();
+                zoomDialog.dismiss();
+            }
+        });
+
+        clearPointButton = (Button) findViewById(R.id.clear);
+        clearPointButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.getOverlays().remove(mMarker);
+                mMarker.remove(mMap);
+                if (mLocation != null) {
+                    mReloadLocationButton.setEnabled(true);
+//					mLocationStatus.setVisibility(View.VISIBLE);
+                }
+                mLocationStatus.setVisibility(View.VISIBLE);
+                mMap.getOverlays().remove(mMarker);
+                mMarker.remove(mMap);
+                setClear = true;
+                mIsDragged = false;
+                mCaptureLocation = false;
+                draggable = intent_draggable;
+                location_from_intent = false;
+                overlayMyLocationLayers();
+                mMap.invalidate();
+            }
+        });
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null) {
+
+            if (intent.hasExtra(GeoPointWidget.DRAGGABLE_ONLY)) {
+                draggable = intent.getBooleanExtra(GeoPointWidget.DRAGGABLE_ONLY, false);
+                intent_draggable = draggable;
+                if (!intent_draggable) {
+                    // Not Draggable, set text for Map else leave as placement-map text
+                    mlocationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
+                }
+            }
+
+            if (intent.hasExtra(GeoPointWidget.READ_ONLY)) {
+                read_only = intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
+                if (read_only) {
+                    mCaptureLocation = true;
+                    clearPointButton.setEnabled(false);
+                }
+            }
+
+            if (intent.hasExtra(GeoPointWidget.LOCATION)) {
+                double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
+                mLatLng = new GeoPoint(location[0], location[1]);
+                mReloadLocationButton.setEnabled(false);
+                mCaptureLocation = true;
+                mIsDragged = true;
+                draggable = false; // If data loaded, must clear first
+                location_from_intent = true;
+
+
+            }
         }
 
+        if (mLatLng != null) {
+            mMarker.setPosition(mLatLng);
+            mMap.getOverlays().add(mMarker);
+            mMap.invalidate();
+            mCaptureLocation = true;
+            foundFirstLocation = true;
+            zoomToPoint();
+        }
     }
 
 
@@ -613,13 +606,4 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
 }
