@@ -307,7 +307,7 @@
   <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
   <string name="google_audio_error">Аудіо файли, наразі, Google Сторінками не підтримуються.</string>
   <string name="google_video_error">Відео файли, наразі, Google Сторінками не підтримуються.</string>
-  <string name="picasa_upload_error">Неможливо надіслати неіснуючу фотографію: %1$s</string>
+  <string name="media_upload_error">Неможливо надіслати неіснуючу фотографію: %1$s</string>
   <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
   <string name="odk_auto_note">Повідомлення ODK Autosend</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
@@ -323,7 +323,6 @@
   <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
   <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
-  <string name="google_sheets_update_error">Помилка оновлення Сторінок. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
   <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>

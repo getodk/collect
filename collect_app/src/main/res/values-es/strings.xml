@@ -314,7 +314,7 @@
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
   <string name="google_audio_error">Archivos de audio no admitidos por Google Sheets de momento.</string>
   <string name="google_video_error">Archivos de vídeo no admitidos por Google Sheets de momento.</string>
-  <string name="picasa_upload_error">Error al cargar la foto que no existe: %1$s</string>
+  <string name="media_upload_error">Error al cargar la foto que no existe: %1$s</string>
   <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
   <string name="odk_auto_note">Notificación de ODK Autosend</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
@@ -330,7 +330,6 @@
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="google_sheets_access_denied">Acceso denegado. Asegurese de que dispone de permisos de acceso.</string>
-  <string name="google_sheets_update_error">Error al actualizar la hoja. Asegurese de que dispone de permisos de acceso.</string>
   <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
   <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
   <string name="username_error_whitespace">Espacios delante o detras no permitidos en nombre de usuario</string>

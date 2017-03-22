@@ -14,17 +14,9 @@
 
 package org.odk.collect.android.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.services.sheets.v4.SheetsScopes;
 
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-
-import java.io.IOException;
 
 /**
  * @author carlhartung (chartung@nafundi.com)
@@ -34,18 +26,11 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
-    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    public static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
-    private final static String tag = "GoogleSheetsTask";
-    protected String mGoogleUserName = null;
-    protected com.google.api.services.sheets.v4.Sheets mService = null;
-    protected Exception mLastError = null;
-    InstanceUploaderListener mStateListener;
+    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
 
-    public void setUserName(String username) {
-        mGoogleUserName = username;
-    }
+    protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
+    protected com.google.api.services.drive.Drive mDriveService = null;
+    InstanceUploaderListener mStateListener;
 
     public void setUploaderListener(InstanceUploaderListener sl) {
         synchronized (this) {
@@ -53,19 +38,4 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
         }
     }
 
-    protected String authenticate(Context context, String mGoogleUserName) throws IOException,
-            GoogleAuthException {
-        // use google auth utils to get oauth2 token
-        String scope =
-                "https://picasaweb.google.com/data/";
-        String token = null;
-
-        if (mGoogleUserName == null) {
-            Log.e(tag, "Google user not set");
-            return null;
-        }
-
-        token = GoogleAuthUtil.getToken(context, mGoogleUserName, scope);
-        return token;
-    }
 }

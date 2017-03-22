@@ -45,6 +45,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -198,9 +199,13 @@ public class InstanceUploaderList extends InstanceListActivity
             // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
 
-            Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-            startActivityForResult(i, INSTANCE_UPLOADER);
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                startActivityForResult(i, INSTANCE_UPLOADER);
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
+            }
         } else {
             // otherwise, do the normal aggregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);

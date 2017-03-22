@@ -310,7 +310,7 @@
   <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
   <string name="google_audio_error">Google Sheets ei toeta hetkel helifailide laadimist.</string>
   <string name="google_video_error">Google Sheets ei toeta hetkel videofailide laadimist.</string>
-  <string name="picasa_upload_error">Pildi %1$s üleslaadimine ebaõnestus. Fail on puudu.</string>
+  <string name="media_upload_error">Pildi %1$s üleslaadimine ebaõnestus. Fail on puudu.</string>
   <string name="odk_auth_auth_fail">ODK automaatse saatmise autentimine ebaõnnestus. Veendu, et seaded oleksid õiged. </string>
   <string name="odk_auto_note">ODK automaatse saatmise teated</string>
   <string name="notification_error">Viga teate näitamisel </string>
@@ -326,7 +326,6 @@
   <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_access_denied">Ligipääs keelatud. Palun veenduge, et arvutustabeli omanik on teile õigused võimaldanud.</string>
-  <string name="google_sheets_update_error">Viga arvutustabeli uuendamisel. Palun veenduge, et arvutustabeli omanik on võimaldanud teile kirjutamise õigused.</string>
   <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
   <string name="password_error_whitespace">Salasõna alguses või lõpus ei ole lubatud kasutada tühikut</string>
   <string name="username_error_whitespace">Kasutajanime alguses või lõpus ei ole lubatud kasutada tühikut</string>

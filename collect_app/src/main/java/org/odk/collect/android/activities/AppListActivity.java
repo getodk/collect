@@ -289,11 +289,6 @@ abstract class AppListActivity extends ListActivity {
         return getCheckedCount() > 0;
     }
 
-    /** Returns the IDs of the checked items, using the ListView of this activity. */
-    protected long[] getCheckedIds() {
-        return getCheckedIds(getListView());
-    }
-
     /** Returns the IDs of the checked items, using the ListView provided */
     protected long[] getCheckedIds(ListView lv) {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
@@ -309,16 +304,6 @@ abstract class AppListActivity extends ListActivity {
             }
         }
         return checkedIds;
-    }
-
-    /** Returns the IDs of the checked items, as an array of Long */
-    protected Long[] getCheckedIdObjects() {
-        long[] checkedIds = getCheckedIds();
-        Long[] checkedIdObjects = new Long[checkedIds.length];
-        for (int i = 0; i < checkedIds.length; i++) {
-            checkedIdObjects[i] = checkedIds[i];
-        }
-        return checkedIdObjects;
     }
 
     protected int getCheckedCount() {

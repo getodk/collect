@@ -298,7 +298,7 @@
   <string name="google_repeat_error">ไม่รองรับการทำซ้ำโดย Google Sheet ในตอนนี้</string>
   <string name="google_audio_error">ไม่รองรับการใช้ไฟล์เสียงโดย Google Sheets ในตอนนี้</string>
   <string name="google_video_error">ไม่รองรับการใช้ไฟล์วิดีโอโดย Google Sheets ในตอนนี้</string>
-  <string name="picasa_upload_error">ไม่สามารถอัพโหลดรูปภาพที่ไม่มีอยู่ได้ %1$s</string>
+  <string name="media_upload_error">ไม่สามารถอัพโหลดรูปภาพที่ไม่มีอยู่ได้ %1$s</string>
   <string name="odk_auth_auth_fail">การตรวจสอบ ODK Autosend authentication ล้มเหลว โปรดตรวจสอบการตั้งค่าให้ถูกต้อง</string>
   <string name="odk_auto_note">เตือน ODK Autosend</string>
   <string name="notification_error">การแสดงข้อความเตือนผิดพลาด</string>
@@ -314,7 +314,6 @@
   <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
   <string name="google_sheets_access_denied">เข้าถึงไม่ได้ แน่ใจหรือไม่ว่าเจ้าของ spreadsheet ให้อนุญาตในการเข้าถึง</string>
-  <string name="google_sheets_update_error">มีข้อผิดพลาดในการแก้ไข Spreadsheet โปรดตรวจสอบว่าเจ้าของ Spreadsheet อนุญาตให้คุณเข้าถึงได้</string>
   <string name="google_sheets_missing_columns">ไม่มี Spreadsheet ของคอลัมภ์: %1$s</string>
   <string name="password_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังรหัสผ่าน</string>
   <string name="username_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังชื่อผู้ใช้</string>
