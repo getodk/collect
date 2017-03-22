@@ -223,7 +223,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         /*  # NOTE #
          *  Media files are uploaded to Google Drive of user
-         *  All media files are currently saved under folder "odk-uploads"
+         *  All media files are currently saved under folder "Open Data Kit/Submissions/formID/"
          */
 
         // if we have any media files to upload,
