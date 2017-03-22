@@ -65,13 +65,17 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
 
         switch (preference.getKey()) {
             case KEY_ODK_WEBSITE:
-                //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE));
-                //startActivity(intent);
+                if(mCustomTabHelper.getPackageName(getActivity()).size()!=0){
                     CustomTabsIntent customTabsIntent =
                             new CustomTabsIntent.Builder()
                                     .build();
                     getActivity();
+                    customTabsIntent.intent.setPackage(mCustomTabHelper.getPackageName(getActivity()).get(0));
                     customTabsIntent.launchUrl(getActivity(), uri);
+                }
+                else {
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                }
                 break;
 
             case KEY_OPEN_SOURCE_LICENSES:

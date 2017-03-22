@@ -166,13 +166,10 @@ dependencies {
     }
     compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
     compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
-<<<<<<< HEAD
 
-=======
     compile group: 'com.google.http-client', name: 'google-http-client-android', version: '1.22.0'
     compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
     compile 'com.android.support:customtabs:25.1.0'
->>>>>>> 2c23b36
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
