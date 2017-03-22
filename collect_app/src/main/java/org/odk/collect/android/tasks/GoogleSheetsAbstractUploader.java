@@ -358,7 +358,8 @@ public abstract class GoogleSheetsAbstractUploader extends
 
                 // file is ready to be uploaded
                 try {
-                    uploadedFileId = uploadFileToDrive(photosToUpload, key, folder, toUpload);
+                    uploadedFileId = uploadFileToDrive(photosToUpload.get(key),
+                            folder.getId(), toUpload);
                 } catch (IOException e) {
                     e.printStackTrace();
                     mResults.put(id, e.getMessage());
@@ -674,14 +675,15 @@ public abstract class GoogleSheetsAbstractUploader extends
         return true;
     }
 
-    private String uploadFileToDrive(HashMap<String, String> photosToUpload, String key, com.google.api.services.drive.model.File folder, File toUpload) throws IOException {
+    private String uploadFileToDrive(String mediaName, String destinationFolderID,
+                                     File toUpload) throws IOException {
 
         //adding meta-data to the file
         com.google.api.services.drive.model.File fileMetadata =
                 new com.google.api.services.drive.model.File()
-                        .setName(photosToUpload.get(key))
+                        .setName(mediaName)
                         .setViewersCanCopyContent(true)
-                        .setParents(Collections.singletonList(folder.getId()));
+                        .setParents(Collections.singletonList(destinationFolderID));
 
         FileContent mediaContent = new FileContent("image/jpeg", toUpload);
         com.google.api.services.drive.model.File file;
@@ -689,6 +691,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .setFields("id, parents")
                 .setIgnoreDefaultVisibility(true)
                 .execute();
+
         return file.getId();
     }
 
