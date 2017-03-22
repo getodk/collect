@@ -49,8 +49,8 @@ public class MapHelper {
     public static String[] offilineOverlays;
     private static final String no_folder_key = "None";
 
-    public static GoogleMap mGoogleMap;
-    public static MapView mOsmMap;
+    public GoogleMap mGoogleMap;
+    public MapView mOsmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -78,21 +78,21 @@ public class MapHelper {
 
 
     public MapHelper(Context pContext, GoogleMap pGoogleMap) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
-        this.mGoogleMap = pGoogleMap;
+        mGoogleMap = pGoogleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
-        this.mOsmMap = pOsmMap;
+        mOsmMap = pOsmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 

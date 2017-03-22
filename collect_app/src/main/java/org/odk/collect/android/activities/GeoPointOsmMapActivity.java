@@ -129,7 +129,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         try {
             setContentView(R.layout.geopoint_osm_layout);
         } catch (NoClassDefFoundError e) {
-            e.printStackTrace();
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;

@@ -162,19 +162,15 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             getColumns(formFilePath, columnNames);
         } catch (FileNotFoundException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         } catch (XmlPullParserException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         } catch (IOException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         } catch (FormException e2) {
-            e2.printStackTrace();
             mResults.put(id, e2.getMessage());
             return false;
         }
@@ -207,7 +203,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             processInstanceXML(instanceFile, answersToUpload, photosToUpload);
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         } catch (FormException e) {
@@ -215,11 +210,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     form_fail + Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
@@ -227,7 +220,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
-            e3.printStackTrace();
         }
 
         // make sure column names in submission are legal (may be different than form)
@@ -250,7 +242,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             try {
                 albumToUse = getOrCreatePicasaAlbum(client, jrFormId);
             } catch (IOException e) {
-                e.printStackTrace();
                 GoogleAuthUtil.invalidateToken(Collect.getInstance(), token);
                 mResults.put(id, picasa_fail + e.getMessage());
                 return false;
@@ -260,7 +251,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 uploadPhotosToPicasa(photosToUpload, uploadedPhotos, client, albumToUse,
                         instanceFile);
             } catch (IOException e1) {
-                e1.printStackTrace();
                 mResults.put(id, picasa_fail + e1.getMessage());
                 return false;
             }
@@ -334,7 +324,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     .setIncludeGridData(false)
                     .execute();
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
@@ -352,7 +341,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
@@ -407,7 +395,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                e.printStackTrace();
                 mResults.put(id, form_fail + e.getMessage());
                 return false;
             }
@@ -425,7 +412,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
@@ -462,7 +448,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                         .update(spreadsheetId, spreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                e.printStackTrace();
                 mResults.put(id, form_fail + e.getMessage());
                 return false;
             }
@@ -480,7 +465,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }
@@ -573,7 +557,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     .append(spreadsheetId, spreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
-            e.printStackTrace();
             mResults.put(id, form_fail + e.getMessage());
             return false;
         }

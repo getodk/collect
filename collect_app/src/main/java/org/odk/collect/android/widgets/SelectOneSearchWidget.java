@@ -142,7 +142,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
                 if (selectedTag == -1 && mSearchedItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                     selectedTag = (Integer) r.getTag();
-                } else if (selectedTag.equals((Integer) r.getTag())) {
+                } else if (selectedTag.equals(r.getTag())) {
                     r.setChecked(true);
                 }
 
