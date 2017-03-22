@@ -53,6 +53,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -179,8 +180,13 @@ public class MainMenuActivity extends Activity {
                         PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                    i = new Intent(getApplicationContext(),
-                            GoogleDriveActivity.class);
+                    if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                        i = new Intent(getApplicationContext(),
+                                GoogleDriveActivity.class);
+                    } else {
+                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                        return;
+                    }
                 } else {
                     i = new Intent(getApplicationContext(),
                             FormDownloadList.class);

@@ -58,7 +58,6 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.GoogleSheetsTask;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -174,9 +173,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (!PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
-            PlayServicesUtil.acquireGooglePlayServices(this);
-        } else if (mCredential.getSelectedAccountName() == null) {
+        if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
