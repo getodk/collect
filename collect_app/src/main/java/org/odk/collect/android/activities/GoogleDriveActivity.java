@@ -231,7 +231,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             try {
                 dismissDialog(PROGRESS_DIALOG);
             } catch (Exception e) {
-                e.printStackTrace();
                 // don't care...
             }
         }
@@ -239,7 +238,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             try {
                 dismissDialog(PROGRESS_DIALOG);
             } catch (Exception e) {
-                e.printStackTrace();
                 // don't care...
             }
             createAlertDialog(mAlertMsg);
@@ -570,7 +568,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
                     return null;
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
 
                 rootId = rootfile.getId();
@@ -597,7 +594,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
                 request = service.files().list().setQ(requestString);
             } catch (IOException e1) {
-                e1.printStackTrace();
             }
 
             // If there's a query parameter, we're searching for all the files.
@@ -606,7 +602,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     request = service.files().list().setQ(query);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
             }
 
@@ -626,7 +621,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     nextPage.put(FILE_LIST_KEY, driveFileListPage);
                     publishProgress(nextPage);
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
@@ -756,7 +750,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 try {
                     request = service.files().list().setQ(requestString);
                 } catch (IOException e1) {
-                    e1.printStackTrace();
                     results.put(fileItem.getName(), e1.getMessage());
                     return results;
                 }
@@ -766,7 +759,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                         driveFileList.addAll(fa.getItems());
                         request.setPageToken(fa.getNextPageToken());
                     } catch (Exception e2) {
-                        e2.printStackTrace();
                         results.put(fileItem.getName(), e2.getMessage());
                         return results;
                     }
@@ -789,14 +781,12 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                                 mediaFileList.addAll(fa.getItems());
                                 request.setPageToken(fa.getNextPageToken());
                             } catch (Exception e2) {
-                                e2.printStackTrace();
                                 results.put(fileItem.getName(), e2.getMessage());
                                 return results;
                             }
                         } while (request.getPageToken() != null
                                 && request.getPageToken().length() > 0);
                     } catch (Exception e) {
-                        e.printStackTrace();
                         results.put(fileItem.getName(), e.getMessage());
                         return results;
                     }
@@ -817,7 +807,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                                 FileUtils.copyInputStreamToFile(is, targetFile);
                             }
                         } catch (IOException e) {
-                            e.printStackTrace();
                             results.put(file.getTitle(), e.getMessage());
                             return results;
                         }
@@ -847,7 +836,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     fw.close();
                     reader.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
                 }
@@ -867,7 +855,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                     return resp.getContent();
                 } catch (IOException e) {
                     // An error occurred.
-                    e.printStackTrace();
                     return null;
                 }
             } else {

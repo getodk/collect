@@ -1162,7 +1162,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 // Create 'save' button
-                ((Button) endView.findViewById(R.id.save_exit_button))
+                 endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1279,7 +1279,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         } catch (JavaRosaException e) {
             mBackButton.setEnabled(true);
-            e.printStackTrace();
         }
     }
 
@@ -1693,7 +1692,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                         try {
                                             Thread.sleep(500);
                                         } catch (InterruptedException e) {
-                                            e.printStackTrace();
                                         }
                                         showNextView();
                                     }
