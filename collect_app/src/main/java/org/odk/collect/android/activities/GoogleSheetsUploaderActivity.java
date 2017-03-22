@@ -305,7 +305,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
-//        getResultsFromApi();
+        // Do nothing.
     }
 
     /**
@@ -318,7 +318,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
-//        ToastUtils.showShortToast("Permission denied. Aborting upload!!!");
+        // Do nothing.
     }
 
     /**
@@ -570,7 +570,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
             } catch (MultipleFoldersFoundException e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
             return mResults;
         }
