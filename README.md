@@ -81,4 +81,3 @@ Current and previous production builds can be found on the [ODK website](https:/
 
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
 When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.
-
