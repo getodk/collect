@@ -51,4 +51,10 @@
   <string name="smap_downloading">Descargando %1$d formularios</string>
   <string name="smap_submitting">Enviando al servidor %1$d formularios finalizados</string>
   <string name="smap_update_task_status">Actualizando estatus de tareas en el servidor</string>
+  <string name="smap_status">Estatus</string>
+  <string name="smap_deleted">borrada(s)</string>
+  <string name="smap_cancelled">Tareas Canceladas</string>
+  <string name="smap_rejected">Tareas Rechazadas</string>
+  <string name="smap_submitted">Tareas Enviadas</string>
+  <string name="smap_closed">Tareas Cerradas</string>
 </resources>
