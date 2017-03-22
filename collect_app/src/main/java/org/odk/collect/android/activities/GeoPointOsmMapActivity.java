@@ -61,9 +61,6 @@ import java.util.List;
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
 
-    private SharedPreferences sharedPreferences;
-    private String basemap;
-
 	private static final String LOCATION_COUNT = "locationCount";
 
     //private GoogleMap mMap;
@@ -93,10 +90,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
 
-    private double mLocationAccuracy;
     private int mLocationCount = 0;
 
-    private boolean mZoomed = false;
     private MapHelper mHelper;
 
     private AlertDialog zoomDialog;
@@ -152,7 +147,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 }
             }, 100);
 
-            mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
             mLocationStatus = (TextView) findViewById(R.id.location_status);
             mlocationInfo = (TextView) findViewById(R.id.location_info);
 
@@ -290,11 +284,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
 
                 }
-                if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                    mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
-                            GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
-                }
-
             }
 
             if (mLatLng != null) {
@@ -303,7 +292,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMap.invalidate();
                 mCaptureLocation = true;
                 foundFirstLocation = true;
-                mZoomed = true;
                 zoomToPoint();
             }
         } else {
@@ -376,8 +364,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mMyLocationOverlay.setEnabled(true);
         mMyLocationOverlay.enableMyLocation();
     }
-
-    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private void zoomToPoint() {
         if (mLatLng != null) {
