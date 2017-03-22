@@ -450,7 +450,7 @@ public class DownloadFormsTask extends
                         }
                         try {
                             is.close();
-                        } catch (Exception e) {
+                        } catch (Exception e) {2
                         }
                     }
                 }

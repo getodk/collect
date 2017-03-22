@@ -41,12 +41,12 @@ public class InfoLogger {
         geologToLogcat(msg);
     }
 
-    private static final void geologToLogcat(String msg) {
+    private static void geologToLogcat(String msg) {
         Log.i(t, msg);
     }
 
     @SuppressWarnings("unused")
-    private static final void geologToFile(String msg) {
+    private static void geologToFile(String msg) {
         File dir = new File(Collect.ODK_ROOT + File.separator + LOG_DIRECTORY);
         if (!dir.exists()) {
             dir.mkdirs();
