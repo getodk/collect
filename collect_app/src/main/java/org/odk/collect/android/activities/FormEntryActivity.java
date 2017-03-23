@@ -234,9 +234,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private FormsDao mFormsDao;
 
-    /**
-     * Called when the activity is first created.
-     */
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1241,7 +1239,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
-
                     if (!qw.getPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
@@ -1330,7 +1327,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      */
     private void showNextView() {
         try {
-
             FormController formController = Collect.getInstance()
                     .getFormController();
 
@@ -2563,7 +2559,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             });
         }
 
-
         // Set saved answer path
         if (formController.getInstancePath() == null) {
 
@@ -2612,7 +2607,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     finish();
                 }
             }
-
         }
 
         refreshCurrentView();
