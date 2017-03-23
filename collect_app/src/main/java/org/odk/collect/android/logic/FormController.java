@@ -41,7 +41,6 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -154,14 +153,11 @@ public class FormController {
     private File mInstancePath;
     private FormEntryController mFormEntryController;
     private FormIndex mIndexWaitingForData = null;
-    //private TimerLogger mTimerLogger;
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
         mMediaFolder = mediaFolder;
         mFormEntryController = fec;
         mInstancePath = instancePath;
-
-        //mTimerLogger = new TimerLogger(instancePath, this);
     }
 
     public FormDef getFormDef() {
@@ -187,10 +183,6 @@ public class FormController {
     public FormIndex getIndexWaitingForData() {
         return mIndexWaitingForData;
     }
-
-    //public TimerLogger getTimerLogger() {
-    //    return mTimerLogger;
-    //}
 
     /**
      * For logging purposes...
@@ -1162,7 +1154,6 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
-        String timing = null;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1184,7 +1175,6 @@ public class FormController {
                     instanceName = (String) sa.getValue();
                 }
             }
-
         }
 
         return new InstanceMetadata(instanceId, instanceName);

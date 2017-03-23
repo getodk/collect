@@ -1850,13 +1850,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         }
 
-        // Log the timer event
-        FormController formController = Collect.getInstance().getFormController();
-        if(complete) {
-            mTimerLogger.logTimerEvent(TimerLogger.Event.FINALIZE, 0, null);
-        } else {
-            mTimerLogger.logTimerEvent(TimerLogger.Event.STOP, 0, null);
-        }
+        mTimerLogger.logTimerEvent(complete ? TimerLogger.Event.FINALIZE : TimerLogger.Event.STOP, 0, null);
 
         synchronized (saveDialogLock) {
             mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
@@ -2572,16 +2566,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
                 formController.setInstancePath(instanceFile);
 
+                // Create the timer logger and then log the start event
                 mTimerLogger = new TimerLogger(instanceFile,
                         PreferenceManager.getDefaultSharedPreferences(this));
                 mTimerLogger.logTimerEvent(TimerLogger.Event.START, 0, null);
-                Log.i("debug", "$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Create Path");
 
             }
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
+            // Create the timer logger and then log the resume event
             mTimerLogger = new TimerLogger(formController.getInstancePath(),
                     PreferenceManager.getDefaultSharedPreferences(this));
             mTimerLogger.logTimerEvent(TimerLogger.Event.RESUME, 0, null);

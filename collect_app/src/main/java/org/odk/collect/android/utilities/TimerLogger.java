@@ -18,20 +18,16 @@ package org.odk.collect.android.utilities;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
@@ -166,8 +162,6 @@ public class TimerLogger {
             long start = getEventTime();
             String node = ref == null ? "" : ref.toString();
 
-            Log.e(t, "######### Timer Event: " + eventType + " : " + fecType);
-
             boolean hasIntervalTime = (eventType == TimerLogger.Event.FEC &&
                     (fecType == FormEntryController.EVENT_QUESTION ||
                             fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT));
@@ -186,7 +180,6 @@ public class TimerLogger {
     public void exitView() {
 
         if (mTimerEnabled) {
-            Log.e(t, "######### Exit view");
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
@@ -198,6 +191,7 @@ public class TimerLogger {
     }
 
     private void writeEvents() {
+
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
             // Verify that all the pending events are ready to send, may require us to wait for an "exit" event
@@ -215,13 +209,11 @@ public class TimerLogger {
                 saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
                 mEvents = new ArrayList<Event>();
             } else {
-                Log.e(t, "######### Queueing Timer Event");
+                Log.e(t, "Queueing Timer Event");
             }
 
-
-            Log.e(t, "######### Saving Timer Event");
         } else {
-            Log.e(t, "######### Queueing Timer Event");
+            Log.e(t, "Queueing Timer Event");
         }
     }
 
@@ -237,7 +229,6 @@ public class TimerLogger {
         // debug
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String currentDateTime = sdf.format(surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime));
-        Log.i(t, "%%%%%%%% " + currentDateTime);
 
         return surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime);
     }

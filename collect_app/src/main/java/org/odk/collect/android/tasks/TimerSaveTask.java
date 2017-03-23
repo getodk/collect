@@ -47,10 +47,14 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
                     fw.write(params[i].toString() + "\n");
                 }
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.e(t, "error writing timer log", e);
         } finally {
-            try {fw.close();} catch(Exception e) {};
+            try {
+                fw.close();
+            } catch (Exception e) {
+            }
+            ;
         }
         return null;
     }
