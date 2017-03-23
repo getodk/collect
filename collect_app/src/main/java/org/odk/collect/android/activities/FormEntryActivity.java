@@ -227,7 +227,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private SharedPreferences mAdminPreferences;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -816,6 +818,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // repeat events, and indexes in field-lists that is not the containing
         // group.
 
+        mTimerLogger.exitView(TimerLogger.Event.NON_VIEW_END);
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
     }
@@ -913,7 +916,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                mTimerLogger.exitView();
+                mTimerLogger.exitView(TimerLogger.Event.VIEW_END);
                 mTimerLogger.logTimerEvent(TimerLogger.Event.HIERARCHY, 0, null);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -1310,7 +1313,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            mTimerLogger.exitView();    // Close timer events waiting for an end time
+            mTimerLogger.exitView(TimerLogger.Event.VIEW_END);    // Close timer events waiting for an end time
 
             // get constraint behavior preference value with appropriate default
             String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
@@ -1388,7 +1391,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            mTimerLogger.exitView();    // Close timer events
+            mTimerLogger.exitView(TimerLogger.Event.VIEW_END);    // Close timer events
 
             // The answer is saved on a back swipe, but question constraints are
             // ignored.
@@ -2090,6 +2093,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * the form.
      */
     private void createLanguageDialog() {
+        mTimerLogger.logTimerEvent(TimerLogger.Event.LANGUAGE, 0, null);
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createLanguageDialog", "show");
         FormController formController = Collect.getInstance()
@@ -2150,6 +2154,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
+                                mTimerLogger.exitView(TimerLogger.Event.NON_VIEW_END);
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
@@ -2576,14 +2581,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            // Create the timer logger and then log the resume event
-            mTimerLogger = new TimerLogger(formController.getInstancePath(),
-                    PreferenceManager.getDefaultSharedPreferences(this));
-            mTimerLogger.logTimerEvent(TimerLogger.Event.RESUME, 0, null);
-
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy
                 // view
+
+                // Create the timer logger and then log the resume event
+                mTimerLogger = new TimerLogger(formController.getInstancePath(),
+                        PreferenceManager.getDefaultSharedPreferences(this));
+                mTimerLogger.logTimerEvent(TimerLogger.Event.RESUME, 0, null);
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 startActivity(i);
                 return; // so we don't show the intro screen before jumping to

@@ -40,33 +40,107 @@ public class TimerLogger {
         int eventType;
         int fecType;
         String node;
-        long end;
 
-        boolean hasIntervalTime;
+        long end;
         boolean endTimeSet;
 
         // Valid event types
-        public static final int FEC = 1000;            // Start from 1000 to not clash with FEC events
-        public static final int START = 1001;
+        public static final int FEC = 0;
+        public static final int START = 1001;   // Start from 1001 to not clash with FEC events
         public static final int STOP = 1002;
         public static final int RESUME = 1003;
         public static final int FINALIZE = 1004;
         public static final int HIERARCHY = 1005;
         public static final int PREFERENCES = 1006;
+        public static final int LANGUAGE = 1007;
+        public static final int VIEW_END = 2000;     // The end event for Questions, repeats, Hierarchy jumps etc
+        public static final int NON_VIEW_END = 2001;    // The end event for select language which can be embedded within a question
 
-        Event(long start, int eventType, int fecType, String node, boolean hasIntervalTime) {
+
+        private class EventDetails {
+            boolean hasIntervalTime;
+            String name;
+        }
+
+        /*
+         * Create a new event
+         */
+        Event(long start, int eventType, int fecType, String node) {
             this.start = start;
             this.eventType = eventType;
             this.fecType = fecType;
             this.node = node;
-            this.hasIntervalTime = hasIntervalTime;
+
+            end = 0;
+            endTimeSet = false;
         }
 
-        public void setEnd(long end) {
-            this.end = end;
-            this.endTimeSet = true;
+        /*
+         * Return true if this is a non view type event
+         *  Non View events occur inside view events
+         */
+        public boolean isNonViewIntervalEvent() {
+            if (eventType == LANGUAGE || eventType == PREFERENCES) {
+                return true;
+            }
+            return false;
         }
 
+        /*
+         * Return true if this is a view type event
+         *  Hierarchy Jump
+         *  Question
+         *  Prompt for repeat
+         */
+        public boolean isIntervalViewEvent() {
+            if (eventType == HIERARCHY || (eventType == FEC &&
+                    (fecType == FormEntryController.EVENT_QUESTION ||
+                            fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT))) {
+                return true;
+            }
+            return false;
+        }
+
+        /*
+         * Mark the end of an interval event
+         */
+        public void setEnd(int endType, long endTime) {
+
+            if (!endTimeSet) {
+                if (endType == NON_VIEW_END && isNonViewIntervalEvent() || endType == VIEW_END && isIntervalViewEvent()) {
+                    this.end = endTime;
+                    this.endTimeSet = true;
+                }
+            }
+
+        }
+
+        /*
+         * Return true if the event can be saved to the timer log
+         * This will return false if at least one of the events is waiting for an end time
+         */
+        public boolean canSave() {
+            if (this.endTimeSet == false && (isNonViewIntervalEvent() || isIntervalViewEvent())) {
+                return false;
+            }
+            return true;
+        }
+
+        /*
+         * Return true if the event is a currently open interval view event
+         */
+        public boolean inIntervalView() {
+
+            if (this.endTimeSet == false && isIntervalViewEvent()) {
+                return true;
+            }
+
+            return false;
+        }
+
+        /*
+         * convert the event into a record to write to the CSV file
+         */
         public String toString() {
             String sType = "unknown";
             switch (eventType) {
@@ -109,12 +183,15 @@ public class TimerLogger {
                 case PREFERENCES:
                     sType = "preferences menu";
                     break;
+                case LANGUAGE:
+                    sType = "language menu";
+                    break;
                 default:
                     sType = "Unknown Event Type: " + eventType;
                     break;
             }
             return sType + "," + node + "," + String.valueOf(start) + ","
-                    + (hasIntervalTime ? String.valueOf(end) : "");
+                    + (end != 0 ? String.valueOf(end) : "");
         }
     }
 
@@ -162,29 +239,38 @@ public class TimerLogger {
             long start = getEventTime();
             String node = ref == null ? "" : ref.toString();
 
-            boolean hasIntervalTime = (eventType == TimerLogger.Event.FEC &&
-                    (fecType == FormEntryController.EVENT_QUESTION ||
-                            fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT));
+            Event newEvent = new Event(start, eventType, fecType, node);
 
-            mEvents.add(new Event(start, eventType, fecType, node, hasIntervalTime));
+            // Ignore the event if we are already in an interval view event ie the question has been refreshed
+            if (newEvent.isIntervalViewEvent()) {
+                for (int i = 0; i < mEvents.size(); i++) {
+                    if (mEvents.get(i).isIntervalViewEvent() && !mEvents.get(i).endTimeSet) {
+                        return;
+                    }
+                }
+            }
+            mEvents.add(newEvent);
 
             // If the user is exiting then mark any open questions as closed
             if (eventType == Event.STOP || eventType == Event.FINALIZE) {
-                exitView();
+                exitView(Event.VIEW_END);
             }
             writeEvents();
         }
 
     }
 
-    public void exitView() {
+    /*
+     * Exit a question, repeat dialog, language select etc
+     */
+    public void exitView(int endType) {
 
         if (mTimerEnabled) {
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
             for (int i = 0; i < mEvents.size(); i++) {
-                mEvents.get(i).setEnd(end);
+                mEvents.get(i).setEnd(endType, end);
             }
             writeEvents();
         }
@@ -195,16 +281,16 @@ public class TimerLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
             // Verify that all the pending events are ready to send, may require us to wait for an "exit" event
-            boolean canSend = true;
+            boolean canSave = true;
             for (int i = 0; i < mEvents.size(); i++) {
                 Event pe = mEvents.get(i);
-                if (pe.hasIntervalTime && !pe.endTimeSet) {
-                    canSend = false;
+                if (!pe.canSave()) {
+                    canSave = false;
                     break;
                 }
             }
 
-            if (canSend) {
+            if (canSave) {
                 Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
                 saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
                 mEvents = new ArrayList<Event>();
