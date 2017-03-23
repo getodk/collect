@@ -13,5 +13,4 @@
     <issue id="SetTextI18n" severity="error" />
     <issue id="HardcodedText" severity="error" />
     <issue id="TypographyEllipsis" severity="error" />
-
 </lint>
