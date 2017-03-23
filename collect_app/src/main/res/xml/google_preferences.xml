@@ -14,7 +14,8 @@
             android:dialogTitle="@string/google_sheets_url"
             android:inputType="textNoSuggestions"
             android:key="google_sheets_url"
-            android:title="@string/google_sheets_url" />
+            android:title="@string/google_sheets_url"
+            android:summary="@string/google_sheets_url_hint" />
     </PreferenceCategory>
 
 </PreferenceScreen>
