@@ -142,11 +142,9 @@ public class EncryptionUtils {
                 }
             } catch (NoSuchAlgorithmException e) {
                 Log.e(t, e.toString());
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (UnsupportedEncodingException e) {
                 Log.e(t, e.toString());
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -164,30 +162,25 @@ public class EncryptionUtils {
 
             } catch (NoSuchAlgorithmException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (NoSuchPaddingException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (InvalidKeyException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (IllegalBlockSizeException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (BadPaddingException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             }
 
             // start building elementSignatureSource...
             appendElementSignatureSource(formId);
             if (formVersion != null) {
-                appendElementSignatureSource(formVersion.toString());
+                appendElementSignatureSource(formVersion);
             }
             appendElementSignatureSource(base64RsaEncryptedSymmetricKey);
 
@@ -226,11 +219,9 @@ public class EncryptionUtils {
                 messageDigest = md.digest();
             } catch (NoSuchAlgorithmException e) {
                 Log.e(t, e.toString());
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (UnsupportedEncodingException e) {
                 Log.e(t, e.toString());
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -245,23 +236,18 @@ public class EncryptionUtils {
 
             } catch (NoSuchAlgorithmException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (NoSuchPaddingException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (InvalidKeyException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (IllegalBlockSizeException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             } catch (BadPaddingException e) {
                 Log.e(t, "Unable to encrypt the symmetric key");
-                e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
@@ -278,7 +264,6 @@ public class EncryptionUtils {
                 isNotBouncyCastle = false;
             } catch (NoSuchProviderException e) {
                 Log.w(t, "Unable to obtain BouncyCastle provider! Decryption may fail!");
-                e.printStackTrace();
                 isNotBouncyCastle = true;
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
             }
@@ -386,7 +371,6 @@ public class EncryptionUtils {
                 String msg = String.format(Collect.getInstance()
                         .getString(R.string.phone_does_not_have_base64_class), String.valueOf(version));
                 Log.e(t, msg);
-                e.printStackTrace();
                 throw new EncryptionException(msg, e);
             }
 
@@ -399,13 +383,11 @@ public class EncryptionUtils {
             } catch (NoSuchAlgorithmException e) {
                 String msg = Collect.getInstance().getString(R.string.phone_does_not_support_rsa);
                 Log.e(t, msg);
-                e.printStackTrace();
                 throw new EncryptionException(msg, e);
             }
             try {
                 pk = kf.generatePublic(publicKeySpec);
             } catch (InvalidKeySpecException e) {
-                e.printStackTrace();
                 String msg = Collect.getInstance().getString(R.string.invalid_rsa_public_key);
                 Log.e(t, msg);
                 throw new EncryptionException(msg, e);
@@ -428,15 +410,12 @@ public class EncryptionUtils {
         try {
             Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             Log.e(t, "No BouncyCastle implementation of symmetric algorithm!");
             return null;
         } catch (NoSuchProviderException e) {
-            e.printStackTrace();
             Log.e(t, "No BouncyCastle provider for implementation of symmetric algorithm!");
             return null;
         } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
             Log.e(t, "No BouncyCastle provider for padding implementation of symmetric algorithm!");
             return null;
         }
@@ -486,7 +465,6 @@ public class EncryptionUtils {
             String msg = "Error encrypting: " + file.getName() + " -> "
                     + encryptedFile.getName();
             Log.e(t, msg, e);
-            e.printStackTrace();
             throw new EncryptionException(msg, e);
         } finally {
             IOUtils.closeQuietly(cipherOutputStream);
@@ -655,7 +633,6 @@ public class EncryptionUtils {
             fout.getChannel().force(true);
             writer.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error writing submission.xml for encrypted submission: "
                     + submissionXml.getParentFile().getName();
             Log.e(t, msg);

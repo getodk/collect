@@ -57,7 +57,6 @@ public class FileManagerTabs extends FragmentActivity {
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setFontColor(android.R.color.white);
         slidingTabLayout.setBackgroundColor(Color.DKGRAY);
-        slidingTabLayout.setFontSize(Collect.getQuestionFontsize());
         slidingTabLayout.setViewPager(viewPager);
     }
 

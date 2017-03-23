@@ -113,7 +113,8 @@
             android:label="@string/all_open_source_licenses" />
         <activity
             android:name=".activities.GoogleDriveActivity"
-            android:label="@string/app_name" 
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden"
             />
         <activity
@@ -129,9 +130,6 @@
             <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
         </intent-filter>
 
-        <activity
-            android:name=".activities.InstanceChooserTabs"
-            android:label="@string/app_name" />
         <activity
             android:name=".activities.FormChooserList"
             android:label="@string/app_name" >
@@ -154,9 +152,11 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GoogleSheetsUploaderActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.InstanceUploaderList"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name">
 	        <intent-filter>
 	            <action android:name="android.intent.action.VIEW" />

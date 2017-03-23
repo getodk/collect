@@ -68,7 +68,7 @@ public class IntegerWidget extends StringWidget {
         mAnswer.setFilters(fa);
 
         if (prompt.isReadOnly()) {
-            setBackgroundDrawable(null);
+            setBackground(null);
             setFocusable(false);
             setClickable(false);
         }

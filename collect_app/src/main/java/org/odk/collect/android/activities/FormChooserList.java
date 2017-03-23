@@ -72,7 +72,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(savedInstanceState.getString(syncMsgKey));
+            tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
         }
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
@@ -102,7 +102,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         TextView tv = (TextView) findViewById(R.id.status_text);
-        outState.putString(syncMsgKey, tv.getText().toString());
+        outState.putString(syncMsgKey, tv.getText().toString().trim());
     }
 
 
@@ -112,7 +112,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get uri to form
-        long idFormsTable = ((SimpleCursorAdapter) getListAdapter()).getItemId(position);
+        long idFormsTable = getListAdapter().getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
@@ -172,7 +172,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     public void syncComplete(String result) {
         Log.i(t, "disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setText(result);
+        tv.setText(result.trim());
     }
 
     @Override
@@ -183,9 +183,16 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         int[] view = new int[]{
                 R.id.text1, R.id.text2, R.id.text3
         };
-        SimpleCursorAdapter instances =
+
+        mListAdapter =
                 new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(sortOrder), data, view);
-        setListAdapter(instances);
+
+        setListAdapter(mListAdapter);
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
     }
 
     /**

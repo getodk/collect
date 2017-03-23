@@ -24,12 +24,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Window;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.InfoLogger;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -68,58 +68,53 @@ public class GeoPointActivity extends Activity implements LocationListener {
         }
 
         setTitle(getString(R.string.get_location));
-
-        if (PlayServicesUtil.checkPlayServices(GeoPointActivity.this)) {
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-            // make sure we have a good location provider before continuing
-            List<String> providers = mLocationManager.getProviders(true);
-            for (String provider : providers) {
-                if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                    mGPSOn = true;
-                }
-                if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                    mNetworkOn = true;
-                }
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // make sure we have a good location provider before continuing
+        List<String> providers = mLocationManager.getProviders(true);
+        for (String provider : providers) {
+            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
+                mGPSOn = true;
             }
-            if (!mGPSOn && !mNetworkOn) {
-                ToastUtils.showShortToast(R.string.provider_disabled_error);
-                finish();
+            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+                mNetworkOn = true;
             }
-
-            if (mGPSOn) {
-                Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (loc != null) {
-                    InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                            " lastKnownLocation(GPS) lat: " +
-                            loc.getLatitude() + " long: " +
-                            loc.getLongitude() + " acc: " +
-                            loc.getAccuracy());
-                } else {
-                    InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                            " lastKnownLocation(GPS) null location");
-                }
-            }
-
-            if (mNetworkOn) {
-                Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                if (loc != null) {
-                    InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                            " lastKnownLocation(Network) lat: " +
-                            loc.getLatitude() + " long: " +
-                            loc.getLongitude() + " acc: " +
-                            loc.getAccuracy());
-                } else {
-                    InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                            " lastKnownLocation(Network) null location");
-                }
-            }
-
-            setupLocationDialog();
-        } else {
-            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointActivity.this);
+        }
+        if (!mGPSOn && !mNetworkOn) {
+            ToastUtils.showShortToast(R.string.provider_disabled_error);
+            Intent onGPS_intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(onGPS_intent);
+            finish();
         }
 
+        if (mGPSOn) {
+            Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (loc != null) {
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+                        " lastKnownLocation(GPS) lat: " +
+                        loc.getLatitude() + " long: " +
+                        loc.getLongitude() + " acc: " +
+                        loc.getAccuracy());
+            } else {
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+                        " lastKnownLocation(GPS) null location");
+            }
+        }
+
+        if (mNetworkOn) {
+            Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (loc != null) {
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+                        " lastKnownLocation(Network) lat: " +
+                        loc.getLatitude() + " long: " +
+                        loc.getLongitude() + " acc: " +
+                        loc.getAccuracy());
+            } else {
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
+                        " lastKnownLocation(Network) null location");
+            }
+        }
+
+        setupLocationDialog();
     }
 
 
@@ -255,14 +250,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
             InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
                     " onLocationChanged(" + mLocationCount + ") null location");
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private String truncateDouble(float number) {

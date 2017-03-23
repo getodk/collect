@@ -309,7 +309,7 @@
   <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
   <string name="google_audio_error">Google Sheets ei tällä hetkellä tue äänitiedostoja.</string>
   <string name="google_video_error">Google Sheets ei tällä hetkellä tue videotiedostoja.</string>
-  <string name="picasa_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
+  <string name="media_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
   <string name="odk_auth_auth_fail">ODK Autosend autentikointivirhe, varmista että asetukset ovat oikein</string>
   <string name="odk_auto_note">ODK Autosend -ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -325,7 +325,6 @@
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että työkirjan omistaja on myöntänyt pääsyn.</string>
-  <string name="google_sheets_update_error">Virhe päivittäessä työkirjaa. Varmista että työkirjan omistaja on myöntänyt muokkausoikeuden.</string>
   <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>

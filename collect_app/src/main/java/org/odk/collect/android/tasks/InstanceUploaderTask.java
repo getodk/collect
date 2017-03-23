@@ -33,8 +33,10 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
+import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
@@ -105,6 +107,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         Uri u = Uri.parse(urlString);
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
+        ResponseMessageParser messageParser = null;
         boolean openRosaServer = false;
         if (uriRemap.containsKey(u)) {
             // we already issued a head request and got a response,
@@ -175,7 +178,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 return true;
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
                             outcome.mResults.put(id, fail + urlString + " " + e.toString());
                             cv.put(InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -204,42 +206,36 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     }
                 }
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Client Protocol Exception");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (ConnectTimeoutException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (UnknownHostException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (SocketTimeoutException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Connection Timeout");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (HttpHostConnectException e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 outcome.mResults.put(id, fail + "Network Connection Refused");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
@@ -459,7 +455,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                     ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                             builder.addPart("*isIncomplete*", sb);
                         } catch (Exception e) {
-                            e.printStackTrace(); // never happens...
                         }
                         ++j; // advance over the last attachment added...
                         break;
@@ -471,12 +466,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
             // prepare response and return uploaded
             HttpResponse response = null;
+
             try {
                 Log.i(t, "Issuing POST request for " + id + " to: " + u.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
+                HttpEntity httpEntity = response.getEntity();
+                messageParser = new ResponseMessageParser(httpEntity);
                 WebUtils.discardEntityBytes(response);
-
                 Log.i(t, "Response code:" + responseCode);
                 // verify that the response was a 201 or 202.
                 // If it wasn't, the submission has failed.
@@ -490,8 +487,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
-                        outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
-                                + " (" + responseCode + ") at " + urlString);
+                        // If response from server is valid use that else use default messaging
+                        if (messageParser.isValid()){
+                            outcome.mResults.put(id, fail + messageParser.getMessageResponse());
+                        }else{
+                            outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
+                                    + " (" + responseCode + ") at " + urlString);
+                        }
+
                     }
                     cv.put(InstanceColumns.STATUS,
                             InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -500,7 +503,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     return true;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
@@ -513,8 +515,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
-        // if it got here, it must have worked
-        outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+        // If response from server is valid use that else use default messaging
+        if (messageParser.isValid()){
+            outcome.mResults.put(id, messageParser.getMessageResponse());
+        }else{
+            // Default messaging
+            outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
+        }
+
         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
         return true;
@@ -557,7 +565,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     if (isCancelled()) {
                         return false;
                     }
-                    publishProgress(c.getPosition() + 1, c.getCount());
+
+                    publishProgress(c.getPosition() + 1 + low, values.length);
                     String instance = c.getString(
                             c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));

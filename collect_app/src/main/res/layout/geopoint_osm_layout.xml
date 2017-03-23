@@ -2,12 +2,12 @@
 <FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/mainlayout"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 	<LinearLayout
 		android:id="@+id/location_buttons"
 		android:orientation="vertical"
-		android:layout_width="fill_parent"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_horizontal"
 		android:paddingLeft="0dip"
@@ -33,8 +33,8 @@
 
 		<org.osmdroid.views.MapView
 			android:id="@+id/omap"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"/>
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
 
 
 	</LinearLayout>
@@ -48,7 +48,7 @@
 
 	<LinearLayout
 			android:orientation="vertical"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			>
 
@@ -58,7 +58,7 @@
 				android:padding="15dp"
 				android:layout_margin="5dp"
 				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
+				android:layout_height="match_parent"
 				android:layout_weight="1" />
 		<Button
 			android:id="@+id/show_location"
@@ -66,7 +66,7 @@
 			android:padding="15dp"
 			android:layout_margin="5dp"
 			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
+			android:layout_height="match_parent"
 			android:layout_weight="1"/>
 
 			<Button
@@ -75,13 +75,13 @@
 				android:padding="15dp"
 				android:layout_margin="5dp"
 				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
+				android:layout_height="match_parent"
 				android:layout_weight="1"/>
 
 		<Button
 			android:id="@+id/clear"
 			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
+			android:layout_height="match_parent"
 			android:padding="15dp"
 			android:layout_margin="5dp"
 			android:drawableRight="@drawable/ic_delete_black_36dp"
@@ -93,7 +93,7 @@
 				android:padding="15dp"
 				android:layout_margin="5dp"
 				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
+				android:layout_height="match_parent"
 				android:layout_weight="1" />
 		</LinearLayout>
 	</ScrollView>

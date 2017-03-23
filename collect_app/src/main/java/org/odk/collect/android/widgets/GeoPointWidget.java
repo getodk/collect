@@ -40,6 +40,7 @@ import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.text.DecimalFormat;
 
@@ -141,12 +142,22 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = null;
                 if (mUseMapsV2 && mUseMaps) {
                     if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-                        i = new Intent(getContext(), GeoPointMapActivity.class);
+                        if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                            i = new Intent(getContext(), GeoPointMapActivity.class);
+                        } else {
+                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                            return;
+                        }
                     } else {
                         i = new Intent(getContext(), GeoPointOsmMapActivity.class);
                     }
                 } else {
-                    i = new Intent(getContext(), GeoPointActivity.class);
+                    if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                        i = new Intent(getContext(), GeoPointActivity.class);
+                    } else {
+                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                        return;
+                    }
                 }
 
                 String s = mStringAnswer.getText().toString();

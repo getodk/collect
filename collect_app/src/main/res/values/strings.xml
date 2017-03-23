@@ -322,7 +322,7 @@
 <string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
 <string name="google_audio_error">Audio files are not supported by Google Sheets at this time.</string>
 <string name="google_video_error">Video files are not supported by Google Sheets at this time.</string>
-<string name="picasa_upload_error">Failed to upload photo that does not exist: %1$s</string>
+<string name="media_upload_error">Failed to upload photo that does not exist: %1$s</string>
 <string name="odk_auth_auth_fail">ODK Autosend authentication failure, please make sure your settings are correct</string>
 <string name="odk_auto_note">ODK Autosend Notification</string>
 <string name="notification_error">Error displaying notification text</string>
@@ -337,8 +337,7 @@
 <string name="sheets_google_account_needed">You have selected Google Sheets as your server, please select a corresponding Google Account in the General Settings before continuing</string>
 <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
 <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
-<string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
-<string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
+<string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
 <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
 <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
 <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
@@ -495,4 +494,6 @@
 <string name="sorting_menu_open">Open sorting menu</string>
 <string name="sorting_menu_close">Close sorting menu</string>
 <string name="sort_the_list">Sort the list</string>
+<string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
+<string name="filter_the_list">Filter the list</string>
 </resources>

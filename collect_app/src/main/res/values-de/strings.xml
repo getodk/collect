@@ -307,7 +307,7 @@
   <string name="google_repeat_error">Wiederholungen werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="google_audio_error">Audiodateien werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="google_video_error">Videodateien werden zur Zeit von Google Sheets nicht unterstützt.</string>
-  <string name="picasa_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
+  <string name="media_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
   <string name="odk_auth_auth_fail">ODK Auto-Send Authentifizierungsfehler, bitte überprüfen Sie ihre Einstellungen</string>
   <string name="odk_auto_note">ODK Auto-Send Benachrichtigung</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
@@ -323,7 +323,6 @@
   <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
-  <string name="google_sheets_update_error">Fehler beim Aktualisieren der Tabelle.Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Schreibzugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_missing_columns">Die folgenden Spalten fehlen in der Tabelle: %1$s</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>

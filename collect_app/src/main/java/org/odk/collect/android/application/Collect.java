@@ -17,16 +17,18 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
@@ -171,16 +173,8 @@ public class Collect extends Application {
     }
 
     public String getVersionedAppName() {
-        String versionName = "";
-        try {
-            versionName = getPackageManager()
-                    .getPackageInfo(getPackageName(), 0)
-                    .versionName;
-            versionName = " " + versionName.replaceFirst("-", "\n");
-        } catch (NameNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String versionName = BuildConfig.VERSION_NAME;
+        versionName = " " + versionName.replaceFirst("-", "\n");
         return getString(R.string.app_name) + versionName;
     }
 
@@ -223,6 +217,17 @@ public class Collect extends Application {
 
     public CookieStore getCookieStore() {
         return cookieStore;
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void showKeyboard(View view) {
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
     @Override
