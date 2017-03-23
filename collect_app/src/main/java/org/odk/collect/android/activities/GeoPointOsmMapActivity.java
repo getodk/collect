@@ -28,16 +28,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
@@ -58,9 +59,6 @@ import java.util.List;
  */
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
-
-    private SharedPreferences sharedPreferences;
-    private String basemap;
 
 	private static final String LOCATION_COUNT = "locationCount";
 
@@ -91,10 +89,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
 
-    private double mLocationAccuracy;
     private int mLocationCount = 0;
 
-    private boolean mZoomed = false;
     private MapHelper mHelper;
 
     private AlertDialog zoomDialog;
@@ -127,9 +123,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         try {
             setContentView(R.layout.geopoint_osm_layout);
         } catch (NoClassDefFoundError e) {
-            e.printStackTrace();
-            Toast.makeText(getBaseContext(), getString(R.string.google_play_services_error_occured),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
@@ -139,7 +133,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mMap.setMultiTouchControls(true);
         mMap.setBuiltInZoomControls(true);
         mMarker = new Marker(mMap);
-        mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+        mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
 
         handler.postDelayed(new Runnable() {
@@ -150,7 +144,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         }, 100);
 
-        mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
         mLocationStatus = (TextView) findViewById(R.id.location_status);
         mlocationInfo = (TextView) findViewById(R.id.location_info);
 
@@ -288,11 +281,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
 
             }
-            if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
-                        GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
-            }
-
         }
 
         if (mLatLng != null) {
@@ -301,10 +289,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             mMap.invalidate();
             mCaptureLocation = true;
             foundFirstLocation = true;
-            mZoomed = true;
             zoomToPoint();
         }
-
     }
 
 
@@ -317,16 +303,21 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     @Override
     protected void onPause() {
         super.onPause();
-        mLocationManager.removeUpdates(this);
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(this);
+        }
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mHelper.setBasemap();
-        upMyLocationOverlayLayers();
-
+        if (mMap != null) {
+            mHelper.setBasemap();
+        }
+        if (mLocationManager != null) {
+            upMyLocationOverlayLayers();
+        }
     }
 
     private void upMyLocationOverlayLayers() {
@@ -366,8 +357,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mMyLocationOverlay.setEnabled(true);
         mMyLocationOverlay.enableMyLocation();
     }
-
-    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private void zoomToPoint() {
         if (mLatLng != null) {
@@ -530,7 +519,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mShowLocationButton.setEnabled(true);
         mMap.invalidate();
         mMarker.setPosition(geoPoint);
-        mMarker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+        mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         mMarker.setDraggable(true);
         mLatLng = geoPoint;
         mIsDragged = true;
@@ -617,5 +606,4 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-
 }

@@ -24,7 +24,7 @@ import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -206,7 +206,7 @@ public final class WebUtils {
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext());
-        String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
+        String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
                 Collect.getInstance().getString(R.string.protocol_odk_default));
 
         // TODO:  this doesn't exist....
@@ -282,9 +282,7 @@ public final class WebUtils {
                 }
                 is.close();
             } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -300,7 +298,6 @@ public final class WebUtils {
             URL url = new URL(urlString);
             u = url.toURI();
         } catch (Exception e) {
-            e.printStackTrace();
             return new DocumentFetchResult(e.getLocalizedMessage()
                     // + app.getString(R.string.while_accessing) + urlString);
                     + ("while accessing") + urlString, 0);
@@ -404,7 +401,6 @@ public final class WebUtils {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
                 Log.e(t, error);
@@ -437,7 +433,6 @@ public final class WebUtils {
             }
             return new DocumentFetchResult(doc, isOR);
         } catch (Exception e) {
-            e.printStackTrace();
             String cause;
             Throwable c = e;
             while (c.getCause() != null) {

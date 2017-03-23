@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Serverul necesită autentificare</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Setări server</string>
-  <string name="toggle_selected">Marcați tot</string>
   <string name="trigger">OK. Vă rugăm să continuați.</string>
   <string name="uploading_data">Trimitere formular</string>
   <string name="url_error">Ne pare rău, URL invalid!</string>
@@ -218,11 +217,13 @@
   <string name="save_mid">Salvați formularul</string>
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="verify_new_password">Reintroduceți noua parolă</string>
+  <string name="admin_password">Parola administratorului</string>
   <string name="admin_password_changed">Parola de administrator a fost schimbată cu succes</string>
   <string name="admin_password_disabled">Parola de administrator dezactivată</string>
   <string name="admin_password_mismatch">Ne pare rău, parolele nu se potrivesc!</string>
   <string name="admin_password_incorrect">Ne pare rău, parola este incorectă!</string>
   <string name="enter_admin_password">Introduceți parola de administrator</string>
+  <string name="change_admin_password">Schimbați parola administratorului</string>
   <string name="found_in_menu">Deselectați pentru a ascunde din meniu în completarea formularului</string>
   <string name="autosend">Auto-trimitere</string>
   <string name="autosend_wifi">Auto-trimitere prin Wi-Fi</string>
@@ -308,7 +309,7 @@
   <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="google_audio_error">Fișierele audio nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="google_video_error">Fișierele video nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="picasa_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
+  <string name="media_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
   <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
   <string name="odk_auto_note">Notificare ODK Autosend</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
@@ -324,7 +325,6 @@
   <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
   <string name="google_sheets_access_denied">Acces interzis. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
-  <string name="google_sheets_update_error">Eroare la actualizarea foii de calcul. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
   <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
   <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
@@ -334,7 +334,11 @@
   <string name="map_sdk_selector_title">SDK cartografiere</string>
   <string name="map_sdk_behavior">SDK cartografiere</string>
   <string name="google_maps_sdk">SDK Google Maps</string>
+  <string name="openstreetmap_sdk">SDK OpenStreetMap</string>
   <string name="show_map_sdk">Afișați opțiuni SDK hartă</string>
+  <string name="openmap_streets">OSM Streets</string>
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="streets">Străzi</string>
   <string name="terrain">Teren</string>
   <string name="hybrid">Hibrid</string>
@@ -357,4 +361,8 @@
   <string name="polyline_save">Salvare ca Polyline</string>
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

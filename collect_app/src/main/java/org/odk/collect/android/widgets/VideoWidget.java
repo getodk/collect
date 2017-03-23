@@ -40,7 +40,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -122,7 +122,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
                 // request high resolution if configured for that...
                 boolean high_resolution = settings.getBoolean(
-                        PreferencesActivity.KEY_HIGH_RESOLUTION,
+                        PreferenceKeys.KEY_HIGH_RESOLUTION,
                         VideoWidget.DEFAULT_HIGH_RESOLUTION);
                 if (high_resolution) {
                     i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
@@ -206,7 +206,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                         + mBinaryName);
                 i.setDataAndType(Uri.fromFile(f), "video/*");
                 try {
-                    ((Activity) getContext()).startActivity(i);
+                    getContext().startActivity(i);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
@@ -263,7 +263,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         if (mBinaryName != null) {
-            return new StringData(mBinaryName.toString());
+            return new StringData(mBinaryName);
         } else {
             return null;
         }

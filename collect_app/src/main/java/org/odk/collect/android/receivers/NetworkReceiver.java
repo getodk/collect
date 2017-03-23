@@ -16,15 +16,23 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
@@ -32,6 +40,7 @@ import org.odk.collect.android.utilities.WebUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -79,14 +88,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     private boolean interfaceIsEnabled(Context context,
-            NetworkInfo currentNetworkInfo) {
+                                       NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         boolean sendwifi = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_AUTOSEND_WIFI, false);
+                PreferenceKeys.KEY_AUTOSEND_WIFI, false);
         boolean sendnetwork = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_AUTOSEND_NETWORK, false);
+                PreferenceKeys.KEY_AUTOSEND_NETWORK, false);
 
         return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
@@ -98,22 +107,15 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (!running) {
             running = true;
 
-            String selection = InstanceColumns.STATUS + "=? or " + InstanceColumns.STATUS + "=?";
-            String selectionArgs[] =
-                    {
-                            InstanceProviderAPI.STATUS_COMPLETE,
-                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED
-                    };
-
             ArrayList<Long> toUpload = new ArrayList<Long>();
-            Cursor c = context.getContentResolver().query(InstanceColumns.CONTENT_URI, null,
-                    selection, selectionArgs, null);
+            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
                     while (c.moveToNext()) {
                         Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(Long.valueOf(l));
+                        toUpload.add(l);
                     }
                 }
             } finally {
@@ -130,33 +132,40 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
+
+            GoogleAccountCredential mCredential;
+            // Initialize credentials and service object.
+            mCredential = GoogleAccountCredential.usingOAuth2(
+                    Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
+                    .setBackOff(new ExponentialBackOff());
+
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-            String protocol = settings.getString(PreferencesActivity.KEY_PROTOCOL,
+            String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
                     context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context);
+                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, mCredential);
                 String googleUsername = settings.getString(
-                        PreferencesActivity.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
                     // just quit if there's no username
                     running = false;
                     return;
                 }
-                mGoogleSheetsUploadTask.setUserName(googleUsername);
+                mCredential.setSelectedAccountName(googleUsername);
                 mGoogleSheetsUploadTask.setUploaderListener(this);
                 mGoogleSheetsUploadTask.execute(toSendArray);
 
             } else {
                 // get the username, password, and server from preferences
 
-                String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-                String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
-                String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                String storedUsername = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+                String storedPassword = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
+                String server = settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         context.getString(R.string.default_server_url));
                 String url = server
-                        + settings.getString(PreferencesActivity.KEY_FORMLIST_URL,
+                        + settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
                         context.getString(R.string.default_odk_formlist));
 
                 Uri u = Uri.parse(url);
@@ -206,11 +215,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             {
                 Cursor results = null;
                 try {
-                    results = Collect
-                            .getInstance()
-                            .getContentResolver()
-                            .query(InstanceColumns.CONTENT_URI, null, selection.toString(),
-                                    selectionArgs, null);
+                    results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
                     if (results.getCount() > 0) {
                         results.moveToPosition(-1);
                         while (results.moveToNext()) {
@@ -271,12 +276,24 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     private class GoogleSheetsAutoUploadTask extends
-            GoogleSheetsAbstractUploader<Long, Integer, HashMap<String, String>> {
+            GoogleSheetsAbstractUploader {
 
+        private final GoogleAccountCredential mCredential;
         private Context mContext;
 
-        public GoogleSheetsAutoUploadTask(Context c) {
+        public GoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
             mContext = c;
+            mCredential = credential;
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mSheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("ODK-Collect")
+                    .build();
+            mDriveService = new com.google.api.services.drive.Drive.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("ODK-Collect")
+                    .build();
         }
 
         @Override
@@ -295,9 +312,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            String token = null;
+            String token;
             try {
-                token = authenticate(mContext, mGoogleUserName);
+                token = mCredential.getToken();
+                GoogleAuthUtil.invalidateToken(mContext, token);
+
+                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+
+
             } catch (IOException e) {
                 // network or server error, the call is expected to succeed if
                 // you try again later. Don't attempt to call again immediately
@@ -307,11 +329,12 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } catch (GooglePlayServicesAvailabilityException playEx) {
                 return null;
             } catch (UserRecoverableAuthException e) {
-                e.printStackTrace();
                 return null;
             } catch (GoogleAuthException e) {
                 // Failure. The call is not expected to ever succeed so it
                 // should not be retried.
+                return null;
+            } catch (MultipleFoldersFoundException e) {
                 return null;
             }
             mContext = null;

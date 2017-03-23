@@ -31,71 +31,79 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
  */
 public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
 
-	private static final String TAG = "DeleteInstancesTask";
-	
-	private ContentResolver contentResolver;
-	private DeleteInstancesListener deleteInstancesListener;
-	
-	private int successCount = 0;
-	
-	@Override
-	protected Integer doInBackground(Long... params) {
-		int deleted = 0;
+    private static final String TAG = "DeleteInstancesTask";
 
-		if (params == null || contentResolver == null) {
-			return deleted;
-		}
-		
-		// delete files from database and then from file system
-		for (int i = 0; i < params.length; i++) {
-			if ( isCancelled() ) {
-				break;
-			}
-			try {
-	            Uri deleteForm =
-	                Uri.withAppendedPath(InstanceColumns.CONTENT_URI, params[i].toString());
-	            
-	            int wasDeleted = contentResolver.delete(deleteForm, null, null);
-	            deleted += wasDeleted;
-	            
-	            if (wasDeleted > 0) {
-	            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
-	            }
-			} catch ( Exception ex ) {
-				Log.e(TAG,"Exception during delete of: " + params[i].toString() + " exception: "  + ex.toString());
-			}
-	    } 
-		successCount = deleted;
-		return deleted;
-	}
-	
-	@Override
-	protected void onPostExecute(Integer result) {
-	  	contentResolver = null;
+    private ContentResolver contentResolver;
+    private DeleteInstancesListener deleteInstancesListener;
+
+    private int successCount = 0;
+    private int toDeleteCount = 0;
+
+    @Override
+    protected Integer doInBackground(Long... params) {
+        int deleted = 0;
+
+        if (params == null || contentResolver == null) {
+            return deleted;
+        }
+
+        toDeleteCount = params.length;
+
+
+        // delete files from database and then from file system
+        for (Long param : params) {
+            if (isCancelled()) {
+                break;
+            }
+            try {
+                Uri deleteForm =
+                        Uri.withAppendedPath(InstanceColumns.CONTENT_URI, param.toString());
+
+                int wasDeleted = contentResolver.delete(deleteForm, null, null);
+                deleted += wasDeleted;
+
+                if (wasDeleted > 0) {
+                    Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
+                }
+            } catch (Exception ex) {
+                Log.e(TAG, "Exception during delete of: " + param.toString() + " exception: " + ex.toString());
+            }
+        }
+        successCount = deleted;
+        return deleted;
+    }
+
+    @Override
+    protected void onPostExecute(Integer result) {
+        contentResolver = null;
         if (deleteInstancesListener != null) {
             deleteInstancesListener.deleteComplete(result);
         }
         super.onPostExecute(result);
-	}
-	
-	@Override
-	protected void onCancelled() {
-		contentResolver = null;
-		if (deleteInstancesListener != null) {
-			deleteInstancesListener.deleteComplete(successCount);
-		}
-	}
+    }
+
+    @Override
+    protected void onCancelled() {
+        contentResolver = null;
+        if (deleteInstancesListener != null) {
+            deleteInstancesListener.deleteComplete(successCount);
+        }
+    }
 
     public void setDeleteListener(DeleteInstancesListener listener) {
         deleteInstancesListener = listener;
     }
 
 
-    public void setContentResolver(ContentResolver resolver){
-       	contentResolver = resolver;
+    public void setContentResolver(ContentResolver resolver) {
+        contentResolver = resolver;
     }
 
     public int getDeleteCount() {
         return successCount;
+    }
+
+    public int getToDeleteCount() {
+        return toDeleteCount;
     }
 }

@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     public Boolean gpsStatus = true;
     private Boolean play_check = false;
     private MapView mapView;
-    private SharedPreferences sharedPreferences;
     public DefaultResourceProxyImpl resource_proxy;
     public MyLocationNewOverlay mMyLocationOverlay;
     private Button mLocationButton;
@@ -91,7 +91,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private String final_return_string;
     private Integer TRACE_MODE; // 0 manual, 1 is automatic
-    private Boolean inital_location_found = false;
     private Spinner time_units;
     private Spinner time_delay;
     private Button mPolygonSaveButton;
@@ -115,7 +114,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView) findViewById(R.id.geotrace_mapview);
         mHelper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
@@ -335,7 +334,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         if (mNetworkOn) {
             mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
-
     }
 
     @Override
@@ -352,14 +350,20 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onResume() {
         super.onResume();
-        mHelper.setBasemap();
+        if (mapView != null) {
+            mHelper.setBasemap();
+        }
+
         upMyLocationOverlayLayers();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mMyLocationOverlay.enableMyLocation();
+        if (mMyLocationOverlay != null) {
+            mMyLocationOverlay.enableMyLocation();
+        }
+
 //		if(mMyLocationOverlay.getMyLocation()!= null){
 //			mMyLocationOverlay.runOnFirstFix(centerAroundFix);
 //		}
@@ -422,7 +426,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             marker.setOnMarkerClickListener(nullmarkerlistner);
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
-            marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             map_markers.add(marker);
             pathOverlay.addPoint(marker.getPosition());
@@ -435,7 +439,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void disableMyLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mMyLocationOverlay.setEnabled(false);
             mMyLocationOverlay.disableFollowLocation();
             mMyLocationOverlay.disableMyLocation();
@@ -446,7 +450,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void upMyLocationOverlayLayers() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             overlayMyLocationLayers();
         } else {
             showGPSDisabledAlertToUser();
@@ -490,7 +494,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void zoomToMyLocation() {
         if (mMyLocationOverlay.getMyLocation() != null) {
-            inital_location_found = true;
             if (zoom_level == 3) {
                 mapView.getController().setZoom(15);
             } else {
@@ -667,7 +670,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         Float last_know_acuracy =
                 mMyLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         mMyLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-        marker.setIcon(getResources().getDrawable(R.drawable.ic_place_black_36dp));
+        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setDraggable(true);
         marker.setOnMarkerDragListener(draglistner);

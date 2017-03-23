@@ -24,12 +24,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Window;
-import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.InfoLogger;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
@@ -46,7 +47,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
     private boolean mNetworkOn = false;
     private double mLocationAccuracy;
     private int mLocationCount = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +67,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
             }
         }
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_location));
-
+        setTitle(getString(R.string.get_location));
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         // make sure we have a good location provider before continuing
         List<String> providers = mLocationManager.getProviders(true);
         for (String provider : providers) {
@@ -82,8 +80,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
             }
         }
         if (!mGPSOn && !mNetworkOn) {
-            Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
-                    Toast.LENGTH_SHORT).show();
+            ToastUtils.showShortToast(R.string.provider_disabled_error);
+            Intent onGPS_intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(onGPS_intent);
             finish();
         }
 
@@ -116,8 +115,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
         }
 
         setupLocationDialog();
-
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -130,7 +129,9 @@ public class GeoPointActivity extends Activity implements LocationListener {
         super.onPause();
 
         // stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
-        mLocationManager.removeUpdates(this);
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(this);
+        }
 
         // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
         // leaking memory.
@@ -143,13 +144,18 @@ public class GeoPointActivity extends Activity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mGPSOn) {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+        if (mLocationManager != null) {
+            if (mGPSOn) {
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            }
+            if (mNetworkOn) {
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            }
         }
-        if (mNetworkOn) {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        if (mLocationDialog != null) {
+            mLocationDialog.show();
         }
-        mLocationDialog.show();
     }
 
     @Override
@@ -245,7 +251,6 @@ public class GeoPointActivity extends Activity implements LocationListener {
                     " onLocationChanged(" + mLocationCount + ") null location");
         }
     }
-
 
     private String truncateDouble(float number) {
         DecimalFormat df = new DecimalFormat("#.##");

@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -49,8 +49,8 @@ public class MapHelper {
     public static String[] offilineOverlays;
     private static final String no_folder_key = "None";
 
-    public static GoogleMap mGoogleMap;
-    public static MapView mOsmMap;
+    public GoogleMap mGoogleMap;
+    public MapView mOsmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -78,30 +78,30 @@ public class MapHelper {
 
 
     public MapHelper(Context pContext, GoogleMap pGoogleMap) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
-        this.mGoogleMap = pGoogleMap;
+        mGoogleMap = pGoogleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
-        this.mOsmMap = pOsmMap;
+        mOsmMap = pOsmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     private static String _getGoogleBasemap() {
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
     private static String _getOsmBasemap() {
-        return sharedPreferences.getString(PreferencesActivity.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {

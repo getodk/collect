@@ -19,5 +19,5 @@ package org.odk.collect.android.listeners;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface DiskSyncListener {
-    void SyncComplete(String result);
+    void syncComplete(String result);
 }

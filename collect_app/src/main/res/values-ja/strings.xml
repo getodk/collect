@@ -120,11 +120,12 @@
   <string name="send_data">確定済のフォームを送信</string>
   <string name="send_data_button">確定済のフォーム (%s) を送信</string>
   <string name="send_selected_data">選択済を送信</string>
+  <string name="view_sent_forms">送信済フォームを表示</string>
+  <string name="view_sent_forms_button">送信済フォーム (%s) を表示</string>
   <string name="server_auth_credentials">サーバーのユーザー名とパスワードを入力してください: %s</string>
   <string name="server_requires_auth">サーバーは認証が必要です</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">サーバー設定</string>
-  <string name="toggle_selected">すべて反転</string>
   <string name="trigger">OK、続けます。</string>
   <string name="uploading_data">フォームを送信中</string>
   <string name="url_error">申し訳ありません、URL が正しくありません!</string>
@@ -194,6 +195,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">yyyy/MM/dd HH:mm \'に送信失敗しました\'</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">yyyy/MM/dd HH:mm \'に削除しました\'</string>
   <string name="version">バージョン:</string>
   <string name="parent_form_not_present">対応する空のフォームが存在しないか、削除されたため、この保存済のフォームを編集できません。\n\nフォーム ID: %1$s</string>
   <string name="launch_app">起動</string>
@@ -310,7 +312,7 @@
   <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
   <string name="google_audio_error">この時点では Google スプレッドシートでオーディオファイルはサポートされていません。</string>
   <string name="google_video_error">この時点では Google スプレッドシートでビデオファイルはサポートされていません。</string>
-  <string name="picasa_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
+  <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
@@ -326,7 +328,6 @@
   <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
-  <string name="google_sheets_update_error">スプレッドシートの更新中にエラー。スプレッドシートの所有者が、書き込みアクセス許可を与えていることを確認してください。</string>
   <string name="google_sheets_missing_columns">スプレッドシートの次の列が見つかりません: %1$s</string>
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
@@ -415,4 +416,49 @@
   <string name="version_number">バージョン: %s</string>
   <string name="general_settings_about">アプリについて</string>
   <string name="all_open_source_licenses">オープンソースライセンス</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">この画像はGoogleドライブに保存されており、オフラインではアクセスできません。</string>
+  <string name="not_exactly_one_record_for_this_instance">このインスタンスで正確なレコードではありません!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">ブランクフォームはこの jr_form_id に一致しません。</string>
+  <string name="no_form_id_specified">フォームId が指定されていない???</string>
+  <string name="phone_does_not_support_encryption">電話は暗号化をサポートしていません。</string>
+  <string name="phone_does_not_have_base64_class">電話は Base64 クラスがありません。 API レベルは %s です。</string>
+  <string name="phone_does_not_support_rsa">電話は RSA 暗号化をサポートしていません。</string>
+  <string name="invalid_rsa_public_key">RSA 公開鍵が無効です。</string>
+  <string name="encryption_error_message">%s フォームはファイナライズ済みとして保存されていません。</string>
+  <string name="analytics_preferences">使用状況データ</string>
+  <string name="analytics">匿名の使用状況データを収集</string>
+  <string name="analytics_summary">匿名の使用状況データは、ODK チームが修正および機能に優先順位付けするのに役立ちます</string>
+  <string name="select_all">すべて選択</string>
+  <string name="clear_all">すべてクリア</string>
+  <string name="reset_settings">全般設定</string>
+  <string name="reset_saved_forms">保存済フォーム (インスタンスフォルダー、インスタンスデータベース)</string>
+  <string name="reset_blank_forms">空のフォーム (フォームフォルダー、フォームデータベース、アイテムセットデータベース)</string>
+  <string name="reset_layers">地図レイヤー (レイヤーフォルダー)</string>
+  <string name="reset_cache">フォーム読み込みキャッシュ (キャッシュフォルダー)</string>
+  <string name="reset_osm_tiles">OSM タイルキャッシュ (osmdroid フォルダー)</string>
+  <string name="reset_settings_dialog_title">リセットするものを選択</string>
+  <string name="reset_settings_dialog">アプリケーションのリセット…</string>
+  <string name="reset_settings_button_reset">リセット</string>
+  <string name="reset_dialog_nothing">リセットするものが選択されていません。</string>
+  <string name="reset_in_progress">リセットしています…</string>
+  <string name="resetting_finished">リセットが完了しました</string>
+  <string name="reset_app_state_result">結果のリセット</string>
+  <string name="reset_app_state_warning">選択したデータはすべて完全に削除されます。元に戻すことはできません。</string>
+  <string name="reset_settings_result">全般設定 :: %s</string>
+  <string name="reset_saved_forms_result">保存されたフォーム :: %s</string>
+  <string name="reset_blank_forms_result">空のフォーム :: %s</string>
+  <string name="reset_layers_result">地図レイヤー :: %s</string>
+  <string name="reset_cache_result">フォーム読み込みキャッシュ :: %s</string>
+  <string name="reset_osm_tiles_result">OSM タイルキャッシュ :: %s</string>
+  <string name="encrypted_form">暗号化フォーム</string>
+  <string name="deleted_form">削除済フォーム</string>
+  <string name="exit">終了</string>
 </resources>

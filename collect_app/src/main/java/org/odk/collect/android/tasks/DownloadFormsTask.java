@@ -24,6 +24,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -71,6 +72,8 @@ public class DownloadFormsTask extends
 
     private FormDownloaderListener mStateListener;
 
+    private FormsDao mFormsDao;
+
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
             "http://openrosa.org/xforms/xformsManifest";
 
@@ -83,6 +86,7 @@ public class DownloadFormsTask extends
     protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
         ArrayList<FormDetails> toDownload = values[0];
 
+        mFormsDao = new FormsDao();
         int total = toDownload.size();
         int count = 1;
         Collect.getInstance().getActivityLogger().logAction(this, "downloadForms",
@@ -235,14 +239,7 @@ public class DownloadFormsTask extends
         FileUtils.checkMediaPath(new File(mediaPath));
 
         try {
-            String[] selectionArgs = {
-                    formFile.getAbsolutePath()
-            };
-            String selection = FormsColumns.FORM_FILE_PATH + "=?";
-            cursor = Collect.getInstance()
-                    .getContentResolver()
-                    .query(FormsColumns.CONTENT_URI, null, selection, selectionArgs,
-                            null);
+            cursor = mFormsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
 
             isNew = cursor.getCount() <= 0;
 
@@ -268,9 +265,7 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
                 v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
                         formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-                uri =
-                        Collect.getInstance().getContentResolver()
-                                .insert(FormsColumns.CONTENT_URI, v);
+                uri = mFormsDao.saveForm(v);
                 Collect.getInstance().getActivityLogger().logAction(this, "insert",
                         formFile.getAbsolutePath());
 
@@ -318,18 +313,9 @@ public class DownloadFormsTask extends
 
         // we've downloaded the file, and we may have renamed it
         // make sure it's not the same as a file we already have
-        String[] projection = {
-                FormsColumns.FORM_FILE_PATH
-        };
-        String[] selectionArgs = {
-                FileUtils.getMd5Hash(f)
-        };
-        String selection = FormsColumns.MD5_HASH + "=?";
-
         Cursor c = null;
         try {
-            c = Collect.getInstance().getContentResolver()
-                    .query(FormsColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+            c = mFormsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
             if (c.getCount() > 0) {
                 // Should be at most, 1
                 c.moveToFirst();
@@ -378,10 +364,8 @@ public class DownloadFormsTask extends
             URL url = new URL(downloadUrl);
             uri = url.toURI();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             throw e;
         } catch (URISyntaxException e) {
-            e.printStackTrace();
             throw e;
         }
 

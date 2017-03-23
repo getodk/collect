@@ -13,14 +13,21 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<LinearLayout
+
+<android.support.v4.widget.DrawerLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:id="@+id/drawer_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
 		<TextView
 			android:id="@+id/status_text"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/form_scan_starting"
 			android:textSize="14sp"
@@ -31,14 +38,18 @@ the License.
 			android:paddingBottom="4dip"
 			android:paddingTop="4dip"
 			android:background="#DDDDDD"/>
+
+		<include layout="@layout/search_box_layout"/>
+
 		<ListView
 			android:id="@id/android:list"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"/>
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
+
 		<TextView
 			android:id="@android:id/empty"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:text="@string/no_items_display_forms"
 			android:textSize="21sp"
 			android:paddingStart="20dip"
@@ -46,6 +57,15 @@ the License.
 			android:paddingEnd="20dip"
 			android:paddingRight="20dp"
 			android:gravity="center"
-			android:background="@drawable/white"
 			android:textColor="@drawable/black" />
-</LinearLayout>
+	</LinearLayout>
+
+	<!-- Side navigation drawer UI -->
+	<ListView
+		android:id="@+id/sortingMenu"
+		android:layout_width="250dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="right|end"
+		android:background="#DDDDDD"/>
+
+</android.support.v4.widget.DrawerLayout>

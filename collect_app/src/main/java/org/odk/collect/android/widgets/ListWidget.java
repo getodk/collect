@@ -18,11 +18,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -135,11 +134,9 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                         if (imageFile.exists()) {
                             Bitmap b = null;
                             try {
-                                Display display =
-                                        ((WindowManager) getContext().getSystemService(
-                                                Context.WINDOW_SERVICE)).getDefaultDisplay();
-                                int screenWidth = display.getWidth();
-                                int screenHeight = display.getHeight();
+                                DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+                                int screenWidth = metrics.widthPixels;
+                                int screenHeight = metrics.heightPixels;
                                 b =
                                         FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
                                                 screenWidth);
@@ -178,7 +175,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
-                        e.printStackTrace();
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

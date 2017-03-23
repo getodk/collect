@@ -24,10 +24,9 @@ import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -71,10 +70,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     private String constructImageElement() {
         File f = new File(mInstanceFolder + File.separator + mBinaryName);
 
-        Display display = ((WindowManager) getContext().getSystemService(
-                Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int screenWidth = display.getWidth();
-        // int screenHeight = display.getHeight();
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
 
         String imgElement = f.exists() ? ("<img align=\"middle\" src=\"file:///"
                 + f.getAbsolutePath()
@@ -300,7 +297,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     @Override
     public IAnswerData getAnswer() {
         if (mBinaryName != null) {
-            return new StringData(mBinaryName.toString());
+            return new StringData(mBinaryName);
         } else {
             return null;
         }

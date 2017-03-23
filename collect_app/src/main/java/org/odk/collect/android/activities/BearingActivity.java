@@ -40,12 +40,11 @@ public class BearingActivity extends Activity implements SensorEventListener {
     private static float[] mGeomagnetic = null;
 
     private String mBearingDecimal = null;
-    private String mBearing = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.get_bearing));
+        setTitle(getString(R.string.get_bearing));
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -108,7 +107,6 @@ public class BearingActivity extends Activity implements SensorEventListener {
                             case DialogInterface.BUTTON_NEGATIVE:
                                 Collect.getInstance().getActivityLogger()
                                         .logInstanceAction(this, "cancelBearing", "cancel");
-                                mBearing = null;
                                 mBearingDecimal = null;
                                 finish();
                                 break;
@@ -173,7 +171,6 @@ public class BearingActivity extends Activity implements SensorEventListener {
                 // double pitch = 180 * orientation[1] / Math.PI;
                 // double roll = 180 * orientation[2] / Math.PI;
                 double degrees = normalizeDegree(azimuth);
-                mBearing = String.format("%.3f", degrees);
                 mBearingDecimal = String.format(Locale.US, "%.3f", degrees);
                 String dir = "N";
                 if ((degrees > 0 && degrees <= 22.5) || degrees > 337.5) {

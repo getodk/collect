@@ -257,11 +257,15 @@
   <string name="survey_saving_encrypting_message">Uqopha ulwazi…</string>
   <string name="high_resolution_summary">Vumela ukuqobha ngesithwebuli sevidiyo sezinga eliphezulu</string>
   <string name="high_resolution">vumela ividiyo yezinga eliphezulu</string>
-  <string name="picasa_upload_error">Ngihlulekile ukufaka isithombe esivele singekho: %1$s</string>
+  <string name="media_upload_error">Ngihlulekile ukufaka isithombe esivele singekho: %1$s</string>
   <string name="notification_error">Iphutha likhombisa umbiko wokwazisa</string>
   <string name="delete_after_send">Susa emva kokuthumela</string>
   <string name="delete_after_send_summary">Cima amafomu nezekuxhumana emuva kokuthumela ku seva</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

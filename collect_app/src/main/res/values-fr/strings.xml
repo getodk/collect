@@ -124,7 +124,6 @@
   <string name="server_requires_auth">Le Serveur requiert une authentification</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Serveur</string>
-  <string name="toggle_selected">(dé)sélectionner tout</string>
   <string name="trigger">OK. Continuer.</string>
   <string name="uploading_data">Envoi du formulaire…</string>
   <string name="url_error">URL non valable !</string>
@@ -246,7 +245,7 @@
   <string name="buttons_instructions">Vous êtes au début de %s. Utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="swipe_buttons_instructions">Vous êtes au début de %s. Faites glisser votre doigt comme montré ou utilisez les boutons pour avancer ou reculer dans le formulaire.</string>
   <string name="form_processing_logic">Logique de traitement du formulaire</string>
-  <string name="form_processing_logic_recommended">Recommendé (par défaut)</string>
+  <string name="form_processing_logic_recommended">Recommandé (par défaut)</string>
   <string name="form_processing_logic_0">janvier 2015 (le plus vite)</string>
   <string name="form_processing_logic_1">janvier 2015 (le plus sûr)</string>
   <string name="form_processing_logic_2">mi-2014 (lent)</string>
@@ -311,7 +310,7 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="google_repeat_error">Les répétitions ne sont pas prises en charge par les Google Sheets en ce moment.</string>
   <string name="google_audio_error">Les fichiers audio ne sont pas pris en charge par les Google Sheets en ce moment.</string>
   <string name="google_video_error">Les fichiers vidéo ne sont pas pris en charge par les Google Sheets en ce moment.</string>
-  <string name="picasa_upload_error">Échec de téléchargement de photo qui n\'existe pas: %1$s</string>
+  <string name="media_upload_error">Échec de téléchargement de photo qui n\'existe pas: %1$s</string>
   <string name="odk_auth_auth_fail">Échec d\'authentification d\'ODK Auto-envoi. Merci de vous assurez que vos paramètres sont corrects.</string>
   <string name="odk_auto_note">Notification d\'ODK Auto-envoi</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
@@ -327,7 +326,6 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="google_sheets_access_denied">Accès refusé. Merci d’assurer que le propriétaire de la feuille de calcul vous a accordé l\'autorisation d\'accès.</string>
-  <string name="google_sheets_update_error">Erreur de mis à jour de la feuille de calcul. Demandez le propriétaire d\'assurer votre accès en autorisation d\'écriture.</string>
   <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom de l\'utilisateur</string>
@@ -407,7 +405,7 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="alert">Alerte</string>
   <string name="install_openmapkit">Veuillez installer OpenMapKit.</string>
   <string name="go_back">Retour</string>
-  <string name="download_selected">Télécharger éléments sélectionnés </string>
+  <string name="download_selected">Télécharger la sélection</string>
   <string name="detection_frequency">Fréquence de détection</string>
   <string name="record_geopoint">Enregistrer un GeoPoint</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
@@ -416,4 +414,23 @@ Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte G
   <string name="version_number">Version: %s</string>
   <string name="general_settings_about">A propos</string>
   <string name="all_open_source_licenses">Licences Open Source</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">O %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">Cette image est stockée sur Google Drive et ne peut être accédée si vous êtes hors ligne.</string>
+  <string name="not_exactly_one_record_for_this_instance">Pas exactement un enregistrement pour cette instance !</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">Aucun formulaire vierge ne correspond à ce jr_form_id.</string>
+  <string name="no_form_id_specified">Pas de FormId spécifié ???</string>
+  <string name="phone_does_not_support_encryption">Le téléphone ne supporte pas le chiffrement.</string>
+  <string name="phone_does_not_have_base64_class">Le téléphone ne dispose pas de la classe Base64 mais le niveau API est %s.</string>
+  <string name="phone_does_not_support_rsa">Le téléphone ne supporte pas le chiffrement RSA.</string>
+  <string name="invalid_rsa_public_key">Clé publique RSA invalide.</string>
+  <string name="encryption_error_message">Le formulaire %s n\'a pas été enregistré comme finalisé.</string>
+  <string name="select_all">Sélectionner tout</string>
+  <string name="clear_all">Tout effacer</string>
 </resources>

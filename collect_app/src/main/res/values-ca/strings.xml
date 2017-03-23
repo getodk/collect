@@ -124,7 +124,6 @@
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servidor</string>
-  <string name="toggle_selected">Marcar tots</string>
   <string name="trigger">D\'acord. Si us plau, continuar.</string>
   <string name="uploading_data">Enviant formulari</string>
   <string name="url_error">La URL és invàlida!</string>
@@ -308,7 +307,7 @@
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
   <string name="google_audio_error">Arxius d\'audio no s\'admeten a Google Sheets de moment</string>
   <string name="google_video_error">Arxius de vídeo no s\'admeten a Google Sheets de moment</string>
-  <string name="picasa_upload_error">No pot pujar una foto que no existeix: %1$s</string>
+  <string name="media_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>
@@ -324,11 +323,14 @@
   <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_access_denied">Accés denegat. Si us plau, assegureu-vos que teniu permís d\'accés a la fulla de càlcul.</string>
-  <string name="google_sheets_update_error">Error actualitzant fulla. Comproveu que el propietari de la fulla de càlcul us ha atorgat permís d\'accés.</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
   <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

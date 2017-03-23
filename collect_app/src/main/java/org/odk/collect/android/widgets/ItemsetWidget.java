@@ -16,7 +16,9 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -38,6 +40,7 @@ import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,28 +53,31 @@ import java.util.HashMap;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class ItemsetWidget extends QuestionWidget implements
-        android.widget.CompoundButton.OnCheckedChangeListener {
+        CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static String tag = "ItemsetWidget";
 
     boolean mReadOnly;
+    private boolean mAutoAdvanceToNext;
+
     private ArrayList<RadioButton> mButtons;
     private String mAnswer = null;
     // Hashmap linking label:value
     private HashMap<String, String> mAnswers;
-
-    public ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        this(context, prompt, readOnlyOverride, true);
-    }
+    private AdvanceToNextListener mAutoAdvanceToNextListener;
 
     protected ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
-            boolean derived) {
+                            boolean autoAdvanceToNext) {
         super(context, prompt);
 
         mReadOnly = prompt.isReadOnly() || readOnlyOverride;
         mAnswers = new HashMap<String, String>();
 
         mButtons = new ArrayList<>();
+        mAutoAdvanceToNext = autoAdvanceToNext;
+        if (autoAdvanceToNext) {
+            mAutoAdvanceToNextListener = (AdvanceToNextListener) context;
+        }
 
         // Layout holds the vertical list of buttons
         LinearLayout allOptionsLayout = new LinearLayout(context);
@@ -167,7 +173,6 @@ public class ItemsetWidget extends QuestionWidget implements
             try {
                 xpr = XPathParseTool.parseXPath(arguments.get(i));
             } catch (XPathSyntaxException e) {
-                e.printStackTrace();
                 TextView error = new TextView(context);
                 error.setText(String.format(getContext().getString(R.string.parser_exception), arguments.get(i)));
                 addAnswerView(error);
@@ -243,6 +248,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         RadioButton rb = new RadioButton(context);
 
                         rb.setOnCheckedChangeListener(this);
+                        rb.setOnClickListener(this);
                         rb.setTextSize(mAnswerFontsize);
                         rb.setText(label);
                         rb.setTag(index);
@@ -267,6 +273,20 @@ public class ItemsetWidget extends QuestionWidget implements
                         textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                         textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         singleOptionLayout.addView(rb, textParams);
+
+                        if (mAutoAdvanceToNext) {
+                            ImageView rightArrow = new ImageView(getContext());
+                            rightArrow.setImageBitmap(
+                                    BitmapFactory.decodeResource(getContext().getResources(),
+                                    R.drawable.expander_ic_right));
+
+                            RelativeLayout.LayoutParams arrowParams =
+                                    new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                                            LayoutParams.WRAP_CONTENT);
+                            arrowParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                            arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                            singleOptionLayout.addView(rightArrow, arrowParams);
+                        }
 
                         if (!c.isLast()) {
                             // Last, add the dividing line (except for the last element)
@@ -307,7 +327,8 @@ public class ItemsetWidget extends QuestionWidget implements
         for (RadioButton button : mButtons) {
             if (button.isChecked()) {
                 button.setChecked(false);
-                return;
+                clearNextLevelsOfCascadingSelect();
+                break;
             }
         }
     }
@@ -358,6 +379,7 @@ public class ItemsetWidget extends QuestionWidget implements
             for (RadioButton button : mButtons) {
                 if (button.isChecked() && !(buttonView == button)) {
                     button.setChecked(false);
+                    clearNextLevelsOfCascadingSelect();
                 } else {
                     mAnswer = mAnswers.get(buttonView.getText().toString());
                 }
@@ -365,4 +387,10 @@ public class ItemsetWidget extends QuestionWidget implements
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        if (mAutoAdvanceToNext) {
+            mAutoAdvanceToNextListener.advance();
+        }
+    }
 }

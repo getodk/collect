@@ -124,7 +124,6 @@
   <string name="server_requires_auth">ម៉ាស៊ីនមេទាមទារឲ្យមានការផ្ទៀងផ្ទាត់</string>
   <string name="server_url">អាសយដ្ឋាន</string>
   <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
-  <string name="toggle_selected">បិទបើកទាំងអស់</string>
   <string name="trigger">យល់ព្រម. សូមបន្ត.</string>
   <string name="uploading_data">កំពុងបញ្ជូនសំណុំ​បែប​បទ​</string>
   <string name="url_error">សុំទោស, អាសយដ្ឋានមិនត្រឹមត្រូវ!</string>
@@ -310,7 +309,7 @@
   <string name="google_repeat_error">សំនួរម្តង​ទៀត​មិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
   <string name="google_audio_error">ឯកសារសម្លេងមិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
   <string name="google_video_error">ឯកសារវីដេអូមិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
-  <string name="picasa_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
+  <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
   <string name="odk_auth_auth_fail">
 បរាជ័យក្នុងការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ ODK នៃការផ្ញើដោយស្វ័យ​ប្រវត្តិ, សូមធ្វើឱ្យប្រាកដថាការកំណត់របស់អ្នកគឺត្រឹមត្រូវ</string>
   <string name="odk_auto_note">ការជូនដំណឹង ODK ដោយស្វ័យប្រវត្តិ</string>
@@ -327,7 +326,6 @@
   <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ការចូលដំណើរការត្រូវបានបដិសេធ។  ​សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីបាន​ផ្តល់​ការអនុញ្ញាតឲ្យអ្នកចូលដំណើរការ។</string>
-  <string name="google_sheets_update_error">មាន​កំហុស​ក្នុង​ធ្វើ​បច្ចុប្បន្ន​ភាព​លើ​សៀវភៅ​បញ្ជី ។ សូម​ប្រាកដ​ថា​ម្ចាស់​​សៀវភៅ​បញ្ជី​​បាន​ផ្តល់​ការ​អនុញ្ញាតិ​ឲ្យ​អ្នក មាន​សិទ្ធិសរសេរ ។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
   <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
@@ -359,4 +357,8 @@
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="general_settings_about">អំពី</string>
   <string name="all_open_source_licenses">អាជ្ញាប័ណ្ណប្រភពបើកចំហ</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

@@ -19,6 +19,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,6 +38,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +73,7 @@ public class FormHierarchyActivity extends ListActivity {
         // We use a static FormEntryController to make jumping faster.
         mStartIndex = formController.getFormIndex();
 
-        setTitle(getString(R.string.app_name) + " > "
-                + formController.getFormTitle());
+        setTitle(formController.getFormTitle());
 
         mPath = (TextView) findViewById(R.id.pathtext);
 
@@ -111,6 +112,26 @@ public class FormHierarchyActivity extends ListActivity {
                 finish();
             }
         });
+
+        String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+            Collect.getInstance().getFormController().stepToOuterScreenEvent();
+
+            Button exitButton = (Button) findViewById(R.id.exitButton);
+            exitButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "exit",
+                            "click");
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+
+            exitButton.setVisibility(View.VISIBLE);
+            jumpBeginningButton.setVisibility(View.GONE);
+            jumpEndButton.setVisibility(View.GONE);
+        }
 
         refreshView();
 
@@ -316,8 +337,8 @@ public class FormHierarchyActivity extends ListActivity {
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, getResources()
-                                            .getDrawable(R.drawable.expander_ic_minimized),
+                                    new HierarchyElement(fc.getLongText(), null, ContextCompat
+                                            .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                             Color.WHITE,
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
@@ -394,8 +415,7 @@ public class FormHierarchyActivity extends ListActivity {
                 for (int i = 0; i < children.size(); i++) {
                     formList.remove(position + 1);
                 }
-                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
-                h.setColor(Color.WHITE);
+                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -407,8 +427,7 @@ public class FormHierarchyActivity extends ListActivity {
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
-                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
-                h.setColor(Color.WHITE);
+                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -424,7 +443,10 @@ public class FormHierarchyActivity extends ListActivity {
                     }
                 }
                 setResult(RESULT_OK);
-                finish();
+                String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                    finish();
+                }
                 return;
             case CHILD:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",

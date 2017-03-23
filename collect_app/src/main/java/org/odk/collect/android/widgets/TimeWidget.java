@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
@@ -58,11 +59,15 @@ public class TimeWidget extends QuestionWidget {
             // create a new date time from date object using default time zone
             DateTime ldt =
                     new DateTime(
-                            ((Date) ((TimeData) prompt.getAnswerValue()).getValue()).getTime());
+                            ((Date) prompt.getAnswerValue().getValue()).getTime());
             System.out.println("retrieving:" + ldt);
-
-            mTimePicker.setCurrentHour(ldt.getHourOfDay());
-            mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTimePicker.setHour(ldt.getHourOfDay());
+                mTimePicker.setMinute(ldt.getMinuteOfHour());
+            } else {
+                mTimePicker.setCurrentHour(ldt.getHourOfDay());
+                mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
+            }
 
         } else {
             // create time widget with current time as of right now
@@ -90,8 +95,13 @@ public class TimeWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         DateTime ldt = new DateTime();
-        mTimePicker.setCurrentHour(ldt.getHourOfDay());
-        mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTimePicker.setHour(ldt.getHourOfDay());
+            mTimePicker.setMinute(ldt.getMinuteOfHour());
+        } else {
+            mTimePicker.setCurrentHour(ldt.getHourOfDay());
+            mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
+        }
     }
 
 
@@ -99,10 +109,16 @@ public class TimeWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
         // use picker time, convert to today's date, store as utc
-        DateTime ldt =
-                (new DateTime()).withTime(mTimePicker.getCurrentHour(),
-                        mTimePicker.getCurrentMinute(),
-                        0, 0);
+        DateTime ldt;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ldt = (new DateTime()).withTime(mTimePicker.getHour(),
+                            mTimePicker.getMinute(),
+                            0, 0);
+        } else {
+             ldt = (new DateTime()).withTime(mTimePicker.getCurrentHour(),
+                            mTimePicker.getCurrentMinute(),
+                            0, 0);
+        }
         //DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
         System.out.println("storing:" + ldt);
         return new TimeData(ldt.toDate());

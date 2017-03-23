@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +22,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -161,7 +161,10 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // finish complex layout
-        addView(mLaunchIntentButton);
+        LinearLayout mPrintLayout = new LinearLayout(getContext());
+        mPrintLayout.setOrientation(LinearLayout.VERTICAL);
+        mPrintLayout.addView(mLaunchIntentButton);
+        addAnswerView( mPrintLayout);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
@@ -171,7 +174,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
                 intentName, mPrompt.getIndex());
         Intent i = new Intent(intentName);
-        ((Activity) getContext()).startActivity(i);
+        getContext().startActivity(i);
 
         String[] splits;
         if (s != null) {
@@ -209,7 +212,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         //send the printDataBundle to the activity via broadcast intent
         Intent bcastIntent = new Intent(intentName + ".data");
         bcastIntent.putExtra("DATA", printDataBundle);
-        ((Activity) getContext()).sendBroadcast(bcastIntent);
+        getContext().sendBroadcast(bcastIntent);
     }
 
     @Override

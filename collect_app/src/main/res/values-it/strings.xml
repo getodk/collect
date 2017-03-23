@@ -125,7 +125,6 @@
   <string name="server_requires_auth">Server richiede l\'autenticazione</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Impostazioni Server</string>
-  <string name="toggle_selected">Seleziona tutto</string>
   <string name="trigger">OK. Perpiacere continua.</string>
   <string name="uploading_data">Invio del Modulo</string>
   <string name="url_error">Spiacenti, URL non valida!</string>
@@ -309,7 +308,7 @@
   <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
   <string name="google_audio_error">File audio non sono ancora supportati da Google Sheets.</string>
   <string name="google_video_error">File video non sono ancora supportati da Google Sheets.</string>
-  <string name="picasa_upload_error">Impossibile caricare foto inesistente: %1$s</string>
+  <string name="media_upload_error">Impossibile caricare foto inesistente: %1$s</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
   <string name="odk_auto_note">Notifica ODK Autosend</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
@@ -325,7 +324,6 @@
   <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="google_sheets_access_denied">Accesso negato. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso.</string>
-  <string name="google_sheets_update_error">Errore di caricamento del foglio. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso in modalità scrittura.</string>
   <string name="google_sheets_missing_columns">Il foglio è mancante delle seguenti colonne: %1$s</string>
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
@@ -406,4 +404,8 @@
   <string name="version_number">Versione: %s</string>
   <string name="general_settings_about">A proposito</string>
   <string name="all_open_source_licenses">Licenze open source </string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
 </resources>

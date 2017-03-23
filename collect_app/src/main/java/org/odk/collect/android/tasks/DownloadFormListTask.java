@@ -25,7 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
@@ -66,12 +66,12 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
         String downloadListUrl =
-                settings.getString(PreferencesActivity.KEY_SERVER_URL,
+                settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
         // NOTE: /formlist must not be translated! It is the well-known path on the server.
         String formListUrl = Collect.getInstance().getApplicationContext().getString(
                 R.string.default_odk_formlist);
-        String downloadPath = settings.getString(PreferencesActivity.KEY_FORMLIST_URL, formListUrl);
+        String downloadPath = settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
 
         Collect.getInstance().getActivityLogger().logAction(this, formListUrl, downloadListUrl);
@@ -125,7 +125,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                     // e.g., whitespace (text)
                     continue;
                 }
-                Element xformElement = (Element) xformsElement.getElement(i);
+                Element xformElement = xformsElement.getElement(i);
                 if (!isXformsListNamespacedElement(xformElement)) {
                     // someone else's extension?
                     continue;

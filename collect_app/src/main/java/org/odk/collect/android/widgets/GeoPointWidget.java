@@ -15,9 +15,11 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ConfigurationInfo;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,8 +39,8 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.utilities.CompatibilityUtils;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.text.DecimalFormat;
 
@@ -86,7 +88,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // Determine whether or not to use the plain, maps, or mapsV2 activity
         mAppearance = prompt.getAppearanceHint();
         // use mapsV2 if it is available and was requested;
-        mUseMapsV2 = CompatibilityUtils.useMapsV2(context);
+        mUseMapsV2 = useMapsV2(context);
         if (mAppearance != null && mAppearance.equalsIgnoreCase("placement-map") && mUseMapsV2) {
             draggable = true;
             mUseMaps = true;
@@ -98,7 +100,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
 
         mReadOnly = prompt.isReadOnly();
@@ -140,12 +142,22 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = null;
                 if (mUseMapsV2 && mUseMaps) {
                     if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-                        i = new Intent(getContext(), GeoPointMapActivity.class);
+                        if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                            i = new Intent(getContext(), GeoPointMapActivity.class);
+                        } else {
+                            PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                            return;
+                        }
                     } else {
                         i = new Intent(getContext(), GeoPointOsmMapActivity.class);
                     }
                 } else {
-                    i = new Intent(getContext(), GeoPointActivity.class);
+                    if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                        i = new Intent(getContext(), GeoPointActivity.class);
+                    } else {
+                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                        return;
+                    }
                 }
 
                 String s = mStringAnswer.getText().toString();
@@ -354,4 +366,11 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         mAnswerDisplay.cancelLongPress();
     }
 
+    private boolean useMapsV2(final Context context) {
+        final ActivityManager activityManager = (ActivityManager) context.getSystemService(
+                Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo =
+                activityManager.getDeviceConfigurationInfo();
+        return configurationInfo.reqGlEsVersion >= 0x20000;
+    }
 }

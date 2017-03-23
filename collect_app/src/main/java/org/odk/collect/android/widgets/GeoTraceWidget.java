@@ -36,7 +36,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.util.ArrayList;
 
@@ -71,7 +72,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mapSDK = sharedPreferences.getString(PreferencesActivity.KEY_MAP_SDK, GOOGLE_MAP_KEY);
+        mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
         mReadOnly = prompt.isReadOnly();
 
         mStringAnswer = new TextView(getContext());
@@ -92,20 +93,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getFormController().setIndexWaitingForData(
-                        mPrompt.getIndex());
-                Intent i = null;
-                if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-                    i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
-                } else {
-                    i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
-                }
-                String s = mStringAnswer.getText().toString();
-                if (s.length() != 0) {
-                    i.putExtra(TRACE_LOCATION, s);
-                }
-                ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.GEOTRACE_CAPTURE);
+                Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                startGeoTraceActivity();
 
             }
         });
@@ -123,6 +112,25 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         updateButtonLabelsAndVisibility(dataAvailable);
+    }
+
+    private void startGeoTraceActivity() {
+        Intent i;
+        if (mapSDK.equals(GOOGLE_MAP_KEY)) {
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                return;
+            }
+        } else {
+            i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
+        }
+        String s = mStringAnswer.getText().toString();
+        if (s.length() != 0) {
+            i.putExtra(TRACE_LOCATION, s);
+        }
+        ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -179,7 +187,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
                 }
                 return new StringData(s);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
                 return null;
             }
         }

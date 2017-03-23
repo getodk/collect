@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -131,8 +132,9 @@ public class GridMultiWidget extends QuestionWidget {
         Display display =
                 ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
                         .getDefaultDisplay();
-        int screenWidth = display.getWidth();
-        int screenHeight = display.getHeight();
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
+        int screenHeight = metrics.heightPixels;
 
         if (display.getOrientation() % 2 == 1) {
             // rotated 90 degrees...
@@ -192,7 +194,6 @@ public class GridMultiWidget extends QuestionWidget {
 
                             ImageView imageView = (ImageView) imageViews[i];
 
-                            imageView.setBackgroundColor(Color.WHITE);
 
                             if (numColumns > 0) {
                                 int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
@@ -219,7 +220,6 @@ public class GridMultiWidget extends QuestionWidget {
                     }
                 } catch (InvalidReferenceException e) {
                     Log.e("GridMultiWidget", "image invalid reference exception");
-                    e.printStackTrace();
                 }
             } else {
                 errorMsg = "";
@@ -298,7 +298,6 @@ public class GridMultiWidget extends QuestionWidget {
                     if (audioHandlers[position] != null) {
                         stopAudio();
                     }
-                    imageViews[position].setBackgroundColor(Color.WHITE);
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onItemClick.deselect",
                             mItems.get(position).getValue(), mPrompt.getIndex());
@@ -346,9 +345,8 @@ public class GridMultiWidget extends QuestionWidget {
             if (selected[i]) {
                 imageViews[i].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
-            } else {
-                imageViews[i].setBackgroundColor(Color.WHITE);
             }
+
         }
 
         // Use the custom image adapter and initialize the grid view
@@ -380,7 +378,6 @@ public class GridMultiWidget extends QuestionWidget {
     public void clearAnswer() {
         for (int i = 0; i < mItems.size(); ++i) {
             selected[i] = false;
-            imageViews[i].setBackgroundColor(Color.WHITE);
         }
 
     }

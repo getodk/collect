@@ -36,6 +36,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
@@ -48,6 +49,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
@@ -63,29 +65,21 @@ import java.util.List;
 public class GeoShapeGoogleMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
 
-    private SharedPreferences sharedPreferences;
-
     private GoogleMap mMap;
-    private String basemap;
-    private UiSettings gmapSettings;
     private LocationManager mLocationManager;
     private Boolean mGPSOn = false;
     private Boolean mNetworkOn = false;
     private Location curLocation;
     private LatLng curlatLng;
-    private Boolean initZoom = false;
     private PolygonOptions polygonOptions;
     private Polygon polygon;
-    private ArrayList<LatLng> latLngsArray = new ArrayList<LatLng>();
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private Button gps_button;
     private Button clear_button;
-    private Button polygon_button;
     private Button return_button;
     private Button layers_button;
     private String final_return_string;
-    private Boolean data_loaded = false;
-    private Boolean clear_button_test;
+
     private MapHelper mHelper;
     private AlertDialog zoomDialog;
     private View zoomDialogView;
@@ -101,17 +95,39 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         setContentView(R.layout.geoshape_google_layout);
 
-
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                R.id.gmap)).getMap();
-        mHelper = new MapHelper(this, mMap);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(this);
+        }
+    }
+
+    private void setupMap(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (mMap == null) {
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
+            finish();
+            return;
+        }
+        mHelper = new MapHelper(GeoShapeGoogleMapActivity.this, mMap);
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerDragListener(this);
+        mMap.setOnMapLongClickListener(GeoShapeGoogleMapActivity.this);
+        mMap.setOnMarkerDragListener(GeoShapeGoogleMapActivity.this);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(false);
+
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
         polygonOptions.zIndex(1);
@@ -138,9 +154,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         gps_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(curLocation !=null){
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
-//                }
+        // if(curLocation !=null){
+        //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng,16));
+        // }
                 showZoomDialog();
             }
         });
@@ -166,7 +182,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             if (intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION)) {
-                data_loaded = true;
                 clear_button.setEnabled(true);
                 String s = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
                 gps_button.setEnabled(true);
@@ -174,14 +189,11 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-
         layers_button = (Button) findViewById(R.id.layers);
         layers_button.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 mHelper.showLayersDialog(GeoShapeGoogleMapActivity.this);
-
             }
         });
 
@@ -189,7 +201,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
         zoomLocationButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (curLocation != null) {
@@ -201,10 +212,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-//                zoomToCentroid();
+                // zoomToCentroid();
                 zoomtoBounds();
                 zoomDialog.dismiss();
             }
@@ -213,33 +223,19 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         if (curLocation != null) {
             curlatLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
             foundFirstLocation = true;
-            initZoom = true;
             gps_button.setEnabled(true);
             showZoomDialog();
         }
 
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mLocationManager.removeUpdates(this);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         mHelper.setBasemap();
-        List<String> providers = mLocationManager.getProviders(true);
+        providers = mLocationManager.getProviders(true);
 
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
                 mGPSOn = true;
                 curLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-//                gps_button.setEnabled(true);
+                // gps_button.setEnabled(true);
             }
             if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
                 mNetworkOn = true;
@@ -247,19 +243,18 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                         LocationManager.NETWORK_PROVIDER);
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
                         this);
-//                gps_button.setEnabled(true);
+                // gps_button.setEnabled(true);
             }
         }
 
         if (mGPSOn) {
-//            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            // mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             gps_button.setEnabled(true);
         }
         if (mNetworkOn) {
-//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            // mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             gps_button.setEnabled(true);
         }
-
     }
 
     @Override
@@ -288,7 +283,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private void overlayIntentPolygon(String str) {
         mMap.setOnMapLongClickListener(null);
         clear_button.setEnabled(true);
-        clear_button_test = true;
         String s = str.replace("; ", ";");
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length - 1); i++) {
@@ -361,7 +355,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             LatLng latLng = markerArray.get(i).getPosition();
             tempLat.add(latLng);
         }
-        latLngsArray = tempLat;
         polygon.setPoints(tempLat);
     }
 
@@ -373,7 +366,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         if (polygon == null) {
             clear_button.setEnabled(true);
-            clear_button_test = true;
             polygonOptions.add(latLng);
             polygon = mMap.addPolygon(polygonOptions);
         } else {
@@ -416,7 +408,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     private void clearFeatures() {
         mMap.clear();
-        clear_button_test = false;
         polygon = null;
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);

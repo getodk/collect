@@ -15,11 +15,9 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,9 +29,11 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 /**
@@ -43,7 +43,7 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends ListActivity implements DiskSyncListener {
+public class FormChooserList extends FormListActivity implements DiskSyncListener {
 
     private static final String t = "FormChooserList";
     private static final boolean EXIT = true;
@@ -66,27 +66,13 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         }
 
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
+        setTitle(getString(R.string.enter_data));
 
-        String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
-        Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
-
-        String[] data = new String[]{
-                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
-        };
-        int[] view = new int[]{
-                R.id.text1, R.id.text2, R.id.text3
-        };
-
-        // render total instance view
-        SimpleCursorAdapter instances =
-                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, c,
-                        data, view);
-        setListAdapter(instances);
+        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText(savedInstanceState.getString(syncMsgKey));
+            tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
         }
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
@@ -98,6 +84,10 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
         }
+        mSortingOptions = new String[]{
+                getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
+                getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
+        };
     }
 
 
@@ -112,7 +102,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         TextView tv = (TextView) findViewById(R.id.status_text);
-        outState.putString(syncMsgKey, tv.getText().toString());
+        outState.putString(syncMsgKey, tv.getText().toString().trim());
     }
 
 
@@ -122,7 +112,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     @Override
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get uri to form
-        long idFormsTable = ((SimpleCursorAdapter) getListAdapter()).getItemId(position);
+        long idFormsTable = getListAdapter().getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
@@ -134,7 +124,9 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             setResult(RESULT_OK, new Intent().setData(formUri));
         } else {
             // caller wants to view/edit a form, so launch formentryactivity
-            startActivity(new Intent(Intent.ACTION_EDIT, formUri));
+            Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
+            intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            startActivity(intent);
         }
 
         finish();
@@ -147,7 +139,7 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
         super.onResume();
 
         if (mDiskSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-            SyncComplete(mDiskSyncTask.getStatusMessage());
+            syncComplete(mDiskSyncTask.getStatusMessage());
         }
     }
 
@@ -175,13 +167,33 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
     /**
      * Called by DiskSyncTask when the task is finished
      */
+
     @Override
-    public void SyncComplete(String result) {
+    public void syncComplete(String result) {
         Log.i(t, "disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
-        tv.setText(result);
+        tv.setText(result.trim());
     }
 
+    @Override
+    protected void setupAdapter(String sortOrder) {
+        String[] data = new String[]{
+                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
+        };
+        int[] view = new int[]{
+                R.id.text1, R.id.text2, R.id.text3
+        };
+
+        mListAdapter =
+                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(sortOrder), data, view);
+
+        setListAdapter(mListAdapter);
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
+    }
 
     /**
      * Creates a dialog with the given message. Will exit the activity when the user preses "ok" if
