@@ -72,8 +72,11 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                     url = url.substring(0, url.length() - 1);
                 }
 
-                if (UrlUtils.isValidUrl(url) || url.length() == 0) {
-                    preference.setSummary(newValue.toString());
+                if (UrlUtils.isValidUrl(url)) {
+                    preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+                    return true;
+                } else if (url.length() == 0) {
+                    preference.setSummary(getString(R.string.google_sheets_url_hint));
                     return true;
                 } else {
                     ToastUtils.showShortToast(R.string.url_error);
@@ -81,7 +84,13 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                 }
             }
         });
-        mGoogleSheetsUrlPreference.setSummary(mGoogleSheetsUrlPreference.getText());
+
+        String currentGoogleSheetsURL = mGoogleSheetsUrlPreference.getText();
+        if (currentGoogleSheetsURL.length() > 0) {
+            mGoogleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n" +
+                    getString(R.string.google_sheets_url_hint));
+        }
+
         mGoogleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
