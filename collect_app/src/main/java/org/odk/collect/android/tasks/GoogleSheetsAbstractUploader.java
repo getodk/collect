@@ -37,7 +37,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.FormException;
+import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -150,7 +152,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         if (mSpreadsheetId == null) {
             try {
                 mSpreadsheetId = UrlUtils.getSpreadsheetID(id);
-            } catch (UrlUtils.BadUrlException e) {
+            } catch (BadUrlException e) {
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -950,12 +952,4 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .execute();
         return response.getValues();
     }
-
-
-    public class MultipleFoldersFoundException extends Exception {
-        public MultipleFoldersFoundException(String message) {
-            super(message);
-        }
-    }
-
 }
