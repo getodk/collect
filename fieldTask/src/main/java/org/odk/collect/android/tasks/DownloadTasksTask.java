@@ -632,7 +632,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	          	  			ManageForm mf = new ManageForm();
 	          	  			ManageFormResponse mfr = mf.insertInstance(ta, assignment.assignment_id, source, serverUrl, tr.version);
 	          	  			if(!mfr.isError) {
-	          	  				results.put(ta.task.title, "Created");
+	          	  				results.put(ta.task.title, Collect.getInstance().getString(R.string.smap_created));
                                 publishProgress(ta.task.title, Integer.valueOf(count).toString(), Integer.valueOf(tr.taskAssignments.size())
                                         .toString());
 	          	  			} else {

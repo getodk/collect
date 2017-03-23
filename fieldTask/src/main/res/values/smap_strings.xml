@@ -73,4 +73,5 @@
     <string name="smap_rejected">"Rejected Tasks"</string>
     <string name="smap_submitted">"Submitted Tasks"</string>
     <string name="smap_closed">"Closed Tasks"</string>
+    <string name="smap_created">"Created"</string>
 </resources>
