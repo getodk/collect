@@ -23,6 +23,7 @@ import android.util.Log;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
@@ -213,7 +214,7 @@ public class TimerLogger {
          *   - The timer log has been enabled in the administration properties of collect
          */
         mTimerEnabled = sharedPreferences.getBoolean(
-                PreferencesActivity.KEY_TIMER_LOG_ENABLED, false);
+                AdminKeys.KEY_TIMER_LOG_ENABLED, false);
 
         if (mTimerEnabled) {
             filename = "timing.csv";
