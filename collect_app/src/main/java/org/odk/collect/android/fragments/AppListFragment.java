@@ -89,6 +89,7 @@ abstract class AppListFragment extends ListFragment {
         if (mDrawerLayout != null) {
             return mDrawerLayout.isDrawerOpen(Gravity.END);
         }
+        return false;
     }
 
     @Override
