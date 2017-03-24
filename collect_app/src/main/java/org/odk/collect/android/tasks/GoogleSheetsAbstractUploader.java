@@ -27,9 +27,12 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.Request;
+import com.google.api.services.sheets.v4.model.SheetProperties;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
+import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.UpdateSpreadsheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
@@ -78,6 +81,7 @@ public abstract class GoogleSheetsAbstractUploader extends
     private String mSpreadsheetId;
     private boolean hasWritePermissonToSheet = false;
     private String mSpreadsheetFileName;
+    private Integer mSheetId;
 
     /**
      * @param selection
@@ -368,6 +372,30 @@ public abstract class GoogleSheetsAbstractUploader extends
             // if the headers were empty, resize the spreadsheet
             // and add the headers
 
+            //resizing the spreadsheet
+            SheetProperties sheetProperties = new SheetProperties()
+                    .setSheetId(mSheetId)
+                    .setGridProperties(new GridProperties()
+                            .setColumnCount(columnNames.size()));
+
+            List<Request> requests = new ArrayList<>();
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(sheetProperties)
+                            .setFields("gridProperties.columnCount")));
+
+            try {
+                mSheetsService.spreadsheets()
+                        .batchUpdate(mSpreadsheetId, new BatchUpdateSpreadsheetRequest()
+                                .setRequests(requests))
+                        .execute();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+                mResults.put(id, e.getMessage());
+                return false;
+            }
+
+            //adding the headers
             ArrayList<Object> list = new ArrayList<>();
             for (String column : columnNames)
                 list.add(column);
@@ -573,6 +601,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .execute();
 
         mSpreadsheetFileName = response.getProperties().getTitle();
+        mSheetId = response.getSheets().get(0).getProperties().getSheetId();
         return response.getSheets().get(0).getProperties().getTitle();
     }
 
