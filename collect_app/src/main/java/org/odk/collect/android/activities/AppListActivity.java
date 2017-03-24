@@ -269,4 +269,13 @@ abstract class AppListActivity extends ListActivity {
             mToggleButton.setText(R.string.clear_all);
         }
     }
+	
+	@Override
+    public void onBackPressed() {
+        if(mDrawerLayout.isDrawerOpen(Gravity.END)){
+            mDrawerLayout.closeDrawer(Gravity.END);
+        }else {
+            super.onBackPressed();
+        }
+    }
 }
