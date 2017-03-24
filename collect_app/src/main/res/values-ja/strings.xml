@@ -383,7 +383,7 @@
   <string name="geopoint_instruction">長押ししてマークするか、マーカーを追加ボタンをタップしてください。</string>
   <string name="geopoint_no_draggable_instruction">マーカーを追加ボタンをタップします。</string>
   <string name="discard">破棄</string>
-  <string name="zoom_to_where">ズーム...</string>
+  <string name="zoom_to_where">ズーム…</string>
   <string name="zoom_to_location">現在の場所にズーム</string>
   <string name="zoom_to_feature">保存した機能にズーム</string>
   <string name="points_captured">%s 地点をキャプチャしました</string>

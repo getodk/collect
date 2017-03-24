@@ -262,9 +262,9 @@
   <string name="ext_conflicting_columns_error">คอลัมน์ %s ตรงกัน</string>
   <string name="ext_sortBy_numeric_error">ข้อมูลในคอลัมน์ที่จัดเรียงต้องมีค่าเป็นตัวเลข ค่าที่ผิดพลาดคือ \'%s\'</string>
   <string name="ext_import_generic_error">ไม่สามารถนำเข้าข้อมูลจาก %1$s. เนื่องจาก: %2$s</string>
-  <string name="ext_import_progress_message">กำลังโหลดข้อมูลล่วงหน้าจาก \'%1$s\', กรุณารอสักครู่... %2$s</string>
+  <string name="ext_import_progress_message">กำลังโหลดข้อมูลล่วงหน้าจาก \'%1$s\', กรุณารอสักครู่… %2$s</string>
   <string name="ext_import_cancelled_message">การอ่านข้อมูลถูกยกเลิก</string>
-  <string name="ext_import_finalizing_message">กำลังตรวจสอบข้อมูลตั้งต้น...</string>
+  <string name="ext_import_finalizing_message">กำลังตรวจสอบข้อมูลตั้งต้น…</string>
   <string name="ext_import_completed_message">การอ่านข้อมูลเสร็จสมบูรณ์</string>
   <string name="ext_not_initialized_error">ระบบจัดการข้อมูลภายนอกยังไม่ถูกเปิดใช้งาน</string>
   <string name="ext_import_csv_missing_error">ข้อมูลภายนอกของ %1$s ยังไม่ถูกนำเข้า เป็นไปได้ว่าคุณลืมแนบไฟล์ %2$s.csv ไว้กับแบบสำรวจ</string>
@@ -273,7 +273,7 @@
   <string name="fs_create_media_folder_error">ไม่สามารถสร้างแฟ้มมีเดีย \'%s\'</string>
   <string name="fs_file_copy_error">ไม่สามารถคัดลอก \'%1$s\' บน \'%2$s\' เนื่องจาก %3$s</string>
   <string name="survey_multiple_forms_error">คุณดาวน์โหลดแบบสำรวจสองฉบับที่มีชื่อและรุ่นตรงกัน ซึ่งอาจเป็นแบบสำรวจเดียวกันที่ถูกอัพโหลดต่างเวลาหรือต่างเซิร์ฟเวอร์ อย่างไรก็แล้วแต่ ควรลบออกหนึ่งฉบับ</string>
-  <string name="survey_loading_reading_form_message">กำลังอ่านคำจำกัดความของแบบสอบถาม...</string>
+  <string name="survey_loading_reading_form_message">กำลังอ่านคำจำกัดความของแบบสอบถาม…</string>
   <string name="survey_loading_reading_data_message">กำลังอ่านข้อมูลการสำรวจ</string>
   <string name="survey_loading_reading_csv_message">กำลังอ่านไฟล์ CSV</string>
   <string name="survey_saving_validating_message">กำลังตรวจความถูกต้องของคำตอบ</string>
