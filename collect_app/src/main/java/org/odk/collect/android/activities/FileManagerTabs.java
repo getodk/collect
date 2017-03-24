@@ -76,9 +76,9 @@ public class FileManagerTabs extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if(dataManagerList.getDrawerStatus()){
+        if (dataManagerList.getDrawerStatus()) {
             dataManagerList.setUserVisibleHint(false);
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
