@@ -87,7 +87,7 @@
   <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="longitude">განედი</string>
   <string name="main_menu">მთავარი მენიუ</string>
-  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა...</string>
+  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა…</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>

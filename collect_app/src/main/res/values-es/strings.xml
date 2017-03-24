@@ -274,9 +274,9 @@
   <string name="ext_search_bad_function_error">Error sintáctico en función search(): \'%s\' no fue evaluada como una función.</string>
   <string name="ext_search_return_error">El gestor de búsqueda ha devuelto un objeto de tipo \'%s\'.</string>
   <string name="ext_import_generic_error">No puede importar datos desde %1$s. Razón: %2$s</string>
-  <string name="ext_import_progress_message">Precarga datos desde \'%1$s\'. Por favor espere... %2$s</string>
+  <string name="ext_import_progress_message">Precarga datos desde \'%1$s\'. Por favor espere… %2$s</string>
   <string name="ext_import_cancelled_message">Lectura de datos cancelada.</string>
-  <string name="ext_import_finalizing_message">Acabando datos precargados...</string>
+  <string name="ext_import_finalizing_message">Acabando datos precargados…</string>
   <string name="ext_import_completed_message">¡Lectura de datos completada!</string>
   <string name="ext_not_initialized_error">El ExternalDataManager no ha sido inicializado.</string>
   <string name="ext_import_csv_missing_error">Los datos externos para %1$s no ha sido importados. ¿Ha olvidado incluir el archivo %2$s.csv con su formulario?</string>
@@ -288,14 +288,14 @@
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
 </string>
-  <string name="survey_loading_reading_form_message">Leyendo definición de formulario...</string>
-  <string name="survey_loading_reading_data_message">Leyendo datos sondeo...</string>
-  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV...</string>
-  <string name="survey_saving_validating_message">Validando respuestas...</string>
-  <string name="survey_saving_collecting_message">Colectando datos...</string>
+  <string name="survey_loading_reading_form_message">Leyendo definición de formulario…</string>
+  <string name="survey_loading_reading_data_message">Leyendo datos sondeo…</string>
+  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
+  <string name="survey_saving_validating_message">Validando respuestas…</string>
+  <string name="survey_saving_collecting_message">Colectando datos…</string>
   <string name="survey_saving_saving_message">Salvando en targeta SD </string>
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
-  <string name="survey_saving_encrypting_message">Encriptando datos...</string>
+  <string name="survey_saving_encrypting_message">Encriptando datos…</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
   <string name="high_resolution">Activa vídeo HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -385,7 +385,7 @@
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
-  <string name="zoom_to_where">Zoom a...</string>
+  <string name="zoom_to_where">Zoom a…</string>
   <string name="zoom_to_location">Zoom a la localización actual</string>
   <string name="zoom_to_feature">Zoom a caracteristica guardada</string>
   <string name="points_captured">%s puntos capturados</string>
@@ -441,7 +441,7 @@
   <string name="reset_settings_dialog_title">Seleccione que resetear</string>
   <string name="reset_settings_button_reset">Reset</string>
   <string name="reset_dialog_nothing">No ha seleccionado nada para resetear.</string>
-  <string name="reset_in_progress">Reseteando...</string>
+  <string name="reset_in_progress">Reseteando…</string>
   <string name="resetting_finished">Termino reset</string>
   <string name="reset_app_state_warning">Los datos seleccionados serán borrados permanentemente. No existe el undo.</string>
   <string name="reset_saved_forms_result">Formularios guardados :: %s</string>

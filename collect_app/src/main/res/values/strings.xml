@@ -402,7 +402,7 @@
 <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
 <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
 <string name="discard">Discard</string>
-<string name="zoom_to_where">Zoom to...</string>
+<string name="zoom_to_where">Zoom to…</string>
 <string name="zoom_to_location">Zoom to current location</string>
 <string name="zoom_to_feature">Zoom to saved feature</string>
 <string name="points_captured">%s points captured</string>
