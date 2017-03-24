@@ -31,6 +31,8 @@ import java.util.ArrayList;
 
 public class FileManagerTabs extends FragmentActivity {
 
+    private DataManagerList dataManagerList = DataManagerList.newInstance();
+    private FormManagerList formManagerList = FormManagerList.newInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,8 @@ public class FileManagerTabs extends FragmentActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(DataManagerList.newInstance());
-        fragments.add(FormManagerList.newInstance());
+        fragments.add(dataManagerList);
+        fragments.add(formManagerList);
 
         viewPager.setAdapter(new ViewPagerAdapter
                 (getSupportFragmentManager(), tabNames, fragments));
@@ -70,6 +72,15 @@ public class FileManagerTabs extends FragmentActivity {
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(dataManagerList.getDrawerStatus()){
+            dataManagerList.setUserVisibleHint(false);
+        }else {
+            super.onBackPressed();
+        }
     }
 
 }
