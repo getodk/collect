@@ -230,7 +230,7 @@ public class GridMultiWidget extends QuestionWidget {
 
                 TextView missingImage = new TextView(getContext());
                 missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
                 if (choices[i] != null && choices[i].length() != 0) {
