@@ -46,16 +46,16 @@ test:
 
     post:
         # APKs
-        - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
+        - cp -r app/build/outputs/apk/ $CIRCLE_ARTIFACTS
 
         # Android Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/androidTests/
-        - cp -r collect_app/build/reports/androidTests/connected/. $CIRCLE_TEST_REPORTS/androidTests
+        - cp -r app/build/reports/androidTests/connected/. $CIRCLE_TEST_REPORTS/androidTests
 
         # Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/tests/
-        - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
+        - find . -type f -regex ".*/app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
 
         # Lint
         - mkdir -p $CIRCLE_TEST_REPORTS/lint/
-        - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
+        - find . -type f -regex ".*/app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
