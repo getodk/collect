@@ -827,7 +827,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
                 }
             }
-            request.setFields("nextPageToken, files(modifiedTime,id,name, mimeType)");
+            request.setFields("nextPageToken, files(modifiedTime, id, name, mimeType)");
 
             results.put(PARENT_ID_KEY, parentId);
             results.put(CURRENT_ID_KEY, currentDir);
