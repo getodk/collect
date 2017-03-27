@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
@@ -50,6 +51,7 @@ import java.util.Date;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DateWidget extends QuestionWidget {
+    private DatePickerDialog mDatePickerDialog;
 
     private Button mDateButton;
     private TextView mDateTextView;
@@ -133,6 +135,7 @@ public class DateWidget extends QuestionWidget {
 
         createDateButton();
         createDateTextView();
+        createDatePickerDialog();
         addViews();
     }
 
@@ -286,5 +289,24 @@ public class DateWidget extends QuestionWidget {
         linearLayout.addView(mDateButton);
         linearLayout.addView(mDateTextView);
         addAnswerView(linearLayout);
+    }
+
+    private void createDatePickerDialog() {
+        mDatePickerDialog = new DatePickerDialog(getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    }
+                }, 0, 0, 0);
+
+        // If there's an answer, use it.
+        if (mPrompt.getAnswerValue() != null) {
+            // create a new date from date object using default time zone
+            DateTime ldt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
+            mDatePickerDialog.updateDate(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth());
+        } else {
+            // create date widget with current time as of right now
+            clearAnswer();
+        }
     }
 }
