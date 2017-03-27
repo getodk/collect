@@ -303,8 +303,7 @@
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
   <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="google_audio_error">الملفات الصوتية غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="google_video_error">ملفات الفيديو غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
+  <string name="media_upload_error">فشل تحميل الصورة الغير موجودة: %1$s</string>
   <string name="odk_auth_auth_fail">فشل ارسال مصادقة المعلومات, رجاءا تأكد من أن جميع الاعدادات صحيحة</string>
   <string name="odk_auto_note">ارسال الاشعارات تلقائيا</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>

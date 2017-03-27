@@ -312,8 +312,7 @@
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
   <string name="invalid_oauth">មិនត្រឹមត្រូវសញ្ញាសម្ងាត់ OAuth 2</string>
   <string name="google_repeat_error">សំនួរម្តង​ទៀត​មិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
-  <string name="google_audio_error">ឯកសារសម្លេងមិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
-  <string name="google_video_error">ឯកសារវីដេអូមិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
+  <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
   <string name="odk_auth_auth_fail">
 បរាជ័យក្នុងការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ ODK នៃការផ្ញើដោយស្វ័យ​ប្រវត្តិ, សូមធ្វើឱ្យប្រាកដថាការកំណត់របស់អ្នកគឺត្រឹមត្រូវ</string>
   <string name="odk_auto_note">ការជូនដំណឹង ODK ដោយស្វ័យប្រវត្តិ</string>

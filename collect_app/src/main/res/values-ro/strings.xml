@@ -305,8 +305,7 @@
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
   <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="google_audio_error">Fișierele audio nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="google_video_error">Fișierele video nu sunt suportate de Google Sheets în acest moment.</string>
+  <string name="media_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
   <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
   <string name="odk_auto_note">Notificare ODK Autosend</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
