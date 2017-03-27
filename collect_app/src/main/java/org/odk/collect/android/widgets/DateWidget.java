@@ -99,6 +99,7 @@ public class DateWidget extends QuestionWidget {
     public void clearAnswer() {
         DateTime dt = new DateTime();
         mDatePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
+        setDate();
     }
 
     @Override
@@ -171,6 +172,18 @@ public class DateWidget extends QuestionWidget {
         addAnswerView(linearLayout);
     }
 
+    private void setDate() {
+        int dayOfMonth = mDatePickerDialog.getDatePicker().getDayOfMonth();
+        int monthOfYear = mDatePickerDialog.getDatePicker().getMonth() + 1;
+        int year = mDatePickerDialog.getDatePicker().getYear();
+
+        String dayText = dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth;
+        String monthText = monthOfYear < 10 ? "0" + monthOfYear : "" + monthOfYear;
+        String yearText = year < 10 ? "0" + year : "" + year;
+
+        mDateTextView.setText(dayText + "/" + monthText + "/" + yearText);
+    }
+
     private void createDatePickerDialog() {
         mDatePickerDialog = new DatePickerDialog(getContext(),
                 new DatePickerDialog.OnDateSetListener() {
@@ -184,6 +197,7 @@ public class DateWidget extends QuestionWidget {
             // create a new date from date object using default time zone
             DateTime ldt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
             mDatePickerDialog.updateDate(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth());
+            setDate();
         } else {
             // create date widget with current time as of right now
             clearAnswer();
