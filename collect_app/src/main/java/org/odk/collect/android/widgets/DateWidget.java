@@ -69,25 +69,30 @@ public class DateWidget extends QuestionWidget {
 
     private void hideDayFieldIfNotInFormat() {
         String appearance = mPrompt.getQuestion().getAppearanceAttr();
-        if ("month-year".equals(appearance)) {
-            mHideDay = true;
-        } else if ("year".equals(appearance)) {
-            mHideDay = true;
-            mHideMonth = true;
-        } else if ("no-calendar".equals(appearance)) {
-        } else {
-            mShowCalendar = true;
-            mHideDay = true;
-        }
+        if (!"no-calendar".equals(appearance)) {
+            if ("month-year".equals(appearance)) {
+                mHideDay = true;
+            } else if ("year".equals(appearance)) {
+                mHideDay = true;
+                mHideMonth = true;
+            } else {
+                mShowCalendar = true;
+                mHideDay = true;
+            }
 
-        if (mHideMonth || mHideDay) {
-            mDatePickerDialog.getDatePicker().findViewById(
-                    Resources.getSystem().getIdentifier("day", "id", "android"))
-                    .setVisibility(View.GONE);
-            if (mHideMonth) {
+            if (mShowCalendar) {
+                mDatePickerDialog.getDatePicker().setCalendarViewShown(true);
+            }
+
+            if (mHideMonth || mHideDay) {
                 mDatePickerDialog.getDatePicker().findViewById(
-                        Resources.getSystem().getIdentifier("month", "id", "android"))
+                        Resources.getSystem().getIdentifier("day", "id", "android"))
                         .setVisibility(View.GONE);
+                if (mHideMonth) {
+                    mDatePickerDialog.getDatePicker().findViewById(
+                            Resources.getSystem().getIdentifier("month", "id", "android"))
+                            .setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -144,7 +149,7 @@ public class DateWidget extends QuestionWidget {
 
         mDateButton = new Button(getContext());
         mDateButton.setId(QuestionWidget.newUniqueId());
-        mDateButton.setText(R.string.select_time);
+        mDateButton.setText(R.string.select_date);
         mDateButton.setPadding(20, 20, 20, 20);
         mDateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mDateButton.setLayoutParams(params);
@@ -153,6 +158,7 @@ public class DateWidget extends QuestionWidget {
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDatePickerDialog.show();
             }
         });
     }
@@ -179,9 +185,15 @@ public class DateWidget extends QuestionWidget {
 
         String dayText = dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth;
         String monthText = monthOfYear < 10 ? "0" + monthOfYear : "" + monthOfYear;
-        String yearText = year < 10 ? "0" + year : "" + year;
 
-        mDateTextView.setText(dayText + "/" + monthText + "/" + yearText);
+        String appearance = mPrompt.getQuestion().getAppearanceAttr();
+        if ("month-year".equals(appearance)) {
+            mDateTextView.setText(monthText + "/" + year);
+        } else if ("year".equals(appearance)) {
+            mDateTextView.setText(String.valueOf(year));
+        } else {
+            mDateTextView.setText(dayText + "/" + monthText + "/" + year);
+        }
     }
 
     private void createDatePickerDialog() {
@@ -189,6 +201,8 @@ public class DateWidget extends QuestionWidget {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mDatePickerDialog.updateDate(year, monthOfYear, dayOfMonth);
+                        setDate();
                     }
                 }, 0, 0, 0);
 
