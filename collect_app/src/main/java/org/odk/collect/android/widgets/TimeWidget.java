@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -33,7 +32,6 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 
 import java.util.Date;
 
@@ -44,7 +42,6 @@ import java.util.Date;
  */
 public class TimeWidget extends QuestionWidget {
     private TimePickerDialog mTimePickerDialog;
-    private TimePicker mTimePicker;
 
     private Button mTimeButton;
     private TextView mTimeTextView;
@@ -55,48 +52,6 @@ public class TimeWidget extends QuestionWidget {
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mTimePicker = new TimePicker(getContext());
-        mTimePicker.setId(QuestionWidget.newUniqueId());
-        mTimePicker.setFocusable(!prompt.isReadOnly());
-        mTimePicker.setEnabled(!prompt.isReadOnly());
-
-        String clockType =
-                android.provider.Settings.System.getString(context.getContentResolver(),
-                        android.provider.Settings.System.TIME_12_24);
-        if (clockType == null || clockType.equalsIgnoreCase("24")) {
-            mTimePicker.setIs24HourView(true);
-        }
-
-        // If there's an answer, use it.
-        if (prompt.getAnswerValue() != null) {
-
-            // create a new date time from date object using default time zone
-            DateTime ldt =
-                    new DateTime(
-                            ((Date) prompt.getAnswerValue().getValue()).getTime());
-            System.out.println("retrieving:" + ldt);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mTimePicker.setHour(ldt.getHourOfDay());
-                mTimePicker.setMinute(ldt.getMinuteOfHour());
-            } else {
-                mTimePicker.setCurrentHour(ldt.getHourOfDay());
-                mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
-            }
-
-        } else {
-            // create time widget with current time as of right now
-            clearAnswer();
-        }
-
-        mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(TimeWidget.this,
-                        "onTimeChanged",
-                        String.format("%1$02d:%2$02d", hourOfDay, minute), mPrompt.getIndex());
-            }
-        });
-
         setGravity(Gravity.LEFT);
 
         createTimeButton();
@@ -104,7 +59,6 @@ public class TimeWidget extends QuestionWidget {
         createTimePickerDialog();
         addViews();
     }
-
 
     /**
      * Resets time to today.
@@ -116,26 +70,13 @@ public class TimeWidget extends QuestionWidget {
         mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
         // use picker time, convert to today's date, store as utc
-        DateTime ldt;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ldt = (new DateTime()).withTime(mTimePicker.getHour(),
-                            mTimePicker.getMinute(),
-                            0, 0);
-        } else {
-             ldt = (new DateTime()).withTime(mTimePicker.getCurrentHour(),
-                            mTimePicker.getCurrentMinute(),
-                            0, 0);
-        }
-        //DateTime utc = ldt.withZone(DateTimeZone.forID("UTC"));
-        System.out.println("storing:" + ldt);
+        DateTime ldt = (new DateTime()).withTime(mHourOfDay, mMinuteOfHour, 0, 0);
         return new TimeData(ldt.toDate());
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -145,13 +86,11 @@ public class TimeWidget extends QuestionWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         mTimeButton.setOnLongClickListener(l);
         mTimeTextView.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
