@@ -14,8 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -41,7 +43,7 @@ import java.util.Date;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class TimeWidget extends QuestionWidget {
-
+    private TimePickerDialog mTimePickerDialog;
     private TimePicker mTimePicker;
 
     private Button mTimeButton;
@@ -99,6 +101,7 @@ public class TimeWidget extends QuestionWidget {
 
         createTimeButton();
         createTimeTextView();
+        createTimePickerDialog();
         addViews();
     }
 
@@ -110,6 +113,7 @@ public class TimeWidget extends QuestionWidget {
     public void clearAnswer() {
         DateTime dt = new DateTime();
         setTime(dt.getHourOfDay(), dt.getMinuteOfHour());
+        mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
     }
 
 
@@ -171,6 +175,8 @@ public class TimeWidget extends QuestionWidget {
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+                mTimePickerDialog.show();
             }
         });
     }
@@ -198,5 +204,26 @@ public class TimeWidget extends QuestionWidget {
         String minute = mMinuteOfHour < 10 ? "0" + mMinuteOfHour : "" + mMinuteOfHour;
 
         mTimeTextView.setText(hour + ":" + minute);
+    }
+
+    private void createTimePickerDialog() {
+        mTimePickerDialog = new TimePickerDialog(getContext(),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+                        setTime(hourOfDay, minuteOfHour);
+                    }
+                }, 0, 0, DateFormat.is24HourFormat(getContext()));
+
+        // If there's an answer, use it.
+        if (mPrompt.getAnswerValue() != null) {
+            // create a new date time from date object using default time zone
+            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
+            setTime(dt.getHourOfDay(), dt.getMinuteOfHour());
+            mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+        } else {
+            // create time widget with current time as of right now
+            clearAnswer();
+        }
     }
 }
