@@ -14,19 +14,15 @@
 
 package org.odk.collect.android.widgets;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -37,10 +33,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.DateWidgetUtils;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -56,9 +50,9 @@ public class DateWidget extends QuestionWidget {
     private Button mDateButton;
     private TextView mDateTextView;
 
-    private boolean hideDay = false;
-    private boolean hideMonth = false;
-    private boolean showCalendar = false;
+    private boolean mHideDay;
+    private boolean mHideMonth;
+    private boolean mShowCalendar;
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -76,21 +70,21 @@ public class DateWidget extends QuestionWidget {
     private void hideDayFieldIfNotInFormat() {
         String appearance = mPrompt.getQuestion().getAppearanceAttr();
         if ("month-year".equals(appearance)) {
-            hideDay = true;
+            mHideDay = true;
         } else if ("year".equals(appearance)) {
-            hideDay = true;
-            hideMonth = true;
+            mHideDay = true;
+            mHideMonth = true;
         } else if ("no-calendar".equals(appearance)) {
         } else {
-            showCalendar = true;
-            hideDay = true;
+            mShowCalendar = true;
+            mHideDay = true;
         }
 
-        if (hideMonth || hideDay) {
+        if (mHideMonth || mHideDay) {
             mDatePickerDialog.getDatePicker().findViewById(
                     Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
-            if (hideMonth) {
+            if (mHideMonth) {
                 mDatePickerDialog.getDatePicker().findViewById(
                         Resources.getSystem().getIdentifier("month", "id", "android"))
                         .setVisibility(View.GONE);
@@ -113,8 +107,8 @@ public class DateWidget extends QuestionWidget {
 
         LocalDateTime ldt = new LocalDateTime()
                 .withYear(mDatePickerDialog.getDatePicker().getYear())
-                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : mDatePickerDialog.getDatePicker().getMonth() + 1)
-                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePickerDialog.getDatePicker().getDayOfMonth())
+                .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mDatePickerDialog.getDatePicker().getMonth() + 1)
+                .withDayOfMonth((!mShowCalendar && (mHideMonth || mHideDay)) ? 1 : mDatePickerDialog.getDatePicker().getDayOfMonth())
                 .withHourOfDay(0)
                 .withMinuteOfHour(0);
 
