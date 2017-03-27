@@ -51,7 +51,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -227,15 +226,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
-    private boolean mShowNavigationButtons=false;
+    private boolean mShowNavigationButtons = false;
 
     private FormsDao mFormsDao;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // must be at the beginning of any activity that can be called from an
         // external intent
         try {
@@ -587,15 +587,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
             return;
         }
-
         if (resultCode == RESULT_CANCELED) {
             // request was canceled...
             if (requestCode != HIERARCHY_ACTIVITY) {
                 ((ODKView) mCurrentView).cancelWaitingForBinaryData();
             }
+            ToastUtils.showShortToast(R.string.show_error_sound_not_recoded);
             return;
         }
-
         switch (requestCode) {
             case BARCODE_CAPTURE:
                 String sb = intent.getStringExtra("SCAN_RESULT");
@@ -704,13 +703,18 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 break;
             case AUDIO_CAPTURE:
             case VIDEO_CAPTURE:
-                Uri mediaUri = intent.getData();
-                saveAudioVideoAnswer(mediaUri);
-                String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
-                if (filePath != null) {
-                    new File(filePath).delete();
+                try {
+                    Uri mediaUri = intent.getData();
+                    saveAudioVideoAnswer(mediaUri);
+                    String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
+                    if (filePath != null) {
+                        new File(filePath).delete();
+                    }
+                    getContentResolver().delete(mediaUri, null, null);
+                } catch (Exception e) {
+                    ToastUtils.showShortToast(R.string.show_error_sound_intent_not_handled);
                 }
-                getContentResolver().delete(mediaUri, null, null);
+
                 break;
             case AUDIO_CHOOSER:
             case VIDEO_CHOOSER:
@@ -1162,7 +1166,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 // Create 'save' button
-                 endView.findViewById(R.id.save_exit_button)
+                endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1266,7 +1270,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Disables the back button if it is first question....
      */
-    private void adjustBackNavigationButtonVisibility(){
+    private void adjustBackNavigationButtonVisibility() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         try {
