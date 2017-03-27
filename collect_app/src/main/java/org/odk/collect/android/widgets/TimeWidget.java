@@ -47,6 +47,9 @@ public class TimeWidget extends QuestionWidget {
     private Button mTimeButton;
     private TextView mTimeTextView;
 
+    private int mHourOfDay;
+    private int mMinuteOfHour;
+
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -105,14 +108,8 @@ public class TimeWidget extends QuestionWidget {
      */
     @Override
     public void clearAnswer() {
-        DateTime ldt = new DateTime();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mTimePicker.setHour(ldt.getHourOfDay());
-            mTimePicker.setMinute(ldt.getMinuteOfHour());
-        } else {
-            mTimePicker.setCurrentHour(ldt.getHourOfDay());
-            mTimePicker.setCurrentMinute(ldt.getMinuteOfHour());
-        }
+        DateTime dt = new DateTime();
+        setTime(dt.getHourOfDay(), dt.getMinuteOfHour());
     }
 
 
@@ -191,5 +188,15 @@ public class TimeWidget extends QuestionWidget {
         linearLayout.addView(mTimeButton);
         linearLayout.addView(mTimeTextView);
         addAnswerView(linearLayout);
+    }
+
+    private void setTime(int hourOfDay, int minuteOfHour) {
+        mHourOfDay = hourOfDay;
+        mMinuteOfHour = minuteOfHour;
+
+        String hour = mHourOfDay < 10 ? "0" + mHourOfDay : "" + mHourOfDay;
+        String minute = mMinuteOfHour < 10 ? "0" + mMinuteOfHour : "" + mMinuteOfHour;
+
+        mTimeTextView.setText(hour + ":" + minute);
     }
 }
