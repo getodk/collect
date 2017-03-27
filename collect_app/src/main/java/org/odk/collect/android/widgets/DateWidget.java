@@ -56,86 +56,21 @@ public class DateWidget extends QuestionWidget {
     private Button mDateButton;
     private TextView mDateTextView;
 
-    private DatePicker mDatePicker;
-    private DatePicker.OnDateChangedListener mDateListener;
     private boolean hideDay = false;
     private boolean hideMonth = false;
     private boolean showCalendar = false;
-    private HorizontalScrollView scrollView = null;
-
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        mDatePicker = new DatePicker(getContext());
-        mDatePicker.setId(QuestionWidget.newUniqueId());
-        mDatePicker.setFocusable(!prompt.isReadOnly());
-        mDatePicker.setEnabled(!prompt.isReadOnly());
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
-            DateWidgetUtils.fixCalendarViewIfJellyBean(mDatePicker.getCalendarView());
-        }
-
-        mDateListener = new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int month, int day) {
-                if (mPrompt.isReadOnly()) {
-                    setAnswer();
-                } else {
-                    // TODO support dates <1900 >2100
-                    // handle leap years and number of days in month
-                    // http://code.google.com/p/android/issues/detail?id=2081
-                    Calendar c = Calendar.getInstance();
-                    c.set(year, month, 1);
-                    int max = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    // in older versions of android (1.6ish) the datepicker lets you pick bad dates
-                    // in newer versions, calling updateDate() calls onDatechangedListener(),
-                    // causing an
-                    // endless loop.
-                    if (day > max) {
-                        if (!(mDatePicker.getDayOfMonth() == day && mDatePicker.getMonth() == month
-                                && mDatePicker.getYear() == year)) {
-                            Collect.getInstance().getActivityLogger().logInstanceAction(
-                                    DateWidget.this, "onDateChanged",
-                                    String.format("%1$04d-%2$02d-%3$02d", year, month, max),
-                                    mPrompt.getIndex());
-                            mDatePicker.updateDate(year, month, max);
-                        }
-                    } else {
-                        if (!(mDatePicker.getDayOfMonth() == day && mDatePicker.getMonth() == month
-                                && mDatePicker.getYear() == year)) {
-                            Collect.getInstance().getActivityLogger().logInstanceAction(
-                                    DateWidget.this, "onDateChanged",
-                                    String.format("%1$04d-%2$02d-%3$02d", year, month, day),
-                                    mPrompt.getIndex());
-                            mDatePicker.updateDate(year, month, day);
-                        }
-                    }
-                }
-            }
-        };
-
-        setGravity(Gravity.LEFT);
-        if (showCalendar) {
-            scrollView = new HorizontalScrollView(context);
-            LinearLayout ll = new LinearLayout(context);
-            ll.addView(mDatePicker);
-            ll.setPadding(10, 10, 10, 10);
-            scrollView.addView(ll);
-            addAnswerView(scrollView);
-        } else {
-            addAnswerView(mDatePicker);
-        }
-
-        // If there's an answer, use it.
-        setAnswer();
-
 
         createDateButton();
         createDateTextView();
         createDatePickerDialog();
         addViews();
         hideDayFieldIfNotInFormat();
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
+            DateWidgetUtils.fixCalendarViewIfJellyBean(mDatePickerDialog.getDatePicker().getCalendarView());
+        }
     }
 
     private void hideDayFieldIfNotInFormat() {
@@ -163,50 +98,29 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    private void setAnswer() {
-
-        if (mPrompt.getAnswerValue() != null) {
-            DateTime ldt =
-                    new DateTime(
-                            ((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
-                    mDateListener);
-        } else {
-            // create date widget with current time as of right now
-            clearAnswer();
-        }
-    }
-
-
     /**
      * Resets date to today.
      */
     @Override
     public void clearAnswer() {
-        DateTime ldt = new DateTime();
-        mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
-                mDateListener);
+        DateTime dt = new DateTime();
+        mDatePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
     }
-
 
     @Override
     public IAnswerData getAnswer() {
-        if (showCalendar) {
-            scrollView.clearChildFocus(mDatePicker);
-        }
         clearFocus();
 
         LocalDateTime ldt = new LocalDateTime()
-                .withYear(mDatePicker.getYear())
-                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : mDatePicker.getMonth() + 1)
-                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePicker.getDayOfMonth())
+                .withYear(mDatePickerDialog.getDatePicker().getYear())
+                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : mDatePickerDialog.getDatePicker().getMonth() + 1)
+                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : mDatePickerDialog.getDatePicker().getDayOfMonth())
                 .withHourOfDay(0)
                 .withMinuteOfHour(0);
 
         ldt = skipDaylightSavingGapIfExists(ldt);
         return new DateData(ldt.toDate());
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -216,13 +130,11 @@ public class DateWidget extends QuestionWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         mDateButton.setOnLongClickListener(l);
         mDateTextView.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
