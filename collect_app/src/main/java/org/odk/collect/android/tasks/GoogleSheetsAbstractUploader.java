@@ -759,20 +759,6 @@ public abstract class GoogleSheetsAbstractUploader extends
                     } else if (inBody && parser.getName().equalsIgnoreCase("repeat")) {
                         throw new FormException(Collect.getInstance().getString(
                                 R.string.google_repeat_error));
-                    } else if (parser.getName().equalsIgnoreCase("upload")) {
-                        for (int i = 0; i < parser.getAttributeCount(); i++) {
-                            String attr = parser.getAttributeName(i);
-                            if (attr.startsWith("mediatype")) {
-                                String attrValue = parser.getAttributeValue(i);
-                                if (attrValue.startsWith("audio")) {
-                                    throw new FormException(Collect.getInstance().getString(
-                                            R.string.google_audio_error));
-                                } else if (attrValue.startsWith("video")) {
-                                    throw new FormException(Collect.getInstance().getString(
-                                            R.string.google_video_error));
-                                }
-                            }
-                        }
                     }
                     if (getPaths) {
                         path.add(parser.getName());
