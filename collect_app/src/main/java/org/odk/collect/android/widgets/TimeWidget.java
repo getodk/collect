@@ -16,14 +16,21 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.util.Date;
@@ -37,6 +44,8 @@ public class TimeWidget extends QuestionWidget {
 
     private TimePicker mTimePicker;
 
+    private Button mTimeButton;
+    private TextView mTimeTextView;
 
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
@@ -84,8 +93,10 @@ public class TimeWidget extends QuestionWidget {
         });
 
         setGravity(Gravity.LEFT);
-        addAnswerView(mTimePicker);
 
+        createTimeButton();
+        createTimeTextView();
+        addViews();
     }
 
 
@@ -136,14 +147,49 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mTimePicker.setOnLongClickListener(l);
+        mTimeButton.setOnLongClickListener(l);
+        mTimeTextView.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mTimePicker.cancelLongPress();
+        mTimeButton.cancelLongPress();
+        mTimeTextView.cancelLongPress();
     }
 
+    private void createTimeButton() {
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+
+        mTimeButton = new Button(getContext());
+        mTimeButton.setId(QuestionWidget.newUniqueId());
+        mTimeButton.setText(R.string.select_time);
+        mTimeButton.setPadding(20, 20, 20, 20);
+        mTimeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mTimeButton.setLayoutParams(params);
+        mTimeButton.setEnabled(!mPrompt.isReadOnly());
+
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
+    private void createTimeTextView() {
+        mTimeTextView = new TextView(getContext());
+        mTimeTextView.setId(QuestionWidget.newUniqueId());
+        mTimeTextView.setPadding(20, 20, 20, 20);
+        mTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+    }
+
+    private void addViews() {
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(mTimeButton);
+        linearLayout.addView(mTimeTextView);
+        addAnswerView(linearLayout);
+    }
 }

@@ -496,4 +496,5 @@
 <string name="sort_the_list">Sort the list</string>
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
 <string name="filter_the_list">Filter the list</string>
+<string name="select_time">Select time</string>
 </resources>
