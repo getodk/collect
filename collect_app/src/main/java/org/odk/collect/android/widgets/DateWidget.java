@@ -217,4 +217,28 @@ public class DateWidget extends QuestionWidget {
             clearAnswer();
         }
     }
+
+    public boolean isCalendarShown() {
+        return mShowCalendar;
+    }
+
+    public boolean isDayHidden() {
+        return mHideDay;
+    }
+
+    public boolean isMonthHidden() {
+        return mHideMonth;
+    }
+
+    public int getYear() {
+        return mDatePickerDialog.getDatePicker().getYear();
+    }
+
+    public int getMonth() {
+        return mDatePickerDialog.getDatePicker().getMonth() + 1;
+    }
+
+    public int getDay() {
+        return mDatePickerDialog.getDatePicker().getDayOfMonth();
+    }
 }

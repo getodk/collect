@@ -425,6 +425,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         mView_Text.setTextColor(color);
     }
 
+    public TextView getView_Text() {
+        return mView_Text;
+    }
+
     /**
      * This is what gets called when the AudioButton gets clicked
      */

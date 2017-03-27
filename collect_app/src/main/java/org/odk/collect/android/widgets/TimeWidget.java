@@ -165,4 +165,12 @@ public class TimeWidget extends QuestionWidget {
             clearAnswer();
         }
     }
+
+    public int getHour() {
+        return mHourOfDay;
+    }
+
+    public int getMinute() {
+        return mMinuteOfHour;
+    }
 }
