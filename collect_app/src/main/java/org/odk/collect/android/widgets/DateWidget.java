@@ -18,19 +18,24 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.DateWidgetUtils;
 
@@ -45,6 +50,9 @@ import java.util.Date;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DateWidget extends QuestionWidget {
+
+    private Button mDateButton;
+    private TextView mDateTextView;
 
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
@@ -121,6 +129,11 @@ public class DateWidget extends QuestionWidget {
 
         // If there's an answer, use it.
         setAnswer();
+
+
+        createDateButton();
+        createDateTextView();
+        addViews();
     }
 
     /**
@@ -229,14 +242,49 @@ public class DateWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mDatePicker.setOnLongClickListener(l);
+        mDateButton.setOnLongClickListener(l);
+        mDateTextView.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mDatePicker.cancelLongPress();
+        mDateButton.cancelLongPress();
+        mDateTextView.cancelLongPress();
     }
 
+    private void createDateButton() {
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+
+        mDateButton = new Button(getContext());
+        mDateButton.setId(QuestionWidget.newUniqueId());
+        mDateButton.setText(R.string.select_time);
+        mDateButton.setPadding(20, 20, 20, 20);
+        mDateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        mDateButton.setLayoutParams(params);
+        mDateButton.setEnabled(!mPrompt.isReadOnly());
+
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
+    private void createDateTextView() {
+        mDateTextView = new TextView(getContext());
+        mDateTextView.setId(QuestionWidget.newUniqueId());
+        mDateTextView.setPadding(20, 20, 20, 20);
+        mDateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+    }
+
+    private void addViews() {
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(mDateButton);
+        linearLayout.addView(mDateTextView);
+        addAnswerView(linearLayout);
+    }
 }
