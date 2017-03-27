@@ -14,44 +14,44 @@
 			android:layout_height="wrap_content"
 			android:gravity="center_vertical"
 			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
 			android:layout_alignParentStart="true"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:layout_alignParentLeft="true" />
+			android:textAppearance="?android:attr/textAppearanceLarge" />
    		<TextView
 			android:id="@+id/text3"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:visibility="gone"
 			android:layout_below="@+id/text1"
+			android:layout_alignParentLeft="true"
 			android:layout_alignParentStart="true"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:layout_alignParentLeft="true" />
+			android:textAppearance="?android:attr/textAppearanceSmall" />
 		<TextView
 			android:id="@+id/text2"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:gravity="center_vertical"
 			android:layout_below="@+id/text3"
+			android:layout_alignParentLeft="true"
 			android:layout_alignParentStart="true"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:layout_alignParentLeft="true" />
+			android:textAppearance="?android:attr/textAppearanceSmall" />
 		<TextView
 			android:id="@+id/text4"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
 			android:layout_alignParentStart="true"
 			android:layout_below="@+id/text2"
 			android:gravity="center_vertical"
 			android:visibility="gone"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:layout_alignParentLeft="true" />
+			android:textAppearance="?android:attr/textAppearanceSmall" />
 		<ImageView
 			android:id="@+id/visible_off"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:src="@drawable/visibility_off"
+			android:layout_alignParentRight="true"
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
-			android:visibility="gone"
-			android:layout_alignParentRight="true" />
+			android:visibility="gone" />
 </RelativeLayout>

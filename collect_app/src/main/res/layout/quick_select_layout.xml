@@ -17,9 +17,9 @@
         android:id="@+id/quick_select_right_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/select_answer"
-        android:layout_alignParentRight="true" />
+        android:contentDescription="@string/select_answer" />
 
 </RelativeLayout>

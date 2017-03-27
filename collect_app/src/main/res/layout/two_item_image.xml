@@ -24,24 +24,24 @@
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/image"
+            android:layout_toRightOf="@+id/image"
             android:layout_toEndOf="@+id/image"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:text="text1"
-            android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/image" />
+            tools:text="text1" />
     <TextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text1"
+            android:layout_alignLeft="@+id/text1"
             android:layout_alignStart="@+id/text1"
+            android:layout_alignRight="@+id/text1"
             android:layout_alignEnd="@+id/text1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            tools:text="text2"
-            android:layout_alignRight="@+id/text1"
-            android:layout_alignLeft="@+id/text1" />
+            tools:text="text2" />
 
     <CheckBox
             android:id="@+id/checkbox"
@@ -51,7 +51,7 @@
             android:focusable="false"
             android:clickable="false"
             android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            android:layout_alignParentRight="true" />
+            android:visibility="gone" />
 </RelativeLayout>
