@@ -295,6 +295,7 @@ public class GridMultiWidget extends QuestionWidget {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (selected[position]) {
                     selected[position] = false;
+                    imageViews[position].setBackgroundColor(0);
                     if (audioHandlers[position] != null) {
                         stopAudio();
                     }
