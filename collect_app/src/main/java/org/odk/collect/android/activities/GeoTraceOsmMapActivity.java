@@ -43,7 +43,6 @@ import android.widget.Spinner;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -72,7 +71,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     public Boolean gpsStatus = true;
     private Boolean play_check = false;
     private MapView mapView;
-    private SharedPreferences sharedPreferences;
     public DefaultResourceProxyImpl resource_proxy;
     public MyLocationNewOverlay mMyLocationOverlay;
     private Button mLocationButton;
@@ -93,7 +91,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private String final_return_string;
     private Integer TRACE_MODE; // 0 manual, 1 is automatic
-    private Boolean inital_location_found = false;
     private Spinner time_units;
     private Spinner time_delay;
     private Button mPolygonSaveButton;
@@ -117,232 +114,226 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoTraceOsmMapActivity.this)) {
 
-            resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
-            mapView = (MapView) findViewById(R.id.geotrace_mapview);
-            mHelper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
-            mapView.setMultiTouchControls(true);
-            mapView.setBuiltInZoomControls(true);
-            mapView.getController().setZoom(zoom_level);
-            mMyLocationOverlay = new MyLocationNewOverlay(this, mapView);
+        resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
+        mapView = (MapView) findViewById(R.id.geotrace_mapview);
+        mHelper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+        mapView.setMultiTouchControls(true);
+        mapView.setBuiltInZoomControls(true);
+        mapView.getController().setZoom(zoom_level);
+        mMyLocationOverlay = new MyLocationNewOverlay(this, mapView);
 
-            inflater = this.getLayoutInflater();
-            traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
-            polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
-            time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
-            time_delay.setSelection(3);
-            time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-            mLayersButton = (Button) findViewById(R.id.layers);
-            mLayersButton.setOnClickListener(new View.OnClickListener() {
+        inflater = this.getLayoutInflater();
+        traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
+        polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
+        time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
+        time_delay.setSelection(3);
+        time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
+        mLayersButton = (Button) findViewById(R.id.layers);
+        mLayersButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    mHelper.showLayersDialog(GeoTraceOsmMapActivity.this);
+            @Override
+            public void onClick(View v) {
+                mHelper.showLayersDialog(GeoTraceOsmMapActivity.this);
 
-                }
-            });
-
-            mLocationButton = (Button) findViewById(R.id.show_location);
-            mLocationButton.setEnabled(false);
-            mLocationButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    reset_trace_settings();
-                    showZoomDialog();
-                }
-
-            });
-
-            mClearButton = (Button) findViewById(R.id.clear);
-            mClearButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    showClearDialog();
-
-                }
-
-            });
-
-            mSaveButton = (Button) findViewById(R.id.geotrace_save);
-            mSaveButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    if (map_markers.size() != 0) {
-                        p_alert.show();
-                    } else {
-                        saveGeoTrace();
-                    }
-                }
-            });
-            if (map_markers == null || map_markers.size() == 0) {
-                mClearButton.setEnabled(false);
             }
-            mManualCaptureButton = (Button) findViewById(R.id.manual_button);
-            mManualCaptureButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addLocationMarker();
-                }
-            });
-            mPauseButton = (Button) findViewById(R.id.pause);
-            mPlayButton = (Button) findViewById(R.id.play);
-            mPlayButton.setEnabled(false);
-            beenPaused = false;
-            TRACE_MODE = 1;
+        });
 
+        mLocationButton = (Button) findViewById(R.id.show_location);
+        mLocationButton.setEnabled(false);
+        mLocationButton.setOnClickListener(new View.OnClickListener() {
 
-            mPlayButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (!play_check) {
-                        if (!beenPaused) {
-                            alert.show();
-                        } else {
-                            RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(
-                                    R.id.radio_group);
-                            int radioButtonID = rb.getCheckedRadioButtonId();
-                            View radioButton = rb.findViewById(radioButtonID);
-                            int idx = rb.indexOfChild(radioButton);
-                            TRACE_MODE = idx;
-                            if (TRACE_MODE == 0) {
-                                setupManualMode();
-                            } else if (TRACE_MODE == 1) {
-                                setupAutomaticMode();
-                            } else {
-                                reset_trace_settings();
-                            }
-                        }
-                        play_check = true;
-                    } else {
-                        play_check = false;
-                        startGeoTrace();
-                    }
-                }
-            });
-
-            mPauseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    mPlayButton.setVisibility(View.VISIBLE);
-                    if (map_markers != null && map_markers.size() > 0) {
-                        mClearButton.setEnabled(true);
-                    }
-                    mPauseButton.setVisibility(View.GONE);
-                    mManualCaptureButton.setVisibility(View.GONE);
-                    play_check = true;
-                    mode_active = false;
-                    mMyLocationOverlay.disableFollowLocation();
-
-                    try {
-                        schedulerHandler.cancel(true);
-                    } catch (Exception e) {
-                        // Do nothing
-                    }
-                }
-            });
-
-            overlayMapLayerListner();
-            buildDialogs();
-            Intent intent = getIntent();
-            if (intent != null && intent.getExtras() != null) {
-                if (intent.hasExtra(GeoTraceWidget.TRACE_LOCATION)) {
-                    String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
-                    mPlayButton.setEnabled(false);
-                    mClearButton.setEnabled(true);
-                    overlayIntentTrace(s);
-                    mLocationButton.setEnabled(true);
-                    //zoomToCentroid();
-                    zoomtoBounds();
-
-                }
-            } else {
-                mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+            @Override
+            public void onClick(View v) {
+                reset_trace_settings();
+                showZoomDialog();
             }
 
+        });
 
-            mPolygonSaveButton = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
-            mPolygonSaveButton.setOnClickListener(new View.OnClickListener() {
+        mClearButton = (Button) findViewById(R.id.clear);
+        mClearButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    if (map_markers.size() > 2) {
-                        createPolygon();
-                        p_alert.dismiss();
-                        saveGeoTrace();
-                    } else {
-                        p_alert.dismiss();
-                        showPolyonErrorDialog();
-                    }
+            @Override
+            public void onClick(View v) {
+                showClearDialog();
 
+            }
 
-                }
-            });
-            mPolylineSaveButton = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
-            mPolylineSaveButton.setOnClickListener(new View.OnClickListener() {
+        });
 
-                @Override
-                public void onClick(View v) {
-                    p_alert.dismiss();
+        mSaveButton = (Button) findViewById(R.id.geotrace_save);
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (map_markers.size() != 0) {
+                    p_alert.show();
+                } else {
                     saveGeoTrace();
-
-                }
-            });
-
-            zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
-
-            zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
-            zoomLocationButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    zoomToMyLocation();
-                    mapView.invalidate();
-                    zoomDialog.dismiss();
-                }
-            });
-
-            zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
-            zoomPointButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    //zoomToCentroid();
-                    zoomtoBounds();
-                    mapView.invalidate();
-                    zoomDialog.dismiss();
-                }
-            });
-
-
-            mapView.invalidate();
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            List<String> providers = mLocationManager.getProviders(true);
-            for (String provider : providers) {
-                if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                    mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    mGPSOn = true;
-                }
-                if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                    mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    mNetworkOn = true;
                 }
             }
-            if (mGPSOn) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        });
+        if (map_markers == null || map_markers.size() == 0) {
+            mClearButton.setEnabled(false);
+        }
+        mManualCaptureButton = (Button) findViewById(R.id.manual_button);
+        mManualCaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addLocationMarker();
             }
-            if (mNetworkOn) {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        });
+        mPauseButton = (Button) findViewById(R.id.pause);
+        mPlayButton = (Button) findViewById(R.id.play);
+        mPlayButton.setEnabled(false);
+        beenPaused = false;
+        TRACE_MODE = 1;
+
+
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (!play_check) {
+                    if (!beenPaused) {
+                        alert.show();
+                    } else {
+                        RadioGroup rb = (RadioGroup) traceSettingsView.findViewById(
+                                R.id.radio_group);
+                        int radioButtonID = rb.getCheckedRadioButtonId();
+                        View radioButton = rb.findViewById(radioButtonID);
+                        int idx = rb.indexOfChild(radioButton);
+                        TRACE_MODE = idx;
+                        if (TRACE_MODE == 0) {
+                            setupManualMode();
+                        } else if (TRACE_MODE == 1) {
+                            setupAutomaticMode();
+                        } else {
+                            reset_trace_settings();
+                        }
+                    }
+                    play_check = true;
+                } else {
+                    play_check = false;
+                    startGeoTrace();
+                }
+            }
+        });
+
+        mPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                mPlayButton.setVisibility(View.VISIBLE);
+                if (map_markers != null && map_markers.size() > 0) {
+                    mClearButton.setEnabled(true);
+                }
+                mPauseButton.setVisibility(View.GONE);
+                mManualCaptureButton.setVisibility(View.GONE);
+                play_check = true;
+                mode_active = false;
+                mMyLocationOverlay.disableFollowLocation();
+
+                try {
+                    schedulerHandler.cancel(true);
+                } catch (Exception e) {
+                    // Do nothing
+                }
+            }
+        });
+
+        overlayMapLayerListner();
+        buildDialogs();
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null) {
+            if (intent.hasExtra(GeoTraceWidget.TRACE_LOCATION)) {
+                String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
+                mPlayButton.setEnabled(false);
+                mClearButton.setEnabled(true);
+                overlayIntentTrace(s);
+                mLocationButton.setEnabled(true);
+                //zoomToCentroid();
+                zoomtoBounds();
+
             }
         } else {
-            PlayServicesUtil.requestPlayServicesErrorDialog(GeoTraceOsmMapActivity.this);
+            mMyLocationOverlay.runOnFirstFix(centerAroundFix);
         }
 
+
+        mPolygonSaveButton = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
+        mPolygonSaveButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (map_markers.size() > 2) {
+                    createPolygon();
+                    p_alert.dismiss();
+                    saveGeoTrace();
+                } else {
+                    p_alert.dismiss();
+                    showPolyonErrorDialog();
+                }
+
+
+            }
+        });
+        mPolylineSaveButton = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
+        mPolylineSaveButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                p_alert.dismiss();
+                saveGeoTrace();
+
+            }
+        });
+
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geoshape_zoom_dialog, null);
+
+        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                zoomToMyLocation();
+                mapView.invalidate();
+                zoomDialog.dismiss();
+            }
+        });
+
+        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_shape);
+        zoomPointButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //zoomToCentroid();
+                zoomtoBounds();
+                mapView.invalidate();
+                zoomDialog.dismiss();
+            }
+        });
+
+
+        mapView.invalidate();
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        for (String provider : providers) {
+            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
+                mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                mGPSOn = true;
+            }
+            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
+                mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                mNetworkOn = true;
+            }
+        }
+        if (mGPSOn) {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
+        if (mNetworkOn) {
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        }
     }
 
     @Override
@@ -503,7 +494,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void zoomToMyLocation() {
         if (mMyLocationOverlay.getMyLocation() != null) {
-            inital_location_found = true;
             if (zoom_level == 3) {
                 mapView.getController().setZoom(15);
             } else {
@@ -903,13 +893,5 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     public void onProviderDisabled(String provider) {
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }

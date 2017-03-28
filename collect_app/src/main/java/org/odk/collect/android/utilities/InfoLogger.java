@@ -61,13 +61,10 @@ public class InfoLogger {
             fo.flush();
             fo.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             Log.e(t, "exception: " + e.toString());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             Log.e(t, "exception: " + e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
             Log.e(t, "exception: " + e.toString());
         }
     }

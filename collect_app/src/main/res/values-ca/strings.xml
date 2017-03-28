@@ -268,9 +268,9 @@
   <string name="ext_search_bad_function_error">Error sintàctic a la funció de cercar(): \'%s\' no s\'ha avaluat com a funció.</string>
   <string name="ext_search_return_error">El cercador ha retornat un objecte de tipus \'%s\'.</string>
   <string name="ext_import_generic_error">No pot importar dades des de %1$s. Raó: %2$s</string>
-  <string name="ext_import_progress_message">Precàrregant dades des de \'%1$s\', espereu si us plau... %2$s</string>
+  <string name="ext_import_progress_message">Precàrregant dades des de \'%1$s\', espereu si us plau… %2$s</string>
   <string name="ext_import_cancelled_message">Lectura de dades calcel·lada</string>
-  <string name="ext_import_finalizing_message">Acabant dades precarregades...</string>
+  <string name="ext_import_finalizing_message">Acabant dades precarregades…</string>
   <string name="ext_import_completed_message">Lectura de dades completada!</string>
   <string name="ext_not_initialized_error">GestorDadesExternes no s\'ha inicialitzat</string>
   <string name="ext_import_csv_missing_error">Dades externes per %1$s no s\'han importat. Pot ser heu oblidat incloure l\'arxiu %2$s.csv amb el formulari?</string>
@@ -281,14 +281,14 @@
   <string name="fs_file_copy_error">No pot copiar \'%1$s\' sobre \'%2$s\'. Raó: %3$s</string>
   <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
   <string name="survey_multiple_forms_error">Heu descarregat dos formularis diferents amb el mateix ID i versió. Potser son formularis repetits o procedents de dos servidors diferents. Cal esborrar-ne un.</string>
-  <string name="survey_loading_reading_form_message">Llegint definició de formulari...</string>
-  <string name="survey_loading_reading_data_message">LLegint dades de enquesta...</string>
-  <string name="survey_loading_reading_csv_message">LLegint arxius CSV...</string>
-  <string name="survey_saving_validating_message">Validant respostes...</string>
-  <string name="survey_saving_collecting_message">Recollint dades...</string>
-  <string name="survey_saving_saving_message">Salvant a tarja SD ...</string>
-  <string name="survey_saving_finalizing_message">Acabant a tarja SD...</string>
-  <string name="survey_saving_encrypting_message">Encriptant dades...</string>
+  <string name="survey_loading_reading_form_message">Llegint definició de formulari…</string>
+  <string name="survey_loading_reading_data_message">LLegint dades de enquesta…</string>
+  <string name="survey_loading_reading_csv_message">LLegint arxius CSV…</string>
+  <string name="survey_saving_validating_message">Validant respostes…</string>
+  <string name="survey_saving_collecting_message">Recollint dades…</string>
+  <string name="survey_saving_saving_message">Salvant a tarja SD …</string>
+  <string name="survey_saving_finalizing_message">Acabant a tarja SD…</string>
+  <string name="survey_saving_encrypting_message">Encriptant dades…</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
   <string name="high_resolution">Activar vídeo HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -307,7 +307,7 @@
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
   <string name="google_audio_error">Arxius d\'audio no s\'admeten a Google Sheets de moment</string>
   <string name="google_video_error">Arxius de vídeo no s\'admeten a Google Sheets de moment</string>
-  <string name="picasa_upload_error">No pot pujar una foto que no existeix: %1$s</string>
+  <string name="media_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>
@@ -323,7 +323,6 @@
   <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_access_denied">Accés denegat. Si us plau, assegureu-vos que teniu permís d\'accés a la fulla de càlcul.</string>
-  <string name="google_sheets_update_error">Error actualitzant fulla. Comproveu que el propietari de la fulla de càlcul us ha atorgat permís d\'accés.</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
   <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>

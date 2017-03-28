@@ -36,6 +36,8 @@ the License.
 			android:textSize="14sp"
 			android:background="#DDDDDD" />
 
+		<include layout="@layout/search_box_layout"/>
+
 		<ListView
 			android:id="@android:id/list"
 			android:layout_width="match_parent"

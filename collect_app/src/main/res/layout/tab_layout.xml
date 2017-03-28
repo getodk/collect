@@ -39,6 +39,8 @@ the License.
             android:text="@string/form_scan_starting"
             android:textSize="14sp" />
 
+        <include layout="@layout/search_box_layout"/>
+
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"

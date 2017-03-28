@@ -23,6 +23,8 @@ the License.
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/search_box_layout"/>
+
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"

@@ -43,6 +43,7 @@ import org.odk.collect.android.activities.GeoShapeGoogleMapActivity;
 import org.odk.collect.android.activities.GeoShapeOsmMapActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.util.ArrayList;
 
@@ -95,21 +96,8 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Collect.getInstance().getFormController().setIndexWaitingForData(
-                        mPrompt.getIndex());
-                Intent i = null;
-                if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-                    i = new Intent(getContext(), GeoShapeGoogleMapActivity.class);
-                } else {
-                    i = new Intent(getContext(), GeoShapeOsmMapActivity.class);
-                }
-                String s = mStringAnswer.getText().toString();
-                if (s.length() != 0) {
-                    i.putExtra(SHAPE_LOCATION, s);
-                }
-                ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.GEOSHAPE_CAPTURE);
+                Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                startGeoShapeActivity();
             }
         });
 
@@ -129,6 +117,24 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         updateButtonLabelsAndVisibility(dataAvailable);
     }
 
+    private void startGeoShapeActivity() {
+        Intent i;
+        if (mapSDK.equals(GOOGLE_MAP_KEY)) {
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                i = new Intent(getContext(), GeoShapeGoogleMapActivity.class);
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                return;
+            }
+        } else {
+            i = new Intent(getContext(), GeoShapeOsmMapActivity.class);
+        }
+        String s = mStringAnswer.getText().toString();
+        if (s.length() != 0) {
+            i.putExtra(SHAPE_LOCATION, s);
+        }
+        ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.GEOSHAPE_CAPTURE);
+    }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
         if (dataAvailable) {
@@ -190,7 +196,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 return new StringData(s);
             } catch (NumberFormatException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
                 return null;
             }
         }

@@ -94,7 +94,6 @@ public class FileUtils {
                 }
             } catch (IOException e) {
                 Log.e(t, "Cannot read " + file.getName());
-                e.printStackTrace();
                 return null;
             }
 
@@ -103,7 +102,6 @@ public class FileUtils {
                 try {
                     throw new IOException("Could not completely read file " + file.getName());
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return null;
                 }
             }
@@ -112,7 +110,6 @@ public class FileUtils {
 
         } catch (FileNotFoundException e) {
             Log.e(t, "Cannot find " + file.getName());
-            e.printStackTrace();
             return null;
 
         } finally {
@@ -121,7 +118,6 @@ public class FileUtils {
                 is.close();
             } catch (IOException e) {
                 Log.e(t, "Cannot close input stream for " + file.getName());
-                e.printStackTrace();
                 return null;
             }
         }
@@ -325,14 +321,12 @@ public class FileUtils {
             try {
                 doc = XFormParser.getXMLDocument(isr);
             } catch (IOException e) {
-                e.printStackTrace();
                 throw new IllegalStateException("Unable to parse XML document", e);
             } finally {
                 try {
                     isr.close();
                 } catch (IOException e) {
                     Log.w(t, xmlFile.getAbsolutePath() + " Error closing form reader");
-                    e.printStackTrace();
                 }
             }
 

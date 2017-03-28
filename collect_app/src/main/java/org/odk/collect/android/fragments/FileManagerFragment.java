@@ -16,10 +16,14 @@ package org.odk.collect.android.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
@@ -39,6 +43,8 @@ public class FileManagerFragment extends AppListFragment {
         mToggleButton = (Button) rootView.findViewById(R.id.toggle_button);
 
         setHasOptionsMenu(true);
+        mSearchBoxLayout = (LinearLayout) rootView.findViewById(R.id.searchBoxLayout);
+        setupSearchBox(rootView);
         return rootView;
     }
 
@@ -68,9 +74,41 @@ public class FileManagerFragment extends AppListFragment {
     public void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
+
+        if (getListView().isItemChecked(position)) {
+            mSelectedInstances.add(getListView().getItemIdAtPosition(position));
+        } else {
+            mSelectedInstances.remove(getListView().getItemIdAtPosition(position));
+        }
+
         toggleButtonLabel(mToggleButton, getListView());
         mDeleteButton.setEnabled(areCheckedItems());
     }
+
+    private void setupSearchBox(View view) {
+        mInputSearch = (EditText) view.findViewById(R.id.inputSearch);
+        mInputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(s);
+            }
+        });
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        checkPreviouslyCheckedItems();
+        mDeleteButton.setEnabled(areCheckedItems());
+    }
+
 
     @Override
     protected void sortByNameAsc() {

@@ -87,7 +87,7 @@
   <string name="location_accuracy">Tarkkuus %1$s m</string>
   <string name="longitude">Pituusaste</string>
   <string name="main_menu">Päävalikko</string>
-  <string name="main_menu_details">Helpotettua tiedonkeruuta...</string>
+  <string name="main_menu_details">Helpotettua tiedonkeruuta…</string>
   <string name="manage_files">Poista tallennettu lomake</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="noselect_error">Pahoittelen, et ole valinnut yhtään lomaketta!</string>
@@ -151,7 +151,7 @@
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
-  <string name="form_scan_starting">Etsitään lomakkeita...</string>
+  <string name="form_scan_starting">Etsitään lomakkeita…</string>
   <string name="access_error">Virhe käyttäessä %s:</string>
   <string name="manifest_server_error">Manifestivastaus ei raportoi OpenRosa-versiota - palvelinvika?</string>
   <string name="root_element_error">Juurielementti ei ole &lt;manifest\&gt; — oli %s</string>
@@ -272,7 +272,7 @@
   <string name="ext_import_generic_error">Ei tuotu dataa lähteestä %1$s. Syy: %2$s</string>
   <string name="ext_import_progress_message">Esiladataan dataa lähteestä \'%1$s\', odota… %2$s</string>
   <string name="ext_import_cancelled_message">Datan lukeminen peruttu!</string>
-  <string name="ext_import_finalizing_message">Viimeistellään esiladattua dataa...</string>
+  <string name="ext_import_finalizing_message">Viimeistellään esiladattua dataa…</string>
   <string name="ext_import_completed_message">Datan lukeminen valmis!</string>
   <string name="ext_not_initialized_error"> ExternalDataManager alustamatta.</string>
   <string name="ext_import_csv_missing_error">Lomakkeen %1$s tarvitsemaa ulkoista dataa ei ole tuotu. Ehkä tiedoston %2$s.csv tuominen lomakkeen ohessa unohtui?</string>
@@ -283,14 +283,14 @@
   <string name="fs_file_copy_error">Ei voitu kopioida \'%1$s\' yli \'%2$s\'. Syy: %3$s</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="survey_multiple_forms_error">Olet ladannut kaksi eri lomaketta, joilla on sama lomake tunnus ja versio. Ehkä ne olivat samat lomake ladattuna eri aikoina tai eri palvelimille. Joka tapauksessa, sinun pitäisi poistaa toinen.</string>
-  <string name="survey_loading_reading_form_message">Luetaan lomakemäärittelyä...</string>
-  <string name="survey_loading_reading_data_message">Luetaan kyselydataa...</string>
-  <string name="survey_loading_reading_csv_message">Luetaan CSV-tiedostoja...</string>
-  <string name="survey_saving_validating_message">Tarkistetaan vastauksia...</string>
-  <string name="survey_saving_collecting_message">Kerätää dataa...</string>
-  <string name="survey_saving_saving_message">Tallennetaan SD-kortille...</string>
-  <string name="survey_saving_finalizing_message">Viimeistellään SD-kortille...</string>
-  <string name="survey_saving_encrypting_message">Salataan dataa...</string>
+  <string name="survey_loading_reading_form_message">Luetaan lomakemäärittelyä…</string>
+  <string name="survey_loading_reading_data_message">Luetaan kyselydataa…</string>
+  <string name="survey_loading_reading_csv_message">Luetaan CSV-tiedostoja…</string>
+  <string name="survey_saving_validating_message">Tarkistetaan vastauksia…</string>
+  <string name="survey_saving_collecting_message">Kerätää dataa…</string>
+  <string name="survey_saving_saving_message">Tallennetaan SD-kortille…</string>
+  <string name="survey_saving_finalizing_message">Viimeistellään SD-kortille…</string>
+  <string name="survey_saving_encrypting_message">Salataan dataa…</string>
   <string name="high_resolution_summary">Aktivoi korkean resoluution videotallennukset</string>
   <string name="high_resolution">Aktivoi hi-res video</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -309,7 +309,7 @@
   <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
   <string name="google_audio_error">Google Sheets ei tällä hetkellä tue äänitiedostoja.</string>
   <string name="google_video_error">Google Sheets ei tällä hetkellä tue videotiedostoja.</string>
-  <string name="picasa_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
+  <string name="media_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
   <string name="odk_auth_auth_fail">ODK Autosend autentikointivirhe, varmista että asetukset ovat oikein</string>
   <string name="odk_auto_note">ODK Autosend -ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -325,7 +325,6 @@
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että työkirjan omistaja on myöntänyt pääsyn.</string>
-  <string name="google_sheets_update_error">Virhe päivittäessä työkirjaa. Varmista että työkirjan omistaja on myöntänyt muokkausoikeuden.</string>
   <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
@@ -381,7 +380,7 @@
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
-  <string name="zoom_to_where">Zoomaa...</string>
+  <string name="zoom_to_where">Zoomaa…</string>
   <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
   <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
   <string name="points_captured">%s pistettä kerätty</string>

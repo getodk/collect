@@ -87,7 +87,7 @@
   <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="longitude">განედი</string>
   <string name="main_menu">მთავარი მენიუ</string>
-  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა...</string>
+  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა…</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>
@@ -269,7 +269,7 @@
   <string name="go_drive">ჩემი Drive</string>
   <string name="protocol_settings">პლატფორმის პარამეტრების შეცვლა</string>
   <string name="aggregate_preferences">ODK Aggregate-ის პარამეტრები</string>
-  <string name="picasa_upload_error">არარსებული ფოტო ვერ აიტვირთა: %1$s</string>
+  <string name="media_upload_error">არარსებული ფოტო ვერ აიტვირთა: %1$s</string>
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>

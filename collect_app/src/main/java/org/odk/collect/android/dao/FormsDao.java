@@ -36,6 +36,18 @@ public class FormsDao {
         return getFormsCursor(null, null, null, null);
     }
 
+    public Cursor getFilteredFormsCursor(CharSequence charSequence) {
+        Cursor cursor;
+        if (charSequence == null || charSequence.length() == 0) {
+            cursor = getFormsCursor();
+        } else {
+            String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = new String[] { "%"+charSequence+"%" };
+            cursor = getFormsCursor(selection, selectionArgs);
+        }
+        return cursor;
+    }
+
     public Cursor getFormsCursor(String sortOrder) {
         return getFormsCursor(null, null, null, sortOrder);
     }
