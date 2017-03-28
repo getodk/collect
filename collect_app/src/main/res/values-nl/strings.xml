@@ -17,7 +17,6 @@
   <string name="cancel">Terug</string>
   <string name="cancel_loading_form">Terug</string>
   <string name="cancel_location">Terug</string>
-  <string name="cannot_edit_completed_form">Een afgerond formulier kan niet bewerkt worden.</string>
   <string name="capture_audio">Audio vastleggen</string>
   <string name="capture_image">Foto nemen</string>
   <string name="capture_video">Video vastleggen</string>
@@ -117,7 +116,6 @@
   <string name="send_data">Verstuur Afgeronde Formulieren</string>
   <string name="send_data_button">Upload afgerond formulier (%s)</string>
   <string name="send_selected_data">Verstuur selectie</string>
-  <string name="server_auth_credentials">Voer gebruikersnaam en wachtwoord in voor server: %s</string>
   <string name="server_requires_auth">Server vereist authenticatie</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>

@@ -17,7 +17,6 @@
   <string name="cancel">फिर्ता जानुहोस्</string>
   <string name="cancel_loading_form">फिर्ता जानुहोस्</string>
   <string name="cancel_location">फिर्ता जानुहोस्</string>
-  <string name="cannot_edit_completed_form">एक पटक पूरा भनी अंकित गरिएको फारमलाई सम्पादन गर्न मिल्दैन । सो फारम गुप्तिकृत (encrypted) गरिएको पनि हुन सक्छ । </string>
   <string name="capture_audio">आवाज रेकर्ड गर्नुहोस् </string>
   <string name="capture_image">फोटो लिनुहोस् </string>
   <string name="capture_video">भिडियो रेकर्ड गर्नुहोस् </string>
@@ -118,7 +117,6 @@
   <string name="send_data">भरिसकेको फारम पठाउन</string>
   <string name="send_data_button">भरिसकेको फारम पठाउन (%s)</string>
   <string name="send_selected_data">छानिएका पठाउनुहोस् </string>
-  <string name="server_auth_credentials">कृपया सर्भर:%sको लागि प्रयोगकर्ता नाम र पासवर्ड हाल्नुहोला | </string>
   <string name="server_requires_auth">सर्भरलाई प्रमाणीकरण चाहिन्छ </string>
   <string name="server_url">URL</string>
   <string name="server_preferences">सर्भर सेटिङ्स</string>
@@ -292,7 +290,6 @@
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
   <string name="invalid_oauth">अमान्य OAuth 2 टोकन</string>
-  <string name="media_upload_error">उपलब्ध नभएको तस्विर अपलोड गर्न असफल: %1$s</string>
   <string name="odk_auth_auth_fail">ODK स्वत: प्रेषण प्रमाणीकरण असफल , कृपया आफ्नो सेटिङ्स सही छ छैन चेक गर्नुहोस्</string>
   <string name="odk_auto_note">ODK स्वत: प्रेषण सूचना</string>
   <string name="notification_error">सूचना देखाउन गल्ती भयो </string>
