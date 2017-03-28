@@ -303,8 +303,7 @@
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
   <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
-  <string name="google_audio_error">Аудіо файли, наразі, Google Сторінками не підтримуються.</string>
-  <string name="google_video_error">Відео файли, наразі, Google Сторінками не підтримуються.</string>
+  <string name="media_upload_error">Неможливо надіслати неіснуючу фотографію: %1$s</string>
   <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
   <string name="odk_auto_note">Повідомлення ODK Autosend</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
