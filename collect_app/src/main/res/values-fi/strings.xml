@@ -310,8 +310,7 @@
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="invalid_oauth">OAuth 2 token ei kelpaa</string>
   <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
-  <string name="google_audio_error">Google Sheets ei tällä hetkellä tue äänitiedostoja.</string>
-  <string name="google_video_error">Google Sheets ei tällä hetkellä tue videotiedostoja.</string>
+  <string name="media_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
   <string name="odk_auth_auth_fail">ODK Autosend autentikointivirhe, varmista että asetukset ovat oikein</string>
   <string name="odk_auto_note">ODK Autosend -ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>

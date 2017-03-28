@@ -311,8 +311,7 @@
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
-  <string name="google_audio_error">Archivos de audio no admitidos por Google Sheets de momento.</string>
-  <string name="google_video_error">Archivos de vídeo no admitidos por Google Sheets de momento.</string>
+  <string name="media_upload_error">Error al cargar la foto que no existe: %1$s</string>
   <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
   <string name="odk_auto_note">Notificación de ODK Autosend</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>

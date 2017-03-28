@@ -310,8 +310,7 @@
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
   <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
   <string name="google_repeat_error">Powtórzenia obecnie nie są wspierane przez Google Sheets.</string>
-  <string name="google_audio_error">Pliki audio nie są wspierane przez Google Sheets w tym razem.</string>
-  <string name="google_video_error">Pliki wideo nie są obsługiwane przez Google Sheets tym razem.</string>
+  <string name="media_upload_error">Nie udało się wysłać nieistniejącego zdjęcia: %1$s</string>
   <string name="odk_auth_auth_fail">Błąd autentykacji ODK Autosend, proszę upewnij się, że twoje ustawienia są poprawne</string>
   <string name="odk_auto_note">Powiadomienie ODK Autosend</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>

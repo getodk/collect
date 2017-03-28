@@ -294,8 +294,7 @@
   <string name="google_set_account">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
   <string name="invalid_oauth">OAuth 2 token ไม่ถูกต้อง</string>
   <string name="google_repeat_error">ไม่รองรับการทำซ้ำโดย Google Sheet ในตอนนี้</string>
-  <string name="google_audio_error">ไม่รองรับการใช้ไฟล์เสียงโดย Google Sheets ในตอนนี้</string>
-  <string name="google_video_error">ไม่รองรับการใช้ไฟล์วิดีโอโดย Google Sheets ในตอนนี้</string>
+  <string name="media_upload_error">ไม่สามารถอัพโหลดรูปภาพที่ไม่มีอยู่ได้ %1$s</string>
   <string name="odk_auth_auth_fail">การตรวจสอบ ODK Autosend authentication ล้มเหลว โปรดตรวจสอบการตั้งค่าให้ถูกต้อง</string>
   <string name="odk_auto_note">เตือน ODK Autosend</string>
   <string name="notification_error">การแสดงข้อความเตือนผิดพลาด</string>
