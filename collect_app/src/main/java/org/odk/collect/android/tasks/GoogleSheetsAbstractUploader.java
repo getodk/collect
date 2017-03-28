@@ -45,6 +45,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -655,7 +656,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .setViewersCanCopyContent(true)
                         .setParents(Collections.singletonList(destinationFolderID));
 
-        String type = UrlUtils.getMimeType(toUpload.getPath());
+        String type = FileUtils.getMimeType(toUpload.getPath());
         FileContent mediaContent = new FileContent(type, toUpload);
         com.google.api.services.drive.model.File file;
         file = mDriveService.files().create(fileMetadata, mediaContent)

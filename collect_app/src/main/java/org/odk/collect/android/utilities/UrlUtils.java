@@ -24,10 +24,8 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import java.net.FileNameMap;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class UrlUtils {
 
@@ -39,12 +37,6 @@ public class UrlUtils {
         } catch (MalformedURLException e) {
             return false;
         }
-    }
-
-    public static String getMimeType(String fileUrl)
-            throws java.io.IOException {
-        FileNameMap fileNameMap = URLConnection.getFileNameMap();
-        return fileNameMap.getContentTypeFor(fileUrl);
     }
 
     public static String getSpreadsheetID(String id)
