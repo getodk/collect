@@ -307,6 +307,7 @@ public class GridWidget extends QuestionWidget {
                         stopAudio();
                     }
                     selected[i] = false;
+                    imageViews[i].setBackgroundColor(0);
                     if (imageViews[i] != null) {
                     }
                 }
