@@ -87,6 +87,6 @@ the License.
         android:id="@+id/sortingMenu"
         android:layout_width="250dp"
         android:layout_height="match_parent"
-        android:layout_gravity="right|end"
+        android:layout_gravity="end"
         android:background="#DDDDDD" />
 </android.support.v4.widget.DrawerLayout>
