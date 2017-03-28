@@ -17,7 +17,6 @@
   <string name="cancel">ຍົກເລິກ</string>
   <string name="cancel_loading_form">ຍົກເລີກ</string>
   <string name="cancel_location">ຍົກເລີກ</string>
-  <string name="cannot_edit_completed_form">ແບບ​ຟອມ​ນີ້ບໍ່​ສາ​ມາດ​ດັດ​ແກ້ໄດ້​ອີກ ໃນເມື່ອ​ມັນ​ຖືກ​ໝາຍ​ສົມ​ບູນ​ແລ້ວ. ມັນ​ອາດ​ຈະ​ຖືກ​ເຂົ້າ​ລະ​ຫັດ​ແລ້ວ.</string>
   <string name="capture_audio">ບັນທຶກສຽງ</string>
   <string name="capture_image">ຖ່າຍຮູບ</string>
   <string name="capture_video">ບັນທຶກວີດີໂອ</string>
@@ -118,7 +117,6 @@
   <string name="send_data">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ</string>
   <string name="send_data_button">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ(%s)</string>
   <string name="send_selected_data">ສົ່ງແບບຟອມທີ່ເລືອກ</string>
-  <string name="server_auth_credentials">ກະລຸນາປ້ອນຊື່ ແລະ ລະຫັດຜ່ານ ຂອງເສີບເວີ: %s</string>
   <string name="server_requires_auth">ເຊີເວີຕ້ອງການກວດ​ສອບ​ຊື່ຜູ້ໃຊ້ງານ ແລະ ລະ​ຫັດ​ຜ່ານ</string>
   <string name="server_url">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
   <string name="server_preferences">​ການ​ຕັ້ງ​ຄ່າ​ເຊີ​ເວີ</string>
@@ -276,7 +274,7 @@
   <string name="survey_loading_reading_form_message">​ກຳ​ລັງ​ອ່ານ​​ຄຳ​ນິ​ຍາມແບບ​ຟອມ…</string>
   <string name="survey_loading_reading_data_message">ກຳ​ລັງ​ອ່ານ​ຂໍ້​ມູນ​ການ​ສຳ​ຫຼວດ…</string>
   <string name="survey_loading_reading_csv_message">ກຳ​ລັງ​ອ່ານ​ເອ​ກະ​ສານ CSV…</string>
-  <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ....</string>
+  <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ….</string>
   <string name="survey_saving_collecting_message">ກຳ​ລັງ​ຮວບ​ຮວມຂໍ້​ມູນ…</string>
   <string name="survey_saving_saving_message">​ກຳ​ລັງ​ບັນ​ທຶກ​ໃສ່ ກາດ​ຄວມຈຳ​ພາຍນອກ…</string>
   <string name="survey_saving_finalizing_message">ກຳ​ລັງ​ເຮັດ​ໃຫ້ ກາດ​ຄວາມ​ຈຳ​ພາຍນອກ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
@@ -293,7 +291,6 @@
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
-  <string name="media_upload_error">ບໍ່ສາມາດອັບໂຫຼດຮູບທີ່ບໍ່ມີ: %1$s</string>
   <string name="odk_auth_auth_fail">ການກວດສອບ ODK Autosend ຜິດພາດ, ກະລຸນາກວດສອບການຕັ້ງຄ່າວ່າຖືກຕ້ອງບໍ່</string>
   <string name="odk_auto_note">ສົ່ງການແຈ້ງເຕືອນແບບໂອໂຕຂອງ ODK</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>

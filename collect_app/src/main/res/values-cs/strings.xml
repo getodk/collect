@@ -17,7 +17,6 @@
   <string name="cancel">Zrušit</string>
   <string name="cancel_loading_form">Zrušit</string>
   <string name="cancel_location">Zrušit</string>
-  <string name="cannot_edit_completed_form">Dotazník, který byl označen za kompletní už nejde editovat. Může být zakódovaný.</string>
   <string name="capture_audio">Nahrát zvuk</string>
   <string name="capture_image">Udělat fotku</string>
   <string name="capture_video">Nahrát video</string>
@@ -119,7 +118,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="send_data">Odeslat dokončený dotazník</string>
   <string name="send_data_button">Odeslat dokončený dotazník (%s)</string>
   <string name="send_selected_data">Odeslat vybrané</string>
-  <string name="server_auth_credentials">Zadejte prosím uživatelské jméno a heslo pro server: %s</string>
   <string name="server_requires_auth">Server vyžaduje přihlášení</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Nastavení serveru</string>
@@ -293,7 +291,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="invalid_oauth">Neplatný kód OAuth 2</string>
-  <string name="media_upload_error">Chyba při nahrávání fotografie - Fotografie není k dispozici : %1$s</string>
   <string name="odk_auth_auth_fail">Chyba autorizace ODK pro automatické odesílání dat, ujistěte se, že Vaše nastavení je správné</string>
   <string name="odk_auto_note">ODK - výsledek automatického odeslání</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
