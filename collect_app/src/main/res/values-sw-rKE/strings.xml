@@ -15,7 +15,6 @@
   <string name="cancel">Tamatisha</string>
   <string name="cancel_loading_form">Tamatisha</string>
   <string name="cancel_location">Tamatisha</string>
-  <string name="cannot_edit_completed_form">Fomu hii haiwezi batilishwa pindi inapoekwa alama ya ukamilifu. Inaweza kuwa fiche</string>
   <string name="capture_audio">Rekodi Sauti</string>
   <string name="capture_image">Piga Picha</string>
   <string name="capture_osm">Anzisha OpenMapkit</string>
@@ -81,7 +80,7 @@
   <string name="location_accuracy">Usahihi ni %1$s m</string>
   <string name="longitude">Longitude</string>
   <string name="main_menu">Menu kuu</string>
-  <string name="main_menu_details">Ukusanyaji wa data umefanywa rahisi....</string>
+  <string name="main_menu_details">Ukusanyaji wa data umefanywa rahisi….</string>
   <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>
   <string name="mark_finished">sahihisha fomu kama iliyo kamilika</string>
   <string name="noselect_error">Samahani, hujachagua fomu yoyote!</string>
@@ -142,7 +141,7 @@
   <string name="submission_url">Njia ya kuwasilisha</string>
   <string name="font_size">Ukubwa wa fonti za nakala</string>
   <string name="change_font_size">Ukubwa wa fonti za nakala</string>
-  <string name="form_scan_starting">Inatafuta fomu.....</string>
+  <string name="form_scan_starting">Inatafuta fomu…..</string>
   <string name="access_error">Hitilafu wakati wa kupata %s:</string>
   <string name="manifest_server_error">Jibu la Manifest halina taarifa ya toleo la OpenRosa - server mbaya?</string>
   <string name="root_element_error">Msingi wa kipengele sio &lt;manifest\&gt; - ilikuwa %s</string>

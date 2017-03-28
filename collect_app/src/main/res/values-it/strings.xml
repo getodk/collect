@@ -17,7 +17,6 @@
   <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
   <string name="cancel_location">Annulla</string>
-  <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che è stato contrassegnato come completo. Potrebbe essere cifrato.</string>
   <string name="capture_audio">Registra Suono</string>
   <string name="capture_image">Scatta Foto</string>
   <string name="capture_osm">Lancia OpenMapKit</string>
@@ -121,7 +120,6 @@
   <string name="send_data">Invia Modulo Completato</string>
   <string name="send_data_button">Invia Modulo Completato (%s)</string>
   <string name="send_selected_data">Invia selezionato</string>
-  <string name="server_auth_credentials">Per favore inserisci la username e password per il server %s</string>
   <string name="server_requires_auth">Server richiede l\'autenticazione</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Impostazioni Server</string>
@@ -152,7 +150,7 @@
   <string name="submission_url">Luogo di consegna</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
-  <string name="form_scan_starting">Ricerca moduli....</string>
+  <string name="form_scan_starting">Ricerca moduli….</string>
   <string name="access_error">Errore durante l\'accesso %s: </string>
   <string name="manifest_server_error">La risposta del \'Manifest\' non si riferisce a una versione OpenRosa — server sbagliato?</string>
   <string name="root_element_error">Elemento principale non è &amp;lt;manifest\&gt; — era %s</string>
@@ -308,7 +306,6 @@
   <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
   <string name="google_audio_error">File audio non sono ancora supportati da Google Sheets.</string>
   <string name="google_video_error">File video non sono ancora supportati da Google Sheets.</string>
-  <string name="media_upload_error">Impossibile caricare foto inesistente: %1$s</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
   <string name="odk_auto_note">Notifica ODK Autosend</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
@@ -317,19 +314,16 @@
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Ricerca per form o seleziona \'My Drive\' in basso.</string>
   <string name="no_blank_search">Il campo ricerca non può essere vuoto.</string>
-  <string name="google_sheets_url">URL di Google Sheets</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="sheets_google_account_needed">Hai selezionato Google Sheets come tuo server, perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
   <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
-  <string name="google_sheets_access_denied">Accesso negato. Perpiacere assicurati che il proprietario del foglio ti abbia accordato il permesso di accesso.</string>
   <string name="google_sheets_missing_columns">Il foglio è mancante delle seguenti colonne: %1$s</string>
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Opzioni Mappatura</string>
   <string name="map_sdk_selector_title">Mappatura SDK</string>
   <string name="map_sdk_behavior">Mappatura SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
@@ -372,7 +366,6 @@
   <string name="geopoint_instruction">Premi a lungo per posizionare il segno altrimenti tocca su Aggiungi Posizione.</string>
   <string name="geopoint_no_draggable_instruction">Tocca Aggiungi Posizione.</string>
   <string name="discard">Annulla</string>
-  <string name="zoom_to_where">Ingrandisci a…</string>
   <string name="zoom_to_location">Ingrandisci la posizione corrente</string>
   <string name="zoom_to_feature">Ingrandisci l\'elemento salvato</string>
   <string name="points_captured">%s punti catturati</string>

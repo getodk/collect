@@ -17,7 +17,6 @@
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
-  <string name="cannot_edit_completed_form">يتعذر تعديل هذه الاستمارة عندما يتم وضع علامة على أنها مكتملة. قد تكون مشفرة.</string>
   <string name="capture_audio">تسجيل الصوت</string>
   <string name="capture_image">التقط صورة</string>
   <string name="capture_osm">شغل ال OpenMapKit</string>
@@ -120,7 +119,6 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة النهائية (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
-  <string name="server_auth_credentials">الرجاء ادخال اسم المستخدم وكلمة المرور الخاصة بالخادم: %s</string>
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
@@ -307,7 +305,6 @@
   <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
   <string name="google_audio_error">الملفات الصوتية غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
   <string name="google_video_error">ملفات الفيديو غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="media_upload_error">فشل تحميل الصورة الغير موجودة: %1$s</string>
   <string name="odk_auth_auth_fail">فشل ارسال مصادقة المعلومات, رجاءا تأكد من أن جميع الاعدادات صحيحة</string>
   <string name="odk_auto_note">ارسال الاشعارات تلقائيا</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
@@ -316,13 +313,11 @@
   <string name="change_server_url">رابط الخادم</string>
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
   <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا.</string>
-  <string name="google_sheets_url">رابط صفحات الجوجل</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="sheets_google_account_needed">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
-  <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن الوصول لك.</string>
   <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>
   <string name="password_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في كلمات المرور</string>
   <string name="username_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في اسم المستخدم</string>
