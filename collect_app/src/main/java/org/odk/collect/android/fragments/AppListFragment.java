@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.DrawerLayout;
@@ -34,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -60,7 +62,8 @@ abstract class AppListFragment extends ListFragment {
     protected SimpleCursorAdapter mListAdapter;
     protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected EditText mInputSearch;
-
+    private int moldSelected;
+    private boolean mFirsttime = true;
     // toggles to all checked or all unchecked
     // returns:
     // true if result is all checked
@@ -169,6 +172,11 @@ abstract class AppListFragment extends ListFragment {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 textView.setPadding(50, 0, 0, 0);
+                if ((position == 0)&&(mFirsttime)) {
+                    textView.setBackgroundColor(Color.parseColor("#2196F3"));
+                    moldSelected = position;
+                    mFirsttime = false;
+                }
                 return textView;
             }
         };
@@ -176,6 +184,9 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(moldSelected).setBackgroundColor(Color.parseColor("#DDDDDD"));
+                moldSelected = position;
+                view.setBackgroundColor(Color.parseColor("#2196F3"));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }

@@ -19,6 +19,7 @@ package org.odk.collect.android.activities;
 import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -67,6 +69,8 @@ abstract class AppListActivity extends ListActivity {
     protected String[] mSortingOptions;
 
     private boolean mIsSearchBoxShown;
+    private boolean mFirstTime = true;
+    private int moldSelected;
 
     @Override
     protected void onResume() {
@@ -189,6 +193,11 @@ abstract class AppListActivity extends ListActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 textView.setPadding(50, 0, 0, 0);
+                if ((position == 0)&&(mFirstTime)) {
+                    textView.setBackgroundColor(Color.parseColor("#2196F3"));
+                    moldSelected = position;
+                    mFirstTime = false;
+                }
                 return textView;
             }
         };
@@ -197,6 +206,9 @@ abstract class AppListActivity extends ListActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(moldSelected).setBackgroundColor(Color.parseColor("#DDDDDD"));
+                moldSelected = position;
+                view.setBackgroundColor(Color.parseColor("#2196F3"));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
             }
