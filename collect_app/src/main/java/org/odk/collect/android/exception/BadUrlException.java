@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 University of Washington
+ * Copyright (C) 2017 Shobhit
  *
  * Originally developed by Dobility, Inc. (as part of SurveyCTO)
  *
