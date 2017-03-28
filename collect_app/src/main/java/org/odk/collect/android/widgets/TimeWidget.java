@@ -83,7 +83,7 @@ public class TimeWidget extends QuestionWidget {
             }
         });
 
-        setGravity(Gravity.LEFT);
+        setGravity(Gravity.START);
         addAnswerView(mTimePicker);
 
     }

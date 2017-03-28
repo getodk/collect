@@ -198,7 +198,7 @@ abstract class AppListActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 performSelectedSearch(position);
-                mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                mDrawerLayout.closeDrawer(Gravity.END);
             }
         });
     }
