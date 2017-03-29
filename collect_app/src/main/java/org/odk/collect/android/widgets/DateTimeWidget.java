@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
@@ -36,6 +37,8 @@ public class DateTimeWidget extends QuestionWidget {
 
     public DateTimeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+
+        setGravity(Gravity.START);
 
         mDateWidget = new DateWidget(context, prompt);
         mTimeWidget= new TimeWidget(context, prompt);

@@ -16,5 +16,8 @@
 	<string translatable="false" name="default_server_url">https://opendatakit.appspot.com</string>
 	<string translatable="false" name="default_odk_formlist">/formList</string>
 	<string translatable="false" name="default_odk_submission">/submission</string>
-    <item name="mapview" type="id"/>
+	<string translatable="false" name="time">%1$s:%2$s</string>
+	<string translatable="false" name="full_date">%1$s/%2$s/%3$s</string>
+	<string translatable="false" name="date_year_month">%1$s/%2$s</string>
+	<item name="mapview" type="id"/>
 </resources>

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -56,6 +57,8 @@ public class DateWidget extends QuestionWidget {
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
+
+        setGravity(Gravity.START);
 
         createDateButton();
         createDateTextView();
@@ -188,11 +191,11 @@ public class DateWidget extends QuestionWidget {
 
         String appearance = mPrompt.getQuestion().getAppearanceAttr();
         if ("month-year".equals(appearance)) {
-            mDateTextView.setText(monthText + "/" + year);
+            mDateTextView.setText(getContext().getString(R.string.date_year_month, monthText, String.valueOf(year)));
         } else if ("year".equals(appearance)) {
             mDateTextView.setText(String.valueOf(year));
         } else {
-            mDateTextView.setText(dayText + "/" + monthText + "/" + year);
+            mDateTextView.setText(getContext().getString(R.string.full_date, dayText, monthText, String.valueOf(year)));
         }
     }
 
