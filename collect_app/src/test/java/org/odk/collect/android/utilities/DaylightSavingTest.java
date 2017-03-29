@@ -45,10 +45,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.xml",
-        packageName = "org.odk.collect")
-// https://github.com/opendatakit/collect/issues/356
-// The purpose of this test is to confirm that the app doesn't crash anymore in that case
+@Config(constants = BuildConfig.class)
+/* https://github.com/opendatakit/collect/issues/356
+ * Verify that the date and datetime widget skips over "daylight savings gaps".
+ * This is needed on the day and time of a daylight savings transition because that date/time
+ * doesn't exist.*/
 public class DaylightSavingTest {
 
     private static final String EST_TIME_ZONE = "America/Los_Angeles";
