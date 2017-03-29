@@ -494,4 +494,6 @@
 <string name="sort_the_list">Sort the list</string>
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
 <string name="filter_the_list">Filter the list</string>
+<string name="auth_failed_form_upload">Authentication Failed:Please verify credentials and try uploading the forms again</string>
+<string name="auth_failed_drive">Authorization Failed:Unable to fetch drive contents</string>
 </resources>

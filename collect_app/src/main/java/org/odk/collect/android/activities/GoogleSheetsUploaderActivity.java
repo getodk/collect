@@ -83,6 +83,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     private AlertDialog mAlertDialog;
     private String mAlertMsg;
     private boolean mAlertShowing;
+    private boolean mAuthFailed;
     private Long[] mInstancesToSend;
     private GoogleSheetsInstanceUploaderTask mUlTask;
 
@@ -98,6 +99,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         // default initializers
         mAlertMsg = getString(R.string.please_wait);
         mAlertShowing = false;
+        mAuthFailed = false;
 
         setTitle(getString(R.string.send_data));
 
@@ -392,7 +394,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         StringBuilder message = new StringBuilder();
 
         if (keys.size() == 0) {
-            message.append(getString(R.string.no_forms_uploaded));
+            if(mAuthFailed) {
+                message.append(getString(R.string.auth_failed_form_upload));
+                mAuthFailed = false;
+            }
+            else
+                message.append(getString(R.string.no_forms_uploaded));
         } else {
             Iterator<String> it = keys.iterator();
 
@@ -419,7 +426,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         message.append(name).append(" - ").append(result.get(id)).append("\n\n");
                     }
                 } else {
-                    message.append(getString(R.string.no_forms_uploaded));
+                    if(mAuthFailed) {
+                        message.append(getString(R.string.auth_failed_form_upload));
+                        mAuthFailed = false;
+                    }
+                    else
+                        message.append(getString(R.string.no_forms_uploaded));
                 }
             } finally {
                 if (results != null) {
@@ -554,8 +566,10 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
                 mResults = null;
+                mAuthFailed = true;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
+                mAuthFailed = true;
             } catch (MultipleFoldersFoundException e) {
                 Log.e(TAG, e.getMessage(), e);
             }

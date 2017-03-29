@@ -789,6 +789,7 @@ public class GoogleDriveActivity extends ListActivity implements
                         .setFields("id")
                         .execute().getId();
             } catch (UserRecoverableAuthIOException e) {
+                createAlertDialog(getString(R.string.auth_failed_drive));
                 startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
                 return null;
             } catch (IOException e) {
