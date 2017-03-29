@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">場所を記録</string>
+  <string name="show_password">パスワードを表示</string>
   <string name="accuracy">精度</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="add_another">グループを追加</string>
@@ -17,7 +18,7 @@
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
-  <string name="cannot_edit_completed_form">完了済になっているため、このフォームは編集できません。暗号化されているかもしれません。</string>
+  <string name="cannot_edit_completed_form">確定済になっているため、このフォームは編集できません。暗号化されているかもしれません。</string>
   <string name="capture_audio">サウンドを録音</string>
   <string name="capture_image">写真を撮影</string>
   <string name="capture_osm">OpenMapKit を起動</string>
@@ -94,6 +95,7 @@
   <string name="no_connection">利用可能なネットワークがありません</string>
   <string name="no_items_display">表示できるものはありません。</string>
   <string name="no_items_display_forms">表示できるものはありません。\n\n空のフォームを取得し、必要事項を記入してみてください。</string>
+  <string name="no_items_display_sent_forms">表示可能なものはありません。\n\n表示する前に確定済みのフォームを送信してみてください。</string>
   <string name="no_items_display_instances">表示可能なものはありません。\n\nフォームを送信する前に保存されたフォームを確定してください。</string>
   <string name="ok">OK</string>
   <string name="parse_error">申し訳ありません、フォームを解析できません。</string>
@@ -122,7 +124,7 @@
   <string name="send_selected_data">選択済を送信</string>
   <string name="view_sent_forms">送信済フォームを表示</string>
   <string name="view_sent_forms_button">送信済フォーム (%s) を表示</string>
-  <string name="server_auth_credentials">サーバーのユーザー名とパスワードを入力してください: %s</string>
+  <string name="server_auth_credentials">サーバーのユーザー名とパスワードが正しくありません: %s</string>
   <string name="server_requires_auth">サーバーは認証が必要です</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">サーバー設定</string>
@@ -305,13 +307,12 @@
   <string name="aggregate_preferences">ODK Aggregate 設定</string>
   <string name="other_preferences">その他のプラットフォーム設定</string>
   <string name="google_preferences">Google スプレッドシート設定</string>
+  <string name="google_sheets_url_hint">フォームは送信 URL を設定する必要があります。 そうしない場合に、この URL が使用されます。</string>
   <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
   <string name="google_set_account">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
   <string name="invalid_oauth">OAuth 2 トークンが正しくありません</string>
   <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
-  <string name="google_audio_error">この時点では Google スプレッドシートでオーディオファイルはサポートされていません。</string>
-  <string name="google_video_error">この時点では Google スプレッドシートでビデオファイルはサポートされていません。</string>
   <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
   <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
@@ -321,7 +322,7 @@
   <string name="change_server_url">サーバー URL</string>
   <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="no_blank_search">検索フィールドは空にできません。</string>
-  <string name="google_sheets_url">Google スプレッドシート URL</string>
+  <string name="google_sheets_url">フォールバック送信 URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_google_account_needed">サーバーとして Google スプレッドシートを選択しています。続行する前に、全般設定で対応する Google アカウントを選択してください</string>
@@ -332,8 +333,14 @@
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
+  <string name="about_preferences">アプリについて</string>
+  <string name="tell_your_friends">友達に教える</string>
+  <string name="tell_your_friends_title">ODK Collect を友達と共有</string>
+  <string name="tell_your_friends_msg">ODK Collect アプリをダウンロードしてください!</string>
+  <string name="leave_a_review">レビューを残す</string>
+  <string name="leave_a_review_summary">Google Play でレビューを残してください</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">マッピング オプション</string>
+  <string name="map_preferences">マッピング</string>
   <string name="map_sdk_selector_title">マッピング SDK</string>
   <string name="map_sdk_behavior">マッピング SDK</string>
   <string name="google_maps_sdk">Google マップ SDK</string>
@@ -415,6 +422,7 @@
   <string name="selected_answer">選択済: %s</string>
   <string name="version_number">バージョン: %s</string>
   <string name="general_settings_about">アプリについて</string>
+  <string name="odk_website">Open Data Kit ウェブサイト</string>
   <string name="all_open_source_licenses">オープンソースライセンス</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
@@ -438,7 +446,7 @@
   <string name="analytics_summary">匿名の使用状況データは、ODK チームが修正および機能に優先順位付けするのに役立ちます</string>
   <string name="select_all">すべて選択</string>
   <string name="clear_all">すべてクリア</string>
-  <string name="reset_settings">全般設定</string>
+  <string name="reset_settings">すべての設定 (内部設定、保存された設定)</string>
   <string name="reset_saved_forms">保存済フォーム (インスタンスフォルダー、インスタンスデータベース)</string>
   <string name="reset_blank_forms">空のフォーム (フォームフォルダー、フォームデータベース、アイテムセットデータベース)</string>
   <string name="reset_layers">地図レイヤー (レイヤーフォルダー)</string>
@@ -452,7 +460,7 @@
   <string name="resetting_finished">リセットが完了しました</string>
   <string name="reset_app_state_result">結果のリセット</string>
   <string name="reset_app_state_warning">選択したデータはすべて完全に削除されます。元に戻すことはできません。</string>
-  <string name="reset_settings_result">全般設定 :: %s</string>
+  <string name="reset_settings_result">すべての設定 :: %s</string>
   <string name="reset_saved_forms_result">保存されたフォーム :: %s</string>
   <string name="reset_blank_forms_result">空のフォーム :: %s</string>
   <string name="reset_layers_result">地図レイヤー :: %s</string>
@@ -461,4 +469,19 @@
   <string name="encrypted_form">暗号化フォーム</string>
   <string name="deleted_form">削除済フォーム</string>
   <string name="exit">終了</string>
+  <string name="instance_scan_completed">スキャンが終了しました。</string>
+  <string name="instance_scan_count">%1$d フォームを追加しました。</string>
+  <string name="instance_sync">確定済として保存されたフォームをインポート</string>
+  <string name="instance_sync_summary">インスタンスフォルダーから保存されたフォームをインポートします</string>
+  <string name="sort_by_name_asc">名前順、A-Z</string>
+  <string name="sort_by_name_desc">名前順、Z-A</string>
+  <string name="sort_by_date_asc">日付順、新しいものが最初</string>
+  <string name="sort_by_date_desc">日付順、古いものが最初</string>
+  <string name="sort_by_status_asc">ステータス順、確定済が最初</string>
+  <string name="sort_by_status_desc">ステータス順、未確定が最初</string>
+  <string name="sorting_menu_open">並び替えメニューを開く</string>
+  <string name="sorting_menu_close">並び替えメニューを閉じる</string>
+  <string name="sort_the_list">一覧の並び替え</string>
+  <string name="request_permissions_google_account">ODK Collect は、空白のフォームを取得して、入力フォームを送信するために、Google アカウントへのアクセスが必要です。</string>
+  <string name="filter_the_list">一覧をフィルター</string>
 </resources>

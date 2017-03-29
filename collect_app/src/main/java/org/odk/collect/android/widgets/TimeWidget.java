@@ -52,7 +52,7 @@ public class TimeWidget extends QuestionWidget {
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
 
-        setGravity(Gravity.LEFT);
+        setGravity(Gravity.START);
 
         createTimeButton();
         createTimeTextView();

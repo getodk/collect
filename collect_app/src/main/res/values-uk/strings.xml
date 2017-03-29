@@ -17,7 +17,6 @@
   <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
-  <string name="cannot_edit_completed_form">Цю анкету не можливо редагувати після того як її позначили завершеною. Вона може бути закодована.</string>
   <string name="capture_audio">Записати звук</string>
   <string name="capture_image">Сфотографувати</string>
   <string name="capture_osm">Запустити OpenMapKit</string>
@@ -120,7 +119,6 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
-  <string name="server_auth_credentials">Будь ласка, введіть ім`я користувача та пароль для сервера: %s</string>
   <string name="server_requires_auth">Для доступу до сервера необхідно авторизуватись</string>
   <string name="server_url">Адреса URL</string>
   <string name="server_preferences">Налаштування сервера</string>
@@ -305,8 +303,6 @@
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
   <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
-  <string name="google_audio_error">Аудіо файли, наразі, Google Сторінками не підтримуються.</string>
-  <string name="google_video_error">Відео файли, наразі, Google Сторінками не підтримуються.</string>
   <string name="media_upload_error">Неможливо надіслати неіснуючу фотографію: %1$s</string>
   <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
   <string name="odk_auto_note">Повідомлення ODK Autosend</string>
@@ -316,19 +312,16 @@
   <string name="change_server_url">Адреса серверу URL</string>
   <string name="google_search_browse">Шукайте анкети. Або натисніть \'Мій диск\' для навігації.</string>
   <string name="no_blank_search">Поле пошуку не може бути порожнім</string>
-  <string name="google_sheets_url">Адреса Google Сторінок</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
   <string name="sheets_google_account_needed">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
-  <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
   <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
   <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Опції мапувння</string>
   <string name="map_sdk_selector_title">SDK для мапування</string>
   <string name="map_sdk_behavior">SDK для мапування</string>
   <string name="streets">Вулиці</string>

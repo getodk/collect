@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">ចាប់​យក​ទីតាំង</string>
+  <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
   <string name="accuracy">ភាព​ត្រឹមត្រូវ</string>
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="add_another">បន្ថែម​ក្រុម</string>
@@ -17,7 +18,7 @@
   <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
-  <string name="cannot_edit_completed_form">សំណុំ​បែប​បទ​នេះ​មិន​អាច​កែ​ប្រែ​បាន​ទេ វា​ត្រូវ​បាន​សម្គាល់ថាបញ្ចប់។ វា​ប្រហែល​បានបម្លែងជារសហ្សលិខ</string>
+  <string name="cannot_edit_completed_form">ទម្រង់នេះមិនអាចកែប្រែម្តងទៀតទេ, វាត្រូវបានគេសម្គាល់ថាបានបញ្ចប់ហើយ។ វាប្រហែលជាត្រូវបានអ៊ិនគ្រីប។</string>
   <string name="capture_audio">ថត​សំឡេង</string>
   <string name="capture_image">ថត​រូបភាព</string>
   <string name="capture_osm">បើក OpenMapKit</string>
@@ -94,6 +95,7 @@
   <string name="no_connection">គ្មានការតភ្ជាប់បណ្តាញដែល​អាច​ប្រើបាន</string>
   <string name="no_items_display">គ្មានអ្វីដែលត្រូវបង្ហាញបាន</string>
   <string name="no_items_display_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូមព្យាយាមទាញ និងបំពេញទិន្នន័យ​ពី​សំណុំ​បែប​បទ​ទទេ</string>
+  <string name="no_items_display_sent_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន។\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​​មុននឹងបង្ហាញ។</string>
   <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
   <string name="ok">យល់ព្រម</string>
   <string name="parse_error">សុំទោស, សំណុំ​បែប​បទ​មិន​អាច​បែកចែកបាន</string>
@@ -120,7 +122,9 @@
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
   <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
   <string name="send_selected_data">បញ្ជូនការជ្រើសរើស</string>
-  <string name="server_auth_credentials">សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ និងពាក្យសម្ងាត់សម្រាប់ម៉ាស៊ីនមេ: %s</string>
+  <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
+  <string name="view_sent_forms_button">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ (%s)</string>
+  <string name="server_auth_credentials">ឈ្មោះអ្នកប្រើប្រាស់ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវសម្រាប់ម៉ាស៊ីនមេ៖ %s</string>
   <string name="server_requires_auth">ម៉ាស៊ីនមេទាមទារឲ្យមានការផ្ទៀងផ្ទាត់</string>
   <string name="server_url">អាសយដ្ឋាន</string>
   <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
@@ -193,6 +197,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'ការផ្ញើចេញបរាជ័យនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'បានលុបនៅថ្ងៃទី \' EEE, MMM dd, yyyy \'ម៉ោង\' HH:mm</string>
   <string name="version">ជំនាន់ ៖</string>
   <string name="parent_form_not_present">មិន​អាច​ធ្វើ​ការ​កែ​ប្រែ​សំុណុំ​បែប​បទ​ដែល​បាន​រក្សាទុក​ ពីព្រោះ​សំណុំបែប​បទ​ទទេ​ដែលត្រូវគ្នាមិន​នៅ ឬត្រូវ​បាន​លុប។ \n\nលេខ​សម្គាល់​សំណុំ​បែប​បទ: %1$s</string>
   <string name="launch_app">ដំណើរការ</string>
@@ -307,8 +312,6 @@
   <string name="google_set_account">អ្នក​បាន​ជ្រើស​សន្លឹក​ Google ជា​ម៉ាស៊ីន​មេ​របស់​អ្នក​សូម​ជ្រើស​រើស​គណនី Google ត្រូវគ្នា ដែលឋិតក្នុងការកំណត់ទូទៅមុននឹងបន្ត</string>
   <string name="invalid_oauth">មិនត្រឹមត្រូវសញ្ញាសម្ងាត់ OAuth 2</string>
   <string name="google_repeat_error">សំនួរម្តង​ទៀត​មិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
-  <string name="google_audio_error">ឯកសារសម្លេងមិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
-  <string name="google_video_error">ឯកសារវីដេអូមិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
   <string name="odk_auth_auth_fail">
 បរាជ័យក្នុងការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ ODK នៃការផ្ញើដោយស្វ័យ​ប្រវត្តិ, សូមធ្វើឱ្យប្រាកដថាការកំណត់របស់អ្នកគឺត្រឹមត្រូវ</string>
@@ -319,46 +322,104 @@
   <string name="change_server_url">URL ម៉ាស៊ីន​បម្រើ</string>
   <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="no_blank_search">field ដែលស្វែងរកមិនត្រូវទទេ។</string>
-  <string name="google_sheets_url">អាសយដ្ឋាន សន្លឹក Google</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
   <string name="sheets_google_account_needed">អ្នកបានជ្រើសរើសយកសន្លឹក Google ជាម៉ាស៊ីនមេរបស់អ្នក, សូមរើសនូវគណនី Google ដែលត្រូវគ្នានៅក្នុងការកំណត់ទូទៅ មុននឹងបន្ត</string>
   <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
-  <string name="google_sheets_access_denied">ការចូលដំណើរការត្រូវបានបដិសេធ។  ​សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីបាន​ផ្តល់​ការអនុញ្ញាតឲ្យអ្នកចូលដំណើរការ។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
   <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
+  <string name="about_preferences">អំពី</string>
+  <string name="tell_your_friends">ប្រាប់​មិត្តភ័ក្ររបស់អ្នក</string>
+  <string name="tell_your_friends_title">ចែក​រំលែក​ODK Collect ជាមួយមិត្តភ័ក្ររបស់អ្នក</string>
+  <string name="tell_your_friends_msg">ទាញយកកម្មវិធី ODK Collect</string>
+  <string name="leave_a_review">ទុកមិតិយោបល់</string>
+  <string name="leave_a_review_summary">ទុកមិតិយោបល់លើហាងកម្មវិធី Google</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">ជម្រើសនៃ​ការ​គូសផែនទី</string>
+  <string name="map_preferences">ដៅផែនទី</string>
   <string name="map_sdk_selector_title">ផែនទី SDK</string>
   <string name="map_sdk_behavior">ផែនទី SDK</string>
   <string name="google_maps_sdk">ផែនទី Google SDK</string>
   <string name="openstreetmap_sdk">ផែនទី​ OpenStreetMap SDK</string>
   <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
+  <string name="openmap_streets">ផ្លូវ OSM</string>
+  <string name="streets">ផ្លូវ</string>
+  <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
+  <string name="hybrid">ផែនទីកូនកាត់</string>
+  <string name="satellite">ផ្កាយរណប</string>
+  <string name="map_basemap_selector_title">មូលដ្ឋានផែនទី</string>
+  <string name="map_basemap_behavior">ជ្រើសរើស​មូលដ្ឋានផែនទី</string>
+  <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
   <string name="start">ចាប់ផ្តើម</string>
   <string name="enable_gps">ដំណើរ​ការ​ប្រព័ន្ធ​ចាប់​ទីតាំង</string>
   <string name="enable_gps_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
   <string name="polygon_save">រក្សាទុកជាពហុកោណ</string>
   <string name="polyline_save">រក្សាទុកជាពហុបន្ទាត់</string>
   <string name="gps_enable_message">ប្រព័ន្ធ​ចាប់​ទី​តាំង​ក្នុងឧបករណ៍​របស់​អ្នក​បានបិទ។ តើ​អ្នក​ចង់​បើក​ដំណើរ​ការ​វា​ដែរ​ឬ​ទេ?</string>
+  <string name="select_offline_layer">ជ្រើសរើសស្រទាប់ក្រៅបណ្តាញ</string>
   <string name="minutes">នាទី</string>
   <string name="geo_exit_warning">បោះបង់​ការផ្លាស់​ប្តូរ និងត្រឡប់ទៅកាន់ ODK វិញ?</string>
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="dialog_continue">បន្តរ</string>
   <string name="clear">លុ​បចេញ</string>
+  <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
-  <string name="zoom_to_where">ពង្រីក/បង្រួមទៅ…</string>
   <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
   <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
   <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>
   <string name="direction">ទិសដៅ៖ %s</string>
+  <string name="bad_uri">URI អាក្រក់: %s</string>
+  <string name="unrecognized_uri">មិនស្គាល់ URI: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;no ទម្រង់បានផ្ទុក&gt;</string>
+  <string name="alert">ព្រមាន</string>
+  <string name="install_openmapkit">សូមចុចដើម្បីដំឡើង OpenMapKit!</string>
+  <string name="go_back">ត្រឡប់ក្រោយ</string>
+  <string name="download_selected">ទាញយកនូវជំរើស</string>
+  <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
+  <string name="version_number">ជំនាន់: %s</string>
   <string name="general_settings_about">អំពី</string>
+  <string name="odk_website">គេហទំព័រ​ Open Data Kit</string>
   <string name="all_open_source_licenses">អាជ្ញាប័ណ្ណប្រភពបើកចំហ</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">ខាងលិច %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">ខាងកើត %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">ខាងត្បូង %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">ខាងជើង %1$s%2$s%3$s</string>
+  <string name="phone_does_not_support_encryption">ទូរស័ព្ទមិនបានគាំទ្រការអ៊ីនគ្រីប</string>
+  <string name="analytics_preferences">ការប្រើប្រាស់ទិន្នន័យ</string>
+  <string name="select_all">ជ្រើសរើសទាំងអស់</string>
+  <string name="clear_all">លុបចេញទាំងអស់</string>
+  <string name="reset_settings">ការកំណត់ទាំងអស់ (ការកំណត់ខាងក្នុង, ការកំណត់ដែលរក្សាទុក)</string>
+  <string name="reset_settings_dialog_title">ជ្រើសរើសអ្វីដែលត្រូវកំណត់ឡើងវិញ</string>
+  <string name="reset_settings_dialog">កំណត់កម្មវិធីឡើងវិញ</string>
+  <string name="reset_settings_button_reset">កំណត់ឡើងវិញ</string>
+  <string name="reset_dialog_nothing">អ្នកមិនបានជ្រើសរើសអ្វីដើម្បីកំណត់ឡើងវិញទេ។</string>
+  <string name="reset_in_progress">កំពុងកំណត់ឡើងវិញ</string>
+  <string name="reset_app_state_result">កំណត់លទ្ធផលឡើងវិញ</string>
+  <string name="reset_app_state_warning">ទិន្នន័យដែល​បានជ្រើសរើសទាំងអស់នឹងត្រូវលុប។ ទាំងនេះមិនធ្វើវិញបានទេ។</string>
+  <string name="reset_settings_result">ការកំណត់ទាំងអស់ :: %s</string>
+  <string name="reset_saved_forms_result">សំណុំបែបបទដែល​​បាន​រក្សា​ទុក :: %s</string>
+  <string name="reset_blank_forms_result">សំណុំបែបបទទទេ :: %s</string>
+  <string name="reset_layers_result">ស្រទាប់ផែនទី :: %s</string>
+  <string name="encrypted_form">បម្លែងសំណុំបែបបទ​ជារហស្សលិខ</string>
+  <string name="deleted_form">សំណុំបែបបទដែលបានលុប​</string>
+  <string name="exit">ចាកចេញ</string>
+  <string name="instance_scan_completed">បញ្ចប់ការស្កេន.</string>
+  <string name="instance_scan_count">%1$d សំណុំបែបបទបានបន្ថែម។</string>
+  <string name="sort_by_name_asc">តាមឈ្មោះ, ក-អ</string>
+  <string name="sort_by_name_desc">តាមឈ្មោះ, អ-ក</string>
+  <string name="sort_by_date_asc">តាមរយះថ្ងៃខែឆ្នាំ, ថ្ងៃថ្មីបំផុតមុន</string>
+  <string name="sort_by_date_desc">តាមរយះថ្ងៃខែឆ្នាំ, ថ្ងៃចាស់បំផុតមុន</string>
+  <string name="sort_by_status_asc">តាមរយះស្ថានភាពបានបញ្ចប់មុនដំបូង</string>
+  <string name="sort_by_status_desc">តាមរយះស្ថានភាពមិនបានបញ្ចប់មុនដំបូង</string>
+  <string name="sorting_menu_open">បើកមីនុយតម្រៀប</string>
+  <string name="sorting_menu_close">បិទមីនុយតម្រៀប</string>
+  <string name="sort_the_list">តម្រៀបបញ្ជី</string>
+  <string name="filter_the_list">តម្រងបញ្ជី</string>
 </resources>
