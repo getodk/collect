@@ -134,12 +134,12 @@ allprojects {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.0'
+    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.3.1'
     compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
+    compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.2.1'
+    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.2.1'
+    compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.2.1'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
     compile group: 'com.google.firebase', name: 'firebase-core', version: '9.2.0'
     compile group: 'com.google.firebase', name: 'firebase-crash', version: '9.2.0'
     compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
@@ -161,7 +161,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
     testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
     testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
-    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.1.0'
+    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.3.1'
     androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
 }
