@@ -381,7 +381,7 @@
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
   <string name="zoom_to_location">Zoom a la localización actual</string>
-  <string name="zoom_to_feature">Zoom a caracteristica guardada</string>
+  <string name="zoom_to_feature">Zoom a característica guardada</string>
   <string name="points_captured">%s puntos capturados</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' es un nombre de columna invalido en su formulario. Google Sheets solo permite caracteres alfanuméricos y guiones en nombres de columna</string>
   <string name="google_sheets_invalid_column_instance">\'n%1$s\' es un nombre de columna invalido en su instancia guardada. Google Sheets solo permite caracteres alfanuméricos y guiones en nombres de columna</string>

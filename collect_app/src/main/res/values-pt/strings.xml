@@ -273,8 +273,8 @@ Escolher Imagem</string>
   <string name="survey_saving_saving_message">Salvando no cartão de memória…</string>
   <string name="survey_saving_finalizing_message">Desconectando o cartão de memória…</string>
   <string name="survey_saving_encrypting_message">Criptografando dados…</string>
-  <string name="high_resolution_summary">Acionar gravação de videos em alta resolução</string>
-  <string name="high_resolution">Acionar video em alta resolução</string>
+  <string name="high_resolution_summary">Acionar gravação de vídeos em alta resolução</string>
+  <string name="high_resolution">Acionar vídeo em alta resolução</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>
