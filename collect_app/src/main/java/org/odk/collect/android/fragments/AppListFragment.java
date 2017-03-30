@@ -62,7 +62,7 @@ abstract class AppListFragment extends ListFragment {
     protected SimpleCursorAdapter mListAdapter;
     protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected EditText mInputSearch;
-    private int moldSelected;
+    private int mOldSelected;
     private boolean mFirsttime = true;
     // toggles to all checked or all unchecked
     // returns:
@@ -174,7 +174,7 @@ abstract class AppListFragment extends ListFragment {
                 textView.setPadding(50, 0, 0, 0);
                 if ((position == 0)&&(mFirsttime)) {
                     textView.setBackgroundColor(Color.parseColor("#2196F3"));
-                    moldSelected = position;
+                    mOldSelected = position;
                     mFirsttime = false;
                 }
                 return textView;
@@ -184,8 +184,8 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                parent.getChildAt(moldSelected).setBackgroundColor(Color.parseColor("#DDDDDD"));
-                moldSelected = position;
+                parent.getChildAt(mOldSelected).setBackgroundColor(Color.parseColor("#DDDDDD"));
+                mOldSelected = position;
                 view.setBackgroundColor(Color.parseColor("#2196F3"));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
