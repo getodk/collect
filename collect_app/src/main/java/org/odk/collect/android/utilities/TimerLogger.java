@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.tasks.TimerSaveTask;
@@ -193,14 +194,18 @@ public class TimerLogger {
     private boolean locationRecordingEnabled = false;   // Set true to also record gps coordinates
 
 
-    public TimerLogger(File instanceFile, SharedPreferences sharedPreferences) {
+    public TimerLogger(File instanceFile, SharedPreferences sharedPreferences, FormController formController) {
 
         /*
          * The timer logger is enabled if:
-         *   - The timer log has been enabled in the administration properties of collect
+         *  1) The meta section of the form contains a logging entry
+         *      <orx:logging />
+         *  2) And logging has been enabled in the device preferences
          */
-        mTimerEnabled = sharedPreferences.getBoolean(
+        boolean loggingEnabledInForm = formController.getSubmissionMetadata().logging;
+        boolean loggingEnabledInPref = sharedPreferences.getBoolean(
                 AdminKeys.KEY_TIMER_LOG_ENABLED, false);
+        mTimerEnabled = loggingEnabledInForm && loggingEnabledInPref;
 
         if (mTimerEnabled) {
             filename = "timing.csv";

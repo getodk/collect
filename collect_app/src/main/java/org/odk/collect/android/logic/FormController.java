@@ -72,6 +72,11 @@ public class FormController {
     private static final String INSTANCE_ID = "instanceID";
     private static final String INSTANCE_NAME = "instanceName";
 
+    /*
+     * Non OpenRosa metadata tag names
+     */
+    private static final String TIMING = "timing";
+
     /**
      * OpenRosa metadata of a form instance.
      *
@@ -83,14 +88,14 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
+        public final boolean logging;
 
-        InstanceMetadata(String instanceId, String instanceName) {
+        InstanceMetadata(String instanceId, String instanceName, boolean logging) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
+            this.logging = logging;
         }
     }
-
-    ;
 
     /**
      * Classes needed to serialize objects. Need to put anything from JR in here.
@@ -1159,6 +1164,7 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
+        boolean logging = false;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1180,9 +1186,16 @@ public class FormController {
                     instanceName = (String) sa.getValue();
                 }
             }
+
+            // timing element...
+            v = e.getChildrenWithName(TIMING);
+            if (v.size() == 1) {
+                logging = true;
+            }
+
         }
 
-        return new InstanceMetadata(instanceId, instanceName);
+        return new InstanceMetadata(instanceId, instanceName, logging);
     }
 
 }

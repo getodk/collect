@@ -230,11 +230,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
-    private boolean mShowNavigationButtons=false;
+    private boolean mShowNavigationButtons = false;
 
     private FormsDao mFormsDao;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1177,7 +1179,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 // Create 'save' button
-                 endView.findViewById(R.id.save_exit_button)
+                endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1281,7 +1283,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Disables the back button if it is first question....
      */
-    private void adjustBackNavigationButtonVisibility(){
+    private void adjustBackNavigationButtonVisibility() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         try {
@@ -2575,7 +2577,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 // Create the timer logger and then log the start event
                 mTimerLogger = new TimerLogger(instanceFile,
-                        PreferenceManager.getDefaultSharedPreferences(this));
+                        PreferenceManager.getDefaultSharedPreferences(this),
+                        formController);
                 mTimerLogger.logTimerEvent(TimerLogger.Event.START, 0, null);
 
             }
@@ -2589,7 +2592,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 // Create the timer logger and then log the resume event
                 mTimerLogger = new TimerLogger(formController.getInstancePath(),
-                        PreferenceManager.getDefaultSharedPreferences(this));
+                        PreferenceManager.getDefaultSharedPreferences(this),
+                        formController);
                 mTimerLogger.logTimerEvent(TimerLogger.Event.RESUME, 0, null);
 
 
