@@ -193,6 +193,7 @@ public class DateWidget extends QuestionWidget {
                         setDate();
                     }
                 }, 0, 0, 0);
+        mDatePickerDialog.setCustomTitle(new LinearLayout(getContext()));
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {

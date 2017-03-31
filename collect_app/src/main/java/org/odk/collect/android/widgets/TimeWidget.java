@@ -153,6 +153,7 @@ public class TimeWidget extends QuestionWidget {
                         setTime(hourOfDay, minuteOfHour);
                     }
                 }, 0, 0, DateFormat.is24HourFormat(getContext()));
+        mTimePickerDialog.setCustomTitle(new LinearLayout(getContext()));
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
