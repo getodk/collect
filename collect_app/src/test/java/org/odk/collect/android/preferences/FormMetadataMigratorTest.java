@@ -21,6 +21,8 @@ import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.odk.collect.android.preferences.FormMetadataMigrator.migrateOnce;
+import static org.odk.collect.android.preferences.FormMetadataMigrator.sourceTargetValuePairs;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
@@ -31,7 +33,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 /** Tests the FormMetadataActivity */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class FormMetadataActivityTest {
+public class FormMetadataMigratorTest {
 
     private FormMetadataActivity formMetadataActivity;
     private SharedPreferences sharedPreferences;
@@ -52,12 +54,6 @@ public class FormMetadataActivityTest {
             {KEY_SELECTED_GOOGLE_ACCOUNT,   "a Google email address"}
     };
 
-    /** The migration flow, from source to target */
-    private final String[][] sourceTargetValuePairs = new String[][] {
-            {KEY_USERNAME,                  KEY_METADATA_USERNAME},
-            {KEY_SELECTED_GOOGLE_ACCOUNT,   KEY_METADATA_EMAIL}
-    };
-
     /** Changes to make to the metadata after the migration */
     private final String[][] modifiedMetadataValuePairs = new String[][] {
             {KEY_METADATA_USERNAME,         "a user--changed"},
@@ -76,13 +72,13 @@ public class FormMetadataActivityTest {
         setPreferencesToPreMigrationValues();
         displayAffectedPreferences("Before calling migrateOnce");
 
-        formMetadataActivity.migrateOnce(sharedPreferences);
+        migrateOnce(sharedPreferences);
         displayAffectedPreferences("After calling migrateOnce");
         checkPostMigrationValues();
 
         setPreferencesToValues(modifiedMetadataValuePairs);
         displayAffectedPreferences("After changing metadata");
-        formMetadataActivity.migrateOnce(sharedPreferences);
+        migrateOnce(sharedPreferences);
         displayAffectedPreferences("After calling migrateOnce again");
         ensureSecondMigrationCallPreservesMetadata();
     }

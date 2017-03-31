@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.PropertyManager;
 import static org.odk.collect.android.logic.PropertyManager.*;
+import static org.odk.collect.android.preferences.FormMetadataMigrator.migrateOnce;
 import static org.odk.collect.android.preferences.PreferenceKeys.*;
 
 public class FormMetadataActivity extends PreferenceActivity {
@@ -28,31 +29,6 @@ public class FormMetadataActivity extends PreferenceActivity {
         initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID,      null);
         initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID,  null);
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL,     null);
-    }
-
-    void migrateOnce(SharedPreferences sharedPreferences) {
-        boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
-
-        if (! migrationAlreadyDone) {
-            String[][] fromToKeyPairs = {
-                    {KEY_USERNAME,                  KEY_METADATA_USERNAME},
-                    {KEY_SELECTED_GOOGLE_ACCOUNT,   KEY_METADATA_EMAIL}
-            };
-
-            for (String[] pair : fromToKeyPairs) {
-                String migratingValue = sharedPreferences.getString(pair[0], "").trim();
-                if (! migratingValue.isEmpty()) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(pair[1], migratingValue);
-                    editor.apply();
-                }
-            }
-
-            // Save that we’ve migrated the values
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(KEY_METADATA_MIGRATED, true);
-            editor.apply();
-        }
     }
 
     /**
