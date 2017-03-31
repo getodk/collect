@@ -139,9 +139,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
-        FormDef.EvalBehavior mode = AdminPreferencesActivity.getConfiguredFormProcessingLogic(
-                Collect.getInstance());
-        FormDef.setEvalBehavior(mode);
 
 //    FormDef.setDefaultEventNotifier(new EventNotifier() {
 //

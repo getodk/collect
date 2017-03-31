@@ -218,7 +218,6 @@
   <string name="admin_preferences">管理者設定</string>
   <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
   <string name="user_access_form_entry">ユーザーがアクセスできるフォーム入力項目:</string>
-  <string name="admin_advanced_settings">詳細設定 (推奨時):</string>
   <string name="save_mid">フォームを保存する</string>
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="verify_new_password">新しいパスワードを再入力してください</string>
@@ -249,12 +248,6 @@
   <string name="swipe_instructions">%s の最初です。次へ/前へ移動するには、次のように画面をスワイプしてください。</string>
   <string name="buttons_instructions">%s の最初です。次へ/前へ移動するには、次のように矢印ボタンをタップしてください。</string>
   <string name="swipe_buttons_instructions">%s の最初です。次へ/前へ移動するには、次のように画面をスワイプするか、矢印ボタンをタップしてください。</string>
-  <string name="form_processing_logic">フォーム処理ロジック</string>
-  <string name="form_processing_logic_recommended">推奨 (デフォルト)</string>
-  <string name="form_processing_logic_0">2015年1月 (最速)</string>
-  <string name="form_processing_logic_1">2015年1月 (最も安全)</string>
-  <string name="form_processing_logic_2">2014年中期 (遅い)</string>
-  <string name="form_processing_logic_3">2014年初期 (速い)</string>
   <string name="launch_printer">印刷を開始</string>
   <string name="no_printer">要求されたプリンターがインストールされていません。プリンターをインストールしてください。</string>
   <string name="constraint_behavior">処理動作の制約</string>

@@ -225,7 +225,6 @@
 <string name="admin_preferences">Admin Settings</string>
 <string name="admin_access_settings">Tap for admin access to settings</string>
 <string name="user_access_form_entry">User can access Form Entry items:</string>
-<string name="admin_advanced_settings">Advanced settings (when advised):</string>
 <string name="save_mid">Save Form</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
@@ -256,12 +255,6 @@
 <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
 <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
 <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
-<string name="form_processing_logic">Form processing logic</string>
-<string name="form_processing_logic_recommended">Recommended (default)</string>
-<string name="form_processing_logic_0">January 2015 (fastest)</string>
-<string name="form_processing_logic_1">January 2015 (safest)</string>
-<string name="form_processing_logic_2">Mid 2014 (slow)</string>
-<string name="form_processing_logic_3">Early 2014 (fast)</string>
 <string name="launch_printer">Initiate Printing</string>
 <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 <string name="constraint_behavior">Constraint processing behavior</string>

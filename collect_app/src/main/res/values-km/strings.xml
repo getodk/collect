@@ -218,7 +218,6 @@
   <string name="admin_preferences">ការកំណត់របស់ Admin</string>
   <string name="admin_access_settings">ប៉ះសម្រាប់កំណត់ដំណើរការរបស់ Admin</string>
   <string name="user_access_form_entry">អ្នកប្រើប្រាស់អាចចូលធាតុរបស់សំណុំ​បែប​បទបញ្ចូលទិន្នន័យ</string>
-  <string name="admin_advanced_settings">ការកំណត់ថ្នាក់ខ្ពស់ (ពេលមានការណែនាំ)</string>
   <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
   <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
   <string name="verify_new_password">សូមបំពេញពាក្យសម្ងាត់ម្តងទៀត</string>
@@ -249,12 +248,6 @@
   <string name="swipe_instructions">អ្នក​នៅ​ចំនុច​ចាប់ផ្តើម​នៃ​ %s ។ អូស​អេក្រង់​ដូចដែលបាន​បង្ហាញ​ខាងក្រោម​ដើម្បី​ចូល​ទៅ​មុខ ឬ​ថយក្រោយ។</string>
   <string name="buttons_instructions">អ្នក​នៅ​ចំនុច​ចាប់ផ្តើម​នៃ​ %s ។ ប៉ះប៊ូតុងសញ្ញាព្រួញ​ខាង​ក្រោម​ដើម្បី​ចូល​ទៅ​មុខ ឬ​ថយក្រោយ។</string>
   <string name="swipe_buttons_instructions">អ្នក​នៅ​ចំនុច​ចាប់ផ្តើម​នៃ​ %s ។ អូស​អេក្រង់​ដូចដែលបាន​បង្ហាញ​ខាងក្រោម​ឬ ប៉ះប៊ូតុងសញ្ញាព្រួញ​ខាង​ក្រោម​ដើម្បី​ចូល​ទៅ​មុខ ឬ​ថយក្រោយ។</string>
-  <string name="form_processing_logic">កំពុងដំណើរការតក្ក​សំណុំ​បែប​បទ</string>
-  <string name="form_processing_logic_recommended">អនុសាសន៍ (លំនាំដើម)</string>
-  <string name="form_processing_logic_0">ខែ មករា ឆ្នាំ 2015 (លឿនបំផុត)</string>
-  <string name="form_processing_logic_1">ខែ មករា ឆ្នាំ 2015 (សុវត្ថិភាពខ្ពស់)</string>
-  <string name="form_processing_logic_2">ពាក់​កណ្តាលឆ្នាំ 2014 (យឺត)</string>
-  <string name="form_processing_logic_3">ដើមឆ្នាំ 2014 (លឿន)</string>
   <string name="launch_printer">ការផ្តួចផ្តើមបោះពុម្ភ</string>
   <string name="no_printer">ម៉ាស៊ីន​បោះ​ពុម្ព​ដែល​បាន​ស្នើ​មិន​ត្រូវ​បាន​ដំឡើង​។ សូម​ដំឡើង​ម៉ាស៊ីន​បោះ​ពុម្ព​។</string>
   <string name="constraint_behavior">កំពុងដំណើរការឥរិយាបទឧបសគ្គ</string>
