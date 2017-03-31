@@ -216,7 +216,6 @@
   <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="user_access_form_entry">Käyttäjällä pääsy seuraaviin lomakesyöttökohtiin:</string>
-  <string name="admin_advanced_settings">Lisäasetukset (kun suositeltavaa):</string>
   <string name="save_mid">Tallenna lomake</string>
   <string name="enter_new_password">Syötä uusi salasana</string>
   <string name="verify_new_password">Syötä uusi salasana uudelleen</string>
@@ -247,12 +246,6 @@
   <string name="swipe_instructions">Olet lomakkeen %s alussa.\nPyyhkäise ruutua kuten alla siirtyäksesi eteenpäin ja taaksepäin.</string>
   <string name="buttons_instructions">Olet lomakkeen %s alussa. Kosketa nuolipainikkeita alla siirtyäksesi eteenpäin ja taaksepäin.</string>
   <string name="swipe_buttons_instructions">Olet lomakkeen %s alussa. Pyyhkäise ruutua kuten alla tai kosketa nuolipainikkeita siirtyäksesi eteenpäin ja taaksepäin.</string>
-  <string name="form_processing_logic">Lomakkeen prosessointilogiikka</string>
-  <string name="form_processing_logic_recommended">Suositeltu (oletusarvo)</string>
-  <string name="form_processing_logic_0">Tammikuu 2015 (nopein)</string>
-  <string name="form_processing_logic_1">Tammikuu 2015 (turvallisin)</string>
-  <string name="form_processing_logic_2">2014 keskivaihe (hidas)</string>
-  <string name="form_processing_logic_3">Varhainen 2014 (nopea)</string>
   <string name="launch_printer">Käynnistä tulostus</string>
   <string name="no_printer">Pyydettyä tulostinta ei ole asennettu. Asenna tulostin.</string>
   <string name="constraint_behavior">Rajoitusten käsittely</string>
