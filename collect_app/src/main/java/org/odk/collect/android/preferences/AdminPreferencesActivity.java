@@ -19,11 +19,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-//import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
-//import org.javarosa.core.model.FormDef;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ToastUtils;

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-//import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -21,7 +20,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import static android.content.Context.MODE_PRIVATE;
-//import static android.content.Context.MODE_WORLD_READABLE;
+import static android.content.Context.MODE_WORLD_READABLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 
@@ -35,7 +34,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
         super.onCreate(savedInstanceState);
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
-        //prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+        prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
