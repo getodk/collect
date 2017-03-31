@@ -19,7 +19,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,8 +30,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-
-
 
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and

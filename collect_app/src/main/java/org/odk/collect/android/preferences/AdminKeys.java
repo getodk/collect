@@ -32,7 +32,6 @@ public final class AdminKeys {
     static final String KEY_CHANGE_PROTOCOL_SETTINGS  = "change_protocol_settings";
 
     // client
-
     static final String KEY_CHANGE_FONT_SIZE          = "change_font_size";
     static final String KEY_DEFAULT_TO_FINALIZED      = "default_to_finalized";
     static final String KEY_HIGH_RESOLUTION           = "high_resolution";
