@@ -133,14 +133,14 @@ public class PropertyManager implements IPropertyManager {
 
     /**
      * Initializes a property and its associated “with URI” property, from shared preferences.
-     * @param settings the shared preferences object to be used
+     * @param preferences the shared preferences object to be used
      * @param prefKey the preferences key
      * @param propName the name of the property to set
-     * @param prefix the string prepended to the value for the associated “with URI” property
+     * @param scheme the scheme for the associated “with URI” property
      */
-    private void initUserDefined(SharedPreferences settings, String prefKey, String propName, String prefix) {
-        String value = settings.getString(prefKey, null);
-        putProperty(propName, prefix, value);
+    private void initUserDefined(SharedPreferences preferences, String prefKey,
+                                 String propName, String scheme) {
+        putProperty(propName, scheme, preferences.getString(prefKey, null));
     }
 
     private void putProperty(String propName, String scheme, String value) {
