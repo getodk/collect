@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
@@ -94,10 +95,5 @@ public class UrlUtils {
         }
     }
 
-    public static class BadUrlException extends Exception {
-        public BadUrlException(String message) {
-            super(message);
-        }
-    }
 
 }
