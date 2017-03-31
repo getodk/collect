@@ -32,7 +32,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 ## Making sure your pull request is accepted
 1. Confirm that your code compiles.
 
-1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected.
+1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected. Attach a test form when appropriate. This form should only include questions which are useful for verifying your change.
 
 1. Make sure that there is an issue that corresponds to the pull request and that it has been discussed by the community as necessary.
 
