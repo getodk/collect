@@ -255,7 +255,7 @@ public class Collect extends Application {
         FormController.initializeJavaRosa(mgr);
 
         mActivityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
+                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
     }

@@ -31,8 +31,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
+
 /**
- * Returns device properties to JavaRosa
+ * Returns device properties and metadata to JavaRosa
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
@@ -40,16 +44,24 @@ public class PropertyManager implements IPropertyManager {
 
     private static final String TAG = "PropertyManager";
 
+    public final static String PROPMGR_DEVICE_ID        = "deviceid";
+    public final static String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
+    public final static String PROPMGR_SIM_SERIAL       = "simserial";
+    public final static String PROPMGR_PHONE_NUMBER     = "phonenumber";
+    public final static String PROPMGR_USERNAME         = "username";
+    public final static String PROPMGR_EMAIL            = "email";
+
     private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
 
-    private final Map<String, String> mProperties = new HashMap<>();
+    private static final String SCHEME_USERNAME     = "username";
+    private static final String SCHEME_TEL          = "tel";
+    private static final String SCHEME_MAILTO       = "mailto";
+    private static final String SCHEME_IMSI         = "imsi";
+    private static final String SCHEME_SIMSERIAL    = "simserial";
+    private static final String SCHEME_IMEI         = "imei";
+    private static final String SCHEME_MAC          = "mac";
 
-    public final static String DEVICE_ID_PROPERTY           = "deviceid";       // imei
-    public final static String SUBSCRIBER_ID_PROPERTY       = "subscriberid";   // imsi
-    public final static String SIM_SERIAL_PROPERTY          = "simserial";
-    public final static String PHONE_NUMBER_PROPERTY        = "phonenumber";
-    public final static String USERNAME_PROPERTY            = "username";
-    public final static String EMAIL_PROPERTY               = "email";
+    private final Map<String, String> mProperties = new HashMap<>();
 
     public String getName() {
         return "Property Manager";
@@ -68,31 +80,32 @@ public class PropertyManager implements IPropertyManager {
     public PropertyManager(Context context) {
         Log.i(TAG, "calling constructor");
 
-        // User-defined properties
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        initUserDefinedProperty(preferences, PHONE_NUMBER_PROPERTY,    "tel");
-        initUserDefinedProperty(preferences, USERNAME_PROPERTY,        "username");
-        initUserDefinedProperty(preferences, EMAIL_PROPERTY,           "mailto");
-
         // Device-defined properties
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        IdAndPrefix idp = findDeviceId(context, telephonyManager);
-        putProperty(DEVICE_ID_PROPERTY,     idp.prefix,    idp.id);
-        putProperty(SUBSCRIBER_ID_PROPERTY, "imsi",        telephonyManager.getSubscriberId());
-        putProperty(SIM_SERIAL_PROPERTY,    "simserial",   telephonyManager.getSimSerialNumber());
+        TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        IdAndPrefix idp = findDeviceId(context, telMgr);
+        putProperty(PROPMGR_DEVICE_ID,     idp.prefix,          idp.id);
+        putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          telMgr.getLine1Number());
+        putProperty(PROPMGR_SUBSCRIBER_ID, SCHEME_IMSI,         telMgr.getSubscriberId());
+        putProperty(PROPMGR_SIM_SERIAL,    SCHEME_SIMSERIAL,    telMgr.getSimSerialNumber());
+
+        // User-defined properties. Will replace any above with the same PROPMGR_ name.
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        initUserDefined(prefs, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
+        initUserDefined(prefs, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
+        initUserDefined(prefs, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
     }
 
     private IdAndPrefix findDeviceId(Context context, TelephonyManager telephonyManager) {
         final String androidIdName = Settings.Secure.ANDROID_ID;
         String deviceId = telephonyManager.getDeviceId();
-        String prefix = null;
+        String scheme = null;
 
         if (deviceId != null) {
             if ((deviceId.contains("*") || deviceId.contains("000000000000000"))) {
                 deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
-                prefix = androidIdName;
+                scheme = androidIdName;
             } else {
-                prefix = "imei";
+                scheme = SCHEME_IMEI;
             }
         }
 
@@ -105,34 +118,35 @@ public class PropertyManager implements IPropertyManager {
             WifiInfo info = wifi.getConnectionInfo();
             if (info != null && !ANDROID6_FAKE_MAC.equals(info.getMacAddress())) {
                 deviceId = info.getMacAddress();
-                prefix = "mac";
+                scheme = SCHEME_MAC;
             }
         }
 
         // if it is still null, use ANDROID_ID
         if (deviceId == null) {
             deviceId = Settings.Secure.getString(context.getContentResolver(), androidIdName);
-            prefix = androidIdName;
+            scheme = androidIdName;
         }
 
-        return new IdAndPrefix(deviceId, prefix);
+        return new IdAndPrefix(deviceId, scheme);
     }
 
     /**
      * Initializes a property and its associated “with URI” property, from shared preferences.
      * @param settings the shared preferences object to be used
+     * @param prefKey the preferences key
      * @param propName the name of the property to set
      * @param prefix the string prepended to the value for the associated “with URI” property
      */
-    private void initUserDefinedProperty(SharedPreferences settings, String propName, String prefix) {
-        String value = settings.getString(propName, null);
+    private void initUserDefined(SharedPreferences settings, String prefKey, String propName, String prefix) {
+        String value = settings.getString(prefKey, null);
         putProperty(propName, prefix, value);
     }
 
-    private void putProperty(String propName, String prefix, String value) {
-        if (value != null) {
+    private void putProperty(String propName, String scheme, String value) {
+        if (value != null && ! value.isEmpty()) {
             mProperties.put(propName, value);
-            mProperties.put(withUri(propName), prefix + ":" + value);
+            mProperties.put(withUri(propName), scheme + ":" + value);
         }
     }
 

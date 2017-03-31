@@ -23,6 +23,13 @@ public final class PreferenceKeys {
     public static final String KEY_USERNAME                 = "username";
     public static final String KEY_PASSWORD                 = "password";
 
+    // METADATA
+    /** Whether any existing username and email values have been migrated to form metadata */
+    public static final String KEY_METADATA_MIGRATED        = "metadata_migrated";
+    public static final String KEY_METADATA_USERNAME        = "metadata_username";
+    public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
+    public static final String KEY_METADATA_EMAIL           = "metadata_email";
+
     // AGGREGATE SPECIFIC
     public static final String KEY_SERVER_URL               = "server_url";
 
