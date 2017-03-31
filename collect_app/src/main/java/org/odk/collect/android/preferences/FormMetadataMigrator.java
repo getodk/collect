@@ -24,7 +24,7 @@ public class FormMetadataMigrator {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
 
         Log.d(TAG, "migrate called, " +
-                (migrationAlreadyDone ? ", migration already done" : "will migrate"));
+                (migrationAlreadyDone ? "migration already done" : "will migrate"));
         if (! migrationAlreadyDone) {
             for (String[] pair : sourceTargetValuePairs) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();
