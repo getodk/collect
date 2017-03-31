@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
@@ -10,15 +11,20 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 /** Migrates existing preference values to metadata */
 public class FormMetadataMigrator {
+    private static final String TAG = "FormMetadataMigrator";
+
     /** The migration flow, from source to target */
     static final String[][] sourceTargetValuePairs = new String[][]{
             {KEY_USERNAME,                  KEY_METADATA_USERNAME},
             {KEY_SELECTED_GOOGLE_ACCOUNT,   KEY_METADATA_EMAIL}
     };
 
-    public static void migrateOnce(SharedPreferences sharedPreferences) {
+    /** Migrates the form metadata if it hasn’t already been done */
+    public static void migrate(SharedPreferences sharedPreferences) {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
 
+        Log.d(TAG, "migrate called, " +
+                (migrationAlreadyDone ? ", migration already done" : "will migrate"));
         if (! migrationAlreadyDone) {
             for (String[] pair : sourceTargetValuePairs) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();

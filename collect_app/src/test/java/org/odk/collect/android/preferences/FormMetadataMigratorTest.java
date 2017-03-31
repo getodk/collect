@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -22,7 +21,7 @@ import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.preferences.FormMetadataMigrator.migrateOnce;
+import static org.odk.collect.android.preferences.FormMetadataMigrator.migrate;
 import static org.odk.collect.android.preferences.FormMetadataMigrator.sourceTargetValuePairs;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
@@ -69,16 +68,16 @@ public class FormMetadataMigratorTest {
     @Test
     public void shouldMigrateDataCorrectly() {
         setPreferencesToPreMigrationValues();
-        displayAffectedPreferences("Before calling migrateOnce");
+        displayAffectedPreferences("Before calling migrate");
 
-        migrateOnce(sharedPreferences);
-        displayAffectedPreferences("After calling migrateOnce");
+        migrate(sharedPreferences);
+        displayAffectedPreferences("After calling migrate");
         checkPostMigrationValues();
 
         setPreferencesToValues(modifiedMetadataValuePairs);
         displayAffectedPreferences("After changing metadata");
-        migrateOnce(sharedPreferences);
-        displayAffectedPreferences("After calling migrateOnce again");
+        migrate(sharedPreferences);
+        displayAffectedPreferences("After calling migrate again");
         ensureSecondMigrationCallPreservesMetadata();
     }
 

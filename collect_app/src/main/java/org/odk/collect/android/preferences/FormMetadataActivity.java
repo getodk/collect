@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.PropertyManager;
 import static org.odk.collect.android.logic.PropertyManager.*;
-import static org.odk.collect.android.preferences.FormMetadataMigrator.migrateOnce;
 import static org.odk.collect.android.preferences.PreferenceKeys.*;
 
 public class FormMetadataActivity extends PreferenceActivity {
@@ -21,7 +20,6 @@ public class FormMetadataActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.form_metadata_preferences);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        migrateOnce(prefs);
         PropertyManager pm = new PropertyManager(this);
         initPrefFromProp(pm, prefs, PROPMGR_USERNAME,       KEY_METADATA_USERNAME);
         initPrefFromProp(pm, prefs, PROPMGR_PHONE_NUMBER,   KEY_METADATA_PHONENUMBER);
