@@ -57,7 +57,6 @@ public class DateTimeWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
 
-        boolean showCalendar = mDateWidget.isCalendarShown();
         boolean hideDay = mDateWidget.isDayHidden();
         boolean hideMonth = mDateWidget.isMonthHidden();
 
@@ -69,10 +68,10 @@ public class DateTimeWidget extends QuestionWidget {
 
         LocalDateTime ldt = new LocalDateTime()
                 .withYear(year)
-                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
-                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
-                .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
-                .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
+                .withMonthOfYear(hideMonth ? 1 : month)
+                .withDayOfMonth(hideMonth || hideDay ? 1 : day)
+                .withHourOfDay(hideMonth || hideDay ? 0 : hour)
+                .withMinuteOfHour(hideMonth || hideDay ? 0 : minute)
                 .withSecondOfMinute(0);
 
         ldt = skipDaylightSavingGapIfExists(ldt);
