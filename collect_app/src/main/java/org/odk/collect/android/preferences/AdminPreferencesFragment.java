@@ -25,7 +25,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 
 
-public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
     public static String ADMIN_PREFERENCES = "admin_prefs";
 
@@ -103,10 +103,5 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
             dialog.show();
         }
         return true;
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        return false;
     }
 }
