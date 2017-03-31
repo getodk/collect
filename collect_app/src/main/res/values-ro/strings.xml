@@ -213,7 +213,6 @@
   <string name="admin_preferences">Setări administrator</string>
   <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
   <string name="user_access_form_entry">Utilizatorul poate accesa itemii din formular:</string>
-  <string name="admin_advanced_settings">Setări avansate (când este indicat):</string>
   <string name="save_mid">Salvați formularul</string>
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="verify_new_password">Reintroduceți noua parolă</string>
@@ -244,12 +243,6 @@
   <string name="swipe_instructions">Sunteți la începutul %s. Trageți ecranul cum este afișat mai jos pentru a naviga înainte și înapoi.</string>
   <string name="buttons_instructions">Sunteți la începutul %s. Atingeți butoanele-săgeată cum este afișat mai jos pentru a naviga înainte și înapoi.</string>
   <string name="swipe_buttons_instructions">Sunteți la începutul %s. Trageți ecranul cum este afișat mai jos sau atingeți butoanele săgeată pentru a naviga înainte și înapoi.</string>
-  <string name="form_processing_logic">Logica procesării formularului</string>
-  <string name="form_processing_logic_recommended">Recomandat (implicit)</string>
-  <string name="form_processing_logic_0">Ianuarie 2015 (cel mai rapid)</string>
-  <string name="form_processing_logic_1">Ianuarie 2015 (cel mai sigur)</string>
-  <string name="form_processing_logic_2">Mijlocul lui 2014 (încet)</string>
-  <string name="form_processing_logic_3">Începutul lui 2014 (cel mai rapid)</string>
   <string name="launch_printer">Printare inițializată</string>
   <string name="no_printer">Imprimanta specificată nu este instalată. Vă rugăm să instalați implimanta.</string>
   <string name="constraint_behavior">Comportament de procesare constrâns</string>

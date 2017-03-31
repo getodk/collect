@@ -30,8 +30,6 @@ public final class AdminKeys {
     static final String KEY_CHANGE_PROTOCOL_SETTINGS    = "change_protocol_settings";
 
     // client
-    static final String KEY_FORM_PROCESSING_LOGIC       = "form_processing_logic";
-
     static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     static final String KEY_HIGH_RESOLUTION             = "high_resolution";
@@ -71,6 +69,7 @@ public final class AdminKeys {
         ag(KEY_SHOW_MAP_SDK,               PreferenceKeys.KEY_MAP_SDK),
         ag(KEY_SHOW_MAP_BASEMAP,           PreferenceKeys.KEY_MAP_BASEMAP),
         ag(KEY_NAVIGATION,                 PreferenceKeys.KEY_NAVIGATION),
+        ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT),
         ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC)
     };
 }

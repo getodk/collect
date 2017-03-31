@@ -213,7 +213,6 @@
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="user_access_form_entry">يمكن للمستخدم الوصول الى عناصر تعبئة الاستمارة:</string>
-  <string name="admin_advanced_settings">اعدادات متقدمة </string>
   <string name="save_mid">حفظ الاستمارة</string>
   <string name="enter_new_password">أدخل كلمة مرور جديدة</string>
   <string name="verify_new_password">أعد إدخال كلمة المرور الجديدة</string>
@@ -242,12 +241,6 @@
   <string name="swipe_instructions">انت في بداية %s. اسحب الشاشىة كما مبين في الاسفل للذهاب الى الخلف او للأمام.</string>
   <string name="buttons_instructions">انت في بداية %s. اضغط على ازرار السهم للذهاب للخلف او للأمام.</string>
   <string name="swipe_buttons_instructions">كنت في بداية %s. اسحب الشاشة كما هو مبين في الاسفل او اضغط ازرار السهم للذهاب للخلف او للأمام.</string>
-  <string name="form_processing_logic">منطق تجهيز الاستمارة</string>
-  <string name="form_processing_logic_recommended">التوصيات (الافتراضية)</string>
-  <string name="form_processing_logic_0">كانون الثاني 2015 (الاسرع)</string>
-  <string name="form_processing_logic_1">كانون الثاني 2015 (الاكثر امانا)</string>
-  <string name="form_processing_logic_2">منتصف 2014 (بطيء)</string>
-  <string name="form_processing_logic_3">مبكرا 2014 (سريع)</string>
   <string name="launch_printer">البدء بالطباعة</string>
   <string name="no_printer">لم يتم تثبيت الطابعة المختارة. يرجى تثبيتها اولا.</string>
   <string name="constraint_behavior">معالجة القيود جارية</string>

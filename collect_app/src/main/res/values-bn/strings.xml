@@ -197,7 +197,6 @@
   <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
   <string name="admin_access_settings">অ্যাডমিনের settings</string>
   <string name="user_access_form_entry">ব্যবহারকারীর ফর্ম এ প্রবেশ</string>
-  <string name="admin_advanced_settings">অ্যাডমিনের advanced_settings</string>
   <string name="save_mid">সংরক্ষণ করুন ফরম </string>
   <string name="enter_new_password">পাসওয়ার্ড দিন।</string>
   <string name="verify_new_password">পুনরায় পাসওয়ার্ড দিন।</string>
@@ -220,7 +219,6 @@
   <string name="buttons_navigation">buttons নেভিগেশান</string>
   <string name="swipe_buttons_navigation">swipe buttons নেভিগেশান</string>
   <string name="swipe_instructions">আপনি %s টি শুরুতে বিষয় ঠিক করতে পরদার নীচের দিকে উপর নীচ করে নিরধারণ করুন</string>
-  <string name="form_processing_logic">ফর্ম প্রসেসিং logic</string>
   <string name="launch_printer">প্রিন্টার চালু</string>
   <string name="no_printer">প্রিন্টার নেই</string>
   <string name="constraint_behavior">constraint_behavior</string>

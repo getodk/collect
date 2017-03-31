@@ -211,7 +211,6 @@
   <string name="admin_preferences">Pengaturan Admin</string>
   <string name="admin_access_settings">Tekan untuk akses admin ke pengaturan</string>
   <string name="user_access_form_entry">Pengguna dapat mengakses item Entri Formulir:</string>
-  <string name="admin_advanced_settings">Pengaturan lanjutan (Saat disarankan):</string>
   <string name="save_mid">Menyimpan di tengah formulir</string>
   <string name="enter_new_password">Masukkan kata sandi baru</string>
   <string name="verify_new_password">Masukkan kembali kata sandi</string>
@@ -240,12 +239,6 @@
   <string name="swipe_instructions">Anda berada di awal %s. Sapu layar sebagaimana ditunjukkan di bawah untuk mundur dan maju.</string>
   <string name="buttons_instructions">Anda berada di awal %s. Ketuk tombol panah berikut untuk mundur dan maju.</string>
   <string name="swipe_buttons_instructions">Anda berada di awal %s. Sapu layar sebagaimana ditunjukkan di bawah atau ketuk tombol panah berikut untuk mundur dan maju.</string>
-  <string name="form_processing_logic">Alur logika pemrosesan formulir</string>
-  <string name="form_processing_logic_recommended">Direkomendasikan (bawaan)</string>
-  <string name="form_processing_logic_0">Januari 2015 (paling cepat)</string>
-  <string name="form_processing_logic_1">Januari 2015 (paling aman)</string>
-  <string name="form_processing_logic_2">Pertengahan 2014 (Lambat)</string>
-  <string name="form_processing_logic_3">Awal 2014 (cepat)</string>
   <string name="launch_printer">Memulai Mencetak</string>
   <string name="no_printer">Printer yang dipilih belum terpasang. Silakan pasang printer.</string>
   <string name="constraint_behavior">Kendala pemrosesan</string>

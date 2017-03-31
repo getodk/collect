@@ -214,7 +214,6 @@
   <string name="admin_preferences">Impostazioni Amministratore</string>
   <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
   <string name="user_access_form_entry">L\'Utente può accedere alle seguenti Impostazioni del Modulo d\'Ingresso:</string>
-  <string name="admin_advanced_settings">Impostazioni avanzate (quando consigliate):</string>
   <string name="save_mid">Salva Modulo</string>
   <string name="enter_new_password">Inserire nuova password</string>
   <string name="verify_new_password">Re-inserire nuova password</string>
@@ -243,12 +242,6 @@
   <string name="swipe_instructions">Benvenuto in %s. Scorri il dito sullo schermo come indicato per andare avanti o indietro.</string>
   <string name="buttons_instructions">Sei all\'inizio di %s. Utilizza le frecce qui in basso per andare avanti o indietro.</string>
   <string name="swipe_buttons_instructions">Sei all\'inizio di %s. Scorri il dito sullo schermo come indicato o utilizza le frecce qui in basso per andare avanti o indietro.</string>
-  <string name="form_processing_logic">Modulo di processo logico</string>
-  <string name="form_processing_logic_recommended">Raccomandato (default)</string>
-  <string name="form_processing_logic_0">Gennaio 2015 (più veloce)</string>
-  <string name="form_processing_logic_1">Gennaio 2015 (più sicuro)</string>
-  <string name="form_processing_logic_2">Metà 2014 (lento)</string>
-  <string name="form_processing_logic_3">Inizio 2014 (veloce)</string>
   <string name="launch_printer">Inizio Stampa</string>
   <string name="no_printer">La stampante richiesta non è installata. Per piacere installa la stampante.</string>
   <string name="constraint_behavior">Comportamento sui vincoli</string>

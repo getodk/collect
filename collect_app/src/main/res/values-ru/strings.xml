@@ -211,7 +211,6 @@
   <string name="admin_preferences">Администрирование</string>
   <string name="admin_access_settings">Нажмите для админского доступа к настройкам</string>
   <string name="user_access_form_entry">Пользователь имеет доступ в формах к:</string>
-  <string name="admin_advanced_settings">Дополнительные настройки:</string>
   <string name="save_mid">Сохранить форму</string>
   <string name="enter_new_password">Укажите новый пароль</string>
   <string name="verify_new_password">Повтор нового пароля</string>
@@ -240,12 +239,6 @@
   <string name="swipe_instructions">Вы находитесь в начале %s. Прокручивайте экран, как показано ниже, чтобы двигаться вперёд и назад.</string>
   <string name="buttons_instructions">Вы находитесь в начале %s. Нажимайте кнопки со стрелками, чтобы двигаться вперёд и назад.</string>
   <string name="swipe_buttons_instructions">Вы находитесь в начале %s. Прокручивайте экран, как показано ниже, или нажимайте кнопки со стрелками, чтобы двигаться вперёд и назад.</string>
-  <string name="form_processing_logic">Логика обработки формы</string>
-  <string name="form_processing_logic_recommended">Рекомендуемая (по умолчанию)</string>
-  <string name="form_processing_logic_0">От января 2015 (самая быстрая)</string>
-  <string name="form_processing_logic_1">От января 2015 (самая безопасная)</string>
-  <string name="form_processing_logic_2">От середины 2014 (медленная)</string>
-  <string name="form_processing_logic_3">От начала 2014 (быстрая)</string>
   <string name="launch_printer">Распечатать</string>
   <string name="no_printer">Принтер не установлен или не подключен.</string>
   <string name="constraint_behavior">Способ проверки ограничений</string>
