@@ -198,7 +198,7 @@ abstract class AppListActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 performSelectedSearch(position);
-                mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                mDrawerLayout.closeDrawer(Gravity.END);
             }
         });
     }
@@ -342,6 +342,15 @@ abstract class AppListActivity extends ListActivity {
             mToggleButton.setText(R.string.select_all);
         } else {
             mToggleButton.setText(R.string.clear_all);
+        }
+    }
+	
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+           mDrawerLayout.closeDrawer(Gravity.END);
+        } else {
+           super.onBackPressed();
         }
     }
 }

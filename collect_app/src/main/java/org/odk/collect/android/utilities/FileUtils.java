@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -35,6 +35,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,17 +48,20 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FileUtils {
-    private final static String t = "FileUtils";
-
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
-
     public static final String FORMID = "formid";
     public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
+    private final static String t = "FileUtils";
 
+    public static String getMimeType(String fileUrl)
+            throws java.io.IOException {
+        FileNameMap fileNameMap = URLConnection.getFileNameMap();
+        return fileNameMap.getContentTypeFor(fileUrl);
+    }
 
     public static boolean createFolder(String path) {
         boolean made = true;
@@ -66,7 +71,6 @@ public class FileUtils {
         }
         return made;
     }
-
 
     public static byte[] getFileAsBytes(File file) {
         byte[] bytes = null;
@@ -122,7 +126,6 @@ public class FileUtils {
             }
         }
     }
-
 
     public static String getMd5Hash(File file) {
         try {
@@ -214,7 +217,7 @@ public class FileUtils {
      * more on a precise scaling to maximize use of space on the screen
      */
     public static Bitmap getBitmapAccuratelyScaledToDisplay(File f, int screenHeight,
-            int screenWidth) {
+                                                            int screenWidth) {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;

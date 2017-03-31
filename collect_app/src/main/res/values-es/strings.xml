@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Registrar localización</string>
+  <string name="show_password">Mostrar contraseña</string>
   <string name="accuracy">Precisión</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
@@ -17,7 +18,6 @@
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
-  <string name="cannot_edit_completed_form">Este formulario no puede ser editado después que se marco como terminado. Puede que este encriptado</string>
   <string name="capture_audio">Grabar el Sonido</string>
   <string name="capture_image">Tomar la Foto</string>
   <string name="capture_osm">Iniciar OpenMapKit</string>
@@ -122,7 +122,6 @@
   <string name="send_selected_data">Enviar seleccionado</string>
   <string name="view_sent_forms">Ver formularios enviados</string>
   <string name="view_sent_forms_button">Ver formularios enviados (%s)</string>
-  <string name="server_auth_credentials">Por favor ingrese el nombre del usuario y contraseña para el servidor: %s</string>
   <string name="server_requires_auth">El servidor requiere autenticacion</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Configuración del Servidor</string>
@@ -274,9 +273,9 @@
   <string name="ext_search_bad_function_error">Error sintáctico en función search(): \'%s\' no fue evaluada como una función.</string>
   <string name="ext_search_return_error">El gestor de búsqueda ha devuelto un objeto de tipo \'%s\'.</string>
   <string name="ext_import_generic_error">No puede importar datos desde %1$s. Razón: %2$s</string>
-  <string name="ext_import_progress_message">Precarga datos desde \'%1$s\'. Por favor espere... %2$s</string>
+  <string name="ext_import_progress_message">Precarga datos desde \'%1$s\'. Por favor espere… %2$s</string>
   <string name="ext_import_cancelled_message">Lectura de datos cancelada.</string>
-  <string name="ext_import_finalizing_message">Acabando datos precargados...</string>
+  <string name="ext_import_finalizing_message">Acabando datos precargados…</string>
   <string name="ext_import_completed_message">¡Lectura de datos completada!</string>
   <string name="ext_not_initialized_error">El ExternalDataManager no ha sido inicializado.</string>
   <string name="ext_import_csv_missing_error">Los datos externos para %1$s no ha sido importados. ¿Ha olvidado incluir el archivo %2$s.csv con su formulario?</string>
@@ -288,14 +287,14 @@
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
 </string>
-  <string name="survey_loading_reading_form_message">Leyendo definición de formulario...</string>
-  <string name="survey_loading_reading_data_message">Leyendo datos sondeo...</string>
-  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV...</string>
-  <string name="survey_saving_validating_message">Validando respuestas...</string>
-  <string name="survey_saving_collecting_message">Colectando datos...</string>
+  <string name="survey_loading_reading_form_message">Leyendo definición de formulario…</string>
+  <string name="survey_loading_reading_data_message">Leyendo datos sondeo…</string>
+  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
+  <string name="survey_saving_validating_message">Validando respuestas…</string>
+  <string name="survey_saving_collecting_message">Colectando datos…</string>
   <string name="survey_saving_saving_message">Salvando en targeta SD </string>
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
-  <string name="survey_saving_encrypting_message">Encriptando datos...</string>
+  <string name="survey_saving_encrypting_message">Encriptando datos…</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
   <string name="high_resolution">Activa vídeo HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -312,8 +311,6 @@
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
-  <string name="google_audio_error">Archivos de audio no admitidos por Google Sheets de momento.</string>
-  <string name="google_video_error">Archivos de vídeo no admitidos por Google Sheets de momento.</string>
   <string name="media_upload_error">Error al cargar la foto que no existe: %1$s</string>
   <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
   <string name="odk_auto_note">Notificación de ODK Autosend</string>
@@ -323,20 +320,17 @@
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
-  <string name="google_sheets_url">URL de Google Sheets</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_google_account_needed">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
-  <string name="google_sheets_access_denied">Acceso denegado. Asegurese de que dispone de permisos de acceso.</string>
-  <string name="google_sheets_update_error">Error al actualizar la hoja. Asegurese de que dispone de permisos de acceso.</string>
   <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
   <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
   <string name="username_error_whitespace">Espacios delante o detras no permitidos en nombre de usuario</string>
   <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Hay el servicio instalado?</string>
+  <string name="about_preferences">Acuerda de</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Opciones de Cartografía</string>
   <string name="map_sdk_selector_title">Cartografía SDK</string>
   <string name="map_sdk_behavior">Cartografía SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
@@ -386,7 +380,6 @@
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
-  <string name="zoom_to_where">Zoom a...</string>
   <string name="zoom_to_location">Zoom a la localización actual</string>
   <string name="zoom_to_feature">Zoom a caracteristica guardada</string>
   <string name="points_captured">%s puntos capturados</string>
@@ -418,6 +411,7 @@
   <string name="selected_answer">Seleccionado: %s</string>
   <string name="version_number">Versión: %s</string>
   <string name="general_settings_about">Acerca de</string>
+  <string name="odk_website">Sitio web Open Data Kit</string>
   <string name="all_open_source_licenses">Licencias de código abierto</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
@@ -438,11 +432,10 @@
   <string name="encryption_error_message">%s del Formulario no ha sido guardada como finalizado.</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
-  <string name="reset_settings">Configuraciones generales</string>
   <string name="reset_settings_dialog_title">Seleccione que resetear</string>
   <string name="reset_settings_button_reset">Reset</string>
   <string name="reset_dialog_nothing">No ha seleccionado nada para resetear.</string>
-  <string name="reset_in_progress">Reseteando...</string>
+  <string name="reset_in_progress">Reseteando…</string>
   <string name="resetting_finished">Termino reset</string>
   <string name="reset_app_state_warning">Los datos seleccionados serán borrados permanentemente. No existe el undo.</string>
   <string name="reset_saved_forms_result">Formularios guardados :: %s</string>
@@ -450,4 +443,6 @@
   <string name="reset_cache_result">Cache de carga de formularios :: %s</string>
   <string name="encrypted_form">Formulario encriptado</string>
   <string name="deleted_form">Formulario borrado</string>
+  <string name="sort_by_name_asc">Por nombre, A-Z</string>
+  <string name="sort_by_name_desc">Por nombre, Z-A</string>
 </resources>

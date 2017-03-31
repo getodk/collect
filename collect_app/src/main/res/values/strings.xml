@@ -314,13 +314,12 @@
 <string name="aggregate_preferences">ODK Aggregate settings</string>
 <string name="other_preferences">Other platform settings</string>
 <string name="google_preferences">Google Sheets settings</string>
+<string name="google_sheets_url_hint">Forms must set a submission URL. If they don\'t, this URL will be used.</string>
 <string name="drive_get_file">Getting %1$s and media files.</string>
 <string name="no_google_account">No Google Account Selected!</string>
 <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
 <string name="invalid_oauth">Invalid OAuth 2 token</string>
 <string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
-<string name="google_audio_error">Audio files are not supported by Google Sheets at this time.</string>
-<string name="google_video_error">Video files are not supported by Google Sheets at this time.</string>
 <string name="media_upload_error">Failed to upload photo that does not exist: %1$s</string>
 <string name="odk_auth_auth_fail">ODK Autosend authentication failure, please make sure your settings are correct</string>
 <string name="odk_auto_note">ODK Autosend Notification</string>
@@ -330,14 +329,13 @@
 <string name="change_server_url">Server URL</string>
 <string name="google_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
 <string name="no_blank_search">Search field cannot be blank.</string>
-<string name="google_sheets_url">Google Sheets URL</string>
+<string name="google_sheets_url">Fallback submission URL</string>
 <string name="default_google_sheets_url"></string>
 <string name="send_in_progress">Background send running, please try again shortly</string>
 <string name="sheets_google_account_needed">You have selected Google Sheets as your server, please select a corresponding Google Account in the General Settings before continuing</string>
 <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
 <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
-<string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you access permission.</string>
-<string name="google_sheets_update_error">Error updating spreadsheet. Please make sure the spreadsheet owner has granted you write access permission.</string>
+<string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
 <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
 <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
 <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
@@ -402,7 +400,7 @@
 <string name="geopoint_instruction">Long press to place mark or tap add marker button.</string>
 <string name="geopoint_no_draggable_instruction">Tap add marker button.</string>
 <string name="discard">Discard</string>
-<string name="zoom_to_where">Zoom to...</string>
+<string name="zoom_to_where">Zoom to…</string>
 <string name="zoom_to_location">Zoom to current location</string>
 <string name="zoom_to_feature">Zoom to saved feature</string>
 <string name="points_captured">%s points captured</string>
@@ -495,6 +493,5 @@
 <string name="sorting_menu_close">Close sorting menu</string>
 <string name="sort_the_list">Sort the list</string>
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
-<string name="access_permission_error">You don\'t have access to the submission sheet. Please make sure your survey administrator has given you edit privileges.</string>
 <string name="filter_the_list">Filter the list</string>
 </resources>
