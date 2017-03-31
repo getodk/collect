@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.application.Collect;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -35,7 +36,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 @RunWith(RobolectricTestRunner.class)
 public class FormMetadataMigratorTest {
 
-    private FormMetadataActivity formMetadataActivity;
     private SharedPreferences sharedPreferences;
     private final PrintStream o = System.out;
 
@@ -63,8 +63,7 @@ public class FormMetadataMigratorTest {
 
     @Before
     public void setUp() throws Exception {
-        formMetadataActivity = Robolectric.setupActivity(FormMetadataActivity.class);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(formMetadataActivity);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
     }
 
     @Test
