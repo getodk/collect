@@ -241,12 +241,6 @@
   <string name="swipe_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. გაასრიალეთ ეკრანი, როგორც მითითებულია, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
-  <string name="form_processing_logic">ფორმის დამუშავების სინტაქსი</string>
-  <string name="form_processing_logic_recommended">რეკომენდებულია (ნაგულისხმევი)</string>
-  <string name="form_processing_logic_0">2015 წლის იანვარი (ყველაზე სწრაფი)</string>
-  <string name="form_processing_logic_1">2015 წლის იანვარი (ყველაზე უსაფრთხო)</string>
-  <string name="form_processing_logic_2">2014 წლის შუა პერიოდი (ნელი)</string>
-  <string name="form_processing_logic_3">2014 წლის ადრე პერიოდი (სწრაფი)</string>
   <string name="launch_printer">ბეჭდვის გაშვება</string>
   <string name="no_printer">მოთხოვნილი პრინტერი არ არის დაყენებული. გთხოვთ, დააყენოთ პრინტერი</string>
   <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>

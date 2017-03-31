@@ -216,7 +216,6 @@
   <string name="admin_preferences">Administraatori seaded</string>
   <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
   <string name="user_access_form_entry">Kasutajal on ligipääs kirjetele:</string>
-  <string name="admin_advanced_settings">Seaded edasijõudnule (kui teid on siia juhatatud):</string>
   <string name="save_mid">Salvesta vorm</string>
   <string name="enter_new_password">Sisesta uus salasõna</string>
   <string name="verify_new_password">Siesta uus salasõna uuesti</string>
@@ -247,12 +246,6 @@
   <string name="swipe_instructions">Olete vormi %s alguses. Edasi ja tagasi liikumiseks kasutage libistamist.</string>
   <string name="buttons_instructions">Olete vormi %s alguses. Edasi ja tagasi liikumiseks kasutage nuppe.</string>
   <string name="swipe_buttons_instructions">Olete vormi %s alguses. Edasi ja tagasi liikumiseks kasutage libistamist või nuppe.</string>
-  <string name="form_processing_logic">Vormi töötlemise loogika</string>
-  <string name="form_processing_logic_recommended">Soovitatav (vaikimisi)</string>
-  <string name="form_processing_logic_0">Jaanuar 2015 (kõige kiirem)</string>
-  <string name="form_processing_logic_1">Jaanuar 2015 (kõige ohutum)</string>
-  <string name="form_processing_logic_2">2014 keskel (aeglane)</string>
-  <string name="form_processing_logic_3">2014 alguses (kiire)</string>
   <string name="launch_printer">Alusta printimist</string>
   <string name="no_printer">Soovitud printer ei ole paigaldatud. Palun paigaldage printer.</string>
   <string name="constraint_behavior">Piira vormi töötlemise käitumist</string>
