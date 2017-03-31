@@ -34,7 +34,7 @@
 			android:orientation="vertical"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:gravity="center_vertical|left"
+			android:gravity="center_vertical|start"
 			android:paddingBottom="5dip">
 			<TextView
 				android:id="@+id/text"

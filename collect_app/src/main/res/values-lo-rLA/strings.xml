@@ -17,7 +17,6 @@
   <string name="cancel">ຍົກເລິກ</string>
   <string name="cancel_loading_form">ຍົກເລີກ</string>
   <string name="cancel_location">ຍົກເລີກ</string>
-  <string name="cannot_edit_completed_form">ແບບ​ຟອມ​ນີ້ບໍ່​ສາ​ມາດ​ດັດ​ແກ້ໄດ້​ອີກ ໃນເມື່ອ​ມັນ​ຖືກ​ໝາຍ​ສົມ​ບູນ​ແລ້ວ. ມັນ​ອາດ​ຈະ​ຖືກ​ເຂົ້າ​ລະ​ຫັດ​ແລ້ວ.</string>
   <string name="capture_audio">ບັນທຶກສຽງ</string>
   <string name="capture_image">ຖ່າຍຮູບ</string>
   <string name="capture_video">ບັນທຶກວີດີໂອ</string>
@@ -85,7 +84,7 @@
   <string name="location_accuracy">ຄ່າຄວາມຖືກຕ້ອງ​ແມ່ນ %1$s m</string>
   <string name="longitude">ເສັ້ນແວງ</string>
   <string name="main_menu">ເມນູຫຼັກ</string>
-  <string name="main_menu_details">​ເຮັດໃຫ້ການ​ເກັບ​ຂໍ້​ມູນ​​ງ່າຍຂຶ້ນກວ່າ...</string>
+  <string name="main_menu_details">​ເຮັດໃຫ້ການ​ເກັບ​ຂໍ້​ມູນ​​ງ່າຍຂຶ້ນກວ່າ…</string>
   <string name="manage_files">ລຶບແບບຟອມທີ່ບັນທຶກໄວ້</string>
   <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
   <string name="noselect_error">ທ່ານບໍ່ທັນ​ໄດ້ເລືອກແບບຟອມ!</string>
@@ -118,7 +117,6 @@
   <string name="send_data">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ</string>
   <string name="send_data_button">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ(%s)</string>
   <string name="send_selected_data">ສົ່ງແບບຟອມທີ່ເລືອກ</string>
-  <string name="server_auth_credentials">ກະລຸນາປ້ອນຊື່ ແລະ ລະຫັດຜ່ານ ຂອງເສີບເວີ: %s</string>
   <string name="server_requires_auth">ເຊີເວີຕ້ອງການກວດ​ສອບ​ຊື່ຜູ້ໃຊ້ງານ ແລະ ລະ​ຫັດ​ຜ່ານ</string>
   <string name="server_url">URL ທີ່​ຢູ່​ເວັບ​ໄຊ</string>
   <string name="server_preferences">​ການ​ຕັ້ງ​ຄ່າ​ເຊີ​ເວີ</string>
@@ -260,9 +258,9 @@
   <string name="ext_search_bad_function_error">ໄວ​ຍະ​ກອນ​ຜິດ​ພາດ​ໃນສູດ​ search():  \'%s\' ບໍ່​ສາ​ມາດ​ປະ​ເມີນ​ເປັນ​ສູດ​ໄດ້.</string>
   <string name="ext_search_return_error">ໂຕ​ຄວບ​ຄຸມການ​ຊອກ​ຫາ ສົ່ງ​ປະ​ເພດ​ຂອງ \'%s\'.</string>
   <string name="ext_import_generic_error">ບໍ່​ສາ​ມາດ​ເອົາ​ຂໍ້​ມູນ​ເຂົ້າ​ຈາກ %1$s. ເຫດ​ຜົນ: %2$s</string>
-  <string name="ext_import_progress_message">ຂໍ້​ມູນ​ກ່ອນ​ໂຫຼດ ຈາກ \'%1$s\', ກະ​ລຸ​ນາ​ລໍ​ຖ້າ... %2$s</string>
+  <string name="ext_import_progress_message">ຂໍ້​ມູນ​ກ່ອນ​ໂຫຼດ ຈາກ \'%1$s\', ກະ​ລຸ​ນາ​ລໍ​ຖ້າ… %2$s</string>
   <string name="ext_import_cancelled_message">ການ​ອ່ານ​ຂໍ້​ມູນ ໄດ້​ຖືກ​ຍົກ​ເລີ​ກ!</string>
-  <string name="ext_import_finalizing_message">ກຳ​ລັງ​ເຮັດ​ຂໍ້​ມູນ​ກ່ອນ​ໂຫຼດ ສຳ​ເລັດ​ສົມ​ບູນ...</string>
+  <string name="ext_import_finalizing_message">ກຳ​ລັງ​ເຮັດ​ຂໍ້​ມູນ​ກ່ອນ​ໂຫຼດ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
   <string name="ext_import_completed_message">​ການ​ອ່ານ​ຂໍ້​ມູນ​ສຳ​ເລັດ!</string>
   <string name="ext_not_initialized_error">ExternalDataManager ຍັງ​ບໍ່​ທັນ​ເລີ້ມ​ຕົ້ນ.</string>
   <string name="ext_import_csv_missing_error">ຂໍ້​ມູນ​ພາຍນອກສຳ​ລັບ %1$s ຍັງ​ບໍ່​ທັນ​ຖືກ​ນຳ​ເຂົ້າ. ບັງ​ເທື່ອທ່ານ​ລືມ​ເອົາ​ເອ​ກະ​ສານ  %2$s.csv ປະ​ກອບກັບ​ແບບ​ຟອມ​ຂອງ​ທ່ານ?</string>
@@ -273,14 +271,14 @@
   <string name="fs_file_copy_error">ບໍ່​ສາ​ມາດ​ກ໋ອບ​ປີ້ \'%1$s\' ຈາກ​ທັງ​ໝົດ \'%2$s\'. ​ເຫດຜົນ: %3$s</string>
   <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
   <string name="survey_multiple_forms_error">ທ່ານ​ໄດ້​ດາວ​ໂຫຼດ​ສອງ​ແບບ​ຟອມ ທີ່​ມີ ID ແລະ ເວີ​ຊັນ ຄື​ກັນ. ບາງ​ເທື່ອ​ຟອ​ມ​ດັ່ງ​ກ່າວ​ເປັນ​ຟອມ​ດຽວ​ກັນ ແຕ່​ອັບ​ໂຫຼດ​ເວ​ລາ​ຕ່າງ​ກັນ ຫຼື ຫາເສີບ​ເວີ​ຕ່າງ​ກັນ. ຢ່າງ​ໃດ​ກໍ່​ຕາມ ທ່ານ​ຄວນ​ລຶບ​ຟອມ​ໜຶ່ງ​ຖີ້ມ.</string>
-  <string name="survey_loading_reading_form_message">​ກຳ​ລັງ​ອ່ານ​​ຄຳ​ນິ​ຍາມແບບ​ຟອມ...</string>
-  <string name="survey_loading_reading_data_message">ກຳ​ລັງ​ອ່ານ​ຂໍ້​ມູນ​ການ​ສຳ​ຫຼວດ...</string>
-  <string name="survey_loading_reading_csv_message">ກຳ​ລັງ​ອ່ານ​ເອ​ກະ​ສານ CSV...</string>
-  <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ....</string>
-  <string name="survey_saving_collecting_message">ກຳ​ລັງ​ຮວບ​ຮວມຂໍ້​ມູນ...</string>
-  <string name="survey_saving_saving_message">​ກຳ​ລັງ​ບັນ​ທຶກ​ໃສ່ ກາດ​ຄວມຈຳ​ພາຍນອກ...</string>
-  <string name="survey_saving_finalizing_message">ກຳ​ລັງ​ເຮັດ​ໃຫ້ ກາດ​ຄວາມ​ຈຳ​ພາຍນອກ ສຳ​ເລັດ​ສົມ​ບູນ...</string>
-  <string name="survey_saving_encrypting_message">​ກຳ​ລັງ​ເຂົ້າ​ລະ​ຫັດ​ຂໍ້​ມູນ...</string>
+  <string name="survey_loading_reading_form_message">​ກຳ​ລັງ​ອ່ານ​​ຄຳ​ນິ​ຍາມແບບ​ຟອມ…</string>
+  <string name="survey_loading_reading_data_message">ກຳ​ລັງ​ອ່ານ​ຂໍ້​ມູນ​ການ​ສຳ​ຫຼວດ…</string>
+  <string name="survey_loading_reading_csv_message">ກຳ​ລັງ​ອ່ານ​ເອ​ກະ​ສານ CSV…</string>
+  <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ….</string>
+  <string name="survey_saving_collecting_message">ກຳ​ລັງ​ຮວບ​ຮວມຂໍ້​ມູນ…</string>
+  <string name="survey_saving_saving_message">​ກຳ​ລັງ​ບັນ​ທຶກ​ໃສ່ ກາດ​ຄວມຈຳ​ພາຍນອກ…</string>
+  <string name="survey_saving_finalizing_message">ກຳ​ລັງ​ເຮັດ​ໃຫ້ ກາດ​ຄວາມ​ຈຳ​ພາຍນອກ ສຳ​ເລັດ​ສົມ​ບູນ…</string>
+  <string name="survey_saving_encrypting_message">​ກຳ​ລັງ​ເຂົ້າ​ລະ​ຫັດ​ຂໍ້​ມູນ…</string>
   <string name="high_resolution_summary">ເປີດ​ການ​ນຳ​ໃຊ້ ການ​ບັນ​ທຶກວີ​ດີ​ໂອ​ແບບ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
   <string name="high_resolution">​ເປີດ​ການ​ນຳ​ໃຊ້ ວີ​ດີ​ໂອ​ຄວາມ​ລະ​ອຽດ​ສູງ</string>
   <string name="google_drive">Google Drive</string>
@@ -293,7 +291,6 @@
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
-  <string name="media_upload_error">ບໍ່ສາມາດອັບໂຫຼດຮູບທີ່ບໍ່ມີ: %1$s</string>
   <string name="odk_auth_auth_fail">ການກວດສອບ ODK Autosend ຜິດພາດ, ກະລຸນາກວດສອບການຕັ້ງຄ່າວ່າຖືກຕ້ອງບໍ່</string>
   <string name="odk_auto_note">ສົ່ງການແຈ້ງເຕືອນແບບໂອໂຕຂອງ ODK</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>

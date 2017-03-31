@@ -31,6 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
