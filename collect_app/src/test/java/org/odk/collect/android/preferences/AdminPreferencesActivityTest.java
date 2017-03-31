@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.robolectric.ParameterizedRobolectricTestRunner.Parameters;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
 
@@ -47,8 +48,6 @@ public class AdminPreferencesActivityTest {
                 //Change setting preferences
                 {"change_server", AdminKeys.KEY_CHANGE_SERVER},
                 {"change_protocol_settings", AdminKeys.KEY_CHANGE_PROTOCOL_SETTINGS},
-                {"change_username", AdminKeys.KEY_CHANGE_USERNAME},
-                {"change_password", AdminKeys.KEY_CHANGE_PASSWORD},
                 {"change_google_account", AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT},
                 {"autosend_wifi", AdminKeys.KEY_AUTOSEND_WIFI},
                 {"autosend_network", AdminKeys.KEY_AUTOSEND_NETWORK},
@@ -94,6 +93,7 @@ public class AdminPreferencesActivityTest {
     public void shouldUpdateAdminSharedPreferences() throws NullPointerException {
         CheckBoxPreference checkBoxPreference = (CheckBoxPreference)
                 adminPreferencesFragment.findPreference(id);
+        assertNotNull("Preference not found: " + id, checkBoxPreference);
         checkBoxPreference.setChecked(true);
         boolean actual = sharedPreferences.getBoolean(adminKey, false);
         assertEquals("Error in preference " + adminKey, actual, true);
