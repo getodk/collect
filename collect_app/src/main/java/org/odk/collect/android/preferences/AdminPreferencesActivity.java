@@ -43,9 +43,56 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_FORM_PROCESSING_
  *         option)
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
-    private static final int SAVE_PREFS_MENU = Menu.FIRST;
-    public static String ADMIN_PREFERENCES = "admin_prefs";
 
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
+
+    // key for this preference screen
+    public static final String KEY_ADMIN_PW = "admin_pw";
+
+    // keys for each preference
+    // main menu
+    public static final String KEY_EDIT_SAVED = "edit_saved";
+    public static final String KEY_SEND_FINALIZED = "send_finalized";
+    public static final String KEY_VIEW_SENT = "view_sent";
+    public static final String KEY_GET_BLANK = "get_blank";
+    public static final String KEY_DELETE_SAVED = "delete_saved";
+    // server
+    public static final String KEY_CHANGE_SERVER = "change_server";
+    public static final String KEY_CHANGE_USERNAME = "change_username";
+    public static final String KEY_CHANGE_PASSWORD = "change_password";
+    public static final String KEY_CHANGE_ADMIN_PASSWORD = "admin_password";
+    public static final String KEY_CHANGE_GOOGLE_ACCOUNT = "change_google_account";
+    public static final String KEY_CHANGE_PROTOCOL_SETTINGS = "change_protocol_settings";
+    // client
+    public static final String KEY_CHANGE_FONT_SIZE = "change_font_size";
+    public static final String KEY_DEFAULT_TO_FINALIZED = "default_to_finalized";
+    public static final String KEY_HIGH_RESOLUTION = "high_resolution";
+    public static final String KEY_SHOW_SPLASH_SCREEN = "show_splash_screen";
+    public static final String KEY_SELECT_SPLASH_SCREEN = "select_splash_screen";
+    public static final String KEY_DELETE_AFTER_SEND = "delete_after_send";
+    // form entry
+    public static final String KEY_SAVE_MID = "save_mid";
+    public static final String KEY_JUMP_TO = "jump_to";
+    public static final String KEY_CHANGE_LANGUAGE = "change_language";
+    public static final String KEY_ACCESS_SETTINGS = "access_settings";
+    public static final String KEY_SAVE_AS = "save_as";
+    public static final String KEY_MARK_AS_FINALIZED = "mark_as_finalized";
+
+    public static final String KEY_AUTOSEND_WIFI = "autosend_wifi";
+    public static final String KEY_AUTOSEND_NETWORK = "autosend_network";
+
+    public static final String KEY_NAVIGATION = "navigation";
+    public static final String KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior";
+
+    public static final String KEY_FORM_PROCESSING_LOGIC = "form_processing_logic";
+
+    public static final String KEY_SHOW_MAP_SDK = "show_map_sdk";
+    public static final String KEY_SHOW_MAP_BASEMAP = "show_map_basemap";
+
+    public static final String KEY_ANALYTICS = "analytics";
+
+    private static final int SAVE_PREFS_MENU = Menu.FIRST;
+    
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
         boolean res = false;
