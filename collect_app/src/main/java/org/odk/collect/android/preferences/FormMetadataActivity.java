@@ -30,7 +30,7 @@ public class FormMetadataActivity extends PreferenceActivity {
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL,     null);
     }
 
-    private void migrateOnce(SharedPreferences sharedPreferences) {
+    void migrateOnce(SharedPreferences sharedPreferences) {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
 
         if (! migrationAlreadyDone) {
@@ -56,7 +56,7 @@ public class FormMetadataActivity extends PreferenceActivity {
     }
 
     /**
-     * Initializes a preference from a property.
+     * Initializes an EditTextPreference from a property.
      * @param propertyManager a PropertyManager
      * @param sharedPreferences shared preferences
      * @param propMgrName the PropertyManager property name
