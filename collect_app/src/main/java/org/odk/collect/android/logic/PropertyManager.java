@@ -144,7 +144,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     private void putProperty(String propName, String scheme, String value) {
-        if (value != null && ! value.isEmpty()) {
+        if (value != null) {
             mProperties.put(propName, value);
             mProperties.put(withUri(propName), scheme + ":" + value);
         }
