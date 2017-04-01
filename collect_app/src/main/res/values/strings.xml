@@ -506,5 +506,5 @@
 <string name="device_defined">Device-defined</string>
 <string name="device_id">Device ID</string>
 <string name="subscriber_id">Subscriber ID</string>
-<string name="sim_serial_id">Subscriber identity module serial number</string>
+<string name="sim_serial_id">SIM serial number</string>
 </resources>
