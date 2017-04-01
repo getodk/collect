@@ -52,6 +52,8 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
@@ -119,6 +121,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         try {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
+            Timber.e(e,"Google maps not accessible. "+e.getMessage());
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
