@@ -395,12 +395,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         StringBuilder message = new StringBuilder();
 
         if (keys.size() == 0) {
-            if(mAuthFailed) {
-                message.append(getString(R.string.auth_failed_form_upload));
+            if (mAuthFailed) {
+                message.append(getString(R.string.google_auth_io_exception_msg));
                 mAuthFailed = false;
-            }
-            else
+            } else {
                 message.append(getString(R.string.no_forms_uploaded));
+            }
         } else {
             Iterator<String> it = keys.iterator();
 
@@ -427,12 +427,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         message.append(name).append(" - ").append(result.get(id)).append("\n\n");
                     }
                 } else {
-                    if(mAuthFailed) {
-                        message.append(getString(R.string.auth_failed_form_upload));
+                    if (mAuthFailed) {
+                        message.append(getString(R.string.google_auth_io_exception_msg));
                         mAuthFailed = false;
-                    }
-                    else
+                    } else {
                         message.append(getString(R.string.no_forms_uploaded));
+                    }
                 }
             } finally {
                 if (results != null) {
