@@ -234,7 +234,7 @@ public class GridWidget extends QuestionWidget {
 
                 TextView missingImage = new TextView(getContext());
                 missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
                 if (choices[i] != null && choices[i].length() != 0) {
@@ -307,6 +307,7 @@ public class GridWidget extends QuestionWidget {
                         stopAudio();
                     }
                     selected[i] = false;
+                    imageViews[i].setBackgroundColor(0);
                     if (imageViews[i] != null) {
                     }
                 }

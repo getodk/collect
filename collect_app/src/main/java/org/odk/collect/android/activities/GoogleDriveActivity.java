@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nafundi
+ * Copyright (C) 2017 Nafundi
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -18,6 +18,8 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
+import android.accounts.AccountManager;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,10 +36,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
@@ -56,14 +59,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Files;
+import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.FileList;
-import com.google.api.services.drive.model.ParentList;
 
-import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
@@ -71,16 +75,14 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.tasks.GoogleSheetsTask;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -88,72 +90,45 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class GoogleDriveActivity extends ListActivity implements GoogleApiClient.OnConnectionFailedListener,
-        TaskListener, GoogleDriveFormDownloadListener {
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class GoogleDriveActivity extends ListActivity implements
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
+        TaskListener, GoogleDriveFormDownloadListener, EasyPermissions.PermissionCallbacks {
 
     private final static int PROGRESS_DIALOG = 1;
-
     private final static int GOOGLE_USER_DIALOG = 3;
-
-    private ProgressDialog mProgressDialog;
-
-    private AlertDialog mAlertDialog;
-
-    private Button mRootButton;
-
-    private Button mBackButton;
-
-    private Button mDownloadButton;
-
-    private ImageButton mSearchButton;
-
-    private EditText mSearchText;
-
-    private Stack<String> mCurrentPath = new Stack<String>();
-
-    private String mAlertMsg;
-
-    private boolean mAlertShowing;
-
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
-
     private static final int COMPLETE_AUTHORIZATION_REQUEST_CODE = 4322;
-
-    private String rootId = null;
-
-    private boolean MyDrive;
-
-    private FileArrayAdapter adapter;
-
-    private RetrieveDriveFileContentsAsyncTask mRetrieveDriveFileContentsAsyncTask;
-
-    private GetFileTask mGetFileTask;
-
-    private String mGoogleUsername = null;
-
-    private String mParentId;
-
-    private ArrayList<DriveListItem> toDownload;
-
     private static final String MY_DRIVE_KEY = "mydrive";
-
     private static final String PATH_KEY = "path";
-
     private static final String DRIVE_ITEMS_KEY = "drive_list";
-
     private static final String PARENT_KEY = "parent";
-
     private static final String ALERT_MSG_KEY = "alertmsg";
-
     private static final String ALERT_SHOWING_KEY = "alertshowing";
-
     private static final String ROOT_KEY = "root";
-
     private static final String FILE_LIST_KEY = "fileList";
-
     private static final String PARENT_ID_KEY = "parentId";
-
     private static final String CURRENT_ID_KEY = "currentDir";
+    private static final String TAG = "GoogleDriveActivity";
+    protected GoogleAccountCredential mCredential;
+    private Button mRootButton;
+    private Button mBackButton;
+    private Button mDownloadButton;
+    private ImageButton mSearchButton;
+    private EditText mSearchText;
+    private Stack<String> mCurrentPath = new Stack<>();
+    private String mAlertMsg;
+    private boolean mAlertShowing;
+    private String rootId = null;
+    private boolean MyDrive;
+    private FileArrayAdapter adapter;
+    private RetrieveDriveFileContentsAsyncTask mRetrieveDriveFileContentsAsyncTask;
+    private GetFileTask mGetFileTask;
+    private String mParentId;
+    private ArrayList<DriveListItem> toDownload;
+    private Drive mDriveService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,15 +142,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
         mParentId = null;
         mAlertShowing = false;
-        toDownload = new ArrayList<DriveListItem>();
-
-        // ensure we have a google account selected
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mGoogleUsername = prefs.getString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
-        if (mGoogleUsername == null || mGoogleUsername.equals("")) {
-            showDialog(GOOGLE_USER_DIALOG);
-            return;
-        }
+        toDownload = new ArrayList<>();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(MY_DRIVE_KEY)) {
             // recover state on rotate
@@ -210,7 +177,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
 
             MyDrive = false;
 
-            if (testNetwork()) {
+            if (isDeviceOnline()) {
             } else {
                 createAlertDialog(getString(R.string.no_connection));
             }
@@ -249,59 +216,14 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         } else {
             mRootButton.setText(getString(R.string.go_drive));
         }
-        mRootButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (testNetwork()) {
-                    toDownload.clear();
-                    mRootButton.setEnabled(false);
-                    mSearchButton.setEnabled(false);
-                    mBackButton.setEnabled(false);
-                    mDownloadButton.setEnabled(false);
-                    listFiles(ROOT_KEY);
-                    MyDrive = !MyDrive;
-                } else {
-                    createAlertDialog(getString(R.string.no_connection));
-                }
-                mCurrentPath.clear();
-                mCurrentPath.add((String) mRootButton.getText());
-            }
-        });
+        mRootButton.setOnClickListener(this);
 
         mBackButton = (Button) findViewById(R.id.back_button);
         mBackButton.setEnabled(mParentId != null);
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBackButton.setEnabled(false);
-                mRootButton.setEnabled(false);
-                mDownloadButton.setEnabled(false);
-                toDownload.clear();
-                getListView().getEmptyView().setVisibility(View.INVISIBLE);
-                TextView empty = (TextView) findViewById(android.R.id.empty);
-                empty.setVisibility(View.VISIBLE);
-                getListView().setEmptyView(empty);
-                if (testNetwork()) {
-                    if (mParentId == null) {
-                        mParentId = ROOT_KEY;
-                    }
-                    listFiles(mParentId);
-                    mCurrentPath.pop();
-                    // }
-                } else {
-                    createAlertDialog(getString(R.string.no_connection));
-                }
-            }
-        });
+        mBackButton.setOnClickListener(this);
 
         mDownloadButton = (Button) findViewById(R.id.download_button);
-        mDownloadButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                getFiles();
-            }
-        });
+        mDownloadButton.setOnClickListener(this);
 
         mSearchText = (EditText) findViewById(R.id.search_text);
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -315,14 +237,147 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
             }
         });
         mSearchButton = (ImageButton) findViewById(R.id.search_button);
-        mSearchButton.setOnClickListener(new OnClickListener() {
+        mSearchButton.setOnClickListener(this);
 
-            @Override
-            public void onClick(View v) {
-                executeSearch();
+        // Initialize credentials and service object.
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Collections.singletonList(DriveScopes.DRIVE))
+                .setBackOff(new ExponentialBackOff());
+
+        HttpTransport transport = AndroidHttp.newCompatibleTransport();
+        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        mDriveService = new com.google.api.services.drive.Drive.Builder(
+                transport, jsonFactory, mCredential)
+                .setApplicationName("ODK-Collect")
+                .build();
+
+        getResultsFromApi();
+    }
+
+    /*
+     * Attempt to call the API, after verifying that all the preconditions are
+     * satisfied. The preconditions are: Google Play Services installed, an
+     * account was selected and the device currently has online access. If any
+     * of the preconditions are not satisfied, the app will prompt the user as
+     * appropriate.
+     *
+     * Google Drive API V3
+     * Please refer to the below link for reference:
+     * https://developers.google.com/drive/v3/web/quickstart/android
+     */
+    private void getResultsFromApi() {
+        if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        } else if (!isDeviceOnline()) {
+            ToastUtils.showShortToast("No network connection available.");
+        } else {
+            if (isDeviceOnline()) {
+                toDownload.clear();
+                mRootButton.setEnabled(false);
+                mSearchButton.setEnabled(false);
+                mBackButton.setEnabled(false);
+                mDownloadButton.setEnabled(false);
+                listFiles(ROOT_KEY);
+                MyDrive = !MyDrive;
+            } else {
+                createAlertDialog(getString(R.string.no_connection));
             }
-        });
+            mCurrentPath.clear();
+            mCurrentPath.add((String) mRootButton.getText());
+        }
+    }
 
+    /**
+     * Checks whether the device currently has a network connection.
+     *
+     * @return true if the device has a network connection, false otherwise.
+     */
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    /**
+     * Respond to requests for permissions at runtime for API 23 and above.
+     *
+     * @param requestCode  The request code passed in
+     *                     requestPermissions(android.app.Activity, String, int, String[])
+     * @param permissions  The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(
+                requestCode, permissions, grantResults, this);
+    }
+
+    /**
+     * Callback for when a permission is granted using the EasyPermissions
+     * library.
+     *
+     * @param requestCode The request code associated with the requested
+     *                    permission
+     * @param list        The requested permission list. Never null.
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        // Do nothing.
+    }
+
+    /**
+     * Callback for when a permission is denied using the EasyPermissions
+     * library.
+     *
+     * @param requestCode The request code associated with the requested
+     *                    permission
+     * @param list        The requested permission list. Never null.
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        // Do nothing.
+    }
+
+    /*
+     * Attempts to set the account used with the API credentials. If an account
+     * name was previously saved it will use that one; otherwise an account
+     * picker dialog will be shown to the user. Note that the setting the
+     * account to use with the credentials object requires the app to have the
+     * GET_ACCOUNTS permission, which is requested here if it is not already
+     * present. The AfterPermissionGranted annotation indicates that this
+     * function will be rerun automatically whenever the GET_ACCOUNTS permission
+     * is granted.
+     */
+    @AfterPermissionGranted(GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS)
+    private void chooseAccount() {
+        if (EasyPermissions.hasPermissions(
+                this, Manifest.permission.GET_ACCOUNTS)) {
+            // ensure we have a google account selected
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String googleUsername = prefs.getString(
+                    PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
+            if (!googleUsername.equals("")) {
+                mCredential.setSelectedAccountName(googleUsername);
+                getResultsFromApi();
+            } else {
+                // Start a dialog from which the user can choose an account
+                startActivityForResult(
+                        mCredential.newChooseAccountIntent(),
+                        GoogleSheetsTask.REQUEST_ACCOUNT_PICKER);
+            }
+        } else {
+            // Request the GET_ACCOUNTS permission via a user dialog
+            EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.request_permissions_google_account),
+                    GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS,
+                    Manifest.permission.GET_ACCOUNTS);
+        }
     }
 
     void executeSearch() {
@@ -369,7 +424,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         adapter.setEnabled(false);
         DriveListItem o = adapter.getItem(position);
         if (o != null && o.getType() == DriveListItem.DIR) {
-            if (testNetwork()) {
+            if (isDeviceOnline()) {
                 toDownload.clear();
                 mSearchText.setText(null);
                 listFiles(o.getDriveId());
@@ -431,7 +486,7 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                mProgressDialog = new ProgressDialog(this);
+                ProgressDialog progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -444,13 +499,13 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                                 mGetFileTask.setGoogleDriveFormDownloadListener(null);
                             }
                         };
-                mProgressDialog.setTitle(getString(R.string.downloading_data));
-                mProgressDialog.setMessage(mAlertMsg);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return mProgressDialog;
+                progressDialog.setTitle(getString(R.string.downloading_data));
+                progressDialog.setMessage(mAlertMsg);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return progressDialog;
             case GOOGLE_USER_DIALOG:
                 AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
@@ -471,9 +526,9 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
     private void createAlertDialog(String message) {
         Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.download_forms_result));
-        mAlertDialog.setMessage(message);
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.download_forms_result));
+        alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -487,21 +542,43 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         mAlertShowing = true;
         mAlertMsg = message;
-        mAlertDialog.show();
+        alertDialog.show();
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
-            final Intent data) {
+                                    final Intent data) {
         switch (requestCode) {
+            case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null &&
+                        data.getExtras() != null) {
+                    String accountName =
+                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        SharedPreferences prefs =
+                                PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+                        editor.apply();
+                        mCredential.setSelectedAccountName(accountName);
+                        getResultsFromApi();
+                    }
+                }
+                break;
+            case GoogleSheetsTask.REQUEST_AUTHORIZATION:
+                if (resultCode == RESULT_OK) {
+                    getResultsFromApi();
+                }
+                break;
+
             case COMPLETE_AUTHORIZATION_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    if (testNetwork()) {
+                    if (isDeviceOnline()) {
                         listFiles(ROOT_KEY);
                     } else {
                         createAlertDialog(getString(R.string.no_connection));
@@ -526,347 +603,12 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         return mGetFileTask;
     }
 
-    // List<com.google.api.services.drive.model.File>
-    private class RetrieveDriveFileContentsAsyncTask extends
-            AsyncTask<String, HashMap<String, Object>, HashMap<String, Object>> {
-
-        private TaskListener listener;
-
-        public void setTaskListener(TaskListener tl) {
-            listener = tl;
-        }
-
-        @Override
-        protected HashMap<String, Object> doInBackground(String... params) {
-            HashMap<String, Object> results = new HashMap<String, Object>();
-
-            String currentDir = params[0];
-            String parentId = ROOT_KEY;
-            String query = null;
-            if (params.length == 2) {
-                // TODO: *.xml or .xml or xml
-                // then search mimetype
-                query = "title contains '" + params[1] + "' and trashed=false";
-            }
-
-            Collection<String> collection = new ArrayList<String>();
-            collection.add(com.google.api.services.drive.DriveScopes.DRIVE);
-            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
-                    GoogleDriveActivity.this.getApplicationContext(), collection);
-
-            com.google.api.services.drive.Drive service =
-                    new com.google.api.services.drive.Drive.Builder(
-                            AndroidHttp.newCompatibleTransport(), new GsonFactory(),
-                            credential).build();
-            credential.setSelectedAccountName(mGoogleUsername);
-
-            if (rootId == null) {
-                com.google.api.services.drive.model.File rootfile = null;
-                try {
-                    rootfile = service.files().get(ROOT_KEY).execute();
-                } catch (UserRecoverableAuthIOException e) {
-                    startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
-                    return null;
-                } catch (IOException e) {
-                }
-
-                rootId = rootfile.getId();
-            }
-
-            String requestString = "'" + currentDir + "' in parents and trashed=false";
-            Files.List request = null;
-
-            try {
-                ParentList parents = service.parents().list(currentDir).execute();
-                if (parents.getItems().size() > 0) {
-                    parentId = parents.getItems().get(0).getId();
-                    if (parents.getItems().get(0).getIsRoot()) {
-                        rootId = parentId;
-                    }
-                } else {
-                    parentId = null;
-                }
-
-                // Sharedwithme, and root:
-                if (!MyDrive && currentDir.equals(ROOT_KEY)) {
-                    requestString = "trashed=false and sharedWithMe=true";
-                }
-
-                request = service.files().list().setQ(requestString);
-            } catch (IOException e1) {
-            }
-
-            // If there's a query parameter, we're searching for all the files.
-            if (query != null) {
-                try {
-                    request = service.files().list().setQ(query);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                }
-            }
-
-            results.put(PARENT_ID_KEY, parentId);
-            results.put(CURRENT_ID_KEY, currentDir);
-            do {
-                try {
-                    FileList fa = request.execute();
-                    List<com.google.api.services.drive.model.File> driveFileListPage =
-                            new ArrayList<com.google.api.services.drive.model.File>();
-
-                    driveFileListPage.addAll(fa.getItems());
-                    request.setPageToken(fa.getNextPageToken());
-                    HashMap<String, Object> nextPage = new HashMap<String, Object>();
-                    nextPage.put(PARENT_ID_KEY, parentId);
-                    nextPage.put(CURRENT_ID_KEY, currentDir);
-                    nextPage.put(FILE_LIST_KEY, driveFileListPage);
-                    publishProgress(nextPage);
-                } catch (IOException e) {
-                }
-            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-
-            return results;
-
-        }
-
-        @Override
-        protected void onPostExecute(HashMap<String, Object> results) {
-            super.onPostExecute(results);
-            if (results == null) {
-                // was an auth request
-                return;
-            }
-            if (listener != null) {
-                listener.taskComplete(results);
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(HashMap<String, Object>... values) {
-            super.onProgressUpdate(values);
-
-            List<com.google.api.services.drive.model.File> fileList =
-                    (List<com.google.api.services.drive.model.File>) values[0]
-                            .get(FILE_LIST_KEY);
-            String parentId = (String) values[0].get(PARENT_ID_KEY);
-            String currentDir = (String) values[0].get(CURRENT_ID_KEY);
-
-            List<DriveListItem> dirs = new ArrayList<DriveListItem>();
-            List<DriveListItem> forms = new ArrayList<DriveListItem>();
-
-            for (com.google.api.services.drive.model.File f : fileList) {
-                String type = f.getMimeType();
-                if (type.equals("application/xml") || type.equals("text/xml") ||
-                        type.equals("application/xhtml") || type.equals("text/xhtml") ||
-                        type.equals("application/xhtml+xml")) {
-                    forms.add(new DriveListItem(f.getTitle(), "", f.getModifiedDate(), "", "",
-                            DriveListItem.FILE, f.getId(), currentDir));
-                } else if (type.equals("application/vnd.google-apps.folder")) {
-                    dirs.add(new DriveListItem(f.getTitle(), "", f.getModifiedDate(), "", "",
-                            DriveListItem.DIR, f.getId(), parentId));
-                } else {
-                    // skip the rest of the files
-                }
-            }
-            Collections.sort(dirs);
-            Collections.sort(forms);
-            dirs.addAll(forms);
-
-            if (adapter == null) {
-                adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image,
-                        dirs);
-                GoogleDriveActivity.this.setListAdapter(adapter);
-            } else {
-                for (DriveListItem d : dirs) {
-                    adapter.add(d);
-                }
-//                adapter.addAll(dirs);
-            }
-            adapter.sort(new Comparator<DriveListItem>() {
-                @Override
-                public int compare(DriveListItem lhs, DriveListItem rhs) {
-                    if (lhs.getType() != rhs.getType()) {
-                        if (lhs.getType() == DriveListItem.DIR) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    } else {
-                        return lhs.getName().compareTo(rhs.getName());
-                    }
-                }
-            });
-            adapter.notifyDataSetChanged();
-
-        }
-
-    }
-
     private Stack<String> buildPath(String[] path) {
         Stack<String> pathStack = new Stack<String>();
         for (int i = 0; i < path.length; i++) {
             pathStack.push(path[i]);
         }
         return pathStack;
-    }
-
-    private class GetFileTask extends
-            AsyncTask<ArrayList<DriveListItem>, Boolean, HashMap<String, Object>> {
-
-        private GoogleDriveFormDownloadListener listener;
-
-        public void setGoogleDriveFormDownloadListener(GoogleDriveFormDownloadListener gl) {
-            listener = gl;
-        }
-
-        @Override
-        protected HashMap<String, Object> doInBackground(ArrayList<DriveListItem>... params) {
-            HashMap<String, Object> results = new HashMap<String, Object>();
-
-            ArrayList<DriveListItem> fileItems = params[0];
-
-            Collection<String> collection = new ArrayList<String>();
-            collection.add(com.google.api.services.drive.DriveScopes.DRIVE);
-            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
-                    GoogleDriveActivity.this.getApplicationContext(), collection);
-
-            com.google.api.services.drive.Drive service =
-                    new com.google.api.services.drive.Drive.Builder(
-                            AndroidHttp.newCompatibleTransport(), new GsonFactory(),
-                            credential).build();
-            credential.setSelectedAccountName(mGoogleUsername);
-
-            for (int k = 0; k < fileItems.size(); k++) {
-                DriveListItem fileItem = fileItems.get(k);
-
-                String mediaDirName = fileItem.getName().substring(0, fileItem.getName().length() - 4)
-                        + "-media";
-
-                String requestString = "'" + fileItem.getParentId()
-                        + "' in parents and trashed=false and title='" + mediaDirName + "'";
-                Files.List request = null;
-                List<com.google.api.services.drive.model.File> driveFileList =
-                        new ArrayList<com.google.api.services.drive.model.File>();
-
-                try {
-                    request = service.files().list().setQ(requestString);
-                } catch (IOException e1) {
-                    results.put(fileItem.getName(), e1.getMessage());
-                    return results;
-                }
-                do {
-                    try {
-                        FileList fa = request.execute();
-                        driveFileList.addAll(fa.getItems());
-                        request.setPageToken(fa.getNextPageToken());
-                    } catch (Exception e2) {
-                        results.put(fileItem.getName(), e2.getMessage());
-                        return results;
-                    }
-                } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-
-                if (driveFileList.size() > 1) {
-                    results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
-                    return results;
-                } else if (driveFileList.size() == 1) {
-                    requestString = "'" + driveFileList.get(0).getId()
-                            + "' in parents and trashed=false";
-                    List<com.google.api.services.drive.model.File> mediaFileList =
-                            new ArrayList<com.google.api.services.drive.model.File>();
-
-                    try {
-                        request = service.files().list().setQ(requestString);
-                        do {
-                            try {
-                                FileList fa = request.execute();
-                                mediaFileList.addAll(fa.getItems());
-                                request.setPageToken(fa.getNextPageToken());
-                            } catch (Exception e2) {
-                                results.put(fileItem.getName(), e2.getMessage());
-                                return results;
-                            }
-                        } while (request.getPageToken() != null
-                                && request.getPageToken().length() > 0);
-                    } catch (Exception e) {
-                        results.put(fileItem.getName(), e.getMessage());
-                        return results;
-                    }
-
-                    File mediaDir = new File(Collect.FORMS_PATH + File.separator + mediaDirName);
-                    if (!mediaDir.exists()) {
-                        mediaDir.mkdir();
-                    }
-
-                    for (com.google.api.services.drive.model.File file : mediaFileList) {
-                        InputStream is = downloadFile(service, file);
-
-                        File targetFile = new File(Collect.FORMS_PATH +
-                                File.separator + mediaDirName + File.separator + file.getTitle());
-
-                        try {
-                            if (is != null) {
-                                FileUtils.copyInputStreamToFile(is, targetFile);
-                            }
-                        } catch (IOException e) {
-                            results.put(file.getTitle(), e.getMessage());
-                            return results;
-                        }
-
-                        results.put(file.getTitle(), Collect.getInstance().getString(R.string.success));
-                    }
-
-                } else {
-                    // zero.. just downloda the .xml file
-                }
-
-                try {
-                    com.google.api.services.drive.model.File df = service.files()
-                            .get(fileItem.getDriveId()).execute();
-
-                    InputStream is = downloadFile(service, df);
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    FileWriter fw = new FileWriter(Collect.FORMS_PATH + File.separator
-                            + fileItem.getName());
-
-                    int c;
-                    while ((c = reader.read()) != -1) {
-                        fw.write(c);
-                    }
-
-                    fw.flush();
-                    fw.close();
-                    reader.close();
-                } catch (Exception e) {
-                    results.put(fileItem.getName(), e.getMessage());
-                    return results;
-                }
-
-                results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
-            }
-            return results;
-
-        }
-
-        private InputStream downloadFile(com.google.api.services.drive.Drive service,
-                com.google.api.services.drive.model.File file) {
-            if (file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0) {
-                try {
-                    HttpResponse resp = service.getRequestFactory()
-                            .buildGetRequest(new GenericUrl(file.getDownloadUrl())).execute();
-                    return resp.getContent();
-                } catch (IOException e) {
-                    // An error occurred.
-                    return null;
-                }
-            } else {
-                // The file doesn't have any content stored on Drive.
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(HashMap<String, Object> results) {
-            listener.formDownloadComplete(results);
-        }
     }
 
     @Override
@@ -964,16 +706,6 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         super.onStop();
     }
 
-    private boolean testNetwork() {
-        ConnectivityManager manager = (ConnectivityManager) this
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
-        if (currentNetworkInfo == null) {
-            return false;
-        }
-        return (currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED);
-    }
-
     public void listFiles(String dir, String query) {
         setProgressBarIndeterminateVisibility(true);
         adapter = null;
@@ -991,4 +723,267 @@ public class GoogleDriveActivity extends ListActivity implements GoogleApiClient
         listFiles(dir, null);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.root_button:
+                getResultsFromApi();
+                break;
+
+            case R.id.back_button:
+                mBackButton.setEnabled(false);
+                mRootButton.setEnabled(false);
+                mDownloadButton.setEnabled(false);
+                toDownload.clear();
+                getListView().getEmptyView().setVisibility(View.INVISIBLE);
+                TextView empty = (TextView) findViewById(android.R.id.empty);
+                empty.setVisibility(View.VISIBLE);
+                getListView().setEmptyView(empty);
+                if (isDeviceOnline()) {
+                    if (mParentId == null) {
+                        mParentId = ROOT_KEY;
+                    }
+                    listFiles(mParentId);
+                    mCurrentPath.pop();
+                    // }
+                } else {
+                    createAlertDialog(getString(R.string.no_connection));
+                }
+                break;
+
+            case R.id.download_button:
+                getFiles();
+                break;
+
+            case R.id.search_button:
+                executeSearch();
+                break;
+        }
+
+    }
+
+    private class RetrieveDriveFileContentsAsyncTask extends
+            AsyncTask<String, HashMap<String, Object>, HashMap<String, Object>> {
+        private TaskListener listener;
+
+        void setTaskListener(TaskListener tl) {
+            listener = tl;
+        }
+
+        @Override
+        protected HashMap<String, Object> doInBackground(String... params) {
+            HashMap<String, Object> results = new HashMap<>();
+
+            String currentDir = params[0];
+            String parentId = ROOT_KEY;
+            String query = null;
+            if (params.length == 2) {
+                // TODO: *.xml or .xml or xml
+                // then search mimetype
+                query = "fullText contains '" + params[1] + "' and trashed=false";
+            }
+            String rootId = null;
+            try {
+                rootId = mDriveService.files()
+                        .get("root")
+                        .setFields("id")
+                        .execute().getId();
+            } catch (UserRecoverableAuthIOException e) {
+                startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
+                return null;
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+            if (rootId == null) {
+                Log.e("drive", "Error occurred : Unable to fetch drive contents");
+                return null;
+           }
+
+            String requestString;
+            Files.List request = null;
+            try {
+
+                if (parentId.equals(currentDir)) {
+                    requestString = "'" + rootId + "' in parents and trashed=false";
+                } else {
+                    requestString = "'" + currentDir + "' in parents and trashed=false";
+                }
+
+                // Sharedwithme, and root:
+                if (!MyDrive && currentDir.equals(ROOT_KEY)) {
+                    requestString = "trashed=false and sharedWithMe=true";
+                }
+
+                request = mDriveService.files().list().setQ(requestString);
+            } catch (IOException e) {
+
+            }
+
+            // If there's a query parameter, we're searching for all the files.
+            if (query != null) {
+                try {
+                    request = mDriveService.files().list().setQ(query);
+                } catch (IOException e) {
+                }
+            }
+            request.setFields("nextPageToken, files(modifiedTime, id, name, mimeType)");
+
+            results.put(PARENT_ID_KEY, parentId);
+            results.put(CURRENT_ID_KEY, currentDir);
+            do {
+                try {
+                    FileList fa = request.execute();
+                    List<com.google.api.services.drive.model.File> driveFileListPage =
+                            new ArrayList<>();
+
+                    driveFileListPage.addAll(fa.getFiles());
+                    request.setPageToken(fa.getNextPageToken());
+                    HashMap<String, Object> nextPage = new HashMap<>();
+                    nextPage.put(PARENT_ID_KEY, parentId);
+                    nextPage.put(CURRENT_ID_KEY, currentDir);
+                    nextPage.put(FILE_LIST_KEY, driveFileListPage);
+                    publishProgress(nextPage);
+                } catch (IOException e) {
+                }
+            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+
+            return results;
+
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<String, Object> results) {
+            super.onPostExecute(results);
+            if (results == null) {
+                // was an auth request
+                return;
+            }
+            if (listener != null) {
+                listener.taskComplete(results);
+            }
+        }
+
+        @SafeVarargs
+        @Override
+        protected final void onProgressUpdate(HashMap<String, Object>... values) {
+            super.onProgressUpdate(values);
+            List<com.google.api.services.drive.model.File> fileList =
+                    (List<com.google.api.services.drive.model.File>) values[0]
+                            .get(FILE_LIST_KEY);
+            String parentId = (String) values[0].get(PARENT_ID_KEY);
+            String currentDir = (String) values[0].get(CURRENT_ID_KEY);
+
+            List<DriveListItem> dirs = new ArrayList<>();
+            List<DriveListItem> forms = new ArrayList<>();
+
+            for (com.google.api.services.drive.model.File f : fileList) {
+                String type = f.getMimeType();
+                if (type.equals("application/xml") || type.equals("text/xml") ||
+                        type.equals("application/xhtml") || type.equals("text/xhtml") ||
+                        type.equals("application/xhtml+xml")) {
+                    forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                            DriveListItem.FILE, f.getId(), currentDir));
+                } else if (type.equals("application/vnd.google-apps.folder")) {
+                    dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                            DriveListItem.DIR, f.getId(), parentId));
+                } else {
+                    // skip the rest of the files
+                }
+            }
+            Collections.sort(dirs);
+            Collections.sort(forms);
+            dirs.addAll(forms);
+
+            if (adapter == null) {
+                adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image,
+                        dirs);
+                GoogleDriveActivity.this.setListAdapter(adapter);
+            } else {
+                for (DriveListItem d : dirs) {
+                    adapter.add(d);
+                }
+                adapter.addAll(dirs);
+            }
+            adapter.sort(new Comparator<DriveListItem>() {
+                @Override
+                public int compare(DriveListItem lhs, DriveListItem rhs) {
+                    if (lhs.getType() != rhs.getType()) {
+                        if (lhs.getType() == DriveListItem.DIR) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                }
+            });
+            adapter.notifyDataSetChanged();
+
+        }
+
+    }
+
+    private class GetFileTask extends
+            AsyncTask<ArrayList<DriveListItem>, Boolean, HashMap<String, Object>> {
+
+        private GoogleDriveFormDownloadListener listener;
+
+        void setGoogleDriveFormDownloadListener(GoogleDriveFormDownloadListener gl) {
+            listener = gl;
+        }
+
+        @SafeVarargs
+        @Override
+        protected final HashMap<String, Object> doInBackground(ArrayList<DriveListItem>... params) {
+            HashMap<String, Object> results = new HashMap<>();
+
+            ArrayList<DriveListItem> fileItems = params[0];
+
+            for (int k = 0; k < fileItems.size(); k++) {
+                DriveListItem fileItem = fileItems.get(k);
+
+                FileOutputStream fStream = null;
+               try {
+                    com.google.api.services.drive.model.File df = mDriveService.files()
+                            .get(fileItem.getDriveId()).execute();
+
+                    fStream = new FileOutputStream
+                            (new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
+                    downloadFile(df).writeTo(fStream);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage(), e);
+                    results.put(fileItem.getName(), e.getMessage());
+                    return results;
+                } finally {
+                    try {
+                        if (fStream != null) {
+                            fStream.close();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                }
+
+                results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
+            }
+            return results;
+
+        }
+
+        private ByteArrayOutputStream downloadFile(com.google.api.services.drive.model.File file)
+                throws IOException {
+
+            String fileId = file.getId();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            mDriveService.files().get(fileId)
+                    .executeMediaAndDownloadTo(outputStream);
+            return outputStream;
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<String, Object> results) {
+            listener.formDownloadComplete(results);
+        }
+    }
 }

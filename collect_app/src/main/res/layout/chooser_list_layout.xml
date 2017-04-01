@@ -39,6 +39,8 @@ the License.
 			android:paddingTop="4dip"
 			android:background="#DDDDDD"/>
 
+		<include layout="@layout/search_box_layout"/>
+
 		<ListView
 			android:id="@id/android:list"
 			android:layout_width="match_parent"
@@ -55,7 +57,6 @@ the License.
 			android:paddingEnd="20dip"
 			android:paddingRight="20dp"
 			android:gravity="center"
-			android:background="@drawable/white"
 			android:textColor="@drawable/black" />
 	</LinearLayout>
 
@@ -64,7 +65,7 @@ the License.
 		android:id="@+id/sortingMenu"
 		android:layout_width="250dp"
 		android:layout_height="match_parent"
-		android:layout_gravity="right|end"
+		android:layout_gravity="end"
 		android:background="#DDDDDD"/>
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Enregistrar localització</string>
+  <string name="show_password">Mostra clau d\'accés</string>
   <string name="accuracy">Precisió</string>
   <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="add_another">Afegir grup</string>
@@ -17,7 +18,7 @@
   <string name="cancel">Cancel·lar</string>
   <string name="cancel_loading_form">Cancel·lar</string>
   <string name="cancel_location">Cancel·lar</string>
-  <string name="cannot_edit_completed_form">El formulari no pot ser editat un cop marcat com complert. Pot haver-se encriptat.</string>
+  <string name="cannot_edit_completed_form">No es pot editar un formulari un cop finalitzat.  Pot estar encriptat.</string>
   <string name="capture_audio">Enregistrar so</string>
   <string name="capture_image">Pren foto</string>
   <string name="capture_osm">Executa OpenMapKit</string>
@@ -94,6 +95,7 @@
   <string name="no_connection">No hi ha connexió a xarxa disponible</string>
   <string name="no_items_display">Res disponible per visualitzar.</string>
   <string name="no_items_display_forms">Res disponible per visualitzar.\n\nProva de seleccionar i omplir un formulari en blanc.</string>
+  <string name="no_items_display_sent_forms">Res disponible per veure.\n\nProva enviant formularis finalitzats abans de visualitzar.</string>
   <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva finalitzant formularis desats abans d\'enviar.</string>
   <string name="ok">D\'acord</string>
   <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
@@ -120,7 +122,8 @@
   <string name="send_data">Enviar formulari finalitzat</string>
   <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
   <string name="send_selected_data">Enviar seleccionats</string>
-  <string name="server_auth_credentials">Si us plau, entrar nom d\'usuari i clau pel servidor: %s</string>
+  <string name="view_sent_forms">Veure formulari enviat.</string>
+  <string name="view_sent_forms_button">Veure formulari enviat  (%s)</string>
   <string name="server_requires_auth">El servidor necessita Autenticació</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servidor</string>
@@ -193,6 +196,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'Enviament fallat el\' EEE dd MMM yyyy, HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Esborrat el\' EEE, dd MMM, yyyy \'a\' HH:mm</string>
   <string name="version">Versió:</string>
   <string name="parent_form_not_present">No es pot editar  aquest formulari desat perquè el formulari plantilla no hi és o s\'ha esborrat.\n\nForm ID: %1$s</string>
   <string name="launch_app">Llançament</string>
@@ -213,15 +217,16 @@
   <string name="admin_preferences">Opcions d\'Administrador</string>
   <string name="admin_access_settings">Polsa per entrar a Configuració</string>
   <string name="user_access_form_entry">Opcions d\'Usuari a gestió de Formularis:</string>
-  <string name="admin_advanced_settings">Configuració avançada (aconsellada):</string>
   <string name="save_mid">Desar mig formulari</string>
   <string name="enter_new_password">Entrar nova clau d\'accés</string>
   <string name="verify_new_password">Re-entrar nova clau d\'accés</string>
+  <string name="admin_password">Clau d\'administrador</string>
   <string name="admin_password_changed">Clau d\'accés d\'Administrador canviat</string>
   <string name="admin_password_disabled">Clau d\'accés d\'Administrador desactivat</string>
   <string name="admin_password_mismatch">Les claus d\'accés no coincideixen!</string>
   <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
   <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
+  <string name="change_admin_password">Canviar clau d\'administrador</string>
   <string name="found_in_menu">S\'ha usat el botó Menu en l\'entrada de dades</string>
   <string name="autosend">Auto-enviament</string>
   <string name="autosend_wifi">Auto-enviament per Wi-Fi</string>
@@ -242,12 +247,6 @@
   <string name="swipe_instructions">Ets a l\'inici de %s. Desplaça la pantalla com l\'exemple de sota per anar endavant i enrere.</string>
   <string name="buttons_instructions">Ets a l\'inici de %s. Prem les fletxes de sota per anar endavant i enrere.</string>
   <string name="swipe_buttons_instructions">Ets a l\'inici de %s. Desplaça la pantalla com l\'exemple o prem les fletxes per anar endavant i enrere.</string>
-  <string name="form_processing_logic">Lògica processament formulari</string>
-  <string name="form_processing_logic_recommended">Recomanat(per defecte)</string>
-  <string name="form_processing_logic_0">gener 2015(mes ràpid)</string>
-  <string name="form_processing_logic_1">gener 2015(mes segur)</string>
-  <string name="form_processing_logic_2">Mitjans 2014(lent)</string>
-  <string name="form_processing_logic_3">Inicis 2014(ràpid)</string>
   <string name="launch_printer">Inicia la impressió</string>
   <string name="no_printer">Impressora no trobada. Si us plau, instal·li la impressora.</string>
   <string name="constraint_behavior">Comportament del processament de restriccions</string>
@@ -268,9 +267,9 @@
   <string name="ext_search_bad_function_error">Error sintàctic a la funció de cercar(): \'%s\' no s\'ha avaluat com a funció.</string>
   <string name="ext_search_return_error">El cercador ha retornat un objecte de tipus \'%s\'.</string>
   <string name="ext_import_generic_error">No pot importar dades des de %1$s. Raó: %2$s</string>
-  <string name="ext_import_progress_message">Precàrregant dades des de \'%1$s\', espereu si us plau... %2$s</string>
+  <string name="ext_import_progress_message">Precàrregant dades des de \'%1$s\', espereu si us plau… %2$s</string>
   <string name="ext_import_cancelled_message">Lectura de dades calcel·lada</string>
-  <string name="ext_import_finalizing_message">Acabant dades precarregades...</string>
+  <string name="ext_import_finalizing_message">Acabant dades precarregades…</string>
   <string name="ext_import_completed_message">Lectura de dades completada!</string>
   <string name="ext_not_initialized_error">GestorDadesExternes no s\'ha inicialitzat</string>
   <string name="ext_import_csv_missing_error">Dades externes per %1$s no s\'han importat. Pot ser heu oblidat incloure l\'arxiu %2$s.csv amb el formulari?</string>
@@ -281,14 +280,14 @@
   <string name="fs_file_copy_error">No pot copiar \'%1$s\' sobre \'%2$s\'. Raó: %3$s</string>
   <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
   <string name="survey_multiple_forms_error">Heu descarregat dos formularis diferents amb el mateix ID i versió. Potser son formularis repetits o procedents de dos servidors diferents. Cal esborrar-ne un.</string>
-  <string name="survey_loading_reading_form_message">Llegint definició de formulari...</string>
-  <string name="survey_loading_reading_data_message">LLegint dades de enquesta...</string>
-  <string name="survey_loading_reading_csv_message">LLegint arxius CSV...</string>
-  <string name="survey_saving_validating_message">Validant respostes...</string>
-  <string name="survey_saving_collecting_message">Recollint dades...</string>
-  <string name="survey_saving_saving_message">Salvant a tarja SD ...</string>
-  <string name="survey_saving_finalizing_message">Acabant a tarja SD...</string>
-  <string name="survey_saving_encrypting_message">Encriptant dades...</string>
+  <string name="survey_loading_reading_form_message">Llegint definició de formulari…</string>
+  <string name="survey_loading_reading_data_message">LLegint dades de enquesta…</string>
+  <string name="survey_loading_reading_csv_message">LLegint arxius CSV…</string>
+  <string name="survey_saving_validating_message">Validant respostes…</string>
+  <string name="survey_saving_collecting_message">Recollint dades…</string>
+  <string name="survey_saving_saving_message">Salvant a tarja SD …</string>
+  <string name="survey_saving_finalizing_message">Acabant a tarja SD…</string>
+  <string name="survey_saving_encrypting_message">Encriptant dades…</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
   <string name="high_resolution">Activar vídeo HD</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -305,9 +304,7 @@
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
-  <string name="google_audio_error">Arxius d\'audio no s\'admeten a Google Sheets de moment</string>
-  <string name="google_video_error">Arxius de vídeo no s\'admeten a Google Sheets de moment</string>
-  <string name="picasa_upload_error">No pot pujar una foto que no existeix: %1$s</string>
+  <string name="media_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>
@@ -316,22 +313,104 @@
   <string name="change_server_url">URL Servidor</string>
   <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="no_blank_search">Camp de cerca no pot ser blanc.</string>
-  <string name="google_sheets_url">Google Sheets URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
   <string name="sheets_google_account_needed">Heu seleccionat Google Sheets com servidor, seleccioneu el compte Google a Configuració general abans de continuar</string>
   <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
-  <string name="google_sheets_access_denied">Accés denegat. Si us plau, assegureu-vos que teniu permís d\'accés a la fulla de càlcul.</string>
-  <string name="google_sheets_update_error">Error actualitzant fulla. Comproveu que el propietari de la fulla de càlcul us ha atorgat permís d\'accés.</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
   <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
+  <string name="about_preferences">Sobre</string>
+  <string name="tell_your_friends">Explica-ho als amics</string>
+  <string name="tell_your_friends_title">Comparteix ODK amb els amics</string>
+  <string name="tell_your_friends_msg">Baixa l\'app ODK Collect!</string>
+  <string name="leave_a_review">Deixa una opinió</string>
+  <string name="leave_a_review_summary">Deixa una opinió a Google Play</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_preferences">Mapejant</string>
+  <string name="map_sdk_selector_title">Mapejant SDK</string>
+  <string name="map_sdk_behavior">Mapejant SDK</string>
+  <string name="google_maps_sdk">Google Maps SDK</string>
+  <string name="show_map_sdk">Veure Map SDK Options</string>
+  <string name="openmap_streets">Carrers OSM</string>
+  <string name="streets">Carrers</string>
+  <string name="terrain">Terreny</string>
+  <string name="hybrid">Híbrid</string>
+  <string name="satellite">Satel·lit</string>
+  <string name="map_basemap_selector_title">Mapes base</string>
+  <string name="map_basemap_behavior">Selecciona un mapa base</string>
+  <string name="show_map_basemap">Veure opcions de mapa base</string>
+  <string name="save_point">Desar GeoPunt</string>
+  <string name="get_point">Comença GeoPunt</string>
+  <string name="geopoint_view_read_only">Veure GeoPunt</string>
+  <string name="get_shape">Comença GeoForma</string>
+  <string name="get_trace">Comença GeoTraça</string>
+  <string name="geoshape_title">GeoForma</string>
+  <string name="mbtiles_not_found">No s\'han trobat arxius .mbtiles al directori \'%s\'.</string>
+  <string name="select_geotrace_mode">Selecciona Mòdus GeoTraça</string>
+  <string name="start">Comença</string>
+  <string name="enable_gps">Activa GPS</string>
+  <string name="enable_gps_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
+  <string name="geotrace_title">GeoTraça</string>
+  <string name="polygon_save">Desa com Poligon</string>
+  <string name="polyline_save">Desa com polilínea</string>
+  <string name="gps_enable_message">El GPS esta desactivat al teu dispositiu. Vols activar-lo?</string>
+  <string name="select_offline_layer">Selecciona capa autònoma</string>
+  <string name="polygon_or_polyline">Desa GeoTraça com</string>
+  <string name="minutes">Minuts</string>
+  <string name="geo_clear_warning">Característica ja creada. Vols netejar-la?</string>
+  <string name="geo_exit_warning">Descartar canvis i tornar a ODK?</string>
+  <string name="polygon_validator">Per crear un polígon calen mínim 3 punts </string>
+  <string name="dialog_continue">Continua</string>
+  <string name="clear">Neteja</string>
+  <string name="polyline_polygon_text">Desa GeoTraça com</string>
+  <string name="manual_mode">Mòdus Manual</string>
+  <string name="automatic_mode">Mòdus Automàtic</string>
+  <string name="geoshape_instruction">Prem una estona per situar marques.</string>
+  <string name="geotrace_instruction">Espera el posicionament, després prem botó d\'afegir fita per començar.</string>
+  <string name="geopoint_instruction">Prem una estona o toca el botó d\'afegir fita.</string>
+  <string name="geopoint_no_draggable_instruction">Toca el botó afegir fita</string>
+  <string name="discard">Descarta</string>
+  <string name="zoom_to_location">Zoom a posició actual</string>
+  <string name="zoom_to_feature">Zoom a característica desada</string>
+  <string name="points_captured">%s punts capturats</string>
+  <string name="google_sheets_invalid_column_form">\'n%1$s\' és un nom de columna invàlid al vostre formulari. Google Sheets només permet caràcters alfanumèrics i guions com nom de columna</string>
+  <string name="google_sheets_invalid_column_instance">\'n%1$s\' és un nom de columna invàlid a la vostre instancia desada. Google Sheets només permet caràcters alfanumèrics i guions com nom de columna</string>
+  <string name="geoshape_view_change_location">Visualitza o modifica GeoShape</string>
+  <string name="geotrace_view_change_location">Visualitza o modifica GeoShape</string>
+  <string name="bearing">Rumb: %.3f</string>
+  <string name="direction">Direcció: %s</string>
+  <string name="select_odk_shortcut">Selecciona drecera ODK</string>
+  <string name="bad_uri">URI dolenta: %s</string>
+  <string name="unrecognized_uri">URI no reconeguda: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="alert">Alerta</string>
+  <string name="go_back">Enrera</string>
+  <string name="download_selected">Descarrega seleccionat</string>
+  <string name="detection_frequency">detecta freqüència</string>
+  <string name="record_geopoint">Grava GeoPunt</string>
+  <string name="selected_answer">Seleccionat: %s</string>
+  <string name="version_number">Versió: %s</string>
+  <string name="general_settings_about">Sobre</string>
+  <string name="odk_website">web d\'Open Data Kit</string>
+  <string name="all_open_source_licenses">llicencies programari lliure</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="analytics_preferences">Us de dades</string>
+  <string name="select_all">Selecciona tot</string>
+  <string name="clear_all">Neteja-ho tot</string>
+  <string name="reset_settings_button_reset">Reinicialitza</string>
+  <string name="reset_in_progress">Reinicialitzant…</string>
+  <string name="resetting_finished">Reinicialitzat finalitzat</string>
+  <string name="reset_app_state_result">Reinicialitzar resultats</string>
+  <string name="reset_settings_result">Totes les característiques:: %s</string>
+  <string name="reset_saved_forms_result">Formularis desats :: %s</string>
+  <string name="encrypted_form">Formulari encriptat</string>
+  <string name="deleted_form">Formulari esborrat</string>
+  <string name="exit">Sortir</string>
+  <string name="instance_scan_completed">Escanejat finalitzat</string>
 </resources>

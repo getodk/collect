@@ -15,7 +15,6 @@
   <string name="cancel">Vazgeç</string>
   <string name="cancel_loading_form">Vazgeç</string>
   <string name="cancel_location">Vazgeç</string>
-  <string name="cannot_edit_completed_form">Bu form bitmiş olarak işaretlendiği için değiştirilemez. Şifrelenmiştir</string>
   <string name="capture_audio">Ses Kaydi</string>
   <string name="capture_image">Resim Çek</string>
   <string name="capture_video">Video Kayit</string>
@@ -65,7 +64,7 @@
   <string name="leave_repeat_yes">Ekleme</string>
   <string name="loading_form">Form Yükleniyor</string>
   <string name="main_menu">Ana Menu</string>
-  <string name="main_menu_details">Daha Kolay veri toplama...</string>
+  <string name="main_menu_details">Daha Kolay veri toplama…</string>
   <string name="manage_files">Kayitli Formu Sil</string>
   <string name="mark_finished">Bitirilen Formu işaretle</string>
   <string name="noselect_error">Herhangi bir form seçilmedi !</string>
@@ -92,7 +91,6 @@
   <string name="send_data">Dolu Formu gönder</string>
   <string name="send_data_button">Dolu Formu gönder (%s)</string>
   <string name="send_selected_data">Seçili olanı gönder</string>
-  <string name="server_auth_credentials">Sunucu için kullanıcı adı ve şifre giriniz : %s</string>
   <string name="server_requires_auth">Server kimlik doğrulaması gerektirir</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Sunucu Ayarlari</string>

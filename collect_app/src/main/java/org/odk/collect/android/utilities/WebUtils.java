@@ -22,6 +22,7 @@ import android.util.Log;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -74,6 +75,8 @@ import java.util.zip.GZIPInputStream;
  */
 public final class WebUtils {
     public static final String t = "WebUtils";
+
+    private static final String USER_AGENT_HEADER = "User-Agent";
 
     public static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     public static final String OPEN_ROSA_VERSION = "1.0";
@@ -180,6 +183,14 @@ public final class WebUtils {
         }
     }
 
+    private static final void setCollectHeaders(HttpRequest req) {
+        String userAgent = String.format("%s %s/%s",
+                System.getProperty("http.agent"),
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_NAME);
+        req.setHeader(USER_AGENT_HEADER, userAgent);
+    }
+
     private static final void setOpenRosaHeaders(HttpRequest req) {
         req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
         GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
@@ -190,12 +201,14 @@ public final class WebUtils {
 
     public static final HttpHead createOpenRosaHttpHead(Uri u) {
         HttpHead req = new HttpHead(URI.create(u.toString()));
+        setCollectHeaders(req);
         setOpenRosaHeaders(req);
         return req;
     }
 
     public static final HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();
+        setCollectHeaders(req);
         setOpenRosaHeaders(req);
         setGoogleHeaders(req);
         req.setURI(uri);
@@ -220,6 +233,7 @@ public final class WebUtils {
 
     public static final HttpPost createOpenRosaHttpPost(Uri u) {
         HttpPost req = new HttpPost(URI.create(u.toString()));
+        setCollectHeaders(req);
         setOpenRosaHeaders(req);
         setGoogleHeaders(req);
         return req;

@@ -15,7 +15,6 @@
   <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
-  <string name="cannot_edit_completed_form">Ang form ay hindi na maaaring ma-edit sa sandaling ito ay minarkahan bilang yari. Ito ay maaring naka-encrypt.</string>
   <string name="capture_audio">Mag-tala ng Tunog</string>
   <string name="capture_image">Kumuha ng Larawan</string>
   <string name="capture_video">Mag-tala ng Bidyo</string>
