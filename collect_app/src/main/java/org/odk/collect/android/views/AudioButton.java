@@ -35,7 +35,7 @@ import java.io.IOException;
  * @author ctsims
  * @author carlhartung
  */
-public class AudioButton extends AppCompatImageButton {
+public class AudioButton extends ImageButton {
     private final static String t = "AudioButton";
 
     /**
