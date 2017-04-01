@@ -10,12 +10,8 @@ public final class PreferenceKeys {
     public static final String KEY_ANALYTICS                = "analytics";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
 
-
     public static final String KEY_PROTOCOL                 = "protocol";
            static final String KEY_PROTOCOL_SETTINGS        = "protocol_settings";
-
-           static final String KEY_FORM_METADATA            = "form_metadata";
-           static final String KEY_FORM_METADATA_SETTINGS   = "form_metadata_settings";
 
     // leaving these in the main screen because username can be used as a
     // pre-fill value in a form
@@ -24,8 +20,9 @@ public final class PreferenceKeys {
     public static final String KEY_PASSWORD                 = "password";
 
     // METADATA
+           static final String KEY_FORM_METADATA            = "form_metadata";
     /** Whether any existing username and email values have been migrated to form metadata */
-    public static final String KEY_METADATA_MIGRATED        = "metadata_migrated";
+           static final String KEY_METADATA_MIGRATED        = "metadata_migrated";
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
@@ -61,7 +58,7 @@ public final class PreferenceKeys {
     public static final String KEY_MAP_SDK                  = "map_sdk_behavior";
     public static final String KEY_MAP_BASEMAP              = "map_basemap_behavior";
 
-           static final int ARRAY_INDEX_GOOGLE_MAPS         = 0;
+           static final int    ARRAY_INDEX_GOOGLE_MAPS      = 0;
            static final String OSM_BASEMAP_KEY              = "osmdroid";
            static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
