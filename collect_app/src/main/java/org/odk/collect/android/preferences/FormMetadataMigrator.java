@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -20,25 +21,27 @@ public class FormMetadataMigrator {
     };
 
     /** Migrates the form metadata if it hasn’t already been done */
+    @SuppressLint("ApplySharedPref")
     public static void migrate(SharedPreferences sharedPreferences) {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
-
-        Log.d(TAG, "migrate called, " +
+        Log.i(TAG, "migrate called, " +
                 (migrationAlreadyDone ? "migration already done" : "will migrate"));
+
         if (! migrationAlreadyDone) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
             for (String[] pair : sourceTargetValuePairs) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();
                 if (! migratingValue.isEmpty()) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    Log.i(TAG, String.format("Copying %s from %s to %s",
+                            migratingValue, pair[0], pair[1]));
                     editor.putString(pair[1], migratingValue);
-                    editor.apply();
                 }
             }
 
             // Save that we’ve migrated the values
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(KEY_METADATA_MIGRATED, true);
-            editor.apply();
+            editor.commit();
         }
     }
 }
