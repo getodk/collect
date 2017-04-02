@@ -66,6 +66,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import au.com.bytecode.opencsv.CSVReader;
+import timber.log.Timber;
 
 /**
  * Background task for loading a form.
@@ -175,11 +176,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 } else {
                     serializeFormDef(fd, formPath);
                 }
-            } catch (FileNotFoundException e) {
-                mErrorMsg = e.getMessage();
-            } catch (XFormParseException e) {
-                mErrorMsg = e.getMessage();
             } catch (Exception e) {
+                Timber.e(e,e.getMessage());
                 mErrorMsg = e.getMessage();
             } finally {
                 IOUtils.closeQuietly(fis);
@@ -204,6 +202,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         try {
             loadExternalData(formMediaDir);
         } catch (Exception e) {
+            Timber.e(e,"Exception thrown while loading external data. "+e.getMessage());
             mErrorMsg = e.getMessage();
             return null;
         }
@@ -488,13 +487,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             fd.readExternal(dis, ExtUtil.defaultPrototypes());
             dis.close();
 
-        } catch (FileNotFoundException e) {
-            fd = null;
-        } catch (IOException e) {
-            fd = null;
-        } catch (DeserializationException e) {
-            fd = null;
         } catch (Exception e) {
+            Timber.e(e,e.getMessage());
             fd = null;
         }
 
@@ -520,8 +514,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 fd.writeExternal(dos);
                 dos.flush();
                 dos.close();
-            } catch (FileNotFoundException e) {
             } catch (IOException e) {
+                Timber.e(e,e.getMessage());
             }
         }
     }
@@ -547,6 +541,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     }
                 }
             } catch (Exception e) {
+                Timber.e(e,e.getMessage());
             }
         }
     }
@@ -633,6 +628,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
             }
         } catch (IOException e) {
+            Timber.e(e,"Exception thrown while reading csv file. "+e.getMessage());
         } finally {
             if (withinTransaction) {
                 ida.commit();
