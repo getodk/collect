@@ -70,6 +70,7 @@ import java.util.Set;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import timber.log.Timber;
 
 
 public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener,
@@ -554,9 +555,11 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
+                Timber.e(e, "Authorization requested.. "+e.getMessage());
                 mResults = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
+                Timber.e(e,e.getMessage());
             } catch (MultipleFoldersFoundException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
