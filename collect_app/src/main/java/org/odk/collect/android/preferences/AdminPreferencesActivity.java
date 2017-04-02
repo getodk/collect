@@ -31,6 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+import timber.log.Timber;
+
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
@@ -58,6 +60,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
             res = true;
         } catch (IOException e) {
+            Timber.e(e,e.getMessage());
         } finally {
             try {
                 if (output != null) {
@@ -65,6 +68,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                     output.close();
                 }
             } catch (IOException ex) {
+                Timber.e(ex,"Unable to close output stream. "+ex.getMessage());
             }
         }
         return res;
