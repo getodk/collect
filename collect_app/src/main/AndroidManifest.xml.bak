@@ -11,7 +11,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.odk.collect.android"
-	android:versionName="1.0"
     >
 
     <uses-feature android:name="android.hardware.location" android:required="false" />
@@ -114,8 +113,7 @@
             android:label="@string/all_open_source_licenses" />
         <activity
             android:name=".activities.GoogleDriveActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name" 
             android:windowSoftInputMode="stateHidden"
             />
         <activity
@@ -132,6 +130,9 @@
         </intent-filter>
 
         <activity
+            android:name=".activities.InstanceChooserTabs"
+            android:label="@string/app_name" />
+        <activity
             android:name=".activities.FormChooserList"
             android:label="@string/app_name" >
             <intent-filter>
@@ -145,19 +146,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.FormManagerList"
+            android:label="@string/app_name" />
+        <activity
             android:name=".activities.FormDownloadList"
             android:label="@string/app_name" />
         <activity
+            android:name=".activities.DataManagerList"
+            android:label="@string/app_name" />
+        <activity
             android:name=".activities.FileManagerTabs"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GoogleSheetsUploaderActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.InstanceUploaderList"
-            android:configChanges="orientation|screenSize"
             android:label="@string/app_name">
 	        <intent-filter>
 	            <action android:name="android.intent.action.VIEW" />
