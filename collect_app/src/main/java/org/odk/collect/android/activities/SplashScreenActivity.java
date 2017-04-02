@@ -42,6 +42,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import timber.log.Timber;
+
 public class SplashScreenActivity extends Activity {
 
     private static final int mSplashTimeout = 2000; // milliseconds
@@ -80,6 +82,7 @@ public class SplashScreenActivity extends Activity {
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
+            Timber.e(e,"Unable to get package info. "+e.getMessage());
         }
 
         boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
@@ -132,6 +135,7 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
+                Timber.e(e,"Unable to close file input stream. "+e.getMessage());
             }
 
             int scale = 1;
@@ -153,8 +157,10 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
+                Timber.e(e,"Unable to close file input stream. "+e.getMessage());
             }
         } catch (FileNotFoundException e) {
+            Timber.e(e,e.getMessage());
         }
         return b;
     }
@@ -187,6 +193,7 @@ public class SplashScreenActivity extends Activity {
                         count += 100;
                     }
                 } catch (Exception e) {
+                    Timber.e(e,e.getMessage());
                 } finally {
                     endSplashScreen();
                 }
