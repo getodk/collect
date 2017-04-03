@@ -38,6 +38,7 @@ public final class AdminKeys {
     static final String KEY_SHOW_SPLASH_SCREEN        = "show_splash_screen";
     static final String KEY_DELETE_AFTER_SEND         = "delete_after_send";
     static final String KEY_INSTANCE_FORM_SYNC        = "instance_form_sync";
+    static final String KEY_LANGUAGE                  = "language";
 
     static final String KEY_AUTOSEND_WIFI             = "autosend_wifi";
     static final String KEY_AUTOSEND_NETWORK          = "autosend_network";
@@ -67,6 +68,7 @@ public final class AdminKeys {
         ag(KEY_SHOW_SPLASH_SCREEN,         PreferenceKeys.KEY_SHOW_SPLASH),
         ag(KEY_SHOW_SPLASH_SCREEN,         PreferenceKeys.KEY_SPLASH_PATH),
         ag(KEY_CHANGE_FONT_SIZE,           PreferenceKeys.KEY_FONT_SIZE),
+        ag(KEY_LANGUAGE,                   PreferenceKeys.KEY_LANGUAGE),
         ag(KEY_CONSTRAINT_BEHAVIOR,        PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR),
         ag(KEY_SHOW_MAP_SDK,               PreferenceKeys.KEY_MAP_SDK),
         ag(KEY_SHOW_MAP_BASEMAP,           PreferenceKeys.KEY_MAP_BASEMAP),

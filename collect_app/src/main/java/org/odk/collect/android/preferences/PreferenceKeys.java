@@ -9,6 +9,7 @@ public final class PreferenceKeys {
     public static final String KEY_DELETE_AFTER_SEND        = "delete_send";
     public static final String KEY_ANALYTICS                = "analytics";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
+    public static final String KEY_LANGUAGE                 = "language";
 
 
     public static final String KEY_PROTOCOL                 = "protocol";

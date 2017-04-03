@@ -122,6 +122,12 @@
             android:summary="@string/found_in_settings"
             android:title="@string/font_size" />
         <CheckBoxPreference
+            android:id="@+id/language"
+            android:defaultValue="true"
+            android:key="language"
+            android:summary="@string/found_in_settings"
+            android:title="@string/language" />
+        <CheckBoxPreference
             android:id="@+id/instance_sync"
             android:defaultValue="true"
             android:key="instance_form_sync"

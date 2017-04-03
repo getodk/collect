@@ -19,6 +19,7 @@ import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.MainMenuActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initNavigationPrefs();
         initConstraintBehaviorPref();
         initFontSizePref();
+        initLanguagePrefs();
         initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
@@ -131,6 +133,35 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                     int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                     CharSequence entry = ((ListPreference) preference).getEntries()[index];
                     preference.setSummary(entry);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void initLanguagePrefs() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_LANGUAGE);
+
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    String entry = (String) ((ListPreference) preference).getEntries()[index];
+                    preference.setSummary(entry);
+
+                    SharedPreferences.Editor edit = PreferenceManager
+                            .getDefaultSharedPreferences(getActivity()).edit();
+                    edit.putString(KEY_LANGUAGE, newValue.toString());
+                    edit.commit();
+                    new LocaleHelper().updateLocale(getActivity());
+
+                    Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().overridePendingTransition(0,0);
+                    getActivity().finishAffinity();
                     return true;
                 }
             });

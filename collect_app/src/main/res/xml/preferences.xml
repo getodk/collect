@@ -74,6 +74,14 @@
             android:entryValues="@array/font_size_entry_values"
             android:key="font_size"
             android:title="@string/font_size" />
+        <ListPreference
+            android:id="@+id/language"
+            android:defaultValue="en"
+            android:dialogTitle="@string/language"
+            android:entries="@array/language_entries"
+            android:entryValues="@array/language_entry_values"
+            android:key="language"
+            android:title="@string/language" />
         <CheckBoxPreference
             android:id="@+id/instance_sync"
             android:defaultValue="true"
