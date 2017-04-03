@@ -32,15 +32,16 @@ public class TimerLogger {
         long end;
         boolean endTimeSet;
 
-        // Valid event types
+        // Valid event types, Non FEC events start from 1001 so they do not clash
         public static final int FEC = 0;
-        public static final int START = 1001;   // Start from 1001 to not clash with FEC events
-        public static final int STOP = 1002;
-        public static final int RESUME = 1003;
-        public static final int FINALIZE = 1004;
-        public static final int HIERARCHY = 1005;
-        public static final int PREFERENCES = 1006;
-        public static final int LANGUAGE = 1007;
+        public static final int FORM_START = 1001;      // Start filling in the form
+        public static final int FORM_EXIT = 1002;       // Exit the form
+        public static final int FORM_RESUME = 1003;     // Resume filling in the form after previously exiting
+        public static final int FORM_SAVE = 1004;       // Save the form
+        public static final int FORM_FINALIZE = 1005;   // Finalize the form
+        public static final int HIERARCHY = 1006;
+        public static final int PREFERENCES = 1007;
+        public static final int LANGUAGE = 1008;
         public static final int VIEW_END = 2000;     // The end event for Questions, repeats, Hierarchy jumps etc
         public static final int NON_VIEW_END = 2001;    // The end event for select language which can be embedded within a question
 
@@ -153,17 +154,20 @@ public class TimerLogger {
                             sType = "Unknown FEC: " + fecType;
                     }
                     break;
-                case START:
-                    sType = "start";
+                case FORM_START:
+                    sType = "form start";
                     break;
-                case STOP:
-                    sType = "stop";
+                case FORM_EXIT:
+                    sType = "form exit";
                     break;
-                case RESUME:
-                    sType = "resume";
+                case FORM_RESUME:
+                    sType = "form resume";
                     break;
-                case FINALIZE:
-                    sType = "finalize";
+                case FORM_SAVE:
+                    sType = "form save";
+                    break;
+                case FORM_FINALIZE:
+                    sType = "form finalize";
                     break;
                 case HIERARCHY:
                     sType = "jump";
@@ -190,7 +194,7 @@ public class TimerLogger {
     private File timerlogFile = null;
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
-    private boolean mTimerEnabled = false;               // Set true of the timer logger is enabled
+    private boolean mTimerEnabled = false;              // Set true of the timer logger is enabled
     private boolean locationRecordingEnabled = false;   // Set true to also record gps coordinates
 
 
@@ -244,7 +248,7 @@ public class TimerLogger {
             mEvents.add(newEvent);
 
             // If the user is exiting then mark any open questions as closed
-            if (eventType == Event.STOP || eventType == Event.FINALIZE) {
+            if (eventType == Event.FORM_EXIT || eventType == Event.FORM_FINALIZE) {
                 exitView(Event.VIEW_END);
             }
             writeEvents();
