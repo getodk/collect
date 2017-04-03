@@ -25,6 +25,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -688,6 +689,19 @@ public class Utilities {
         s = df.format(theTime);
 
         return s;
+    }
+
+    /*
+     * Translate a message
+     */
+    public static String translateMsg(String in) {
+        String out = in;
+        if(in != null) {
+            if (in.contains("Unauthorized")) {
+                out = Collect.getInstance().getString(R.string.smap_unauth);
+            }
+        }
+        return out;
     }
 
 }

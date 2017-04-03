@@ -74,4 +74,6 @@
     <string name="smap_submitted">"Submitted Tasks"</string>
     <string name="smap_closed">"Closed Tasks"</string>
     <string name="smap_created">"Created"</string>
+    <string name="smap_error">"Error"</string>
+    <string name="smap_unauth">"Unauthorised"</string>
 </resources>

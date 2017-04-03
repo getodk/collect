@@ -290,7 +290,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 InputStream is = null;
                 if(statusCode != HttpStatus.SC_OK) {
                     Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
-                    results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+                    results.put(Collect.getInstance().getString(R.string.smap_get_tasks), response.getStatusLine().getReasonPhrase());
                     throw new Exception(response.getStatusLine().getReasonPhrase());
                 }
 
@@ -389,7 +389,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	Log.e(getClass().getSimpleName(), "JSON Syntax Error:" + " for URL " + taskURL);
 	        	publishProgress(e.getMessage());
 	        	e.printStackTrace();
-	        	results.put("Error:", e.getMessage());
+	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", e.getMessage());
 	        	
 	        } catch (CancelException e) {	
 	        	
@@ -400,7 +400,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	Log.e(getClass().getSimpleName(), "Error:" + " for URL " + taskURL);
 	        	e.printStackTrace();
 	        	publishProgress(e.getMessage());
-	        	results.put("Error:", e.getMessage());
+                String msg = Utilities.translateMsg(e.getMessage());
+	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg);
 	
 	        }
         }
@@ -566,7 +567,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
             if (statusCode != HttpStatus.SC_OK) {
                 Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
-                results.put("Get Assignments", response.getStatusLine().getReasonPhrase());
+                results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
+                        response.getStatusLine().getReasonPhrase());
                 WebUtils.discardEntityBytes(response);
                 throw new Exception(response.getStatusLine().getReasonPhrase());
             }

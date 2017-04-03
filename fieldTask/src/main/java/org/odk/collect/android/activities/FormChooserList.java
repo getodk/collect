@@ -34,6 +34,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 /**
@@ -134,7 +135,14 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             setResult(RESULT_OK, new Intent().setData(formUri));
         } else {
             // caller wants to view/edit a form, so launch formentryactivity
-            startActivity(new Intent(Intent.ACTION_EDIT, formUri));
+            // startActivity(new Intent(Intent.ACTION_EDIT, formUri)); smap
+
+            // start smap
+            Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+            //i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            i.setData(formUri);
+            startActivity(i);
+            // end smap
         }
 
         finish();
