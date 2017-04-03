@@ -15,6 +15,7 @@
   <string name="capture_video">विडियो रिकार्ड करे</string>
   <string name="change_language">भाषा बदलें</string>
   <string name="clear_answer">उत्तर मिटाएं</string>
+  <string name="clear_answer_ask">उत्तर मिटाएं ?</string>
   <string name="clear_answer_no">मिटाएं</string>
   <string name="completed_data">(%s) समाप्त </string>
   <string name="data">जमा फारम</string>
@@ -40,6 +41,7 @@
   <string name="enter_data_button">खाली फारम भरें</string>
   <string name="error_occured">एरर</string>
   <string name="forms">खाली फारम</string>
+  <string name="get_barcode">बारकोड प्राप्त करें </string>
   <string name="get_forms">खाली फारम प्राप्त करें</string>
   <string name="get_location">जगह  रिकार्ड करे </string>
   <string name="invalid_answer_error">अमान्य उत्तर</string>
@@ -56,9 +58,11 @@
   <string name="noselect_error">आपने फारम नही चुना है</string>
   <string name="no_connection">कोई नेटवर्क कनेक्शन उपलब्ध नहीं</string>
   <string name="ok">ठीक</string>
+  <string name="play_audio">ध्वनि बजाएँ </string>
   <string name="quit_application">निकास %s</string>
   <string name="quit_entry">फारम बचाएं और बंद करें</string>
   <string name="refresh">रीलोड</string>
+  <string name="required_answer_error">क्षमा करें , यह चुनाव अनिवार्य है </string>
   <string name="review_data">बचाया फारम बदलें</string>
   <string name="review_data_button">बचाया फारम (%s) बदलें</string>
   <string name="saved_data">(%s) अधूरा</string>
@@ -69,6 +73,7 @@
   <string name="send_data">बचाए फारम भेजें</string>
   <string name="send_data_button">बचाए फारम (%s) भेजें</string>
   <string name="send_selected_data">चुने हुए फारम भेजें</string>
+  <string name="view_sent_forms">भेजे हुए फॉर्म देखें </string>
   <string name="uploading_data">फारम भेजा जा राहा हे</string>
   <string name="keep_changes">बदलाव बचाएं</string>
   <string name="success">सफल</string>
@@ -83,8 +88,12 @@
   <string name="swipe_instructions">आप %s के शुरुआत पर हैं । आगे और पीछे जाने के लिए स्वाईप करें ।</string>
   <string name="change_server_url">सर्भर URL</string>
   <string name="default_google_sheets_url"></string>
+  <string name="tell_your_friends">मित्रों को बताएँ </string>
+  <string name="leave_a_review">अपनी समीक्षा दें </string>
+  <string name="leave_a_review_summary">गूगल प्ले पर अपनी समीक्षा दें </string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="odk_website">ओपन डाटा किट वेबसाइट </string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

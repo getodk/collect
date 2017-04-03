@@ -17,7 +17,6 @@
   <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>
-  <string name="cannot_edit_completed_form">Hierdie vorm kan nie gewysig word nadat dit as Voltooid gemerk is nie. Dit mag dalk ge-enkripteer wees.</string>
   <string name="capture_audio">Neem klank op</string>
   <string name="capture_image">Neem foto</string>
   <string name="capture_osm">Loods OpenMapKit</string>
@@ -120,7 +119,6 @@
   <string name="send_data">Stuur Gefinaliseerde Vorm</string>
   <string name="send_data_button">Stuur Gefinaliseerde Vorm (%s)</string>
   <string name="send_selected_data">Stuur Geselekteerde</string>
-  <string name="server_auth_credentials">Voer asb gebruikersnaam en wagwoord vir server in: %s</string>
   <string name="server_requires_auth">Server Benodig Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server Verstellings</string>
@@ -294,7 +292,6 @@
   <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
   <string name="invalid_oauth">Ongeldige OAuth 2 token</string>
-  <string name="media_upload_error">Kon nie foto oplaai nie want dit bestaan nie: %1$s</string>
   <string name="odk_auth_auth_fail">ODK Outostuur authentication mislukking, maak asseblief seker u verstellings is korrek</string>
   <string name="odk_auto_note">ODK Outostuur Kennisgewing</string>
   <string name="notification_error">Fout met vertoon van kennisgewing teks</string>

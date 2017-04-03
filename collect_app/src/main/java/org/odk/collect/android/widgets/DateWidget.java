@@ -107,7 +107,7 @@ public class DateWidget extends QuestionWidget {
             }
         };
 
-        setGravity(Gravity.LEFT);
+        setGravity(Gravity.START);
         if (showCalendar) {
             scrollView = new HorizontalScrollView(context);
             LinearLayout ll = new LinearLayout(context);

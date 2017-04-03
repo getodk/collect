@@ -94,6 +94,7 @@
   <string name="no_connection">Brak połączenia do sieci</string>
   <string name="no_items_display">Brak informacji do wyświetlenia.</string>
   <string name="no_items_display_forms">Brak informacji do wyświetlenia.\n\nSpróbuj pobrać i wypełnić pusty formularz.</string>
+  <string name="no_items_display_sent_forms">Brak informacji do wyświetlenia.\n\nSpróbuj wysłać skończone formularze przed obejrzeniem ich.</string>
   <string name="no_items_display_instances">Brak informacji do wyświetlenia.\n\nSpróbuj zakończyć zapisane formularze przed wysłaniem.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Przykro mi, nie mogę zanalizować formularza.</string>
@@ -120,7 +121,8 @@
   <string name="send_data">Wyślij Zakończony Formularz</string>
   <string name="send_data_button">Wyślij Zakończony Formularz (%s)</string>
   <string name="send_selected_data">Wyślij Wybrane</string>
-  <string name="server_auth_credentials">Proszę podać nazwę użytkowanika oraz hasło do serwera: %s</string>
+  <string name="view_sent_forms">Pokaż Wysłany Formularz</string>
+  <string name="view_sent_forms_button">Pokaż Wysłany Formularz (%s)</string>
   <string name="server_requires_auth">Serwer Wymaga Uwierzytelnienia</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Ustawienia Serwera</string>
@@ -193,6 +195,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'Wysyłanie nie powiodło się\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Skasowany \' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <string name="version">Wersja:</string>
   <string name="parent_form_not_present">Nie mogę edytować tego zapisanego formularza ponieważ powiązany czysty formularz jest niedostępny lub został skasowany.\n\nID Formularza: %1$s</string>
   <string name="launch_app">Uruchom</string>
@@ -300,8 +303,6 @@
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
   <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
   <string name="google_repeat_error">Powtórzenia obecnie nie są wspierane przez Google Sheets.</string>
-  <string name="google_audio_error">Pliki audio nie są wspierane przez Google Sheets w tym razem.</string>
-  <string name="google_video_error">Pliki wideo nie są obsługiwane przez Google Sheets tym razem.</string>
   <string name="media_upload_error">Nie udało się wysłać nieistniejącego zdjęcia: %1$s</string>
   <string name="odk_auth_auth_fail">Błąd autentykacji ODK Autosend, proszę upewnij się, że twoje ustawienia są poprawne</string>
   <string name="odk_auto_note">Powiadomienie ODK Autosend</string>
@@ -311,19 +312,23 @@
   <string name="change_server_url">Serwer URL</string>
   <string name="google_search_browse">Wyszukaj formularze. Lub wybierz poniżej \'Mój Dysk\' by przejrzeć</string>
   <string name="no_blank_search">Pole wyszukiwania nie może być puste.</string>
-  <string name="google_sheets_url">Google Sheets URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="sheets_google_account_needed">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające konto Google w Ustawieniach Ogólnych zanim będziesz kontynuować</string>
   <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
-  <string name="google_sheets_access_denied">Brak dostępu. Upewnij się, że właściciel arkusza kalkulacyjnego udzielił Ci praw dostępu.</string>
   <string name="google_sheets_missing_columns">W arkuszu kalkulacyjnym brak następujących kolumn: %1$s</string>
   <string name="password_error_whitespace">Spacje na początku lub na końcu hasła są niedozwolone</string>
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
+  <string name="about_preferences">O Aplikacji</string>
+  <string name="tell_your_friends">Powiadom znajomych</string>
+  <string name="tell_your_friends_title">Podziel się ODK Collect ze swoimi przyjaciółmi</string>
+  <string name="tell_your_friends_msg">Pobierz aplikację ODK Collect!</string>
+  <string name="leave_a_review">Zostaw recenzję</string>
+  <string name="leave_a_review_summary">Zostaw recenzję na Google Play</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Opcje Mapowania</string>
+  <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>
   <string name="map_sdk_behavior">SDK Mapowania</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
@@ -373,7 +378,6 @@
   <string name="geopoint_instruction">Długo naciśnij aby umieścić znacznik lub dotknij przycisk Dodaj znacznik.</string>
   <string name="geopoint_no_draggable_instruction">Dotknij przycisk Dodaj znacznik.</string>
   <string name="discard">Usuń</string>
-  <string name="zoom_to_where">Przybliż do…</string>
   <string name="zoom_to_location">Zbliżenie na bieżącą lokalizację</string>
   <string name="zoom_to_feature">Zbliżenie na zapisaną właściwość</string>
   <string name="points_captured">zachowano %s punktów</string>
@@ -405,6 +409,7 @@
   <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
   <string name="general_settings_about">O aplikacji</string>
+  <string name="odk_website">Witryna Open Data Kit</string>
   <string name="all_open_source_licenses">Licencje open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Z %1$s%2$s%3$s</string>
@@ -423,4 +428,36 @@
   <string name="phone_does_not_support_rsa">Telefon nie wspiera szyfrowania RSA.</string>
   <string name="invalid_rsa_public_key">Niepoprawny klucz publiczny RSA.</string>
   <string name="encryption_error_message">Formularz %s nie został zapisany jako zakończony.</string>
+  <string name="analytics_preferences">Dane użytkowania</string>
+  <string name="analytics">Zbieraj anonimowe dane dotyczące użytkowania</string>
+  <string name="analytics_summary">Anonimowe dane dotyczące użytkowania pomagają zespołowi ODK priorytetyzować poprawki i funkcjonalność</string>
+  <string name="select_all">Zaznacz Wszystkie</string>
+  <string name="clear_all">Odznacz Wszystkie</string>
+  <string name="reset_settings">Wszystkie ustawienia (ustawienia wewnętrzne, ustawienia zapisane)</string>
+  <string name="reset_saved_forms">Zapisane formularze (folder formularzy, baza danych formularzy)</string>
+  <string name="reset_blank_forms">Czyste formularze (folder formularzy, baza danych formularzy, baza danych zbiorów pozycji) </string>
+  <string name="reset_layers">Warstwy mapy (folder warstw)</string>
+  <string name="reset_cache">Pamięć podręczna załadowanego formularza (folder cache)</string>
+  <string name="reset_osm_tiles">Pamięć podręczna kafelka tytułowego OSM (folder osmdroid)</string>
+  <string name="reset_settings_dialog_title">Wybierz co zresetować</string>
+  <string name="reset_settings_dialog">Resetuj aplikację…</string>
+  <string name="reset_settings_button_reset">Reset</string>
+  <string name="reset_dialog_nothing">Nie wybrałeś niczego do zresetowania.</string>
+  <string name="reset_in_progress">Resetowanie…</string>
+  <string name="resetting_finished">Resetowanie zakończone</string>
+  <string name="reset_app_state_result">Wyniki resetu</string>
+  <string name="reset_app_state_warning">Wszystkie wybrane dane zostaną trwale usunięte. Nie ma możliwości cofnięcia operacji.</string>
+  <string name="reset_settings_result">Wszystkie ustawienia :: %s</string>
+  <string name="reset_saved_forms_result">Zapisane formularze :: %s</string>
+  <string name="reset_blank_forms_result">Puste formularze :: %s</string>
+  <string name="reset_layers_result">Warstwy mapy :: %s</string>
+  <string name="reset_cache_result">Pamięć podręczna załadowanego formularza :: %s</string>
+  <string name="reset_osm_tiles_result">Pamięć podręczna kafelka tytułowego OSM :: %s</string>
+  <string name="encrypted_form">Formularz zaszyfrowany</string>
+  <string name="deleted_form">Formularz usunięty</string>
+  <string name="exit">Wyjdź</string>
+  <string name="instance_scan_completed">Skanowanie zakończone.</string>
+  <string name="instance_scan_count">Dodano %1$d formularzy.</string>
+  <string name="instance_sync">Importuj zapisane formularze jak zakończone</string>
+  <string name="instance_sync_summary">Importuje zapisane formularze z folderu formularzy</string>
 </resources>

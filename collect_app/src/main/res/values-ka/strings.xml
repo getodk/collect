@@ -17,7 +17,6 @@
   <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
-  <string name="cannot_edit_completed_form">ამ ფორმის რედაქტირება  დასრულების შემდეგ შეუძლებელია. იგი შეიძლება კოდირებული იყოს.</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
   <string name="capture_osm">OpenMapKit-ის ჩართვა</string>
@@ -120,7 +119,6 @@
   <string name="send_data">დასრულებული ფორმების გაგზავნა</string>
   <string name="send_data_button">დასრულებული ფორმების გაგზავნა (%s)</string>
   <string name="send_selected_data">არჩეული ფორმების გაგზავნა</string>
-  <string name="server_auth_credentials">გთხოვთ, შეიყვანოთ მომხმარებლის სახელი და პაროლი სერვერისთვის: %s</string>
   <string name="server_requires_auth">სერვერი მოითხოვს ავთენტიკაციას</string>
   <string name="server_url">ბმული</string>
   <string name="server_preferences">სერვერი</string>
@@ -263,7 +261,6 @@
   <string name="go_drive">ჩემი Drive</string>
   <string name="protocol_settings">პლატფორმის პარამეტრების შეცვლა</string>
   <string name="aggregate_preferences">ODK Aggregate-ის პარამეტრები</string>
-  <string name="media_upload_error">არარსებული ფოტო ვერ აიტვირთა: %1$s</string>
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>

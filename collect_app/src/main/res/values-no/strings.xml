@@ -17,7 +17,6 @@
   <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
-  <string name="cannot_edit_completed_form">Skjemaet kan ikke redigeres etter at den er merket som fullført. Det kan være kryptert.</string>
   <string name="capture_audio">Ta opp lyd</string>
   <string name="capture_image">Ta bilde</string>
   <string name="capture_osm">Start OpenMapKit</string>
@@ -120,7 +119,6 @@
   <string name="send_data">Send ferdig skjema</string>
   <string name="send_data_button">Send ferdig skjema (%s)</string>
   <string name="send_selected_data">Send utvalgte</string>
-  <string name="server_auth_credentials">Skriv inn brukernavn og passord for serveren: %s</string>
   <string name="server_requires_auth">Server krever godkjenning</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>
@@ -298,8 +296,6 @@
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
   <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
-  <string name="google_audio_error">Google Sheets støtter ikke lydfiler. </string>
-  <string name="google_video_error">Google Sheets støtter ikke videofiler. </string>
   <string name="media_upload_error">Feil ved opplasting av bilde: %1$s</string>
   <string name="odk_auth_auth_fail">Feil ved autentisering av ODK Autosend. Sjekk innstillingene dine.</string>
   <string name="odk_auto_note">ODK Autosend kvittering</string>
@@ -309,13 +305,11 @@
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="no_blank_search">Søkefeltet kan ikke være tomt.</string>
-  <string name="google_sheets_url">Google Sheets URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
   <string name="sheets_google_account_needed">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="sheets_max_columns">Maks antall kolonner er 255, ditt skjema har %s. Det er ikke mulig å laste opp dette regnearket.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
-  <string name="google_sheets_access_denied">Tilgang avvist. Pass på at eieren av regnearket har gitt deg tilgang.</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
   <string name="password_error_whitespace">Mellomrom er ikke tillatt før eller etter passord</string>
   <string name="username_error_whitespace">Mellomrom er ikke tillatt før eller etter brukernavn</string>
