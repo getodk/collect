@@ -832,7 +832,9 @@ public abstract class GoogleSheetsAbstractUploader extends
                     break;
                 case XmlPullParser.TEXT:
                     String answer = parser.getText();
-                    if (answer.contains(".")) {
+                    Pattern pattern = Pattern.compile("^(.*)\\.(.*)$");
+                    Matcher matcher = pattern.matcher(answer);
+                    if (matcher.find() && !matcher.group(2).matches("[0-9]+")) {
                         mediaToUpload.put(getPath(path), answer);
                     } else {
                         answersToUpload.put(getPath(path), answer);
