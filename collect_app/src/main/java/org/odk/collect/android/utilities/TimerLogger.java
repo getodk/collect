@@ -22,29 +22,29 @@ import java.util.ArrayList;
  */
 public class TimerLogger {
 
+    public enum EventTypes {
+        FEC,                // FEC, Real type defined in FormEntryController
+        FORM_START,         // Start filling in the form
+        FORM_EXIT,          // Exit the form
+        FORM_RESUME,        // Resume filling in the form after previously exiting
+        FORM_SAVE,          // Save the form
+        FORM_FINALIZE,      // Finalize the form
+        HIERARCHY,
+        PREFERENCES,
+        LANGUAGE,
+        VIEW_END,
+        NON_VIEW_END
+    }
+
     public class Event {
 
         long start;
-        int eventType;
+        EventTypes eventType;
         int fecType;
         String node;
 
         long end;
         boolean endTimeSet;
-
-        // Valid event types, Non FEC events start from 1001 so they do not clash
-        public static final int FEC = 0;
-        public static final int FORM_START = 1001;      // Start filling in the form
-        public static final int FORM_EXIT = 1002;       // Exit the form
-        public static final int FORM_RESUME = 1003;     // Resume filling in the form after previously exiting
-        public static final int FORM_SAVE = 1004;       // Save the form
-        public static final int FORM_FINALIZE = 1005;   // Finalize the form
-        public static final int HIERARCHY = 1006;
-        public static final int PREFERENCES = 1007;
-        public static final int LANGUAGE = 1008;
-        public static final int VIEW_END = 2000;     // The end event for Questions, repeats, Hierarchy jumps etc
-        public static final int NON_VIEW_END = 2001;    // The end event for select language which can be embedded within a question
-
 
         private class EventDetails {
             boolean hasIntervalTime;
@@ -54,7 +54,7 @@ public class TimerLogger {
         /*
          * Create a new event
          */
-        Event(long start, int eventType, int fecType, String node) {
+        Event(long start, EventTypes eventType, int fecType, String node) {
             this.start = start;
             this.eventType = eventType;
             this.fecType = fecType;
@@ -69,7 +69,7 @@ public class TimerLogger {
          *  Non View events occur inside view events
          */
         public boolean isNonViewIntervalEvent() {
-            if (eventType == LANGUAGE || eventType == PREFERENCES) {
+            if (eventType == EventTypes.LANGUAGE || eventType == EventTypes.PREFERENCES) {
                 return true;
             }
             return false;
@@ -82,7 +82,7 @@ public class TimerLogger {
          *  Prompt for repeat
          */
         public boolean isIntervalViewEvent() {
-            if (eventType == HIERARCHY || (eventType == FEC &&
+            if (eventType == EventTypes.HIERARCHY || (eventType == EventTypes.FEC &&
                     (fecType == FormEntryController.EVENT_QUESTION ||
                             fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT))) {
                 return true;
@@ -93,10 +93,10 @@ public class TimerLogger {
         /*
          * Mark the end of an interval event
          */
-        public void setEnd(int endType, long endTime) {
+        public void setEnd(EventTypes endType, long endTime) {
 
             if (!endTimeSet) {
-                if (endType == NON_VIEW_END && isNonViewIntervalEvent() || endType == VIEW_END && isIntervalViewEvent()) {
+                if (endType == EventTypes.NON_VIEW_END && isNonViewIntervalEvent() || endType == EventTypes.VIEW_END && isIntervalViewEvent()) {
                     this.end = endTime;
                     this.endTimeSet = true;
                 }
@@ -228,7 +228,7 @@ public class TimerLogger {
         }
     }
 
-    public void logTimerEvent(int eventType, int fecType, TreeReference ref) {
+    public void logTimerEvent(EventTypes eventType, int fecType, TreeReference ref) {
 
         if (mTimerEnabled) {
             // Calculate the time and add the event to the events array
@@ -248,8 +248,8 @@ public class TimerLogger {
             mEvents.add(newEvent);
 
             // If the user is exiting then mark any open questions as closed
-            if (eventType == Event.FORM_EXIT || eventType == Event.FORM_FINALIZE) {
-                exitView(Event.VIEW_END);
+            if (eventType == EventTypes.FORM_EXIT || eventType == EventTypes.FORM_FINALIZE) {
+                exitView(EventTypes.VIEW_END);
             }
             writeEvents();
         }
@@ -259,7 +259,7 @@ public class TimerLogger {
     /*
      * Exit a question, repeat dialog, language select etc
      */
-    public void exitView(int endType) {
+    public void exitView(EventTypes endType) {
 
         if (mTimerEnabled) {
 
