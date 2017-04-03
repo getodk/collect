@@ -251,9 +251,12 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     }
 
     private void initFormMetadata() {
-        final Preference formMetadataPref = findPreference(KEY_FORM_METADATA);
-        final Intent intent = new Intent(getActivity(), FormMetadataActivity.class);
-        formMetadataPref.setIntent(intent);
+        final Preference pref = findPreference(KEY_FORM_METADATA);
+
+        if (pref != null) {
+            final Intent intent = new Intent(getActivity(), FormMetadataActivity.class);
+            pref.setIntent(intent);
+        }
     }
 
     private Intent setProtocolIntent(boolean adminMode, CharSequence value,

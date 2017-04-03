@@ -48,7 +48,7 @@ public class AdminPreferencesActivityTest {
                 //Change setting preferences
                 {"change_server", AdminKeys.KEY_CHANGE_SERVER},
                 {"change_protocol_settings", AdminKeys.KEY_CHANGE_PROTOCOL_SETTINGS},
-                {"change_google_account", AdminKeys.KEY_CHANGE_GOOGLE_ACCOUNT},
+                {AdminKeys.KEY_CHANGE_FORM_METADATA, AdminKeys.KEY_CHANGE_FORM_METADATA},
                 {"autosend_wifi", AdminKeys.KEY_AUTOSEND_WIFI},
                 {"autosend_network", AdminKeys.KEY_AUTOSEND_NETWORK},
                 {"navigation", AdminKeys.KEY_NAVIGATION},

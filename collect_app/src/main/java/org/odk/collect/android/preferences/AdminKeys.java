@@ -25,9 +25,9 @@ public final class AdminKeys {
 
     // server
     static final String KEY_CHANGE_ADMIN_PASSWORD       = "admin_password";
-    static final String KEY_CHANGE_GOOGLE_ACCOUNT       = "change_google_account";
     static final String KEY_CHANGE_SERVER               = "change_server";
     static final String KEY_CHANGE_PROTOCOL_SETTINGS    = "change_protocol_settings";
+    static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
     static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
@@ -69,7 +69,7 @@ public final class AdminKeys {
         ag(KEY_SHOW_MAP_SDK,               PreferenceKeys.KEY_MAP_SDK),
         ag(KEY_SHOW_MAP_BASEMAP,           PreferenceKeys.KEY_MAP_BASEMAP),
         ag(KEY_NAVIGATION,                 PreferenceKeys.KEY_NAVIGATION),
-        ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT),
+        ag(KEY_CHANGE_FORM_METADATA,       PreferenceKeys.KEY_FORM_METADATA),
         ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC)
     };
 }
