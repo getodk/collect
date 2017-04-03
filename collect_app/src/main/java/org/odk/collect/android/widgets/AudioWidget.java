@@ -59,7 +59,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private String mBinaryName;
     private String mInstanceFolder;
 
-    public AudioWidget(Context context, FormEntryPrompt prompt) {
+    public AudioWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         mInstanceFolder = Collect.getInstance().getFormController()
@@ -110,7 +110,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup capture button
+        // setup choose button
         mChooseButton = new Button(getContext());
         mChooseButton.setId(QuestionWidget.newUniqueId());
         mChooseButton.setText(getContext().getString(R.string.choose_sound));
