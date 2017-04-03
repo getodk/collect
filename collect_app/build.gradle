@@ -143,7 +143,7 @@ dependencies {
     compile group: 'com.google.firebase', name: 'firebase-core', version: '9.2.0'
     compile group: 'com.google.firebase', name: 'firebase-crash', version: '9.2.0'
     compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
-    compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
+    compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'    
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
@@ -155,7 +155,9 @@ dependencies {
     compile(group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
-
+    
+    compile group: 'com.android.support', name: 'customtabs', version: '25.1.0'
+    
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
