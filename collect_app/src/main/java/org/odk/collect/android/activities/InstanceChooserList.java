@@ -44,6 +44,8 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener {
+    private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
+    private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -206,6 +208,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
             mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
         }
         setListAdapter(mListAdapter);
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return mEditMode ? INSTANCE_LIST_ACTIVITY_SORTING_ORDER : VIEW_SENT_FORM_SORTING_ORDER;
     }
 
     @Override

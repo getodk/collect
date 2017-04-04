@@ -63,6 +63,7 @@ public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener {
     private static final String t = "InstanceUploaderList";
     private static final String SHOW_ALL_MODE = "showAllMode";
+    private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
     private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
     private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
@@ -320,6 +321,11 @@ public class InstanceUploaderList extends InstanceListActivity
         mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, cursor, data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
     }
 
     @Override

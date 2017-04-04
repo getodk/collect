@@ -144,4 +144,9 @@ public class FileManagerFragment extends AppListFragment {
     protected void setupAdapter() {
 
     }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return null;
+    }
 }

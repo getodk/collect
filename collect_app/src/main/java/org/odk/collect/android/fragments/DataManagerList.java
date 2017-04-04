@@ -50,6 +50,8 @@ import java.util.List;
 public class DataManagerList extends InstanceListFragment
         implements DeleteInstancesListener, DiskSyncListener, View.OnClickListener {
     private static final String TAG = "DataManagerList";
+    private static final String DATA_MANAGER_LIST_SORTING_ORDER = "dataManagerListSortingOrder";
+
     DeleteInstancesTask mDeleteInstancesTask = null;
     private AlertDialog mAlertDialog;
     private InstanceSyncTask instanceSyncTask;
@@ -136,6 +138,11 @@ public class DataManagerList extends InstanceListFragment
                 R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(getSortingOrder()), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return DATA_MANAGER_LIST_SORTING_ORDER;
     }
 
     @Override

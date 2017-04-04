@@ -48,6 +48,7 @@ import java.util.List;
  */
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
+    private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handled across orientation changes
@@ -132,6 +133,11 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
                 R.layout.two_item_multiple_choice, new FormsDao().getFormsCursor(getSortingOrder()), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return FORM_MANAGER_LIST_SORTING_ORDER;
     }
 
     @Override
