@@ -34,7 +34,6 @@ import android.widget.Button;
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoShapeWidget;
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -65,7 +64,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private MapView mMap;
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private PathOverlay pathOverlay;
-    public DefaultResourceProxyImpl resource_proxy;
     public int zoom_level = 3;
     public static final int stroke_width = 5;
     public String final_return_string;
@@ -96,7 +94,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         mSaveButton = (Button) findViewById(R.id.save);
         mClearButton = (Button) findViewById(R.id.clear);
 
-        resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mMap = (MapView) findViewById(R.id.geoshape_mapview);
         mHelper = new MapHelper(this, mMap, GeoShapeOsmMapActivity.this);
         mMap.setMultiTouchControls(true);

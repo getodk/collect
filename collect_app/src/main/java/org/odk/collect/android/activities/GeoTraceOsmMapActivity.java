@@ -44,7 +44,6 @@ import android.widget.Spinner;
 import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerClickListener;
 import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
@@ -71,7 +70,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     public Boolean gpsStatus = true;
     private Boolean play_check = false;
     private MapView mapView;
-    public DefaultResourceProxyImpl resource_proxy;
     public MyLocationNewOverlay mMyLocationOverlay;
     private Button mLocationButton;
     private Button mPlayButton;
@@ -115,7 +113,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
 
-        resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         mapView = (MapView) findViewById(R.id.geotrace_mapview);
         mHelper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
         mapView.setMultiTouchControls(true);
