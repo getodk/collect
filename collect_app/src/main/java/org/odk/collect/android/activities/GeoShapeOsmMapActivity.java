@@ -567,4 +567,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
         zoomDialog.show();
     }
+
+    @Override
+    public void destroy() {
+
+    }
 }

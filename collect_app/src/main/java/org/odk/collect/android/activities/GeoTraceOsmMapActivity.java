@@ -894,4 +894,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     public void onProviderDisabled(String provider) {
 
     }
+
+    @Override
+    public void destroy() {
+
+    }
 }

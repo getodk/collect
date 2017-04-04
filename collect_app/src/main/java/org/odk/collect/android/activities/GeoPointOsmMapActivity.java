@@ -606,4 +606,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
+
+    @Override
+    public void destroy() {
+
+    }
 }
