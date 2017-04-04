@@ -20,6 +20,7 @@ package org.odk.collect.android.spatial;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.MapTileRequestState;
@@ -42,8 +43,8 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
         // Call the super constructor
         super(receiverRegistrar,
-                NUMBER_OF_TILE_FILESYSTEM_THREADS,
-                TILE_FILESYSTEM_MAXIMUM_QUEUE_SIZE);
+                Configuration.getInstance().getTileFileSystemThreads(),
+                Configuration.getInstance().getTileFileSystemMaxQueueSize());
 
         // Initialize fields
         this.tileSource = tileSource;

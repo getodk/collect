@@ -24,6 +24,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
@@ -61,7 +62,7 @@ public class ResetUtility {
                     }
                     break;
                 case ResetAction.RESET_OSM_DROID:
-                    if (deleteFolderContents(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath())) {
+                    if (deleteFolderContents(Configuration.getInstance().getOsmdroidTileCache().getPath())) {
                         mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
                     }
                     break;
