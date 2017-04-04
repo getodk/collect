@@ -211,7 +211,6 @@
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="admin_advanced_settings">Avanserte innstillinger (i samarbeid med support):</string>
   <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Enter new password</string>
   <string name="verify_new_password">Re-enter new password</string>
@@ -240,12 +239,6 @@
   <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
   <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
   <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
-  <string name="form_processing_logic">Skjemaregler</string>
-  <string name="form_processing_logic_recommended">Anbefalt (standard)</string>
-  <string name="form_processing_logic_0">Januar 2015 (raskest)</string>
-  <string name="form_processing_logic_1">Januar 2015 (sikrest)</string>
-  <string name="form_processing_logic_2">Medio 2014 (treg)</string>
-  <string name="form_processing_logic_3">Primo 2014 (rask)</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="constraint_behavior">Begrens prosesseringsmetoden</string>

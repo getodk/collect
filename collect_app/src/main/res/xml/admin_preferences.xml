@@ -74,23 +74,11 @@
             android:summary="@string/found_in_settings"
             android:title="@string/change_protocol_settings_default" />
         <CheckBoxPreference
-            android:id="@+id/change_username"
+            android:id="@+id/change_form_metadata"
             android:defaultValue="true"
-            android:key="change_username"
+            android:key="change_form_metadata"
             android:summary="@string/found_in_settings"
-            android:title="@string/change_username_default" />
-        <CheckBoxPreference
-            android:id="@+id/change_password"
-            android:defaultValue="true"
-            android:key="change_password"
-            android:summary="@string/found_in_settings"
-            android:title="@string/password" />
-        <CheckBoxPreference
-            android:id="@+id/change_google_account"
-            android:defaultValue="true"
-            android:key="change_google_account"
-            android:summary="@string/found_in_settings"
-            android:title="@string/selected_google_account_text" />
+            android:title="@string/form_metadata" />
         <CheckBoxPreference
             android:id="@+id/autosend_wifi"
             android:defaultValue="true"
@@ -207,16 +195,5 @@
             android:key="mark_as_finalized"
             android:summary="@string/found_at_end"
             android:title="@string/mark_finished" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/admin_advanced_settings">
-        <ListPreference
-                android:id="@+id/form_processing_logic"
-                android:defaultValue="@string/default_form_processing_logic"
-                android:dialogTitle="@string/form_processing_logic"
-                android:entries="@array/form_processing_logic_entries"
-                android:entryValues="@array/form_processing_logic_entry_values"
-                android:key="form_processing_logic"
-                android:title="@string/form_processing_logic" />
     </PreferenceCategory>
 </PreferenceScreen>

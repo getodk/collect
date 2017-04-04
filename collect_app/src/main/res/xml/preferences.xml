@@ -13,24 +13,11 @@
             android:title="@string/protocol" />
         <PreferenceScreen
         	android:key="protocol_settings"
-        	android:title="@string/protocol_settings"/>
-        <ListPreference
-            android:id="@+id/selected_google_account"
-            android:defaultValue=""
-            android:key="selected_google_account"
-            android:title="@string/selected_google_account_text" />
-        <EditTextPreference
-            android:id="@+id/username"
-            android:dialogTitle="@string/change_username"
-            android:inputType="textNoSuggestions"
-            android:key="username"
-            android:title="@string/username" />
-        <EditTextPreference
-            android:id="@+id/password"
-            android:dialogTitle="@string/change_password"
-            android:inputType="textPassword"
-            android:key="password"
-            android:title="@string/password" />
+        	android:title="@string/change_protocol_settings_default"/>
+        <PreferenceScreen
+        	android:key="form_metadata"
+        	android:title="@string/form_metadata"
+            android:summary="@string/form_metadata_summary"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="@string/autosend"

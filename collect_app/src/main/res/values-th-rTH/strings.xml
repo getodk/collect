@@ -209,7 +209,6 @@
   <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="admin_advanced_settings">การตั้งค่าขั้นสูง (เมื่อได้รับอนุญาต):</string>
   <string name="save_mid">บันทึกแบบสำรวจ</string>
   <string name="enter_new_password">ใส่รหัสผ่านใหม่</string>
   <string name="verify_new_password">ยืนยันรหัสผ่านใหม่</string>
@@ -238,12 +237,6 @@
   <string name="swipe_instructions">เริ่มต้นแบบสำรวจ %s. เลื่อนหน้าจอตามที่แสดงด้านล่างเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
   <string name="buttons_instructions">เริ่มต้นแบบสำรวจ %s. แตะปุ่มลูกศรด้านล่างเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
   <string name="swipe_buttons_instructions">เริ่มต้นแบบสำรวจ %s. เลื่อนหน้าจอตามที่แสดงด้านล่างหรือแตะปุ่มลูกศรเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
-  <string name="form_processing_logic">ตรรกะการประมวลผลแบบฟอร์ม</string>
-  <string name="form_processing_logic_recommended">แนะนำให้ใช้ (ค่าตั้งต้น)</string>
-  <string name="form_processing_logic_0">มกราคม 2015 (เร็วที่สุด)</string>
-  <string name="form_processing_logic_1">มกราคม 2015 (ปลอดภัยที่สุด)</string>
-  <string name="form_processing_logic_2">กลางปี 2014 (ช้า)</string>
-  <string name="form_processing_logic_3">ต้นปี 2014 (เร็ว)</string>
   <string name="launch_printer">เริ่มต้นการพิมพ์</string>
   <string name="no_printer">เครื่องพิมพ์ที่เลือกยังไม่ได้ติดตั้ง กรุณาติดตั้งเครื่องพิมพ์</string>
   <string name="constraint_behavior">ลักษณะการประมวลผลแบบมีเงื่อนไข</string>
