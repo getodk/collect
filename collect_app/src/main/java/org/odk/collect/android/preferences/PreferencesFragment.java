@@ -141,6 +141,10 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     private void initLanguagePrefs() {
         final ListPreference pref = (ListPreference) findPreference(KEY_LANGUAGE);
+        final LocaleHelper localeHelper = new LocaleHelper();
+        String[][] prefListEntry = localeHelper.getEntryListValues();
+        pref.setEntryValues(prefListEntry[0]);
+        pref.setEntries(prefListEntry[1]);
 
         if (pref != null) {
             pref.setSummary(pref.getEntry());
@@ -156,11 +160,11 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                             .getDefaultSharedPreferences(getActivity()).edit();
                     edit.putString(KEY_LANGUAGE, newValue.toString());
                     edit.commit();
-                    new LocaleHelper().updateLocale(getActivity());
+                    localeHelper.updateLocale(getActivity());
 
                     Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
                     getActivity().startActivity(intent);
-                    getActivity().overridePendingTransition(0,0);
+                    getActivity().overridePendingTransition(0, 0);
                     getActivity().finishAffinity();
                     return true;
                 }

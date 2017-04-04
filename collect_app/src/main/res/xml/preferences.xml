@@ -78,8 +78,6 @@
             android:id="@+id/language"
             android:defaultValue="en"
             android:dialogTitle="@string/language"
-            android:entries="@array/language_entries"
-            android:entryValues="@array/language_entry_values"
             android:key="language"
             android:title="@string/language" />
         <CheckBoxPreference
