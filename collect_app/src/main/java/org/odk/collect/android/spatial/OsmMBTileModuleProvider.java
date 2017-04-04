@@ -97,7 +97,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
         public Drawable loadTile(final MapTileRequestState pState) {
 
             // if there's no sdcard then don't do anything
-            if (!getSdCardAvailable()) {
+            if (!isSdCardAvailable()) {
                 return null;
             }
 
