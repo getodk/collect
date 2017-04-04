@@ -52,6 +52,7 @@ import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.PathOverlay;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(zoom_level);
-        mMyLocationOverlay = new MyLocationNewOverlay(this, mapView);
+        mMyLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), mapView);
 
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
