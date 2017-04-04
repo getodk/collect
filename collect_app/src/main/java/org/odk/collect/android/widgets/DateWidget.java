@@ -107,7 +107,7 @@ public class DateWidget extends QuestionWidget {
             }
         };
 
-        setGravity(Gravity.LEFT);
+        setGravity(Gravity.START);
         if (showCalendar) {
             scrollView = new HorizontalScrollView(context);
             LinearLayout ll = new LinearLayout(context);
@@ -178,7 +178,7 @@ public class DateWidget extends QuestionWidget {
         if (mPrompt.getAnswerValue() != null) {
             DateTime ldt =
                     new DateTime(
-                            ((Date) ((DateData) mPrompt.getAnswerValue()).getValue()).getTime());
+                            ((Date) mPrompt.getAnswerValue().getValue()).getTime());
             mDatePicker.init(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth(),
                     mDateListener);
         } else {

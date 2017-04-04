@@ -29,24 +29,37 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 
 abstract class AppListFragment extends ListFragment {
-    public static final int MENU_SORT = Menu.FIRST;
+    private static final int MENU_SORT = Menu.FIRST;
+    private static final int MENU_FILTER = MENU_SORT + 1;
+
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] mSortingOptions;
     View rootView;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    protected LinearLayout mSearchBoxLayout;
+    protected SimpleCursorAdapter mListAdapter;
+    protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
+    protected EditText mInputSearch;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -84,6 +97,14 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
+    //to get present drawer status
+    public Boolean getDrawerStatus() {
+        if (mDrawerLayout != null) {
+            return mDrawerLayout.isDrawerOpen(Gravity.END);
+        }
+        return false;
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (!isVisibleToUser) {
@@ -103,6 +124,11 @@ abstract class AppListFragment extends ListFragment {
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
                 .setIcon(R.drawable.ic_sort)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        menu
+                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
+                .setIcon(R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
@@ -112,7 +138,16 @@ abstract class AppListFragment extends ListFragment {
                 if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
                     mDrawerLayout.closeDrawer(Gravity.END);
                 } else {
+                    Collect.getInstance().hideKeyboard(mInputSearch);
                     mDrawerLayout.openDrawer(Gravity.END);
+                }
+                return true;
+
+            case MENU_FILTER:
+                if (mSearchBoxLayout.getVisibility() == View.GONE) {
+                    showSearchBox();
+                } else {
+                    hideSearchBox();
                 }
                 return true;
         }
@@ -148,6 +183,7 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void performSelectedSearch(int position) {
+        hideSearchBox();
         switch (position) {
             case 0:
                 sortByNameAsc();
@@ -204,19 +240,38 @@ abstract class AppListFragment extends ListFragment {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
-    protected void checkPreviouslyCheckedItems(List<Long> checkedInstances, Cursor cursor) {
+    protected void checkPreviouslyCheckedItems() {
         getListView().clearChoices();
+        List<Integer> selectedPositions = new ArrayList<>();
         int listViewPosition = 0;
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
+        Cursor cursor = mListAdapter.getCursor();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
                 long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                if (checkedInstances.contains(instanceId)) {
-                    getListView().setItemChecked(listViewPosition, true);
+                if (mSelectedInstances.contains(instanceId)) {
+                    selectedPositions.add(listViewPosition);
                 }
                 listViewPosition++;
-            }
+            } while (cursor.moveToNext());
+        }
+
+        for (int position : selectedPositions) {
+            getListView().setItemChecked(position, true);
         }
     }
+
+    private void hideSearchBox() {
+        mInputSearch.setText("");
+        mSearchBoxLayout.setVisibility(View.GONE);
+        Collect.getInstance().hideKeyboard(mInputSearch);
+    }
+
+    private void showSearchBox() {
+        mSearchBoxLayout.setVisibility(View.VISIBLE);
+        Collect.getInstance().showKeyboard(mInputSearch);
+    }
+
+    protected abstract void filter(CharSequence charSequence);
 
     protected abstract void sortByNameAsc();
 

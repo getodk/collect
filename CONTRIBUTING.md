@@ -27,10 +27,12 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. When your changes are ready to be added to the core ODK Collect project, [open a pull request](https://help.github.com/articles/creating-a-pull-request/). Make sure to set the base fork to `opendatakit/collect`. Describe your changes in the comment, refer to any relevant issues using [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) and tag any person you think might need to know about the changes.
 
+1. Pull requests will be reviewed when committers have time. If you haven't received a review in 10 days, you may notify committers by putting `@opendatakit/collect` in a comment.
+
 ## Making sure your pull request is accepted
 1. Confirm that your code compiles.
 
-1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected.
+1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected. Attach a test form when appropriate. This form should only include questions which are useful for verifying your change.
 
 1. Make sure that there is an issue that corresponds to the pull request and that it has been discussed by the community as necessary.
 
@@ -45,7 +47,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 1. Follow the guidelines below.
 
 ## Style guidelines
-For now, match the style of the code in the file you are editing. When creating new files, follow the [Android style rules](http://source.android.com/source/code-style.html).
+Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
 ## Strings
 Always use [string resources](https://developer.android.com/guide/topics/resources/string-resource.html) instead of literal strings. This ensures wording consistency across the project and also enables full translation of the app. Only make changes to the base `res/values/strings.xml` English file and not to the other language files. The translated files are generated from [Transifex](https://www.transifex.com/opendatakit/odk-collect/) where translations can be submitted by the community. Names of software packages or other untranslatable strings should be placed in `res/values/untranslated.xml`.

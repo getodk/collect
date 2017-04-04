@@ -139,9 +139,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
-        FormDef.EvalBehavior mode = AdminPreferencesActivity.getConfiguredFormProcessingLogic(
-                Collect.getInstance());
-        FormDef.setEvalBehavior(mode);
 
 //    FormDef.setDefaultEventNotifier(new EventNotifier() {
 //
@@ -179,14 +176,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     serializeFormDef(fd, formPath);
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
                 mErrorMsg = e.getMessage();
             } catch (XFormParseException e) {
                 mErrorMsg = e.getMessage();
-                e.printStackTrace();
             } catch (Exception e) {
                 mErrorMsg = e.getMessage();
-                e.printStackTrace();
             } finally {
                 IOUtils.closeQuietly(fis);
             }
@@ -211,7 +205,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             loadExternalData(formMediaDir);
         } catch (Exception e) {
             mErrorMsg = e.getMessage();
-            e.printStackTrace();
             return null;
         }
 
@@ -496,16 +489,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             dis.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             fd = null;
         } catch (IOException e) {
-            e.printStackTrace();
             fd = null;
         } catch (DeserializationException e) {
-            e.printStackTrace();
             fd = null;
         } catch (Exception e) {
-            e.printStackTrace();
             fd = null;
         }
 
@@ -532,9 +521,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 dos.flush();
                 dos.close();
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -560,7 +547,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -647,7 +633,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             if (withinTransaction) {
                 ida.commit();

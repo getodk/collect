@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -24,10 +23,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_FORM_PROCESSING_LOGIC;
 
 
-public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
     public static String ADMIN_PREFERENCES = "admin_prefs";
 
@@ -39,10 +37,6 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
         prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
         addPreferencesFromResource(R.xml.admin_preferences);
-
-        ListPreference mFormProcessingLogicPreference = (ListPreference) findPreference(KEY_FORM_PROCESSING_LOGIC);
-        mFormProcessingLogicPreference.setSummary(mFormProcessingLogicPreference.getEntry());
-        mFormProcessingLogicPreference.setOnPreferenceChangeListener(this);
 
         Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
         mChangeAdminPwPreference.setOnPreferenceClickListener(this);
@@ -79,7 +73,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
                         ToastUtils.showShortToast(R.string.admin_password_changed);
-                        editor.commit();
+                        editor.apply();
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "CHANGED");
@@ -87,7 +81,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
-                        editor.commit();
+                        editor.apply();
                         ToastUtils.showShortToast(R.string.admin_password_disabled);
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
@@ -110,18 +104,4 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
         }
         return true;
     }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-        if (preference.getKey().equals(KEY_FORM_PROCESSING_LOGIC)) {
-            int index = ((ListPreference) preference).findIndexOfValue(
-                    newValue.toString());
-            String entry = (String) ((ListPreference) preference).getEntries()[index];
-            preference.setSummary(entry);
-        }
-        return true;
-    }
-
-
 }

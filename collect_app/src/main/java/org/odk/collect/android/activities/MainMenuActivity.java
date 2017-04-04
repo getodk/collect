@@ -53,6 +53,7 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -179,8 +180,13 @@ public class MainMenuActivity extends Activity {
                         PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                    i = new Intent(getApplicationContext(),
-                            GoogleDriveActivity.class);
+                    if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                        i = new Intent(getApplicationContext(),
+                                GoogleDriveActivity.class);
+                    } else {
+                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                        return;
+                    }
                 } else {
                     i = new Intent(getApplicationContext(),
                             FormDownloadList.class);
@@ -630,7 +636,7 @@ public class MainMenuActivity extends Activity {
                     prefEdit.putString(key, ((String) v));
                 }
             }
-            prefEdit.commit();
+            prefEdit.apply();
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
@@ -654,22 +660,18 @@ public class MainMenuActivity extends Activity {
                     adminEdit.putString(key, ((String) v));
                 }
             }
-            adminEdit.commit();
+            adminEdit.apply();
 
             res = true;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } finally {
             try {
                 if (input != null) {
                     input.close();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
             }
         }
         return res;

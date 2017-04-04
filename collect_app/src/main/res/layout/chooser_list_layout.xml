@@ -39,6 +39,8 @@ the License.
 			android:paddingTop="@dimen/vertical_padding_status_tv"
 			android:background="@color/background_status_tv"/>
 
+		<include layout="@layout/search_box_layout"/>
+
 		<ListView
 			android:id="@id/android:list"
 			android:layout_width="match_parent"
@@ -65,7 +67,7 @@ the License.
 		android:id="@+id/sortingMenu"
 		android:layout_width="@dimen/width_side_navigation_drawer"
 		android:layout_height="match_parent"
-		android:layout_gravity="right|end"
+		android:layout_gravity="end|right"
 		android:background="@color/background_navigation_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>

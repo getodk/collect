@@ -121,7 +121,7 @@ public class PreferencesActivity extends PreferenceActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sharedPreferences.edit();
         editor.putString(KEY_SPLASH_PATH, path);
-        editor.commit();
+        editor.apply();
 
         PreferenceScreen splashPathPreference = (PreferenceScreen) fragment.findPreference(KEY_SPLASH_PATH);
         String summary = splashPathPreference.getSharedPreferences().getString(

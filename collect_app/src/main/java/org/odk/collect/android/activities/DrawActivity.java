@@ -91,7 +91,6 @@ public class DrawActivity extends Activity {
         try {
             saveFile(savepointImage);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         if (savepointImage.exists()) {
             outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
@@ -282,7 +281,6 @@ public class DrawActivity extends Activity {
             saveFile(output);
             setResult(Activity.RESULT_OK);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             setResult(Activity.RESULT_CANCELED);
         }
         this.finish();

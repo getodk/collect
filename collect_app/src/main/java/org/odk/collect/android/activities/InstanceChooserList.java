@@ -68,7 +68,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         setContentView(R.layout.chooser_list_layout);
 
         String order;
-        if (getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+
+        String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(R.string.review_data));
             mEditMode = true;
             mSortingOptions = new String[]{
@@ -134,7 +136,8 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                 // caller wants to view/edit a form, so launch formentryactivity
                 Intent parentIntent = this.getIntent();
                 Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                if (parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equalsIgnoreCase(ApplicationConstants.FormModes.EDIT_SAVED)) {
+                String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 } else {
                     intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
@@ -200,13 +203,22 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         int[] view = new int[]{
                 R.id.text1, R.id.text2, R.id.text4
         };
-        SimpleCursorAdapter instances;
+
         if (mEditMode) {
-            instances = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
         } else {
-            instances = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
         }
-        setListAdapter(instances);
+        setListAdapter(mListAdapter);
+    }
+
+    @Override
+    protected void filter(CharSequence charSequence) {
+        if (mEditMode) {
+            mListAdapter.changeCursor(new InstancesDao().getFilteredUnsentInstancesCursor(charSequence));
+        } else {
+            mListAdapter.changeCursor(new InstancesDao().getFilteredSentInstancesCursor(charSequence));
+        }
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {

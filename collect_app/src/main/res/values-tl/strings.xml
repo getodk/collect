@@ -15,7 +15,6 @@
   <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
-  <string name="cannot_edit_completed_form">Ang form ay hindi na maaaring ma-edit sa sandaling ito ay minarkahan bilang yari. Ito ay maaring naka-encrypt.</string>
   <string name="capture_audio">Mag-tala ng Tunog</string>
   <string name="capture_image">Kumuha ng Larawan</string>
   <string name="capture_video">Mag-tala ng Bidyo</string>
@@ -108,7 +107,6 @@
   <string name="sending_items">Pinapadala ang %1$s sa %2$s na (mga) form</string>
   <string name="send_data">Ipadala ang mga Yaring Form</string>
   <string name="send_selected_data">Ipadala ang mga pinili</string>
-  <string name="server_auth_credentials">Paki-pasok ang Username at Hudyat para sa server: %s</string>
   <string name="server_requires_auth">Nangangailagan ng Authentication ang Server</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server</string>

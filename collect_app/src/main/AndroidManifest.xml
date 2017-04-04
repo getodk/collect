@@ -113,7 +113,8 @@
             android:label="@string/all_open_source_licenses" />
         <activity
             android:name=".activities.GoogleDriveActivity"
-            android:label="@string/app_name" 
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden"
             />
         <activity
@@ -151,9 +152,11 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GoogleSheetsUploaderActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.InstanceUploaderList"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name">
 	        <intent-filter>
 	            <action android:name="android.intent.action.VIEW" />
@@ -180,6 +183,9 @@
         <activity
             android:name=".preferences.AggregatePreferencesActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name=".preferences.FormMetadataActivity"
+            android:label="@string/form_metadata_title" />
         <activity
             android:name=".preferences.AdminPreferencesActivity"
             android:label="@string/app_name" />

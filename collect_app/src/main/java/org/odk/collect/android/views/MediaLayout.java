@@ -14,19 +14,19 @@
 
 package org.odk.collect.android.views;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageButton;
-import android.util.Log;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -127,7 +127,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                         ReferenceManager._().DeriveReference(mVideoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Log.e(t, "Invalid reference exception");
-                e.printStackTrace();
             }
 
             File videoFile = new File(videoFilename);
@@ -143,7 +142,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             Intent i = new Intent("android.intent.action.VIEW");
             i.setDataAndType(Uri.fromFile(videoFile), "video/*");
             if (i.resolveActivity(getContext().getPackageManager()) != null) {
-                ((Activity) getContext()).startActivity(i);
+                getContext().startActivity(i);
             } else {
                 ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found, "view video"));
             }
@@ -276,7 +275,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 }
             } catch (InvalidReferenceException e) {
                 Log.e(t, "image invalid reference exception");
-                e.printStackTrace();
             }
         } else {
             // There's no imageURI listed, so just ignore it.
@@ -438,16 +436,29 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         }
         if (mPlayer.isPlaying()) {
             mPlayer.stop();
-            mPlayer.reset();
+            Bitmap b =
+                    BitmapFactory.decodeResource(getContext().getResources(),
+                            android.R.drawable.ic_lock_silent_mode_off);
+            mAudioButton.setImageBitmap(b);
+
+        } else {
+            playAudio();
+            Bitmap b =
+                    BitmapFactory.decodeResource(getContext().getResources(),
+                            android.R.drawable.ic_media_pause);
+            mAudioButton.setImageBitmap(b);
         }
         mPlayer.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetTextFormatting();
                 mediaPlayer.reset();
+                Bitmap b =
+                        BitmapFactory.decodeResource(getContext().getResources(),
+                                android.R.drawable.ic_lock_silent_mode_off);
+                mAudioButton.setImageBitmap(b);
             }
         });
-        playAudio();
     }
 
     public void setAudioListener(AudioPlayListener listener) {
