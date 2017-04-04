@@ -38,7 +38,7 @@
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">ODK Password</string>
-<string name="change_protocol_settings_default">Platform Settings</string>
+<string name="change_protocol_settings_default">Platform settings</string>
 <string name="change_username">ODK Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 <string name="clear_answer">Remove response</string>
@@ -487,4 +487,15 @@
 <string name="sort_the_list">Sort the list</string>
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
 <string name="filter_the_list">Filter the list</string>
+
+<string name="form_metadata_title">Form Metadata</string>
+<string name="form_metadata">Form metadata</string>
+<string name="form_metadata_summary">These values will be added to forms that have username, email and/or telephone preloaded fields to identify the person submitting data.</string>
+<string name="phone_number">Phone number</string>
+<string name="email">Email address</string>
+<string name="user_defined">User-defined</string>
+<string name="device_defined">Device-defined</string>
+<string name="device_id">Device ID</string>
+<string name="subscriber_id">Subscriber ID</string>
+<string name="sim_serial_id">SIM serial number</string>
 </resources>
