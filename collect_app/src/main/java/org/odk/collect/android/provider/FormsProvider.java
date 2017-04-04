@@ -33,6 +33,7 @@ import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.DummyCursor;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -283,7 +284,12 @@ public class FormsProvider extends ContentProvider {
         }
 
         // Get the database and run the query
-        SQLiteDatabase db = getDbHelper().getReadableDatabase();
+        final DatabaseHelper dbHelper = getDbHelper();
+        if (dbHelper == null) {
+            return new DummyCursor();
+        }
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, null,
                 null, sortOrder);
 

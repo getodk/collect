@@ -25,6 +25,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -117,6 +120,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private boolean mShouldExit;
     private static final String SHOULD_EXIT = "shouldexit";
 
+    @Nullable
+    private DownloadFormListTask mPreparedDownloadFormListTask;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -293,7 +298,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     /**
      * Starts the download task and shows the progress dialog.
      */
-    private void downloadFormList() {
+    void downloadFormList() {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
@@ -312,19 +317,44 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (mDownloadFormListTask != null &&
                     mDownloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
                 return; // we are already doing the download!!!
-            } else if (mDownloadFormListTask != null) {
+            }
+
+            if (mDownloadFormListTask != null) {
                 mDownloadFormListTask.setDownloaderListener(null);
                 mDownloadFormListTask.cancel(true);
                 mDownloadFormListTask = null;
             }
 
-            mDownloadFormListTask = new DownloadFormListTask();
+            mDownloadFormListTask = instantiateDownloadFormListTask();
             mDownloadFormListTask.setDownloaderListener(this);
             mDownloadFormListTask.execute();
 
         }
     }
 
+    @NonNull
+    private DownloadFormListTask instantiateDownloadFormListTask() {
+        if (mPreparedDownloadFormListTask == null) {
+            return new DownloadFormListTask();
+        }
+        return mPreparedDownloadFormListTask;
+    }
+
+    /**
+     * Used from tests only to provide mock implementation of {@link DownloadFormListTask}.
+     */
+    @VisibleForTesting
+    void setPreparedDownloadFormListTask(DownloadFormListTask downloadFormListTask) {
+        mPreparedDownloadFormListTask = downloadFormListTask;
+    }
+
+    /**
+     * Used from tests only to make mDownloadFormListTask field non-null.
+     */
+    @VisibleForTesting
+    void setDownloadFormListTask(DownloadFormListTask downloadFormListTask) {
+        mDownloadFormListTask = downloadFormListTask;
+    }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
