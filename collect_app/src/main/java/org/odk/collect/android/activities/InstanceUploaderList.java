@@ -341,7 +341,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showUnsent() {
         mShowAllMode = false;
-        Cursor c = mInstanceDao.getFinalizedInstancesCursor();
+        Cursor c = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
         Cursor old = mListAdapter.getCursor();
         try {
             mListAdapter.changeCursor(c);
@@ -356,7 +356,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showAll() {
         mShowAllMode = true;
-        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor();
+        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
         Cursor old = mListAdapter.getCursor();
         try {
             mListAdapter.changeCursor(c);

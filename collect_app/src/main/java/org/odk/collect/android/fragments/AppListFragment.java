@@ -68,7 +68,7 @@ abstract class AppListFragment extends ListFragment {
     protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected EditText mInputSearch;
 
-    protected static Integer mSelectedSortingOrder;
+    protected Integer mSelectedSortingOrder;
 
     // toggles to all checked or all unchecked
     // returns:

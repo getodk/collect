@@ -331,6 +331,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         toggleButtonLabel(mToggleButton, getListView());
+        setupAdapter();
     }
 
     @Override
@@ -605,8 +606,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private void selectSupersededForms() {
 
         ListView ls = getListView();
-        for (int idx = 0; idx < mFormList.size(); idx++) {
-            HashMap<String, String> item = mFormList.get(idx);
+        for (int idx = 0; idx < mFilteredFormList.size(); idx++) {
+            HashMap<String, String> item = mFilteredFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
                 ls.setItemChecked(idx, true);
                 mSelectedForms.add(item.get(FORMDETAIL_KEY));
@@ -676,8 +677,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     mFormList.add(j, item);
                 }
             }
-            selectSupersededForms();
             mFilteredFormList.addAll(mFormList);
+            setupAdapter();
+            selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
             toggleButtonLabel(mToggleButton, getListView());

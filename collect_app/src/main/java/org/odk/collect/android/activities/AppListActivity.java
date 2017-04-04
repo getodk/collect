@@ -76,7 +76,7 @@ abstract class AppListActivity extends ListActivity {
 
     private boolean mIsSearchBoxShown;
 
-    protected static Integer mSelectedSortingOrder;
+    protected Integer mSelectedSortingOrder;
 
     @Override
     protected void onResume() {
