@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--Text Sizes-->
-    <dimen name="text_14">14sp</dimen>
-    <dimen name="text_21">21sp</dimen>
+    <!--dimensions for chooser_list_layout.xml-->
 
     <!--Layout Dimensions-->
-    <dimen name="size_8">8dp</dimen>
-    <dimen name="size_4">4dp</dimen>
-    <dimen name="size_20">20dp</dimen>
-    <dimen name="size_250">250dp</dimen>
+    <dimen name="horizontal_padding_status_tv">8dp</dimen>
+    <dimen name="vertical_padding_status_tv">4dp</dimen>
+    <dimen name="padding_empty_list_alt_tv">20dp</dimen>
+    <dimen name="width_side_navigation_drawer">250dp</dimen>
+
+    <!--Text Sizes-->
+    <dimen name="textsize_status_tv">14sp</dimen>
+    <dimen name="textsize_empty_list_alt_tv">21sp</dimen>
 
 </resources>
