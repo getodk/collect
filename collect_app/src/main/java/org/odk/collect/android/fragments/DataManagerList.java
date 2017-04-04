@@ -72,7 +72,7 @@ public class DataManagerList extends InstanceListFragment
         mDeleteButton.setOnClickListener(this);
         mToggleButton.setOnClickListener(this);
 
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
@@ -124,7 +124,7 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
         List<Long> checkedInstances = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
@@ -133,7 +133,7 @@ public class DataManagerList extends InstanceListFragment
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         mListAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(sortOrder), data, view);
+                R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(getSortingOrder()), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
     }

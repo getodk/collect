@@ -16,25 +16,30 @@ package org.odk.collect.android.fragments;
 
 import org.odk.collect.android.provider.FormsProviderAPI;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+
 public class FormListFragment extends FileManagerFragment {
     @Override
     protected void sortByNameAsc() {
-        setupAdapter(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByNameDesc() {
-        setupAdapter(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " DESC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByDateAsc() {
-        setupAdapter(FormsProviderAPI.FormsColumns.DATE + " ASC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByDateDesc() {
-        setupAdapter(FormsProviderAPI.FormsColumns.DATE + " DESC");
+        setupAdapter();
     }
 
     @Override
@@ -46,6 +51,28 @@ public class FormListFragment extends FileManagerFragment {
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
+    }
+
+    protected String getSortingOrder() {
+        if (mSelectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
+        switch (mSelectedSortingOrder) {
+            case BY_NAME_ASC:
+                sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
+                break;
+            case BY_NAME_DESC:
+                sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " DESC";
+                break;
+            case BY_DATE_ASC:
+                sortOrder = FormsProviderAPI.FormsColumns.DATE + " ASC";
+                break;
+            case BY_DATE_DESC:
+                sortOrder = FormsProviderAPI.FormsColumns.DATE + " DESC";
+                break;
+        }
+        return sortOrder;
     }
 }

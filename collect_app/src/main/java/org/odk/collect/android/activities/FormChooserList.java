@@ -68,7 +68,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.enter_data));
 
-        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
+        setupAdapter();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
             TextView tv = (TextView) findViewById(R.id.status_text);
@@ -176,7 +176,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
         String[] data = new String[]{
                 FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
         };
@@ -185,7 +185,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         };
 
         mListAdapter =
-                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(sortOrder), data, view);
+                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(getSortingOrder()), data, view);
 
         setListAdapter(mListAdapter);
     }

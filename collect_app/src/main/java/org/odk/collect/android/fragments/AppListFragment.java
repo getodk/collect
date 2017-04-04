@@ -300,7 +300,7 @@ abstract class AppListFragment extends ListFragment {
 
     protected abstract void sortByStatusDesc();
 
-    protected abstract void setupAdapter(String sortOrder);
+    protected abstract void setupAdapter();
 
     protected abstract String getSortingOrderKey();
 

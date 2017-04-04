@@ -15,42 +15,73 @@ package org.odk.collect.android.fragments;
 
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
+
 public class InstanceListFragment extends FileManagerFragment {
     @Override
     protected void sortByNameAsc() {
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " +
-                InstanceProviderAPI.InstanceColumns.STATUS + " DESC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByNameDesc() {
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " DESC, " +
-                InstanceProviderAPI.InstanceColumns.STATUS + " DESC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByDateAsc() {
-        setupAdapter(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByDateDesc() {
-        setupAdapter(InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByStatusAsc() {
-        setupAdapter(InstanceProviderAPI.InstanceColumns.STATUS + " ASC, " +
-                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
     }
 
     @Override
     protected void sortByStatusDesc() {
-        setupAdapter(InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " +
-                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
+    }
+
+    protected String getSortingOrder() {
+        if (mSelectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+        switch (mSelectedSortingOrder) {
+            case BY_NAME_ASC:
+                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+                break;
+            case BY_NAME_DESC:
+                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+                break;
+            case BY_DATE_ASC:
+                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                break;
+            case BY_DATE_DESC:
+                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                break;
+            case BY_STATUS_ASC:
+                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " ASC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+                break;
+            case BY_STATUS_DESC:
+                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+                break;
+        }
+        return sortOrder;
     }
 }

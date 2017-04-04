@@ -141,7 +141,7 @@ public class FileManagerFragment extends AppListFragment {
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
 
     }
 }

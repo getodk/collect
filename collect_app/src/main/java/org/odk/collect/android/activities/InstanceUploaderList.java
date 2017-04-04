@@ -134,7 +134,7 @@ public class InstanceUploaderList extends InstanceListActivity
         });
         toggleSelsButton.setOnLongClickListener(this);
 
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
@@ -303,16 +303,16 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
         List<Long> checkedInstances = new ArrayList();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
         }
         Cursor cursor;
         if (mShowAllMode) {
-            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(sortOrder);
+            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
         } else {
-            cursor = mInstanceDao.getFinalizedInstancesCursor(sortOrder);
+            cursor = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
         }
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
