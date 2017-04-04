@@ -1,7 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import android.test.*;
-
 import okhttp3.mockwebserver.*;
 
 import java.net.*;
