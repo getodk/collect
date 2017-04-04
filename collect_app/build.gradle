@@ -155,7 +155,7 @@ dependencies {
     compile(group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
-    
+    compile(group: 'com.github.MKergall', name: 'osmbonuspack', version: '6.3') { exclude group: 'com.squareup.okio' exclude group: 'com.squareup.okhttp3'}
     compile group: 'com.android.support', name: 'customtabs', version: '25.1.0'
     
     // Testing-only dependencies
