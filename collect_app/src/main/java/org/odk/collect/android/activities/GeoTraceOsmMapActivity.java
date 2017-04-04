@@ -702,7 +702,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         for (int i = 0; i < map_markers.size(); i++) {
             String lat = Double.toString(map_markers.get(i).getPosition().getLatitude());
             String lng = Double.toString(map_markers.get(i).getPosition().getLongitude());
-            String alt = Integer.toString(map_markers.get(i).getPosition().getAltitude());
+            String alt = Double.toString(map_markers.get(i).getPosition().getAltitude());
             String acu = map_markers.get(i).getSubDescription();
             temp_string = temp_string + lat + " " + lng + " " + alt + " " + acu + ";";
         }
