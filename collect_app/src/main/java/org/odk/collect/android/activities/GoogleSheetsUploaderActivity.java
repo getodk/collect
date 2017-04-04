@@ -567,7 +567,6 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
                 mResults = null;
-                mAuthFailed = true;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
                 mAuthFailed = true;
