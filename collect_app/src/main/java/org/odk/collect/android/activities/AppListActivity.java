@@ -47,6 +47,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
+
 abstract class AppListActivity extends ListActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
@@ -206,22 +213,22 @@ abstract class AppListActivity extends ListActivity {
     private void performSelectedSearch(int position) {
         hideSearchBox();
         switch(position) {
-            case 0:
+            case BY_NAME_ASC:
                 sortByNameAsc();
                 break;
-            case 1:
+            case BY_NAME_DESC:
                 sortByNameDesc();
                 break;
-            case 2:
+            case BY_DATE_ASC:
                 sortByDateDesc();
                 break;
-            case 3:
+            case BY_DATE_DESC:
                 sortByDateAsc();
                 break;
-            case 4:
+            case BY_STATUS_ASC:
                 sortByStatusAsc();
                 break;
-            case 5:
+            case BY_STATUS_DESC:
                 sortByStatusDesc();
                 break;
         }
