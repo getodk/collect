@@ -40,13 +40,12 @@ import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
-import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
-import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
-import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -59,7 +58,7 @@ import java.util.List;
  * @author jonnordling@gmail.com
  */
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
-        OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
+        Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
 
 	private static final String LOCATION_COUNT = "locationCount";
 
