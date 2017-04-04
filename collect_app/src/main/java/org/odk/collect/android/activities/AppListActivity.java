@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
@@ -74,6 +75,8 @@ abstract class AppListActivity extends ListActivity {
     protected String[] mSortingOptions;
 
     private boolean mIsSearchBoxShown;
+
+    protected static Integer mSelectedSortingOrder;
 
     @Override
     protected void onResume() {
@@ -214,21 +217,27 @@ abstract class AppListActivity extends ListActivity {
         hideSearchBox();
         switch(position) {
             case BY_NAME_ASC:
+                saveSelectedSortingOrder(BY_NAME_ASC);
                 sortByNameAsc();
                 break;
             case BY_NAME_DESC:
+                saveSelectedSortingOrder(BY_NAME_DESC);
                 sortByNameDesc();
                 break;
             case BY_DATE_ASC:
+                saveSelectedSortingOrder(BY_DATE_ASC);
                 sortByDateDesc();
                 break;
             case BY_DATE_DESC:
+                saveSelectedSortingOrder(BY_DATE_DESC);
                 sortByDateAsc();
                 break;
             case BY_STATUS_ASC:
+                saveSelectedSortingOrder(BY_STATUS_ASC);
                 sortByStatusAsc();
                 break;
             case BY_STATUS_DESC:
+                saveSelectedSortingOrder(BY_STATUS_DESC);
                 sortByStatusDesc();
                 break;
         }
@@ -291,6 +300,8 @@ abstract class AppListActivity extends ListActivity {
     protected abstract void sortByStatusDesc();
 
     protected abstract void setupAdapter(String sortOrder);
+
+    protected abstract String getSortingOrderKey();
 
     protected boolean areCheckedItems() {
         return getCheckedCount() > 0;
@@ -359,5 +370,19 @@ abstract class AppListActivity extends ListActivity {
         } else {
            super.onBackPressed();
         }
+    }
+
+    private void saveSelectedSortingOrder(int selectedStringOrder) {
+        mSelectedSortingOrder = selectedStringOrder;
+        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
+                .edit()
+                .putInt(getSortingOrderKey(), selectedStringOrder)
+                .apply();
+    }
+
+    protected void restoreSelectedSortingOrder() {
+        mSelectedSortingOrder = PreferenceManager
+                .getDefaultSharedPreferences(Collect.getInstance())
+                .getInt(getSortingOrderKey(), BY_NAME_ASC);
     }
 }
