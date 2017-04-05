@@ -488,7 +488,7 @@
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
 <string name="filter_the_list">Filter the list</string>
 <string name="language">Language</string>
-
+<string name="google_auth_io_exception_msg">Unable to make API calls. If you are running a local build, please review the project readme.</string>
 <string name="form_metadata_title">Form Metadata</string>
 <string name="form_metadata">Form metadata</string>
 <string name="form_metadata_summary">These values will be added to forms that have username, email and/or telephone preloaded fields to identify the person submitting data.</string>
