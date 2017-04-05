@@ -19,6 +19,7 @@ package org.odk.collect.android.activities;
 import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -67,6 +69,8 @@ abstract class AppListActivity extends ListActivity {
     protected String[] mSortingOptions;
 
     private boolean mIsSearchBoxShown;
+    private boolean mFirstTime = true;
+    private int mOldSelected;
 
     @Override
     protected void onResume() {
@@ -189,6 +193,11 @@ abstract class AppListActivity extends ListActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 textView.setPadding(50, 0, 0, 0);
+                if ((position == 0) && (mFirstTime)) {
+                    textView.setBackgroundColor(Color.parseColor("#2196F3"));
+                    mOldSelected = position;
+                    mFirstTime = false;
+                }
                 return textView;
             }
         };
@@ -197,6 +206,9 @@ abstract class AppListActivity extends ListActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(mOldSelected).setBackgroundColor(Color.parseColor("#DDDDDD"));
+                mOldSelected = position;
+                view.setBackgroundColor(Color.parseColor("#2196F3"));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
@@ -205,7 +217,7 @@ abstract class AppListActivity extends ListActivity {
 
     private void performSelectedSearch(int position) {
         hideSearchBox();
-        switch(position) {
+        switch (position) {
             case 0:
                 sortByNameAsc();
                 break;
@@ -289,7 +301,9 @@ abstract class AppListActivity extends ListActivity {
         return getCheckedCount() > 0;
     }
 
-    /** Returns the IDs of the checked items, using the ListView provided */
+    /**
+     * Returns the IDs of the checked items, using the ListView provided
+     */
     protected long[] getCheckedIds(ListView lv) {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
         // IDs were “stable” (see the getCheckedItemIds doc).
@@ -299,7 +313,7 @@ abstract class AppListActivity extends ListActivity {
         int resultIndex = 0;
         for (int posIdx = 0; posIdx < itemCount; posIdx++) {
             if (lv.isItemChecked(posIdx)) {
-                checkedIds      [resultIndex] = lv.getItemIdAtPosition(posIdx);
+                checkedIds[resultIndex] = lv.getItemIdAtPosition(posIdx);
                 resultIndex++;
             }
         }
@@ -344,13 +358,13 @@ abstract class AppListActivity extends ListActivity {
             mToggleButton.setText(R.string.clear_all);
         }
     }
-	
+
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-           mDrawerLayout.closeDrawer(Gravity.END);
+            mDrawerLayout.closeDrawer(Gravity.END);
         } else {
-           super.onBackPressed();
+            super.onBackPressed();
         }
     }
 }
