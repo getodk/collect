@@ -107,10 +107,10 @@ android {
     }
 }
 
-// Must use latest version or get exceptions when using latest google checkstyle.xml
+// Must use latest version or get exceptions when using latest Google checkstyle.xml
 checkstyle.toolVersion = '7.6.1' 
 
-// The check task won't work probably because Android uses its own sourceSets
+// The normal check task reports nothing probably because Android uses its own sourceSets
 task checkstyle(type: Checkstyle) {
     source 'src'
     include '**/*.java'
