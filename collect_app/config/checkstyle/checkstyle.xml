@@ -15,11 +15,10 @@
     <property name="charset" value="UTF-8"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
-    <!-- Checks for whitespace                               -->
-    <!-- See http://checkstyle.sf.net/config_whitespace.html -->
-    <module name="FileTabCharacter">
+
+    <!-- <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
-    </module>
+    </module> -->
 
     <module name="TreeWalker">
     	<!-- ODK-specific additions -->
