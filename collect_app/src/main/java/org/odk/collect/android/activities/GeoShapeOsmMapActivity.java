@@ -44,11 +44,12 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.PathOverlay;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -61,7 +62,7 @@ import java.util.ArrayList;
 public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
     private MapView mMap;
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
-    private PathOverlay pathOverlay;
+    private Polyline polyline;
     public int zoom_level = 3;
     public static final int stroke_width = 5;
     public String final_return_string;
@@ -320,11 +321,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
 
     private void overlayPointPathListner() {
-        OverlayEventos = new MapEventsOverlay(getBaseContext(), mReceive);
-        pathOverlay = new PathOverlay(Color.RED, this);
-        Paint pPaint = pathOverlay.getPaint();
+        OverlayEventos = new MapEventsOverlay(mReceive);
+        polyline = new Polyline();
+        polyline.setColor(Color.RED);
+        Paint pPaint = polyline.getPaint();
         pPaint.setStrokeWidth(stroke_width);
-        mMap.getOverlays().add(pathOverlay);
+        mMap.getOverlays().add(polyline);
         mMap.getOverlays().add(OverlayEventos);
         mMap.invalidate();
     }
@@ -332,7 +334,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private void clearFeatures() {
         clear_button_test = false;
         map_markers.clear();
-        pathOverlay.clearPath();
         mMap.getOverlays().clear();
         mClearButton.setEnabled(false);
         //mSaveButton.setEnabled(false);
@@ -402,11 +403,13 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void update_polygon() {
-        pathOverlay.clearPath();
+        List<GeoPoint> points = new ArrayList<>();
         for (int i = 0; i < map_markers.size(); i++) {
-            pathOverlay.addPoint(map_markers.get(i).getPosition());
+            points.add(map_markers.get(i).getPosition());
         }
-        pathOverlay.addPoint(map_markers.get(0).getPosition());
+        points.add(map_markers.get(0).getPosition());
+
+        polyline.setPoints(points);
         mMap.invalidate();
     }
 
@@ -427,7 +430,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
             mMap.getOverlays().add(marker);
-            pathOverlay.addPoint(marker.getPosition());
+            List<GeoPoint> points = polyline.getPoints();
+            points.add(marker.getPosition());
+            polyline.setPoints(points);
             update_polygon();
             mMap.invalidate();
             return false;

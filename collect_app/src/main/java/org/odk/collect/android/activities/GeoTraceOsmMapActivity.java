@@ -49,7 +49,7 @@ import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.PathOverlay;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private AlertDialog p_alert;
     private View traceSettingsView;
     private View polygonPolylineView;
-    private PathOverlay pathOverlay;
+    private Polyline polyline;
     private ArrayList<Marker> map_markers = new ArrayList<Marker>();
     private String final_return_string;
     private Integer TRACE_MODE; // 0 manual, 1 is automatic
@@ -411,7 +411,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             map_markers.add(marker);
-            pathOverlay.addPoint(marker.getPosition());
+            List<GeoPoint> points = polyline.getPoints();
+            points.add(marker.getPosition());
+            polyline.setPoints(points);
             mapView.getOverlays().add(marker);
 
         }
@@ -440,10 +442,11 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void overlayMapLayerListner() {
-        pathOverlay = new PathOverlay(Color.RED, this);
-        Paint pPaint = pathOverlay.getPaint();
+        polyline = new Polyline();
+        polyline.setColor(Color.RED);
+        Paint pPaint = polyline.getPaint();
         pPaint.setStrokeWidth(5);
-        mapView.getOverlays().add(pathOverlay);
+        mapView.getOverlays().add(polyline);
         mapView.invalidate();
     }
 
@@ -661,7 +664,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         marker.setOnMarkerClickListener(nullmarkerlistner);
         mapView.getOverlays().add(marker);
-        pathOverlay.addPoint(marker.getPosition());
+        List<GeoPoint> points = polyline.getPoints();
+        points.add(marker.getPosition());
+        polyline.setPoints(points);
         mapView.invalidate();
     }
 
@@ -715,15 +720,18 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void createPolygon() {
         map_markers.add(map_markers.get(0));
-        pathOverlay.addPoint(map_markers.get(0).getPosition());
+        List<GeoPoint> points = polyline.getPoints();
+        points.add(map_markers.get(0).getPosition());
+        polyline.setPoints(points);
         mapView.invalidate();
     }
 
     private void update_polygon() {
-        pathOverlay.clearPath();
+        List<GeoPoint> points = new ArrayList<>();
         for (int i = 0; i < map_markers.size(); i++) {
-            pathOverlay.addPoint(map_markers.get(i).getPosition());
+            points.add(map_markers.get(i).getPosition());
         }
+        polyline.setPoints(points);
         mapView.invalidate();
     }
 
@@ -767,7 +775,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private void clearFeatures() {
         map_markers.clear();
-        pathOverlay.clearPath();
+        polyline.setPoints(new ArrayList<GeoPoint>());
         mapView.getOverlays().clear();
         mClearButton.setEnabled(false);
         overlayMyLocationLayers();
