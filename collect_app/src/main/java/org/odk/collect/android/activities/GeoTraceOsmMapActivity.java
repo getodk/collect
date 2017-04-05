@@ -50,7 +50,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.PathOverlay;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -117,7 +116,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(zoom_level);
-        mMyLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), mapView);
+        mMyLocationOverlay = new MyLocationNewOverlay(mapView);
 
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
@@ -351,19 +350,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         }
 
         upMyLocationOverlayLayers();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mMyLocationOverlay != null) {
-            mMyLocationOverlay.enableMyLocation();
-        }
-
-//		if(mMyLocationOverlay.getMyLocation()!= null){
-//			mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-//		}
-
     }
 
     @Override
@@ -871,7 +857,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     public void onLocationChanged(Location location) {
-        if (mode_active) {
+        if (mode_active && mMyLocationOverlay.getMyLocation() != null) {
             mapView.getController().setCenter(mMyLocationOverlay.getMyLocation());
         }
     }

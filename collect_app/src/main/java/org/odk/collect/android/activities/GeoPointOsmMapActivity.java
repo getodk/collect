@@ -46,7 +46,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.text.DecimalFormat;
@@ -134,7 +133,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mMap.setBuiltInZoomControls(true);
         mMarker = new Marker(mMap);
         mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
-        mMyLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), mMap);
+        mMyLocationOverlay = new MyLocationNewOverlay(mMap);
 
         handler.postDelayed(new Runnable() {
             public void run() {

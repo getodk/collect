@@ -134,7 +134,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         GpsMyLocationProvider imlp = new GpsMyLocationProvider(this.getBaseContext());
         imlp.setLocationUpdateMinDistance(1000);
         imlp.setLocationUpdateMinTime(60000);
-        mMyLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), mMap);
+        mMyLocationOverlay = new MyLocationNewOverlay(mMap);
 
 
         Intent intent = getIntent();
