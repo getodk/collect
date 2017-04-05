@@ -793,6 +793,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 return null;
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage(), e);
+                createAlertDialog(getString(R.string.google_auth_io_exception_msg));
             }
             if (rootId == null) {
                 Log.e("drive", "Error occurred : Unable to fetch drive contents");
