@@ -107,16 +107,16 @@ android {
     }
 }
 
+// Must use latest version or get exceptions when using latest google checkstyle.xml
+checkstyle.toolVersion = '7.6.1' 
+
+// The check task won't work probably because Android uses its own sourceSets
 task checkstyle(type: Checkstyle) {
-    configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
     source 'src'
     include '**/*.java'
-    exclude '**/gen/**'
-
+    // empty classpath
     classpath = files()
 }
-
-
 
 configurations.all {
     resolutionStrategy {
