@@ -49,8 +49,7 @@ test:
         - cp -r collect_app/build/outputs/apk/ $CIRCLE_ARTIFACTS
 
         # Android Tests
-        - mkdir -p $CIRCLE_TEST_REPORTS/androidTests/
-        - cp -r collect_app/build/reports/androidTests/connected/. $CIRCLE_TEST_REPORTS/androidTests
+        - cp -r collect_app/build/reports/androidTests/connected/ $CIRCLE_TEST_REPORTS/androidTests
 
         # Tests
         - mkdir -p $CIRCLE_TEST_REPORTS/tests/
