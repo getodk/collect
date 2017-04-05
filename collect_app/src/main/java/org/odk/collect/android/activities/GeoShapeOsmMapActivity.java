@@ -334,6 +334,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private void clearFeatures() {
         clear_button_test = false;
         map_markers.clear();
+        polyline.setPoints(new ArrayList<GeoPoint>());
         mMap.getOverlays().clear();
         mClearButton.setEnabled(false);
         //mSaveButton.setEnabled(false);

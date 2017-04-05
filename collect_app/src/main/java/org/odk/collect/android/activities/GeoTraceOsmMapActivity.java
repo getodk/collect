@@ -791,7 +791,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                double minLat = Integer.MAX_VALUE;
+                double minLat = Double.MAX_VALUE;
                 double maxLat = Double.MIN_VALUE;
                 double minLong = Double.MAX_VALUE;
                 double maxLong = Double.MIN_VALUE;
