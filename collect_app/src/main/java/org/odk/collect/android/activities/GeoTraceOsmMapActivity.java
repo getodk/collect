@@ -45,7 +45,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
-import org.osmdroid.util.BoundingBoxE6;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -783,28 +783,28 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                int minLat = Integer.MAX_VALUE;
-                int maxLat = Integer.MIN_VALUE;
-                int minLong = Integer.MAX_VALUE;
-                int maxLong = Integer.MIN_VALUE;
+                double minLat = Integer.MAX_VALUE;
+                double maxLat = Double.MIN_VALUE;
+                double minLong = Double.MAX_VALUE;
+                double maxLong = Double.MIN_VALUE;
                 Integer size = map_markers.size();
                 for (int i = 0; i < size; i++) {
                     GeoPoint temp_marker = map_markers.get(i).getPosition();
-                    if (temp_marker.getLatitudeE6() < minLat) {
-                        minLat = temp_marker.getLatitudeE6();
+                    if (temp_marker.getLatitude() < minLat) {
+                        minLat = temp_marker.getLatitude();
                     }
-                    if (temp_marker.getLatitudeE6() > maxLat) {
-                        maxLat = temp_marker.getLatitudeE6();
+                    if (temp_marker.getLatitude() > maxLat) {
+                        maxLat = temp_marker.getLatitude();
                     }
-                    if (temp_marker.getLongitudeE6() < minLong) {
-                        minLong = temp_marker.getLongitudeE6();
+                    if (temp_marker.getLongitude() < minLong) {
+                        minLong = temp_marker.getLongitude();
                     }
-                    if (temp_marker.getLongitudeE6() > maxLong) {
-                        maxLong = temp_marker.getLongitudeE6();
+                    if (temp_marker.getLongitude() > maxLong) {
+                        maxLong = temp_marker.getLongitude();
                     }
                 }
-                BoundingBoxE6 boundingBox = new BoundingBoxE6(maxLat, maxLong, minLat, minLong);
-                mapView.zoomToBoundingBox(boundingBox);
+                BoundingBox boundingBox = new BoundingBox(maxLat, maxLong, minLat, minLong);
+                mapView.zoomToBoundingBox(boundingBox, false);
                 mapView.invalidate();
             }
         }, 100);
