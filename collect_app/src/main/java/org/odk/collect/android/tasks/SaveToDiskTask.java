@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.javarosa.core.model.FormDef;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
@@ -73,9 +72,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
 
     /**
-     * Initialize {@link FormEntryController} with {@link FormDef} from binary or from XML. If
+     * Initialize {@link FormEntryController} with {@link org.javarosa.core.model.FormDef} from binary or from XML. If
      * given
-     * an instance, it will be used to fill the {@link FormDef}.
+     * an instance, it will be used to fill the {@link org.javarosa.core.model.FormDef}.
      */
     @Override
     protected SaveResult doInBackground(Void... nothing) {
