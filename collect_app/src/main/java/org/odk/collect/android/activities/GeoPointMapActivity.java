@@ -121,7 +121,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         try {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
-            Timber.e(e,"Google maps not accessible. "+e.getMessage());
+            Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;

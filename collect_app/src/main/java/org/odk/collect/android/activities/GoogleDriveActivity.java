@@ -796,7 +796,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 return null;
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage(), e);
-                Timber.e(e,e.getMessage());
+                Timber.e(e, e.getMessage());
             }
             if (rootId == null) {
                 Log.e("drive", "Error occurred : Unable to fetch drive contents");
@@ -820,7 +820,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
                 request = mDriveService.files().list().setQ(requestString);
             } catch (IOException e) {
-                Timber.e(e,e.getMessage());
+                Timber.e(e, e.getMessage());
             }
 
             // If there's a query parameter, we're searching for all the files.
@@ -828,7 +828,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 try {
                     request = mDriveService.files().list().setQ(query);
                 } catch (IOException e) {
-                    Timber.e(e,e.getMessage());
+                    Timber.e(e, e.getMessage());
                 }
             }
             request.setFields("nextPageToken, files(modifiedTime, id, name, mimeType)");
@@ -849,7 +849,7 @@ public class GoogleDriveActivity extends ListActivity implements
                     nextPage.put(FILE_LIST_KEY, driveFileListPage);
                     publishProgress(nextPage);
                 } catch (IOException e) {
-                    Timber.e(e,"Exception thrown while accessing the file list");
+                    Timber.e(e, "Exception thrown while accessing the file list due to: %s ", e.getMessage());
                 }
             } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
@@ -958,7 +958,7 @@ public class GoogleDriveActivity extends ListActivity implements
                             (new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
                     downloadFile(df).writeTo(fStream);
                 } catch (Exception e) {
-                   Timber.e(e,e.getMessage());
+                    Timber.e(e, e.getMessage());
                     Log.e(TAG, e.getMessage(), e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
@@ -969,7 +969,7 @@ public class GoogleDriveActivity extends ListActivity implements
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage(), e);
-                        Timber.e(e,"Unable to close the file output stream due to "+e.getMessage());
+                        Timber.e(e, "Unable to close the file output stream due to : %s ", e.getMessage());
                     }
                 }
 

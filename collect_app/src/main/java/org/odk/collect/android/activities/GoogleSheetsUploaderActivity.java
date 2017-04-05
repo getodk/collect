@@ -555,12 +555,13 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
-                Timber.e(e, "Authorization requested.. "+e.getMessage());
+                Timber.e(e, "Authorization requested.. The reason uploading instances failed is due to: %s ", e.getMessage());
                 mResults = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
-                Timber.e(e,e.getMessage());
+                Timber.e(e, e.getMessage());
             } catch (MultipleFoldersFoundException e) {
+                Timber.e(e, e.getMessage());
                 Log.e(TAG, e.getMessage(), e);
             }
             return mResults;

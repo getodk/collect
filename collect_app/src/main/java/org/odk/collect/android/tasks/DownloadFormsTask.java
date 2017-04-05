@@ -366,7 +366,7 @@ public class DownloadFormsTask extends
             URL url = new URL(downloadUrl);
             uri = url.toURI();
         } catch (MalformedURLException | URISyntaxException e) {
-            Timber.e(e,"Unable to get a URI for download URL : "+downloadUrl+" "+e.getMessage());
+            Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
             throw e;
         }
 

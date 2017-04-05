@@ -262,9 +262,9 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
-        if(timber.log.BuildConfig.DEBUG){
+        if(timber.log.BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-        }else{
+        } else {
             Timber.plant(new CrashReportingTree());
         }
     }

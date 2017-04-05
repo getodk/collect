@@ -94,7 +94,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                         }
                     }
                 } catch (android.content.ActivityNotFoundException anfe) {
-                    Timber.e(anfe,anfe.getMessage());
+                    Timber.e(anfe, anfe.getMessage());
                 }
                 if (!reviewTaken) {
                     // Show a list of all available browsers if user doesn't have a default browser

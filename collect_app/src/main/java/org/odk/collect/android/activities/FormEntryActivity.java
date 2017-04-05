@@ -1281,7 +1281,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         } catch (JavaRosaException e) {
             mBackButton.setEnabled(true);
-            Timber.e(e,e.getMessage());
+            Timber.e(e, e.getMessage());
         }
     }
 
@@ -1696,7 +1696,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                             Thread.sleep(500);
                                         } catch (InterruptedException e) {
                                             //This is rare
-                                            Timber.e(e,e.getMessage());
+                                            Timber.e(e, e.getMessage());
                                         }
                                         showNextView();
                                     }
@@ -2506,7 +2506,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
-                Timber.e(e,"Ended up with a bad language. "+ e.getMessage());
+                Timber.e(e, "Ended up with a bad language. %s", e.getMessage());
                 formController.setLanguage(defaultLanguage);
             }
         }

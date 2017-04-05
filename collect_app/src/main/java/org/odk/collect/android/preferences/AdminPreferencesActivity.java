@@ -60,7 +60,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
             res = true;
         } catch (IOException e) {
-            Timber.e(e,e.getMessage());
+            Timber.e(e, e.getMessage());
         } finally {
             try {
                 if (output != null) {
@@ -68,7 +68,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                     output.close();
                 }
             } catch (IOException ex) {
-                Timber.e(ex,"Unable to close output stream. "+ex.getMessage());
+                Timber.e(ex, "Unable to close output stream due to : %s ", ex.getMessage());
             }
         }
         return res;

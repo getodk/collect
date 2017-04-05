@@ -324,7 +324,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
 
             } catch (IOException | GoogleAuthException | MultipleFoldersFoundException e) {
-                Timber.e(e,e.getMessage());
+                Timber.e(e, e.getMessage());
                 return null;
             }
             mContext = null;

@@ -143,7 +143,7 @@ public class EncryptionUtils {
                     ivSeedArray[i] = messageDigest[(i % messageDigest.length)];
                 }
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                Timber.e(e,"Unable to set md5 hash for instanceid and symmetric key. "+e.getMessage());
+                Timber.e(e, "Unable to set md5 hash for instanceid and symmetric key due to : %s ", e.getMessage());
                 Log.e(t, e.toString());
                 throw new IllegalArgumentException(e.getMessage());
             }
@@ -161,7 +161,7 @@ public class EncryptionUtils {
                         .encodeToString(pkEncryptedKey);
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-                Timber.e(e,"Unable to encrypt the symmetric key. "+e.getMessage());
+                Timber.e(e, "Unable to encrypt the symmetric key due to : %s ", e.getMessage());
                 Log.e(t, "Unable to encrypt the symmetric key");
                 throw new IllegalArgumentException(e.getMessage());
             }
@@ -207,7 +207,7 @@ public class EncryptionUtils {
                 md.update(elementSignatureSource.toString().getBytes(UTF_8));
                 messageDigest = md.digest();
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                Timber.e(e,"Exception thrown while constructing md5 hash. "+e.getMessage());
+                Timber.e(e,"Exception thrown while constructing md5 hash due to %s ", e.getMessage());
                 Log.e(t, e.toString());
                 throw new IllegalArgumentException(e.getMessage());
             }
@@ -222,7 +222,7 @@ public class EncryptionUtils {
                 return wrapper.encodeToString(pkEncryptedKey);
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |IllegalBlockSizeException | BadPaddingException e) {
-                Timber.e(e,"Unable to encrypt the symmetric key. "+e.getMessage());
+                Timber.e(e, "Unable to encrypt the symmetric key due to %s ", e.getMessage());
                 Log.e(t, "Unable to encrypt the symmetric key");
                 throw new IllegalArgumentException(e.getMessage());
             }
@@ -239,7 +239,7 @@ public class EncryptionUtils {
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
                 isNotBouncyCastle = false;
             } catch (NoSuchProviderException e) {
-                Timber.w(e,"Unable to obtain BouncyCastle provider! Decryption may fail! "+e.getMessage());
+                Timber.w(e, "Unable to obtain BouncyCastle provider! Decryption may fail due to %s ", e.getMessage());
                 Log.w(t, "Unable to obtain BouncyCastle provider! Decryption may fail!");
                 isNotBouncyCastle = true;
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
@@ -347,7 +347,7 @@ public class EncryptionUtils {
             } catch (ClassNotFoundException e) {
                 String msg = String.format(Collect.getInstance()
                         .getString(R.string.phone_does_not_have_base64_class), String.valueOf(version));
-                Timber.e(e,msg+" "+e.getMessage());
+                Timber.e(e,"%s due to %s", msg, e.getMessage());
                 Log.e(t, msg);
                 throw new EncryptionException(msg, e);
             }
@@ -360,7 +360,7 @@ public class EncryptionUtils {
                 kf = KeyFactory.getInstance(RSA_ALGORITHM);
             } catch (NoSuchAlgorithmException e) {
                 String msg = Collect.getInstance().getString(R.string.phone_does_not_support_rsa);
-                Timber.e(e, msg +" "+e.getMessage());
+                Timber.e(e, "%s due to %s ", msg, e.getMessage());
                 Log.e(t, msg);
                 throw new EncryptionException(msg, e);
             }
@@ -368,7 +368,7 @@ public class EncryptionUtils {
                 pk = kf.generatePublic(publicKeySpec);
             } catch (InvalidKeySpecException e) {
                 String msg = Collect.getInstance().getString(R.string.invalid_rsa_public_key);
-                Timber.e(e, msg +" "+e.getMessage());
+                Timber.e(e, "%s due to %s ", msg, e.getMessage());
                 Log.e(t, msg);
                 throw new EncryptionException(msg, e);
             }
@@ -389,7 +389,7 @@ public class EncryptionUtils {
         // https://code.google.com/p/opendatakit/issues/detail?id=918
         try {
             Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
-        } catch (NoSuchAlgorithmException |NoSuchProviderException |NoSuchPaddingException e) {
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
             String msg="";
             if( e instanceof  NoSuchAlgorithmException){
                 msg = "No BouncyCastle implementation of symmetric algorithm!";
@@ -399,7 +399,7 @@ public class EncryptionUtils {
                 msg = "No BouncyCastle provider for padding implementation of symmetric algorithm!";
             }
             Log.e(t, msg);
-            Timber.e(e,msg);
+            Timber.e(e, msg);
             return null;
         }
 
@@ -448,7 +448,7 @@ public class EncryptionUtils {
             String msg = "Error encrypting: " + file.getName() + " -> "
                     + encryptedFile.getName();
             Log.e(t, msg, e);
-            Timber.e(e,msg+" "+e.getMessage());
+            Timber.e(e, "%s due to %s ", msg, e.getMessage());
             throw new EncryptionException(msg, e);
         } finally {
             IOUtils.closeQuietly(cipherOutputStream);
@@ -620,7 +620,7 @@ public class EncryptionUtils {
             String msg = "Error writing submission.xml for encrypted submission: "
                     + submissionXml.getParentFile().getName();
             Log.e(t, msg);
-            Timber.e(ex,msg+" "+ex.getMessage());
+            Timber.e(ex, "%s due to : %s ", msg, ex.getMessage());
             throw new EncryptionException(msg, ex);
         } finally {
             IOUtils.closeQuietly(writer);

@@ -180,7 +180,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 return true;
                             }
                         } catch (Exception e) {
-                            Timber.e(e,"Exception thrown parsing URI for url "+urlString+" . "+e.getMessage());
+                            Timber.e(e, "Exception thrown parsing URI for url %s due to : %s ", urlString, e.getMessage());
                             outcome.mResults.put(id, fail + urlString + " " + e.toString());
                             cv.put(InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -208,22 +208,22 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         return true;
                     }
                 }
-            } catch (ClientProtocolException | ConnectTimeoutException |UnknownHostException |SocketTimeoutException |HttpHostConnectException e) {
+            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
                 if(e instanceof  ClientProtocolException){
                     outcome.mResults.put(id, fail + "Client Protocol Exception");
-                    Timber.e(e,"Client Protocol Exception "+((ClientProtocolException) e).getMessage());
+                    Timber.e(e, "Client Protocol Exception thrown due to : %s ", e.getMessage());
                 }else if(e instanceof  ConnectTimeoutException){
                     outcome.mResults.put(id, fail + "Connection Timeout");
-                    Timber.e(e,"Connection Timeout "+((ConnectTimeoutException) e).getMessage());
+                    Timber.e(e, "Connection Timeout due to : %s ", e.getMessage());
                 }else if(e instanceof  UnknownHostException){
                     outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
-                    Timber.e(e,"Network Connection Failed "+((UnknownHostException) e).getMessage());
+                    Timber.e(e, "Network Connection Failed due to : %s ", e.getMessage());
                 }else if(e instanceof  SocketTimeoutException){
                     outcome.mResults.put(id, fail + "Connection Timeout");
-                    Timber.e(e,"Connection timeout "+((SocketTimeoutException) e).getMessage());
+                    Timber.e(e, "Connection timeout due to : %s ", e.getMessage());
                 }else{
                     outcome.mResults.put(id, fail + "Network Connection Refused");
-                    Timber.e(e,"Network Connection Refused "+((HttpHostConnectException) e).getMessage());
+                    Timber.e(e,"Network Connection Refused due to : %s ", e.getMessage());
                 }
                 Log.e(t, e.toString());
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -236,6 +236,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     msg = e.toString();
                 }
                 outcome.mResults.put(id, fail + "Generic Exception: " + msg);
+                Timber.e(e, e.getMessage());
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
@@ -449,7 +450,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                     ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                             builder.addPart("*isIncomplete*", sb);
                         } catch (Exception e) {
-                            Timber.e(e,e.getMessage());
+                            Timber.e(e, e.getMessage());
                         }
                         ++j; // advance over the last attachment added...
                         break;
@@ -498,7 +499,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     return true;
                 }
             } catch (Exception e) {
-                Timber.e(e,e.getMessage());
+                Timber.e(e, e.getMessage());
                 Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
@@ -578,7 +579,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         // unreachable...
-                        Timber.i(e,"Error encoding URL. "+e.getMessage());
+                        Timber.i(e, "Error encoding URL for devise id : %s due to : %s ", deviceId, e.getMessage());
                     }
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,

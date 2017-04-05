@@ -666,14 +666,14 @@ public class MainMenuActivity extends Activity {
 
             res = true;
         } catch (IOException | ClassNotFoundException e) {
-            Timber.e(e,"Exception while loading preferences from file "+e.getMessage());
+            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
                 if (input != null) {
                     input.close();
                 }
             } catch (IOException ex) {
-                Timber.e(ex,"Exception thrown while closing an input stream. "+ ex.getMessage());
+                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
             }
         }
         return res;
