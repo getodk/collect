@@ -349,7 +349,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMarker.setOnMarkerDragListener(this);
                 mMarker.setDraggable(true);
             }
-            overlayEventos = new MapEventsOverlay(getBaseContext(), this);
+            overlayEventos = new MapEventsOverlay(this);
             mMap.getOverlays().add(overlayEventos);
         }
 
