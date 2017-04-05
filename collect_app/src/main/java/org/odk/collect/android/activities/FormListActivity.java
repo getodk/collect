@@ -8,38 +8,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
 
 abstract class FormListActivity extends AppListActivity {
-    @Override
-    protected void sortByNameAsc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByNameDesc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByDateAsc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByDateDesc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByStatusAsc() {
-    }
-
-    @Override
-    protected void sortByStatusDesc() {
-    }
-
-    @Override
-    protected void setupAdapter() {
-    }
-
     protected String getSortingOrder() {
         if (mSelectedSortingOrder == null) {
             restoreSelectedSortingOrder();

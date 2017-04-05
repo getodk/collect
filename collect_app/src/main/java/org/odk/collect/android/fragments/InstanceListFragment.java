@@ -22,41 +22,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
-public class InstanceListFragment extends FileManagerFragment {
-    @Override
-    protected void sortByNameAsc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByNameDesc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByDateAsc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByDateDesc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByStatusAsc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void sortByStatusDesc() {
-        setupAdapter();
-    }
-
-    @Override
-    protected void setupAdapter() {
-    }
-
+public abstract class InstanceListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
         if (mSelectedSortingOrder == null) {
             restoreSelectedSortingOrder();

@@ -45,12 +45,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 abstract class AppListFragment extends ListFragment {
     private static final int MENU_SORT = Menu.FIRST;
@@ -193,32 +188,8 @@ abstract class AppListFragment extends ListFragment {
 
     private void performSelectedSearch(int position) {
         hideSearchBox();
-        switch (position) {
-            case BY_NAME_ASC:
-                saveSelectedSortingOrder(BY_NAME_ASC);
-                sortByNameAsc();
-                break;
-            case BY_NAME_DESC:
-                saveSelectedSortingOrder(BY_NAME_DESC);
-                sortByNameDesc();
-                break;
-            case BY_DATE_ASC:
-                saveSelectedSortingOrder(BY_DATE_ASC);
-                sortByDateDesc();
-                break;
-            case BY_DATE_DESC:
-                saveSelectedSortingOrder(BY_DATE_DESC);
-                sortByDateAsc();
-                break;
-            case BY_STATUS_ASC:
-                saveSelectedSortingOrder(BY_STATUS_ASC);
-                sortByStatusAsc();
-                break;
-            case BY_STATUS_DESC:
-                saveSelectedSortingOrder(BY_STATUS_DESC);
-                sortByStatusDesc();
-                break;
-        }
+        saveSelectedSortingOrder(position);
+        setupAdapter();
     }
 
     @Override
@@ -287,18 +258,6 @@ abstract class AppListFragment extends ListFragment {
     }
 
     protected abstract void filter(CharSequence charSequence);
-
-    protected abstract void sortByNameAsc();
-
-    protected abstract void sortByNameDesc();
-
-    protected abstract void sortByDateAsc();
-
-    protected abstract void sortByDateDesc();
-
-    protected abstract void sortByStatusAsc();
-
-    protected abstract void sortByStatusDesc();
 
     protected abstract void setupAdapter();
 
