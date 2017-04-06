@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
@@ -172,6 +173,9 @@ abstract class AppListFragment extends ListFragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                if(position == mSelectedSortingOrder) {
+                    textView.setBackgroundColor(Color.parseColor("#2196F3"));
+                }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
             }
@@ -180,6 +184,8 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.parseColor("#DDDDDD"));
+                view.setBackgroundColor(Color.parseColor("#2196F3"));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
