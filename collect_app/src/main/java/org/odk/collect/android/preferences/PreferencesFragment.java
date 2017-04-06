@@ -18,6 +18,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.util.TreeMap;
 
@@ -134,13 +135,14 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     }
 
     private void initLanguagePrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_LANGUAGE);
-        final LocaleHelper localeHelper = new LocaleHelper();
-        TreeMap<String, String> languageList = localeHelper.getEntryListValues();
-        pref.setEntryValues(languageList.values().toArray(new String[0]));
-        pref.setEntries(languageList.keySet().toArray(new String[0]));
+        final ListPreference pref = (ListPreference) findPreference(KEY_APP_LANGUAGE);
 
         if (pref != null) {
+            final LocaleHelper localeHelper = new LocaleHelper();
+            TreeMap<String, String> languageList = localeHelper.getEntryListValues();
+            int length = languageList.size();
+            pref.setEntryValues(languageList.values().toArray(new String[length]));
+            pref.setEntries(languageList.keySet().toArray(new String[length]));
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -152,8 +154,8 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
                     SharedPreferences.Editor edit = PreferenceManager
                             .getDefaultSharedPreferences(getActivity()).edit();
-                    edit.putString(KEY_LANGUAGE, newValue.toString());
-                    edit.commit();
+                    edit.putString(KEY_APP_LANGUAGE, newValue.toString());
+                    edit.apply();
                     localeHelper.updateLocale(getActivity());
 
                     Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);

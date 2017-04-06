@@ -110,9 +110,9 @@
             android:summary="@string/found_in_settings"
             android:title="@string/font_size" />
         <CheckBoxPreference
-            android:id="@+id/language"
+            android:id="@+id/app_language"
             android:defaultValue="true"
-            android:key="language"
+            android:key="app_language"
             android:summary="@string/found_in_settings"
             android:title="@string/language" />
         <CheckBoxPreference

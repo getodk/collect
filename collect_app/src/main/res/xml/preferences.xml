@@ -62,10 +62,10 @@
             android:key="font_size"
             android:title="@string/font_size" />
         <ListPreference
-            android:id="@+id/language"
+            android:id="@+id/app_language"
             android:defaultValue="en"
             android:dialogTitle="@string/language"
-            android:key="language"
+            android:key="app_language"
             android:title="@string/language" />
         <CheckBoxPreference
             android:id="@+id/instance_sync"

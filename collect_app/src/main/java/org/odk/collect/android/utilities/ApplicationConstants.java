@@ -20,6 +20,13 @@ public class ApplicationConstants {
     // based on http://www.sqlite.org/limits.html
     public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
 
+    public static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar", "bn",
+            "ca", "cs", "de", "en", "es", "es_SV", "et", "fa", "fi", "fr", "ha",
+            "hi", "hi_IN", "hu", "in", "it", "ja", "ka", "km", "lo_LA", "lt", "mg",
+            "my", "nb", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "so",
+            "sq", "sw", "sw_KE", "ta", "th_TH", "tl", "tl_PH", "tr", "uk", "ur",
+            "ur_PK", "vi", "zh", "zu"};
+
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
     }
