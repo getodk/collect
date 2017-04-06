@@ -41,7 +41,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;

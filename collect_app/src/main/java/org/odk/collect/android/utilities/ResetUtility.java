@@ -24,8 +24,6 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
 
 import java.io.File;
 import java.util.ArrayList;
