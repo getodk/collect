@@ -3,7 +3,6 @@ package org.odk.collect.android.spatial;
 import android.content.Context;
 
 import org.odk.collect.android.R;
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
@@ -22,7 +21,6 @@ public class TileSourceFactory {
     public TileSourceFactory(Context context) {
         mUSGSTopo = new OnlineTileSourceBase(
                 context.getString(R.string.openmap_usgs_topo),
-                ResourceProxy.string.unknown,
                 0, 18, 256, "",
                 new String[] { "http://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/" }) {
             @Override
@@ -33,7 +31,6 @@ public class TileSourceFactory {
 
         mUsgsSat = new OnlineTileSourceBase(
                 context.getString(R.string.openmap_usgs_sat),
-                ResourceProxy.string.unknown,
                 0, 18, 256, "",
                 new String[]{"http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/"}) {
             @Override
@@ -43,15 +40,15 @@ public class TileSourceFactory {
         };
 
         mStamenTerrain = new XYTileSource(context.getString(R.string.openmap_stamen_terrain),
-                ResourceProxy.string.unknown, 0, 18, 256, ".jpg", new String[] {
+                0, 18, 256, ".jpg", new String[] {
                 "http://tile.stamen.com/terrain/" });
 
         mCartoDbPositron = new XYTileSource(context.getString(R.string.openmap_cartodb_positron),
-                ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
+                0, 18, 256, ".png", new String[] {
                 "http://1.basemaps.cartocdn.com/light_all/" });
 
         mCartoDbDarkMatter = new XYTileSource(context.getString(R.string.openmap_cartodb_darkmatter),
-                ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
+                0, 18, 256, ".png", new String[] {
                 "http://1.basemaps.cartocdn.com/dark_all/" });
     }
 
