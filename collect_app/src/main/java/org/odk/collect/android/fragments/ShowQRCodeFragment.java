@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
+    private final String TAG = "QRCodeFragment";
     private static final int QRCODE_CAPTURE = 1;
     private SharedPreferences settings;
 
@@ -112,6 +114,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             }
             return bmp;
         } catch (WriterException | JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
         }
         return null;
     }
@@ -125,6 +128,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     startActivityForResult(i, QRCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     ToastUtils.showShortToast(R.string.barcode_scanner_error);
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 break;
         }
@@ -148,7 +152,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     applySettings(jsonObject);
                     ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage(), e);
                 }
                 break;
         }
