@@ -1,18 +1,24 @@
 package org.odk.collect.android.utilities;
 
-import okhttp3.mockwebserver.*;
-
-import java.net.*;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.*;
-import org.odk.collect.android.application.*;
-import org.opendatakit.httpclientandroidlib.*;
-import org.opendatakit.httpclientandroidlib.client.*;
-import org.opendatakit.httpclientandroidlib.client.methods.*;
-import org.opendatakit.httpclientandroidlib.protocol.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.odk.collect.android.application.Collect;
+import org.opendatakit.httpclientandroidlib.HttpResponse;
+import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WebUtilsTest {
     private MockWebServer server;
