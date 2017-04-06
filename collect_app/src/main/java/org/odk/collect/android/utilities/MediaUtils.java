@@ -42,6 +42,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Consolidate all interactions with media providers here.
  *
@@ -129,6 +131,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Unable to delete image file from media provider due to %s ", e.getMessage());
             Log.e(t, e.toString());
         } finally {
             if (imageCursor != null) {
@@ -174,6 +177,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Unable to delete images in folder %s due to %s", folder.getAbsoluteFile(), e.getMessage());
             Log.e(t, e.toString());
         } finally {
             if (imageCursor != null) {
@@ -244,6 +248,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Unable to delete audio file %s due to %s ", audioFile, e.getMessage());
             Log.e(t, e.toString());
         } finally {
             if (audioCursor != null) {
@@ -289,6 +294,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Unable to delete audio files in folder %s due to %s", folder.getAbsolutePath(), e.getMessage());
             Log.e(t, e.toString());
         } finally {
             if (audioCursor != null) {
@@ -359,6 +365,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Unable to delete video file %s due to %s ", videoFile, e.getMessage());
             Log.e(t, e.toString());
         } finally {
             if (videoCursor != null) {
@@ -404,6 +411,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Unable to delete video files in folder %s due to %s ", folder.getAbsolutePath(), e.getMessage());
             Log.e(t, e.toString());
         } finally {
             if (videoCursor != null) {
@@ -570,6 +578,7 @@ public class MediaUtils {
             }
             return new File(filePath);
         } catch (IOException e) {
+            Timber.e(e, e.getMessage());
         } finally {
             IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(outputStream);

@@ -41,6 +41,8 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 /**
  * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
  * locations.
@@ -187,6 +189,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
                 }
                 return new StringData(s);
             } catch (NumberFormatException e) {
+                Timber.e(e, e.getMessage());
                 return null;
             }
         }

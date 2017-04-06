@@ -221,7 +221,7 @@ public class EncryptionUtils {
                 byte[] pkEncryptedKey = pkCipher.doFinal(messageDigest);
                 return wrapper.encodeToString(pkEncryptedKey);
 
-            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |IllegalBlockSizeException | BadPaddingException e) {
+            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
                 Timber.e(e, "Unable to encrypt the symmetric key due to %s ", e.getMessage());
                 Log.e(t, "Unable to encrypt the symmetric key");
                 throw new IllegalArgumentException(e.getMessage());
@@ -391,11 +391,11 @@ public class EncryptionUtils {
             Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
         } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
             String msg="";
-            if( e instanceof  NoSuchAlgorithmException){
+            if ( e instanceof  NoSuchAlgorithmException) {
                 msg = "No BouncyCastle implementation of symmetric algorithm!";
-            }else if(e instanceof  NoSuchProviderException){
+            } else if (e instanceof  NoSuchProviderException) {
                 msg = "No BouncyCastle provider implementation of symmetric algorithm!";
-            }else{
+            } else {
                 msg = "No BouncyCastle provider for padding implementation of symmetric algorithm!";
             }
             Log.e(t, msg);

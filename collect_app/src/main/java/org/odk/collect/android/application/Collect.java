@@ -288,7 +288,6 @@ public class Collect extends Application {
                 return;
             }
 
-            //Changed from Log.ERROR to priority below.
             FirebaseCrash.logcat(priority, tag, message);
 
             if (t != null && priority == Log.ERROR) {

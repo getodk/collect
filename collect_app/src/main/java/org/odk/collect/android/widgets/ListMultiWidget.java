@@ -51,6 +51,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * ListMultiWidget handles multiple selection fields using check boxes. The check boxes are aligned
  * horizontally. They are typically meant to be used in a field list, where multiple questions with
@@ -204,6 +206,7 @@ public class ListMultiWidget extends QuestionWidget {
                         }
                     } catch (InvalidReferenceException e) {
                         Log.e(t, "image invalid reference exception");
+                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

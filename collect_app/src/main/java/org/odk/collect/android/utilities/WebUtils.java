@@ -66,6 +66,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
+import timber.log.Timber;
+
 /**
  * Common utility methods for managing the credentials associated with the
  * request context and constructing http context, client and request with the
@@ -296,7 +298,9 @@ public final class WebUtils {
                 }
                 is.close();
             } catch (IOException e) {
+                Timber.e(e, "Unable read the stream due to %s ", e.getMessage());
             } catch (Exception e) {
+                Timber.e(e, e.getMessage());
             }
         }
     }
@@ -312,6 +316,7 @@ public final class WebUtils {
             URL url = new URL(urlString);
             u = url.toURI();
         } catch (Exception e) {
+            Timber.e(e, "Error converting URL %s to uri due to %s", urlString, e.getMessage());
             return new DocumentFetchResult(e.getLocalizedMessage()
                     // + app.getString(R.string.while_accessing) + urlString);
                     + ("while accessing") + urlString, 0);
@@ -399,17 +404,20 @@ public final class WebUtils {
                             }
                         } catch (Exception e) {
                             // no-op
+                            Timber.e(e, e.getMessage());
                         }
                         try {
                             isr.close();
-                        } catch (Exception e) {
+                        } catch (IOException e) {
                             // no-op
+                            Timber.e(e, "Error closing input stream reader due to %s", e.getMessage());
                         }
                     }
                     if (is != null) {
                         try {
                             is.close();
-                        } catch (Exception e) {
+                        } catch (IOException e) {
+                            Timber.e(e, "Error closing inputstream due to %s", e.getMessage());
                             // no-op
                         }
                     }
@@ -417,6 +425,7 @@ public final class WebUtils {
             } catch (Exception e) {
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
+                Timber.e(e, error);
                 Log.e(t, error);
                 return new DocumentFetchResult(error, 0);
             }
@@ -456,6 +465,7 @@ public final class WebUtils {
             String error = "Error: " + cause + " while accessing "
                     + u.toString();
 
+            Timber.w(e, error);
             Log.w(t, error);
             return new DocumentFetchResult(error, 0);
         }
