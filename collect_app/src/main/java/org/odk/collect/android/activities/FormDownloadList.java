@@ -331,7 +331,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         toggleButtonLabel(mToggleButton, getListView());
-        setupAdapter();
     }
 
     @Override
@@ -421,36 +420,24 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     @Override
-    protected void setupAdapter() {
-        getListView().clearChoices();
-        Collections.sort(mFilteredFormList, new Comparator<HashMap<String, String>>() {
-            @Override
-            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                if (getSortingOrder().equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
-                    return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
-                } else {
-                    return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
-                }
-            }
-        });
-
-        mFormListAdapter.notifyDataSetChanged();
-        checkPreviouslyCheckedItems();
-    }
-
-    @Override
     protected String getSortingOrderKey() {
         return FORM_DOWNLOAD_LIST_SORTING_ORDER;
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
+    protected void updateAdapter() {
+        CharSequence charSequence = getFilterText();
         mFilteredFormList.clear();
-        for (HashMap<String, String> form : mFormList) {
-            if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {
-                mFilteredFormList.add(form);
+        if (charSequence.length() > 0) {
+            for (HashMap<String, String> form : mFormList) {
+                if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                    mFilteredFormList.add(form);
+                }
             }
+        } else {
+            mFilteredFormList.addAll(mFormList);
         }
+        sortList();
         mFormListAdapter.notifyDataSetChanged();
         checkPreviouslyCheckedItems();
     }
@@ -465,6 +452,19 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 getListView().setItemChecked(i, true);
             }
         }
+    }
+
+    private void sortList() {
+        Collections.sort(mFilteredFormList, new Comparator<HashMap<String, String>>() {
+            @Override
+            public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
+                if (getSortingOrder().equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
+                    return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
+                } else {
+                    return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
+                }
+            }
+        });
     }
 
     /**
@@ -678,7 +678,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 }
             }
             mFilteredFormList.addAll(mFormList);
-            setupAdapter();
+            updateAdapter();
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);

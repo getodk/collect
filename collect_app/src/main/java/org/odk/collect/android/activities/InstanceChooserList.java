@@ -184,17 +184,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         super.onStop();
     }
 
-    @Override
-    protected void setupAdapter() {
-        Cursor cursor;
-        InstancesDao instancesDao = new InstancesDao();
-
-        if (mEditMode) {
-            cursor = instancesDao.getUnsentInstancesCursor(getSortingOrder());
-        } else {
-            cursor = instancesDao.getSentInstancesCursor(getSortingOrder());
-        }
-
+    private void setupAdapter() {
         String[] data = new String[]{
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
         };
@@ -203,9 +193,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         };
 
         if (mEditMode) {
-            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
         } else {
-            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
         }
         setListAdapter(mListAdapter);
     }
@@ -216,12 +206,19 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+    }
+
+    private Cursor getCursor() {
+        Cursor cursor;
         if (mEditMode) {
-            mListAdapter.changeCursor(new InstancesDao().getFilteredUnsentInstancesCursor(charSequence));
+            cursor = new InstancesDao().getUnsentInstancesCursor(getFilterText(), getSortingOrder());
         } else {
-            mListAdapter.changeCursor(new InstancesDao().getFilteredSentInstancesCursor(charSequence));
+            cursor = new InstancesDao().getSentInstancesCursor(getFilterText(), getSortingOrder());
         }
+
+        return cursor;
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
