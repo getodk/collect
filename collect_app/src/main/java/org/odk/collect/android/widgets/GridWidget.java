@@ -150,6 +150,7 @@ public class GridWidget extends QuestionWidget {
         if (numColumns > 0) {
             resizeWidth = ((screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
                     - (IMAGE_PADDING + SPACING) * numColumns) / numColumns);
+            resizeWidth =  (resizeWidth * 95)/100;
         }
 
         // Build view
@@ -197,6 +198,7 @@ public class GridWidget extends QuestionWidget {
                             }
 
                             ImageView imageView = (ImageView) imageViews[i];
+
 
 
                             if (numColumns > 0) {

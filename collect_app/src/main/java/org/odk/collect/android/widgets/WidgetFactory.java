@@ -155,8 +155,12 @@ public class WidgetFactory {
                     }
 
                     if (appearance.startsWith("quick")) {
+                        if (numColumns == -1)
+                            numColumns = 2;
                         questionWidget = new GridWidget(context, fep, numColumns, true);
                     } else {
+                        if (numColumns == -1)
+                            numColumns = 2;
                         questionWidget = new GridWidget(context, fep, numColumns, false);
                     }
                 } else if (appearance.startsWith("minimal")) {
