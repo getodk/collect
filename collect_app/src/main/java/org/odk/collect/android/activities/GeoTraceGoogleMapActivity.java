@@ -53,7 +53,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
-import org.osmdroid.DefaultResourceProxyImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +91,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean play_check = false;
     private Spinner time_units;
     private Spinner time_delay;
-    public DefaultResourceProxyImpl resource_proxy;
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
@@ -167,7 +165,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
         polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
-        resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
         time_delay.setSelection(3);
         time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
