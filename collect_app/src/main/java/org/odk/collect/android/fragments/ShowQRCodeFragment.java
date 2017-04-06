@@ -49,9 +49,11 @@ import java.util.Map;
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 
 /**
@@ -86,7 +88,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
 
     private Bitmap generateQRBitMap() {
-
         final String content;
         try {
             content = getUserPreferences();
@@ -111,20 +112,18 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         return null;
     }
 
-    private String getUserPreferences() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put(KEY_PROTOCOL, settings.getString(KEY_PROTOCOL, null));
-        jsonObject.put(KEY_SERVER_URL, settings.getString(KEY_SERVER_URL,
-                getActivity().getString(R.string.default_server_url)));
-        jsonObject.put(KEY_GOOGLE_SHEETS_URL, settings.getString(KEY_GOOGLE_SHEETS_URL,
-                getActivity().getString(R.string.default_google_sheets_url)));
-        jsonObject.put(KEY_FORMLIST_URL, settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
-                getActivity().getString(R.string.default_odk_formlist)));
-        jsonObject.put(KEY_SUBMISSION_URL, settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
-                getActivity().getString(R.string.default_odk_submission)));
-
-        return jsonObject.toString();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnScan:
+                Intent i = new Intent("com.google.zxing.client.android.SCAN");
+                try {
+                    startActivityForResult(i, QRCODE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    ToastUtils.showShortToast(R.string.barcode_scanner_error);
+                }
+                break;
+        }
     }
 
     @Override
@@ -157,20 +156,24 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         editor.putString(KEY_GOOGLE_SHEETS_URL, jsonObject.getString(KEY_GOOGLE_SHEETS_URL));
         editor.putString(KEY_FORMLIST_URL, jsonObject.getString(KEY_FORMLIST_URL));
         editor.putString(KEY_SUBMISSION_URL, jsonObject.getString(KEY_SUBMISSION_URL));
+        editor.putString(KEY_USERNAME, jsonObject.getString(KEY_USERNAME));
+        editor.putString(KEY_PASSWORD, jsonObject.getString(KEY_PASSWORD));
         editor.apply();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnScan:
-                Intent i = new Intent("com.google.zxing.client.android.SCAN");
-                try {
-                    startActivityForResult(i, QRCODE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    ToastUtils.showShortToast(R.string.barcode_scanner_error);
-                }
-                break;
-        }
+    private String getUserPreferences() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(KEY_PROTOCOL, settings.getString(KEY_PROTOCOL, null));
+        jsonObject.put(KEY_SERVER_URL, settings.getString(KEY_SERVER_URL,
+                getActivity().getString(R.string.default_server_url)));
+        jsonObject.put(KEY_GOOGLE_SHEETS_URL, settings.getString(KEY_GOOGLE_SHEETS_URL,
+                getActivity().getString(R.string.default_google_sheets_url)));
+        jsonObject.put(KEY_FORMLIST_URL, settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
+                getActivity().getString(R.string.default_odk_formlist)));
+        jsonObject.put(KEY_SUBMISSION_URL, settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
+                getActivity().getString(R.string.default_odk_submission)));
+        jsonObject.put(KEY_USERNAME, settings.getString(PreferenceKeys.KEY_USERNAME, ""));
+        jsonObject.put(KEY_PASSWORD, settings.getString(PreferenceKeys.KEY_PASSWORD, ""));
+        return jsonObject.toString();
     }
 }
