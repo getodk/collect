@@ -216,11 +216,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
+    protected void updateAdapter(CharSequence charSequence) {
         if (mEditMode) {
-            mListAdapter.changeCursor(new InstancesDao().getFilteredUnsentInstancesCursor(charSequence, getSortingOrder()));
+            mListAdapter.changeCursor(new InstancesDao().getSortedFilteredUnsentInstancesCursor(charSequence, getSortingOrder()));
         } else {
-            mListAdapter.changeCursor(new InstancesDao().getFilteredSentInstancesCursor(charSequence, getSortingOrder()));
+            mListAdapter.changeCursor(new InstancesDao().getSortedFilteredSentInstancesCursor(charSequence, getSortingOrder()));
         }
     }
 

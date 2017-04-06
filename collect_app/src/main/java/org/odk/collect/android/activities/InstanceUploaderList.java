@@ -41,7 +41,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -329,11 +328,11 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
+    protected void updateAdapter(CharSequence charSequence) {
         if (mShowAllMode) {
-            mListAdapter.changeCursor(mInstanceDao.getFilteredCompletedUndeletedInstancesCursor(charSequence, getSortingOrder()));
+            mListAdapter.changeCursor(mInstanceDao.getSortedFilteredCompletedUndeletedInstancesCursor(charSequence, getSortingOrder()));
         } else {
-            mListAdapter.changeCursor(mInstanceDao.getFilteredFinalizedInstancesCursor(charSequence, getSortingOrder()));
+            mListAdapter.changeCursor(mInstanceDao.getSortedFilteredFinalizedInstancesCursor(charSequence, getSortingOrder()));
         }
         checkPreviouslyCheckedItems();
         mUploadButton.setEnabled(areCheckedItems());

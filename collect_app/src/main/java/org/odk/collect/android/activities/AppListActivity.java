@@ -167,13 +167,13 @@ abstract class AppListActivity extends ListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter(s);
+                updateAdapter(s);
             }
         });
 
         if (mIsSearchBoxShown) {
             showSearchBox();
-            filter(mInputSearch.getText());
+            updateAdapter(mInputSearch.getText());
         }
     }
 
@@ -209,9 +209,8 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void performSelectedSearch(int position) {
-        hideSearchBox();
         saveSelectedSortingOrder(position);
-        setupAdapter();
+        updateAdapter(mInputSearch.getText());
     }
 
     private void setupDrawer() {
@@ -256,7 +255,7 @@ abstract class AppListActivity extends ListActivity {
         }
     }
 
-    protected abstract void filter(CharSequence charSequence);
+    protected abstract void updateAdapter(CharSequence charSequence);
 
     protected abstract void setupAdapter();
 

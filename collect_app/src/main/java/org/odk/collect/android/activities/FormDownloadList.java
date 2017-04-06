@@ -444,7 +444,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
+    protected void updateAdapter(CharSequence charSequence) {
         mFilteredFormList.clear();
         for (HashMap<String, String> form : mFormList) {
             if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {

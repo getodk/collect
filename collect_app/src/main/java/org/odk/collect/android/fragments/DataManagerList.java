@@ -31,7 +31,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -146,9 +145,9 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new InstancesDao().getFilteredSavedInstancesCursor(charSequence, getSortingOrder()));
-        super.filter(charSequence);
+    protected void updateAdapter(CharSequence charSequence) {
+        mListAdapter.changeCursor(new InstancesDao().getSortedFilteredSavedInstancesCursor(charSequence, getSortingOrder()));
+        super.updateAdapter(charSequence);
     }
 
     /**

@@ -257,7 +257,7 @@ abstract class AppListFragment extends ListFragment {
         Collect.getInstance().showKeyboard(mInputSearch);
     }
 
-    protected abstract void filter(CharSequence charSequence);
+    protected abstract void updateAdapter(CharSequence charSequence);
 
     protected abstract void setupAdapter();
 

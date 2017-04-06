@@ -36,10 +36,10 @@ public class FormsDao {
         return getFormsCursor(null, null, null, null);
     }
 
-    public Cursor getFilteredFormsCursor(CharSequence charSequence, String sortOrder) {
+    public Cursor getSortedFilteredFormsCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
         if (charSequence == null || charSequence.length() == 0) {
-            cursor = getFormsCursor();
+            cursor = getFormsCursor(sortOrder);
         } else {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
             String selectionArgs[] = new String[] { "%"+charSequence+"%" };
