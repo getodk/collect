@@ -14,4 +14,5 @@
     <issue id="HardcodedText" severity="error" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="RtlHardcoded" severity="error" />
+    <issue id="Deprecated"  severity="error" />
 </lint>
