@@ -74,6 +74,7 @@ import java.util.Set;
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
         FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final String t = "RemoveFileManageList";
+    private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
@@ -330,6 +331,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         toggleButtonLabel(mToggleButton, getListView());
+        setupAdapter();
     }
 
     @Override
@@ -419,12 +421,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     @Override
-    protected void setupAdapter(final String sortOrder) {
+    protected void setupAdapter() {
         getListView().clearChoices();
         Collections.sort(mFilteredFormList, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                if (sortOrder.equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
+                if (getSortingOrder().equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
                     return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
                 } else {
                     return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
@@ -434,6 +436,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         mFormListAdapter.notifyDataSetChanged();
         checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return FORM_DOWNLOAD_LIST_SORTING_ORDER;
     }
 
     @Override
@@ -599,8 +606,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private void selectSupersededForms() {
 
         ListView ls = getListView();
-        for (int idx = 0; idx < mFormList.size(); idx++) {
-            HashMap<String, String> item = mFormList.get(idx);
+        for (int idx = 0; idx < mFilteredFormList.size(); idx++) {
+            HashMap<String, String> item = mFilteredFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
                 ls.setItemChecked(idx, true);
                 mSelectedForms.add(item.get(FORMDETAIL_KEY));
@@ -670,8 +677,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     mFormList.add(j, item);
                 }
             }
-            selectSupersededForms();
             mFilteredFormList.addAll(mFormList);
+            setupAdapter();
+            selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
             toggleButtonLabel(mToggleButton, getListView());

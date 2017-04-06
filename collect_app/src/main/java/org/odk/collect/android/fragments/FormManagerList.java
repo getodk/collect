@@ -48,6 +48,7 @@ import java.util.List;
  */
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
+    private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handled across orientation changes
@@ -70,7 +71,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         mDeleteButton.setOnClickListener(this);
         mToggleButton.setOnClickListener(this);
 
-        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
+        setupAdapter();
 
         if (mBackgroundTasks == null) {
             mBackgroundTasks = new BackgroundTasks();
@@ -119,7 +120,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
         List<Long> checkedForms = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedForms.add(a);
@@ -129,9 +130,14 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
         mListAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, new FormsDao().getFormsCursor(sortOrder), data, view);
+                R.layout.two_item_multiple_choice, new FormsDao().getFormsCursor(getSortingOrder()), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return FORM_MANAGER_LIST_SORTING_ORDER;
     }
 
     @Override

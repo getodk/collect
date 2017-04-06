@@ -29,7 +29,7 @@ import android.widget.ListView;
 import org.odk.collect.android.R;
 
 
-public class FileManagerFragment extends AppListFragment {
+public abstract class FileManagerFragment extends AppListFragment {
     protected Button mDeleteButton;
     protected Button mToggleButton;
 
@@ -107,41 +107,5 @@ public class FileManagerFragment extends AppListFragment {
     protected void filter(CharSequence charSequence) {
         checkPreviouslyCheckedItems();
         mDeleteButton.setEnabled(areCheckedItems());
-    }
-
-
-    @Override
-    protected void sortByNameAsc() {
-
-    }
-
-    @Override
-    protected void sortByNameDesc() {
-
-    }
-
-    @Override
-    protected void sortByDateAsc() {
-
-    }
-
-    @Override
-    protected void sortByDateDesc() {
-
-    }
-
-    @Override
-    protected void sortByStatusAsc() {
-
-    }
-
-    @Override
-    protected void sortByStatusDesc() {
-
-    }
-
-    @Override
-    protected void setupAdapter(String sortOrder) {
-
     }
 }
