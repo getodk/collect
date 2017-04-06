@@ -167,13 +167,13 @@ abstract class AppListActivity extends ListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter(s);
+                updateAdapter();
             }
         });
 
         if (mIsSearchBoxShown) {
             showSearchBox();
-            filter(mInputSearch.getText());
+            updateAdapter();
         }
     }
 
@@ -209,9 +209,8 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void performSelectedSearch(int position) {
-        hideSearchBox();
         saveSelectedSortingOrder(position);
-        setupAdapter();
+        updateAdapter();
     }
 
     private void setupDrawer() {
@@ -256,9 +255,7 @@ abstract class AppListActivity extends ListActivity {
         }
     }
 
-    protected abstract void filter(CharSequence charSequence);
-
-    protected abstract void setupAdapter();
+    protected abstract void updateAdapter();
 
     protected abstract String getSortingOrderKey();
 
@@ -343,5 +340,9 @@ abstract class AppListActivity extends ListActivity {
         mSelectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected CharSequence getFilterText() {
+        return mInputSearch != null ? mInputSearch.getText() : "";
     }
 }

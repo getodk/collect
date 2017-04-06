@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -175,8 +176,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         tv.setText(result.trim());
     }
 
-    @Override
-    protected void setupAdapter() {
+    private void setupAdapter() {
         String[] data = new String[]{
                 FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
         };
@@ -185,7 +185,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         };
 
         mListAdapter =
-                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(getSortingOrder()), data, view);
+                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
 
         setListAdapter(mListAdapter);
     }
@@ -196,8 +196,12 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+    }
+
+    private Cursor getCursor() {
+        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
     }
 
     /**

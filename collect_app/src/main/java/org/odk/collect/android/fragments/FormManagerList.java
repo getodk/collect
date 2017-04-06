@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -119,8 +120,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         super.onPause();
     }
 
-    @Override
-    protected void setupAdapter() {
+    private void setupAdapter() {
         List<Long> checkedForms = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedForms.add(a);
@@ -130,7 +130,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
         mListAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, new FormsDao().getFormsCursor(getSortingOrder()), data, view);
+                R.layout.two_item_multiple_choice, getCursor(), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -141,9 +141,13 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
-        super.filter(charSequence);
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+        super.updateAdapter();
+    }
+
+    private Cursor getCursor() {
+        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
     }
 
     /**
