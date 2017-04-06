@@ -1,6 +1,8 @@
 package org.odk.collect.android.fragments;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
@@ -24,10 +27,12 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
@@ -39,8 +44,9 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_
  * Created by shobhit on 6/4/17.
  */
 
-public class ShowQRCodeFragment extends Fragment {
+public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
+    private static final int QRCODE_CAPTURE = 1;
     private SharedPreferences adminSettings;
     private SharedPreferences settings;
 
@@ -49,6 +55,9 @@ public class ShowQRCodeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         ImageView qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
+        Button scan = (Button) view.findViewById(R.id.btnScan);
+
+        scan.setOnClickListener(this);
 
         adminSettings = getActivity().getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -102,5 +111,37 @@ public class ShowQRCodeFragment extends Fragment {
                 getActivity().getString(R.string.default_odk_submission)));
 
         return jsonObject.toString();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_CANCELED) {
+            // request was canceled...
+            ToastUtils.showShortToast("Scanning Cancelled");
+            return;
+        }
+
+        switch (requestCode) {
+            case QRCODE_CAPTURE:
+                String sb = data.getStringExtra("SCAN_RESULT");
+                ToastUtils.showShortToast(sb);
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnScan:
+                Intent i = new Intent("com.google.zxing.client.android.SCAN");
+                try {
+                    startActivityForResult(i, QRCODE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    ToastUtils.showShortToast(R.string.barcode_scanner_error);
+                }
+                break;
+        }
     }
 }
