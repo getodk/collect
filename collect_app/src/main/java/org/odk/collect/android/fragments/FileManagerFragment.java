@@ -98,13 +98,13 @@ public abstract class FileManagerFragment extends AppListFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter(s);
+                updateAdapter();
             }
         });
     }
 
     @Override
-    protected void updateAdapter(CharSequence charSequence) {
+    protected void updateAdapter() {
         checkPreviouslyCheckedItems();
         mDeleteButton.setEnabled(areCheckedItems());
     }

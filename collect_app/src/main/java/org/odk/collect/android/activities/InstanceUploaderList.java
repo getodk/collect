@@ -302,22 +302,15 @@ public class InstanceUploaderList extends InstanceListActivity
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
-    @Override
-    protected void setupAdapter() {
+    private void setupAdapter() {
         List<Long> checkedInstances = new ArrayList();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
         }
-        Cursor cursor;
-        if (mShowAllMode) {
-            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
-        } else {
-            cursor = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
-        }
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, cursor, data, view);
+        mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -328,14 +321,21 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void updateAdapter(CharSequence charSequence) {
-        if (mShowAllMode) {
-            mListAdapter.changeCursor(mInstanceDao.getSortedFilteredCompletedUndeletedInstancesCursor(charSequence, getSortingOrder()));
-        } else {
-            mListAdapter.changeCursor(mInstanceDao.getSortedFilteredFinalizedInstancesCursor(charSequence, getSortingOrder()));
-        }
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
         checkPreviouslyCheckedItems();
         mUploadButton.setEnabled(areCheckedItems());
+    }
+
+    private Cursor getCursor() {
+        Cursor cursor;
+        if (mShowAllMode) {
+            cursor = mInstanceDao.getCompletedUndeletedInstancesCursor(getFilterText(), getSortingOrder());
+        } else {
+            cursor = mInstanceDao.getFinalizedInstancesCursor(getFilterText(), getSortingOrder());
+        }
+
+        return cursor;
     }
 
     private void showUnsent() {
@@ -343,7 +343,7 @@ public class InstanceUploaderList extends InstanceListActivity
         Cursor c = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
         Cursor old = mListAdapter.getCursor();
         try {
-            mListAdapter.changeCursor(c);
+            mListAdapter.changeCursor(getCursor());
         } finally {
             if (old != null) {
                 old.close();
@@ -358,7 +358,7 @@ public class InstanceUploaderList extends InstanceListActivity
         Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
         Cursor old = mListAdapter.getCursor();
         try {
-            mListAdapter.changeCursor(c);
+            mListAdapter.changeCursor(getCursor());
         } finally {
             if (old != null) {
                 old.close();

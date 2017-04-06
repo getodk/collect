@@ -187,9 +187,8 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void performSelectedSearch(int position) {
-        hideSearchBox();
         saveSelectedSortingOrder(position);
-        setupAdapter();
+        updateAdapter();
     }
 
     @Override
@@ -257,9 +256,7 @@ abstract class AppListFragment extends ListFragment {
         Collect.getInstance().showKeyboard(mInputSearch);
     }
 
-    protected abstract void updateAdapter(CharSequence charSequence);
-
-    protected abstract void setupAdapter();
+    protected abstract void updateAdapter();
 
     protected abstract String getSortingOrderKey();
 
@@ -321,5 +318,9 @@ abstract class AppListFragment extends ListFragment {
         mSelectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected CharSequence getFilterText() {
+        return mInputSearch != null ? mInputSearch.getText() : "";
     }
 }

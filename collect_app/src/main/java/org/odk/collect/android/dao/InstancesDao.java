@@ -56,9 +56,9 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getSortedFilteredUnsentInstancesCursor(CharSequence charSequence, String sortOrder) {
+    public Cursor getUnsentInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
-        if (charSequence == null || charSequence.length() == 0) {
+        if (charSequence.length() == 0) {
             cursor = getUnsentInstancesCursor(sortOrder);
         } else {
             String selection =
@@ -74,9 +74,9 @@ public class InstancesDao {
         return cursor;
     }
 
-    public Cursor getSortedFilteredSentInstancesCursor(CharSequence charSequence, String sortOrder) {
+    public Cursor getSentInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
-        if (charSequence == null || charSequence.length() == 0) {
+        if (charSequence.length() == 0) {
             cursor = getSentInstancesCursor(sortOrder);
         } else {
             String selection =
@@ -105,10 +105,10 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, null, sortOrder);
     }
 
-    public Cursor getSortedFilteredSavedInstancesCursor(CharSequence charSequence, String sortOrder) {
+    public Cursor getSavedInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
-        if (charSequence == null || charSequence.length() == 0) {
-            cursor = getSentInstancesCursor(sortOrder);
+        if (charSequence.length() == 0) {
+            cursor = getSavedInstancesCursor(sortOrder);
         } else {
             String selection =
                     InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "
@@ -135,9 +135,9 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getSortedFilteredFinalizedInstancesCursor(CharSequence charSequence, String sortOrder) {
+    public Cursor getFinalizedInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
-        if (charSequence == null || charSequence.length() == 0) {
+        if (charSequence.length() == 0) {
             cursor = getFinalizedInstancesCursor(sortOrder);
         } else {
             String selection =
@@ -176,9 +176,9 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getSortedFilteredCompletedUndeletedInstancesCursor(CharSequence charSequence, String sortOrder) {
+    public Cursor getCompletedUndeletedInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
-        if (charSequence == null || charSequence.length() == 0) {
+        if (charSequence.length() == 0) {
             cursor = getAllCompletedUndeletedInstancesCursor(sortOrder);
         } else {
             String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("

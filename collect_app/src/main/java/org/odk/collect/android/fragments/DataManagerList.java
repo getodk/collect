@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -124,8 +125,7 @@ public class DataManagerList extends InstanceListFragment
         textView.setText(result);
     }
 
-    @Override
-    protected void setupAdapter() {
+    private void setupAdapter() {
         List<Long> checkedInstances = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
@@ -134,7 +134,7 @@ public class DataManagerList extends InstanceListFragment
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         mListAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(getSortingOrder()), data, view);
+                R.layout.two_item_multiple_choice, getCursor(), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
     }
@@ -145,9 +145,13 @@ public class DataManagerList extends InstanceListFragment
     }
 
     @Override
-    protected void updateAdapter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new InstancesDao().getSortedFilteredSavedInstancesCursor(charSequence, getSortingOrder()));
-        super.updateAdapter(charSequence);
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+        super.updateAdapter();
+    }
+
+    private Cursor getCursor() {
+        return new InstancesDao().getSavedInstancesCursor(getFilterText(), getSortingOrder());
     }
 
     /**
