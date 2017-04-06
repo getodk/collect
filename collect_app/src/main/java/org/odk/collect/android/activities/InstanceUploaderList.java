@@ -331,9 +331,9 @@ public class InstanceUploaderList extends InstanceListActivity
     @Override
     protected void filter(CharSequence charSequence) {
         if (mShowAllMode) {
-            mListAdapter.changeCursor(mInstanceDao.getFilteredCompletedUndeletedInstancesCursor(charSequence));
+            mListAdapter.changeCursor(mInstanceDao.getFilteredCompletedUndeletedInstancesCursor(charSequence, getSortingOrder()));
         } else {
-            mListAdapter.changeCursor(mInstanceDao.getFilteredFinalizedInstancesCursor(charSequence));
+            mListAdapter.changeCursor(mInstanceDao.getFilteredFinalizedInstancesCursor(charSequence, getSortingOrder()));
         }
         checkPreviouslyCheckedItems();
         mUploadButton.setEnabled(areCheckedItems());

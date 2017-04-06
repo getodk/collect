@@ -56,7 +56,7 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getFilteredUnsentInstancesCursor(CharSequence charSequence) {
+    public Cursor getFilteredUnsentInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
         if (charSequence == null || charSequence.length() == 0) {
             cursor = getUnsentInstancesCursor();
@@ -67,16 +67,14 @@ public class InstancesDao {
             String selectionArgs[] = {
                     InstanceProviderAPI.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
-            String sortOrder =
-                    InstanceProviderAPI.InstanceColumns.STATUS + " DESC, "
-                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+
             cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
         }
 
         return cursor;
     }
 
-    public Cursor getFilteredSentInstancesCursor(CharSequence charSequence) {
+    public Cursor getFilteredSentInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
         if (charSequence == null || charSequence.length() == 0) {
             cursor = getSentInstancesCursor();
@@ -87,7 +85,7 @@ public class InstancesDao {
             String selectionArgs[] = {
                     InstanceProviderAPI.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
-            String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+
             cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
         }
 
@@ -107,13 +105,13 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, null, sortOrder);
     }
 
-    public Cursor getFilteredSavedInstancesCursor(CharSequence charSequence) {
+    public Cursor getFilteredSavedInstancesCursor(CharSequence charSequence, String sortOrder) {
         String selection =
                 InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "
                 + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
         String selectionArgs[] = {"%" + charSequence + "%"};
 
-        return getInstancesCursor(null, selection, selectionArgs, null);
+        return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
     public Cursor getFinalizedInstancesCursor() {
@@ -131,7 +129,7 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getFilteredFinalizedInstancesCursor(CharSequence charSequence) {
+    public Cursor getFilteredFinalizedInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
         if (charSequence == null || charSequence.length() == 0) {
             cursor = getFinalizedInstancesCursor();
@@ -144,7 +142,7 @@ public class InstancesDao {
                     InstanceProviderAPI.STATUS_COMPLETE,
                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
                     "%" + charSequence + "%"};
-            String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+
             cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
         }
 
@@ -172,7 +170,7 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
-    public Cursor getFilteredCompletedUndeletedInstancesCursor(CharSequence charSequence) {
+    public Cursor getFilteredCompletedUndeletedInstancesCursor(CharSequence charSequence, String sortOrder) {
         Cursor cursor;
         if (charSequence == null || charSequence.length() == 0) {
             cursor = getAllCompletedUndeletedInstancesCursor();
@@ -188,7 +186,7 @@ public class InstancesDao {
                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
                     InstanceProviderAPI.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
-            String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+
             cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
         }
         return cursor;

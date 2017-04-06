@@ -197,7 +197,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
+        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence, getSortingOrder()));
     }
 
     /**

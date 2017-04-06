@@ -142,7 +142,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
+        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence, getSortingOrder()));
         super.filter(charSequence);
     }
 

@@ -147,7 +147,7 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new InstancesDao().getFilteredSavedInstancesCursor(charSequence));
+        mListAdapter.changeCursor(new InstancesDao().getFilteredSavedInstancesCursor(charSequence, getSortingOrder()));
         super.filter(charSequence);
     }
 
