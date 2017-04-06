@@ -499,8 +499,9 @@
 <string name="device_id">Device ID</string>
 <string name="subscriber_id">Subscriber ID</string>
 <string name="sim_serial_id">SIM serial number</string>
-<string name="import_settings">Scan to import settings</string>
+<string name="import_settings">Scan QR Code to import settings</string>
 <string name="qr_code">QR Code</string>
 <string name="tv_qrcode">Scan the image to copy the settings from this device</string>
-    <string name="scan_qrcode">Click to scan QRCode</string>
+<string name="scan_qrcode">Click to scan QRCode</string>
+<string name="successfully_imported_settings">Settings imported successfully</string>
 </resources>

@@ -125,10 +125,25 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
         switch (requestCode) {
             case QRCODE_CAPTURE:
-                String sb = data.getStringExtra("SCAN_RESULT");
-                ToastUtils.showShortToast(sb);
+                String dataObject = data.getStringExtra("SCAN_RESULT");
+                try {
+                    JSONObject jsonObject = new JSONObject(dataObject);
+                    applySettings(jsonObject);
+                    ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
+    }
+
+    private void applySettings(JSONObject jsonObject) throws JSONException {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(KEY_SERVER_URL, jsonObject.getString(KEY_SERVER_URL));
+        editor.putString(KEY_GOOGLE_SHEETS_URL, jsonObject.getString(KEY_GOOGLE_SHEETS_URL));
+        editor.putString(KEY_FORMLIST_URL, jsonObject.getString(KEY_FORMLIST_URL));
+        editor.putString(KEY_SUBMISSION_URL, jsonObject.getString(KEY_SUBMISSION_URL));
+        editor.apply();
     }
 
     @Override
