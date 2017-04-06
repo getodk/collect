@@ -63,6 +63,7 @@ public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener {
     private static final String t = "InstanceUploaderList";
     private static final String SHOW_ALL_MODE = "showAllMode";
+    private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
     private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
     private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
@@ -134,7 +135,7 @@ public class InstanceUploaderList extends InstanceListActivity
         });
         toggleSelsButton.setOnLongClickListener(this);
 
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
@@ -303,16 +304,16 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void setupAdapter(String sortOrder) {
+    protected void setupAdapter() {
         List<Long> checkedInstances = new ArrayList();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
         }
         Cursor cursor;
         if (mShowAllMode) {
-            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(sortOrder);
+            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
         } else {
-            cursor = mInstanceDao.getFinalizedInstancesCursor(sortOrder);
+            cursor = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
         }
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
@@ -320,6 +321,11 @@ public class InstanceUploaderList extends InstanceListActivity
         mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, cursor, data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
     }
 
     @Override
@@ -335,7 +341,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showUnsent() {
         mShowAllMode = false;
-        Cursor c = mInstanceDao.getFinalizedInstancesCursor();
+        Cursor c = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
         Cursor old = mListAdapter.getCursor();
         try {
             mListAdapter.changeCursor(c);
@@ -350,7 +356,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showAll() {
         mShowAllMode = true;
-        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor();
+        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
         Cursor old = mListAdapter.getCursor();
         try {
             mListAdapter.changeCursor(c);
