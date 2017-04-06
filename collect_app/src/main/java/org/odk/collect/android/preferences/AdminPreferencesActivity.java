@@ -77,7 +77,10 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new AdminPreferencesFragment()).commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new AdminPreferencesFragment())
+                .commit();
         setTitle(getString(R.string.admin_preferences));
     }
 

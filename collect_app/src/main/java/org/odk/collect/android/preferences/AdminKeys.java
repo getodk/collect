@@ -33,6 +33,7 @@ public final class AdminKeys {
 
     // server
             static final String KEY_CHANGE_ADMIN_PASSWORD       = "admin_password";
+            static final String KEY_IMPORT_SETTINGS             = "import_settings";
     private static final String KEY_CHANGE_SERVER               = "change_server";
     private static final String KEY_CHANGE_PROTOCOL_SETTINGS    = "change_protocol_settings";
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";

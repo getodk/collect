@@ -167,7 +167,8 @@ dependencies {
     compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
     compile group: 'com.android.support', name: 'customtabs', version: '25.1.0'
-    
+    compile group: 'com.google.zxing', name: 'core', version: '3.2.0'
+
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
