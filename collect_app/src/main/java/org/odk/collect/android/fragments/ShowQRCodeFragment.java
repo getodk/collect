@@ -39,7 +39,6 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -63,7 +62,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private static final int QRCODE_CAPTURE = 1;
-    private SharedPreferences adminSettings;
     private SharedPreferences settings;
 
     @Nullable
@@ -75,7 +73,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
         scan.setOnClickListener(this);
 
-        adminSettings = getActivity().getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         Bitmap qrCode = generateQRBitMap();
