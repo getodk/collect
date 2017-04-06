@@ -4,8 +4,12 @@ apply plugin: 'checkstyle'
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)
 
-ant.condition(property: "os", value: "windows") { os(family: "windows") }
-ant.condition(property: "os", value: "unix") { os(family: "unix") }
+ant.condition(property: 'os', value: 'windows') { 
+    os(family: 'windows') 
+}
+ant.condition(property: 'os', value: 'unix') { 
+    os(family: 'unix') 
+}
 
 // Build numbers were manually set until 1067
 def LEGACY_BUILD_NUMBER_OFFSET = 1067
@@ -53,15 +57,15 @@ def getVersionName = { ->
 
 android {
     compileSdkVersion(25)
-    buildToolsVersion("25.0.2")
+    buildToolsVersion('25.0.2')
 
     defaultConfig {
-        applicationId("org.odk.collect.android")
+        applicationId('org.odk.collect.android')
         minSdkVersion(16)
         targetSdkVersion(22)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
-        testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
+        testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
     }
 
@@ -99,7 +103,7 @@ android {
     }
 
     dexOptions {
-        javaMaxHeapSize "2048M"
+        javaMaxHeapSize '2048M'
     }
 
     lintOptions {
@@ -127,7 +131,7 @@ configurations.all {
 
 allprojects {
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:all"
+        options.compilerArgs << '-Xlint:all'
     }
 }
 
