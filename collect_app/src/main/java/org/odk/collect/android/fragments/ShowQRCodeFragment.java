@@ -85,9 +85,16 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
 
     private Bitmap generateQRBitMap() {
-        final String content;
+        String content;
         try {
-            content = getUserPreferences();
+            content = getAllSettings();
+
+            //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
+            if (content.length() > 4000) {
+                ToastUtils.showLongToast(getString(R.string.encoding_max_limit));
+                content = getServerSettings();
+            }
+
             Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -149,6 +156,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     private void applySettings(JSONObject jsonObject) throws JSONException {
         SharedPreferences.Editor editor = settings.edit();
+        editor.putString(KEY_PROTOCOL, jsonObject.getString(KEY_PROTOCOL));
         editor.putString(KEY_SERVER_URL, jsonObject.getString(KEY_SERVER_URL));
         editor.putString(KEY_GOOGLE_SHEETS_URL, jsonObject.getString(KEY_GOOGLE_SHEETS_URL));
         editor.putString(KEY_FORMLIST_URL, jsonObject.getString(KEY_FORMLIST_URL));
@@ -158,7 +166,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         editor.apply();
     }
 
-    private String getUserPreferences() throws JSONException {
+    private String getServerSettings() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(KEY_PROTOCOL, settings.getString(KEY_PROTOCOL, null));
         jsonObject.put(KEY_SERVER_URL, settings.getString(KEY_SERVER_URL,
@@ -169,6 +177,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 getActivity().getString(R.string.default_odk_formlist)));
         jsonObject.put(KEY_SUBMISSION_URL, settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
                 getActivity().getString(R.string.default_odk_submission)));
+        return jsonObject.toString();
+    }
+
+    private String getAllSettings() throws JSONException {
+        JSONObject jsonObject = new JSONObject(getServerSettings());
         jsonObject.put(KEY_USERNAME, settings.getString(PreferenceKeys.KEY_USERNAME, ""));
         jsonObject.put(KEY_PASSWORD, settings.getString(PreferenceKeys.KEY_PASSWORD, ""));
         return jsonObject.toString();
