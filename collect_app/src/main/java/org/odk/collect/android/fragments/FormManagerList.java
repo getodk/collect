@@ -20,7 +20,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,8 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -209,14 +210,14 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     public void syncComplete(String result) {
-        Log.i(TAG, "Disk scan complete");
+        Timber.i("Disk scan complete");
         TextView tv = (TextView) rootView.findViewById(R.id.status_text);
         tv.setText(result);
     }
 
     @Override
     public void deleteComplete(int deletedForms) {
-        Log.i(TAG, "Delete forms complete");
+        Timber.i("Delete forms complete");
         logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
         final int toDeleteCount = mBackgroundTasks.mDeleteFormsTask.getToDeleteCount();
 
@@ -225,7 +226,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Log.e(TAG, "Failed to delete " + (toDeleteCount - deletedForms) + " forms");
+            Timber.e("Failed to delete %d forms", (toDeleteCount - deletedForms));
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                     - deletedForms), String.valueOf(getCheckedCount())));
         }
