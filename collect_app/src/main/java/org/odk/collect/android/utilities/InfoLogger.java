@@ -24,6 +24,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import timber.log.Timber;
+
 /**
  * Used for logging data to log files that could be retrieved after a field deployment.
  * The initial use for this is to assist in diagnosing a report of a cached geopoints
@@ -60,12 +62,8 @@ public class InfoLogger {
             fo.write(msg.getBytes("UTF-8"));
             fo.flush();
             fo.close();
-        } catch (FileNotFoundException e) {
-            Log.e(t, "exception: " + e.toString());
-        } catch (UnsupportedEncodingException e) {
-            Log.e(t, "exception: " + e.toString());
         } catch (IOException e) {
-            Log.e(t, "exception: " + e.toString());
+            Timber.e(e, "Unable to write to log file %s due to %s", log.getAbsolutePath(), e.getMessage());
         }
     }
 }
