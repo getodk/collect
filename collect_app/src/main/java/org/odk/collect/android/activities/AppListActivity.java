@@ -19,12 +19,14 @@ package org.odk.collect.android.activities;
 import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -193,6 +195,10 @@ abstract class AppListActivity extends ListActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                Log.e("selected ",mSelectedSortingOrder+"");
+                if(position == mSelectedSortingOrder) {
+                    textView.setBackgroundColor(Color.parseColor("#2196F3"));
+                }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
             }
@@ -202,6 +208,9 @@ abstract class AppListActivity extends ListActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("selected ",mSelectedSortingOrder+"");
+                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.parseColor("#DDDDDD"));
+                view.setBackgroundColor(Color.parseColor("#2196F3"));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
