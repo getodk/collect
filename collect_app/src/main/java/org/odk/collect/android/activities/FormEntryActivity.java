@@ -855,6 +855,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
+        if (mAdminPreferences == null) {
+            return false;
+        }
+
         FormController formController = Collect.getInstance()
                 .getFormController();
 
