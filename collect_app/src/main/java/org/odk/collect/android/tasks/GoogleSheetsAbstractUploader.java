@@ -185,8 +185,9 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .execute();
             } catch (GoogleJsonResponseException e) {
                 String message = e.getMessage();
-                if (e.getDetails().getCode() == 403)
+                if (e.getDetails().getCode() == 403) {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+                }
                 mResults.put(id, message);
                 return false;
             } catch (IOException e) {
@@ -391,8 +392,9 @@ public abstract class GoogleSheetsAbstractUploader extends
 
             //adding the headers
             ArrayList<Object> list = new ArrayList<>();
-            for (String column : columnNames)
+            for (String column : columnNames) {
                 list.add(column);
+            }
 
             ArrayList<List<Object>> content = new ArrayList<>();
             content.add(list);

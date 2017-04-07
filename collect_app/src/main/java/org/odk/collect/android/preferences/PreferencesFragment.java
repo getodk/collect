@@ -211,8 +211,9 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         final ListPreference mapSdk = (ListPreference) findPreference(KEY_MAP_SDK);
         final ListPreference mapBasemap = (ListPreference) findPreference(KEY_MAP_BASEMAP);
 
-        if (mapSdk == null || mapBasemap == null)
+        if (mapSdk == null || mapBasemap == null) {
             return;
+        }
 
         mapSdk.setSummary(mapSdk.getEntry());
         mapSdk.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -281,8 +282,9 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         final ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
         final Preference settingsPref = findPreference(KEY_PROTOCOL_SETTINGS);
 
-        if (protocolPref == null || settingsPref == null)
+        if (protocolPref == null || settingsPref == null) {
             return;
+        }
 
         protocolPref.setSummary(protocolPref.getEntry());
         setProtocolIntent(adminMode, protocolPref.getValue(), settingsPref);
