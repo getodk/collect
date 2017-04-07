@@ -625,21 +625,25 @@ public class DownloadFormsTask extends
                         continue;
                     }
                     String tag = child.getName();
-                    if (tag.equals("filename")) {
-                        filename = XFormParser.getXMLText(child, true);
-                        if (filename != null && filename.length() == 0) {
-                            filename = null;
-                        }
-                    } else if (tag.equals("hash")) {
-                        hash = XFormParser.getXMLText(child, true);
-                        if (hash != null && hash.length() == 0) {
-                            hash = null;
-                        }
-                    } else if (tag.equals("downloadUrl")) {
-                        downloadUrl = XFormParser.getXMLText(child, true);
-                        if (downloadUrl != null && downloadUrl.length() == 0) {
-                            downloadUrl = null;
-                        }
+                    switch (tag) {
+                        case "filename":
+                            filename = XFormParser.getXMLText(child, true);
+                            if (filename != null && filename.length() == 0) {
+                                filename = null;
+                            }
+                            break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
                     }
                 }
                 if (filename == null || downloadUrl == null || hash == null) {
