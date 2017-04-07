@@ -44,6 +44,7 @@ public final class AdminKeys {
     private static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
     private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
+    private static final String KEY_APP_LANGUAGE                = "app_language";
 
     private static final String KEY_AUTOSEND_WIFI               = "autosend_wifi";
     private static final String KEY_AUTOSEND_NETWORK            = "autosend_network";
@@ -62,11 +63,13 @@ public final class AdminKeys {
      * preference is false.
      */
     static AdminAndGeneralKeys[] adminToGeneral = new AdminAndGeneralKeys[] {
+
             ag(KEY_CHANGE_SERVER,              PreferenceKeys.KEY_PROTOCOL),
             ag(KEY_CHANGE_PROTOCOL_SETTINGS,   PreferenceKeys.KEY_PROTOCOL_SETTINGS),
             ag(KEY_CHANGE_FORM_METADATA,       PreferenceKeys.KEY_FORM_METADATA),
 
             ag(KEY_CHANGE_FONT_SIZE,           PreferenceKeys.KEY_FONT_SIZE),
+            ag(KEY_APP_LANGUAGE,               PreferenceKeys.KEY_APP_LANGUAGE),
             ag(KEY_DEFAULT_TO_FINALIZED,       PreferenceKeys.KEY_COMPLETED_DEFAULT),
             ag(KEY_HIGH_RESOLUTION,            PreferenceKeys.KEY_HIGH_RESOLUTION),
             ag(KEY_SHOW_SPLASH_SCREEN,         PreferenceKeys.KEY_SHOW_SPLASH),

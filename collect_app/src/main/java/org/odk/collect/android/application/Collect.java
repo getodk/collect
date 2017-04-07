@@ -17,6 +17,7 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -36,6 +37,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
@@ -232,6 +234,7 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
+        new LocaleHelper().updateLocale(this);
         singleton = this;
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -265,6 +268,13 @@ public class Collect extends Application {
         }
         return mTracker;
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        onCreate();
+    }
+
     private static class CrashReportingTree extends Timber.Tree {
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
