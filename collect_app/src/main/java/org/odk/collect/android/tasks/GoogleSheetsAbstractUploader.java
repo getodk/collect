@@ -813,15 +813,16 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(in, null);
-        readInstanceFeed(parser, answersToUpload, mediaToUpload, instanceFile);
+        readInstanceFeed(parser, answersToUpload, mediaToUpload, instanceFile.getParentFile());
         in.close();
     }
 
     private void readInstanceFeed(XmlPullParser parser,
                                   HashMap<String, String> answersToUpload,
-                                  HashMap<String, String> mediaToUpload, File instanceFile)
+                                  HashMap<String, String> mediaToUpload, File instanceFolder)
             throws XmlPullParserException, IOException,
             FormException {
+
         ArrayList<String> path = new ArrayList<String>();
 
         int event = parser.next();
@@ -833,7 +834,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 case XmlPullParser.TEXT:
                     String answer = parser.getText();
 
-                    String filename = instanceFile.getParentFile() + "/" + answer;
+                    String filename = instanceFolder + "/" + answer;
                     File file = new File(filename);
 
                     if (file.isFile()) {
