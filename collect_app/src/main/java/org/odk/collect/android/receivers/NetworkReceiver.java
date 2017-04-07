@@ -46,6 +46,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
@@ -321,21 +323,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
 
 
-            } catch (IOException e) {
-                // network or server error, the call is expected to succeed if
-                // you try again later. Don't attempt to call again immediately
-                // - the request is likely to fail, you'll hit quotas or
-                // back-off.
-                return null;
-            } catch (GooglePlayServicesAvailabilityException playEx) {
-                return null;
-            } catch (UserRecoverableAuthException e) {
-                return null;
-            } catch (GoogleAuthException e) {
-                // Failure. The call is not expected to ever succeed so it
-                // should not be retried.
-                return null;
-            } catch (MultipleFoldersFoundException e) {
+            } catch (IOException | GoogleAuthException | MultipleFoldersFoundException e) {
+                Timber.e(e, e.getMessage());
                 return null;
             }
             mContext = null;

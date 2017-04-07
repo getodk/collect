@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
@@ -47,6 +46,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
+
+import timber.log.Timber;
 
 /**
  * This layout is used anywhere we can have image/audio/video/text. TODO: It would probably be nice
@@ -126,7 +127,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 videoFilename =
                         ReferenceManager._().DeriveReference(mVideoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
-                Log.e(t, "Invalid reference exception");
+                Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
             }
 
             File videoFile = new File(videoFilename);
@@ -134,7 +135,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 // We should have a video clip, but the file doesn't exist.
                 String errorMsg =
                         getContext().getString(R.string.file_missing, videoFilename);
-                Log.e(t, errorMsg);
+                Timber.d("File %s is missing", videoFilename);
                 ToastUtils.showLongToast(errorMsg);
                 return;
             }
@@ -250,6 +251,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                     try {
                                         getContext().startActivity(i);
                                     } catch (ActivityNotFoundException e) {
+                                        Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
                                         ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
                                                         "view image"));
                                     }
@@ -274,7 +276,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     mMissingImage.setId(imageId);
                 }
             } catch (InvalidReferenceException e) {
-                Log.e(t, "image invalid reference exception");
+                Timber.e(e, "Invalid image reference due to %s ", e.getMessage() );
             }
         } else {
             // There's no imageURI listed, so just ignore it.

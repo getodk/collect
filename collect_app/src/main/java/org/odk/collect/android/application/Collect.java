@@ -23,11 +23,13 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -49,6 +51,8 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+
+import timber.log.Timber;
 
 /**
  * The Open Data Kit Collect application.
@@ -245,6 +249,11 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        if(timber.log.BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new CrashReportingTree());
+        }
     }
 
     /**
@@ -264,6 +273,21 @@ public class Collect extends Application {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         onCreate();
+    }
+
+    private static class CrashReportingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
+                return;
+            }
+
+            FirebaseCrash.logcat(priority, tag, message);
+
+            if (t != null && priority == Log.ERROR) {
+                FirebaseCrash.report(t);
+            }
+        }
     }
 
 }

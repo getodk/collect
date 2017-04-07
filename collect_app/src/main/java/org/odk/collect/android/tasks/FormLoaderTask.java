@@ -49,7 +49,6 @@ import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ZipUtils;
 
@@ -66,6 +65,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import au.com.bytecode.opencsv.CSVReader;
+import timber.log.Timber;
 
 /**
  * Background task for loading a form.
@@ -175,11 +175,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 } else {
                     serializeFormDef(fd, formPath);
                 }
-            } catch (FileNotFoundException e) {
-                mErrorMsg = e.getMessage();
-            } catch (XFormParseException e) {
-                mErrorMsg = e.getMessage();
             } catch (Exception e) {
+                Timber.e(e, e.getMessage());
                 mErrorMsg = e.getMessage();
             } finally {
                 IOUtils.closeQuietly(fis);
@@ -204,6 +201,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         try {
             loadExternalData(formMediaDir);
         } catch (Exception e) {
+            Timber.e(e, "Exception thrown while loading external data due to : %s ", e.getMessage());
             mErrorMsg = e.getMessage();
             return null;
         }
@@ -488,13 +486,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             fd.readExternal(dis, ExtUtil.defaultPrototypes());
             dis.close();
 
-        } catch (FileNotFoundException e) {
-            fd = null;
-        } catch (IOException e) {
-            fd = null;
-        } catch (DeserializationException e) {
-            fd = null;
         } catch (Exception e) {
+            Timber.e(e, e.getMessage());
             fd = null;
         }
 
@@ -520,8 +513,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 fd.writeExternal(dos);
                 dos.flush();
                 dos.close();
-            } catch (FileNotFoundException e) {
             } catch (IOException e) {
+                Timber.e(e, e.getMessage());
             }
         }
     }
@@ -547,6 +540,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     }
                 }
             } catch (Exception e) {
+                Timber.e(e, e.getMessage());
             }
         }
     }
@@ -633,6 +627,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
             }
         } catch (IOException e) {
+            Timber.e(e, "Exception thrown while reading csv file due to : %s ", e.getMessage());
         } finally {
             if (withinTransaction) {
                 ida.commit();

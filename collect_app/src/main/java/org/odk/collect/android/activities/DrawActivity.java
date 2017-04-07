@@ -50,6 +50,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import timber.log.Timber;
+
 /**
  * Modified from the FingerPaint example found in The Android Open Source
  * Project.
@@ -91,6 +93,7 @@ public class DrawActivity extends Activity {
         try {
             saveFile(savepointImage);
         } catch (FileNotFoundException e) {
+            Timber.e(e, e.getMessage());
         }
         if (savepointImage.exists()) {
             outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
@@ -306,6 +309,7 @@ public class DrawActivity extends Activity {
                     fos.close();
                 }
             } catch (Exception e) {
+                Timber.e(e, e.getMessage());
             }
         }
     }

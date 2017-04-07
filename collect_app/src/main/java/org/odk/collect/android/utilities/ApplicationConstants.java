@@ -35,4 +35,13 @@ public class ApplicationConstants {
         public static final String EDIT_SAVED = "editSaved";
         public static final String VIEW_SENT = "viewSent";
     }
+
+    public abstract static class SortingOrder {
+        public static final int BY_NAME_ASC = 0;
+        public static final int BY_NAME_DESC = 1;
+        public static final int BY_DATE_DESC = 2;
+        public static final int BY_DATE_ASC = 3;
+        public static final int BY_STATUS_ASC = 4;
+        public static final int BY_STATUS_DESC = 5;
+    }
 }
