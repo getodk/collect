@@ -20,7 +20,6 @@ import android.widget.TimePicker;
 
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.After;
 import org.junit.Before;
@@ -34,25 +33,23 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-/* https://github.com/opendatakit/collect/issues/356
- * Verify that the date and datetime widget skips over "daylight savings gaps".
+/** https://github.com/opendatakit/collect/issues/356
+ * Verify that the {@link DateWidget} and {@link DateTimeWidget} widget skips over
+ * "daylight savings gaps".
  * This is needed on the day and time of a daylight savings transition because that date/time
- * doesn't exist.*/
+ * doesn't exist.
+ * In this test we set time to daylight saving gap and check if any crash occur*/
 public class DaylightSavingTest {
 
-    private static final String EST_TIME_ZONE = "America/Los_Angeles";
+    private static final String EAT_IME_ZONE = "Africa/Nairobi";
     private static final String CET_TIME_ZONE = "Europe/Warsaw";
 
     private TimeZone mCurrentTimeZone;
@@ -68,59 +65,29 @@ public class DaylightSavingTest {
     }
 
     @Test
-    // 12 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00
+    // 26 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00.
     public void testESTTimeZoneWithDateTimeWidget() {
-        TimeZone.setDefault(TimeZone.getTimeZone(EST_TIME_ZONE));
-        DateTimeWidget dateTimeWidget = prepareDateTimeWidget(2017, 2, 12, 2, 0);
-
-        IAnswerData answerData = dateTimeWidget.getAnswer();
-        assertNotNull(answerData);
-        assertDate(answerData, 2017, 2, 12, 3, 0);
-    }
-
-    @Test
-    // 12 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00
-    public void testESTTimezoneWithDateWidget() {
-        TimeZone.setDefault(TimeZone.getTimeZone(EST_TIME_ZONE));
-        DateWidget dateWidget = prepareDateWidget(2017, 2, 12);
-
-        IAnswerData answerData = dateWidget.getAnswer();
-        assertNotNull(answerData);
-        assertDate(answerData, 2017, 2, 12, 0, 0);
-    }
-
-    @Test
-    // 26 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00
-    public void testCETTimeZoneWithDateTimeWidget() {
         TimeZone.setDefault(TimeZone.getTimeZone(CET_TIME_ZONE));
-        DateTimeWidget dateTimeWidget = prepareDateTimeWidget(2017, 2, 26, 2, 0);
+        DateTimeWidget dateTimeWidget = prepareDateTimeWidget(2017, 2, 26, 2, 30);
 
-        IAnswerData answerData = dateTimeWidget.getAnswer();
-        assertNotNull(answerData);
-        assertDate(answerData, 2017, 2, 26, 3, 0);
+        /**
+         * We would get crash in this place using old approach {@link org.joda.time.DateTime} instead of
+         * {@link org.joda.time.LocalDateTime}
+         */
+        dateTimeWidget.getAnswer();
     }
 
     @Test
-    // 26 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00
-    public void testCETTimezoneWithDateWidget() {
-        TimeZone.setDefault(TimeZone.getTimeZone(CET_TIME_ZONE));
-        DateWidget dateWidget = prepareDateWidget(2017, 2, 26);
+    // 1 Jan 1960 at 00:00:00 clocks were turned forward to 00:15:00
+    public void testEATTimezoneWithDateWidget() {
+        TimeZone.setDefault(TimeZone.getTimeZone(EAT_IME_ZONE));
+        DateWidget dateWidget = prepareDateWidget(1960, 0, 1);
 
-        IAnswerData answerData = dateWidget.getAnswer();
-        assertNotNull(answerData);
-        assertDate(answerData, 2017, 2, 26, 0, 0);
-    }
-
-    private void assertDate(IAnswerData answerData, int year, int month, int day, int hour, int minute) {
-        Date date = (Date) answerData.getValue();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
-        assertEquals(year, calendar.get(Calendar.YEAR));
-        assertEquals(month, calendar.get(Calendar.MONTH));
-        assertEquals(day, calendar.get(Calendar.DAY_OF_MONTH));
-        assertEquals(hour, calendar.get(Calendar.HOUR_OF_DAY));
-        assertEquals(minute, calendar.get(Calendar.MINUTE));
+        /**
+         * We would get crash in this place using old approach {@link org.joda.time.DateTime} instead of
+         * {@link org.joda.time.LocalDateTime}
+         */
+        dateWidget.getAnswer();
     }
 
     private DateWidget prepareDateWidget(int year, int month, int day) {
