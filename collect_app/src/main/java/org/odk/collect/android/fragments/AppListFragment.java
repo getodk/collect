@@ -173,8 +173,8 @@ abstract class AppListFragment extends ListFragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if(position == mSelectedSortingOrder) {
-                    textView.setBackgroundColor(Color.parseColor("#2196F3"));
+                if (position == mSelectedSortingOrder) {
+                    textView.setBackgroundColor(getResources().getColor(R.color.light_blue));
                 }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
@@ -184,8 +184,8 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.parseColor("#DDDDDD"));
-                view.setBackgroundColor(Color.parseColor("#2196F3"));
+                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
+                view.setBackgroundColor(getResources().getColor(R.color.light_blue));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
@@ -203,6 +203,7 @@ abstract class AppListFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
         setupDrawer(view);
         setupDrawerItems();
+        getSelectedSortingOrder();
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
         }
@@ -261,6 +262,13 @@ abstract class AppListFragment extends ListFragment {
     private void showSearchBox() {
         mSearchBoxLayout.setVisibility(View.VISIBLE);
         Collect.getInstance().showKeyboard(mInputSearch);
+    }
+
+    protected int getSelectedSortingOrder() {
+        if (mSelectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return mSelectedSortingOrder;
     }
 
     protected abstract void filter(CharSequence charSequence);
