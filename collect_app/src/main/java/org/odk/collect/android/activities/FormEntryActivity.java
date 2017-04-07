@@ -622,7 +622,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     Bundle extras = intent.getExtras();
                     ((ODKView) mCurrentView).setDataForFields(extras);
                 } catch (JavaRosaException e) {
-                    Timber.e(e, e.getMessage());
+                    Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
                 break;
@@ -951,7 +951,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     return false;
                 }
             } catch (JavaRosaException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 return false;
             }
@@ -1200,13 +1200,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
                 } catch (RuntimeException e) {
-                    Timber.e(e, e.getMessage());
+                    Timber.e(e);
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
                         createErrorDialog(e.getMessage(), DO_NOT_EXIT);
                     } catch (JavaRosaException e1) {
-                        Timber.e(e1, e1.getMessage());
+                        Timber.e(e1);
                         createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
                                 DO_NOT_EXIT);
                     }
@@ -1247,7 +1247,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     event = formController.stepToNextScreenEvent();
                     createErrorDialog(getString(R.string.survey_internal_error), EXIT);
                 } catch (JavaRosaException e) {
-                    Timber.e(e, e.getMessage());
+                    Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), EXIT);
                 }
                 return createView(event, advancingPage);
@@ -1270,7 +1270,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         } catch (JavaRosaException e) {
             mBackButton.setEnabled(true);
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
         }
     }
 
@@ -1280,7 +1280,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             event = formController.stepToNextScreenEvent();
 
         } catch (JavaRosaException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
             createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
         }
 
@@ -1366,7 +1366,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     break;
             }
         } catch (JavaRosaException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
     }
@@ -1414,7 +1414,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mBeenSwiped = false;
             }
         } catch (JavaRosaException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
     }
@@ -1683,7 +1683,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                             Thread.sleep(500);
                                         } catch (InterruptedException e) {
                                             //This is rare
-                                            Timber.e(e, e.getMessage());
+                                            Timber.e(e);
                                         }
                                         showNextView();
                                     }
@@ -2492,7 +2492,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
-                Timber.e(e, "Ended up with a bad language. %s", e.getMessage());
+                Timber.e(e, "Ended up with a bad language. %s");
                 formController.setLanguage(defaultLanguage);
             }
         }
