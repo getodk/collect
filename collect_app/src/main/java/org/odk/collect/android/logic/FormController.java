@@ -90,8 +90,6 @@ public class FormController {
         }
     }
 
-    ;
-
     /**
      * Classes needed to serialize objects. Need to put anything from JR in here.
      */

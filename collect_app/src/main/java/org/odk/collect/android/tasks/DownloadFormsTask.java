@@ -444,7 +444,6 @@ public class DownloadFormsTask extends
                             // ensure stream is consumed...
                             final long count = 1024L;
                             while (is.skip(count) == count) {
-                                ;
                             }
                         } catch (Exception e) {
                             // no-op
