@@ -148,7 +148,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayColor = Color.parseColor(playColorString);
             } catch (IllegalArgumentException e) {
-                Timber.e(e, "Argument %s is incorrect");
+                Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
         questionMediaLayout.setPlayTextColor(mPlayColor);
