@@ -23,8 +23,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.ResourceProxy.string;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.BitmapTileSourceBase;
 
@@ -52,9 +50,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     public static final int maxZoom = 15;
     public static final int tileSizePixels = 256;
 
-    // Required for the superclass
-    public static final string resourceId = ResourceProxy.string.offline_mode;
-
     /**
      * The reason this constructor is protected is because all parameters,
      * except file should be determined from the archive file. Therefore a
@@ -70,7 +65,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             int tileSizePixels,
             File file,
             SQLiteDatabase db) {
-        super("MBTiles", resourceId, minZoom, maxZoom, tileSizePixels, ".png");
+        super("MBTiles", minZoom, maxZoom, tileSizePixels, ".png");
 
         archive = file;
         database = db;

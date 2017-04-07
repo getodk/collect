@@ -44,6 +44,8 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener {
+    private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
+    private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -67,8 +69,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
         setContentView(R.layout.chooser_list_layout);
 
-        String order;
-
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(R.string.review_data));
@@ -78,16 +78,14 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
                     getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
             };
-            order = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
         } else {
             setTitle(getString(R.string.view_sent_forms));
             mSortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
             };
-            order = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
         }
-        setupAdapter(order);
+        setupAdapter();
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -186,17 +184,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         super.onStop();
     }
 
-    @Override
-    protected void setupAdapter(String sortOrder) {
-        Cursor cursor;
-        InstancesDao instancesDao = new InstancesDao();
-
-        if (mEditMode) {
-            cursor = instancesDao.getUnsentInstancesCursor(sortOrder);
-        } else {
-            cursor = instancesDao.getSentInstancesCursor(sortOrder);
-        }
-
+    private void setupAdapter() {
         String[] data = new String[]{
                 InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DELETED_DATE
         };
@@ -205,20 +193,32 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         };
 
         if (mEditMode) {
-            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
         } else {
-            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, cursor, data, view);
+            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
         }
         setListAdapter(mListAdapter);
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
+    protected String getSortingOrderKey() {
+        return mEditMode ? INSTANCE_LIST_ACTIVITY_SORTING_ORDER : VIEW_SENT_FORM_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+    }
+
+    private Cursor getCursor() {
+        Cursor cursor;
         if (mEditMode) {
-            mListAdapter.changeCursor(new InstancesDao().getFilteredUnsentInstancesCursor(charSequence));
+            cursor = new InstancesDao().getUnsentInstancesCursor(getFilterText(), getSortingOrder());
         } else {
-            mListAdapter.changeCursor(new InstancesDao().getFilteredSentInstancesCursor(charSequence));
+            cursor = new InstancesDao().getSentInstancesCursor(getFilterText(), getSortingOrder());
         }
+
+        return cursor;
     }
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {

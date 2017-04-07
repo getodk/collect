@@ -217,7 +217,6 @@
   <string name="admin_preferences">Admineinstellungen</string>
   <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
   <string name="user_access_form_entry">Verfügbare Formulareingabe-Menüpunkte:</string>
-  <string name="admin_advanced_settings">Erweiterte Einstellungen (auf Anweisung):</string>
   <string name="save_mid">Formular speichern</string>
   <string name="enter_new_password">Neues Passwort eingeben</string>
   <string name="verify_new_password">Neues Passwort wiederholen</string>
@@ -248,12 +247,6 @@
   <string name="swipe_instructions">Sie sind am Anfang von \"%s\". Wischen Sie über den Touchscreen, wie unten gezeigt, um sich vor und zurück zu bewegen.</string>
   <string name="buttons_instructions">Sie sind am Anfang von \"%s\". Tippen Sie auf die Pfeil-Buttons unten, um sich vor und zurück zu bewegen.</string>
   <string name="swipe_buttons_instructions">Sie sind am Anfang von \"%s\". Wischen Sie über den Touchscreen, wie unten gezeigt oder tippen Sie auf die Pfeil-Buttons, um sich vor und zurück zu bewegen.</string>
-  <string name="form_processing_logic">Formularverarbeitungslogik</string>
-  <string name="form_processing_logic_recommended">Empfohlen (Standard)</string>
-  <string name="form_processing_logic_0">Januar 2015 (schnellste)</string>
-  <string name="form_processing_logic_1">Januar 2015 (sicherste)</string>
-  <string name="form_processing_logic_2">Mitte 2014 (langsam)</string>
-  <string name="form_processing_logic_3">Frühjahr 2014 (schnell)</string>
   <string name="launch_printer">Drucken starten</string>
   <string name="no_printer">Der gewählte Drucker ist nicht installiert. Bitte installieren Sie den Drucker.</string>
   <string name="constraint_behavior">Validierungszeitpunkt</string>

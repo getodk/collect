@@ -38,7 +38,7 @@
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">ODK Password</string>
-<string name="change_protocol_settings_default">Platform Settings</string>
+<string name="change_protocol_settings_default">Platform settings</string>
 <string name="change_username">ODK Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 <string name="clear_answer">Remove response</string>
@@ -225,7 +225,6 @@
 <string name="admin_preferences">Admin Settings</string>
 <string name="admin_access_settings">Tap for admin access to settings</string>
 <string name="user_access_form_entry">User can access Form Entry items:</string>
-<string name="admin_advanced_settings">Advanced settings (when advised):</string>
 <string name="save_mid">Save Form</string>
 <string name="enter_new_password">Enter new password</string>
 <string name="verify_new_password">Re-enter new password</string>
@@ -256,12 +255,6 @@
 <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
 <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
 <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
-<string name="form_processing_logic">Form processing logic</string>
-<string name="form_processing_logic_recommended">Recommended (default)</string>
-<string name="form_processing_logic_0">January 2015 (fastest)</string>
-<string name="form_processing_logic_1">January 2015 (safest)</string>
-<string name="form_processing_logic_2">Mid 2014 (slow)</string>
-<string name="form_processing_logic_3">Early 2014 (fast)</string>
 <string name="launch_printer">Initiate Printing</string>
 <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
 <string name="constraint_behavior">Constraint processing behavior</string>
@@ -494,6 +487,16 @@
 <string name="sort_the_list">Sort the list</string>
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
 <string name="filter_the_list">Filter the list</string>
-<string name="select_time">Select time</string>
 <string name="select_date">Select date</string>
+<string name="google_auth_io_exception_msg">Unable to make API calls. If you are running a local build, please review the project readme.</string>
+<string name="form_metadata_title">Form Metadata</string>
+<string name="form_metadata">Form metadata</string>
+<string name="form_metadata_summary">These values will be added to forms that have username, email and/or telephone preloaded fields to identify the person submitting data.</string>
+<string name="phone_number">Phone number</string>
+<string name="email">Email address</string>
+<string name="user_defined">User-defined</string>
+<string name="device_defined">Device-defined</string>
+<string name="device_id">Device ID</string>
+<string name="subscriber_id">Subscriber ID</string>
+<string name="sim_serial_id">SIM serial number</string>
 </resources>

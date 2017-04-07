@@ -49,7 +49,6 @@ import org.odk.collect.android.external.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ZipUtils;
 
@@ -139,9 +138,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
-        FormDef.EvalBehavior mode = AdminPreferencesActivity.getConfiguredFormProcessingLogic(
-                Collect.getInstance());
-        FormDef.setEvalBehavior(mode);
 
 //    FormDef.setDefaultEventNotifier(new EventNotifier() {
 //

@@ -211,7 +211,6 @@
   <string name="admin_preferences">Адміністрування</string>
   <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="user_access_form_entry">Користувачі мають доступ до пунктів Заповнення анкети:</string>
-  <string name="admin_advanced_settings">Розширені налаштування (за порадою):</string>
   <string name="save_mid">Зберегти анкету</string>
   <string name="enter_new_password">Введіть новий пароль</string>
   <string name="verify_new_password">Введіть новий пароль ще раз</string>
@@ -240,12 +239,6 @@
   <string name="swipe_instructions">Ви на початку %s. Проведіть пальцем по екрану, як показано нижче,  для переходу назад або вперед.</string>
   <string name="buttons_instructions">Ви на початку %s. Торкніться кнопки зі стрілкою внизу для переходу назад або вперед.</string>
   <string name="swipe_buttons_instructions">Ви на початку %s. Проведіть пальцем по екрану, як показано нижче,  або торкніться кнопки зі стрілкою для переходу назад або вперед.</string>
-  <string name="form_processing_logic">Логіка обробки анкети</string>
-  <string name="form_processing_logic_recommended">Рекомендована (за замовчуванням)</string>
-  <string name="form_processing_logic_0">Січень 2015 (найшвидша)</string>
-  <string name="form_processing_logic_1">Січень 2015 (найбезпечніша)</string>
-  <string name="form_processing_logic_2">Середина 2014 (повільна)</string>
-  <string name="form_processing_logic_3">Початок 2014 (швидка)</string>
   <string name="launch_printer">Друк</string>
   <string name="no_printer">Потрібний принтер не встановлений. Будь ласка, встановіть принтер.</string>
   <string name="constraint_behavior">Обмеження зумовлюють поведінку</string>

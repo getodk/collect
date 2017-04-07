@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,7 +32,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -50,6 +50,8 @@ import java.util.List;
 public class DataManagerList extends InstanceListFragment
         implements DeleteInstancesListener, DiskSyncListener, View.OnClickListener {
     private static final String TAG = "DataManagerList";
+    private static final String DATA_MANAGER_LIST_SORTING_ORDER = "dataManagerListSortingOrder";
+
     DeleteInstancesTask mDeleteInstancesTask = null;
     private AlertDialog mAlertDialog;
     private InstanceSyncTask instanceSyncTask;
@@ -72,7 +74,7 @@ public class DataManagerList extends InstanceListFragment
         mDeleteButton.setOnClickListener(this);
         mToggleButton.setOnClickListener(this);
 
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
@@ -123,8 +125,7 @@ public class DataManagerList extends InstanceListFragment
         textView.setText(result);
     }
 
-    @Override
-    protected void setupAdapter(String sortOrder) {
+    private void setupAdapter() {
         List<Long> checkedInstances = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
@@ -133,15 +134,24 @@ public class DataManagerList extends InstanceListFragment
         int[] view = new int[]{R.id.text1, R.id.text2};
 
         mListAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, new InstancesDao().getSavedInstancesCursor(sortOrder), data, view);
+                R.layout.two_item_multiple_choice, getCursor(), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new InstancesDao().getFilteredSavedInstancesCursor(charSequence));
-        super.filter(charSequence);
+    protected String getSortingOrderKey() {
+        return DATA_MANAGER_LIST_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+        super.updateAdapter();
+    }
+
+    private Cursor getCursor() {
+        return new InstancesDao().getSavedInstancesCursor(getFilterText(), getSortingOrder());
     }
 
     /**
