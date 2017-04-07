@@ -17,6 +17,10 @@ import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.utilities.LocaleHelper;
+
+import java.util.TreeMap;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
@@ -57,6 +61,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initNavigationPrefs();
         initConstraintBehaviorPref();
         initFontSizePref();
+        initLanguagePrefs();
         initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
@@ -141,6 +146,40 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                     int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                     CharSequence entry = ((ListPreference) preference).getEntries()[index];
                     preference.setSummary(entry);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void initLanguagePrefs() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_APP_LANGUAGE);
+
+        if (pref != null) {
+            final LocaleHelper localeHelper = new LocaleHelper();
+            TreeMap<String, String> languageList = localeHelper.getEntryListValues();
+            int length = languageList.size();
+            pref.setEntryValues(languageList.values().toArray(new String[length]));
+            pref.setEntries(languageList.keySet().toArray(new String[length]));
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    String entry = (String) ((ListPreference) preference).getEntries()[index];
+                    preference.setSummary(entry);
+
+                    SharedPreferences.Editor edit = PreferenceManager
+                            .getDefaultSharedPreferences(getActivity()).edit();
+                    edit.putString(KEY_APP_LANGUAGE, newValue.toString());
+                    edit.apply();
+                    localeHelper.updateLocale(getActivity());
+
+                    Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().overridePendingTransition(0, 0);
+                    getActivity().finishAffinity();
                     return true;
                 }
             });
