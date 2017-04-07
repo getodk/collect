@@ -336,11 +336,11 @@ public class FormsProvider extends ContentProvider {
         Long now = Long.valueOf(System.currentTimeMillis());
 
         // Make sure that the necessary fields are all set
-        if (values.containsKey(FormsColumns.DATE) == false) {
+        if (!values.containsKey(FormsColumns.DATE)) {
             values.put(FormsColumns.DATE, now);
         }
 
-        if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
+        if (!values.containsKey(FormsColumns.DISPLAY_SUBTEXT)) {
             Date today = new Date();
             String ts = new SimpleDateFormat(getContext().getString(
                     R.string.added_on_date_at_time), Locale.getDefault())
@@ -348,7 +348,7 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
         }
 
-        if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
+        if (!values.containsKey(FormsColumns.DISPLAY_NAME)) {
             values.put(FormsColumns.DISPLAY_NAME, form.getName());
         }
 
@@ -359,12 +359,12 @@ public class FormsProvider extends ContentProvider {
         String md5 = FileUtils.getMd5Hash(form);
         values.put(FormsColumns.MD5_HASH, md5);
 
-        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
+        if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
             String cachePath = Collect.CACHE_PATH + File.separator + md5
                     + ".formdef";
             values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
         }
-        if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
+        if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
             String pathNoExtension = filePath.substring(0,
                     filePath.lastIndexOf("."));
             String mediaPath = pathNoExtension + "-media";
@@ -592,7 +592,7 @@ public class FormsProvider extends ContentProvider {
                 }
 
                 // Make sure that the necessary fields are all set
-                if (values.containsKey(FormsColumns.DATE) == true) {
+                if (values.containsKey(FormsColumns.DATE)) {
                     Date today = new Date();
                     String ts = new SimpleDateFormat(getContext().getString(
                             R.string.added_on_date_at_time), Locale.getDefault())
@@ -661,7 +661,7 @@ public class FormsProvider extends ContentProvider {
                         }
 
                         // Make sure that the necessary fields are all set
-                        if (values.containsKey(FormsColumns.DATE) == true) {
+                        if (values.containsKey(FormsColumns.DATE)) {
                             Date today = new Date();
                             String ts = new SimpleDateFormat(getContext()
                                     .getString(R.string.added_on_date_at_time),

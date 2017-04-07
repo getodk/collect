@@ -202,17 +202,17 @@ public class InstanceProvider extends ContentProvider {
         Long now = Long.valueOf(System.currentTimeMillis());
 
         // Make sure that the fields are all set
-        if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
+        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
-        if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
+        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
             Date today = new Date();
             String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
             values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
         }
 
-        if (values.containsKey(InstanceColumns.STATUS) == false) {
+        if (!values.containsKey(InstanceColumns.STATUS)) {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         }
 
@@ -371,7 +371,7 @@ public class InstanceProvider extends ContentProvider {
         Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
-        if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
+        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
@@ -382,7 +382,7 @@ public class InstanceProvider extends ContentProvider {
                 if (values.containsKey(InstanceColumns.STATUS)) {
                     status = values.getAsString(InstanceColumns.STATUS);
 
-                    if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
+                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
@@ -398,7 +398,7 @@ public class InstanceProvider extends ContentProvider {
                 if (values.containsKey(InstanceColumns.STATUS)) {
                     status = values.getAsString(InstanceColumns.STATUS);
 
-                    if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
+                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
