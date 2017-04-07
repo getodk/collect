@@ -99,7 +99,6 @@ public class FileUtils {
                     offset += read;
                 }
             } catch (IOException e) {
-                Log.e(t, "Cannot read " + file.getName());
                 Timber.e(e, "Cannot read file %s due to : %s ", file.getName(), e.getMessage());
                 return null;
             }
@@ -117,7 +116,6 @@ public class FileUtils {
             return bytes;
 
         } catch (FileNotFoundException e) {
-            Log.e(t, "Cannot find " + file.getName());
             Timber.e(e, "Cannot find file %s due to : %s", file.getName(), e.getMessage());
             return null;
 
@@ -126,7 +124,6 @@ public class FileUtils {
             try {
                 is.close();
             } catch (IOException e) {
-                Log.e(t, "Cannot close input stream for " + file.getName());
                 Timber.e(e, "Cannot close input stream for file %s due to %s", file.getName(), e.getMessage());
                 return null;
             }
@@ -177,13 +174,10 @@ public class FileUtils {
 
         } catch (NoSuchAlgorithmException | IOException e) {
             if (e instanceof NoSuchAlgorithmException) {
-                Log.e("MD5", e.getMessage());
-                Timber.e(e, "");
+                Timber.e(e, e.getMessage());
             } else if (e instanceof FileNotFoundException) {
-                Log.e("No Cache File", e.getMessage());
-                Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+                Timber.e(e, "Cache file %s not found due to %s", file.getAbsolutePath(), e.getMessage());
             } else {
-                Log.e("Problem reading file", e.getMessage());
                 Timber.e(e, "Problem reading file %s due to %s ", file.getAbsolutePath(), e.getMessage());
             }
             return null;
@@ -267,7 +261,6 @@ public class FileUtils {
                             + sourceFile.getAbsolutePath());
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
-                    Log.e(t, e.getMessage(), e);
                     Timber.e(e, e.getMessage());
                 }
             }
@@ -294,13 +287,12 @@ public class FileUtils {
             return null;
         } catch (Exception e) {
             if (e instanceof  FileNotFoundException) {
-                Log.e(t, "FileNotFoundException while copying file", e);
+                Timber.e(e, "FileNotFoundException while copying file due to %s", e.getMessage());
             } else if (e instanceof  IOException) {
-                Log.e(t, "IOException while copying file", e);
+                Timber.e(e, "IOException while copying file due to %s ", e.getMessage());
             } else {
-                Log.e(t, "Exception while copying file", e);
+                Timber.e(e, "Exception while copying file due to %s ", e.getMessage());
             }
-            Timber.e(e, e.getMessage());
             return e.getMessage();
         } finally {
             IOUtils.closeQuietly(fileInputStream);
@@ -324,7 +316,6 @@ public class FileUtils {
         try {
             isr = new InputStreamReader(is, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            Log.w(t, "UTF 8 encoding unavailable, trying default encoding");
             Timber.w(uee, "Trying default encoding as UTF 8 encoding unavailable due to %s ", uee.getMessage());
             isr = new InputStreamReader(is);
         }
@@ -341,7 +332,6 @@ public class FileUtils {
                 try {
                     isr.close();
                 } catch (IOException e) {
-                    Log.w(t, xmlFile.getAbsolutePath() + " Error closing form reader");
                     Timber.w("%s error closing from reader due to : %s", xmlFile.getAbsolutePath(), e.getMessage());
                 }
             }
@@ -397,7 +387,6 @@ public class FileUtils {
                         (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
                                 ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
-                Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
                 Timber.i("XML file %s does not have a submission element due to : %s ", xmlFile.getAbsolutePath(), e.getMessage());
                 // and that's totally fine.
             }

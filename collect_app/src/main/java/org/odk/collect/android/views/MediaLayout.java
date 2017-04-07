@@ -127,7 +127,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 videoFilename =
                         ReferenceManager._().DeriveReference(mVideoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
-                Log.e(t, "Invalid reference exception");
                 Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
             }
 
@@ -136,7 +135,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 // We should have a video clip, but the file doesn't exist.
                 String errorMsg =
                         getContext().getString(R.string.file_missing, videoFilename);
-                Log.e(t, errorMsg);
                 Timber.d("File %s is missing", videoFilename);
                 ToastUtils.showLongToast(errorMsg);
                 return;
@@ -278,7 +276,6 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     mMissingImage.setId(imageId);
                 }
             } catch (InvalidReferenceException e) {
-                Log.e(t, "image invalid reference exception");
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage() );
             }
         } else {

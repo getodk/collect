@@ -184,14 +184,12 @@ public abstract class GoogleSheetsAbstractUploader extends
                                 .setRequests(requests))
                         .execute();
             } catch (GoogleJsonResponseException e) {
-                Log.e(TAG, e.getMessage(), e);
                 String message = e.getMessage();
                 if (e.getDetails().getCode() == 403)
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 mResults.put(id, message);
                 return false;
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -305,7 +303,6 @@ public abstract class GoogleSheetsAbstractUploader extends
                     folderId = createOrGetIDOfFolderWithName(jrFormId);
                 } catch (IOException | MultipleFoldersFoundException e) {
                     Timber.e(e, e.getMessage());
-                    Log.e(TAG, e.getMessage(), e);
                     mResults.put(id, e.getMessage());
                     return false;
                 }
@@ -388,7 +385,6 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .execute();
             } catch (IOException e) {
                 Timber.e(e, e.getMessage());
-                Log.e(TAG, e.getMessage(), e);
                 mResults.put(id, e.getMessage());
                 return false;
             }

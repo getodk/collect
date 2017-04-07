@@ -426,7 +426,6 @@ public final class WebUtils {
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
                 Timber.e(e, error);
-                Log.e(t, error);
                 return new DocumentFetchResult(error, 0);
             }
 
@@ -466,7 +465,6 @@ public final class WebUtils {
                     + u.toString();
 
             Timber.w(e, error);
-            Log.w(t, error);
             return new DocumentFetchResult(error, 0);
         }
     }

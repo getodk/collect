@@ -795,7 +795,6 @@ public class GoogleDriveActivity extends ListActivity implements
                 startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
                 return null;
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
                 Timber.e(e, e.getMessage());
                 createAlertDialog(getString(R.string.google_auth_io_exception_msg));
             }
@@ -960,7 +959,6 @@ public class GoogleDriveActivity extends ListActivity implements
                     downloadFile(df).writeTo(fStream);
                 } catch (Exception e) {
                     Timber.e(e, e.getMessage());
-                    Log.e(TAG, e.getMessage(), e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
                 } finally {
@@ -969,7 +967,6 @@ public class GoogleDriveActivity extends ListActivity implements
                             fStream.close();
                         }
                     } catch (IOException e) {
-                        Log.e(TAG, e.getMessage(), e);
                         Timber.e(e, "Unable to close the file output stream due to : %s ", e.getMessage());
                     }
                 }

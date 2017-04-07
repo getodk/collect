@@ -216,7 +216,6 @@ public class ItemsetDbAdapter {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
             Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
-            Log.e("MD5", e.getMessage());
         }
         md.update(toEncode.getBytes());
         byte[] digest = md.digest();

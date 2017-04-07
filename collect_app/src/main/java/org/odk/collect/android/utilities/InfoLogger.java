@@ -64,7 +64,6 @@ public class InfoLogger {
             fo.close();
         } catch (IOException e) {
             Timber.e(e, "Unable to write to log file %s due to %s", log.getAbsolutePath(), e.getMessage());
-            Log.e(t, "exception: " + e.toString());
         }
     }
 }

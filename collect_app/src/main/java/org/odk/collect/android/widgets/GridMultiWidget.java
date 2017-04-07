@@ -221,7 +221,6 @@ public class GridMultiWidget extends QuestionWidget {
                         errorMsg = getContext().getString(R.string.file_missing, imageFile);
                     }
                 } catch (InvalidReferenceException e) {
-                    Log.e("GridMultiWidget", "image invalid reference exception");
                     Timber.e("Image invalid reference due to %s ", e.getMessage());
                 }
             } else {

@@ -132,7 +132,6 @@ public class MediaUtils {
             }
         } catch (Exception e) {
             Timber.e(e, "Unable to delete image file from media provider due to %s ", e.getMessage());
-            Log.e(t, e.toString());
         } finally {
             if (imageCursor != null) {
                 imageCursor.close();
@@ -178,7 +177,6 @@ public class MediaUtils {
             }
         } catch (Exception e) {
             Timber.e(e, "Unable to delete images in folder %s due to %s", folder.getAbsoluteFile(), e.getMessage());
-            Log.e(t, e.toString());
         } finally {
             if (imageCursor != null) {
                 imageCursor.close();
@@ -249,7 +247,6 @@ public class MediaUtils {
             }
         } catch (Exception e) {
             Timber.e(e, "Unable to delete audio file %s due to %s ", audioFile, e.getMessage());
-            Log.e(t, e.toString());
         } finally {
             if (audioCursor != null) {
                 audioCursor.close();
@@ -295,7 +292,6 @@ public class MediaUtils {
             }
         } catch (Exception e) {
             Timber.e(e, "Unable to delete audio files in folder %s due to %s", folder.getAbsolutePath(), e.getMessage());
-            Log.e(t, e.toString());
         } finally {
             if (audioCursor != null) {
                 audioCursor.close();
@@ -366,7 +362,6 @@ public class MediaUtils {
             }
         } catch (Exception e) {
             Timber.e(e, "Unable to delete video file %s due to %s ", videoFile, e.getMessage());
-            Log.e(t, e.toString());
         } finally {
             if (videoCursor != null) {
                 videoCursor.close();
@@ -412,7 +407,6 @@ public class MediaUtils {
             }
         } catch (Exception e) {
             Timber.e(e, "Unable to delete video files in folder %s due to %s ", folder.getAbsolutePath(), e.getMessage());
-            Log.e(t, e.toString());
         } finally {
             if (videoCursor != null) {
                 videoCursor.close();

@@ -230,7 +230,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (Exception e) {
-                Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
@@ -579,7 +578,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         // unreachable...
-                        Timber.i(e, "Error encoding URL for devise id : %s due to : %s ", deviceId, e.getMessage());
+                        Timber.i(e, "Error encoding URL for device id : %s due to : %s ", deviceId, e.getMessage());
                     }
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,

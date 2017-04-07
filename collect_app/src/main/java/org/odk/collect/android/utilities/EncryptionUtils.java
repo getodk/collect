@@ -144,7 +144,6 @@ public class EncryptionUtils {
                 }
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
                 Timber.e(e, "Unable to set md5 hash for instanceid and symmetric key due to : %s ", e.getMessage());
-                Log.e(t, e.toString());
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -162,7 +161,6 @@ public class EncryptionUtils {
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
                 Timber.e(e, "Unable to encrypt the symmetric key due to : %s ", e.getMessage());
-                Log.e(t, "Unable to encrypt the symmetric key");
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -208,7 +206,6 @@ public class EncryptionUtils {
                 messageDigest = md.digest();
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
                 Timber.e(e,"Exception thrown while constructing md5 hash due to %s ", e.getMessage());
-                Log.e(t, e.toString());
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -223,7 +220,6 @@ public class EncryptionUtils {
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
                 Timber.e(e, "Unable to encrypt the symmetric key due to %s ", e.getMessage());
-                Log.e(t, "Unable to encrypt the symmetric key");
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
@@ -240,7 +236,6 @@ public class EncryptionUtils {
                 isNotBouncyCastle = false;
             } catch (NoSuchProviderException e) {
                 Timber.w(e, "Unable to obtain BouncyCastle provider! Decryption may fail due to %s ", e.getMessage());
-                Log.w(t, "Unable to obtain BouncyCastle provider! Decryption may fail!");
                 isNotBouncyCastle = true;
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
             }
@@ -348,7 +343,6 @@ public class EncryptionUtils {
                 String msg = String.format(Collect.getInstance()
                         .getString(R.string.phone_does_not_have_base64_class), String.valueOf(version));
                 Timber.e(e,"%s due to %s", msg, e.getMessage());
-                Log.e(t, msg);
                 throw new EncryptionException(msg, e);
             }
 
@@ -361,7 +355,6 @@ public class EncryptionUtils {
             } catch (NoSuchAlgorithmException e) {
                 String msg = Collect.getInstance().getString(R.string.phone_does_not_support_rsa);
                 Timber.e(e, "%s due to %s ", msg, e.getMessage());
-                Log.e(t, msg);
                 throw new EncryptionException(msg, e);
             }
             try {
@@ -369,7 +362,6 @@ public class EncryptionUtils {
             } catch (InvalidKeySpecException e) {
                 String msg = Collect.getInstance().getString(R.string.invalid_rsa_public_key);
                 Timber.e(e, "%s due to %s ", msg, e.getMessage());
-                Log.e(t, msg);
                 throw new EncryptionException(msg, e);
             }
         } finally {
@@ -398,7 +390,6 @@ public class EncryptionUtils {
             } else {
                 msg = "No BouncyCastle provider for padding implementation of symmetric algorithm!";
             }
-            Log.e(t, msg);
             Timber.e(e, msg);
             return null;
         }
@@ -447,7 +438,6 @@ public class EncryptionUtils {
         } catch (Exception e) {
             String msg = "Error encrypting: " + file.getName() + " -> "
                     + encryptedFile.getName();
-            Log.e(t, msg, e);
             Timber.e(e, "%s due to %s ", msg, e.getMessage());
             throw new EncryptionException(msg, e);
         } finally {
@@ -619,7 +609,6 @@ public class EncryptionUtils {
         } catch (Exception ex) {
             String msg = "Error writing submission.xml for encrypted submission: "
                     + submissionXml.getParentFile().getName();
-            Log.e(t, msg);
             Timber.e(ex, "%s due to : %s ", msg, ex.getMessage());
             throw new EncryptionException(msg, ex);
         } finally {

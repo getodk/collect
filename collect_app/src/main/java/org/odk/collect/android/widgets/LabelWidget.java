@@ -151,7 +151,6 @@ public class LabelWidget extends QuestionWidget {
                         }
                     } catch (InvalidReferenceException e) {
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
-                        Log.e(t, "image invalid reference exception");
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

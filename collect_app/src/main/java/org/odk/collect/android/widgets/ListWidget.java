@@ -176,7 +176,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                             mMissingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
-                        Log.e(t, "image invalid reference exception");
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
                 } else {
