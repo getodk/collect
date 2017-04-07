@@ -294,7 +294,6 @@ public final class WebUtils {
                 // read to end of stream...
                 final long count = 1024L;
                 while (is.skip(count) == count) {
-                    ;
                 }
                 is.close();
             } catch (IOException e) {
@@ -400,7 +399,6 @@ public final class WebUtils {
                             // ensure stream is consumed...
                             final long count = 1024L;
                             while (isr.skip(count) == count) {
-                                ;
                             }
                         } catch (Exception e) {
                             // no-op

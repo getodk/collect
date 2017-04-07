@@ -20,11 +20,11 @@ package org.odk.collect.android.widgets;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public interface IBinaryWidget {
-    public void setBinaryData(Object answer);
+    void setBinaryData(Object answer);
 
-    public void cancelWaitingForBinaryData();
+    void cancelWaitingForBinaryData();
 
-    public boolean isWaitingForBinaryData();
+    boolean isWaitingForBinaryData();
 }
 
 /*TODO carlhartung:  we might want to move this into the QuestionWidget abstract class? 
