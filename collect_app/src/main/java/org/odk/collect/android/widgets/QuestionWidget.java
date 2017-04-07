@@ -36,8 +36,6 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -378,19 +376,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             mPlayer.stop();
             mPlayer.reset();
         }
-    }
-
-    // Skip over a "daylight savings gap". This is needed on the day and time of a daylight savings
-    // transition because that date/time doesn't exist.
-    // Today clocks are almost always set one hour back or ahead.
-    // Throughout history there have been several variations, like half adjustments (30 minutes) or
-    // double adjustment (two hours). Adjustments of 20 and 40 minutes have also been used.
-    // https://www.timeanddate.com/time/dst/
-    protected LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime ldt) {
-        while (DateTimeZone.getDefault().isLocalDateTimeGap(ldt)) {
-            ldt = ldt.plusMinutes(1);
-        }
-        return ldt;
     }
 
     /**

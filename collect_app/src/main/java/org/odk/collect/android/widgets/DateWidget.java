@@ -213,7 +213,6 @@ public class DateWidget extends QuestionWidget {
                 .withHourOfDay(0)
                 .withMinuteOfHour(0);
 
-        ldt = skipDaylightSavingGapIfExists(ldt);
         return new DateData(ldt.toDate());
     }
 
