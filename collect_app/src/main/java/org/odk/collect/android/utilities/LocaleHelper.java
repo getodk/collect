@@ -37,7 +37,7 @@ public class LocaleHelper {
 
     public TreeMap<String, String> getEntryListValues() {
         //Holds language as key and language code as value
-        TreeMap<String, String> languageList = new TreeMap<>();
+        TreeMap<String, String> languageList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         for (String language : ApplicationConstants.TRANSLATIONS_AVAILABLE) {
             Locale locale = getLocale(language);
             languageList.put(locale.getDisplayName(locale), language);
