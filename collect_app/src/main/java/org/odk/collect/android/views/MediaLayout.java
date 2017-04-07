@@ -441,16 +441,29 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         }
         if (mPlayer.isPlaying()) {
             mPlayer.stop();
-            mPlayer.reset();
+            Bitmap b =
+                    BitmapFactory.decodeResource(getContext().getResources(),
+                            android.R.drawable.ic_lock_silent_mode_off);
+            mAudioButton.setImageBitmap(b);
+
+        } else {
+            playAudio();
+            Bitmap b =
+                    BitmapFactory.decodeResource(getContext().getResources(),
+                            android.R.drawable.ic_media_pause);
+            mAudioButton.setImageBitmap(b);
         }
         mPlayer.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetTextFormatting();
                 mediaPlayer.reset();
+                Bitmap b =
+                        BitmapFactory.decodeResource(getContext().getResources(),
+                                android.R.drawable.ic_lock_silent_mode_off);
+                mAudioButton.setImageBitmap(b);
             }
         });
-        playAudio();
     }
 
     public void setAudioListener(AudioPlayListener listener) {

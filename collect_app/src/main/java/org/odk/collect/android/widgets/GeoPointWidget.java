@@ -152,12 +152,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                         i = new Intent(getContext(), GeoPointOsmMapActivity.class);
                     }
                 } else {
-                    if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-                        i = new Intent(getContext(), GeoPointActivity.class);
-                    } else {
-                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
-                        return;
-                    }
+                    i = new Intent(getContext(), GeoPointActivity.class);
                 }
 
                 String s = mStringAnswer.getText().toString();

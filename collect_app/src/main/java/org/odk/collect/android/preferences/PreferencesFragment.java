@@ -1,7 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,10 +18,25 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.odk.collect.android.preferences.PreferenceKeys.*;
+import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
+import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORM_METADATA;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL_SETTINGS;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
+import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
@@ -39,17 +52,14 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         removeAllDisabledPrefs();
 
-        // ToDo: order these logically
         initProtocolPrefs(adminMode);
-        initGoogleAccountPref();
-        initUserAndPasswordPrefs();
+        initFormMetadata();
         initNavigationPrefs();
         initConstraintBehaviorPref();
         initFontSizePref();
         initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
-
     }
 
 
@@ -227,75 +237,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
     }
 
-    private void initUserAndPasswordPrefs() {
-        final EditTextPreference userPref = (EditTextPreference) findPreference(KEY_USERNAME);
-
-        if (userPref != null) {
-            userPref.setOnPreferenceChangeListener(this);
-            userPref.setSummary(userPref.getText());
-            userPref.getEditText().setFilters(new InputFilter[]{getReturnFilter()});
-        }
-
-        final EditTextPreference passwordPref = (EditTextPreference) findPreference(KEY_PASSWORD);
-
-        if (passwordPref != null) {
-            passwordPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    String pw = newValue.toString();
-
-                    if (pw.length() > 0) {
-                        passwordPref.setSummary("********");
-                    } else {
-                        passwordPref.setSummary("");
-                    }
-                    return true;
-                }
-            });
-            if (passwordPref.getText() != null && passwordPref.getText().length() > 0) {
-                passwordPref.setSummary("********");
-            }
-            passwordPref.getEditText().setFilters(new InputFilter[]{getReturnFilter()});
-        }
-    }
-
-    private void initGoogleAccountPref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
-
-        if (pref == null)
-            return;
-
-        // get list of google accounts
-        // ToDo: this code is duplicated somewhere. Fix the duplication.
-        final List<String> accountEntries = new ArrayList<>();
-        final List<String> accountValues = new ArrayList<>();
-        final Account[] accounts = AccountManager.get(getActivity().getApplicationContext()).getAccountsByType(
-                "com.google");
-
-        for (Account account : accounts) {
-            accountEntries.add(account.name);
-            accountValues.add(account.name);
-        }
-        accountEntries.add(getString(R.string.no_account));
-        accountValues.add("");
-
-        pref.setEntries(accountEntries.toArray(new String[accountEntries.size()]));
-        pref.setEntryValues(accountValues.toArray(new String[accountValues.size()]));
-        pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(
-                        newValue.toString());
-                String value =
-                        (String) ((ListPreference) preference).getEntryValues()[index];
-                preference.setSummary(value);
-                return true;
-            }
-        });
-        pref.setSummary(pref.getValue());
-    }
-
     private void initProtocolPrefs(final boolean adminMode) {
         final ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
         final Preference settingsPref = findPreference(KEY_PROTOCOL_SETTINGS);
@@ -327,6 +268,15 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         });
     }
 
+    private void initFormMetadata() {
+        final Preference pref = findPreference(KEY_FORM_METADATA);
+
+        if (pref != null) {
+            final Intent intent = new Intent(getActivity(), FormMetadataActivity.class);
+            pref.setIntent(intent);
+        }
+    }
+
     private Intent setProtocolIntent(boolean adminMode, CharSequence value,
                                      Preference protocolSettings) {
         final Intent prefIntent;
@@ -334,8 +284,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         if (value.equals(getString(R.string.protocol_odk_default))) {
             setDefaultAggregatePaths();
             prefIntent = new Intent(getActivity(), AggregatePreferencesActivity.class);
-        } else if (value.equals(
-                getString(R.string.protocol_google_sheets))) {
+        } else if (value.equals(getString(R.string.protocol_google_sheets))) {
             prefIntent = new Intent(getActivity(), GooglePreferencesActivity.class);
         } else {
             // other
@@ -381,5 +330,4 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         preference.setSummary((CharSequence) newValue);
         return true;
     }
-
 }

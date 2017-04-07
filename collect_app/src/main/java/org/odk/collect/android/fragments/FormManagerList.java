@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -48,6 +49,7 @@ import java.util.List;
  */
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
+    private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handled across orientation changes
@@ -70,7 +72,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         mDeleteButton.setOnClickListener(this);
         mToggleButton.setOnClickListener(this);
 
-        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
+        setupAdapter();
 
         if (mBackgroundTasks == null) {
             mBackgroundTasks = new BackgroundTasks();
@@ -118,8 +120,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         super.onPause();
     }
 
-    @Override
-    protected void setupAdapter(String sortOrder) {
+    private void setupAdapter() {
         List<Long> checkedForms = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedForms.add(a);
@@ -129,15 +130,24 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
         mListAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, new FormsDao().getFormsCursor(sortOrder), data, view);
+                R.layout.two_item_multiple_choice, getCursor(), data, view);
         setListAdapter(mListAdapter);
         checkPreviouslyCheckedItems();
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
-        super.filter(charSequence);
+    protected String getSortingOrderKey() {
+        return FORM_MANAGER_LIST_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+        super.updateAdapter();
+    }
+
+    private Cursor getCursor() {
+        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
     }
 
     /**
