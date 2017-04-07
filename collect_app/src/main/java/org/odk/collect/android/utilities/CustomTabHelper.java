@@ -25,7 +25,9 @@ public class CustomTabHelper {
     public CustomTabsSession mCustomTabsSession;
 
     public void bindCustomTabsService(final Activity activity, final Uri url) {
-        if (mCustomTabsClient != null) return;
+        if (mCustomTabsClient != null) {
+            return;
+        }
         final CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
