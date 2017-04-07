@@ -95,7 +95,6 @@
                 android:id="@+id/view_sent_forms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/view_sent_forms"
                 android:padding="20dp"
                 android:textSize="21sp" />
 
