@@ -26,6 +26,9 @@
         <module name="RedundantImport" />
         <module name="UnusedImports" />
 
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
         <!-- <module name="OuterTypeFilename"/> -->
         <!-- <module name="IllegalTokenText">
             <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
