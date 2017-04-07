@@ -104,6 +104,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
@@ -1278,6 +1280,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         } catch (JavaRosaException e) {
             mBackButton.setEnabled(true);
+            Timber.e(e, e.getMessage());
         }
     }
 
@@ -1691,6 +1694,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                         try {
                                             Thread.sleep(500);
                                         } catch (InterruptedException e) {
+                                            //This is rare
+                                            Timber.e(e, e.getMessage());
                                         }
                                         showNextView();
                                     }
@@ -2500,6 +2505,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
+                Timber.e(e, "Ended up with a bad language. %s", e.getMessage());
                 formController.setLanguage(defaultLanguage);
             }
         }

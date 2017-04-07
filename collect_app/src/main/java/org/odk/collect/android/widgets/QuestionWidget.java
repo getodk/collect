@@ -48,6 +48,8 @@ import org.odk.collect.android.views.MediaLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
 
     @SuppressWarnings("unused")
@@ -148,6 +150,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayColor = Color.parseColor(playColorString);
             } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playColorString, e.getMessage());
             }
         }
         questionMediaLayout.setPlayTextColor(mPlayColor);
@@ -158,6 +161,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayBackgroundColor = Color.parseColor(playBackgroundColorString);
             } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playBackgroundColorString, e.getMessage());
             }
         }
         questionMediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
@@ -406,6 +410,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
+                Timber.e(e, e.getMessage());
             }
         }
     }

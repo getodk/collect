@@ -65,6 +65,8 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
  * some activities based on returns of others.
@@ -663,15 +665,15 @@ public class MainMenuActivity extends Activity {
             adminEdit.apply();
 
             res = true;
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
+            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
                 if (input != null) {
                     input.close();
                 }
             } catch (IOException ex) {
+                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
             }
         }
         return res;
