@@ -504,5 +504,5 @@
 <string name="tv_qrcode">Scan the image to copy the settings from this device</string>
 <string name="scan_qrcode">Click to scan QRCode</string>
 <string name="successfully_imported_settings">Settings imported successfully</string>
-    <string name="encoding_max_limit">Maximum characters limit reached QRCode can\'t be generated for all settings Trying to create QRCode for server settings</string>
+<string name="encoding_max_limit">Maximum characters limit reached QRCode can\'t be generated for all settings</string>
 </resources>

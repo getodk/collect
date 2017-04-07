@@ -41,10 +41,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.DataFormatException;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
@@ -62,8 +65,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
-    private final String TAG = "QRCodeFragment";
     private static final int QRCODE_CAPTURE = 1;
+    private final String TAG = "QRCodeFragment";
     private SharedPreferences settings;
 
     @Nullable
@@ -89,18 +92,20 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private Bitmap generateQRBitMap() {
         String content;
         try {
-            content = getAllSettings();
+            content = getServerSettings();
+            String compressedData = TextUtils.compress(content);
 
             //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
-            if (content.length() > 4000) {
+            if (compressedData.length() > 4000) {
                 ToastUtils.showLongToast(getString(R.string.encoding_max_limit));
-                content = getServerSettings();
+                return null;
             }
 
             Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 512, 512, hints);
+            BitMatrix bitMatrix = qrCodeWriter
+                    .encode(compressedData, BarcodeFormat.QR_CODE, 512, 512, hints);
 
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
@@ -113,7 +118,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 }
             }
             return bmp;
-        } catch (WriterException | JSONException e) {
+        } catch (WriterException | IOException | JSONException e) {
             Log.e(TAG, e.getMessage(), e);
         }
         return null;
@@ -148,13 +153,14 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             case QRCODE_CAPTURE:
                 String dataObject = data.getStringExtra("SCAN_RESULT");
                 try {
-                    JSONObject jsonObject = new JSONObject(dataObject);
+                    String decompressedData = TextUtils.decompress(dataObject);
+                    JSONObject jsonObject = new JSONObject(decompressedData);
                     applySettings(jsonObject);
                     ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
-                } catch (JSONException e) {
+                } catch (JSONException | IOException | DataFormatException e) {
                     Log.e(TAG, e.getMessage(), e);
+                    break;
                 }
-                break;
         }
     }
 
@@ -181,11 +187,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 getActivity().getString(R.string.default_odk_formlist)));
         jsonObject.put(KEY_SUBMISSION_URL, settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
                 getActivity().getString(R.string.default_odk_submission)));
-        return jsonObject.toString();
-    }
-
-    private String getAllSettings() throws JSONException {
-        JSONObject jsonObject = new JSONObject(getServerSettings());
         jsonObject.put(KEY_USERNAME, settings.getString(PreferenceKeys.KEY_USERNAME, ""));
         jsonObject.put(KEY_PASSWORD, settings.getString(PreferenceKeys.KEY_PASSWORD, ""));
         return jsonObject.toString();
