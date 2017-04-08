@@ -109,11 +109,10 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
                 inputStream = tileSource.getInputStream(pTile);
 
                 if (inputStream != null) {
-                    Drawable drawable = tileSource.getDrawable(inputStream);
 
                     // Note that the finally clause will be called before
                     // the value is returned!
-                    return drawable;
+                    return tileSource.getDrawable(inputStream);
                 }
 
             } catch (Throwable e) {

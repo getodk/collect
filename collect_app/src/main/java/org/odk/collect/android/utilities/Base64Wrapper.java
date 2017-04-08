@@ -42,8 +42,7 @@ public class Base64Wrapper {
             Object[] argList = new Object[]{ba, FLAGS};
             Object o = m.invoke(null, argList);
             byte[] outArray = (byte[]) o;
-            String s = new String(outArray, "UTF-8");
-            return s;
+            return new String(outArray, "UTF-8");
         } catch (SecurityException e) {
             throw new IllegalArgumentException(e.toString());
         } catch (NoSuchMethodException e) {

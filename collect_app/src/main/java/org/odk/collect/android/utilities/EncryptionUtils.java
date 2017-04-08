@@ -128,8 +128,7 @@ public class EncryptionUtils {
             SecureRandom r = new SecureRandom();
             byte[] key = new byte[SYMMETRIC_KEY_LENGTH / 8];
             r.nextBytes(key);
-            SecretKeySpec sk = new SecretKeySpec(key, SYMMETRIC_ALGORITHM);
-            symmetricKey = sk;
+            symmetricKey = new SecretKeySpec(key, SYMMETRIC_ALGORITHM);
 
             // construct the fixed portion of the iv -- the ivSeedArray
             // this is the md5 hash of the instanceID and the symmetric key

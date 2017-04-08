@@ -1096,10 +1096,8 @@ public class FormController {
         // assume no binary data inside the model.
         FormInstance datamodel = getInstance();
         XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-        ByteArrayPayload payload =
-                (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
-        return payload;
+        return (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
     }
 
     /**
@@ -1108,10 +1106,8 @@ public class FormController {
     public ByteArrayPayload getSubmissionXml() throws IOException {
         FormInstance instance = getInstance();
         XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-        ByteArrayPayload payload =
-                (ByteArrayPayload) serializer.createSerializedPayload(instance,
-                        getSubmissionDataReference());
-        return payload;
+        return (ByteArrayPayload) serializer.createSerializedPayload(instance,
+                getSubmissionDataReference());
     }
 
     /**
