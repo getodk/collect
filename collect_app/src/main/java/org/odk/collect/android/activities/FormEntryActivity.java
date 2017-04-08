@@ -2161,7 +2161,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Log.e(t, "Creating PROGRESS_DIALOG");
+                Log.d(t, "Creating PROGRESS_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
