@@ -88,8 +88,9 @@ public class AuthDialogUtility {
         String username = getUserName(settings);
         String password = getPassword(settings);
 
-        if (username == null || username.isEmpty())
+        if (username == null || username.isEmpty()) {
             return;
+        }
 
         String host = Uri.parse(getServer(settings, context)).getHost();
         WebUtils.addCredentials(username, password, host);

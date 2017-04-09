@@ -65,6 +65,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import timber.log.Timber;
+
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
@@ -158,6 +160,7 @@ public abstract class GoogleSheetsAbstractUploader extends
             try {
                 mSpreadsheetId = UrlUtils.getSpreadsheetID(id);
             } catch (BadUrlException e) {
+                Timber.e(e, e.getMessage());
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -181,14 +184,13 @@ public abstract class GoogleSheetsAbstractUploader extends
                                 .setRequests(requests))
                         .execute();
             } catch (GoogleJsonResponseException e) {
-                Log.e(TAG, e.getMessage(), e);
                 String message = e.getMessage();
-                if (e.getDetails().getCode() == 403)
+                if (e.getDetails().getCode() == 403) {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+                }
                 mResults.put(id, message);
                 return false;
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -206,16 +208,8 @@ public abstract class GoogleSheetsAbstractUploader extends
         ArrayList<String> columnNames = new ArrayList<String>();
         try {
             getColumns(formFilePath, columnNames);
-        } catch (FileNotFoundException e2) {
-            mResults.put(id, e2.getMessage());
-            return false;
-        } catch (XmlPullParserException e2) {
-            mResults.put(id, e2.getMessage());
-            return false;
-        } catch (IOException e2) {
-            mResults.put(id, e2.getMessage());
-            return false;
-        } catch (FormException e2) {
+        } catch ( XmlPullParserException | IOException | FormException e2) {
+            Timber.e(e2, "Exception thrown while getting columns from form file due to : %s ", e2.getMessage());
             mResults.put(id, e2.getMessage());
             return false;
         }
@@ -245,17 +239,13 @@ public abstract class GoogleSheetsAbstractUploader extends
         // hashmaps.
         try {
             processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
-        } catch (XmlPullParserException e) {
-            mResults.put(id, e.getMessage());
-            return false;
         } catch (FormException e) {
+            Timber.e(e, Collect.getInstance().getString(R.string.google_repeat_error));
             mResults.put(id,
                     Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
-        } catch (FileNotFoundException e) {
-            mResults.put(id, e.getMessage());
-            return false;
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
+            Timber.e(e, "Exception thrown while parsing the file due to : %s ", e.getMessage());
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -263,6 +253,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
+            Timber.d(e3, e3.getMessage());
         }
 
         // make sure column names in submission are legal (may be different than form)
@@ -303,7 +294,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         throw new FileNotFoundException(Collect.getInstance()
                                 .getString(R.string.media_upload_error, filename));
                     } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                        Timber.e(e, e.getMessage());
                     }
                 }
                 c.close();
@@ -312,7 +303,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 try {
                     folderId = createOrGetIDOfFolderWithName(jrFormId);
                 } catch (IOException | MultipleFoldersFoundException e) {
-                    Log.e(TAG, e.getMessage(), e);
+                    Timber.e(e, e.getMessage());
                     mResults.put(id, e.getMessage());
                     return false;
                 }
@@ -324,7 +315,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     uploadedFileId = uploadFileToDrive(mediaToUpload.get(key),
                             folderId, toUpload);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Timber.e(e, "Exception thrown while uploading the file to drive due to: %s ", e.getMessage());
                     mResults.put(id, e.getMessage());
                     return false;
                 }
@@ -353,6 +344,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
+            Timber.e(e, e.getMessage());
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -393,15 +385,16 @@ public abstract class GoogleSheetsAbstractUploader extends
                                 .setRequests(requests))
                         .execute();
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
+                Timber.e(e, e.getMessage());
                 mResults.put(id, e.getMessage());
                 return false;
             }
 
             //adding the headers
             ArrayList<Object> list = new ArrayList<>();
-            for (String column : columnNames)
+            for (String column : columnNames) {
                 list.add(column);
+            }
 
             ArrayList<List<Object>> content = new ArrayList<>();
             content.add(list);
@@ -430,6 +423,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
+                Timber.e(e, e.getMessage());
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -447,6 +441,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
+            Timber.e(e, "Exception thrown while getting the header feed due to : %s ", e.getMessage());
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -483,6 +478,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .update(mSpreadsheetId, mSpreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
+                Timber.e(e, e.getMessage());
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -500,6 +496,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
+            Timber.e(e, "Exception thrown while getting the header feed due to : %s ", e.getMessage());
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -588,6 +585,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     .append(mSpreadsheetId, mSpreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
+            Timber.e(e, e.getMessage());
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -813,15 +811,16 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(in, null);
-        readInstanceFeed(parser, answersToUpload, mediaToUpload);
+        readInstanceFeed(parser, answersToUpload, mediaToUpload, instanceFile.getParentFile());
         in.close();
     }
 
     private void readInstanceFeed(XmlPullParser parser,
                                   HashMap<String, String> answersToUpload,
-                                  HashMap<String, String> mediaToUpload)
+                                  HashMap<String, String> mediaToUpload, File instanceFolder)
             throws XmlPullParserException, IOException,
             FormException {
+
         ArrayList<String> path = new ArrayList<String>();
 
         int event = parser.next();
@@ -832,11 +831,16 @@ public abstract class GoogleSheetsAbstractUploader extends
                     break;
                 case XmlPullParser.TEXT:
                     String answer = parser.getText();
-                    if (answer.contains(".")) {
+
+                    String filename = instanceFolder + "/" + answer;
+                    File file = new File(filename);
+
+                    if (file.isFile()) {
                         mediaToUpload.put(getPath(path), answer);
                     } else {
                         answersToUpload.put(getPath(path), answer);
                     }
+
                     break;
                 case XmlPullParser.END_TAG:
                     path.remove(path.size() - 1);

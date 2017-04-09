@@ -31,6 +31,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.io.File;
 import java.io.IOException;
 
+import timber.log.Timber;
+
 /**
  * @author ctsims
  * @author carlhartung
@@ -74,7 +76,7 @@ public class AudioButton extends AppCompatImageButton {
             try {
                 audioFilename = ReferenceManager._().DeriveReference(URI).getLocalURI();
             } catch (InvalidReferenceException e) {
-                Log.e(t, "Invalid reference exception");
+                Timber.e(e, "Invalid reference exception due to %s", e.getMessage());
             }
 
             File audioFile = new File(audioFilename);
@@ -93,7 +95,7 @@ public class AudioButton extends AppCompatImageButton {
                 mPlayer.start();
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid);
-                Log.e(t, errorMsg);
+                Timber.e(e, errorMsg, audioFilename);
                 ToastUtils.showLongToast(errorMsg);
             }
 

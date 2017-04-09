@@ -41,7 +41,9 @@ public class WidgetFactory {
 
         // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
-        if (appearance == null) appearance = "";
+        if (appearance == null) {
+            appearance = "";
+        }
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 

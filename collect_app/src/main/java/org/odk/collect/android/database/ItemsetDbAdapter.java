@@ -12,6 +12,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import timber.log.Timber;
+
 public class ItemsetDbAdapter {
 
     public static final String KEY_ID = "_id";
@@ -213,7 +215,7 @@ public class ItemsetDbAdapter {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getMessage());
+            Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
         }
         md.update(toEncode.getBytes());
         byte[] digest = md.digest();

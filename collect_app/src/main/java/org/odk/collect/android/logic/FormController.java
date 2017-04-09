@@ -90,8 +90,6 @@ public class FormController {
         }
     }
 
-    ;
-
     /**
      * Classes needed to serialize objects. Need to put anything from JR in here.
      */
@@ -1127,7 +1125,9 @@ public class FormController {
                 return e;
             } else if (e.getNumChildren() != 0) {
                 TreeElement v = findDepthFirst(e, name);
-                if (v != null) return v;
+                if (v != null) {
+                    return v;
+                }
             }
         }
         return null;

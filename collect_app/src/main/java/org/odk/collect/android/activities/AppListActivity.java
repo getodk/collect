@@ -294,7 +294,9 @@ abstract class AppListActivity extends ListActivity {
     // if ALL items are checked, uncheck them all
     public static boolean toggleChecked(ListView lv) {
         // shortcut null case
-        if (lv == null) return false;
+        if (lv == null) {
+            return false;
+        }
 
         boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
         setAllToCheckedState(lv, newCheckState);
@@ -303,7 +305,9 @@ abstract class AppListActivity extends ListActivity {
 
     public static void setAllToCheckedState(ListView lv, boolean check) {
         // no-op if ListView null
-        if (lv == null) return;
+        if (lv == null) {
+            return;
+        }
 
         for (int x = 0; x < lv.getCount(); x++) {
             lv.setItemChecked(x, check);

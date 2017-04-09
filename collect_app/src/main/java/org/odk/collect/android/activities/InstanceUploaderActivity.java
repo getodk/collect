@@ -261,8 +261,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             } catch (SQLException e) {
                 Log.e(TAG, e.getMessage(), e);
             } finally {
-                if (results != null)
+                if (results != null) {
                     results.close();
+                }
             }
             message.append(queryMessage.toString());
         }

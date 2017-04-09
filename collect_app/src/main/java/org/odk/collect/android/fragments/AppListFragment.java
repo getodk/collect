@@ -75,7 +75,9 @@ abstract class AppListFragment extends ListFragment {
     // if ALL items are checked, uncheck them all
     public static boolean toggleChecked(ListView lv) {
         // shortcut null case
-        if (lv == null) return false;
+        if (lv == null) {
+            return false;
+        }
 
         boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
         setAllToCheckedState(lv, newCheckState);
