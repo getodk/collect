@@ -570,11 +570,10 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 mResults = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 mAuthFailed = true;
             } catch (MultipleFoldersFoundException e) {
-                Timber.e(e, e.getMessage());
-                Log.e(TAG, e.getMessage(), e);
+                Timber.e(e);
             }
             return mResults;
         }
