@@ -360,7 +360,7 @@ public class FormHierarchyActivity extends ListActivity {
             // set the controller back to the current index in case the user hits 'back'
             formController.jumpToIndex(currentIndex);
         } catch (Exception e) {
-            Timber.e(e.getMessage(), e);
+            Timber.e(e);
             createErrorDialog(e.getMessage());
         }
     }
@@ -436,7 +436,7 @@ public class FormHierarchyActivity extends ListActivity {
                     try {
                         Collect.getInstance().getFormController().stepToPreviousScreenEvent();
                     } catch (JavaRosaException e) {
-                        Timber.e(e.getMessage(), e);
+                        Timber.e(e);
                         createErrorDialog(e.getCause().getMessage());
                         return;
                     }
