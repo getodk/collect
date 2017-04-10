@@ -93,7 +93,7 @@ public class DrawActivity extends Activity {
         try {
             saveFile(savepointImage);
         } catch (FileNotFoundException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
         }
         if (savepointImage.exists()) {
             outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
@@ -309,7 +309,7 @@ public class DrawActivity extends Activity {
                     fos.close();
                 }
             } catch (Exception e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
             }
         }
     }
