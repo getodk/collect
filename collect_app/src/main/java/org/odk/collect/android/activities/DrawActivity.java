@@ -29,7 +29,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -294,7 +293,7 @@ public class DrawActivity extends Activity {
             // apparently on 4.x, the orientation change notification can occur
             // sometime before the view is rendered. In that case, the view
             // dimensions will not be known.
-            Log.e(t, "view has zero width or zero height");
+            Timber.e("View has zero width or zero height");
         } else {
             FileOutputStream fos;
             fos = new FileOutputStream(f);
