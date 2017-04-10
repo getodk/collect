@@ -47,7 +47,6 @@ import timber.log.Timber;
 public class FormChooserList extends FormListActivity implements DiskSyncListener {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
-    private static final String t = "FormChooserList";
     private static final boolean EXIT = true;
     private static final String syncMsgKey = "syncmsgkey";
 

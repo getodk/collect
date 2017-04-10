@@ -111,7 +111,6 @@ public class GoogleDriveActivity extends ListActivity implements
     private static final String FILE_LIST_KEY = "fileList";
     private static final String PARENT_ID_KEY = "parentId";
     private static final String CURRENT_ID_KEY = "currentDir";
-    private static final String TAG = "GoogleDriveActivity";
     protected GoogleAccountCredential mCredential;
     private Button mRootButton;
     private Button mBackButton;
