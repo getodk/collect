@@ -165,7 +165,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             }
 
         } catch (final Throwable e) {
-            Timber.w(e, "Error getting db stream: " + pTile);
+            Timber.w(e, "Error getting db stream: %s", pTile);
         }
 
         return null;

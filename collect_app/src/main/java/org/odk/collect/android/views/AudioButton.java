@@ -76,7 +76,7 @@ public class AudioButton extends AppCompatImageButton {
             try {
                 audioFilename = ReferenceManager._().DeriveReference(URI).getLocalURI();
             } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid reference exception due to %s", e.getMessage());
+                Timber.e(e);
             }
 
             File audioFile = new File(audioFilename);
@@ -94,8 +94,8 @@ public class AudioButton extends AppCompatImageButton {
                 mPlayer.prepare();
                 mPlayer.start();
             } catch (IOException e) {
-                String errorMsg = c.getString(R.string.audio_file_invalid);
-                Timber.e(e, errorMsg, audioFilename);
+                String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
+                Timber.e(e, errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }
 
