@@ -271,12 +271,10 @@ public final class WebUtils {
                 .setCookieSpec(CookieSpecs.DEFAULT)
                 .build();
 
-        CloseableHttpClient httpClient = HttpClientBuilder.create()
+        return HttpClientBuilder.create()
                 .setDefaultSocketConfig(socketConfig)
                 .setDefaultRequestConfig(requestConfig)
                 .build();
-
-        return httpClient;
 
     }
 

@@ -247,13 +247,12 @@ public class MapHelper {
 
     private File[] getFileFromSelectedItem(int item) {
         File directory = new File(Collect.OFFLINE_LAYERS + slash + offilineOverlays[item]);
-        File[] files = directory.listFiles(new FilenameFilter() {
+        return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 return (filename.toLowerCase().endsWith(".mbtiles"));
             }
         });
-        return files;
     }
 
 
