@@ -884,16 +884,22 @@ public class GoogleDriveActivity extends ListActivity implements
 
             for (com.google.api.services.drive.model.File f : fileList) {
                 String type = f.getMimeType();
-                if (type.equals("application/xml") || type.equals("text/xml") ||
-                        type.equals("application/xhtml") || type.equals("text/xhtml") ||
-                        type.equals("application/xhtml+xml")) {
-                    forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
-                            DriveListItem.FILE, f.getId(), currentDir));
-                } else if (type.equals("application/vnd.google-apps.folder")) {
-                    dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
-                            DriveListItem.DIR, f.getId(), parentId));
-                } else {
-                    // skip the rest of the files
+                switch (type) {
+                    case "application/xml":
+                    case "text/xml":
+                    case "application/xhtml":
+                    case "text/xhtml":
+                    case "application/xhtml+xml":
+                        forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                                DriveListItem.FILE, f.getId(), currentDir));
+                        break;
+                    case "application/vnd.google-apps.folder":
+                        dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                                DriveListItem.DIR, f.getId(), parentId));
+                        break;
+                    default:
+                        // skip the rest of the files
+                        break;
                 }
             }
             Collections.sort(dirs);

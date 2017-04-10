@@ -157,41 +157,49 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         continue;
                     }
                     String tag = child.getName();
-                    if (tag.equals("formID")) {
-                        formId = XFormParser.getXMLText(child, true);
-                        if (formId != null && formId.length() == 0) {
-                            formId = null;
-                        }
-                    } else if (tag.equals("name")) {
-                        formName = XFormParser.getXMLText(child, true);
-                        if (formName != null && formName.length() == 0) {
-                            formName = null;
-                        }
-                    } else if (tag.equals("version")) {
-                        version = XFormParser.getXMLText(child, true);
-                        if (version != null && version.length() == 0) {
-                            version = null;
-                        }
-                    } else if (tag.equals("majorMinorVersion")) {
-                        majorMinorVersion = XFormParser.getXMLText(child, true);
-                        if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
-                            majorMinorVersion = null;
-                        }
-                    } else if (tag.equals("descriptionText")) {
-                        description = XFormParser.getXMLText(child, true);
-                        if (description != null && description.length() == 0) {
-                            description = null;
-                        }
-                    } else if (tag.equals("downloadUrl")) {
-                        downloadUrl = XFormParser.getXMLText(child, true);
-                        if (downloadUrl != null && downloadUrl.length() == 0) {
-                            downloadUrl = null;
-                        }
-                    } else if (tag.equals("manifestUrl")) {
-                        manifestUrl = XFormParser.getXMLText(child, true);
-                        if (manifestUrl != null && manifestUrl.length() == 0) {
-                            manifestUrl = null;
-                        }
+                    switch (tag) {
+                        case "formID":
+                            formId = XFormParser.getXMLText(child, true);
+                            if (formId != null && formId.length() == 0) {
+                                formId = null;
+                            }
+                            break;
+                        case "name":
+                            formName = XFormParser.getXMLText(child, true);
+                            if (formName != null && formName.length() == 0) {
+                                formName = null;
+                            }
+                            break;
+                        case "version":
+                            version = XFormParser.getXMLText(child, true);
+                            if (version != null && version.length() == 0) {
+                                version = null;
+                            }
+                            break;
+                        case "majorMinorVersion":
+                            majorMinorVersion = XFormParser.getXMLText(child, true);
+                            if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
+                                majorMinorVersion = null;
+                            }
+                            break;
+                        case "descriptionText":
+                            description = XFormParser.getXMLText(child, true);
+                            if (description != null && description.length() == 0) {
+                                description = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
+                        case "manifestUrl":
+                            manifestUrl = XFormParser.getXMLText(child, true);
+                            if (manifestUrl != null && manifestUrl.length() == 0) {
+                                manifestUrl = null;
+                            }
+                            break;
                     }
                 }
                 if (formId == null || downloadUrl == null || formName == null) {
