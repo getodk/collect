@@ -259,7 +259,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                     }
                 }
             } catch (SQLException e) {
-                Timber.e(e.getMessage(), e);
+                Timber.e(e);
             } finally {
                 if (results != null) {
                     results.close();
