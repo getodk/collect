@@ -37,7 +37,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -799,7 +798,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 createAlertDialog(getString(R.string.google_auth_io_exception_msg));
             }
             if (rootId == null) {
-                Log.e("drive", "Error occurred : Unable to fetch drive contents");
+                Timber.e("Unable to fetch drive contents");
                 return null;
            }
 
