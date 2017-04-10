@@ -382,7 +382,7 @@ public class EncryptionUtils {
             Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
         } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
             String msg;
-            if (e instanceof  NoSuchAlgorithmException) {
+            if (e instanceof NoSuchAlgorithmException) {
                 msg = "No BouncyCastle implementation of symmetric algorithm!";
             } else if (e instanceof  NoSuchProviderException) {
                 msg = "No BouncyCastle provider implementation of symmetric algorithm!";
