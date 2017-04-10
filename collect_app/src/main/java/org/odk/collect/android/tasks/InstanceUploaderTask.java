@@ -211,17 +211,20 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
                 if (e instanceof  ClientProtocolException) {
                     outcome.mResults.put(id, fail + "Client Protocol Exception");
+                    Timber.e(e, "Client Protocol Exception");
                 } else if (e instanceof  ConnectTimeoutException) {
                     outcome.mResults.put(id, fail + "Connection Timeout");
+                    Timber.e(e, "Connection Timeout");
                 } else if (e instanceof  UnknownHostException) {
                     outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
+                    Timber.e(e, "Network Connection Failed");
                 } else if (e instanceof  SocketTimeoutException) {
                     outcome.mResults.put(id, fail + "Connection Timeout");
+                    Timber.e(e, "Connection timeout");
                 } else {
                     outcome.mResults.put(id, fail + "Network Connection Refused");
+                    Timber.e(e,"Network Connection Refused");
                 }
-                Timber.e(e);
-
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
