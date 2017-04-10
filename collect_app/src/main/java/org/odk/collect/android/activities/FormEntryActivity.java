@@ -2494,7 +2494,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
-                Timber.e(e, "Ended up with a bad language. %s");
+                Timber.e("Ended up with a bad language. %s", newLanguage);
                 formController.setLanguage(defaultLanguage);
             }
         }

@@ -48,7 +48,6 @@ import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
-import org.opendatakit.httpclientandroidlib.impl.client.CloseableHttpClient;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
@@ -295,9 +294,9 @@ public final class WebUtils {
                 }
                 is.close();
             } catch (IOException e) {
-                Timber.e(e, "Unable read the stream due to %s ", e.getMessage());
+                Timber.e(e, "Unable read the stream");
             } catch (Exception e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
             }
         }
     }
@@ -313,7 +312,7 @@ public final class WebUtils {
             URL url = new URL(urlString);
             u = url.toURI();
         } catch (Exception e) {
-            Timber.e(e, "Error converting URL %s to uri due to %s", urlString, e.getMessage());
+            Timber.e(e, "Error converting URL %s to uri", urlString);
             return new DocumentFetchResult(e.getLocalizedMessage()
                     // + app.getString(R.string.while_accessing) + urlString);
                     + ("while accessing") + urlString, 0);
@@ -400,20 +399,20 @@ public final class WebUtils {
                             }
                         } catch (Exception e) {
                             // no-op
-                            Timber.e(e, e.getMessage());
+                            Timber.e(e);
                         }
                         try {
                             isr.close();
                         } catch (IOException e) {
                             // no-op
-                            Timber.e(e, "Error closing input stream reader due to %s", e.getMessage());
+                            Timber.e(e, "Error closing input stream reader");
                         }
                     }
                     if (is != null) {
                         try {
                             is.close();
                         } catch (IOException e) {
-                            Timber.e(e, "Error closing inputstream due to %s", e.getMessage());
+                            Timber.e(e, "Error closing inputstream");
                             // no-op
                         }
                     }

@@ -160,7 +160,7 @@ public abstract class GoogleSheetsAbstractUploader extends
             try {
                 mSpreadsheetId = UrlUtils.getSpreadsheetID(id);
             } catch (BadUrlException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -209,7 +209,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             getColumns(formFilePath, columnNames);
         } catch ( XmlPullParserException | IOException | FormException e2) {
-            Timber.e(e2, "Exception thrown while getting columns from form file due to : %s ", e2.getMessage());
+            Timber.e(e2, "Exception thrown while getting columns from form file");
             mResults.put(id, e2.getMessage());
             return false;
         }
@@ -240,12 +240,11 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
         } catch (FormException e) {
-            Timber.e(e, Collect.getInstance().getString(R.string.google_repeat_error));
             mResults.put(id,
                     Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
         } catch (XmlPullParserException | IOException e) {
-            Timber.e(e, "Exception thrown while parsing the file due to : %s ", e.getMessage());
+            Timber.e(e, "Exception thrown while parsing the file");
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -253,7 +252,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
-            Timber.d(e3, e3.getMessage());
+            Timber.d(e3);
         }
 
         // make sure column names in submission are legal (may be different than form)
@@ -294,7 +293,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         throw new FileNotFoundException(Collect.getInstance()
                                 .getString(R.string.media_upload_error, filename));
                     } catch (FileNotFoundException e) {
-                        Timber.e(e, e.getMessage());
+                        Timber.e(e);
                     }
                 }
                 c.close();
@@ -303,7 +302,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 try {
                     folderId = createOrGetIDOfFolderWithName(jrFormId);
                 } catch (IOException | MultipleFoldersFoundException e) {
-                    Timber.e(e, e.getMessage());
+                    Timber.e(e);
                     mResults.put(id, e.getMessage());
                     return false;
                 }
@@ -315,7 +314,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     uploadedFileId = uploadFileToDrive(mediaToUpload.get(key),
                             folderId, toUpload);
                 } catch (IOException e) {
-                    Timber.e(e, "Exception thrown while uploading the file to drive due to: %s ", e.getMessage());
+                    Timber.e(e, "Exception thrown while uploading the file to drive");
                     mResults.put(id, e.getMessage());
                     return false;
                 }
@@ -344,7 +343,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -385,7 +384,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                                 .setRequests(requests))
                         .execute();
             } catch (IOException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -423,7 +422,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -441,7 +440,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            Timber.e(e, "Exception thrown while getting the header feed due to : %s ", e.getMessage());
+            Timber.e(e, "Exception thrown while getting the header feed");
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -478,7 +477,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .update(mSpreadsheetId, mSpreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 mResults.put(id, e.getMessage());
                 return false;
             }
@@ -496,7 +495,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            Timber.e(e, "Exception thrown while getting the header feed due to : %s ", e.getMessage());
+            Timber.e(e, "Exception thrown while getting the header feed");
             mResults.put(id, e.getMessage());
             return false;
         }
@@ -585,7 +584,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     .append(mSpreadsheetId, mSpreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
             mResults.put(id, e.getMessage());
             return false;
         }
