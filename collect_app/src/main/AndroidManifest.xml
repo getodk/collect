@@ -80,7 +80,7 @@
 
         <activity
             android:name=".activities.MainMenuActivity"
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation|screenSize"
             android:label="@string/app_name" >
         </activity>
         <activity
