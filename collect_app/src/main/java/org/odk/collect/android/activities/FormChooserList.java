@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +34,8 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -80,7 +81,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         // that is, put here by dragging and dropping onto the SDCard
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
-            Log.i(t, "Starting new disk sync task");
+            Timber.i("Starting new disk sync task");
             mDiskSyncTask = new DiskSyncTask();
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
@@ -171,7 +172,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     public void syncComplete(String result) {
-        Log.i(t, "disk sync task complete");
+        Timber.i("Disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
     }
