@@ -649,7 +649,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 if (!fi.renameTo(nf)) {
                     Timber.e("Failed to rename %s", fi.getAbsolutePath());
                 } else {
-                    Timber.i("renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
+                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
                 ((ODKView) mCurrentView).setBinaryData(nf);
@@ -1358,7 +1358,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     showView(next, AnimationType.RIGHT);
                     break;
                 case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                    Timber.i("repeat juncture: %s", formController.getFormIndex().getReference());
+                    Timber.i("Repeat juncture: %s", formController.getFormIndex().getReference());
                     // skip repeat junctures until we implement them
                     break;
                 default:
