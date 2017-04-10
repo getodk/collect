@@ -173,7 +173,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     serializeFormDef(fd, formPath);
                 }
             } catch (Exception e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 mErrorMsg = e.getMessage();
             } finally {
                 IOUtils.closeQuietly(fis);
@@ -198,7 +198,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         try {
             loadExternalData(formMediaDir);
         } catch (Exception e) {
-            Timber.e(e, "Exception thrown while loading external data due to : %s ", e.getMessage());
+            Timber.e(e, "Exception thrown while loading external data");
             mErrorMsg = e.getMessage();
             return null;
         }
@@ -484,7 +484,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             dis.close();
 
         } catch (Exception e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
             fd = null;
         }
 
@@ -511,7 +511,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 dos.flush();
                 dos.close();
             } catch (IOException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
             }
         }
     }
@@ -537,7 +537,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                     }
                 }
             } catch (Exception e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
             }
         }
     }
@@ -624,7 +624,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
             }
         } catch (IOException e) {
-            Timber.e(e, "Exception thrown while reading csv file due to : %s ", e.getMessage());
+            Timber.e(e, "Exception thrown while reading csv file");
         } finally {
             if (withinTransaction) {
                 ida.commit();
