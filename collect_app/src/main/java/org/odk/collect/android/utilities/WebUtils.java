@@ -48,7 +48,6 @@ import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
-import org.opendatakit.httpclientandroidlib.impl.client.CloseableHttpClient;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
