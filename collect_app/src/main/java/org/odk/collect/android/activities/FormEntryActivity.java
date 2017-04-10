@@ -1870,12 +1870,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         String[] items;
         if (mAdminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
-            String[] two = {getString(R.string.keep_changes),
+            items = new String[]{getString(R.string.keep_changes),
                     getString(R.string.do_not_save)};
-            items = two;
         } else {
-            String[] one = {getString(R.string.do_not_save)};
-            items = one;
+            items = new String[]{getString(R.string.do_not_save)};
         }
 
         Collect.getInstance().getActivityLogger()
