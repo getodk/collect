@@ -19,14 +19,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -44,6 +50,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +74,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private SharedPreferences settings;
-    private int mProgress = 0;
+    private ShareActionProvider mShareActionProvider;
+    private ImageView qrImageView;
 
     @Nullable
     @Override
@@ -79,21 +87,34 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initialize();
+        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        setHasOptionsMenu(true);
 
+        qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
         Button scan = (Button) view.findViewById(R.id.btnScan);
         scan.setOnClickListener(this);
+    }
 
+    public void generateCode() {
         Bitmap qrCode = generateQRBitMap();
         if (qrCode != null) {
-            ImageView qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
             qrImageView.setImageBitmap(qrCode);
+            updateShareIntent(qrCode);
         }
     }
 
-    private void initialize() {
-        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        setHasOptionsMenu(true);
+    private void updateShareIntent(Bitmap qrCode) {
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        qrCode.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+                qrCode, "settings_image", null);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
+        setShareIntent(intent);
     }
 
     private Bitmap generateQRBitMap() {
@@ -138,7 +159,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             case R.id.btnScan:
                 IntentIntegrator integrator = IntentIntegrator.forFragment(this);
                 integrator.setBeepEnabled(true);
-                integrator.setBarcodeImageEnabled(true);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                 integrator.initiateScan();
                 break;
@@ -194,5 +214,20 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         jsonObject.put(KEY_USERNAME, settings.getString(PreferenceKeys.KEY_USERNAME, ""));
         jsonObject.put(KEY_PASSWORD, settings.getString(PreferenceKeys.KEY_PASSWORD, ""));
         return jsonObject.toString();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.share_menu, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        generateCode();
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 }
