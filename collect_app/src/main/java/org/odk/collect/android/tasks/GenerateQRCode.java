@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.tasks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,6 +34,8 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
 import java.util.HashMap;

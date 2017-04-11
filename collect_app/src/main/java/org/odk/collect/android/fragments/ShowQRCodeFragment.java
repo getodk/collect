@@ -51,7 +51,7 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.utilities.CompressionUtils;
-import org.odk.collect.android.utilities.GenerateQRCode;
+import org.odk.collect.android.tasks.GenerateQRCode;
 import org.odk.collect.android.utilities.ImportSettings;
 import org.odk.collect.android.utilities.ToastUtils;
 
