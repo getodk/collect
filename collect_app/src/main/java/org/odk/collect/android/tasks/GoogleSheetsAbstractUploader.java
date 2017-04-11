@@ -48,6 +48,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.Regex;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -227,7 +228,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         // make sure column names are legal
         for (String n : columnNames) {
-            if (!isValidGoogleSheetsString(n)) {
+            if (!Regex.isValidGoogleSheetsString(n)) {
                 mResults.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
@@ -258,7 +259,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
-            if (!isValidGoogleSheetsString(n)) {
+            if (!Regex.isValidGoogleSheetsString(n)) {
                 mResults.put(id, Collect.getInstance()
                         .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
@@ -556,12 +557,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     // try to match a fairly specific pattern to determine
                     // if it's a location
                     // [-]#.# [-]#.# #.# #.#
-                    Pattern p = Pattern
-                            .compile(
-                                    "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                                            + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
-                    Matcher m = p.matcher(answer);
-                    if (m.matches()) {
+
+                    if (Regex.isValidLocation(answer)) {
                         // get rid of everything after the second space
                         int firstSpace = answer.indexOf(" ");
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
@@ -941,12 +938,7 @@ public abstract class GoogleSheetsAbstractUploader extends
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
-    private boolean isValidGoogleSheetsString(String name) {
-        Pattern p = Pattern
-                .compile("^[a-zA-Z0-9\\-]+$");
-        Matcher m = p.matcher(name);
-        return m.matches();
-    }
+
 
     /**
      * Fetches the spreadsheet with the provided mSpreadsheetId
