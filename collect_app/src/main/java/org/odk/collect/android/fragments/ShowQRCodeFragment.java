@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -34,6 +33,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
@@ -51,7 +52,6 @@ import java.util.zip.DataFormatException;
 
 import timber.log.Timber;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
@@ -67,7 +67,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
-    private static final int QRCODE_CAPTURE = 1;
     private SharedPreferences settings;
     private ProgressDialog progressDialog;
     private int mProgress = 0;
@@ -149,13 +148,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnScan:
-                Intent i = new Intent("com.google.zxing.client.android.SCAN");
-                try {
-                    startActivityForResult(i, QRCODE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    ToastUtils.showShortToast(R.string.barcode_scanner_error);
-                    Timber.e(e);
-                }
+                IntentIntegrator integrator = IntentIntegrator.forFragment(this);
+                integrator.setBeepEnabled(true);
+                integrator.setBarcodeImageEnabled(true);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                integrator.initiateScan();
                 break;
         }
     }
@@ -164,24 +161,22 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled...
-            ToastUtils.showShortToast("Scanning Cancelled");
-            return;
-        }
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case QRCODE_CAPTURE:
-                String dataObject = data.getStringExtra("SCAN_RESULT");
+        if (result != null) {
+            if (result.getContents() == null) {
+                // request was canceled...
+                ToastUtils.showShortToast("Scanning Cancelled");
+            } else {
                 try {
-                    String decompressedData = TextUtils.decompress(dataObject);
+                    String decompressedData = TextUtils.decompress(result.getContents());
                     JSONObject jsonObject = new JSONObject(decompressedData);
                     applySettings(jsonObject);
                     ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
                 } catch (JSONException | IOException | DataFormatException e) {
                     Timber.e(e);
-                    break;
                 }
+            }
         }
     }
 
