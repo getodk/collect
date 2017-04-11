@@ -12,9 +12,9 @@ public class RegexTest {
      @Test
     public void  junitTest()
     {
-       Assert.assertTrue("INVALID GOOGLE SHEETS",RegexMatcher.matchesRegex(Regex.VALID_GOOGLE_SHEETS_ID).matches("()("));
+        Assert.assertTrue("INVALID GOOGLE SHEETS",RegexMatcher.matchesRegex(Regex.VALID_GOOGLE_SHEETS_ID).matches("()("));
         Assert.assertTrue("INVALID GOOGLE SHEETS",RegexMatcher.matchesRegex(Regex.VALID_GOOGLE_SHEETS_ID).matches("googlesheet"));
-        Assert.assertTrue("INVALID LOCATION",RegexMatcher.matchesRegex(Regex.GPS_LOCATION).matches("{}{"));
-        Assert.assertTrue("INVALID LOCATION",RegexMatcher.matchesRegex(Regex.GPS_LOCATION).matches("28"));
+       Assert.assertTrue("INVALID LOCATION",RegexMatcher.matchesRegex(Regex.GPS_LOCATION).matches("{}{"));
+       Assert.assertTrue("INVALID LOCATION",RegexMatcher.matchesRegex(Regex.GPS_LOCATION).matches("28"));
     }
 }
