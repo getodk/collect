@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +48,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
 
+import timber.log.Timber;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
@@ -66,7 +67,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private static final int QRCODE_CAPTURE = 1;
-    private final String TAG = "QRCodeFragment";
     private SharedPreferences settings;
 
     @Nullable
@@ -119,7 +119,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             }
             return bmp;
         } catch (WriterException | IOException | JSONException e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(e);
         }
         return null;
     }
@@ -133,7 +133,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     startActivityForResult(i, QRCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     ToastUtils.showShortToast(R.string.barcode_scanner_error);
-                    Log.e(TAG, e.getMessage(), e);
+                    Timber.e(e);
                 }
                 break;
         }
@@ -158,7 +158,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     applySettings(jsonObject);
                     ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
                 } catch (JSONException | IOException | DataFormatException e) {
-                    Log.e(TAG, e.getMessage(), e);
+                    Timber.e(e);
                     break;
                 }
         }

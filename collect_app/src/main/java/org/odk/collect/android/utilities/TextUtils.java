@@ -15,7 +15,6 @@
 package org.odk.collect.android.utilities;
 
 import android.text.Html;
-import android.util.Log;
 
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 
@@ -25,9 +24,9 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-public class TextUtils {
-    private static final String TAG = "TextUtils";
+import timber.log.Timber;
 
+public class TextUtils {
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {
             int level = match.group(1).length();
@@ -124,7 +123,9 @@ public class TextUtils {
 
         // Encode to base64
         String base64String = Base64.encodeBase64String(output);
-        Log.d(TAG, compressedDataLength + " : " + base64String);
+        Timber.i("Original length : %d", data.length());
+        Timber.i("Compressed length : %d", compressedDataLength);
+        Timber.i("Compression ratio : %f%", (data.length() * 1.0) / compressedDataLength);
         return base64String;
     }
 
@@ -142,7 +143,8 @@ public class TextUtils {
 
         // Decode the bytes into a String
         String outputString = new String(result, 0, resultLength, "UTF-8");
-        Log.d(TAG, resultLength + " : " + outputString);
+        Timber.i("Compressed length : %d", compressedString.length());
+        Timber.i("Decompressed length : %d", resultLength);
         return outputString;
     }
 } 
