@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,8 +61,9 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -122,16 +122,24 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     private void updateShareIntent(Bitmap qrCode) {
 
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        qrCode.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        //Save the bitmap to a file
+        File cache = getActivity().getApplicationContext().getExternalCacheDir();
+        File shareFile = new File(cache, "shareImage.jpeg");
+        try {
+            FileOutputStream out = new FileOutputStream(shareFile);
+            qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
 
-        String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
-                qrCode, "settings_image", null);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
-        setShareIntent(intent);
+        // Sent a intent to share saved image
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
+        setShareIntent(shareIntent);
     }
 
     private Bitmap generateQRBitMap() {
