@@ -25,7 +25,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -155,14 +154,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             setResult(RESULT_OK, i);
 
         } else if (mIsDragged || read_only || location_from_intent) {
-            Log.i(getClass().getName(), "IsDragged !!!");
+            Timber.i("IsDragged !!!");
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
                     mLatLng.latitude + " " + mLatLng.longitude + " "
                             + 0 + " " + 0);
             setResult(RESULT_OK, i);
         } else if (mLocation != null) {
-            Log.i(getClass().getName(), "IsNotDragged !!!");
+            Timber.i("IsNotDragged !!!");
 
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
