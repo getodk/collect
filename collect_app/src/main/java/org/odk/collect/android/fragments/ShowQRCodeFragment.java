@@ -15,6 +15,7 @@
 package org.odk.collect.android.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,26 +69,42 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     private static final int QRCODE_CAPTURE = 1;
     private SharedPreferences settings;
+    private ProgressDialog progressDialog;
+    private int mProgress = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        ImageView qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
+        return inflater.inflate(R.layout.show_qrcode_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initialize();
+
         Button scan = (Button) view.findViewById(R.id.btnScan);
-
         scan.setOnClickListener(this);
-
-        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         Bitmap qrCode = generateQRBitMap();
         if (qrCode != null) {
+            ImageView qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
             qrImageView.setImageBitmap(qrCode);
         }
 
-        return view;
+        progressDialog.dismiss();
     }
 
+    private void initialize() {
+        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Generating QRCode...");
+        progressDialog.setProgressStyle(android.R.style.Widget_DeviceDefault_Light_ProgressBar_Horizontal);
+        progressDialog.setProgress(mProgress);
+        progressDialog.show();
+    }
 
     private Bitmap generateQRBitMap() {
         String content;
@@ -113,9 +130,12 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 
+            progressDialog.setMax(width * height);
+
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                    progressDialog.setProgress(mProgress++);
                 }
             }
             return bmp;

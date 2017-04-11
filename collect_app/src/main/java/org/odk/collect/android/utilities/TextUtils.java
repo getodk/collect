@@ -125,7 +125,7 @@ public class TextUtils {
         String base64String = Base64.encodeBase64String(output);
         Timber.i("Original length : %d", data.length());
         Timber.i("Compressed length : %d", compressedDataLength);
-        Timber.i("Compression ratio : %f%", (data.length() * 1.0) / compressedDataLength);
+        Timber.i("Compression ratio : %2f", ((data.length() * 1.0) / compressedDataLength) * 100);
         return base64String;
     }
 
