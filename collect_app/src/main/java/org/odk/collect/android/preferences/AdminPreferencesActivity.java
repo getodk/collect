@@ -60,7 +60,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
             res = true;
         } catch (IOException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
         } finally {
             try {
                 if (output != null) {

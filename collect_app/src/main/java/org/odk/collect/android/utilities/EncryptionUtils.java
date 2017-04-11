@@ -128,8 +128,7 @@ public class EncryptionUtils {
             SecureRandom r = new SecureRandom();
             byte[] key = new byte[SYMMETRIC_KEY_LENGTH / 8];
             r.nextBytes(key);
-            SecretKeySpec sk = new SecretKeySpec(key, SYMMETRIC_ALGORITHM);
-            symmetricKey = sk;
+            symmetricKey = new SecretKeySpec(key, SYMMETRIC_ALGORITHM);
 
             // construct the fixed portion of the iv -- the ivSeedArray
             // this is the md5 hash of the instanceID and the symmetric key
@@ -143,7 +142,7 @@ public class EncryptionUtils {
                     ivSeedArray[i] = messageDigest[(i % messageDigest.length)];
                 }
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                Timber.e(e, "Unable to set md5 hash for instanceid and symmetric key due to : %s ", e.getMessage());
+                Timber.e(e, "Unable to set md5 hash for instanceid and symmetric key.");
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -160,7 +159,7 @@ public class EncryptionUtils {
                         .encodeToString(pkEncryptedKey);
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-                Timber.e(e, "Unable to encrypt the symmetric key due to : %s ", e.getMessage());
+                Timber.e(e, "Unable to encrypt the symmetric key.");
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -205,7 +204,7 @@ public class EncryptionUtils {
                 md.update(elementSignatureSource.toString().getBytes(UTF_8));
                 messageDigest = md.digest();
             } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                Timber.e(e,"Exception thrown while constructing md5 hash due to %s ", e.getMessage());
+                Timber.e(e,"Exception thrown while constructing md5 hash.");
                 throw new IllegalArgumentException(e.getMessage());
             }
 
@@ -219,7 +218,7 @@ public class EncryptionUtils {
                 return wrapper.encodeToString(pkEncryptedKey);
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-                Timber.e(e, "Unable to encrypt the symmetric key due to %s ", e.getMessage());
+                Timber.e(e, "Unable to encrypt the symmetric key.");
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
@@ -235,7 +234,7 @@ public class EncryptionUtils {
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
                 isNotBouncyCastle = false;
             } catch (NoSuchProviderException e) {
-                Timber.w(e, "Unable to obtain BouncyCastle provider! Decryption may fail due to %s ", e.getMessage());
+                Timber.w(e, "Unable to obtain BouncyCastle provider! Decryption may fail.");
                 isNotBouncyCastle = true;
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM);
             }
@@ -382,8 +381,8 @@ public class EncryptionUtils {
         try {
             Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, ENCRYPTION_PROVIDER);
         } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
-            String msg="";
-            if ( e instanceof  NoSuchAlgorithmException) {
+            String msg;
+            if (e instanceof NoSuchAlgorithmException) {
                 msg = "No BouncyCastle implementation of symmetric algorithm!";
             } else if (e instanceof  NoSuchProviderException) {
                 msg = "No BouncyCastle provider implementation of symmetric algorithm!";

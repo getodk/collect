@@ -99,7 +99,6 @@ public class FormsProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
             if (oldVersion < 2) {
                 Log.w(t, "Upgrading database from version " + oldVersion
                         + " to " + newVersion
@@ -227,7 +226,7 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
 
                 Log.w(t, "Successfully upgraded database from version "
-                        + initialVersion + " to " + newVersion
+                        + oldVersion + " to " + newVersion
                         + ", without destroying all the old data");
             }
         }

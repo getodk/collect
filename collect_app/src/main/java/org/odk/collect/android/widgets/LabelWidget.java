@@ -116,7 +116,7 @@ public class LabelWidget extends QuestionWidget {
                                         FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
                                                 screenWidth);
                             } catch (OutOfMemoryError e) {
-                                Timber.e(e, e.getMessage());
+                                Timber.e(e);
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
 
@@ -150,7 +150,7 @@ public class LabelWidget extends QuestionWidget {
                             mMissingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
-                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+                        Timber.e(e, "Invalid image reference");
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

@@ -395,7 +395,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
             }
         }
     }

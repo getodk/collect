@@ -197,7 +197,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 GeoShape shape = new GeoShape(list);
                 return new StringData(s);
             } catch (NumberFormatException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 return null;
             }
         }
