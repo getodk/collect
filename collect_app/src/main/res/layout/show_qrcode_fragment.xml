@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2017 Shobhit
 
      Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -15,7 +14,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -34,5 +34,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/scan_qrcode" />
+
+    <Button
+        android:id="@+id/btnSelect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_qrcode" />
 
 </LinearLayout>

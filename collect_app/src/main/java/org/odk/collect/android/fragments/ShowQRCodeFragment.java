@@ -14,10 +14,12 @@
 
 package org.odk.collect.android.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,11 +37,21 @@ import android.widget.ImageView;
 import android.widget.ShareActionProvider;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
@@ -51,7 +63,9 @@ import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.DataFormatException;
@@ -73,6 +87,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
+    private static final int SELECT_PHOTO = 111;
     private SharedPreferences settings;
     private ShareActionProvider mShareActionProvider;
     private ImageView qrImageView;
@@ -93,6 +108,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
         Button scan = (Button) view.findViewById(R.id.btnScan);
         scan.setOnClickListener(this);
+        Button select = (Button) view.findViewById(R.id.btnSelect);
+        select.setOnClickListener(this);
     }
 
     public void generateCode() {
@@ -162,6 +179,12 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                 integrator.initiateScan();
                 break;
+
+            case R.id.btnSelect:
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                break;
         }
     }
 
@@ -176,28 +199,75 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 // request was canceled...
                 ToastUtils.showShortToast("Scanning Cancelled");
             } else {
+                applySettings(result.getContents());
+                return;
+            }
+        }
+
+        if (requestCode == SELECT_PHOTO) {
+            if (resultCode == Activity.RESULT_OK) {
                 try {
-                    String decompressedData = TextUtils.decompress(result.getContents());
-                    JSONObject jsonObject = new JSONObject(decompressedData);
-                    applySettings(jsonObject);
-                    ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
-                } catch (JSONException | IOException | DataFormatException e) {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getActivity().getContentResolver()
+                            .openInputStream(imageUri);
+
+                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    scanQRImage(selectedImage);
+                } catch (FileNotFoundException e) {
                     Timber.e(e);
                 }
+            } else {
+                ToastUtils.showShortToast("Cancelled");
             }
         }
     }
 
-    private void applySettings(JSONObject jsonObject) throws JSONException {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(KEY_PROTOCOL, jsonObject.getString(KEY_PROTOCOL));
-        editor.putString(KEY_SERVER_URL, jsonObject.getString(KEY_SERVER_URL));
-        editor.putString(KEY_GOOGLE_SHEETS_URL, jsonObject.getString(KEY_GOOGLE_SHEETS_URL));
-        editor.putString(KEY_FORMLIST_URL, jsonObject.getString(KEY_FORMLIST_URL));
-        editor.putString(KEY_SUBMISSION_URL, jsonObject.getString(KEY_SUBMISSION_URL));
-        editor.putString(KEY_USERNAME, jsonObject.getString(KEY_USERNAME));
-        editor.putString(KEY_PASSWORD, jsonObject.getString(KEY_PASSWORD));
-        editor.apply();
+    private void scanQRImage(Bitmap bitmap) {
+        int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
+
+        //copy pixel data from bitmap into the array
+        bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+        Reader reader = new QRCodeMultiReader();
+        try {
+            Result result = reader.decode(binaryBitmap);
+            applySettings(result.getText());
+        } catch (FormatException | NotFoundException | ChecksumException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void applySettings(String content) {
+        String decompressedData = null;
+        try {
+            decompressedData = TextUtils.decompress(content);
+        } catch (IOException | DataFormatException e) {
+            Timber.e(e);
+            return;
+        }
+
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(decompressedData);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(KEY_PROTOCOL, jsonObject.getString(KEY_PROTOCOL));
+            editor.putString(KEY_SERVER_URL, jsonObject.getString(KEY_SERVER_URL));
+            editor.putString(KEY_GOOGLE_SHEETS_URL, jsonObject.getString(KEY_GOOGLE_SHEETS_URL));
+            editor.putString(KEY_FORMLIST_URL, jsonObject.getString(KEY_FORMLIST_URL));
+            editor.putString(KEY_SUBMISSION_URL, jsonObject.getString(KEY_SUBMISSION_URL));
+            editor.putString(KEY_USERNAME, jsonObject.getString(KEY_USERNAME));
+            editor.putString(KEY_PASSWORD, jsonObject.getString(KEY_PASSWORD));
+            editor.apply();
+        } catch (JSONException e) {
+            Timber.e(e);
+            return;
+        }
+
+        //settings import confirmation toast
+        ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
     }
 
     private String getServerSettings() throws JSONException {

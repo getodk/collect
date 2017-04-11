@@ -83,7 +83,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 .commit();
         setTitle(getString(R.string.admin_preferences));
     }
-z
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()

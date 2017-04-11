@@ -506,4 +506,5 @@
 <string name="successfully_imported_settings">Settings imported successfully</string>
 <string name="encoding_max_limit">Maximum characters limit reached QRCode can\'t be generated for all settings</string>
 <string name="share">Share</string>
+    <string name="select_qrcode">Select image from SD Card</string>
 </resources>
