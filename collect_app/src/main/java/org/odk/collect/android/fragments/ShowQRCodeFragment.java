@@ -244,15 +244,20 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             Result result = reader.decode(binaryBitmap);
             applySettings(result.getText());
         } catch (FormatException | NotFoundException | ChecksumException e) {
-            e.printStackTrace();
+            Timber.i(e);
+            ToastUtils.showLongToast("QR Code not found in the selected image");
         }
     }
 
     private void applySettings(String content) {
-        String decompressedData = null;
+        String decompressedData;
         try {
             decompressedData = TextUtils.decompress(content);
-        } catch (IOException | DataFormatException e) {
+        } catch (DataFormatException e) {
+            Timber.e(e);
+            ToastUtils.showShortToast("QR Code does not contains valid settings");
+            return;
+        } catch (IOException e) {
             Timber.e(e);
             return;
         }
