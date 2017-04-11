@@ -409,11 +409,13 @@ public class FormController {
             return groupIsFieldList(grp.getIndex());
         } else if (event == FormEntryController.EVENT_GROUP) {
             return groupIsFieldList(index);
-        } else
-            return event == FormEntryController.EVENT_REPEAT && repeatIsFieldList(index);
-// right now we only test Questions and Groups. Should we also handle
-// repeats?
-
+        } else if (event == FormEntryController.EVENT_REPEAT) {
+            return repeatIsFieldList(index);
+        } else {
+            // right now we only test Questions and Groups. Should we also handle
+            // repeats?
+            return false;
+        }
 
     }
 
