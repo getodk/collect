@@ -116,23 +116,22 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         Bitmap qrCode = generateQRBitMap();
         if (qrCode != null) {
             qrImageView.setImageBitmap(qrCode);
-            updateShareIntent(qrCode);
+            try {
+                updateShareIntent(qrCode);
+            } catch (IOException e) {
+                Timber.e(e);
+            }
         }
     }
 
-    private void updateShareIntent(Bitmap qrCode) {
+    private void updateShareIntent(Bitmap qrCode) throws IOException {
 
         //Save the bitmap to a file
         File cache = getActivity().getApplicationContext().getExternalCacheDir();
         File shareFile = new File(cache, "shareImage.jpeg");
-        try {
-            FileOutputStream out = new FileOutputStream(shareFile);
-            qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            Timber.e(e);
-        }
+        FileOutputStream out = new FileOutputStream(shareFile);
+        qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        out.close();
 
         // Sent a intent to share saved image
         Intent shareIntent = new Intent();
@@ -281,6 +280,9 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
         //settings import confirmation toast
         ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
+
+        // update the QR Code
+        generateCode();
     }
 
     private String getServerSettings() throws JSONException {
