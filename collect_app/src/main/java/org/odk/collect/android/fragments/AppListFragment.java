@@ -105,10 +105,7 @@ abstract class AppListFragment extends ListFragment {
 
     //to get present drawer status
     public Boolean getDrawerStatus() {
-        if (mDrawerLayout != null) {
-            return mDrawerLayout.isDrawerOpen(Gravity.END);
-        }
-        return false;
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END);
     }
 
     @Override
