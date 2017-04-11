@@ -98,6 +98,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
             if (compressedData.length() > 4000) {
                 ToastUtils.showLongToast(getString(R.string.encoding_max_limit));
+                Timber.e(getString(R.string.encoding_max_limit));
                 return null;
             }
 
