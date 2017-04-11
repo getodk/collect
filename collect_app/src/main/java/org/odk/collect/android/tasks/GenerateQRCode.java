@@ -84,11 +84,10 @@ public class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
             }
 
             Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter
-                    .encode(compressedData, BarcodeFormat.QR_CODE, imageView.getWidth(),
-                            imageView.getHeight(), hints);
+                    .encode(compressedData, BarcodeFormat.QR_CODE, 400, 400, hints);
 
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
