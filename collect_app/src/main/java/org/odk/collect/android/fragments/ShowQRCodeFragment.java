@@ -59,6 +59,7 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.ImportSettings;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -252,34 +253,18 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         String decompressedData;
         try {
             decompressedData = CompressionUtils.decompress(content);
+            JSONObject jsonObject = new JSONObject(decompressedData);
+            ImportSettings.fromJSON(jsonObject);
         } catch (DataFormatException e) {
             Timber.e(e);
             ToastUtils.showShortToast("QR Code does not contains valid settings");
             return;
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             Timber.e(e);
             return;
         }
 
         JSONObject jsonObject;
-        try {
-            jsonObject = new JSONObject(decompressedData);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(KEY_PROTOCOL, jsonObject.getString(KEY_PROTOCOL));
-            editor.putString(KEY_SERVER_URL, jsonObject.getString(KEY_SERVER_URL));
-            editor.putString(KEY_GOOGLE_SHEETS_URL, jsonObject.getString(KEY_GOOGLE_SHEETS_URL));
-            editor.putString(KEY_FORMLIST_URL, jsonObject.getString(KEY_FORMLIST_URL));
-            editor.putString(KEY_SUBMISSION_URL, jsonObject.getString(KEY_SUBMISSION_URL));
-            editor.putString(KEY_USERNAME, jsonObject.getString(KEY_USERNAME));
-            editor.putString(KEY_PASSWORD, jsonObject.getString(KEY_PASSWORD));
-            editor.apply();
-        } catch (JSONException e) {
-            Timber.e(e);
-            return;
-        }
-
-        //settings import confirmation toast
-        ToastUtils.showLongToast(getString(R.string.successfully_imported_settings));
 
         // update the QR Code
         generateCode();
