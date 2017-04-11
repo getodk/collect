@@ -15,7 +15,6 @@
 package org.odk.collect.android.fragments;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -68,7 +67,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
 
     private SharedPreferences settings;
-    private ProgressDialog progressDialog;
     private int mProgress = 0;
 
     @Nullable
@@ -91,18 +89,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             ImageView qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
             qrImageView.setImageBitmap(qrCode);
         }
-
-        progressDialog.dismiss();
     }
 
     private void initialize() {
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Generating QRCode...");
-        progressDialog.setProgressStyle(android.R.style.Widget_DeviceDefault_Light_ProgressBar_Horizontal);
-        progressDialog.setProgress(mProgress);
-        progressDialog.show();
+        setHasOptionsMenu(true);
     }
 
     private Bitmap generateQRBitMap() {
@@ -129,12 +120,9 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
 
-            progressDialog.setMax(width * height);
-
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                    progressDialog.setProgress(mProgress++);
                 }
             }
             return bmp;
