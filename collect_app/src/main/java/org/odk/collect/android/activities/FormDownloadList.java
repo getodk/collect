@@ -25,7 +25,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,6 +55,8 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
  * caveat. If the server requires authentication, a dialog will pop up asking when you request the
@@ -73,7 +74,6 @@ import java.util.Set;
  */
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
         FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
-    private static final String t = "RemoveFileManageList";
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     private static final int PROGRESS_DIALOG = 1;
@@ -209,7 +209,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 try {
                     dismissDialog(PROGRESS_DIALOG);
                 } catch (IllegalArgumentException e) {
-                    Log.i(t, "Attempting to close a dialog that was not previously opened");
+                    Timber.i("Attempting to close a dialog that was not previously opened");
                 }
                 mDownloadFormsTask = null;
             }
@@ -219,7 +219,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 try {
                     dismissDialog(PROGRESS_DIALOG);
                 } catch (IllegalArgumentException e) {
-                    Log.i(t, "Attempting to close a dialog that was not previously opened");
+                    Timber.i("Attempting to close a dialog that was not previously opened");
                 }
                 mDownloadFormsTask = null;
             }
@@ -561,7 +561,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public static boolean isLocalFormSuperseded(String formId, String latestVersion) {
 
         if (formId == null) {
-            Log.e(t, "isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
+            Timber.e("isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
             return true;
         }
 
@@ -625,7 +625,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         mDownloadFormListTask = null;
 
         if (result == null) {
-            Log.e(t, "Formlist Downloading returned null.  That shouldn't happen");
+            Timber.e("Formlist Downloading returned null.  That shouldn't happen");
             // Just displayes "error occured" to the user, but this should never happen.
             createAlertDialog(getString(R.string.load_remote_form_error),
                     getString(R.string.error_occured), EXIT);

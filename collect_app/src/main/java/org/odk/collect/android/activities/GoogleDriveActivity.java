@@ -37,7 +37,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -112,7 +111,6 @@ public class GoogleDriveActivity extends ListActivity implements
     private static final String FILE_LIST_KEY = "fileList";
     private static final String PARENT_ID_KEY = "parentId";
     private static final String CURRENT_ID_KEY = "currentDir";
-    private static final String TAG = "GoogleDriveActivity";
     protected GoogleAccountCredential mCredential;
     private Button mRootButton;
     private Button mBackButton;
@@ -799,7 +797,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 createAlertDialog(getString(R.string.google_auth_io_exception_msg));
             }
             if (rootId == null) {
-                Log.e("drive", "Error occurred : Unable to fetch drive contents");
+                Timber.e("Unable to fetch drive contents");
                 return null;
            }
 
