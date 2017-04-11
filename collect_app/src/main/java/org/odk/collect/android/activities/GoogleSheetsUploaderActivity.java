@@ -90,7 +90,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -132,7 +132,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // drop through --
             // everything will process through OK
         } else {
-            Timber.i("onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Timber.i("onCreate: Beginning upload of %d instances!", mInstancesToSend.length);
         }
 
         // Initialize credentials and service object.
@@ -386,8 +386,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // probably got an auth request, so ignore
             return;
         }
-        Timber.i("uploadingComplete: Processing results (" + result.size() + ") from upload of "
-                + mInstancesToSend.length + " instances!");
+        Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
+                result.size(), mInstancesToSend.length);
 
         StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();

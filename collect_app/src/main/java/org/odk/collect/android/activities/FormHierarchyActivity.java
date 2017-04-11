@@ -422,7 +422,7 @@ public class FormHierarchyActivity extends ListActivity {
                 h.setType(EXPANDED);
                 ArrayList<HierarchyElement> children1 = h.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
-                    Timber.i("adding child: " + children1.get(i).getFormIndex());
+                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
                     formList.add(position + 1 + i, children1.get(i));
 
                 }

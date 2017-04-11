@@ -77,7 +77,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         mAlertMsg = getString(R.string.please_wait);
         mAlertShowing = false;
@@ -121,7 +121,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             Timber.e("onCreate: No instances to upload!");
             // drop through -- everything will process through OK
         } else {
-            Timber.i("onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Timber.i("onCreate: Beginning upload of %d instances!", mInstancesToSend.length);
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
@@ -146,7 +146,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onResume() {
-        Timber.i("onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
+        Timber.i("onResume: Resuming upload of %d instances!", mInstancesToSend.length);
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(this);
         }
@@ -179,7 +179,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onPause() {
-        Timber.i("onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
+        Timber.i("onPause: Pausing upload of %d instances!", mInstancesToSend.length);
         super.onPause();
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
@@ -203,8 +203,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        Timber.i("uploadingComplete: Processing results (" + result.size() + ") from upload of "
-                + mInstancesToSend.length + " instances!");
+        Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
+                result.size(), mInstancesToSend.length);
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -309,8 +309,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case AUTH_DIALOG:
-                Timber.i("onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.length
-                        + " instances!");
+                Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
+                        mInstancesToSend.length);
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
@@ -345,8 +345,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 Long removeMe = Long.valueOf(itr.next());
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Timber.i(removeMe
-                            + " was already sent, removing from queue before restarting task");
+                    Timber.i("%l was already sent, removing from queue before restarting task",
+                            removeMe);
                 }
             }
             mUploadedInstances.putAll(doneSoFar);
