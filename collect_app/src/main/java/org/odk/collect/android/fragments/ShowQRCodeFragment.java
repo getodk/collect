@@ -17,13 +17,10 @@ package org.odk.collect.android.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,32 +30,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
-import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.GenerateQRCode;
 import org.odk.collect.android.utilities.ImportSettings;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -67,31 +60,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.DataFormatException;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 
 /**
  * Created by shobhit on 6/4/17.
  */
 
-public class ShowQRCodeFragment extends Fragment implements View.OnClickListener {
+public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
-    private SharedPreferences settings;
     private ShareActionProvider mShareActionProvider;
     private ImageView qrImageView;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -103,10 +89,9 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         setHasOptionsMenu(true);
-
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         Button scan = (Button) view.findViewById(R.id.btnScan);
         scan.setOnClickListener(this);
         Button select = (Button) view.findViewById(R.id.btnSelect);
@@ -114,15 +99,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     public void generateCode() {
-        Bitmap qrCode = generateQRBitMap();
-        if (qrCode != null) {
-            qrImageView.setImageBitmap(qrCode);
-            try {
-                updateShareIntent(qrCode);
-            } catch (IOException e) {
-                Timber.e(e);
-            }
-        }
+        GenerateQRCode generateQRCode = new GenerateQRCode(this, getActivity(), qrImageView);
+        generateQRCode.execute();
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
@@ -142,41 +120,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         setShareIntent(shareIntent);
     }
 
-    private Bitmap generateQRBitMap() {
-        String content;
-        try {
-            content = getServerSettings();
-            String compressedData = CompressionUtils.compress(content);
-
-            //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
-            if (compressedData.length() > 4000) {
-                ToastUtils.showLongToast(getString(R.string.encoding_max_limit));
-                Timber.e(getString(R.string.encoding_max_limit));
-                return null;
-            }
-
-            Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter
-                    .encode(compressedData, BarcodeFormat.QR_CODE, 512, 512, hints);
-
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            return bmp;
-        } catch (WriterException | IOException | JSONException e) {
-            Timber.e(e);
-        }
-        return null;
-    }
 
     @Override
     public void onClick(View v) {
@@ -270,22 +213,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         generateCode();
     }
 
-    private String getServerSettings() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(KEY_PROTOCOL, settings.getString(KEY_PROTOCOL, null));
-        jsonObject.put(KEY_SERVER_URL, settings.getString(KEY_SERVER_URL,
-                getActivity().getString(R.string.default_server_url)));
-        jsonObject.put(KEY_GOOGLE_SHEETS_URL, settings.getString(KEY_GOOGLE_SHEETS_URL,
-                getActivity().getString(R.string.default_google_sheets_url)));
-        jsonObject.put(KEY_FORMLIST_URL, settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
-                getActivity().getString(R.string.default_odk_formlist)));
-        jsonObject.put(KEY_SUBMISSION_URL, settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
-                getActivity().getString(R.string.default_odk_submission)));
-        jsonObject.put(KEY_USERNAME, settings.getString(PreferenceKeys.KEY_USERNAME, ""));
-        jsonObject.put(KEY_PASSWORD, settings.getString(PreferenceKeys.KEY_PASSWORD, ""));
-        return jsonObject.toString();
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.share_menu, menu);
@@ -298,6 +225,27 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
+
+    @Override
+    public void preExecute() {
+        progressBar.setVisibility(VISIBLE);
+        qrImageView.setVisibility(GONE);
+    }
+
+    @Override
+    public void bitmapGenerated(Bitmap bitmap) {
+        progressBar.setVisibility(GONE);
+        qrImageView.setVisibility(VISIBLE);
+
+        if (bitmap != null) {
+            qrImageView.setImageBitmap(bitmap);
+            try {
+                updateShareIntent(bitmap);
+            } catch (IOException e) {
+                Timber.e(e);
+            }
         }
     }
 }
