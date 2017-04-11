@@ -3,15 +3,13 @@ package org.odk.collect.android.utilities;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by simran on 4/8/2017.
- */
+
 
 public class Regex {
     public static final String GPS_LOCATION= "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
             + ".[0-9]+\\s[0-9]+\\.[0-9]+$";
     public static final String VALID_GOOGLE_SHEETS_ID = "^[a-zA-Z0-9\\-]+$";
-    private static Pattern valid_google_sheets_id, gps_location;
+    private static final Pattern valid_google_sheets_id, gps_location;
 
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
@@ -28,15 +26,14 @@ public class Regex {
         gps_location = Pattern.compile(GPS_LOCATION);
     }
 
-
     public static boolean isValidGoogleSheetsString(String name) {
 
-        Matcher m = valid_google_sheets_id.matcher(name);
+         Matcher m = valid_google_sheets_id.matcher(name);
         return m.matches();
     }
 
     public static boolean isValidLocation(String answer) {
-        java.util.regex.Matcher m = gps_location.matcher(answer);
+        Matcher m = gps_location.matcher(answer);
         return m.matches();
     }
 }
