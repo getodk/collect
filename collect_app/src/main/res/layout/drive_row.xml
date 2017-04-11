@@ -12,19 +12,23 @@
     android:id="@+id/TextView01"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:singleLine="true"
+    android:maxLines="1"
     android:textStyle="bold"
     android:layout_toRightOf="@+id/fd_Icon1"
-    android:layout_marginTop="5dip" 
-    android:layout_marginLeft="5dip">
+    android:layout_toEndOf="@+id/fd_Icon1"
+    android:layout_marginTop="5dip"
+    android:layout_marginLeft="5dip"
+    android:layout_marginStart="5dip">
 </TextView>
 <TextView android:text="@+id/TextView02"
     android:id="@+id/TextView02"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_toRightOf="@+id/fd_Icon1"
+    android:layout_toEndOf="@+id/fd_Icon1"
     android:layout_below="@+id/TextView01"
-    android:layout_marginLeft="10dip">
+    android:layout_marginLeft="10dip"
+    android:layout_marginStart="10dip">
    
 </TextView>
 <TextView android:text="@+id/TextViewDate"
@@ -33,6 +37,8 @@
     android:layout_height="wrap_content"
     android:layout_below="@+id/TextView01"
     android:layout_alignParentRight="true"
-    android:layout_marginLeft="5dip">
+    android:layout_alignParentEnd="true"
+    android:layout_marginLeft="5dip"
+    android:layout_marginStart="5dip">
 </TextView>
 </RelativeLayout>

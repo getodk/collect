@@ -45,6 +45,8 @@ import org.odk.collect.android.utilities.FileUtils;
 import java.io.File;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * The Label Widget does not return an answer. The purpose of this widget is to be the top entry in
  * a field-list with a bunch of list widgets below. This widget provides the labels, so that the
@@ -114,6 +116,7 @@ public class LabelWidget extends QuestionWidget {
                                         FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
                                                 screenWidth);
                             } catch (OutOfMemoryError e) {
+                                Timber.e(e);
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
 
@@ -147,8 +150,7 @@ public class LabelWidget extends QuestionWidget {
                             mMissingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
-                        Log.e(t, "image invalid reference exception");
-                        e.printStackTrace();
+                        Timber.e(e, "Invalid image reference");
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

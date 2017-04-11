@@ -51,6 +51,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * ListWidget handles select-one fields using radio buttons. The radio buttons are aligned
  * horizontally. They are typically meant to be used in a field list, where multiple questions with
@@ -174,8 +176,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                             mMissingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
-                        Log.e(t, "image invalid reference exception");
-                        e.printStackTrace();
+                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
                 } else {
                     // There's no imageURI listed, so just ignore it.

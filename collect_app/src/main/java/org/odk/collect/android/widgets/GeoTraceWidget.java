@@ -37,8 +37,11 @@ import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 /**
  * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
@@ -92,20 +95,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getFormController().setIndexWaitingForData(
-                        mPrompt.getIndex());
-                Intent i = null;
-                if (mapSDK.equals(GOOGLE_MAP_KEY)) {
-                    i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
-                } else {
-                    i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
-                }
-                String s = mStringAnswer.getText().toString();
-                if (s.length() != 0) {
-                    i.putExtra(TRACE_LOCATION, s);
-                }
-                ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.GEOTRACE_CAPTURE);
+                Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                startGeoTraceActivity();
 
             }
         });
@@ -123,6 +114,25 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         updateButtonLabelsAndVisibility(dataAvailable);
+    }
+
+    private void startGeoTraceActivity() {
+        Intent i;
+        if (mapSDK.equals(GOOGLE_MAP_KEY)) {
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
+                i = new Intent(getContext(), GeoTraceGoogleMapActivity.class);
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
+                return;
+            }
+        } else {
+            i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
+        }
+        String s = mStringAnswer.getText().toString();
+        if (s.length() != 0) {
+            i.putExtra(TRACE_LOCATION, s);
+        }
+        ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -179,7 +189,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
                 }
                 return new StringData(s);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                Timber.e(e);
                 return null;
             }
         }

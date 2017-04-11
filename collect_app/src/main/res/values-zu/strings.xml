@@ -14,7 +14,6 @@
   <string name="cancel">Khansela</string>
   <string name="cancel_loading_form">Khansela</string>
   <string name="cancel_location">Khansela</string>
-  <string name="cannot_edit_completed_form">Leli fomu ayikwazi ukushintshwa uma isiyenziwe ephelele. Kungase ibethelwe.</string>
   <string name="capture_audio">Qopha umsindo</string>
   <string name="capture_image">Thwebula isithombe</string>
   <string name="capture_osm">ukwethula i-OpenMapKit</string>
@@ -115,7 +114,6 @@
   <string name="send_data">Thumela kwefomu eliphelesiwe</string>
   <string name="send_data_button">Thumela kwefomu eliphelesiwe (%s)</string>
   <string name="send_selected_data">Thumela okukhethiwe</string>
-  <string name="server_auth_credentials">Sicela ufake igamamfihlo nenombolomfihlo kweseva: %s</string>
   <string name="server_requires_auth">Iseva idinga isikhombosigxivizo</string>
   <string name="server_preferences">ukuhlelwa kweSeva</string>
   <string name="trigger">Kulungile. Ucelwa ukuba uqhubeke.</string>
@@ -203,7 +201,6 @@
   <string name="admin_preferences">Izinhlelo zokusingathwa komsebenzi</string>
   <string name="admin_access_settings">Thinta ukufinyelela ezinhlelweni zokusingathwa komsebenzi</string>
   <string name="user_access_form_entry">Umsebenzisi angafinyelela ukugcwalisa kwefomu:</string>
-  <string name="admin_advanced_settings">Izilungiselelo ezithuthukisiwe (uma welulekiwe):</string>
   <string name="save_mid">Gcina iFomu</string>
   <string name="enter_new_password">Faka inombolomfihlo entsha</string>
   <string name="verify_new_password">Phinda ufake inombolomfihlo entsha</string>
@@ -232,12 +229,6 @@
   <string name="swipe_instructions">Usekuqaleni kwe %s. Swipe the screen njengoba kukhonjisiwe ngezansi ukuya emumva naphambili</string>
   <string name="buttons_instructions">Usekuqaleni kwe %s. Thinta umcbisholo ongezansi ukuya emumva naphambili</string>
   <string name="swipe_buttons_instructions">Usekuqaleni kwe %s. Swipe the screen njengoba kukhonjisiwe ngezansi noma uthinte umcibisholo ukuya emumva naphambili</string>
-  <string name="form_processing_logic">Ukudluiswa bngokulandelana kwefomu</string>
-  <string name="form_processing_logic_recommended">Okunconyiwe ngokungenhloso</string>
-  <string name="form_processing_logic_0">January 2015 (okushesha kakhulu)</string>
-  <string name="form_processing_logic_1">January 2015 (okuphephileyo)</string>
-  <string name="form_processing_logic_2">Mid 2104 (okuhamba kancane)</string>
-  <string name="form_processing_logic_3">Early 2014 (okusheshayo)</string>
   <string name="launch_printer">Qala ukhiqize emshinini (printer)</string>
   <string name="no_printer">Umshini wokukhiqisa oceliwe awuxhunyiwe. Sicela uxhume umshini</string>
   <string name="view_change_location">Bheka noma ushintshe isizinda/indawo</string>
@@ -257,7 +248,6 @@
   <string name="survey_saving_encrypting_message">Uqopha ulwazi…</string>
   <string name="high_resolution_summary">Vumela ukuqobha ngesithwebuli sevidiyo sezinga eliphezulu</string>
   <string name="high_resolution">vumela ividiyo yezinga eliphezulu</string>
-  <string name="picasa_upload_error">Ngihlulekile ukufaka isithombe esivele singekho: %1$s</string>
   <string name="notification_error">Iphutha likhombisa umbiko wokwazisa</string>
   <string name="delete_after_send">Susa emva kokuthumela</string>
   <string name="delete_after_send_summary">Cima amafomu nezekuxhumana emuva kokuthumela ku seva</string>

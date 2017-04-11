@@ -20,12 +20,10 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -41,6 +39,8 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
  * directory.
@@ -50,6 +50,7 @@ import java.util.List;
  */
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
+    private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private static final String syncMsgKey = "syncmsgkey";
     private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handled across orientation changes
@@ -72,7 +73,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         mDeleteButton.setOnClickListener(this);
         mToggleButton.setOnClickListener(this);
 
-        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
+        setupAdapter();
 
         if (mBackgroundTasks == null) {
             mBackgroundTasks = new BackgroundTasks();
@@ -120,22 +121,34 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         super.onPause();
     }
 
-    @Override
-    protected void setupAdapter(String sortOrder) {
+    private void setupAdapter() {
         List<Long> checkedForms = new ArrayList<>();
         for (long a : getListView().getCheckedItemIds()) {
             checkedForms.add(a);
         }
-        Cursor c = new FormsDao().getFormsCursor(sortOrder);
         String[] data = new String[]{FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION};
         int[] view = new int[]{R.id.text1, R.id.text2, R.id.text3};
 
-        // render total instance view
-        SimpleCursorAdapter cursorAdapter = new VersionHidingCursorAdapter(
+        mListAdapter = new VersionHidingCursorAdapter(
                 FormsColumns.JR_VERSION, getActivity(),
-                R.layout.two_item_multiple_choice, c, data, view);
-        setListAdapter(cursorAdapter);
-        checkPreviouslyCheckedItems(checkedForms, c);
+                R.layout.two_item_multiple_choice, getCursor(), data, view);
+        setListAdapter(mListAdapter);
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return FORM_MANAGER_LIST_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+        super.updateAdapter();
+    }
+
+    private Cursor getCursor() {
+        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
     }
 
     /**
@@ -197,14 +210,14 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
 
     @Override
     public void syncComplete(String result) {
-        Log.i(TAG, "Disk scan complete");
+        Timber.i("Disk scan complete");
         TextView tv = (TextView) rootView.findViewById(R.id.status_text);
         tv.setText(result);
     }
 
     @Override
     public void deleteComplete(int deletedForms) {
-        Log.i(TAG, "Delete forms complete");
+        Timber.i("Delete forms complete");
         logger.logAction(this, "deleteComplete", Integer.toString(deletedForms));
         final int toDeleteCount = mBackgroundTasks.mDeleteFormsTask.getToDeleteCount();
 
@@ -213,7 +226,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             ToastUtils.showShortToast(getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Log.e(TAG, "Failed to delete " + (toDeleteCount - deletedForms) + " forms");
+            Timber.e("Failed to delete %d forms", (toDeleteCount - deletedForms));
             ToastUtils.showLongToast(getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                     - deletedForms), String.valueOf(getCheckedCount())));
         }

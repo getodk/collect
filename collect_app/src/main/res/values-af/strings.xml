@@ -17,7 +17,6 @@
   <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>
-  <string name="cannot_edit_completed_form">Hierdie vorm kan nie gewysig word nadat dit as Voltooid gemerk is nie. Dit mag dalk ge-enkripteer wees.</string>
   <string name="capture_audio">Neem klank op</string>
   <string name="capture_image">Neem foto</string>
   <string name="capture_osm">Loods OpenMapKit</string>
@@ -87,7 +86,7 @@
   <string name="location_accuracy">Akkuraatheid is %1$s m</string>
   <string name="longitude">Lengtegraad</string>
   <string name="main_menu">Hoofkieslys</string>
-  <string name="main_menu_details">Data-insameling vereenvoudig...</string>
+  <string name="main_menu_details">Data-insameling vereenvoudig…</string>
   <string name="manage_files">Verwyder Gestoorde Vorm</string>
   <string name="mark_finished">Merk vorm as gefinaliseer</string>
   <string name="noselect_error">Jammer, u het nie enige vorms geselekteer nie!</string>
@@ -120,7 +119,6 @@
   <string name="send_data">Stuur Gefinaliseerde Vorm</string>
   <string name="send_data_button">Stuur Gefinaliseerde Vorm (%s)</string>
   <string name="send_selected_data">Stuur Geselekteerde</string>
-  <string name="server_auth_credentials">Voer asb gebruikersnaam en wagwoord vir server in: %s</string>
   <string name="server_requires_auth">Server Benodig Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Server Verstellings</string>
@@ -151,7 +149,7 @@
   <string name="submission_url">Indiening path</string>
   <string name="font_size">Teks font grootte</string>
   <string name="change_font_size">Teks font grootte</string>
-  <string name="form_scan_starting">Scan vir vorms...</string>
+  <string name="form_scan_starting">Scan vir vorms…</string>
   <string name="access_error">Fout tydens toegang na %s:</string>
   <string name="manifest_server_error">Manifest antwoord gee nie \'n OpenRosa weergawe nie - slegte server?</string>
   <string name="root_element_error">Root element is nie &lt;manifest\&gt; nie — was %s</string>
@@ -213,7 +211,6 @@
   <string name="admin_preferences">Admin Verstellings</string>
   <string name="admin_access_settings">Raak hier vir admin toegang na Verstellings</string>
   <string name="user_access_form_entry">Gebruiker kan Vorm Invulling items bykom:</string>
-  <string name="admin_advanced_settings">Gevorderde Verstellings (soos aangeraai):</string>
   <string name="save_mid">Stoor Vorm</string>
   <string name="enter_new_password">Voer nuwe wagwoord in</string>
   <string name="verify_new_password">Voer weer nuwe wagwoord in</string>
@@ -242,12 +239,6 @@
   <string name="swipe_instructions">U is aan die begin van %s. Swipe die skerm soos hieronder gewys om vorentoe en agtertoe te gaan.</string>
   <string name="buttons_instructions">U is aan die begin van %s. Raak die pyl-knoppies hieronder om vorentoe en agtertoe te gaan.</string>
   <string name="swipe_buttons_instructions">U is aan die begin van %s. Swipe die skerm soos hieronder gewys, of raak die pyl-knoppies om vorentoe en agtertoe te gaan.</string>
-  <string name="form_processing_logic">Vorm-verwerkingslogika</string>
-  <string name="form_processing_logic_recommended">Aanbeveel (default)</string>
-  <string name="form_processing_logic_0">Januarie 2015 (vinnigste)</string>
-  <string name="form_processing_logic_1">Januarie 2015 (veiligste)</string>
-  <string name="form_processing_logic_2">Middel 2014 (stadig)</string>
-  <string name="form_processing_logic_3">Vroeg 2014 (vinnig)</string>
   <string name="launch_printer">Begin druk</string>
   <string name="no_printer">Die aangevraagde drukker is nie geïnstalleer nie. Installeer asseblief die drukker .</string>
   <string name="constraint_behavior">Constraint proseseringsgedrag</string>
@@ -270,7 +261,7 @@
   <string name="ext_import_generic_error">Kon nie data van %1$s intrek nie. Rede: %2$s</string>
   <string name="ext_import_progress_message">Laai data vanaf \'%1$s\', wag asseblief… %2$s</string>
   <string name="ext_import_cancelled_message">Lees van data is gekanselleer!</string>
-  <string name="ext_import_finalizing_message">Besig om vooraf-gelaaide data te finaliseer...</string>
+  <string name="ext_import_finalizing_message">Besig om vooraf-gelaaide data te finaliseer…</string>
   <string name="ext_import_completed_message">Lees van data voltooi!</string>
   <string name="ext_not_initialized_error">Die ExternalDataManager is nie geïnisialiseer nie.</string>
   <string name="ext_import_csv_missing_error">Eksterne data vir %1$s is nie ingetrek nie. Miskien het u vergeet om die %2$s.csv leêr met u vorm in te sluit?</string>
@@ -281,14 +272,14 @@
   <string name="fs_file_copy_error">Kon nie \'%1$s\' oor \'%2$s\' skryf nie. Rede: %3$s</string>
   <string name="survey_internal_error">Interne fout: aanstap na die vraag het misluk</string>
   <string name="survey_multiple_forms_error">U het twee verskillende vorms afgelaai met dieselfde Vorm ID en weergawe. Miskien is dit dieselfde vorm wat of op verskillende tye of na verskillende servers opgelaai is. U moet in enige geval een verwyder.</string>
-  <string name="survey_loading_reading_form_message">Lees vorm definisie...</string>
-  <string name="survey_loading_reading_data_message">Lees opname data...</string>
-  <string name="survey_loading_reading_csv_message">Lees CSV leêrs...</string>
-  <string name="survey_saving_validating_message">Toets antwoorde...</string>
-  <string name="survey_saving_collecting_message">Versamel data...</string>
-  <string name="survey_saving_saving_message">Stoor na SD kaart...</string>
-  <string name="survey_saving_finalizing_message">Finaliseer na SD kaart...</string>
-  <string name="survey_saving_encrypting_message">Enkripteer data...</string>
+  <string name="survey_loading_reading_form_message">Lees vorm definisie…</string>
+  <string name="survey_loading_reading_data_message">Lees opname data…</string>
+  <string name="survey_loading_reading_csv_message">Lees CSV leêrs…</string>
+  <string name="survey_saving_validating_message">Toets antwoorde…</string>
+  <string name="survey_saving_collecting_message">Versamel data…</string>
+  <string name="survey_saving_saving_message">Stoor na SD kaart…</string>
+  <string name="survey_saving_finalizing_message">Finaliseer na SD kaart…</string>
+  <string name="survey_saving_encrypting_message">Enkripteer data…</string>
   <string name="high_resolution_summary">Laat hoë-resolusie video opnames toe</string>
   <string name="high_resolution">Laat hoë-resolusie video toe</string>
   <string name="google_drive">Google Drive</string>
@@ -301,7 +292,6 @@
   <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
   <string name="invalid_oauth">Ongeldige OAuth 2 token</string>
-  <string name="picasa_upload_error">Kon nie foto oplaai nie want dit bestaan nie: %1$s</string>
   <string name="odk_auth_auth_fail">ODK Outostuur authentication mislukking, maak asseblief seker u verstellings is korrek</string>
   <string name="odk_auto_note">ODK Outostuur Kennisgewing</string>
   <string name="notification_error">Fout met vertoon van kennisgewing teks</string>

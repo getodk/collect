@@ -15,7 +15,6 @@
   <string name="cancel">Atšaukti</string>
   <string name="cancel_loading_form">Atšaukti</string>
   <string name="cancel_location">Atšaukti</string>
-  <string name="cannot_edit_completed_form">Ši forma daugiau negalės būti redaguojama, jei bus pažymėsite, kad ji baigta.</string>
   <string name="capture_audio">Įrašyti garsą</string>
   <string name="capture_image">Užfiksuoti kadrą</string>
   <string name="capture_video">Įrašyti video</string>
@@ -110,7 +109,6 @@
   <string name="send_data">Išsiųsti užbaigtą formą</string>
   <string name="send_data_button">Išsiųsti užbaigtą formą (%s)</string>
   <string name="send_selected_data">Išsiųsti pažymėtas</string>
-  <string name="server_auth_credentials">Prašome įvesti naudotojo vardą ir slaptažodį serveryje: %s</string>
   <string name="server_requires_auth">Serveris reikalauja autentifikavimo</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Serveris</string>

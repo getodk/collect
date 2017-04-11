@@ -49,8 +49,8 @@ public class MapHelper {
     public static String[] offilineOverlays;
     private static final String no_folder_key = "None";
 
-    public static GoogleMap mGoogleMap;
-    public static MapView mOsmMap;
+    public GoogleMap mGoogleMap;
+    public MapView mOsmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -78,21 +78,21 @@ public class MapHelper {
 
 
     public MapHelper(Context pContext, GoogleMap pGoogleMap) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
-        this.mGoogleMap = pGoogleMap;
+        mGoogleMap = pGoogleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
     public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
+        mGoogleMap = null;
+        mOsmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
         offilineOverlays = getOfflineLayerList();
         iRegisterReceiver = pIregisterReceiver;
-        this.mOsmMap = pOsmMap;
+        mOsmMap = pOsmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
@@ -107,16 +107,22 @@ public class MapHelper {
     public void setBasemap() {
         if (mGoogleMap != null) {
             String basemap = _getGoogleBasemap();
-            if (basemap.equals(GOOGLE_MAP_STREETS)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            } else if (basemap.equals(GOOGLE_MAP_SATELLITE)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            } else if (basemap.equals(GOOGLE_MAP_TERRAIN)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            } else if (basemap.equals(GOOGLE_MAP_HYBRID)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            } else {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            switch (basemap) {
+                case GOOGLE_MAP_STREETS:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
+                case GOOGLE_MAP_SATELLITE:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    break;
+                case GOOGLE_MAP_TERRAIN:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    break;
+                case GOOGLE_MAP_HYBRID:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    break;
+                default:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
             }
         } else {
             //OSMMAP
@@ -241,13 +247,12 @@ public class MapHelper {
 
     private File[] getFileFromSelectedItem(int item) {
         File directory = new File(Collect.OFFLINE_LAYERS + slash + offilineOverlays[item]);
-        File[] files = directory.listFiles(new FilenameFilter() {
+        return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 return (filename.toLowerCase().endsWith(".mbtiles"));
             }
         });
-        return files;
     }
 
 

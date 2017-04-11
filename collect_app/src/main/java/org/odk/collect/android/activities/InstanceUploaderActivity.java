@@ -26,7 +26,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -43,6 +42,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * Activity to upload completed forms.
  *
@@ -50,7 +51,6 @@ import java.util.Set;
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
-    private final static String TAG = "InstanceUploaderActiv";
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
 
@@ -77,7 +77,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         mAlertMsg = getString(R.string.please_wait);
         mAlertShowing = false;
@@ -118,10 +118,10 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         // at this point, we don't expect this to be empty...
         if (mInstancesToSend.length == 0) {
-            Log.e(TAG, "onCreate: No instances to upload!");
+            Timber.e("onCreate: No instances to upload!");
             // drop through -- everything will process through OK
         } else {
-            Log.i(TAG, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Timber.i("onCreate: Beginning upload of %d instances!", mInstancesToSend.length);
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
@@ -146,7 +146,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "onResume: Resuming upload of " + mInstancesToSend.length + " instances!");
+        Timber.i("onResume: Resuming upload of %d instances!", mInstancesToSend.length);
         if (mInstanceUploaderTask != null) {
             mInstanceUploaderTask.setUploaderListener(this);
         }
@@ -179,7 +179,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     protected void onPause() {
-        Log.i(TAG, "onPause: Pausing upload of " + mInstancesToSend.length + " instances!");
+        Timber.i("onPause: Pausing upload of %d instances!", mInstancesToSend.length);
         super.onPause();
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
@@ -203,8 +203,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        Log.i(TAG, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
-                + mInstancesToSend.length + " instances!");
+        Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
+                result.size(), mInstancesToSend.length);
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -255,14 +255,15 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                                 results.getString(
                                         results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + "-" + result.get(id) + "\n\n");
+                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
                     }
                 }
             } catch (SQLException e) {
-                Log.e(TAG, e.getMessage(), e);
+                Timber.e(e);
             } finally {
-                if (results != null)
+                if (results != null) {
                     results.close();
+                }
             }
             message.append(queryMessage.toString());
         }
@@ -308,8 +309,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case AUTH_DIALOG:
-                Log.i(TAG, "onCreateDialog(AUTH_DIALOG): for upload of " + mInstancesToSend.length
-                        + " instances!");
+                Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
+                        mInstancesToSend.length);
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
@@ -344,8 +345,8 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 Long removeMe = Long.valueOf(itr.next());
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Log.i(TAG, removeMe
-                            + " was already sent, removing from queue before restarting task");
+                    Timber.i("%l was already sent, removing from queue before restarting task",
+                            removeMe);
                 }
             }
             mUploadedInstances.putAll(doneSoFar);

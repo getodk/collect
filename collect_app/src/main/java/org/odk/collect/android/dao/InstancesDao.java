@@ -22,6 +22,7 @@ import android.net.Uri;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.ApplicationConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,42 @@ public class InstancesDao {
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
     }
 
+    public Cursor getUnsentInstancesCursor(CharSequence charSequence, String sortOrder) {
+        Cursor cursor;
+        if (charSequence.length() == 0) {
+            cursor = getUnsentInstancesCursor(sortOrder);
+        } else {
+            String selection =
+                    InstanceProviderAPI.InstanceColumns.STATUS + " !=? and "
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = {
+                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    "%" + charSequence + "%"};
+
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursor;
+    }
+
+    public Cursor getSentInstancesCursor(CharSequence charSequence, String sortOrder) {
+        Cursor cursor;
+        if (charSequence.length() == 0) {
+            cursor = getSentInstancesCursor(sortOrder);
+        } else {
+            String selection =
+                    InstanceProviderAPI.InstanceColumns.STATUS + " =? and "
+                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = {
+                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    "%" + charSequence + "%"};
+
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursor;
+    }
+
     public Cursor getUnsentInstancesCursor(String sortOrder) {
         String selection = InstanceProviderAPI.InstanceColumns.STATUS + " !=? ";
         String selectionArgs[] = {InstanceProviderAPI.STATUS_SUBMITTED};
@@ -66,6 +103,21 @@ public class InstancesDao {
         String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL ";
 
         return getInstancesCursor(null, selection, null, sortOrder);
+    }
+
+    public Cursor getSavedInstancesCursor(CharSequence charSequence, String sortOrder) {
+        Cursor cursor;
+        if (charSequence.length() == 0) {
+            cursor = getSavedInstancesCursor(sortOrder);
+        } else {
+            String selection =
+                    InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and "
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = {"%" + charSequence + "%"};
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursor;
     }
 
     public Cursor getFinalizedInstancesCursor() {
@@ -81,6 +133,26 @@ public class InstancesDao {
         String selectionArgs[] = {InstanceProviderAPI.STATUS_COMPLETE, InstanceProviderAPI.STATUS_SUBMISSION_FAILED};
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
+    public Cursor getFinalizedInstancesCursor(CharSequence charSequence, String sortOrder) {
+        Cursor cursor;
+        if (charSequence.length() == 0) {
+            cursor = getFinalizedInstancesCursor(sortOrder);
+        } else {
+            String selection =
+                    "(" + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
+                    + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
+                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selectionArgs[] = {
+                    InstanceProviderAPI.STATUS_COMPLETE,
+                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
+                    "%" + charSequence + "%"};
+
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+
+        return cursor;
     }
 
     public Cursor getInstancesCursorForFilePath(String path) {
@@ -102,6 +174,28 @@ public class InstancesDao {
         String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
 
         return getInstancesCursor(null, selection, selectionArgs, sortOrder);
+    }
+
+    public Cursor getCompletedUndeletedInstancesCursor(CharSequence charSequence, String sortOrder) {
+        Cursor cursor;
+        if (charSequence.length() == 0) {
+            cursor = getAllCompletedUndeletedInstancesCursor(sortOrder);
+        } else {
+            String selection = InstanceProviderAPI.InstanceColumns.DELETED_DATE + " IS NULL and ("
+                    + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
+                    + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
+                    + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
+                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+
+            String selectionArgs[] = {
+                    InstanceProviderAPI.STATUS_COMPLETE,
+                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
+                    InstanceProviderAPI.STATUS_SUBMITTED,
+                    "%" + charSequence + "%"};
+
+            cursor = getInstancesCursor(null, selection, selectionArgs, sortOrder);
+        }
+        return cursor;
     }
 
     public Cursor getAllCompletedUndeletedInstancesCursor(String sortOrder) {
@@ -143,6 +237,41 @@ public class InstancesDao {
 
     public void deleteInstancesDatabase() {
         Collect.getInstance().getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
+    }
+
+    public void deleteInstancesFromIDs(List<String> ids){
+        int count = ids.size();
+        int counter = 0;
+        while (count > 0) {
+            String[] selectionArgs = null;
+            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER ) {
+                selectionArgs = new String[
+                        ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
+            } else {
+                selectionArgs = new String[count];
+            }
+
+            StringBuilder selection = new StringBuilder();
+            selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " IN (");
+            int j = 0 ;
+            while (j < selectionArgs.length) {
+                selectionArgs[j] = ids.get(
+                        counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);
+                selection.append("?");
+
+                if (j != selectionArgs.length - 1) {
+                    selection.append(",");
+                }
+                j++;
+            }
+            counter++;
+            count -= selectionArgs.length;
+            selection.append(")");
+            Collect.getInstance().getContentResolver()
+                    .delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI
+                            , selection.toString(), selectionArgs);
+
+        }
     }
 
     public List<Instance> getInstancesFromCursor(Cursor cursor) {
