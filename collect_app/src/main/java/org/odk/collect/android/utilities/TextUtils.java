@@ -16,15 +16,7 @@ package org.odk.collect.android.utilities;
 
 import android.text.Html;
 
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
-
-import java.io.IOException;
 import java.util.regex.MatchResult;
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
-
-import timber.log.Timber;
 
 public class TextUtils {
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
@@ -103,48 +95,5 @@ public class TextUtils {
         }
 
         return Html.fromHtml(markdownToHtml(text));
-    }
-
-    public static String compress(String data) throws IOException {
-        if (data == null || data.length() == 0) {
-            return data;
-        }
-
-        // Encode string into bytes
-        byte[] input = data.getBytes("UTF-8");
-
-        // Compress the bytes
-        byte[] output = new byte[input.length];
-        Deflater compresser = new Deflater();
-        compresser.setInput(input);
-        compresser.finish();
-        int compressedDataLength = compresser.deflate(output);
-        compresser.end();
-
-        // Encode to base64
-        String base64String = Base64.encodeBase64String(output);
-        Timber.i("Original length : %d", data.length());
-        Timber.i("Compressed length : %d", compressedDataLength);
-        Timber.i("Compression ratio : %2f", ((data.length() * 1.0) / compressedDataLength) * 100);
-        return base64String;
-    }
-
-    public static String decompress(String compressedString) throws IOException, DataFormatException {
-
-        // Decode from base64
-        byte[] output = Base64.decodeBase64(compressedString);
-
-        // Decompresses the bytes
-        Inflater decompresser = new Inflater();
-        decompresser.setInput(output);
-        byte[] result = compressedString.getBytes();
-        int resultLength = decompresser.inflate(result);
-        decompresser.end();
-
-        // Decode the bytes into a String
-        String outputString = new String(result, 0, resultLength, "UTF-8");
-        Timber.i("Compressed length : %d", compressedString.length());
-        Timber.i("Decompressed length : %d", resultLength);
-        return outputString;
     }
 } 

@@ -58,7 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -145,7 +145,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         String content;
         try {
             content = getServerSettings();
-            String compressedData = TextUtils.compress(content);
+            String compressedData = CompressionUtils.compress(content);
 
             //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
             if (compressedData.length() > 4000) {
@@ -251,7 +251,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private void applySettings(String content) {
         String decompressedData;
         try {
-            decompressedData = TextUtils.decompress(content);
+            decompressedData = CompressionUtils.decompress(content);
         } catch (DataFormatException e) {
             Timber.e(e);
             ToastUtils.showShortToast("QR Code does not contains valid settings");
