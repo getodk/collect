@@ -50,8 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.QRCodeListener;
-import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.tasks.GenerateQRCode;
+import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ImportSettings;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -99,8 +99,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     public void generateCode() {
-        GenerateQRCode generateQRCode = new GenerateQRCode(this, getActivity(), qrImageView);
-        generateQRCode.execute();
+        new GenerateQRCode(this, getActivity(), qrImageView).execute();
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
