@@ -185,7 +185,7 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void createDatePickerDialog() {
-        mDatePickerDialog = new DatePickerDialog(getContext(),
+        mDatePickerDialog = new CustomDatePickerDialog(getContext(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -193,7 +193,6 @@ public class DateWidget extends QuestionWidget {
                         setDate();
                     }
                 }, 0, 0, 0);
-        mDatePickerDialog.setCustomTitle(new LinearLayout(getContext()));
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
@@ -229,5 +228,18 @@ public class DateWidget extends QuestionWidget {
 
     public int getDay() {
         return mDatePickerDialog.getDatePicker().getDayOfMonth();
+    }
+
+    private class CustomDatePickerDialog extends DatePickerDialog {
+        private String mDialogTitle = getContext().getString(R.string.select_date);
+
+        public CustomDatePickerDialog(Context context, OnDateSetListener listener, int year, int month, int dayOfMonth) {
+            super(context, listener, year, month, dayOfMonth);
+            setTitle(mDialogTitle);
+        }
+
+        public void setTitle(CharSequence title) {
+            super.setTitle(mDialogTitle);
+        }
     }
 }

@@ -143,14 +143,13 @@ public class TimeWidget extends QuestionWidget {
     }
 
     private void createTimePickerDialog() {
-        mTimePickerDialog = new TimePickerDialog(getContext(),
+        mTimePickerDialog = new CustomTimePickerDialog(getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
                         setTime(hourOfDay, minuteOfHour);
                     }
-                }, 0, 0, DateFormat.is24HourFormat(getContext()));
-        mTimePickerDialog.setCustomTitle(new LinearLayout(getContext()));
+                }, 0, 0);
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
@@ -170,5 +169,24 @@ public class TimeWidget extends QuestionWidget {
 
     public int getMinute() {
         return mMinuteOfHour;
+    }
+
+    private class CustomTimePickerDialog extends TimePickerDialog implements TimePickerDialog.OnTimeSetListener {
+        private String mDialogTitle = getContext().getString(R.string.select_time);
+
+        public CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
+            super(context, callBack, hour, minute, DateFormat.is24HourFormat(context));
+            setTitle(mDialogTitle);
+        }
+
+        public void setTitle(CharSequence title) {
+            super.setTitle(mDialogTitle);
+        }
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            mHourOfDay = hourOfDay;
+            mMinuteOfHour = minute;
+        }
     }
 }
