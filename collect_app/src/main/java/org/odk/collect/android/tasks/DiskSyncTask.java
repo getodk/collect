@@ -20,7 +20,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.Patterns;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -28,6 +27,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.UrlUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,9 +35,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
-import static org.odk.collect.android.R.string.url_error;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -125,7 +122,6 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         String sqlFilename =
                                 mCursor.getString(
                                         mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                        Log.d(TAG, "FORM_FILE_PATH= "+sqlFilename);
                         String md5 = mCursor.getString(
                                 mCursor.getColumnIndex(FormsColumns.MD5_HASH));
                         File sqlFile = new File(sqlFilename);
@@ -306,10 +302,12 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             updateValues.put(FormsColumns.JR_VERSION, version);
         }
         if (submission != null) {
-            if(Patterns.WEB_URL.matcher(submission).matches()) {
+            if (UrlUtils.isValidUrl(submission)) {
                 updateValues.put(FormsColumns.SUBMISSION_URI, submission);
             } else {
-                throw new IllegalArgumentException(formDefFile.getName() + " :: " + Collect.getInstance().getString(R.string.url_error));
+                throw new IllegalArgumentException(
+                        Collect.getInstance().getString(R.string.xform_parse_error,
+                                formDefFile.getName(), "submission url"));
             }
         }
         if (base64RsaPublicKey != null) {
