@@ -27,14 +27,16 @@ the License.
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:paddingBottom="4dip"
+			android:paddingRight="8dip"
 			android:paddingEnd="8dip"
 			android:paddingLeft="8dip"
-			android:paddingRight="8dip"
 			android:paddingStart="8dip"
 			android:paddingTop="4dip"
 			android:text="@string/form_scan_starting"
 			android:textSize="14sp"
 			android:background="#DDDDDD" />
+
+		<include layout="@layout/search_box_layout"/>
 
 		<ListView
 			android:id="@android:id/list"
@@ -48,10 +50,10 @@ the License.
 			android:layout_height="match_parent"
 			android:text="@string/no_items_display_instances"
 			android:textSize="21sp"
-			android:paddingStart="20dp"
 			android:paddingLeft="20dp"
-			android:paddingEnd="20dp"
+			android:paddingStart="20dp"
 			android:paddingRight="20dp"
+			android:paddingEnd="20dp"
 			android:gravity="center" />
 
 		<LinearLayout
@@ -83,6 +85,6 @@ the License.
 		android:id="@+id/sortingMenu"
 		android:layout_width="250dp"
 		android:layout_height="match_parent"
-		android:layout_gravity="right|end"
+		android:layout_gravity="end"
 		android:background="#DDDDDD"/>
 </android.support.v4.widget.DrawerLayout>

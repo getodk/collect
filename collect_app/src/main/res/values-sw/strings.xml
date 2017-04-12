@@ -15,7 +15,6 @@
   <string name="cancel">Sitisha</string>
   <string name="cancel_loading_form">Sitisha</string>
   <string name="cancel_location">Sitisha</string>
-  <string name="cannot_edit_completed_form">Fomu hii haiwezi kuhaririwa baada ya kuwekwa alama ni kamili. Huenda imesibwa.</string>
   <string name="capture_audio">Rekodi Sauti</string>
   <string name="capture_image">Chukua Picha</string>
   <string name="capture_osm">Anzisha OpenMapkit</string>
@@ -252,7 +251,6 @@
   <string name="high_resolution">Ruhusu video za hi-res</string>
   <string name="no_google_account">Hakuna Google Account Iliyochaguliwa!</string>
   <string name="google_set_account">Umechagua Google Sheets kama seva yako, tafadhali chagua Google akaunti zake katika General Settings kabla ya kuendelea</string>
-  <string name="picasa_upload_error">Imeshindwa kuweka picha ambayo haipo: %1$s</string>
   <string name="delete_after_send">Ondoa baada ya kutuma</string>
   <string name="delete_after_send_summary">Ondoa fomu zilizokamilika na media baada ya kuzituma kwa seva</string>
   <string name="change_server_url">URL ya Seva</string>

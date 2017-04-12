@@ -43,10 +43,9 @@ public class StringNumberWidget extends StringWidget {
         mAnswer.setKeyListener(new DigitsKeyListener() {
             @Override
             protected char[] getAcceptedChars() {
-                char[] accepted = {
+                return new char[]{
                         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
                 };
-                return accepted;
             }
         });
 

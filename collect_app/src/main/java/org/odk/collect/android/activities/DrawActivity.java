@@ -29,7 +29,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -50,6 +49,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import timber.log.Timber;
+
 /**
  * Modified from the FingerPaint example found in The Android Open Source
  * Project.
@@ -57,8 +58,6 @@ import java.io.FileOutputStream;
  * @author BehrAtherton@gmail.com
  */
 public class DrawActivity extends Activity {
-    public static final String t = "DrawActivity";
-
     public static final String OPTION = "option";
     public static final String OPTION_SIGNATURE = "signature";
     public static final String OPTION_ANNOTATE = "annotate";
@@ -91,7 +90,7 @@ public class DrawActivity extends Activity {
         try {
             saveFile(savepointImage);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         if (savepointImage.exists()) {
             outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
@@ -282,7 +281,6 @@ public class DrawActivity extends Activity {
             saveFile(output);
             setResult(Activity.RESULT_OK);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             setResult(Activity.RESULT_CANCELED);
         }
         this.finish();
@@ -293,7 +291,7 @@ public class DrawActivity extends Activity {
             // apparently on 4.x, the orientation change notification can occur
             // sometime before the view is rendered. In that case, the view
             // dimensions will not be known.
-            Log.e(t, "view has zero width or zero height");
+            Timber.e("View has zero width or zero height");
         } else {
             FileOutputStream fos;
             fos = new FileOutputStream(f);
@@ -308,6 +306,7 @@ public class DrawActivity extends Activity {
                     fos.close();
                 }
             } catch (Exception e) {
+                Timber.e(e);
             }
         }
     }
@@ -503,7 +502,8 @@ public class DrawActivity extends Activity {
             canvas.drawPath(mCurrentPath, paint);
         }
 
-        private float mX, mY;
+        private float mX;
+        private float mY;
 
         private void touch_start(float x, float y) {
             mCurrentPath.reset();
