@@ -27,17 +27,15 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 public class UrlUtils {
 
     public static boolean isValidUrl(String url) {
 
-        try {
-            new URL(url);
-            return true;
-        } catch (MalformedURLException e) {
-            return false;
-        }
+        final Pattern urlPattern = Pattern.compile("^https?:\\/\\/.+$", Pattern.CASE_INSENSITIVE);
+
+        return urlPattern.matcher(url).matches();
     }
 
     public static String getSpreadsheetID(String id)
