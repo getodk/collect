@@ -62,6 +62,7 @@ public class DateTimeWidget extends QuestionWidget {
 
         boolean hideDay = mDateWidget.isDayHidden();
         boolean hideMonth = mDateWidget.isMonthHidden();
+        boolean showCalendar = mDateWidget.isCalendarShown();
 
         int year = mDateWidget.getYear();
         int month = mDateWidget.getMonth();
@@ -71,10 +72,10 @@ public class DateTimeWidget extends QuestionWidget {
 
         LocalDateTime ldt = new LocalDateTime()
                 .withYear(year)
-                .withMonthOfYear(hideMonth ? 1 : month)
-                .withDayOfMonth(hideMonth || hideDay ? 1 : day)
-                .withHourOfDay(hideMonth || hideDay ? 0 : hour)
-                .withMinuteOfHour(hideMonth || hideDay ? 0 : minute)
+                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
+                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
+                .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
+                .withMinuteOfHour((!showCalendar && (hideMonth) || hideDay) ? 0 : minute)
                 .withSecondOfMinute(0);
 
         ldt = skipDaylightSavingGapIfExists(ldt);

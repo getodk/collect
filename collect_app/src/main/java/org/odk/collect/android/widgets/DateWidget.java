@@ -215,6 +215,10 @@ public class DateWidget extends QuestionWidget {
         return mHideMonth;
     }
 
+    public boolean isCalendarShown() {
+        return mShowCalendar;
+    }
+
     public int getYear() {
         return mDatePickerDialog.getDatePicker().getYear();
     }
