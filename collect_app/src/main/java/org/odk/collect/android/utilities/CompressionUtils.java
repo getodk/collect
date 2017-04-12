@@ -16,6 +16,8 @@ package org.odk.collect.android.utilities;
 
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -36,38 +38,54 @@ public class CompressionUtils {
         // Encode string into bytes
         byte[] input = data.getBytes("UTF-8");
 
+        Deflater deflater = new Deflater();
+        deflater.setInput(input);
+
         // Compress the bytes
-        byte[] output = new byte[input.length];
-        Deflater compresser = new Deflater();
-        compresser.setInput(input);
-        compresser.finish();
-        int compressedDataLength = compresser.deflate(output);
-        compresser.end();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length());
+        deflater.finish();
+        byte[] buffer = new byte[1024];
+        while (!deflater.finished()) {
+            int count = deflater.deflate(buffer); // returns the generated code... index
+            outputStream.write(buffer, 0, count);
+        }
+        outputStream.close();
+        byte[] output = outputStream.toByteArray();
 
         // Encode to base64
         String base64String = Base64.encodeBase64String(output);
-        Timber.i("Original length : %d", data.length());
-        Timber.i("Compressed length : %d", compressedDataLength);
-        Timber.i("Compression ratio : %2f", ((data.length() * 1.0) / compressedDataLength) * 100);
+        Timber.i("Original : %d", data.length());
+        Timber.i("Compressed : %d", base64String.length());
+        Timber.i("Compression ratio : %2f", ((data.length() * 1.0) / base64String.length()) * 100);
         return base64String;
     }
 
     public static String decompress(String compressedString) throws IOException, DataFormatException {
+        if (compressedString == null || compressedString.length() == 0) {
+            return compressedString;
+        }
 
         // Decode from base64
         byte[] output = Base64.decodeBase64(compressedString);
 
+        Inflater inflater = new Inflater();
+        inflater.setInput(output);
+
         // Decompresses the bytes
-        Inflater decompresser = new Inflater();
-        decompresser.setInput(output);
-        byte[] result = compressedString.getBytes();
-        int resultLength = decompresser.inflate(result);
-        decompresser.end();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(output.length);
+        byte[] buffer = new byte[1024];
+        while (!inflater.finished()) {
+            int count = inflater.inflate(buffer);
+            outputStream.write(buffer, 0, count);
+        }
+        outputStream.close();
+        byte[] result = outputStream.toByteArray();
 
         // Decode the bytes into a String
-        String outputString = new String(result, 0, resultLength, "UTF-8");
-        Timber.i("Compressed length : %d", compressedString.length());
-        Timber.i("Decompressed length : %d", resultLength);
+        String outputString = new String(result, "UTF-8");
+        Timber.i("Compressed : %d", output.length);
+        Timber.i("Decompressed : %d", result.length);
         return outputString;
+
     }
 }
