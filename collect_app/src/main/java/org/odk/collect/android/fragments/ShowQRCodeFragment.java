@@ -78,17 +78,12 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private ShareActionProvider mShareActionProvider;
     private ImageView qrImageView;
     private ProgressBar progressBar;
+    private Intent mShareIntent;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+        View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         setHasOptionsMenu(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -96,6 +91,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         scan.setOnClickListener(this);
         Button select = (Button) view.findViewById(R.id.btnSelect);
         select.setOnClickListener(this);
+        generateCode();
+        return view;
     }
 
     public void generateCode() {
@@ -112,11 +109,10 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         out.close();
 
         // Sent a intent to share saved image
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
-        setShareIntent(shareIntent);
+        mShareIntent = new Intent();
+        mShareIntent.setAction(Intent.ACTION_SEND);
+        mShareIntent.setType("image/*");
+        mShareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
     }
 
 
@@ -215,17 +211,17 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.share_menu, menu);
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-        generateCode();
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_share) {
+            getActivity().startActivity(Intent.createChooser(mShareIntent, "Share QR Code"));
         }
+        return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void preExecute() {
