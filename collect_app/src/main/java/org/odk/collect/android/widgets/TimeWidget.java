@@ -139,10 +139,7 @@ public class TimeWidget extends QuestionWidget {
         mHourOfDay = hourOfDay;
         mMinuteOfHour = minuteOfHour;
 
-        String hour = mHourOfDay < 10 ? "0" + mHourOfDay : "" + mHourOfDay;
-        String minute = mMinuteOfHour < 10 ? "0" + mMinuteOfHour : "" + mMinuteOfHour;
-
-        mTimeTextView.setText(getContext().getString(R.string.time, hour, minute));
+        mTimeTextView.setText(getAnswer().getDisplayText());
     }
 
     private void createTimePickerDialog() {

@@ -181,21 +181,7 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void setDate() {
-        int dayOfMonth = mDatePickerDialog.getDatePicker().getDayOfMonth();
-        int monthOfYear = mDatePickerDialog.getDatePicker().getMonth() + 1;
-        int year = mDatePickerDialog.getDatePicker().getYear();
-
-        String dayText = dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth;
-        String monthText = monthOfYear < 10 ? "0" + monthOfYear : "" + monthOfYear;
-
-        String appearance = mPrompt.getQuestion().getAppearanceAttr();
-        if ("month-year".equals(appearance)) {
-            mDateTextView.setText(getContext().getString(R.string.date_year_month, monthText, String.valueOf(year)));
-        } else if ("year".equals(appearance)) {
-            mDateTextView.setText(String.valueOf(year));
-        } else {
-            mDateTextView.setText(getContext().getString(R.string.full_date, dayText, monthText, String.valueOf(year)));
-        }
+        mDateTextView.setText(getAnswer().getDisplayText());
     }
 
     private void createDatePickerDialog() {
