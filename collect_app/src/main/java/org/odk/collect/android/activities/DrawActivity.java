@@ -502,7 +502,8 @@ public class DrawActivity extends Activity {
             canvas.drawPath(mCurrentPath, paint);
         }
 
-        private float mX, mY;
+        private float mX;
+        private float mY;
 
         private void touch_start(float x, float y) {
             mCurrentPath.reset();
