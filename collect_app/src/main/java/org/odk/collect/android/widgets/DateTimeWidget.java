@@ -51,7 +51,9 @@ public class DateTimeWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(mDateWidget);
-        linearLayout.addView(mTimeWidget);
+        if (mDateWidget.isCalendarShown() || !mDateWidget.isDayHidden()) {
+            linearLayout.addView(mTimeWidget);
+        }
         addAnswerView(linearLayout);
     }
 
@@ -74,7 +76,7 @@ public class DateTimeWidget extends QuestionWidget {
                 .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
                 .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
                 .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
-                .withMinuteOfHour((!showCalendar && (hideMonth) || hideDay) ? 0 : minute)
+                .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
                 .withSecondOfMinute(0);
 
         ldt = skipDaylightSavingGapIfExists(ldt);

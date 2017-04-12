@@ -17,11 +17,9 @@ package org.odk.collect.android.utilities;
 
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.After;
 import org.junit.Before;
@@ -101,6 +99,7 @@ public class DaylightSavingTest {
         stub(iFormElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
         stub(formEntryPromptStub.getQuestion()).toReturn(questionDefStub);
         stub(formEntryPromptStub.getFormElement()).toReturn(iFormElementStub);
+        stub(formEntryPromptStub.getQuestion().getAppearanceAttr()).toReturn("no-calendar");
 
         DatePickerDialog datePickerDialog = mock(DatePickerDialog.class);
         DatePicker datePicker = mock(DatePicker.class);
@@ -111,8 +110,6 @@ public class DaylightSavingTest {
 
         DateWidget dateWidget = new DateWidget(RuntimeEnvironment.application, formEntryPromptStub);
         Whitebox.setInternalState(dateWidget, "mDatePickerDialog", datePickerDialog);
-
-        IAnswerData test = dateWidget.getAnswer();
 
         return dateWidget;
     }
@@ -125,6 +122,7 @@ public class DaylightSavingTest {
         stub(iFormElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
         stub(formEntryPromptStub.getQuestion()).toReturn(questionDefStub);
         stub(formEntryPromptStub.getFormElement()).toReturn(iFormElementStub);
+        stub(formEntryPromptStub.getQuestion().getAppearanceAttr()).toReturn("no-calendar");
 
         DateWidget dateWidget = mock(DateWidget.class);
         stub(dateWidget.getYear()).toReturn(year);
