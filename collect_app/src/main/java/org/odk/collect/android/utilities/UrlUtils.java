@@ -25,8 +25,6 @@ import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.regex.Pattern;
 
 public class UrlUtils {
