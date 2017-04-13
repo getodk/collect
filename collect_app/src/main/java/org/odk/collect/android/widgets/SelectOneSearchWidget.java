@@ -110,7 +110,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         }
     }
 
-    public void createOptions(List<SelectChoice> mSearchedItems, List<Integer> tagList) {
+    public void createOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {
         removeView(buttonLayout);
         buttons = new ArrayList<RadioButton>();
 
@@ -122,11 +122,11 @@ public class SelectOneSearchWidget extends QuestionWidget implements
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mSearchedItems != null && mSearchedItems.size() > 0) {
-            for (int i = 0; i < mSearchedItems.size(); i++) {
+        if (searchedItems != null && searchedItems.size() > 0) {
+            for (int i = 0; i < searchedItems.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mSearchedItems.get(i))));
+                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(searchedItems.get(i))));
 
                 if (tagList == null) {
                     r.setTag(Integer.valueOf(i));
@@ -139,7 +139,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
                 buttons.add(r);
 
-                if (selectedTag == -1 && mSearchedItems.get(i).getValue().equals(s)) {
+                if (selectedTag == -1 && searchedItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                     selectedTag = (Integer) r.getTag();
                 } else if (selectedTag.equals(r.getTag())) {
@@ -154,7 +154,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
                 mediaLayout.setPlayTextColor(mPlayColor);
                 mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
 
-                if (i != mSearchedItems.size() - 1) {
+                if (i != searchedItems.size() - 1) {
                     // Last, add the dividing line (except for the last element)
                     ImageView divider = new ImageView(getContext());
                     divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);

@@ -109,9 +109,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String XPath, String waitingXPath) {
+    public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
         mInstancePath = instancePath;
-        mXPath = XPath;
+        mXPath = xpath;
         mWaitingXPath = waitingXPath;
     }
 

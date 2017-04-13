@@ -95,14 +95,14 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
     private class TileLoader extends MapTileModuleProviderBase.TileLoader {
 
         @Override
-        public Drawable loadTile(final MapTileRequestState pState) {
+        public Drawable loadTile(final MapTileRequestState state) {
 
             // if there's no sdcard then don't do anything
             if (!isSdCardAvailable()) {
                 return null;
             }
 
-            MapTile pTile = pState.getMapTile();
+            MapTile pTile = state.getMapTile();
             InputStream inputStream = null;
 
             try {

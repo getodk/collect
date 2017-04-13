@@ -219,8 +219,8 @@ public class FormController {
         return value;
     }
 
-    public FormIndex getIndexFromXPath(String xPath) {
-        switch (xPath) {
+    public FormIndex getIndexFromXPath(String xpath) {
+        switch (xpath) {
             case "beginningOfForm":
                 return FormIndex.createBeginningOfFormIndex();
             case "endOfForm":
@@ -239,7 +239,7 @@ public class FormController {
                     while (event != FormEntryController.EVENT_END_OF_FORM) {
                         String candidateXPath = getXPath(getFormIndex());
                         // Log.i(t, "xpath: " + candidateXPath);
-                        if (candidateXPath.equals(xPath)) {
+                        if (candidateXPath.equals(xpath)) {
                             returned = getFormIndex();
                             break;
                         }
