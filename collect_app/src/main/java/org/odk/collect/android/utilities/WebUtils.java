@@ -224,12 +224,12 @@ public final class WebUtils {
                 Collect.getInstance().getString(R.string.protocol_odk_default));
 
         // TODO:  this doesn't exist....
-//		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
-//	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-//			if ((auth != null) && (auth.length() > 0)) {
-//				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-//			}
-//		}
+        //if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
+        //String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
+        //if ((auth != null) && (auth.length() > 0)) {
+        //req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+        //}
+        //}
     }
 
     public static final HttpPost createOpenRosaHttpPost(Uri u) {

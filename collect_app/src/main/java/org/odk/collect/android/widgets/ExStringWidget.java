@@ -244,16 +244,16 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             if (!mPrompt.isReadOnly()) {
                 mAnswer.requestFocus();
                 inputManager.showSoftInput(mAnswer, 0);
-                /*
-	             * If you do a multi-question screen after a "add another group" dialog, this won't
-	             * automatically pop up. It's an Android issue.
-	             *
-	             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-	             * dialog's button's OnClick() I call edittext.requestFocus() and
-	             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
-	             * edittext
-	             * is focused before the dialog pops up, everything works fine. great.
-	             */
+            /*
+             * If you do a multi-question screen after a "add another group" dialog, this won't
+             * automatically pop up. It's an Android issue.
+             *
+             * That is, if I have an edit text in an activity, and pop a dialog, and in that
+             * dialog's button's OnClick() I call edittext.requestFocus() and
+             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the
+             * edittext
+             * is focused before the dialog pops up, everything works fine. great.
+             */
             } else {
                 inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
             }
