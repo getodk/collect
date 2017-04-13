@@ -45,8 +45,9 @@ test:
                     circle-android wait-for-boot
                     gradlew connectedCheck -Pandroid.useDexArchive=false
                     ;;
-            esac:
-                parallel: true
+            esac
+        :
+            parallel: true
     
     post:
         - ? |
@@ -55,8 +56,9 @@ test:
                     cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
                     cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests
                     ;;
-            esac:
-                parallel: true
+            esac
+        :
+            parallel: true
 
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
    
