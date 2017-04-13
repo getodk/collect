@@ -9,7 +9,7 @@ machine:
         # https://docs.gradle.org/current/userguide/build_environment.html
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
 
-        INSTRUMENTED_TESTS: false
+        INSTRUMENTED_TESTS: 1
         
 dependencies:
     pre:
@@ -46,8 +46,6 @@ test:
                     gradlew connectedCheck -Pandroid.useDexArchive=false
                     ;;
             esac
-        :
-            parallel: true
     
     post:
         - ? |
@@ -57,8 +55,6 @@ test:
                     cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests
                     ;;
             esac
-        :
-            parallel: true
 
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
    
