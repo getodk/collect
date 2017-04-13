@@ -30,14 +30,14 @@ the License.
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/form_scan_starting"
-			android:textSize="14sp"
-			android:paddingStart="8dip"
-			android:paddingLeft="8dip"
-			android:paddingEnd="8dip"
-			android:paddingRight="8dip"
-			android:paddingBottom="4dip"
-			android:paddingTop="4dip"
-			android:background="#DDDDDD"/>
+			android:textSize="@dimen/textsize_status_tv"
+			android:paddingStart="@dimen/horizontal_padding_status_tv"
+			android:paddingLeft="@dimen/horizontal_padding_status_tv"
+			android:paddingEnd="@dimen/horizontal_padding_status_tv"
+			android:paddingRight="@dimen/horizontal_padding_status_tv"
+			android:paddingBottom="@dimen/vertical_padding_status_tv"
+			android:paddingTop="@dimen/vertical_padding_status_tv"
+			android:background="@color/background_status_tv"/>
 
 		<include layout="@layout/search_box_layout"/>
 
@@ -51,21 +51,23 @@ the License.
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:text="@string/no_items_display_forms"
-			android:textSize="21sp"
-			android:paddingStart="20dip"
-			android:paddingLeft="20dp"
-			android:paddingEnd="20dip"
-			android:paddingRight="20dp"
+			android:textSize="@dimen/textsize_empty_list_alt_tv"
+			android:paddingStart="@dimen/padding_empty_list_alt_tv"
+			android:paddingLeft="@dimen/padding_empty_list_alt_tv"
+			android:paddingEnd="@dimen/padding_empty_list_alt_tv"
+			android:paddingRight="@dimen/padding_empty_list_alt_tv"
 			android:gravity="center"
-			android:textColor="@drawable/black" />
+			android:background="@color/background_empty_list_alt_tv"
+			android:textColor="@color/text_color_empty_list_alt_tv" />
+
 	</LinearLayout>
 
 	<!-- Side navigation drawer UI -->
 	<ListView
 		android:id="@+id/sortingMenu"
-		android:layout_width="250dp"
+		android:layout_width="@dimen/width_side_navigation_drawer"
 		android:layout_height="match_parent"
 		android:layout_gravity="end"
-		android:background="#DDDDDD"/>
+		android:background="@color/background_navigation_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>

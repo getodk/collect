@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--dimensions for chooser_list_layout.xml-->
+
+    <!--Layout Dimensions-->
+    <dimen name="horizontal_padding_status_tv">8dp</dimen>
+    <dimen name="vertical_padding_status_tv">4dp</dimen>
+    <dimen name="padding_empty_list_alt_tv">20dp</dimen>
+    <dimen name="width_side_navigation_drawer">250dp</dimen>
+
+    <!--Text Sizes-->
+    <dimen name="textsize_status_tv">14sp</dimen>
+    <dimen name="textsize_empty_list_alt_tv">21sp</dimen>
+
+</resources>

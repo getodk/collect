@@ -19,4 +19,11 @@ the License.
     <drawable name="white">#ffffffff</drawable>
     <drawable name="black">#ff000000</drawable>
 
+    <!--colors for chooser_list_layout.xml-->
+
+    <color name="background_empty_list_alt_tv">#FFFFFF</color>
+    <color name="text_color_empty_list_alt_tv">#000000</color>
+    <color name="background_status_tv">#DDDDDD</color>
+    <color name="background_navigation_drawer">#DDDDDD</color>
+
 </resources>
