@@ -273,7 +273,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     private String formatGps(double coordinates, String type) {
         String location = Double.toString(coordinates);
-        String degreeSign = "\u00B0";
+        String degreeSign = "°";
         String degree = location.substring(0, location.indexOf("."))
                 + degreeSign;
         location = "0." + location.substring(location.indexOf(".") + 1);
