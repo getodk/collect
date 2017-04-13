@@ -924,7 +924,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 mTimerLogger.exitView(TimerLogger.EventTypes.VIEW_END);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -936,7 +936,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
 
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.PREFERENCES, 0, null);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.PREFERENCES, 0, null, false);
 
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
@@ -1083,7 +1083,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 
         mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
-                event, formController.getFormIndex().getReference());
+                event, formController.getFormIndex().getReference(), advancingPage);
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1727,7 +1727,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         };
 
         mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
-                FormEntryController.EVENT_PROMPT_NEW_REPEAT, null);
+                FormEntryController.EVENT_PROMPT_NEW_REPEAT, null, false);
 
         if (formController.getLastRepeatCount() > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
@@ -1871,12 +1871,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         // Log user events
-        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null);
+        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false);
         if (exit) {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false);
         }
         if (complete) {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false);
         }
 
         synchronized (saveDialogLock) {
@@ -2113,7 +2113,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * the form.
      */
     private void createLanguageDialog() {
-        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.LANGUAGE, 0, null);
+        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.LANGUAGE, 0, null, false);
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createLanguageDialog", "show");
         FormController formController = Collect.getInstance()
@@ -2586,7 +2586,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mTimerLogger = new TimerLogger(instanceFile,
                         PreferenceManager.getDefaultSharedPreferences(this),
                         formController);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false);
 
             }
         } else {
@@ -2601,7 +2601,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mTimerLogger = new TimerLogger(formController.getInstancePath(),
                         PreferenceManager.getDefaultSharedPreferences(this),
                         formController);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false);
 
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);

@@ -18,7 +18,8 @@ import static android.os.SystemClock.sleep;
 public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
     private final static String t = "TimerSaveTask";
     private static File file;
-    private static String TIMING_CSV_HEADER = "event, node, start, end";
+    private static String TIMING_CSV_HEADER = "event, node, start, end, dirn";
+
     public TimerSaveTask(File file) {
         this.file = file;
     }
@@ -30,7 +31,7 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
         try {
             boolean newFile = !file.exists();
             fw = new FileWriter(file, true);
-            if(newFile) {
+            if (newFile) {
                 fw.write(TIMING_CSV_HEADER + "\n");
             }
             if (params.length > 0) {

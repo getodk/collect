@@ -42,6 +42,7 @@ public class TimerLogger {
         EventTypes eventType;
         int fecType;
         String node;
+        String dirn;
 
         long end;
         boolean endTimeSet;
@@ -54,11 +55,17 @@ public class TimerLogger {
         /*
          * Create a new event
          */
-        Event(long start, EventTypes eventType, int fecType, String node) {
+        Event(long start, EventTypes eventType, int fecType, String node, boolean advancingPage) {
             this.start = start;
             this.eventType = eventType;
             this.fecType = fecType;
             this.node = node;
+
+            if(eventType == EventTypes.FEC && fecType == FormEntryController.EVENT_QUESTION) {
+                this.dirn = advancingPage ? "fwd" : "back";
+            } else {
+                this.dirn = "";
+            }
 
             end = 0;
             endTimeSet = false;
@@ -131,7 +138,7 @@ public class TimerLogger {
          * convert the event into a record to write to the CSV file
          */
         public String toString() {
-            String sType = "unknown";
+            String sType = null;
             switch (eventType) {
                 case FEC:
                     switch (fecType) {
@@ -183,7 +190,8 @@ public class TimerLogger {
                     break;
             }
             return sType + "," + node + "," + String.valueOf(start) + ","
-                    + (end != 0 ? String.valueOf(end) : "");
+                    + (end != 0 ? String.valueOf(end) : "") + ","
+                    + dirn;
         }
     }
 
@@ -228,14 +236,14 @@ public class TimerLogger {
         }
     }
 
-    public void logTimerEvent(EventTypes eventType, int fecType, TreeReference ref) {
+    public void logTimerEvent(EventTypes eventType, int fecType, TreeReference ref, boolean advancingPage) {
 
         if (mTimerEnabled) {
             // Calculate the time and add the event to the events array
             long start = getEventTime();
             String node = ref == null ? "" : ref.toString();
 
-            Event newEvent = new Event(start, eventType, fecType, node);
+            Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
 
             // Ignore the event if we are already in an interval view event ie the question has been refreshed
             if (newEvent.isIntervalViewEvent()) {
