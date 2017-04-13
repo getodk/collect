@@ -16,9 +16,9 @@
 
     <property name="fileExtensions" value="java, properties, xml"/>
 
-    <!-- <module name="FileTabCharacter">
+     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
-    </module> -->
+    </module> 
 
     <module name="TreeWalker">
     	<!-- ODK-specific additions -->
