@@ -290,7 +290,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 InputStream is = null;
                 if(statusCode != HttpStatus.SC_OK) {
                     Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
-                    results.put(Collect.getInstance().getString(R.string.smap_get_tasks), response.getStatusLine().getReasonPhrase());
+                    results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
+                            Utilities.translateMsg(response.getStatusLine().getReasonPhrase()));
                     throw new Exception(response.getStatusLine().getReasonPhrase());
                 }
 
@@ -568,7 +569,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             if (statusCode != HttpStatus.SC_OK) {
                 Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
                 results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
-                        response.getStatusLine().getReasonPhrase());
+                        Utilities.translateMsg(response.getStatusLine().getReasonPhrase()));
                 WebUtils.discardEntityBytes(response);
                 throw new Exception(response.getStatusLine().getReasonPhrase());
             }
