@@ -9,7 +9,7 @@ public final class PreferenceKeys {
     public static final String KEY_DELETE_AFTER_SEND        = "delete_send";
     public static final String KEY_ANALYTICS                = "analytics";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";
-
+    public static final String KEY_APP_LANGUAGE             = "app_language";
 
     public static final String KEY_PROTOCOL                 = "protocol";
            static final String KEY_PROTOCOL_SETTINGS        = "protocol_settings";
@@ -19,6 +19,14 @@ public final class PreferenceKeys {
     public static final String KEY_SELECTED_GOOGLE_ACCOUNT  = "selected_google_account";
     public static final String KEY_USERNAME                 = "username";
     public static final String KEY_PASSWORD                 = "password";
+
+    // METADATA
+           static final String KEY_FORM_METADATA            = "form_metadata";
+    /** Whether any existing username and email values have been migrated to form metadata */
+           static final String KEY_METADATA_MIGRATED        = "metadata_migrated";
+    public static final String KEY_METADATA_USERNAME        = "metadata_username";
+    public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
+    public static final String KEY_METADATA_EMAIL           = "metadata_email";
 
     // AGGREGATE SPECIFIC
     public static final String KEY_SERVER_URL               = "server_url";
@@ -53,7 +61,7 @@ public final class PreferenceKeys {
     public static final String KEY_MAP_SDK                  = "map_sdk_behavior";
     public static final String KEY_MAP_BASEMAP              = "map_basemap_behavior";
 
-           static final int ARRAY_INDEX_GOOGLE_MAPS         = 0;
+           static final int    ARRAY_INDEX_GOOGLE_MAPS      = 0;
            static final String OSM_BASEMAP_KEY              = "osmdroid";
            static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";

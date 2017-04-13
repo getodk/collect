@@ -17,7 +17,6 @@
   <string name="cancel">বাতিল</string>
   <string name="cancel_loading_form">বাতিল</string>
   <string name="cancel_location">বাতিল</string>
-  <string name="cannot_edit_completed_form">যদি একবার এটি সমাপ্ত হিসেবে চিহ্নিত করা হয়ে যায় তবে এই ফর্মটি পুনরায় আর সম্পাদনা করা যাবে না। এটি হয়ত সঙ্কেতায়িত করা অবস্থায় রয়েছে।</string>
   <string name="capture_audio">শব্দ রেকর্ড</string>
   <string name="capture_image">ছবি তোলা </string>
   <string name="capture_osm">OpenMapKit চালু করুন</string>
@@ -119,7 +118,6 @@
   <string name="send_data">চূড়ান্ত ফরম পাঠান</string>
   <string name="send_data_button">চূড়ান্ত ফরম (%s) পাঠান</string>
   <string name="send_selected_data">নির্বাচিত ফরমটি পাঠান </string>
-  <string name="server_auth_credentials">দয়া করে সার্ভার server:%s এর জন্য ব্যবহারকারীর নির্দিষ্ট নাম ও পাসওয়ার্ড </string>
   <string name="server_requires_auth">সার্ভারে প্রমাণীকরণ অপরিহার্য আবশ্যক</string>
   <string name="server_url">ইউআরএল </string>
   <string name="server_preferences">সার্ভার নির্দিষ্টকরণ</string>
@@ -197,7 +195,6 @@
   <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
   <string name="admin_access_settings">অ্যাডমিনের settings</string>
   <string name="user_access_form_entry">ব্যবহারকারীর ফর্ম এ প্রবেশ</string>
-  <string name="admin_advanced_settings">অ্যাডমিনের advanced_settings</string>
   <string name="save_mid">সংরক্ষণ করুন ফরম </string>
   <string name="enter_new_password">পাসওয়ার্ড দিন।</string>
   <string name="verify_new_password">পুনরায় পাসওয়ার্ড দিন।</string>
@@ -220,7 +217,6 @@
   <string name="buttons_navigation">buttons নেভিগেশান</string>
   <string name="swipe_buttons_navigation">swipe buttons নেভিগেশান</string>
   <string name="swipe_instructions">আপনি %s টি শুরুতে বিষয় ঠিক করতে পরদার নীচের দিকে উপর নীচ করে নিরধারণ করুন</string>
-  <string name="form_processing_logic">ফর্ম প্রসেসিং logic</string>
   <string name="launch_printer">প্রিন্টার চালু</string>
   <string name="no_printer">প্রিন্টার নেই</string>
   <string name="constraint_behavior">constraint_behavior</string>

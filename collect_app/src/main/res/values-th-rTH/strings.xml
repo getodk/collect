@@ -17,7 +17,6 @@
   <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>
-  <string name="cannot_edit_completed_form">แบบสำรวจอาจถูกเข้ารหัสและจะแก้ไขไม่ได้อีก หากถูกทำเครื่องหมายว่าเสร็จสมบูรณ์แล้ว</string>
   <string name="capture_audio">บันทึกเสียง</string>
   <string name="capture_image">บันทึกภาพ</string>
   <string name="capture_osm">เปิด OpenMapKit</string>
@@ -118,7 +117,6 @@
   <string name="send_data">ส่งแบบสำรวจที่ทำเสร็จแล้ว</string>
   <string name="send_data_button">ส่งแบบสำรวจที่เสร็จสมบูรณ์แล้ว (%s)</string>
   <string name="send_selected_data">ส่งแบบสำรวจที่เลือกไว้</string>
-  <string name="server_auth_credentials">กรุณาใส่ชื่อผู้ใช้และรหัสผ่านสำหรับเซิร์ฟเวอร์: %s</string>
   <string name="server_requires_auth">Server Requires Authentication</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">ตั้งค่าเซิร์ฟเวอร์</string>
@@ -211,7 +209,6 @@
   <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="admin_advanced_settings">การตั้งค่าขั้นสูง (เมื่อได้รับอนุญาต):</string>
   <string name="save_mid">บันทึกแบบสำรวจ</string>
   <string name="enter_new_password">ใส่รหัสผ่านใหม่</string>
   <string name="verify_new_password">ยืนยันรหัสผ่านใหม่</string>
@@ -240,12 +237,6 @@
   <string name="swipe_instructions">เริ่มต้นแบบสำรวจ %s. เลื่อนหน้าจอตามที่แสดงด้านล่างเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
   <string name="buttons_instructions">เริ่มต้นแบบสำรวจ %s. แตะปุ่มลูกศรด้านล่างเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
   <string name="swipe_buttons_instructions">เริ่มต้นแบบสำรวจ %s. เลื่อนหน้าจอตามที่แสดงด้านล่างหรือแตะปุ่มลูกศรเพื่อเลื่อนไปข้างหน้าหรือย้อนกลับ</string>
-  <string name="form_processing_logic">ตรรกะการประมวลผลแบบฟอร์ม</string>
-  <string name="form_processing_logic_recommended">แนะนำให้ใช้ (ค่าตั้งต้น)</string>
-  <string name="form_processing_logic_0">มกราคม 2015 (เร็วที่สุด)</string>
-  <string name="form_processing_logic_1">มกราคม 2015 (ปลอดภัยที่สุด)</string>
-  <string name="form_processing_logic_2">กลางปี 2014 (ช้า)</string>
-  <string name="form_processing_logic_3">ต้นปี 2014 (เร็ว)</string>
   <string name="launch_printer">เริ่มต้นการพิมพ์</string>
   <string name="no_printer">เครื่องพิมพ์ที่เลือกยังไม่ได้ติดตั้ง กรุณาติดตั้งเครื่องพิมพ์</string>
   <string name="constraint_behavior">ลักษณะการประมวลผลแบบมีเงื่อนไข</string>
@@ -262,9 +253,9 @@
   <string name="ext_conflicting_columns_error">คอลัมน์ %s ตรงกัน</string>
   <string name="ext_sortBy_numeric_error">ข้อมูลในคอลัมน์ที่จัดเรียงต้องมีค่าเป็นตัวเลข ค่าที่ผิดพลาดคือ \'%s\'</string>
   <string name="ext_import_generic_error">ไม่สามารถนำเข้าข้อมูลจาก %1$s. เนื่องจาก: %2$s</string>
-  <string name="ext_import_progress_message">กำลังโหลดข้อมูลล่วงหน้าจาก \'%1$s\', กรุณารอสักครู่... %2$s</string>
+  <string name="ext_import_progress_message">กำลังโหลดข้อมูลล่วงหน้าจาก \'%1$s\', กรุณารอสักครู่… %2$s</string>
   <string name="ext_import_cancelled_message">การอ่านข้อมูลถูกยกเลิก</string>
-  <string name="ext_import_finalizing_message">กำลังตรวจสอบข้อมูลตั้งต้น...</string>
+  <string name="ext_import_finalizing_message">กำลังตรวจสอบข้อมูลตั้งต้น…</string>
   <string name="ext_import_completed_message">การอ่านข้อมูลเสร็จสมบูรณ์</string>
   <string name="ext_not_initialized_error">ระบบจัดการข้อมูลภายนอกยังไม่ถูกเปิดใช้งาน</string>
   <string name="ext_import_csv_missing_error">ข้อมูลภายนอกของ %1$s ยังไม่ถูกนำเข้า เป็นไปได้ว่าคุณลืมแนบไฟล์ %2$s.csv ไว้กับแบบสำรวจ</string>
@@ -273,7 +264,7 @@
   <string name="fs_create_media_folder_error">ไม่สามารถสร้างแฟ้มมีเดีย \'%s\'</string>
   <string name="fs_file_copy_error">ไม่สามารถคัดลอก \'%1$s\' บน \'%2$s\' เนื่องจาก %3$s</string>
   <string name="survey_multiple_forms_error">คุณดาวน์โหลดแบบสำรวจสองฉบับที่มีชื่อและรุ่นตรงกัน ซึ่งอาจเป็นแบบสำรวจเดียวกันที่ถูกอัพโหลดต่างเวลาหรือต่างเซิร์ฟเวอร์ อย่างไรก็แล้วแต่ ควรลบออกหนึ่งฉบับ</string>
-  <string name="survey_loading_reading_form_message">กำลังอ่านคำจำกัดความของแบบสอบถาม...</string>
+  <string name="survey_loading_reading_form_message">กำลังอ่านคำจำกัดความของแบบสอบถาม…</string>
   <string name="survey_loading_reading_data_message">กำลังอ่านข้อมูลการสำรวจ</string>
   <string name="survey_loading_reading_csv_message">กำลังอ่านไฟล์ CSV</string>
   <string name="survey_saving_validating_message">กำลังตรวจความถูกต้องของคำตอบ</string>
@@ -296,8 +287,6 @@
   <string name="google_set_account">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
   <string name="invalid_oauth">OAuth 2 token ไม่ถูกต้อง</string>
   <string name="google_repeat_error">ไม่รองรับการทำซ้ำโดย Google Sheet ในตอนนี้</string>
-  <string name="google_audio_error">ไม่รองรับการใช้ไฟล์เสียงโดย Google Sheets ในตอนนี้</string>
-  <string name="google_video_error">ไม่รองรับการใช้ไฟล์วิดีโอโดย Google Sheets ในตอนนี้</string>
   <string name="media_upload_error">ไม่สามารถอัพโหลดรูปภาพที่ไม่มีอยู่ได้ %1$s</string>
   <string name="odk_auth_auth_fail">การตรวจสอบ ODK Autosend authentication ล้มเหลว โปรดตรวจสอบการตั้งค่าให้ถูกต้อง</string>
   <string name="odk_auto_note">เตือน ODK Autosend</string>
@@ -307,13 +296,11 @@
   <string name="change_server_url">URL ของเซิร์ฟเวอร์</string>
   <string name="google_search_browse">ค้นหาแบบฟอร์ม หรือเลือก \'My Drive\' ด้านล่างเพื่อค้นหา</string>
   <string name="no_blank_search">ช่องค้นหาปล่อยว่างไม่ได้</string>
-  <string name="google_sheets_url">Google Sheets URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
   <string name="sheets_google_account_needed">คุณเลือก Google Sheets เป็นเซิร์ฟเวอร์ โปรดเลือกบัญชี Google ที่เกี่ยวข้องในการตั้งค่าทั่วไปก่อนดำเนินการต่อ</string>
   <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
-  <string name="google_sheets_access_denied">เข้าถึงไม่ได้ แน่ใจหรือไม่ว่าเจ้าของ spreadsheet ให้อนุญาตในการเข้าถึง</string>
   <string name="google_sheets_missing_columns">ไม่มี Spreadsheet ของคอลัมภ์: %1$s</string>
   <string name="password_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังรหัสผ่าน</string>
   <string name="username_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังชื่อผู้ใช้</string>

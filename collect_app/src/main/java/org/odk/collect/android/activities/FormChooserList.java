@@ -18,13 +18,12 @@ import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -36,6 +35,8 @@ import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
  * selected form for use by {@link MainMenuActivity}.
@@ -44,8 +45,8 @@ import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormChooserList extends FormListActivity implements DiskSyncListener {
+    private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
-    private static final String t = "FormChooserList";
     private static final boolean EXIT = true;
     private static final String syncMsgKey = "syncmsgkey";
 
@@ -68,7 +69,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.enter_data));
 
-        setupAdapter(FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC");
+        setupAdapter();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
             TextView tv = (TextView) findViewById(R.id.status_text);
@@ -79,7 +80,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         // that is, put here by dragging and dropping onto the SDCard
         mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
         if (mDiskSyncTask == null) {
-            Log.i(t, "Starting new disk sync task");
+            Timber.i("Starting new disk sync task");
             mDiskSyncTask = new DiskSyncTask();
             mDiskSyncTask.setDiskSyncListener(this);
             mDiskSyncTask.execute((Void[]) null);
@@ -170,13 +171,12 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     public void syncComplete(String result) {
-        Log.i(t, "disk sync task complete");
+        Timber.i("Disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
     }
 
-    @Override
-    protected void setupAdapter(String sortOrder) {
+    private void setupAdapter() {
         String[] data = new String[]{
                 FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
         };
@@ -185,14 +185,23 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         };
 
         mListAdapter =
-                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, new FormsDao().getFormsCursor(sortOrder), data, view);
+                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
 
         setListAdapter(mListAdapter);
     }
 
     @Override
-    protected void filter(CharSequence charSequence) {
-        mListAdapter.changeCursor(new FormsDao().getFilteredFormsCursor(charSequence));
+    protected String getSortingOrderKey() {
+        return FORM_CHOOSER_LIST_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+    }
+
+    private Cursor getCursor() {
+        return new FormsDao().getFormsCursor(getFilterText(), getSortingOrder());
     }
 
     /**

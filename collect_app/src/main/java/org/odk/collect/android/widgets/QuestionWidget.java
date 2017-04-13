@@ -36,8 +36,6 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -47,6 +45,8 @@ import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
 
@@ -148,6 +148,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayColor = Color.parseColor(playColorString);
             } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
         questionMediaLayout.setPlayTextColor(mPlayColor);
@@ -158,6 +159,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 mPlayBackgroundColor = Color.parseColor(playBackgroundColorString);
             } catch (IllegalArgumentException e) {
+                Timber.e(e, "Argument %s is incorrect", playBackgroundColorString);
             }
         }
         questionMediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
@@ -376,19 +378,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         }
     }
 
-    // Skip over a "daylight savings gap". This is needed on the day and time of a daylight savings
-    // transition because that date/time doesn't exist.
-    // Today clocks are almost always set one hour back or ahead.
-    // Throughout history there have been several variations, like half adjustments (30 minutes) or
-    // double adjustment (two hours). Adjustments of 20 and 40 minutes have also been used.
-    // https://www.timeanddate.com/time/dst/
-    protected LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime ldt) {
-        while (DateTimeZone.getDefault().isLocalDateTimeGap(ldt)) {
-            ldt = ldt.plusMinutes(1);
-        }
-        return ldt;
-    }
-
     /**
      * It's needed only for external choices. Everything works well and
      * out of the box when we use internal choices instead
@@ -406,6 +395,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
+                Timber.e(e);
             }
         }
     }

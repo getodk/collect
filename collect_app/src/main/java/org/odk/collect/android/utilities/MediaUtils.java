@@ -42,6 +42,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Consolidate all interactions with media providers here.
  *
@@ -129,7 +131,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete image file from media provider");
         } finally {
             if (imageCursor != null) {
                 imageCursor.close();
@@ -174,7 +176,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete images in folder %s", folder.getAbsoluteFile());
         } finally {
             if (imageCursor != null) {
                 imageCursor.close();
@@ -244,7 +246,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete audio file %s ", audioFile);
         } finally {
             if (audioCursor != null) {
                 audioCursor.close();
@@ -289,7 +291,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete audio files in folder %s", folder.getAbsolutePath());
         } finally {
             if (audioCursor != null) {
                 audioCursor.close();
@@ -359,7 +361,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete video file %s", videoFile);
         } finally {
             if (videoCursor != null) {
                 videoCursor.close();
@@ -404,7 +406,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete video files in folder %s", folder.getAbsolutePath());
         } finally {
             if (videoCursor != null) {
                 videoCursor.close();
@@ -570,6 +572,7 @@ public class MediaUtils {
             }
             return new File(filePath);
         } catch (IOException e) {
+            Timber.e(e);
         } finally {
             IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(outputStream);

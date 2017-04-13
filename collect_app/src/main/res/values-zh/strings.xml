@@ -15,7 +15,6 @@
   <string name="cancel">取消</string>
   <string name="cancel_loading_form">取消</string>
   <string name="cancel_location">取消</string>
-  <string name="cannot_edit_completed_form">此表格在标记为已完成之后不可更改. 它可能已被加密.</string>
   <string name="capture_audio">录音</string>
   <string name="capture_image">照相</string>
   <string name="capture_video">拍摄视频</string>
@@ -110,7 +109,6 @@
   <string name="send_data">上传完成的表格</string>
   <string name="send_data_button">上传完成的表格 (%s)</string>
   <string name="send_selected_data">上传选定项</string>
-  <string name="server_auth_credentials">請輸入服務器:%s的用戶名及密碼</string>
   <string name="server_requires_auth">服务器要求验证身份</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">服务器设置</string>
@@ -230,10 +228,6 @@
   <string name="swipe_instructions">您在 %s 的开始. 如屏幕所示滑动以前进或后退.</string>
   <string name="buttons_instructions">您在 %s 的开始. 点击下面的箭头按钮以前进或后退.</string>
   <string name="swipe_buttons_instructions">您在 %s 的开始. 如屏幕所示滑动或点击下面的箭头按钮以前进或后退.</string>
-  <string name="form_processing_logic_0">2015年1月(最快)</string>
-  <string name="form_processing_logic_1">2015年1月(最安全)</string>
-  <string name="form_processing_logic_2">2014年中(緩慢)</string>
-  <string name="form_processing_logic_3">2014年初(快速)</string>
   <string name="launch_printer">初始化打印</string>
   <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
   <string name="constraint_behavior">约束检查</string>

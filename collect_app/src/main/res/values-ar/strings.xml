@@ -17,7 +17,6 @@
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
-  <string name="cannot_edit_completed_form">يتعذر تعديل هذه الاستمارة عندما يتم وضع علامة على أنها مكتملة. قد تكون مشفرة.</string>
   <string name="capture_audio">تسجيل الصوت</string>
   <string name="capture_image">التقط صورة</string>
   <string name="capture_osm">شغل ال OpenMapKit</string>
@@ -87,7 +86,7 @@
   <string name="location_accuracy">الدقة هي is %1$s متر</string>
   <string name="longitude">خط الطول</string>
   <string name="main_menu">القائمة الأساسية</string>
-  <string name="main_menu_details">جمع البيانات أصبح أسهل...</string>
+  <string name="main_menu_details">جمع البيانات أصبح أسهل…</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
   <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>
   <string name="noselect_error">عذرًا، لم تختَر أيّ استمارة!</string>
@@ -120,7 +119,6 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة النهائية (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
-  <string name="server_auth_credentials">الرجاء ادخال اسم المستخدم وكلمة المرور الخاصة بالخادم: %s</string>
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
@@ -151,7 +149,7 @@
   <string name="submission_url">مسار الارسال</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
-  <string name="form_scan_starting">البحث عن الاستمارات...</string>
+  <string name="form_scan_starting">البحث عن الاستمارات…</string>
   <string name="access_error">خطأ اثناء الوصول %s:</string>
   <string name="manifest_server_error">المانيفست لايعلم نسخة OpenRosa - الخادم لايستجيب؟</string>
   <string name="root_element_error">العنصرالأساسي &lt;manifest\&gt; كان %s</string>
@@ -213,7 +211,6 @@
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="user_access_form_entry">يمكن للمستخدم الوصول الى عناصر تعبئة الاستمارة:</string>
-  <string name="admin_advanced_settings">اعدادات متقدمة </string>
   <string name="save_mid">حفظ الاستمارة</string>
   <string name="enter_new_password">أدخل كلمة مرور جديدة</string>
   <string name="verify_new_password">أعد إدخال كلمة المرور الجديدة</string>
@@ -242,12 +239,6 @@
   <string name="swipe_instructions">انت في بداية %s. اسحب الشاشىة كما مبين في الاسفل للذهاب الى الخلف او للأمام.</string>
   <string name="buttons_instructions">انت في بداية %s. اضغط على ازرار السهم للذهاب للخلف او للأمام.</string>
   <string name="swipe_buttons_instructions">كنت في بداية %s. اسحب الشاشة كما هو مبين في الاسفل او اضغط ازرار السهم للذهاب للخلف او للأمام.</string>
-  <string name="form_processing_logic">منطق تجهيز الاستمارة</string>
-  <string name="form_processing_logic_recommended">التوصيات (الافتراضية)</string>
-  <string name="form_processing_logic_0">كانون الثاني 2015 (الاسرع)</string>
-  <string name="form_processing_logic_1">كانون الثاني 2015 (الاكثر امانا)</string>
-  <string name="form_processing_logic_2">منتصف 2014 (بطيء)</string>
-  <string name="form_processing_logic_3">مبكرا 2014 (سريع)</string>
   <string name="launch_printer">البدء بالطباعة</string>
   <string name="no_printer">لم يتم تثبيت الطابعة المختارة. يرجى تثبيتها اولا.</string>
   <string name="constraint_behavior">معالجة القيود جارية</string>
@@ -268,7 +259,7 @@
   <string name="ext_search_bad_function_error">خطا في عملية البحث:  \'%s\' لم يتم تقييمها كعملية</string>
   <string name="ext_search_return_error">معالج البحث استعاد نوع الموضوع  \'%s\'.</string>
   <string name="ext_import_generic_error">لم يمكن استيراد البيانات من  %1$s السبب: %2$s</string>
-  <string name="ext_import_progress_message">التحميل المسبق للبيانات من \'%1$s\'،  يرجى الانتظار...  %2$s</string>
+  <string name="ext_import_progress_message">التحميل المسبق للبيانات من \'%1$s\'،  يرجى الانتظار…  %2$s</string>
   <string name="ext_import_cancelled_message">الغاء قراءة البيانات!</string>
   <string name="ext_import_finalizing_message">جاري انهاء التحميل المسبق للبيانات.</string>
   <string name="ext_import_completed_message">اكتملت قراءة البيانات!</string>
@@ -281,10 +272,10 @@
   <string name="fs_file_copy_error">لا يمكن النسخ  \'%1$s\' فوق  \'%2$s\'. السبب: \'%3$s\'</string>
   <string name="survey_internal_error">خطأ داخلي: فشل الخطأ الموجه.</string>
   <string name="survey_multiple_forms_error">قمت بتحميل استمارتين مختلفتين بنفس رقم النموذج والاصدار. ربما قد يكون نفس النموذج تم تحميله في اوقات مختلفة او في خودام مختلفة. بأي حال يجب عليك حذف واحدة.</string>
-  <string name="survey_loading_reading_form_message">القراءة من التعريف...</string>
-  <string name="survey_loading_reading_data_message">قراءة بيانات الدراسة...</string>
+  <string name="survey_loading_reading_form_message">القراءة من التعريف…</string>
+  <string name="survey_loading_reading_data_message">قراءة بيانات الدراسة…</string>
   <string name="survey_loading_reading_csv_message">قراءة ملفات CSV..</string>
-  <string name="survey_saving_validating_message">تدقيق الاجابات...</string>
+  <string name="survey_saving_validating_message">تدقيق الاجابات…</string>
   <string name="survey_saving_collecting_message">جمع البيانات</string>
   <string name="survey_saving_saving_message">جاري الحفظ في بطاقة SD</string>
   <string name="survey_saving_finalizing_message">جاري  انهاء الاستمارات  في بطاقة </string>
@@ -305,8 +296,6 @@
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
   <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="google_audio_error">الملفات الصوتية غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="google_video_error">ملفات الفيديو غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
   <string name="media_upload_error">فشل تحميل الصورة الغير موجودة: %1$s</string>
   <string name="odk_auth_auth_fail">فشل ارسال مصادقة المعلومات, رجاءا تأكد من أن جميع الاعدادات صحيحة</string>
   <string name="odk_auto_note">ارسال الاشعارات تلقائيا</string>
@@ -316,13 +305,11 @@
   <string name="change_server_url">رابط الخادم</string>
   <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
   <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا.</string>
-  <string name="google_sheets_url">رابط صفحات الجوجل</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="sheets_google_account_needed">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
-  <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن الوصول لك.</string>
   <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>
   <string name="password_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في كلمات المرور</string>
   <string name="username_error_whitespace">الزيادات في البداية أو الفراغات غير مسموح بها في اسم المستخدم</string>

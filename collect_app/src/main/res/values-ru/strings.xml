@@ -17,7 +17,6 @@
   <string name="cancel">Отмена</string>
   <string name="cancel_loading_form">Отмена</string>
   <string name="cancel_location">Отмена</string>
-  <string name="cannot_edit_completed_form">Эта форма отмечена как завершённая и не может быть отредактирована, но её можно зашифровать.</string>
   <string name="capture_audio">Записать аудио</string>
   <string name="capture_image">Сделать снимок</string>
   <string name="capture_video">Записать видео</string>
@@ -118,7 +117,6 @@
   <string name="send_data">Отправить завершённую форму</string>
   <string name="send_data_button">Отправить завершенную форму (%s)</string>
   <string name="send_selected_data">Отправить выбранные</string>
-  <string name="server_auth_credentials">Пожалуйста, введить имя пользователя и пароль для сервера: %s</string>
   <string name="server_requires_auth">Необходима аутентификация</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Настройки сервера</string>
@@ -211,7 +209,6 @@
   <string name="admin_preferences">Администрирование</string>
   <string name="admin_access_settings">Нажмите для админского доступа к настройкам</string>
   <string name="user_access_form_entry">Пользователь имеет доступ в формах к:</string>
-  <string name="admin_advanced_settings">Дополнительные настройки:</string>
   <string name="save_mid">Сохранить форму</string>
   <string name="enter_new_password">Укажите новый пароль</string>
   <string name="verify_new_password">Повтор нового пароля</string>
@@ -240,12 +237,6 @@
   <string name="swipe_instructions">Вы находитесь в начале %s. Прокручивайте экран, как показано ниже, чтобы двигаться вперёд и назад.</string>
   <string name="buttons_instructions">Вы находитесь в начале %s. Нажимайте кнопки со стрелками, чтобы двигаться вперёд и назад.</string>
   <string name="swipe_buttons_instructions">Вы находитесь в начале %s. Прокручивайте экран, как показано ниже, или нажимайте кнопки со стрелками, чтобы двигаться вперёд и назад.</string>
-  <string name="form_processing_logic">Логика обработки формы</string>
-  <string name="form_processing_logic_recommended">Рекомендуемая (по умолчанию)</string>
-  <string name="form_processing_logic_0">От января 2015 (самая быстрая)</string>
-  <string name="form_processing_logic_1">От января 2015 (самая безопасная)</string>
-  <string name="form_processing_logic_2">От середины 2014 (медленная)</string>
-  <string name="form_processing_logic_3">От начала 2014 (быстрая)</string>
   <string name="launch_printer">Распечатать</string>
   <string name="no_printer">Принтер не установлен или не подключен.</string>
   <string name="constraint_behavior">Способ проверки ограничений</string>
@@ -299,7 +290,6 @@
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="invalid_oauth">Неверный OAuth 2 токен</string>
-  <string name="media_upload_error">Не удалось загрузить несуществующее фото: %1$s</string>
   <string name="odk_auth_auth_fail">Ошибка аутентификации при автоматической отправке. Пожалуйста, проверьте настройки</string>
   <string name="odk_auto_note">Уведомление автоматической отправки ODK</string>
   <string name="notification_error">Ошибка отображения текста уведомления</string>

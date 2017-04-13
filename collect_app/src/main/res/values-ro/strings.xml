@@ -17,7 +17,6 @@
   <string name="cancel">Anulează</string>
   <string name="cancel_loading_form">Anulează</string>
   <string name="cancel_location">Anulează</string>
-  <string name="cannot_edit_completed_form">Acest formular nu poate fi modificat după ce a fost marcat ca fiind completat. Acesta poate fi criptat.</string>
   <string name="capture_audio">Înregistrează sunet</string>
   <string name="capture_image">Fă o poză</string>
   <string name="capture_osm">Lansează OpenMapKit</string>
@@ -120,7 +119,6 @@
   <string name="send_data">Trimiteți formular finalizat</string>
   <string name="send_data_button">Trimiteți formular finalizat (%s)</string>
   <string name="send_selected_data">Trimiteți selectatele</string>
-  <string name="server_auth_credentials">Vă rugăm să introduceți numele de utilizator și parola pentru server: %s</string>
   <string name="server_requires_auth">Serverul necesită autentificare</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Setări server</string>
@@ -213,7 +211,6 @@
   <string name="admin_preferences">Setări administrator</string>
   <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
   <string name="user_access_form_entry">Utilizatorul poate accesa itemii din formular:</string>
-  <string name="admin_advanced_settings">Setări avansate (când este indicat):</string>
   <string name="save_mid">Salvați formularul</string>
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="verify_new_password">Reintroduceți noua parolă</string>
@@ -244,12 +241,6 @@
   <string name="swipe_instructions">Sunteți la începutul %s. Trageți ecranul cum este afișat mai jos pentru a naviga înainte și înapoi.</string>
   <string name="buttons_instructions">Sunteți la începutul %s. Atingeți butoanele-săgeată cum este afișat mai jos pentru a naviga înainte și înapoi.</string>
   <string name="swipe_buttons_instructions">Sunteți la începutul %s. Trageți ecranul cum este afișat mai jos sau atingeți butoanele săgeată pentru a naviga înainte și înapoi.</string>
-  <string name="form_processing_logic">Logica procesării formularului</string>
-  <string name="form_processing_logic_recommended">Recomandat (implicit)</string>
-  <string name="form_processing_logic_0">Ianuarie 2015 (cel mai rapid)</string>
-  <string name="form_processing_logic_1">Ianuarie 2015 (cel mai sigur)</string>
-  <string name="form_processing_logic_2">Mijlocul lui 2014 (încet)</string>
-  <string name="form_processing_logic_3">Începutul lui 2014 (cel mai rapid)</string>
   <string name="launch_printer">Printare inițializată</string>
   <string name="no_printer">Imprimanta specificată nu este instalată. Vă rugăm să instalați implimanta.</string>
   <string name="constraint_behavior">Comportament de procesare constrâns</string>
@@ -272,7 +263,7 @@
   <string name="ext_import_generic_error">Nu am putut importa date din %1$s. Motiv: %2$s</string>
   <string name="ext_import_progress_message">Preîncarc date din \'%1$s\', vă rugăm să așteptați… %2$s</string>
   <string name="ext_import_cancelled_message">Citirea datelor a fost anulată</string>
-  <string name="ext_import_finalizing_message">Finalizez preîncărcarea datelor...</string>
+  <string name="ext_import_finalizing_message">Finalizez preîncărcarea datelor…</string>
   <string name="ext_import_completed_message">Citirea datelor a fost finalizată!</string>
   <string name="ext_not_initialized_error">ExternalDataManager nu a fost inițializat.</string>
   <string name="ext_import_csv_missing_error">Datele externe pentru %1$s nu au fost importate. Poate ai uitat să includeți fișierul %2$s.csv în formularul dumneavoastră?</string>
@@ -283,14 +274,14 @@
   <string name="fs_file_copy_error">Nu pot copia \'%1$s\' peste \'%2$s\'. Motiv: %3$s</string>
   <string name="survey_internal_error">Eroare internă: trecerea către prompt eșuată.</string>
   <string name="survey_multiple_forms_error">Ați descărcat două formulare diferite cu același form ID și versiune. Poate a fost același formular încărcat la momente diferite sau către servere diferite. Va trebui să ștergeți unul.</string>
-  <string name="survey_loading_reading_form_message">Citesc definiția formularului...</string>
-  <string name="survey_loading_reading_data_message">Citesc datele chestionarului...</string>
-  <string name="survey_loading_reading_csv_message">Citesc fișierele CSV...</string>
-  <string name="survey_saving_validating_message">Validez răspunsurile...</string>
-  <string name="survey_saving_collecting_message">Colectez date...</string>
-  <string name="survey_saving_saving_message">Salvez pe SD card...</string>
-  <string name="survey_saving_finalizing_message">Fizalizez pe SD card...</string>
-  <string name="survey_saving_encrypting_message">Criptez datele...</string>
+  <string name="survey_loading_reading_form_message">Citesc definiția formularului…</string>
+  <string name="survey_loading_reading_data_message">Citesc datele chestionarului…</string>
+  <string name="survey_loading_reading_csv_message">Citesc fișierele CSV…</string>
+  <string name="survey_saving_validating_message">Validez răspunsurile…</string>
+  <string name="survey_saving_collecting_message">Colectez date…</string>
+  <string name="survey_saving_saving_message">Salvez pe SD card…</string>
+  <string name="survey_saving_finalizing_message">Fizalizez pe SD card…</string>
+  <string name="survey_saving_encrypting_message">Criptez datele…</string>
   <string name="high_resolution_summary">Activați înregistrările video high-resolution</string>
   <string name="high_resolution">Activați video hi-res</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -307,8 +298,6 @@
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
   <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="google_audio_error">Fișierele audio nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="google_video_error">Fișierele video nu sunt suportate de Google Sheets în acest moment.</string>
   <string name="media_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
   <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
   <string name="odk_auto_note">Notificare ODK Autosend</string>
@@ -318,19 +307,16 @@
   <string name="change_server_url">URL server</string>
   <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
   <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
-  <string name="google_sheets_url">URL Google Sheets</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
   <string name="sheets_google_account_needed">Ați selectat  Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
-  <string name="google_sheets_access_denied">Acces interzis. Vă rugăm să vă asigurați că deținătorul foii de calcul v-a acordat permisiunea de acces.</string>
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>
   <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
   <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
   <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Opțiuni de cartografiere</string>
   <string name="map_sdk_selector_title">SDK cartografiere</string>
   <string name="map_sdk_behavior">SDK cartografiere</string>
   <string name="google_maps_sdk">SDK Google Maps</string>

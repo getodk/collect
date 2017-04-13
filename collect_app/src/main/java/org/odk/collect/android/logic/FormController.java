@@ -227,34 +227,35 @@ public class FormController {
     }
 
     public FormIndex getIndexFromXPath(String xPath) {
-        if (xPath.equals("beginningOfForm")) {
-            return FormIndex.createBeginningOfFormIndex();
-        } else if (xPath.equals("endOfForm")) {
-            return FormIndex.createEndOfFormIndex();
-        } else if (xPath.equals("unexpected")) {
-            Log.e(t, "Unexpected string from XPath");
-            throw new IllegalArgumentException("unexpected string from XPath");
-        } else {
-            FormIndex returned = null;
-            FormIndex saved = getFormIndex();
-            // the only way I know how to do this is to step through the entire form
-            // until the XPath of a form entry matches that of the supplied XPath
-            try {
-                jumpToIndex(FormIndex.createBeginningOfFormIndex());
-                int event = stepToNextEvent(true);
-                while (event != FormEntryController.EVENT_END_OF_FORM) {
-                    String candidateXPath = getXPath(getFormIndex());
-                    // Log.i(t, "xpath: " + candidateXPath);
-                    if (candidateXPath.equals(xPath)) {
-                        returned = getFormIndex();
-                        break;
+        switch (xPath) {
+            case "beginningOfForm":
+                return FormIndex.createBeginningOfFormIndex();
+            case "endOfForm":
+                return FormIndex.createEndOfFormIndex();
+            case "unexpected":
+                Log.e(t, "Unexpected string from XPath");
+                throw new IllegalArgumentException("unexpected string from XPath");
+            default:
+                FormIndex returned = null;
+                FormIndex saved = getFormIndex();
+                // the only way I know how to do this is to step through the entire form
+                // until the XPath of a form entry matches that of the supplied XPath
+                try {
+                    jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                    int event = stepToNextEvent(true);
+                    while (event != FormEntryController.EVENT_END_OF_FORM) {
+                        String candidateXPath = getXPath(getFormIndex());
+                        // Log.i(t, "xpath: " + candidateXPath);
+                        if (candidateXPath.equals(xPath)) {
+                            returned = getFormIndex();
+                            break;
+                        }
+                        event = stepToNextEvent(true);
                     }
-                    event = stepToNextEvent(true);
+                } finally {
+                    jumpToIndex(saved);
                 }
-            } finally {
-                jumpToIndex(saved);
-            }
-            return returned;
+                return returned;
         }
     }
 
@@ -1103,10 +1104,8 @@ public class FormController {
         // assume no binary data inside the model.
         FormInstance datamodel = getInstance();
         XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-        ByteArrayPayload payload =
-                (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
 
-        return payload;
+        return (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
     }
 
     /**
@@ -1115,10 +1114,8 @@ public class FormController {
     public ByteArrayPayload getSubmissionXml() throws IOException {
         FormInstance instance = getInstance();
         XFormSerializingVisitor serializer = new XFormSerializingVisitor();
-        ByteArrayPayload payload =
-                (ByteArrayPayload) serializer.createSerializedPayload(instance,
-                        getSubmissionDataReference());
-        return payload;
+        return (ByteArrayPayload) serializer.createSerializedPayload(instance,
+                getSubmissionDataReference());
     }
 
     /**
@@ -1132,7 +1129,9 @@ public class FormController {
                 return e;
             } else if (e.getNumChildren() != 0) {
                 TreeElement v = findDepthFirst(e, name);
-                if (v != null) return v;
+                if (v != null) {
+                    return v;
+                }
             }
         }
         return null;

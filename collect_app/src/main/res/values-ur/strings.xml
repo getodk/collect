@@ -17,7 +17,6 @@
   <string name="cancel">منسوخ</string>
   <string name="cancel_loading_form">منسوخ</string>
   <string name="cancel_location">منسوخ</string>
-  <string name="cannot_edit_completed_form">ایک دفعہ مکمل کرنے کے بعد اس فائل کی مزید تدوین نہیں ہو سکتی ۔ یہ انکرپٹڈ ہوگی</string>
   <string name="capture_audio">آوازریکارڈ کریں</string>
   <string name="capture_image">تصویر لیں</string>
   <string name="capture_video">وڈیو ریکارڈ کریں</string>
@@ -115,7 +114,6 @@
   <string name="send_data">حتمی فارم کو بھیجیں</string>
   <string name="send_data_button">حتمی فارم  (‎%s‏) کو بھیجیں</string>
   <string name="send_selected_data">منتخب شدہ کو بھیجیں</string>
-  <string name="server_auth_credentials">براہ مہربانی، سرور کیلئے استعمال کنندہ کا نام اور شناختی لفظ درج کریں، ‎%s‏</string>
   <string name="server_requires_auth">سرور کو تصدیق چاہیے</string>
   <string name="server_url">یو آر ایل (URL)</string>
   <string name="server_preferences">سرور کی ترتیب</string>

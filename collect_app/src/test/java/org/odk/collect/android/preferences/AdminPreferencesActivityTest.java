@@ -2,30 +2,25 @@ package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences;
 import android.preference.CheckBoxPreference;
+import android.preference.Preference;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import static org.junit.Assert.assertEquals;
-import static org.robolectric.ParameterizedRobolectricTestRunner.Parameters;
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
 
-/**
- * Unit test for checking {@link SharedPreferences}'s behaviour
- */
+/** Tests for Admin Preferences */
 @Config(constants = BuildConfig.class)
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class AdminPreferencesActivityTest {
 
-    private String id;
-    private String adminKey;
     private AdminPreferencesFragment adminPreferencesFragment;
     private SharedPreferences sharedPreferences;
 
@@ -88,20 +83,23 @@ public class AdminPreferencesActivityTest {
                 getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
-    /**
-     * {@link Test} to assert admin setting shows and hides the associated
-     * {@link android.widget.CheckBox} in general settings
-     */
     @Test
     public void shouldUpdateAdminSharedPreferences() throws NullPointerException {
-        CheckBoxPreference checkBoxPreference = (CheckBoxPreference)
-                adminPreferencesFragment.findPreference(id);
-        checkBoxPreference.setChecked(true);
-        boolean actual = sharedPreferences.getBoolean(adminKey, false);
-        assertEquals("Error in preference " + adminKey, actual, true);
+        for (String adminKey : AdminKeys.ALL_KEYS) {
+            Preference preference = adminPreferencesFragment.findPreference(adminKey);
+            if (preference instanceof CheckBoxPreference) {
+                System.out.println("Testing " + adminKey);
+                CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
 
-        checkBoxPreference.setChecked(false);
-        actual = sharedPreferences.getBoolean(adminKey, true);
-        assertEquals("Error in preference " + adminKey, actual, false);
+                assertNotNull("Preference not found: " + adminKey, checkBoxPreference);
+                checkBoxPreference.setChecked(true);
+                boolean actual = sharedPreferences.getBoolean(adminKey, false);
+                assertTrue("Error in preference " + adminKey, actual);
+
+                checkBoxPreference.setChecked(false);
+                actual = sharedPreferences.getBoolean(adminKey, true);
+                assertFalse("Error in preference " + adminKey, actual);
+            }
+        }
     }
 }

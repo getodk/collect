@@ -42,7 +42,7 @@
             android:id="@+id/save_form_as"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:lineSpacingMultiplier="1.2"
             android:text="@string/save_form_as"
             android:textSize="21sp" />
@@ -58,7 +58,7 @@
             android:id="@+id/mark_finished"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_marginBottom="10dp"
             android:text="@string/mark_finished"
             android:textSize="21sp" />

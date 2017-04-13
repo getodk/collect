@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Simpan lokasi</string>
+  <string name="show_password">Tunjukan sandi</string>
   <string name="accuracy">Ketepatan</string>
   <string name="activity_not_found">Tidak ditemukan aktifitas untuk menyelesaikan: %s</string>
   <string name="add_another">Tambah grup</string>
@@ -17,9 +18,11 @@
   <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>
-  <string name="cannot_edit_completed_form">Formulir tidak dapat diubah ketika telah diberikan tanda untuk siap kirim. Mungkin telah terenkripsi.</string>
+  <string name="cannot_edit_completed_form">Formulir yang sudah final tidak bisa disunting karena sudah terenkripsi.</string>
   <string name="capture_audio">Simpan suara</string>
   <string name="capture_image">Ambil foto</string>
+  <string name="capture_osm">Jalankan OpenMapKit</string>
+  <string name="recapture_osm">Ulang tandai OSM</string>
   <string name="capture_video">Simpan video</string>
   <string name="change_language">Ubah bahasa</string>
   <string name="change_password">Kata sandi</string>
@@ -92,6 +95,7 @@
   <string name="no_connection">Tidak ditemukan koneksi internet</string>
   <string name="no_items_display">Tidak ada yang dapat ditampilkan.</string>
   <string name="no_items_display_forms">Tidak ada yang dapat ditampilkan.\n\nCoba kembali mengambil dan mengisi formulir yang masih kosong.</string>
+  <string name="no_items_display_sent_forms">Tidak ada yang dapat ditampilkan.\n\nCoba kirim formulir final sebelum melihat.</string>
   <string name="no_items_display_instances">Tidak ada yang dapat ditampilkan.\n\nCoba selesaikan formulir yang tersimpan sebelum mengirim.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Maaf, formulir tidak dapat terbaca.</string>
@@ -118,7 +122,8 @@
   <string name="send_data">Kirim formulir ke Server</string>
   <string name="send_data_button">Kirim formulir ke Server (%s)</string>
   <string name="send_selected_data">Kirim</string>
-  <string name="server_auth_credentials">Masukkan nama pengguna dan kata sandi untuk server: %s</string>
+  <string name="view_sent_forms">Lihat Formulir yang terkirim</string>
+  <string name="view_sent_forms_button">Lihat Formulir yang terkirim (%s)</string>
   <string name="server_requires_auth">Harap login untuk otentikasi</string>
   <string name="server_url">Tautan (URL)</string>
   <string name="server_preferences">Pengaturan Server</string>
@@ -191,6 +196,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'Pengiriman gagal pada\' EEE, MMM dd, yyyy \'-\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Hapus\' EEE, MMM dd, yyyy \'pada\' HH:mm</string>
   <string name="version">Versi:</string>
   <string name="parent_form_not_present">Tidak dapat menyunting formulir yang tersimpan ini karena formulir kosong terkait tidak ada atau telah dihapus.\n\nID Formulir:%1$s</string>
   <string name="launch_app">Buka aplikasi</string>
@@ -211,15 +217,16 @@
   <string name="admin_preferences">Pengaturan Admin</string>
   <string name="admin_access_settings">Tekan untuk akses admin ke pengaturan</string>
   <string name="user_access_form_entry">Pengguna dapat mengakses item Entri Formulir:</string>
-  <string name="admin_advanced_settings">Pengaturan lanjutan (Saat disarankan):</string>
   <string name="save_mid">Menyimpan di tengah formulir</string>
   <string name="enter_new_password">Masukkan kata sandi baru</string>
   <string name="verify_new_password">Masukkan kembali kata sandi</string>
+  <string name="admin_password">Kata sandi Admin</string>
   <string name="admin_password_changed">Kata sandi admin berhasil diubah</string>
   <string name="admin_password_disabled">Kata sandi admin ditiadakan</string>
   <string name="admin_password_mismatch">Maaf, kata sandi tidak cocok!</string>
   <string name="admin_password_incorrect">Maaf, kata sandi tidak benar!</string>
   <string name="enter_admin_password">Masukkan Kata Sandi Admin</string>
+  <string name="change_admin_password">Ubah Kata sandi Admin</string>
   <string name="found_in_menu">Ditemukan dengan tombol Menu pada Entri Formulir</string>
   <string name="autosend">Kirim Otomatis</string>
   <string name="autosend_wifi">Kirim otomatis dengan Wi-Fi</string>
@@ -240,12 +247,6 @@
   <string name="swipe_instructions">Anda berada di awal %s. Sapu layar sebagaimana ditunjukkan di bawah untuk mundur dan maju.</string>
   <string name="buttons_instructions">Anda berada di awal %s. Ketuk tombol panah berikut untuk mundur dan maju.</string>
   <string name="swipe_buttons_instructions">Anda berada di awal %s. Sapu layar sebagaimana ditunjukkan di bawah atau ketuk tombol panah berikut untuk mundur dan maju.</string>
-  <string name="form_processing_logic">Alur logika pemrosesan formulir</string>
-  <string name="form_processing_logic_recommended">Direkomendasikan (bawaan)</string>
-  <string name="form_processing_logic_0">Januari 2015 (paling cepat)</string>
-  <string name="form_processing_logic_1">Januari 2015 (paling aman)</string>
-  <string name="form_processing_logic_2">Pertengahan 2014 (Lambat)</string>
-  <string name="form_processing_logic_3">Awal 2014 (cepat)</string>
   <string name="launch_printer">Memulai Mencetak</string>
   <string name="no_printer">Printer yang dipilih belum terpasang. Silakan pasang printer.</string>
   <string name="constraint_behavior">Kendala pemrosesan</string>
@@ -268,7 +269,7 @@
   <string name="ext_import_generic_error">Tidak dapat mengimpor data dari %1$s. Penyebab: %2$s</string>
   <string name="ext_import_progress_message">Pra-memuat data dari \'%1$s\', silahkan tunggu.. %2$s</string>
   <string name="ext_import_cancelled_message">Pembacaan data dibatalkan!</string>
-  <string name="ext_import_finalizing_message">Menyelesaikan Pra-memuat data...</string>
+  <string name="ext_import_finalizing_message">Menyelesaikan Pra-memuat data…</string>
   <string name="ext_import_completed_message">Selesai membaca data!</string>
   <string name="ext_not_initialized_error">ExternalDataManager belum diinisialisasi.</string>
   <string name="ext_import_csv_missing_error">Data eksternal untuk %1$s belum diimpor. Mungkin anda lupa untuk memasukkan file %2$s.csv menggunakan formulir anda?</string>
@@ -279,16 +280,17 @@
   <string name="fs_file_copy_error">Tidak dapat menyalin \'%1$s\' terhadap \'%2$s\'. Penyebab: %3$s</string>
   <string name="survey_internal_error">Kesalahan internal: langkah menuju pertanyaan selanjutnya gagal.</string>
   <string name="survey_multiple_forms_error">Kamu mengunduh dua formulir berbeda tapi memiliki ID dan versi formulir yang sama. Kemungkinan keduanya adalah formulir sama yang diunggah pada saat yang berbeda atau pada server yang berbeda. Pada kasus ini, hapus salah satu formulir.</string>
-  <string name="survey_loading_reading_form_message">Membaca definisi formulir...</string>
-  <string name="survey_loading_reading_data_message">Membaca data survei...</string>
-  <string name="survey_loading_reading_csv_message">Membaca berkas CSV...</string>
-  <string name="survey_saving_validating_message">Memvalidasi jawaban...</string>
-  <string name="survey_saving_collecting_message">Menghimpun data...</string>
-  <string name="survey_saving_saving_message">Menyimpan ke SD card...</string>
-  <string name="survey_saving_finalizing_message">Menyempurnakan ke SD card...</string>
-  <string name="survey_saving_encrypting_message">Mengenkripsi data...</string>
+  <string name="survey_loading_reading_form_message">Membaca definisi formulir…</string>
+  <string name="survey_loading_reading_data_message">Membaca data survei…</string>
+  <string name="survey_loading_reading_csv_message">Membaca berkas CSV…</string>
+  <string name="survey_saving_validating_message">Memvalidasi jawaban…</string>
+  <string name="survey_saving_collecting_message">Menghimpun data…</string>
+  <string name="survey_saving_saving_message">Menyimpan ke SD card…</string>
+  <string name="survey_saving_finalizing_message">Menyempurnakan ke SD card…</string>
+  <string name="survey_saving_encrypting_message">Mengenkripsi data…</string>
   <string name="high_resolution_summary">Mengaktifkan perekaman video beresolusi tinggi.</string>
   <string name="high_resolution">Mengaktifkan video resolusi tinggi</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
@@ -296,10 +298,12 @@
   <string name="protocol_settings">Konfigurasi pengaturan platform</string>
   <string name="aggregate_preferences">Pengaturan ODK Aggregate</string>
   <string name="other_preferences">Pengaturan platform lainnya</string>
+  <string name="google_preferences">Pengaturan Google Sheets</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih!</string>
+  <string name="google_set_account">Google Sheet telah dipilih sebagai server kamu, silahkan tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
   <string name="invalid_oauth">Token OAuth 2 tidak sesuai</string>
-  <string name="media_upload_error">Gagal mengunggah foto yang tidak ada: %1$s</string>
+  <string name="google_repeat_error">Pengulangan belum didukung oleh Google Sheet.</string>
   <string name="odk_auth_auth_fail">Autentikasi pengiriman otomatis ODK gagal, pastikan pengaturan anda sudah benar</string>
   <string name="odk_auto_note">Notifikasi Pengiriman otomatis ODK</string>
   <string name="notification_error">Gagal menampilkan teks notifikasi</string>
@@ -308,10 +312,24 @@
   <string name="change_server_url">Tautan server (URL)</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
   <string name="default_google_sheets_url"></string>
+  <string name="about_preferences">Tentang</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="start">Mulai</string>
+  <string name="minutes">Menit</string>
+  <string name="dialog_continue">Lanjut</string>
+  <string name="clear">Hapus</string>
+  <string name="discard">Buang</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="go_back">Balik</string>
+  <string name="general_settings_about">Tentang</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="select_all">Pilih Semua</string>
+  <string name="clear_all">Hapus Semua</string>
+  <string name="reset_settings_dialog_title">Pilih apa yang mau di ulang</string>
+  <string name="reset_settings_dialog">ulang aplikasi</string>
+  <string name="reset_settings_button_reset">Ulang</string>
+  <string name="exit">Keluar</string>
 </resources>

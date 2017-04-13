@@ -2,7 +2,7 @@
 
     <PreferenceCategory
         android:key="@string/server_preferences"
-        android:title="@string/aggregate_preferences" >
+        android:title="@string/aggregate_preferences">
         <EditTextPreference
             android:id="@+id/server_url"
             android:defaultValue="@string/default_server_url"

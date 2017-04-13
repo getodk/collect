@@ -47,6 +47,8 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 /**
  * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
  *
@@ -195,7 +197,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 GeoShape shape = new GeoShape(list);
                 return new StringData(s);
             } catch (NumberFormatException e) {
-                // TODO Auto-generated catch block
+                Timber.e(e);
                 return null;
             }
         }

@@ -17,7 +17,6 @@
   <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
-  <string name="cannot_edit_completed_form">Цю анкету не можливо редагувати після того як її позначили завершеною. Вона може бути закодована.</string>
   <string name="capture_audio">Записати звук</string>
   <string name="capture_image">Сфотографувати</string>
   <string name="capture_osm">Запустити OpenMapKit</string>
@@ -87,7 +86,7 @@
   <string name="location_accuracy">Точність %1$s м</string>
   <string name="longitude">Довгота</string>
   <string name="main_menu">Головне меню</string>
-  <string name="main_menu_details">Збір даних спрощує...</string>
+  <string name="main_menu_details">Збір даних спрощує…</string>
   <string name="manage_files">Видалити збережену анкету</string>
   <string name="mark_finished">Позначити анкету як завершену</string>
   <string name="noselect_error">Вибачте, Ви не обрали жодної анкети!</string>
@@ -120,7 +119,6 @@
   <string name="send_data">Надіслати завершену анкету</string>
   <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <string name="send_selected_data">Надіслати обране</string>
-  <string name="server_auth_credentials">Будь ласка, введіть ім`я користувача та пароль для сервера: %s</string>
   <string name="server_requires_auth">Для доступу до сервера необхідно авторизуватись</string>
   <string name="server_url">Адреса URL</string>
   <string name="server_preferences">Налаштування сервера</string>
@@ -151,7 +149,7 @@
   <string name="submission_url">Шлях надсилання</string>
   <string name="font_size">Розмір шрифту</string>
   <string name="change_font_size">Розмір шрифту</string>
-  <string name="form_scan_starting">Шукаю анкети...</string>
+  <string name="form_scan_starting">Шукаю анкети…</string>
   <string name="access_error">Помилка підчас доступу до %s:</string>
   <string name="manifest_server_error">Маніфест відповідь не повідомляє версію OpenRosa — помилковий серевер?</string>
   <string name="root_element_error">Кореневий елемент не є &lt;маніфест\&gt; — був %s</string>
@@ -213,7 +211,6 @@
   <string name="admin_preferences">Адміністрування</string>
   <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="user_access_form_entry">Користувачі мають доступ до пунктів Заповнення анкети:</string>
-  <string name="admin_advanced_settings">Розширені налаштування (за порадою):</string>
   <string name="save_mid">Зберегти анкету</string>
   <string name="enter_new_password">Введіть новий пароль</string>
   <string name="verify_new_password">Введіть новий пароль ще раз</string>
@@ -242,12 +239,6 @@
   <string name="swipe_instructions">Ви на початку %s. Проведіть пальцем по екрану, як показано нижче,  для переходу назад або вперед.</string>
   <string name="buttons_instructions">Ви на початку %s. Торкніться кнопки зі стрілкою внизу для переходу назад або вперед.</string>
   <string name="swipe_buttons_instructions">Ви на початку %s. Проведіть пальцем по екрану, як показано нижче,  або торкніться кнопки зі стрілкою для переходу назад або вперед.</string>
-  <string name="form_processing_logic">Логіка обробки анкети</string>
-  <string name="form_processing_logic_recommended">Рекомендована (за замовчуванням)</string>
-  <string name="form_processing_logic_0">Січень 2015 (найшвидша)</string>
-  <string name="form_processing_logic_1">Січень 2015 (найбезпечніша)</string>
-  <string name="form_processing_logic_2">Середина 2014 (повільна)</string>
-  <string name="form_processing_logic_3">Початок 2014 (швидка)</string>
   <string name="launch_printer">Друк</string>
   <string name="no_printer">Потрібний принтер не встановлений. Будь ласка, встановіть принтер.</string>
   <string name="constraint_behavior">Обмеження зумовлюють поведінку</string>
@@ -270,7 +261,7 @@
   <string name="ext_import_generic_error">Не можливо імпортувати дані з %1$s. Причина: %2$s</string>
   <string name="ext_import_progress_message">Передзавантаження даних з \'%1$s\', будь ласка, зачекайте… %2$s</string>
   <string name="ext_import_cancelled_message">Читання даних відмінене!</string>
-  <string name="ext_import_finalizing_message">Завершення передзавантажених даних...</string>
+  <string name="ext_import_finalizing_message">Завершення передзавантажених даних…</string>
   <string name="ext_import_completed_message">Читання даних завершене!</string>
   <string name="ext_not_initialized_error">ExternalDataManager не ініціалізований.</string>
   <string name="ext_import_csv_missing_error">Зовнішні дані для %1$s не імпортовані. Можливо ви забули підключити в анкеті %2$s.csv файл?</string>
@@ -281,14 +272,14 @@
   <string name="fs_file_copy_error">Неможливо скопіювати \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
   <string name="survey_internal_error">Внутрішня помилка: невдалий перехід.</string>
   <string name="survey_multiple_forms_error">Ви завантажили дві різні анкети однакової версії з однаковим ID. Можливо це та сама акета опублікована в різний час або на різних серверах. В будь-якому разі одну треба видалити.</string>
-  <string name="survey_loading_reading_form_message">Читання анкети...</string>
-  <string name="survey_loading_reading_data_message">Читання даних опитування...</string>
-  <string name="survey_loading_reading_csv_message">Читання CSV файлів...</string>
-  <string name="survey_saving_validating_message">Перевірка відповіді...</string>
-  <string name="survey_saving_collecting_message">Збір даних...</string>
-  <string name="survey_saving_saving_message">Збереження на SD картку...</string>
-  <string name="survey_saving_finalizing_message">Завершення на SD картку...</string>
-  <string name="survey_saving_encrypting_message">Шифрування даних...</string>
+  <string name="survey_loading_reading_form_message">Читання анкети…</string>
+  <string name="survey_loading_reading_data_message">Читання даних опитування…</string>
+  <string name="survey_loading_reading_csv_message">Читання CSV файлів…</string>
+  <string name="survey_saving_validating_message">Перевірка відповіді…</string>
+  <string name="survey_saving_collecting_message">Збір даних…</string>
+  <string name="survey_saving_saving_message">Збереження на SD картку…</string>
+  <string name="survey_saving_finalizing_message">Завершення на SD картку…</string>
+  <string name="survey_saving_encrypting_message">Шифрування даних…</string>
   <string name="high_resolution_summary">Дозволяє запис відео високої якості</string>
   <string name="high_resolution">Відео високої якості</string>
   <string name="server_platform_google_sheets">Google Диск, Google Сторінки</string>
@@ -305,8 +296,6 @@
   <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
   <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
-  <string name="google_audio_error">Аудіо файли, наразі, Google Сторінками не підтримуються.</string>
-  <string name="google_video_error">Відео файли, наразі, Google Сторінками не підтримуються.</string>
   <string name="media_upload_error">Неможливо надіслати неіснуючу фотографію: %1$s</string>
   <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
   <string name="odk_auto_note">Повідомлення ODK Autosend</string>
@@ -316,19 +305,16 @@
   <string name="change_server_url">Адреса серверу URL</string>
   <string name="google_search_browse">Шукайте анкети. Або натисніть \'Мій диск\' для навігації.</string>
   <string name="no_blank_search">Поле пошуку не може бути порожнім</string>
-  <string name="google_sheets_url">Адреса Google Сторінок</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
   <string name="sheets_google_account_needed">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="sheets_max_columns">Максимальна кількість колонок - 255, ваша анкета містить %s. Неможливо вивантажити в Сторінки.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
-  <string name="google_sheets_access_denied">Доступ заборонений. Будь ласка, переконайтесь, що власник Сторінок надав вам доступ.</string>
   <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
   <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Опції мапувння</string>
   <string name="map_sdk_selector_title">SDK для мапування</string>
   <string name="map_sdk_behavior">SDK для мапування</string>
   <string name="streets">Вулиці</string>

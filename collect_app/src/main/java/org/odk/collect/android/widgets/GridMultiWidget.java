@@ -56,6 +56,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * GridWidget handles multiple selection fields using a grid of icons. The user clicks the desired
  * icon and the background changes from black to orange. If text, audio or video are specified in
@@ -219,7 +221,7 @@ public class GridMultiWidget extends QuestionWidget {
                         errorMsg = getContext().getString(R.string.file_missing, imageFile);
                     }
                 } catch (InvalidReferenceException e) {
-                    Log.e("GridMultiWidget", "image invalid reference exception");
+                    Timber.e("Image invalid reference due to %s ", e.getMessage());
                 }
             } else {
                 errorMsg = "";
@@ -230,7 +232,7 @@ public class GridMultiWidget extends QuestionWidget {
 
                 TextView missingImage = new TextView(getContext());
                 missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+                missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
                 if (choices[i] != null && choices[i].length() != 0) {
@@ -295,6 +297,7 @@ public class GridMultiWidget extends QuestionWidget {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (selected[position]) {
                     selected[position] = false;
+                    imageViews[position].setBackgroundColor(0);
                     if (audioHandlers[position] != null) {
                         stopAudio();
                     }

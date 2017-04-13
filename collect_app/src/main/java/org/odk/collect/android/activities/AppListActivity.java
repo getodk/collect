@@ -20,6 +20,7 @@ import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
@@ -47,6 +48,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+
 abstract class AppListActivity extends ListActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
@@ -67,6 +70,8 @@ abstract class AppListActivity extends ListActivity {
     protected String[] mSortingOptions;
 
     private boolean mIsSearchBoxShown;
+
+    protected Integer mSelectedSortingOrder;
 
     @Override
     protected void onResume() {
@@ -162,13 +167,13 @@ abstract class AppListActivity extends ListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter(s);
+                updateAdapter();
             }
         });
 
         if (mIsSearchBoxShown) {
             showSearchBox();
-            filter(mInputSearch.getText());
+            updateAdapter();
         }
     }
 
@@ -198,33 +203,14 @@ abstract class AppListActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 performSelectedSearch(position);
-                mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                mDrawerLayout.closeDrawer(Gravity.END);
             }
         });
     }
 
     private void performSelectedSearch(int position) {
-        hideSearchBox();
-        switch(position) {
-            case 0:
-                sortByNameAsc();
-                break;
-            case 1:
-                sortByNameDesc();
-                break;
-            case 2:
-                sortByDateDesc();
-                break;
-            case 3:
-                sortByDateAsc();
-                break;
-            case 4:
-                sortByStatusAsc();
-                break;
-            case 5:
-                sortByStatusDesc();
-                break;
-        }
+        saveSelectedSortingOrder(position);
+        updateAdapter();
     }
 
     private void setupDrawer() {
@@ -269,21 +255,9 @@ abstract class AppListActivity extends ListActivity {
         }
     }
 
-    protected abstract void filter(CharSequence charSequence);
+    protected abstract void updateAdapter();
 
-    protected abstract void sortByNameAsc();
-
-    protected abstract void sortByNameDesc();
-
-    protected abstract void sortByDateAsc();
-
-    protected abstract void sortByDateDesc();
-
-    protected abstract void sortByStatusAsc();
-
-    protected abstract void sortByStatusDesc();
-
-    protected abstract void setupAdapter(String sortOrder);
+    protected abstract String getSortingOrderKey();
 
     protected boolean areCheckedItems() {
         return getCheckedCount() > 0;
@@ -320,7 +294,9 @@ abstract class AppListActivity extends ListActivity {
     // if ALL items are checked, uncheck them all
     public static boolean toggleChecked(ListView lv) {
         // shortcut null case
-        if (lv == null) return false;
+        if (lv == null) {
+            return false;
+        }
 
         boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
         setAllToCheckedState(lv, newCheckState);
@@ -329,7 +305,9 @@ abstract class AppListActivity extends ListActivity {
 
     public static void setAllToCheckedState(ListView lv, boolean check) {
         // no-op if ListView null
-        if (lv == null) return;
+        if (lv == null) {
+            return;
+        }
 
         for (int x = 0; x < lv.getCount(); x++) {
             lv.setItemChecked(x, check);
@@ -343,5 +321,32 @@ abstract class AppListActivity extends ListActivity {
         } else {
             mToggleButton.setText(R.string.clear_all);
         }
+    }
+	
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+           mDrawerLayout.closeDrawer(Gravity.END);
+        } else {
+           super.onBackPressed();
+        }
+    }
+
+    private void saveSelectedSortingOrder(int selectedStringOrder) {
+        mSelectedSortingOrder = selectedStringOrder;
+        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
+                .edit()
+                .putInt(getSortingOrderKey(), selectedStringOrder)
+                .apply();
+    }
+
+    protected void restoreSelectedSortingOrder() {
+        mSelectedSortingOrder = PreferenceManager
+                .getDefaultSharedPreferences(Collect.getInstance())
+                .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected CharSequence getFilterText() {
+        return mInputSearch != null ? mInputSearch.getText() : "";
     }
 }

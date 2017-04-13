@@ -67,13 +67,6 @@
 		<item>2</item>
 		<item>3</item>
 	</string-array>
-	<string-array name="form_processing_logic_entries">
-		<item>@string/form_processing_logic_recommended</item>
-		<item>@string/form_processing_logic_0</item>
-		<item>@string/form_processing_logic_1</item>
-		<item>@string/form_processing_logic_2</item>
-		<item>@string/form_processing_logic_3</item>
-	</string-array>
 	<string-array name="map_sdk_selector_entries">
 		<item>@string/google_maps_sdk</item>
 		<item>@string/openstreetmap_sdk</item>

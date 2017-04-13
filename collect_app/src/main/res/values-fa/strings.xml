@@ -6,7 +6,6 @@
   <string name="cancel">انصراف</string>
   <string name="cancel_loading_form">انصراف</string>
   <string name="cancel_location">انصراف</string>
-  <string name="cannot_edit_completed_form">این فایل کامل شده است و شما نمیتوانید در آن تغییرات بیاورید و ممکن هست به صورت رمزگذاری شده باشد</string>
   <string name="capture_audio">ثبت صدا</string>
   <string name="capture_image">عکس گرفتن</string>
   <string name="capture_osm">اجرای ابزار نقشه</string>

@@ -15,7 +15,6 @@
   <string name="cancel">ပယ္ရန္</string>
   <string name="cancel_loading_form">ပယ္ရန္</string>
   <string name="cancel_location">ပယ္ရန္</string>
-  <string name="cannot_edit_completed_form">ျပည့္စံုေအာင္ ျဖည့္စြက္ၿပီးသား ပံုစံမ်ားကို ျပင္ဆင္၍ မရပါ</string>
   <string name="capture_audio">အသံသြင္းရန္</string>
   <string name="capture_image">ဓါတ္ပံုရိုက္ရန္</string>
   <string name="capture_video">ဗီြဒီယိုရိုက္ရန္</string>
@@ -110,8 +109,6 @@
   <string name="send_data">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္</string>
   <string name="send_data_button">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္ (%s)</string>
   <string name="send_selected_data">ေရြးခ်ယ္ထားေသာပံုစံမ်ားေပးပို႔ရန္</string>
-  <string name="server_auth_credentials">ဆာဗာ သံုးစြဲသူ အမည္ႏွင့္ လ်ိဳ႔၀ွက္နံပါတ္ ထည့္သြင္းရန္:
-%s</string>
   <string name="server_requires_auth">ဆာဗာမွ မွန္ကန္ေၾကာင္း ေထာက္ခံရန္လိုအပ္ပါသည္</string>
   <string name="server_url">ရင္းျမစ္ေနရာ</string>
   <string name="server_preferences">ဆာဗာ</string>

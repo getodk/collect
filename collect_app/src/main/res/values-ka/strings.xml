@@ -17,7 +17,6 @@
   <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>
-  <string name="cannot_edit_completed_form">ამ ფორმის რედაქტირება  დასრულების შემდეგ შეუძლებელია. იგი შეიძლება კოდირებული იყოს.</string>
   <string name="capture_audio">ხმის ჩაწერა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
   <string name="capture_osm">OpenMapKit-ის ჩართვა</string>
@@ -87,7 +86,7 @@
   <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="longitude">განედი</string>
   <string name="main_menu">მთავარი მენიუ</string>
-  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა...</string>
+  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა…</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>
@@ -120,7 +119,6 @@
   <string name="send_data">დასრულებული ფორმების გაგზავნა</string>
   <string name="send_data_button">დასრულებული ფორმების გაგზავნა (%s)</string>
   <string name="send_selected_data">არჩეული ფორმების გაგზავნა</string>
-  <string name="server_auth_credentials">გთხოვთ, შეიყვანოთ მომხმარებლის სახელი და პაროლი სერვერისთვის: %s</string>
   <string name="server_requires_auth">სერვერი მოითხოვს ავთენტიკაციას</string>
   <string name="server_url">ბმული</string>
   <string name="server_preferences">სერვერი</string>
@@ -243,12 +241,6 @@
   <string name="swipe_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. გაასრიალეთ ეკრანი, როგორც მითითებულია, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს, რათა წინ და უკან გადახვიდეთ.</string>
   <string name="swipe_buttons_instructions">თქვენ ხართ შემდეგი ფორმის დასაწყისში: %s. დააჭირეთ ღილაკებს ან გაასრიალეთ, რათა წინ და უკან გადახვიდეთ.</string>
-  <string name="form_processing_logic">ფორმის დამუშავების სინტაქსი</string>
-  <string name="form_processing_logic_recommended">რეკომენდებულია (ნაგულისხმევი)</string>
-  <string name="form_processing_logic_0">2015 წლის იანვარი (ყველაზე სწრაფი)</string>
-  <string name="form_processing_logic_1">2015 წლის იანვარი (ყველაზე უსაფრთხო)</string>
-  <string name="form_processing_logic_2">2014 წლის შუა პერიოდი (ნელი)</string>
-  <string name="form_processing_logic_3">2014 წლის ადრე პერიოდი (სწრაფი)</string>
   <string name="launch_printer">ბეჭდვის გაშვება</string>
   <string name="no_printer">მოთხოვნილი პრინტერი არ არის დაყენებული. გთხოვთ, დააყენოთ პრინტერი</string>
   <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>
@@ -269,7 +261,6 @@
   <string name="go_drive">ჩემი Drive</string>
   <string name="protocol_settings">პლატფორმის პარამეტრების შეცვლა</string>
   <string name="aggregate_preferences">ODK Aggregate-ის პარამეტრები</string>
-  <string name="media_upload_error">არარსებული ფოტო ვერ აიტვირთა: %1$s</string>
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
