@@ -221,6 +221,14 @@ public class TimerLogger {
 
             Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
 
+            // If the user is exiting then add a save event if they are finalizing add an exit event
+            if (eventType == EventTypes.FORM_EXIT || eventType == EventTypes.FORM_FINALIZE) {
+                mEvents.add(new Event(start, EventTypes.FORM_SAVE, 0, "", false));
+                if (eventType == EventTypes.FORM_FINALIZE) {
+                    mEvents.add(new Event(start, EventTypes.FORM_EXIT, 0, "", false));
+                }
+            }
+
             // Ignore the event if we are already in an interval view event ie the question has been refreshed
             if (newEvent.isIntervalViewEvent()) {
                 for (int i = 0; i < mEvents.size(); i++) {
@@ -231,10 +239,6 @@ public class TimerLogger {
             }
             mEvents.add(newEvent);
 
-            // If the user is exiting then mark any open questions as closed
-            if (eventType == EventTypes.FORM_EXIT || eventType == EventTypes.FORM_FINALIZE) {
-                exitView();
-            }
             writeEvents();
         }
 

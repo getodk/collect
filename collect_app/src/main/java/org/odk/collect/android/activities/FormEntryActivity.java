@@ -1868,12 +1868,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         // Log user events
-        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false);
-        if (exit) {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false);
-        }
         if (complete) {
             mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false);
+        } else {
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false);
         }
 
         synchronized (saveDialogLock) {
