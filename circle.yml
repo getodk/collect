@@ -43,7 +43,7 @@ test:
             case $INSTRUMENTED_TESTS in
                 true)
                     circle-android wait-for-boot
-                    gradlew connectedCheck -Pandroid.useDexArchive=false
+                    ./gradlew connectedCheck -Pandroid.useDexArchive=false
                     ;;
             esac
 
