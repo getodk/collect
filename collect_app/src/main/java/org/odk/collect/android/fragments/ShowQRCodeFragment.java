@@ -178,8 +178,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             return;
         }
 
-        JSONObject jsonObject;
-
         // update the QR Code
         generateCode();
     }
