@@ -33,18 +33,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.FormatException;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
-import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +43,7 @@ import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.tasks.GenerateQRCode;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ImportSettings;
+import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -158,7 +149,10 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                             .openInputStream(imageUri);
 
                     final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    scanQRImage(selectedImage);
+                    String response = QRCodeUtils.decodeFromBitmap(selectedImage);
+                    if (response != null) {
+                        applySettings(response);
+                    }
                 } catch (FileNotFoundException e) {
                     Timber.e(e);
                 }
@@ -168,24 +162,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void scanQRImage(Bitmap bitmap) {
-        int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
-
-        //copy pixel data from bitmap into the array
-        bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
-        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-        Reader reader = new QRCodeMultiReader();
-        try {
-            Result result = reader.decode(binaryBitmap);
-            applySettings(result.getText());
-        } catch (FormatException | NotFoundException | ChecksumException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast("QR Code not found in the selected image");
-        }
-    }
 
     private void applySettings(String content) {
         String decompressedData;
