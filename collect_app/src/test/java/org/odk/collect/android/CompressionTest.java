@@ -8,7 +8,6 @@ import org.odk.collect.android.utilities.CompressionUtils;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 
-import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -66,7 +65,7 @@ public class CompressionTest {
         assertTrue(null_text.equals(decompressedText));
     }
 
-    @Test(expected=DataFormatException.class)
+    @Test(expected = DataFormatException.class)
     public void decompressRaiseException() throws IOException, DataFormatException {
         String input = "Decoding this will raise an error";
         decompressedText = CompressionUtils.decompress(input);
