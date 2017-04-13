@@ -9,7 +9,7 @@ machine:
         # https://docs.gradle.org/current/userguide/build_environment.html
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
 
-        INSTRUMENTED_BUILDS: 0
+        INSTRUMENTED_TESTS: false
         
 dependencies:
     pre:
@@ -38,28 +38,22 @@ test:
         - ./gradlew lintDebug -Pandroid.useDexArchive=false
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
         - ? |
-            case $INSTRUMENTED_BUILDS in
-                1)
+            case $INSTRUMENTED_TESTS in
+                true)
                     mksdcard -l e 128M sdcard.img
                     emulator -avd circleci-android22 -sdcard sdcard.img -no-window
                     circle-android wait-for-boot
                     gradlew connectedCheck -Pandroid.useDexArchive=false
                     ;;
-                0)
-                    echo "Disabled instrumented builds"
-                    ;;
             esac:
                 parallel: true
-
+    
     post:
         - ? |
-            case $INSTRUMENTED_BUILDS in
-                1)
+            case $INSTRUMENTED_TESTS in
+                true)
                     cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
                     cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests
-                    ;;
-                0) 
-                    echo "Disabled instrumented builds"
                     ;;
             esac:
                 parallel: true
@@ -71,5 +65,3 @@ test:
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
         - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
-
-     
