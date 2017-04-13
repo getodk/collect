@@ -67,7 +67,7 @@ the License.
 		android:id="@+id/sortingMenu"
 		android:layout_width="@dimen/width_side_navigation_drawer"
 		android:layout_height="match_parent"
-		android:layout_gravity="end|right"
+		android:layout_gravity="end"
 		android:background="@color/background_navigation_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>
