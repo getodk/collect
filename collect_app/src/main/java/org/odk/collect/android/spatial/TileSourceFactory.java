@@ -24,8 +24,8 @@ public class TileSourceFactory {
                 0, 18, 256, "",
                 new String[] { "http://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/" }) {
             @Override
-            public String getTileURLString(MapTile aTile) {
-                return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
+            public String getTileURLString(MapTile tile) {
+                return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
             }
         };
 
@@ -34,8 +34,8 @@ public class TileSourceFactory {
                 0, 18, 256, "",
                 new String[]{"http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/"}) {
             @Override
-            public String getTileURLString(MapTile aTile) {
-                return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
+            public String getTileURLString(MapTile tile) {
+                return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
             }
         };
 

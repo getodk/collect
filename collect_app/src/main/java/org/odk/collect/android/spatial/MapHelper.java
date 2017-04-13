@@ -77,36 +77,36 @@ public class MapHelper {
     private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
 
 
-    public MapHelper(Context pContext, GoogleMap pGoogleMap) {
+    public MapHelper(Context context, GoogleMap googleMap) {
         mGoogleMap = null;
         mOsmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
-        mGoogleMap = pGoogleMap;
-        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
+        mGoogleMap = googleMap;
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
     }
 
-    public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
+    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver) {
         mGoogleMap = null;
         mOsmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
-        iRegisterReceiver = pIregisterReceiver;
-        mOsmMap = pOsmMap;
-        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
+        this.iRegisterReceiver = iregisterReceiver;
+        mOsmMap = osmMap;
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
     }
 
-    private static String _getGoogleBasemap() {
+    private static String getGoogleBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
-    private static String _getOsmBasemap() {
+    private static String getOsmBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
         if (mGoogleMap != null) {
-            String basemap = _getGoogleBasemap();
+            String basemap = getGoogleBasemap();
             switch (basemap) {
                 case GOOGLE_MAP_STREETS:
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -126,7 +126,7 @@ public class MapHelper {
             }
         } else {
             //OSMMAP
-            String basemap = _getOsmBasemap();
+            String basemap = getOsmBasemap();
 
             ITileSource tileSource = null;
 
@@ -177,9 +177,9 @@ public class MapHelper {
         return results.toArray(new String[0]);
     }
 
-    public void showLayersDialog(final Context pContext) {
-        AlertDialog.Builder layerDialod = new AlertDialog.Builder(pContext);
-        layerDialod.setTitle(pContext.getString(R.string.select_offline_layer));
+    public void showLayersDialog(final Context context) {
+        AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
+        layerDialod.setTitle(context.getString(R.string.select_offline_layer));
         AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
                 selected_layer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -227,7 +227,7 @@ public class MapHelper {
                                         mOsmMap.invalidate();
                                         OsmMBTileProvider mbprovider = new OsmMBTileProvider(
                                                 iRegisterReceiver, spfile);
-                                        osmTileOverlay = new TilesOverlay(mbprovider, pContext);
+                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
                                         osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
                                         mOsmMap.getOverlays().add(0, osmTileOverlay);
                                         mOsmMap.invalidate();

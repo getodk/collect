@@ -136,14 +136,14 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         return value;
     }
 
-    public InputStream getInputStream(MapTile pTile) {
+    public InputStream getInputStream(MapTile mapTile) {
 
         try {
             InputStream ret = null;
             final String[] tile = {COL_TILES_TILE_DATA};
-            final String[] xyz = {Integer.toString(pTile.getX()),
-                    Double.toString(Math.pow(2, pTile.getZoomLevel()) - pTile.getY() - 1),
-                    Integer.toString(pTile.getZoomLevel())};
+            final String[] xyz = {Integer.toString(mapTile.getX()),
+                    Double.toString(Math.pow(2, mapTile.getZoomLevel()) - mapTile.getY() - 1),
+                    Integer.toString(mapTile.getZoomLevel())};
 
             final Cursor cur = database.query(TABLE_TILES,
                     tile,
@@ -165,7 +165,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             }
 
         } catch (final Throwable e) {
-            Timber.w(e, "Error getting db stream: %s", pTile);
+            Timber.w(e, "Error getting db stream: %s", mapTile);
         }
 
         return null;

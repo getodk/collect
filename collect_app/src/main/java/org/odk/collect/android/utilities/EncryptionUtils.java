@@ -250,9 +250,9 @@ public class EncryptionUtils {
     /**
      * Retrieve the encryption information for this uri.
      *
-     * @param mUri either an instance URI (if previously saved) or a form URI
+     * @param uri either an instance URI (if previously saved) or a form URI
      */
-    public static EncryptedFormInformation getEncryptedFormInformation(Uri mUri,
+    public static EncryptedFormInformation getEncryptedFormInformation(Uri uri,
             InstanceMetadata instanceMetadata) throws EncryptionException {
 
         ContentResolver cr = Collect.getInstance().getContentResolver();
@@ -265,13 +265,13 @@ public class EncryptionUtils {
 
         Cursor formCursor = null;
         try {
-            if (cr.getType(mUri) == InstanceColumns.CONTENT_ITEM_TYPE) {
+            if (cr.getType(uri) == InstanceColumns.CONTENT_ITEM_TYPE) {
                 // chain back to the Form record...
                 String[] selectionArgs = null;
                 String selection = null;
                 Cursor instanceCursor = null;
                 try {
-                    instanceCursor = cr.query(mUri, null, null, null, null);
+                    instanceCursor = cr.query(uri, null, null, null, null);
                     if (instanceCursor.getCount() != 1) {
                         String msg = Collect.getInstance().getString(R.string.not_exactly_one_record_for_this_instance);
                         Log.e(t, msg);
@@ -305,8 +305,8 @@ public class EncryptionUtils {
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
-            } else if (cr.getType(mUri) == FormsColumns.CONTENT_ITEM_TYPE) {
-                formCursor = cr.query(mUri, null, null, null, null);
+            } else if (cr.getType(uri) == FormsColumns.CONTENT_ITEM_TYPE) {
+                formCursor = cr.query(uri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
                     Log.e(t, msg);
