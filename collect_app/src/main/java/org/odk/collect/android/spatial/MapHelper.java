@@ -96,17 +96,17 @@ public class MapHelper {
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
-    private static String _getGoogleBasemap() {
+    private static String getGoogleBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
-    private static String _getOsmBasemap() {
+    private static String getOsmBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
         if (mGoogleMap != null) {
-            String basemap = _getGoogleBasemap();
+            String basemap = getGoogleBasemap();
             switch (basemap) {
                 case GOOGLE_MAP_STREETS:
                     mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -126,7 +126,7 @@ public class MapHelper {
             }
         } else {
             //OSMMAP
-            String basemap = _getOsmBasemap();
+            String basemap = getOsmBasemap();
 
             ITileSource tileSource = null;
 
