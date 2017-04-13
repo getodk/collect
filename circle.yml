@@ -9,7 +9,7 @@ machine:
         # https://docs.gradle.org/current/userguide/build_environment.html
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
 
-        INSTRUMENTED_BUILDS: false
+        INSTRUMENTED_BUILDS: 0
         
 dependencies:
     pre:
@@ -39,25 +39,28 @@ test:
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
         - ? |
             case $INSTRUMENTED_BUILDS in
-                true)
+                1)
                     mksdcard -l e 128M sdcard.img
                     emulator -avd circleci-android22 -sdcard sdcard.img -no-window
                     circle-android wait-for-boot
                     gradlew connectedCheck -Pandroid.useDexArchive=false
                     ;;
+                0)
+                    echo "Disabled instrumented builds"
+                    ;;
             esac
-        :
-            parallel: true
+
     post:
         - ? |
             case $INSTRUMENTED_BUILDS in
-                true)
+                1)
                     cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
                     cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests
                     ;;
+                0) 
+                    echo "Disabled instrumented builds"
+                    ;;
             esac
-        :
-            parallel: true
 
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
    
