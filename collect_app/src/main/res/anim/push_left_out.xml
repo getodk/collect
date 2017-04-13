@@ -14,6 +14,12 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-	<translate android:fromXDelta="0" android:toXDelta="-100%p" android:duration="300"/>
-	<alpha android:fromAlpha="1.0" android:toAlpha="0.0" android:duration="300" />
+    <translate
+        android:duration="300"
+        android:fromXDelta="0"
+        android:toXDelta="-100%p" />
+    <alpha
+        android:duration="300"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.0" />
 </set>

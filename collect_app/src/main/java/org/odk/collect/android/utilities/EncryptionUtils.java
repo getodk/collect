@@ -184,16 +184,16 @@ public class EncryptionUtils {
 
         public String getBase64EncryptedElementSignature() {
             // Step 0: construct the text of the elements in elementSignatureSource (done)
-            // 		Where...
+            //     Where...
             //      * Elements are separated by newline characters.
             //      * Filename is the unencrypted filename (no .enc suffix).
             //      * Md5 hashes of the unencrypted files' contents are converted
             //        to zero-padded 32-character strings before concatenation.
             //      Assumes this is in the order:
-            //			formId
-            //			version   (omitted if null)
-            //			base64RsaEncryptedSymmetricKey
-            //			instanceId
+            //          formId
+            //          version   (omitted if null)
+            //          base64RsaEncryptedSymmetricKey
+            //          instanceId
             //          for each media file { filename "::" md5Hash }
             //          submission.xml "::" md5Hash
 

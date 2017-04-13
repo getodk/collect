@@ -71,10 +71,8 @@ android {
 
     buildTypes {
         release {
-            // Proguard rules will need to be carefully revised before turning on minification --
-            // the current configuration breaks Google Drive API.
-            // minifyEnabled(true)
-            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            minifyEnabled(true)
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
         debug {
             debuggable(true)
