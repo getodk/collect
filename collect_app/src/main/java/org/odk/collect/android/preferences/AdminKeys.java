@@ -78,6 +78,7 @@ public final class AdminKeys {
         ag(KEY_CHANGE_PASSWORD,            PreferenceKeys.KEY_PASSWORD),
         ag(KEY_CHANGE_USERNAME,            PreferenceKeys.KEY_USERNAME),
         ag(KEY_CHANGE_GOOGLE_ACCOUNT,      PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT),
-        ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC)
+        ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC),
+        ag(KEY_TIMER_LOG_ENABLED,          PreferenceKeys.KEY_TIMER_LOG_ENABLED)
     };
 }

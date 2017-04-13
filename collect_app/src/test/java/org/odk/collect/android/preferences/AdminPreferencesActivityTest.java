@@ -70,7 +70,9 @@ public class AdminPreferencesActivityTest {
                 {"jump_to", AdminKeys.KEY_JUMP_TO},
                 {"save_mid", AdminKeys.KEY_SAVE_MID},
                 {"save_as", AdminKeys.KEY_SAVE_AS},
-                {"mark_as_finalized", AdminKeys.KEY_MARK_AS_FINALIZED}
+                {"mark_as_finalized", AdminKeys.KEY_MARK_AS_FINALIZED},
+
+                {"timer_log", AdminKeys.KEY_TIMER_LOG_ENABLED}
         });
     }
 
