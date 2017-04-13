@@ -507,4 +507,6 @@
 <string name="encoding_max_limit">Maximum characters limit reached QRCode can\'t be generated for all settings</string>
 <string name="share">Share</string>
 <string name="select_qrcode">Select QR Code from SD Card</string>
+<string name="turn_on_flashlight">Turn on Flashlight</string>
+<string name="turn_off_flashlight">Turn off Flashlight</string>
 </resources>

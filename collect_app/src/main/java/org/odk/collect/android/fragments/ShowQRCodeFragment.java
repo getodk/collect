@@ -38,6 +38,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CustomScannerActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.tasks.GenerateQRCode;
 import org.odk.collect.android.utilities.CompressionUtils;
@@ -106,9 +107,13 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.btnScan:
                 IntentIntegrator integrator = IntentIntegrator.forFragment(this);
-                integrator.setBeepEnabled(true);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                integrator.initiateScan();
+                integrator
+                        .setCaptureActivity(CustomScannerActivity.class)
+                        .setBeepEnabled(true)
+                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+                        .setOrientationLocked(false)
+                        .setPrompt("Place the QRCode inside the rectangle")
+                        .initiateScan();
                 break;
 
             case R.id.btnSelect:
