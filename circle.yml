@@ -30,17 +30,21 @@ dependencies:
 
 test:
     override:
-        # Disable incremental dexing to speed up clean builds
+        # Disable incremental dexing on all gradle commands to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
         - ./gradlew checkstyle -Pandroid.useDexArchive=false
         - ./gradlew lintDebug -Pandroid.useDexArchive=false
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
-        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then mksdcard -l e 128M sdcard.img; fi
-        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then emulator -avd circleci-android22 -sdcard sdcard.img -no-window; fi:
+
+        # Instrumented tests take time, so only run them on master
+        # SD card needed for circleci-android22 image
+        # https://circleci.com/docs/1.0/android/
+        - if [ $CIRCLE_BRANCH = 'master' ]; then mksdcard -l e 128M sdcard.img; fi
+        - if [ $CIRCLE_BRANCH = 'master' ]; then emulator -avd circleci-android22 -sdcard sdcard.img -no-window; fi:
             background: true
             parallel: true
-        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then circle-android wait-for-boot; fi
-        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then ./gradlew connectedCheck -Pandroid.useDexArchive=false; fi
+        - if [ $CIRCLE_BRANCH = 'master' ]; then circle-android wait-for-boot; fi
+        - if [ $CIRCLE_BRANCH = 'master' ]; then ./gradlew connectedCheck -Pandroid.useDexArchive=false; fi
 
     post:
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
@@ -51,5 +55,5 @@ test:
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
         - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
 
-        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS; fi
-        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests; fi
+        - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS; fi
+        - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests; fi
