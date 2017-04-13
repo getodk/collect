@@ -29,11 +29,7 @@ public class TimerLogger {
         FORM_RESUME,        // Resume filling in the form after previously exiting
         FORM_SAVE,          // Save the form
         FORM_FINALIZE,      // Finalize the form
-        HIERARCHY,
-        PREFERENCES,
-        LANGUAGE,
-        VIEW_END,
-        NON_VIEW_END
+        HIERARCHY
     }
 
     public class Event {
@@ -61,7 +57,7 @@ public class TimerLogger {
             this.fecType = fecType;
             this.node = node;
 
-            if(eventType == EventTypes.FEC && fecType == FormEntryController.EVENT_QUESTION) {
+            if (eventType == EventTypes.FEC && fecType == FormEntryController.EVENT_QUESTION) {
                 this.dirn = advancingPage ? "fwd" : "back";
             } else {
                 this.dirn = "";
@@ -69,17 +65,6 @@ public class TimerLogger {
 
             end = 0;
             endTimeSet = false;
-        }
-
-        /*
-         * Return true if this is a non view type event
-         *  Non View events occur inside view events
-         */
-        public boolean isNonViewIntervalEvent() {
-            if (eventType == EventTypes.LANGUAGE || eventType == EventTypes.PREFERENCES) {
-                return true;
-            }
-            return false;
         }
 
         /*
@@ -100,13 +85,11 @@ public class TimerLogger {
         /*
          * Mark the end of an interval event
          */
-        public void setEnd(EventTypes endType, long endTime) {
+        public void setEnd(long endTime) {
 
-            if (!endTimeSet) {
-                if (endType == EventTypes.NON_VIEW_END && isNonViewIntervalEvent() || endType == EventTypes.VIEW_END && isIntervalViewEvent()) {
-                    this.end = endTime;
-                    this.endTimeSet = true;
-                }
+            if (!endTimeSet && isIntervalViewEvent()) {
+                this.end = endTime;
+                this.endTimeSet = true;
             }
 
         }
@@ -116,7 +99,7 @@ public class TimerLogger {
          * This will return false if at least one of the events is waiting for an end time
          */
         public boolean canSave() {
-            if (this.endTimeSet == false && (isNonViewIntervalEvent() || isIntervalViewEvent())) {
+            if (this.endTimeSet == false && (isIntervalViewEvent())) {
                 return false;
             }
             return true;
@@ -179,12 +162,6 @@ public class TimerLogger {
                 case HIERARCHY:
                     sType = "jump";
                     break;
-                case PREFERENCES:
-                    sType = "preferences menu";
-                    break;
-                case LANGUAGE:
-                    sType = "language menu";
-                    break;
                 default:
                     sType = "Unknown Event Type: " + eventType;
                     break;
@@ -203,7 +180,6 @@ public class TimerLogger {
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
     private boolean mTimerEnabled = false;              // Set true of the timer logger is enabled
-    private boolean locationRecordingEnabled = false;   // Set true to also record gps coordinates
 
 
     public TimerLogger(File instanceFile, SharedPreferences sharedPreferences, FormController formController) {
@@ -257,7 +233,7 @@ public class TimerLogger {
 
             // If the user is exiting then mark any open questions as closed
             if (eventType == EventTypes.FORM_EXIT || eventType == EventTypes.FORM_FINALIZE) {
-                exitView(EventTypes.VIEW_END);
+                exitView();
             }
             writeEvents();
         }
@@ -267,14 +243,14 @@ public class TimerLogger {
     /*
      * Exit a question, repeat dialog, language select etc
      */
-    public void exitView(EventTypes endType) {
+    public void exitView() {
 
         if (mTimerEnabled) {
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
             for (int i = 0; i < mEvents.size(); i++) {
-                mEvents.get(i).setEnd(endType, end);
+                mEvents.get(i).setEnd(end);
             }
             writeEvents();
         }
