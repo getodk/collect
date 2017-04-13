@@ -86,14 +86,14 @@ public class MapHelper {
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
     }
 
-    public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
+    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver) {
         mGoogleMap = null;
         mOsmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
-        iRegisterReceiver = pIregisterReceiver;
-        mOsmMap = pOsmMap;
-        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
+        this.iRegisterReceiver = iregisterReceiver;
+        mOsmMap = osmMap;
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
     }
 
     private static String getGoogleBasemap() {
