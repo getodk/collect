@@ -35,31 +35,21 @@ test:
         - ./gradlew checkstyle -Pandroid.useDexArchive=false
         - ./gradlew lintDebug -Pandroid.useDexArchive=false
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
-        - case $INSTRUMENTED_TESTS in true) mksdcard -l e 128M sdcard.img ;; esac
-        - case $INSTRUMENTED_TESTS in true) emulator -avd circleci-android22 -sdcard sdcard.img -no-window ;; esac:
+        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then mksdcard -l e 128M sdcard.img; fi
+        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then emulator -avd circleci-android22 -sdcard sdcard.img -no-window; fi:
             background: true
             parallel: true
-        - ? |
-            case $INSTRUMENTED_TESTS in
-                true)
-                    circle-android wait-for-boot
-                    ./gradlew connectedCheck -Pandroid.useDexArchive=false
-                    ;;
-            esac
+        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then circle-android wait-for-boot; fi
+        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then ./gradlew connectedCheck -Pandroid.useDexArchive=false; fi
 
     post:
-        - ? |
-            case $INSTRUMENTED_TESTS in
-                true)
-                    cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
-                    cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests
-                    ;;
-            esac
-
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
-   
+
         - mkdir -p $CIRCLE_TEST_REPORTS/lint
         - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
         - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
+
+        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS; fi
+        - if [ $CIRCLE_BRANCH = 'toggle-instrumented-tests' ]; then cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests; fi
