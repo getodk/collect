@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.ShareActionProvider;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -43,12 +42,10 @@ import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.tasks.GenerateQRCode;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ImportSettings;
-import org.odk.collect.android.utilities.QRCodeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.DataFormatException;
@@ -57,6 +54,8 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.odk.collect.android.utilities.QRCodeUtils.decodeFromBitmap;
+import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 
 
 /**
@@ -66,7 +65,6 @@ import static android.view.View.VISIBLE;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
-    private ShareActionProvider mShareActionProvider;
     private ImageView qrImageView;
     private ProgressBar progressBar;
     private Intent mShareIntent;
@@ -93,11 +91,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private void updateShareIntent(Bitmap qrCode) throws IOException {
 
         //Save the bitmap to a file
-        File cache = getActivity().getApplicationContext().getExternalCacheDir();
-        File shareFile = new File(cache, "shareImage.jpeg");
-        FileOutputStream out = new FileOutputStream(shareFile);
-        qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        out.close();
+        File shareFile = saveBitmapToCache(qrCode);
 
         // Sent a intent to share saved image
         mShareIntent = new Intent();
@@ -148,8 +142,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     final InputStream imageStream = getActivity().getContentResolver()
                             .openInputStream(imageUri);
 
-                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    String response = QRCodeUtils.decodeFromBitmap(selectedImage);
+                    final Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                    String response = decodeFromBitmap(bitmap);
                     if (response != null) {
                         applySettings(response);
                     }

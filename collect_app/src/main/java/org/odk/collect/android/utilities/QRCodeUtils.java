@@ -27,6 +27,12 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 
+import org.odk.collect.android.application.Collect;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import timber.log.Timber;
 
 /**
@@ -54,5 +60,15 @@ public class QRCodeUtils {
             ToastUtils.showLongToast("QR Code not found in the selected image");
         }
         return null;
+    }
+
+    public static File saveBitmapToCache(Bitmap qrCode) throws IOException {
+        //Save the bitmap to a file
+        File cache = Collect.getInstance().getApplicationContext().getExternalCacheDir();
+        File shareFile = new File(cache, "shareImage.jpeg");
+        FileOutputStream out = new FileOutputStream(shareFile);
+        qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        out.close();
+        return shareFile;
     }
 }
