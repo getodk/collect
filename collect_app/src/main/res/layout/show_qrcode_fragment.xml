@@ -20,6 +20,7 @@
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:padding="5dp"
         android:text="@string/tv_qrcode" />
 
@@ -44,19 +45,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_margin="5dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btnScan"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/scan_qrcode" />
 
         <Button
             android:id="@+id/btnSelect"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:text="@string/select_qrcode" />
     </LinearLayout>
