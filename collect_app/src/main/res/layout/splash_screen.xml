@@ -1,64 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:gravity="center_vertical|center_horizontal"
-	android:background="@android:color/transparent"
-	android:id="@+id/layout"
-	android:orientation="vertical"
-	android:padding="10dip">
-	<ImageView
-		android:id="@+id/splash"
-		android:gravity="center"
-		android:contentDescription="@string/app_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@android:color/transparent"
-		android:padding="0dip"
-		android:visibility="gone" />
-	<LinearLayout
-		android:id="@+id/splash_default"
-		android:orientation="horizontal"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="center_vertical|center_horizontal"
-		android:paddingBottom="5dip">
-		<ImageView
-			android:id="@+id/app_icon"
-			android:src="@drawable/notes"
-			android:contentDescription="@string/app_name"
-			android:layout_height="72dip"
-			android:layout_width="72dip" />
-		<LinearLayout
-			android:orientation="vertical"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical|start"
-			android:paddingBottom="5dip">
-			<TextView
-				android:id="@+id/text"
-				android:text="@string/app_name"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:background="@android:color/transparent"
-				android:textSize="22sp"
-				android:textStyle="bold"
-				android:paddingStart="7dip"
-				android:paddingLeft="7dip"
-				android:paddingEnd="7dip"
-				android:paddingRight="7dip" />
-			<TextView
-				android:id="@+id/url"
-				android:text="@string/app_url"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:background="@android:color/transparent"
-				android:textSize="14sp"
-				android:paddingStart="7dip"
-				android:paddingLeft="7dip"
-				android:paddingEnd="7dip"
-				android:paddingRight="7dip" />
-		</LinearLayout>
-	</LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+    <ImageView
+        android:id="@+id/splash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:gravity="center"
+        android:padding="0dip"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/splash_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingBottom="5dip">
+
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="72dip"
+            android:layout_height="72dip"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/notes" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:orientation="vertical"
+            android:paddingBottom="5dip">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:paddingEnd="7dip"
+                android:paddingLeft="7dip"
+                android:paddingRight="7dip"
+                android:paddingStart="7dip"
+                android:text="@string/app_name"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/url"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:paddingEnd="7dip"
+                android:paddingLeft="7dip"
+                android:paddingRight="7dip"
+                android:paddingStart="7dip"
+                android:text="@string/app_url"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
