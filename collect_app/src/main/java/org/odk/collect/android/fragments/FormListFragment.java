@@ -23,11 +23,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 public abstract class FormListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
-        if (mSelectedSortingOrder == null) {
-            restoreSelectedSortingOrder();
-        }
         String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
-        switch (mSelectedSortingOrder) {
+        switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
                 sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
                 break;

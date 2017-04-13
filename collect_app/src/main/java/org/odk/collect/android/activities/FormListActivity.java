@@ -9,11 +9,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class FormListActivity extends AppListActivity {
     protected String getSortingOrder() {
-        if (mSelectedSortingOrder == null) {
-            restoreSelectedSortingOrder();
-        }
         String sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
-        switch (mSelectedSortingOrder) {
+        switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
                 sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
                 break;

@@ -19,12 +19,15 @@ package org.odk.collect.android.activities;
 import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,7 +74,7 @@ abstract class AppListActivity extends ListActivity {
 
     private boolean mIsSearchBoxShown;
 
-    protected Integer mSelectedSortingOrder;
+    private Integer mSelectedSortingOrder;
 
     @Override
     protected void onResume() {
@@ -80,6 +83,7 @@ abstract class AppListActivity extends ListActivity {
         setupSearchBox();
         setupDrawer();
         setupDrawerItems();
+        Log.e("Heello","indianna");
     }
 
     @Override
@@ -189,19 +193,29 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void setupDrawerItems() {
+        Log.e("settingup",Integer.toString(mSelectedSortingOrder));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mSortingOptions) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                Log.e("position",Integer.toString(position));
+                Log.e("mselectedsortingorder",Integer.toString(mSelectedSortingOrder));
+                if(position == mSelectedSortingOrder) {
+                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
+                }
+                Log.e("check1","qwerty");
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
             }
         };
-
+        Log.e("HELLO","after dot");
         mDrawerList.setAdapter(adapter);
+        Log.e("ADATER SET","before itemclivk");
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
+                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.light_blue));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
@@ -344,6 +358,13 @@ abstract class AppListActivity extends ListActivity {
         mSelectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected int getSelectedSortingOrder() {
+        if (mSelectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return mSelectedSortingOrder;
     }
 
     protected CharSequence getFilterText() {
