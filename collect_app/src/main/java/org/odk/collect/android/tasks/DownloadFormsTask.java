@@ -497,10 +497,10 @@ public class DownloadFormsTask extends
         private final String mediaPath;
         private final boolean isNew;
 
-        private UriResult(Uri uri, String mediaPath, boolean aNew) {
+        private UriResult(Uri uri, String mediaPath, boolean isNew) {
             this.uri = uri;
             this.mediaPath = mediaPath;
-            this.isNew = aNew;
+            this.isNew = isNew;
         }
 
         private Uri getUri() {
@@ -521,9 +521,9 @@ public class DownloadFormsTask extends
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean aNew) {
+        private FileResult(File file, boolean isNew) {
             this.file = file;
-            isNew = aNew;
+            this.isNew = isNew;
         }
 
         private File getFile() {
