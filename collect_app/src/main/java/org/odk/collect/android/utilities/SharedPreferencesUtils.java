@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
@@ -35,15 +36,15 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
  * Created by shobhit on 12/4/17.
  */
 
-public class ImportSettings {
+public class SharedPreferencesUtils {
 
-    public static void fromJSON(JSONObject settingsJson) throws JSONException {
 
+    public static void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
         Context context = Collect.getInstance();
-        final SharedPreferences settings =
+        final SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
 
-        SharedPreferences.Editor editor = settings.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_PROTOCOL, settingsJson.getString(KEY_PROTOCOL));
         editor.putString(KEY_SERVER_URL, settingsJson.getString(KEY_SERVER_URL));
         editor.putString(KEY_GOOGLE_SHEETS_URL, settingsJson.getString(KEY_GOOGLE_SHEETS_URL));
@@ -55,6 +56,26 @@ public class ImportSettings {
 
         //settings import confirmation toast
         ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
+    }
 
+    public static String getJSONFromPreferences() throws JSONException {
+        Context context = Collect.getInstance();
+        final SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(KEY_PROTOCOL, sharedPreferences.getString(KEY_PROTOCOL, null));
+        jsonObject.put(KEY_SERVER_URL, sharedPreferences.getString(KEY_SERVER_URL,
+                context.getString(R.string.default_server_url)));
+        jsonObject.put(KEY_GOOGLE_SHEETS_URL, sharedPreferences.getString(KEY_GOOGLE_SHEETS_URL,
+                context.getString(R.string.default_google_sheets_url)));
+        jsonObject.put(KEY_FORMLIST_URL, sharedPreferences.getString(PreferenceKeys.KEY_FORMLIST_URL,
+                context.getString(R.string.default_odk_formlist)));
+        jsonObject.put(KEY_SUBMISSION_URL, sharedPreferences.getString(PreferenceKeys.KEY_SUBMISSION_URL,
+                context.getString(R.string.default_odk_submission)));
+        jsonObject.put(KEY_USERNAME, sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, ""));
+        jsonObject.put(KEY_PASSWORD, sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, ""));
+        return jsonObject.toString();
     }
 }
+

@@ -15,12 +15,9 @@
 package org.odk.collect.android.tasks;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -30,10 +27,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.QRCodeListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -43,13 +38,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.utilities.SharedPreferencesUtils.getJSONFromPreferences;
 
 /**
  * Created by shobhit on 12/4/17.
@@ -60,20 +49,16 @@ public class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
 
     private final QRCodeListener listener;
     private final Context context;
-    private final SharedPreferences sharedPreferences;
-    private final ImageView imageView;
 
-    public GenerateQRCode(QRCodeListener listener, Context context, ImageView imageView) {
+    public GenerateQRCode(QRCodeListener listener, Context context) {
         this.listener = listener;
         this.context = context;
-        this.imageView = imageView;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     private Bitmap generateQRBitMap() {
         String content;
         try {
-            content = getPreferencesJSON();
+            content = getJSONFromPreferences();
             String compressedData = CompressionUtils.compress(content);
 
             //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
@@ -106,22 +91,6 @@ public class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
         return null;
     }
 
-    private String getPreferencesJSON() throws JSONException {
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(KEY_PROTOCOL, sharedPreferences.getString(KEY_PROTOCOL, null));
-        jsonObject.put(KEY_SERVER_URL, sharedPreferences.getString(KEY_SERVER_URL,
-                context.getString(R.string.default_server_url)));
-        jsonObject.put(KEY_GOOGLE_SHEETS_URL, sharedPreferences.getString(KEY_GOOGLE_SHEETS_URL,
-                context.getString(R.string.default_google_sheets_url)));
-        jsonObject.put(KEY_FORMLIST_URL, sharedPreferences.getString(PreferenceKeys.KEY_FORMLIST_URL,
-                context.getString(R.string.default_odk_formlist)));
-        jsonObject.put(KEY_SUBMISSION_URL, sharedPreferences.getString(PreferenceKeys.KEY_SUBMISSION_URL,
-                context.getString(R.string.default_odk_submission)));
-        jsonObject.put(KEY_USERNAME, sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, ""));
-        jsonObject.put(KEY_PASSWORD, sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, ""));
-        return jsonObject.toString();
-    }
 
     @Override
     protected void onPreExecute() {
