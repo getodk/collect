@@ -9,8 +9,6 @@ machine:
         # https://docs.gradle.org/current/userguide/build_environment.html
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
 
-        INSTRUMENTED_TESTS: 1
-        
 dependencies:
     pre:
         # Cache Android SDK to avoid unnecessary downloads
@@ -45,14 +43,20 @@ test:
                     circle-android wait-for-boot
                     gradlew connectedCheck -Pandroid.useDexArchive=false
                     ;;
+                false)
+                    echo "Skipping instrumented tests."
+                    ;;
             esac
-    
+
     post:
         - ? |
             case $INSTRUMENTED_TESTS in
                 true)
                     cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS
                     cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests
+                    ;;
+                false)
+                    echo "Skipping instrumented test outputs."
                     ;;
             esac
 
