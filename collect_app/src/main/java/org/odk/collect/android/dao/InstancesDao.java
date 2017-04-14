@@ -81,7 +81,7 @@ public class InstancesDao {
         } else {
             String selection =
                     InstanceProviderAPI.InstanceColumns.STATUS + " =? and "
-                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String selectionArgs[] = {
                     InstanceProviderAPI.STATUS_SUBMITTED,
                     "%" + charSequence + "%"};
@@ -142,8 +142,8 @@ public class InstancesDao {
         } else {
             String selection =
                     "(" + InstanceProviderAPI.InstanceColumns.STATUS + "=? or "
-                    + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
-                    + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
+                            + InstanceProviderAPI.InstanceColumns.STATUS + "=?) and "
+                            + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " LIKE ?";
             String selectionArgs[] = {
                     InstanceProviderAPI.STATUS_COMPLETE,
                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED,
@@ -239,12 +239,12 @@ public class InstancesDao {
         Collect.getInstance().getContentResolver().delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI, null, null);
     }
 
-    public void deleteInstancesFromIDs(List<String> ids){
+    public void deleteInstancesFromIDs(List<String> ids) {
         int count = ids.size();
         int counter = 0;
         while (count > 0) {
             String[] selectionArgs = null;
-            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER ) {
+            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
                 selectionArgs = new String[
                         ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
             } else {
@@ -253,7 +253,7 @@ public class InstancesDao {
 
             StringBuilder selection = new StringBuilder();
             selection.append(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " IN (");
-            int j = 0 ;
+            int j = 0;
             while (j < selectionArgs.length) {
                 selectionArgs[j] = ids.get(
                         counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER + j);

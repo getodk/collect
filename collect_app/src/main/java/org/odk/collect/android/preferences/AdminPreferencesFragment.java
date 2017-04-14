@@ -77,7 +77,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "CHANGED");
-                    } else{
+                    } else {
                         SharedPreferences.Editor editor = getActivity().
                                 getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");

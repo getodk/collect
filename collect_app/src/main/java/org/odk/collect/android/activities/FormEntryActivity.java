@@ -227,7 +227,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
-    private boolean mShowNavigationButtons=false;
+    private boolean mShowNavigationButtons = false;
 
     private FormsDao mFormsDao;
 
@@ -1261,7 +1261,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Disables the back button if it is first question....
      */
-    private void adjustBackNavigationButtonVisibility(){
+    private void adjustBackNavigationButtonVisibility() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         try {
