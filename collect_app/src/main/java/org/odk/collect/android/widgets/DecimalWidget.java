@@ -103,7 +103,7 @@ public class DecimalWidget extends StringWidget {
         } else {
             try {
                 return new DecimalData(Double.valueOf(s).doubleValue());
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }
