@@ -499,6 +499,6 @@
 <string name="device_id">Device ID</string>
 <string name="subscriber_id">Subscriber ID</string>
 <string name="sim_serial_id">SIM serial number</string>
-<string name="select_date">Select date</string>	
+<string name="select_date">Select date</string>
 <string name="select_time">Select time</string>
 </resources>
