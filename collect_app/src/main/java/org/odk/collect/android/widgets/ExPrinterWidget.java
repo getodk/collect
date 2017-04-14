@@ -254,10 +254,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.isAltPressed()) {
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
     @Override

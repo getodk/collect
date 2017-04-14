@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2009 University of Washington Licensed under the Apache
   License, Version 2.0 (the "License"); you may not use this file except in
   compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -17,7 +16,7 @@
     android:layout_marginRight="0dp"
     android:layout_marginTop="0dp"
     android:orientation="vertical"
-    android:padding="0dp" >
+    android:padding="0dp">
 
     <TextView
         android:id="@+id/main_menu_header"
@@ -42,16 +41,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingEnd="10dp"
             android:paddingLeft="10dp"
-			android:paddingStart="10dp"
             android:paddingRight="10dp"
-			android:paddingEnd="10dp">
+            android:paddingStart="10dp">
 
             <View
                 android:layout_width="match_parent"
@@ -76,9 +75,9 @@
                 android:textSize="21sp" />
 
             <View
+                android:id="@+id/review_spacer"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:id="@+id/review_spacer" />
+                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/send_data"
@@ -95,8 +94,8 @@
                 android:id="@+id/view_sent_forms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/view_sent_forms"
                 android:padding="20dp"
+                android:text="@string/view_sent_forms"
                 android:textSize="21sp" />
 
             <View
@@ -111,9 +110,9 @@
                 android:textSize="21sp" />
 
             <View
+                android:id="@+id/get_forms_spacer"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:id="@+id/get_forms_spacer" />
+                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/manage_forms"

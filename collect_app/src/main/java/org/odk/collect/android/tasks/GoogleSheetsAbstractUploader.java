@@ -966,15 +966,15 @@ public abstract class GoogleSheetsAbstractUploader extends
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      *
      * @param spreadsheetId
-     * @param mSpreadsheetName
+     * @param spreadsheetName
      * @return
      * @throws IOException
      */
-    private List<List<Object>> getHeaderFeed(String spreadsheetId, String mSpreadsheetName)
+    private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
             throws IOException {
         ValueRange response = mSheetsService.spreadsheets()
                 .values()
-                .get(spreadsheetId, mSpreadsheetName)
+                .get(spreadsheetId, spreadsheetName)
                 .execute();
         return response.getValues();
     }
