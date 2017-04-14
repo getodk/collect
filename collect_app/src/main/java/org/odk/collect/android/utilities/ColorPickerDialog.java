@@ -96,7 +96,7 @@ public class ColorPickerDialog extends Dialog {
         private OnColorChangedListener mListener;
 
         ColorPickerView(Context c, OnColorChangedListener l, int color,
-                int defaultColor) {
+                        int defaultColor) {
             super(c);
             mListener = l;
             mDefaultColor = defaultColor;
@@ -112,39 +112,33 @@ public class ColorPickerDialog extends Dialog {
 
             // Initialize the colors of the hue slider bar
             int index = 0;
-            for (float i = 0; i < 256; i += 256 / 42) // Red (#f00) to pink
-            // (#f0f)
-            {
+            for (float i = 0; i < 256; i += 256 / 42) {
+                // Red (#f00) to pink (#f0f)
                 mHueBarColors[index] = Color.rgb(255, 0, (int) i);
                 index++;
             }
-            for (float i = 0; i < 256; i += 256 / 42) // Pink (#f0f) to blue
-            // (#00f)
-            {
+            for (float i = 0; i < 256; i += 256 / 42) {
+                // Pink (#f0f) to blue (#00f)
                 mHueBarColors[index] = Color.rgb(255 - (int) i, 0, 255);
                 index++;
             }
-            for (float i = 0; i < 256; i += 256 / 42) // Blue (#00f) to light
-            // blue (#0ff)
-            {
+            for (float i = 0; i < 256; i += 256 / 42) {
+                // Blue (#00f) to light blue (#0ff)
                 mHueBarColors[index] = Color.rgb(0, (int) i, 255);
                 index++;
             }
-            for (float i = 0; i < 256; i += 256 / 42) // Light blue (#0ff) to
-            // green (#0f0)
-            {
+            for (float i = 0; i < 256; i += 256 / 42) {
+                // Light blue (#0ff) to green (#0f0)
                 mHueBarColors[index] = Color.rgb(0, 255, 255 - (int) i);
                 index++;
             }
-            for (float i = 0; i < 256; i += 256 / 42) // Green (#0f0) to yellow
-            // (#ff0)
-            {
+            for (float i = 0; i < 256; i += 256 / 42) {
+                // Green (#0f0) to yellow (#ff0)
                 mHueBarColors[index] = Color.rgb((int) i, 255, 0);
                 index++;
             }
-            for (float i = 0; i < 256; i += 256 / 42) // Yellow (#ff0) to red
-            // (#f00)
-            {
+            for (float i = 0; i < 256; i += 256 / 42) {
+                // Yellow (#ff0) to red (#f00)
                 mHueBarColors[index] = Color.rgb(255, 255 - (int) i, 0);
                 index++;
             }
@@ -232,8 +226,8 @@ public class ColorPickerDialog extends Dialog {
                 if (translatedHue != x) {
                     mPaint.setColor(mHueBarColors[x]);
                     mPaint.setStrokeWidth(1);
-                } else // else display a slightly larger black line
-                {
+                } else {
+                    // else display a slightly larger black line
                     mPaint.setColor(Color.BLACK);
                     mPaint.setStrokeWidth(3);
                 }
@@ -385,7 +379,7 @@ public class ColorPickerDialog extends Dialog {
     }
 
     public ColorPickerDialog(Context context, OnColorChangedListener listener,
-            String key, int initialColor, int defaultColor, String title) {
+                             String key, int initialColor, int defaultColor, String title) {
         super(context);
 
         mListener = listener;
