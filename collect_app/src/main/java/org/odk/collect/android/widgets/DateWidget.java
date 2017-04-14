@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -64,8 +65,8 @@ public class DateWidget extends QuestionWidget {
         createDateButton();
         createDateTextView();
         createDatePickerDialog();
-        addViews();
         hideDayFieldIfNotInFormat();
+        addViews();
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
             DateWidgetUtils.fixCalendarViewIfJellyBean(mDatePickerDialog.getDatePicker().getCalendarView());
@@ -173,11 +174,20 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void addViews() {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(mDateButton);
-        linearLayout.addView(mDateTextView);
-        addAnswerView(linearLayout);
+        if (mShowCalendar) {
+            HorizontalScrollView mScrollView = new HorizontalScrollView(getContext());
+            LinearLayout ll = new LinearLayout(getContext());
+            ll.addView(mDatePickerDialog.getDatePicker());
+            ll.setPadding(10, 10, 10, 10);
+            mScrollView.addView(ll);
+            addAnswerView(mScrollView);
+        } else {
+            LinearLayout linearLayout = new LinearLayout(getContext());
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(mDateButton);
+            linearLayout.addView(mDateTextView);
+            addAnswerView(linearLayout);
+        }
     }
 
     private void setDate() {
