@@ -107,7 +107,7 @@ public class ExDecimalWidget extends ExStringWidget {
         } else {
             try {
                 return new DecimalData(Double.valueOf(s).doubleValue());
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }

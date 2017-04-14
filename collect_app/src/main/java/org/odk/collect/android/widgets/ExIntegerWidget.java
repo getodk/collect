@@ -95,7 +95,7 @@ public class ExIntegerWidget extends ExStringWidget {
         } else {
             try {
                 return new IntegerData(Integer.parseInt(s));
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }

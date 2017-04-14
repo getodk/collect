@@ -77,7 +77,7 @@ public class StringNumberWidget extends StringWidget {
         } else {
             try {
                 return new StringData(s);
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }
