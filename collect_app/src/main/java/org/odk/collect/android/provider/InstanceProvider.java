@@ -48,32 +48,67 @@ public class InstanceProvider extends ContentProvider {
     private static final String DATABASE_NAME = "instances.db";
     private static final int DATABASE_VERSION = 4;
     private static final String INSTANCES_TABLE_NAME = "instances";
-    private static final int INSTANCES = 1;
-    private static final int INSTANCE_ID = 2;
-    private static final UriMatcher sUriMatcher;
+
     private static HashMap<String, String> sInstancesProjectionMap;
 
-    static {
-        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
-        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
+    private static final int INSTANCES = 1;
+    private static final int INSTANCE_ID = 2;
 
-        sInstancesProjectionMap = new HashMap<String, String>();
-        sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
-        sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
-        sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE,
-                InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
-        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH,
-                InstanceColumns.INSTANCE_FILE_PATH);
-        sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
-        sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
-        sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
-        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
-                InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
-                InstanceColumns.DISPLAY_SUBTEXT);
-        sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
+    private static final UriMatcher sUriMatcher;
+
+    /**
+     * This class helps open, create, and upgrade the database file.
+     */
+    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+
+        DatabaseHelper(String databaseName) {
+            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+        }
+
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
+                    + InstanceColumns._ID + " integer primary key, "
+                    + InstanceColumns.DISPLAY_NAME + " text not null, "
+                    + InstanceColumns.SUBMISSION_URI + " text, "
+                    + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
+                    + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
+                    + InstanceColumns.JR_FORM_ID + " text not null, "
+                    + InstanceColumns.JR_VERSION + " text, "
+                    + InstanceColumns.STATUS + " text not null, "
+                    + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
+                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
+                    + InstanceColumns.DELETED_DATE + " date );");
+        }
+
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            int initialVersion = oldVersion;
+            if (oldVersion == 1) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
+                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                        + "' WHERE " +
+                        InstanceColumns.STATUS + " IS NOT NULL AND " +
+                        InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                        + "'");
+                oldVersion = 2;
+            }
+            if (oldVersion == 2) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.JR_VERSION + " text;");
+            }
+            if (oldVersion == 3) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.DELETED_DATE + " date;");
+            }
+            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
+                    + newVersion
+                    + ", without destroying all the old data");
+        }
     }
 
     private DatabaseHelper mDbHelper;
@@ -385,59 +420,27 @@ public class InstanceProvider extends ContentProvider {
         return count;
     }
 
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+    static {
+        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
+        sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
-        DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
-        }
-
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-                    + InstanceColumns._ID + " integer primary key, "
-                    + InstanceColumns.DISPLAY_NAME + " text not null, "
-                    + InstanceColumns.SUBMISSION_URI + " text, "
-                    + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                    + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                    + InstanceColumns.JR_FORM_ID + " text not null, "
-                    + InstanceColumns.JR_VERSION + " text, "
-                    + InstanceColumns.STATUS + " text not null, "
-                    + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " date );");
-        }
-
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
-            if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " +
-                        InstanceColumns.STATUS + " IS NOT NULL AND " +
-                        InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
-                        + "'");
-                oldVersion = 2;
-            }
-            if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.JR_VERSION + " text;");
-            }
-            if (oldVersion == 3) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.DELETED_DATE + " date;");
-            }
-            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
-                    + newVersion
-                    + ", without destroying all the old data");
-        }
+        sInstancesProjectionMap = new HashMap<String, String>();
+        sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
+        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
+        sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
+        sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE,
+                InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
+        sInstancesProjectionMap.put(InstanceColumns.INSTANCE_FILE_PATH,
+                InstanceColumns.INSTANCE_FILE_PATH);
+        sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
+        sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
+        sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
+        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
+                InstanceColumns.LAST_STATUS_CHANGE_DATE);
+        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
+                InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 
 }
