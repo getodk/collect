@@ -1,25 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-     Copyright (C) 2009 University of Washington Licensed under the Apache
-	License, Version 2.0 (the "License"); you may not use this file except in
-	compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-	Unless required by applicable law or agreed to in writing, software distributed
-	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
-	OR CONDITIONS OF ANY KIND, either express or implied. See the License for
-	the specific language governing permissions and limitations under the License.
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (C) 2009 University of Washington Licensed under the Apache
+License, Version 2.0 (the "License"); you may not use this file except in
+compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.odk.collect.android"
-    >
+    package="org.odk.collect.android">
 
-    <uses-feature android:name="android.hardware.location" android:required="false" />
-    <uses-feature android:name="android.hardware.location.network" android:required="false" />
-    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
 
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-    <uses-feature android:name="android.hardware.wifi" android:required="false" />
-
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
 
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -37,57 +44,56 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
     <!--  for Maps v2 functionality, want:
     <uses-feature android:glEsVersion="0x00020000" android:required="false"/>
-    	uses-feature android:glEsVersion="0x00020000" android:required="false"
-    	BUT, the gl setting is not modified by the required parameter, so
-    	do not declare anything here - detect capabilities at runtime.
+    uses-feature android:glEsVersion="0x00020000" android:required="false"
+    BUT, the gl setting is not modified by the required parameter, so
+    do not declare anything here - detect capabilities at runtime.
     -->
 
     <permission
-          android:name="org.odk.collect.android.permission.MAPS_RECEIVE"
-          android:protectionLevel="signature" />
+        android:name="org.odk.collect.android.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="org.odk.collect.android.permission.MAPS_RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <supports-screens
         android:anyDensity="true"
-        android:xlargeScreens="true"
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
-        android:smallScreens="true" />
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
         android:name="org.odk.collect.android.application.Collect"
-		android:supportsRtl="true" 
-        android:largeHeap="true"
-        android:installLocation="auto"
         android:icon="@drawable/notes"
+        android:installLocation="auto"
         android:label="@string/app_name"
-        android:theme="@style/Collect"
-        >
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/Collect">
 
         <provider
-            android:exported="true"
             android:name="org.odk.collect.android.provider.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms" />
+            android:authorities="org.odk.collect.android.provider.odk.forms"
+            android:exported="true" />
         <provider
-            android:exported="true"
             android:name="org.odk.collect.android.provider.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances" />
+            android:authorities="org.odk.collect.android.provider.odk.instances"
+            android:exported="true" />
 
         <activity
             android:name=".activities.MainMenuActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name" >
-        </activity>
+            android:configChanges="locale|orientation|screenSize"
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".activities.FormEntryActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -98,13 +104,12 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
             </intent-filter>
         </activity>
-        <activity 
+        <activity
             android:name=".activities.NotificationActivity"
-            android:label="@string/app_name"
-            android:taskAffinity=""
-            android:launchMode="singleTask"
             android:excludeFromRecents="true"
-            />
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:taskAffinity="" />
         <activity
             android:name=".activities.DrawActivity"
             android:label="@string/app_name" />
@@ -113,10 +118,9 @@
             android:label="@string/all_open_source_licenses" />
         <activity
             android:name=".activities.GoogleDriveActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden"
-            />
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.InstanceChooserList"
             android:label="@string/app_name" />
@@ -132,7 +136,7 @@
 
         <activity
             android:name=".activities.FormChooserList"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -158,12 +162,12 @@
             android:name=".activities.InstanceUploaderList"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name">
-	        <intent-filter>
-	            <action android:name="android.intent.action.VIEW" />
-	            <action android:name="android.intent.action.EDIT" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
 
-	            <category android:name="android.intent.category.DEFAULT" />
-	        </intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.InstanceUploaderActivity"
@@ -195,12 +199,13 @@
         <activity
             android:name=".activities.GeoPointActivity"
             android:label="@string/app_name" />
-        <activity android:name=".activities.GeoPointMapActivity"
+        <activity
+            android:name=".activities.GeoPointMapActivity"
             android:configChanges="orientation"
             android:label="@string/app_name" />
         <!--<activity-->
-            <!--android:name=".activities.GeoPointMapActivitySdk7"-->
-            <!--android:label="@string/app_name" />-->
+        <!--android:name=".activities.GeoPointMapActivitySdk7"-->
+        <!--android:label="@string/app_name" />-->
         <activity
             android:name=".activities.GeoPointOsmMapActivity"
             android:configChanges="orientation"
@@ -228,7 +233,7 @@
         <activity
             android:name=".activities.SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@android:style/Theme.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -240,7 +245,7 @@
         <activity
             android:name=".activities.AndroidShortcuts"
             android:label="ODK Form"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -249,7 +254,7 @@
         </activity>
         <receiver
             android:name=".receivers.NetworkReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -259,30 +264,32 @@
         </receiver>
         <!-- Register AnalyticsReceiver and AnalyticsService to support background
         dispatching on non-Google Play devices. -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
         <!-- ... -->
 
         <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI" />
 
         <meta-data
-            tools:replace="android:value"
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />  <!-- integer/google_play_services_version -->
+            android:value="@integer/google_play_services_version"
+            tools:replace="android:value" />  <!-- integer/google_play_services_version -->
 
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
 
-        </application>
+    </application>
 
 </manifest>

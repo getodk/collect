@@ -56,8 +56,7 @@ import java.util.List;
  */
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
-
-	private static final String LOCATION_COUNT = "locationCount";
+    private static final String LOCATION_COUNT = "locationCount";
 
     //private GoogleMap mMap;
     private MapView mMap;
@@ -232,7 +231,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMarker.remove(mMap);
                 if (mLocation != null) {
                     mReloadLocationButton.setEnabled(true);
-//					mLocationStatus.setVisibility(View.VISIBLE);
+                //mLocationStatus.setVisibility(View.VISIBLE);
                 }
                 mLocationStatus.setVisibility(View.VISIBLE);
                 mMap.getOverlays().remove(mMarker);
@@ -447,16 +446,16 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
 
 
-//				if (mLocation.getLatitude() != mMarker.getPosition().getLatitude() & mLocation
-// .getLongitude() != mMarker.getPosition().getLongitude()) {
-//					mReloadLocationButton.setEnabled(true);
-//				}
-//
-//				//If location is accurate enough, stop updating position and make the marker
-// draggable
-//				if (mLocation.getAccuracy() <= mLocationAccuracy) {
-//					stopGeolocating();
-//				}
+        //if (mLocation.getLatitude() != mMarker.getPosition().getLatitude() & mLocation
+        // .getLongitude() != mMarker.getPosition().getLongitude()) {
+        //mReloadLocationButton.setEnabled(true);
+        //}
+        //
+        //If location is accurate enough, stop updating position and make the marker
+        // draggable
+        //if (mLocation.getAccuracy() <= mLocationAccuracy) {
+        //stopGeolocating();
+        //}
 
         } else {
             InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
@@ -487,7 +486,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     @Override
     public void onMarkerDragStart(Marker arg0) {
-//		stopGeolocating();
+        //stopGeolocating();
     }
 
 

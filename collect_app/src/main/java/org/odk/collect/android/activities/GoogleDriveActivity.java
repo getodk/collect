@@ -37,7 +37,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -112,7 +111,6 @@ public class GoogleDriveActivity extends ListActivity implements
     private static final String FILE_LIST_KEY = "fileList";
     private static final String PARENT_ID_KEY = "parentId";
     private static final String CURRENT_ID_KEY = "currentDir";
-    private static final String TAG = "GoogleDriveActivity";
     protected GoogleAccountCredential mCredential;
     private Button mRootButton;
     private Button mBackButton;
@@ -795,11 +793,11 @@ public class GoogleDriveActivity extends ListActivity implements
                 startActivityForResult(e.getIntent(), COMPLETE_AUTHORIZATION_REQUEST_CODE);
                 return null;
             } catch (IOException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 createAlertDialog(getString(R.string.google_auth_io_exception_msg));
             }
             if (rootId == null) {
-                Log.e("drive", "Error occurred : Unable to fetch drive contents");
+                Timber.e("Unable to fetch drive contents");
                 return null;
            }
 
@@ -820,7 +818,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
                 request = mDriveService.files().list().setQ(requestString);
             } catch (IOException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
             }
 
             // If there's a query parameter, we're searching for all the files.
@@ -828,7 +826,7 @@ public class GoogleDriveActivity extends ListActivity implements
                 try {
                     request = mDriveService.files().list().setQ(query);
                 } catch (IOException e) {
-                    Timber.e(e, e.getMessage());
+                    Timber.e(e);
                 }
             }
             request.setFields("nextPageToken, files(modifiedTime, id, name, mimeType)");
@@ -849,7 +847,7 @@ public class GoogleDriveActivity extends ListActivity implements
                     nextPage.put(FILE_LIST_KEY, driveFileListPage);
                     publishProgress(nextPage);
                 } catch (IOException e) {
-                    Timber.e(e, "Exception thrown while accessing the file list due to: %s ", e.getMessage());
+                    Timber.e(e, "Exception thrown while accessing the file list");
                 }
             } while (request.getPageToken() != null && request.getPageToken().length() > 0);
 
@@ -884,16 +882,22 @@ public class GoogleDriveActivity extends ListActivity implements
 
             for (com.google.api.services.drive.model.File f : fileList) {
                 String type = f.getMimeType();
-                if (type.equals("application/xml") || type.equals("text/xml") ||
-                        type.equals("application/xhtml") || type.equals("text/xhtml") ||
-                        type.equals("application/xhtml+xml")) {
-                    forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
-                            DriveListItem.FILE, f.getId(), currentDir));
-                } else if (type.equals("application/vnd.google-apps.folder")) {
-                    dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
-                            DriveListItem.DIR, f.getId(), parentId));
-                } else {
-                    // skip the rest of the files
+                switch (type) {
+                    case "application/xml":
+                    case "text/xml":
+                    case "application/xhtml":
+                    case "text/xhtml":
+                    case "application/xhtml+xml":
+                        forms.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                                DriveListItem.FILE, f.getId(), currentDir));
+                        break;
+                    case "application/vnd.google-apps.folder":
+                        dirs.add(new DriveListItem(f.getName(), "", f.getModifiedTime(), "", "",
+                                DriveListItem.DIR, f.getId(), parentId));
+                        break;
+                    default:
+                        // skip the rest of the files
+                        break;
                 }
             }
             Collections.sort(dirs);
@@ -958,7 +962,7 @@ public class GoogleDriveActivity extends ListActivity implements
                             (new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
                     downloadFile(df).writeTo(fStream);
                 } catch (Exception e) {
-                    Timber.e(e, e.getMessage());
+                    Timber.e(e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
                 } finally {
@@ -967,7 +971,7 @@ public class GoogleDriveActivity extends ListActivity implements
                             fStream.close();
                         }
                     } catch (IOException e) {
-                        Timber.e(e, "Unable to close the file output stream due to : %s ", e.getMessage());
+                        Timber.e(e, "Unable to close the file output stream");
                     }
                 }
 

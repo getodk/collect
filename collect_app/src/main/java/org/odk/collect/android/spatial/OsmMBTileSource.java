@@ -21,7 +21,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.BitmapTileSourceBase;
@@ -29,6 +28,8 @@ import org.osmdroid.tileprovider.tilesource.BitmapTileSourceBase;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+
+import timber.log.Timber;
 
 public class OsmMBTileSource extends BitmapTileSourceBase {
 
@@ -112,7 +113,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             tileSize = bitmap.getHeight();
-            Log.w(t, String.format("Found a tile size of %d", tileSize));
+            Timber.w("Found a tile size of %d", tileSize);
         }
 
         cursor.close();
@@ -128,21 +129,21 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
             value = cursor.getInt(0);
-            Log.e(t, String.format("Found a minimum zoomlevel of %d", value));
+            Timber.e("Found a minimum zoomlevel of %d", value);
         }
 
         cursor.close();
         return value;
     }
 
-    public InputStream getInputStream(MapTile pTile) {
+    public InputStream getInputStream(MapTile mapTile) {
 
         try {
             InputStream ret = null;
             final String[] tile = {COL_TILES_TILE_DATA};
-            final String[] xyz = {Integer.toString(pTile.getX()),
-                    Double.toString(Math.pow(2, pTile.getZoomLevel()) - pTile.getY() - 1),
-                    Integer.toString(pTile.getZoomLevel())};
+            final String[] xyz = {Integer.toString(mapTile.getX()),
+                    Double.toString(Math.pow(2, mapTile.getZoomLevel()) - mapTile.getY() - 1),
+                    Integer.toString(mapTile.getZoomLevel())};
 
             final Cursor cur = database.query(TABLE_TILES,
                     tile,
@@ -164,7 +165,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             }
 
         } catch (final Throwable e) {
-            Log.w(t, "Error getting db stream: " + pTile, e);
+            Timber.w(e, "Error getting db stream: %s", mapTile);
         }
 
         return null;

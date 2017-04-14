@@ -175,7 +175,7 @@ public class ItemsetWidget extends QuestionWidget implements
             try {
                 xpr = XPathParseTool.parseXPath(arguments.get(i));
             } catch (XPathSyntaxException e) {
-                Timber.e(e, e.getMessage());
+                Timber.e(e);
                 TextView error = new TextView(context);
                 error.setText(String.format(getContext().getString(R.string.parser_exception), arguments.get(i)));
                 addAnswerView(error);
@@ -355,10 +355,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.isAltPressed()) {
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
+        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }
 
     @Override

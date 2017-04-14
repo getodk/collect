@@ -95,20 +95,17 @@ abstract class AppListFragment extends ListFragment {
     }
 
     // Function to toggle button label
-    public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
+    public static void toggleButtonLabel(Button toggleButton, ListView lv) {
         if (lv.getCheckedItemCount() != lv.getCount()) {
-            mToggleButton.setText(R.string.select_all);
+            toggleButton.setText(R.string.select_all);
         } else {
-            mToggleButton.setText(R.string.clear_all);
+            toggleButton.setText(R.string.clear_all);
         }
     }
 
     //to get present drawer status
     public Boolean getDrawerStatus() {
-        if (mDrawerLayout != null) {
-            return mDrawerLayout.isDrawerOpen(Gravity.END);
-        }
-        return false;
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END);
     }
 
     @Override

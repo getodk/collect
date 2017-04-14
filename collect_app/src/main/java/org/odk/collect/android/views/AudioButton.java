@@ -53,11 +53,11 @@ public class AudioButton extends AppCompatImageButton {
         private String URI;
         private MediaPlayer mPlayer;
 
-        public AudioHandler(FormIndex index, String selectionDesignator, String URI,
+        public AudioHandler(FormIndex index, String selectionDesignator, String uri,
                 MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
-            this.URI = URI;
+            this.URI = uri;
             mPlayer = player;
         }
 
@@ -76,7 +76,7 @@ public class AudioButton extends AppCompatImageButton {
             try {
                 audioFilename = ReferenceManager._().DeriveReference(URI).getLocalURI();
             } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid reference exception due to %s", e.getMessage());
+                Timber.e(e);
             }
 
             File audioFile = new File(audioFilename);
@@ -94,8 +94,8 @@ public class AudioButton extends AppCompatImageButton {
                 mPlayer.prepare();
                 mPlayer.start();
             } catch (IOException e) {
-                String errorMsg = c.getString(R.string.audio_file_invalid);
-                Timber.e(e, errorMsg, audioFilename);
+                String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
+                Timber.e(e, errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }
 
@@ -104,10 +104,10 @@ public class AudioButton extends AppCompatImageButton {
 
     AudioHandler handler;
 
-    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI,
+    public AudioButton(Context context, FormIndex index, String selectionDesignator, String uri,
             MediaPlayer player) {
         super(context);
-        handler = new AudioHandler(index, selectionDesignator, URI, player);
+        handler = new AudioHandler(index, selectionDesignator, uri, player);
         Bitmap b =
                 BitmapFactory.decodeResource(context.getResources(),
                         android.R.drawable.ic_lock_silent_mode_off);

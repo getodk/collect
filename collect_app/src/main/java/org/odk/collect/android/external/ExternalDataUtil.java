@@ -139,7 +139,7 @@ public final class ExternalDataUtil {
     }
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
-            XPathFuncExpr xPathFuncExpr) {
+            XPathFuncExpr xpathfuncexpr) {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
@@ -172,7 +172,7 @@ public final class ExternalDataUtil {
                             new ExternalDataHandlerSearch(externalDataManager, displayColumns,
                                     value, imageColumn));
 
-                    Object eval = xPathFuncExpr.eval(formInstance, evaluationContext);
+                    Object eval = xpathfuncexpr.eval(formInstance, evaluationContext);
                     if (eval.getClass().isAssignableFrom(ArrayList.class)) {
                         @SuppressWarnings("unchecked")
                         List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;

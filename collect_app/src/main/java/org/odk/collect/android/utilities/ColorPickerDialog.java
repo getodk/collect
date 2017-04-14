@@ -45,7 +45,8 @@ public class ColorPickerDialog extends Dialog {
     }
 
     private OnColorChangedListener mListener;
-    private int mInitialColor, mDefaultColor;
+    private int mInitialColor;
+    private int mDefaultColor;
     private String mKey;
 
     /**
@@ -86,8 +87,10 @@ public class ColorPickerDialog extends Dialog {
     private static class ColorPickerView extends View {
         private Paint mPaint;
         private float mCurrentHue = 0;
-        private int mCurrentX = 0, mCurrentY = 0;
-        private int mCurrentColor, mDefaultColor;
+        private int mCurrentX = 0;
+        private int mCurrentY = 0;
+        private int mCurrentColor;
+        private int mDefaultColor;
         private final int[] mHueBarColors = new int[258];
         private int[] mMainColors = new int[65536];
         private OnColorChangedListener mListener;

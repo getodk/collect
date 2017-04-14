@@ -206,10 +206,9 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             builder.setTitle(R.string.alert);
             builder.setMessage(R.string.install_openmapkit);
             DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
-            	public void onClick(DialogInterface dialog, int id) {
+                public void onClick(DialogInterface dialog, int id) {
                     //TODO: launch to app store?
                 }
-            	
             };
 
             builder.setPositiveButton("Ok", okClickListener);

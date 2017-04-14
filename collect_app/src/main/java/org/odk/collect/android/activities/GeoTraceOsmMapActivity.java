@@ -196,8 +196,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                                 R.id.radio_group);
                         int radioButtonID = rb.getCheckedRadioButtonId();
                         View radioButton = rb.findViewById(radioButtonID);
-                        int idx = rb.indexOfChild(radioButton);
-                        TRACE_MODE = idx;
+                        TRACE_MODE = rb.indexOfChild(radioButton);
                         if (TRACE_MODE == 0) {
                             setupManualMode();
                         } else if (TRACE_MODE == 1) {
@@ -449,10 +448,10 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void overlayMyLocationLayers() {
-//		mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-//		if(mMyLocationOverlay.getMyLocation()!= null){
-//			mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-//		}
+    //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+    //if(mMyLocationOverlay.getMyLocation()!= null){
+    //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+    //}
         mapView.getOverlays().add(mMyLocationOverlay);
         mMyLocationOverlay.setEnabled(true);
         mMyLocationOverlay.enableMyLocation();

@@ -25,7 +25,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +49,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenuActivity}.
@@ -60,7 +61,6 @@ import java.util.List;
 
 public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener {
-    private static final String t = "InstanceUploaderList";
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
@@ -79,7 +79,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(t, "onCreate");
+        Timber.i("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
 
@@ -270,7 +270,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
-        Log.d(t, "onRestoreInstanceState");
+        Timber.d("onRestoreInstanceState");
         super.onRestoreInstanceState(bundle);
         mUploadButton.setEnabled(areCheckedItems());
     }

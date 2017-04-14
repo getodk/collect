@@ -214,8 +214,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                                 R.id.radio_group);
                         int radioButtonID = rb.getCheckedRadioButtonId();
                         View radioButton = rb.findViewById(radioButtonID);
-                        int idx = rb.indexOfChild(radioButton);
-                        TRACE_MODE = idx;
+                        TRACE_MODE = rb.indexOfChild(radioButton);
                         if (TRACE_MODE == 0) {
                             setupManualMode();
                         } else if (TRACE_MODE == 1) {
@@ -582,9 +581,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         update_polyline();
     }
 
-	/*
+/*
         This functions handels the delay and the Runable for
-	*/
+*/
 
     public void setGeoTraceScheuler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
