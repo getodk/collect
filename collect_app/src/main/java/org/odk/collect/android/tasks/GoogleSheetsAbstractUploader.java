@@ -48,7 +48,6 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.Regex;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -78,7 +77,9 @@ public abstract class GoogleSheetsAbstractUploader extends
     private static final String oauth_fail = "OAUTH Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
-
+    public static final String VALID_GOOGLE_SHEETS_ID = "^[a-zA-Z0-9\\-]+$";
+    public static final String GPS_LOCATION= "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+            + ".[0-9]+\\s[0-9]+\\.[0-9]+$";
     private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
@@ -228,7 +229,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         // make sure column names are legal
         for (String n : columnNames) {
-            if (!Regex.isValidGoogleSheetsString(n)) {
+            if (!isValidGoogleSheetsString(n)) {
                 mResults.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
@@ -258,7 +259,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
-            if (!Regex.isValidGoogleSheetsString(n)) {
+            if (!isValidGoogleSheetsString(n)) {
                 mResults.put(id, Collect.getInstance()
                         .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
@@ -557,7 +558,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     // if it's a location
                     // [-]#.# [-]#.# #.# #.#
 
-                    if (Regex.isValidLocation(answer)) {
+                    if (isValidLocation(answer)) {
                         // get rid of everything after the second space
                         int firstSpace = answer.indexOf(" ");
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
@@ -937,6 +938,19 @@ public abstract class GoogleSheetsAbstractUploader extends
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
+
+    private boolean isValidGoogleSheetsString(String name) {
+        Pattern p = Pattern
+                .compile(VALID_GOOGLE_SHEETS_ID);
+        Matcher m = p.matcher(name);
+        return m.matches();
+    }
+    public static boolean isValidLocation(String answer) {
+        Pattern p = Pattern
+                .compile(GPS_LOCATION);
+        Matcher m = p.matcher(answer);
+        return m.matches();
+    }
 
 
     /**
