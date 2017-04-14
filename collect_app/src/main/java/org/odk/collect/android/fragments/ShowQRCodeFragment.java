@@ -73,6 +73,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        getActivity().setTitle("Import/Export Settings");
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         setHasOptionsMenu(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);

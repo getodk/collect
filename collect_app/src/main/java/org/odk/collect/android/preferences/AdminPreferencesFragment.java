@@ -33,6 +33,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+        getActivity().setTitle("Admin Settings");
         super.onCreate(savedInstanceState);
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
