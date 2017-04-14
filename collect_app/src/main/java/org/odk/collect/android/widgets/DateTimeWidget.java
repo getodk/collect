@@ -43,7 +43,7 @@ public class DateTimeWidget extends QuestionWidget {
         setGravity(Gravity.START);
 
         mDateWidget = new DateWidget(context, prompt);
-        mTimeWidget= new TimeWidget(context, prompt);
+        mTimeWidget = new TimeWidget(context, prompt);
 
         mDateWidget.mQuestionMediaLayout.getView_Text().setVisibility(GONE);
         mTimeWidget.mQuestionMediaLayout.getView_Text().setVisibility(GONE);
