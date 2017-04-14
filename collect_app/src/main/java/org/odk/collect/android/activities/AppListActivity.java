@@ -27,7 +27,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,7 +82,6 @@ abstract class AppListActivity extends ListActivity {
         setupSearchBox();
         setupDrawer();
         setupDrawerItems();
-        Log.e("Heello","indianna");
     }
 
     @Override
@@ -193,24 +191,18 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void setupDrawerItems() {
-        Log.e("settingup",Integer.toString(mSelectedSortingOrder));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mSortingOptions) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                Log.e("position",Integer.toString(position));
-                Log.e("mselectedsortingorder",Integer.toString(mSelectedSortingOrder));
-                if(position == mSelectedSortingOrder) {
+                if (position == mSelectedSortingOrder) {
                     textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
                 }
-                Log.e("check1","qwerty");
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
             }
         };
-        Log.e("HELLO","after dot");
         mDrawerList.setAdapter(adapter);
-        Log.e("ADATER SET","before itemclivk");
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -277,7 +269,9 @@ abstract class AppListActivity extends ListActivity {
         return getCheckedCount() > 0;
     }
 
-    /** Returns the IDs of the checked items, using the ListView provided */
+    /**
+     * Returns the IDs of the checked items, using the ListView provided
+     */
     protected long[] getCheckedIds(ListView lv) {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
         // IDs were “stable” (see the getCheckedItemIds doc).
@@ -287,7 +281,7 @@ abstract class AppListActivity extends ListActivity {
         int resultIndex = 0;
         for (int posIdx = 0; posIdx < itemCount; posIdx++) {
             if (lv.isItemChecked(posIdx)) {
-                checkedIds      [resultIndex] = lv.getItemIdAtPosition(posIdx);
+                checkedIds[resultIndex] = lv.getItemIdAtPosition(posIdx);
                 resultIndex++;
             }
         }
@@ -336,13 +330,13 @@ abstract class AppListActivity extends ListActivity {
             mToggleButton.setText(R.string.clear_all);
         }
     }
-	
+
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-           mDrawerLayout.closeDrawer(Gravity.END);
+            mDrawerLayout.closeDrawer(Gravity.END);
         } else {
-           super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
