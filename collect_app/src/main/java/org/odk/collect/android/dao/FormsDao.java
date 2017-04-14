@@ -42,7 +42,7 @@ public class FormsDao {
             cursor = getFormsCursor(sortOrder);
         } else {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
-            String selectionArgs[] = new String[] { "%"+charSequence+"%" };
+            String selectionArgs[] = new String[]{"%" + charSequence + "%"};
             cursor = getFormsCursor(null, selection, selectionArgs, sortOrder);
         }
         return cursor;
@@ -84,14 +84,14 @@ public class FormsDao {
     public void deleteFormsDatabase() {
         Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, null, null);
     }
-    
+
     public void deleteFormsFromIDs(String[] idsToDelete) {
         String selection = FormsProviderAPI.FormsColumns._ID + " in (";
         for (int i = 0; i < idsToDelete.length - 1; i++) {
             selection += "?, ";
         }
         selection += "? )";
-       
+
         //This will break if the number of forms to delete > SQLITE_MAX_VARIABLE_NUMBER (999)
         Collect.getInstance().getContentResolver().delete(FormsProviderAPI.FormsColumns.CONTENT_URI, selection, idsToDelete);
     }
