@@ -66,7 +66,7 @@
             android:entryValues="@array/navigation_entry_values"
             android:key="navigation"
             android:title="@string/navigation" />
-        <ListPreference
+       <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"
             android:dialogTitle="@string/change_font_size"
@@ -74,36 +74,45 @@
             android:entryValues="@array/font_size_entry_values"
             android:key="font_size"
             android:title="@string/font_size" />
-        <CheckBoxPreference
+       <ListPreference
+            android:id="@+id/date_format"
+            android:defaultValue="@string/use_phone_locale"
+            android:dialogTitle="@string/change_date_format"
+            android:entries="@array/date_format_entries"
+            android:entryValues="@array/date_format_entry_values"
+            android:key="date_format"
+            android:title="@string/date_format" />
+
+       <CheckBoxPreference
             android:id="@+id/instance_sync"
             android:defaultValue="true"
             android:key="instance_sync"
             android:summary="@string/instance_sync_summary"
             android:title="@string/instance_sync" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
             android:key="default_completed"
             android:summary="@string/default_completed_summary"
             android:title="@string/default_completed" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/delete_after_send"
             android:key="delete_send"
             android:summary="@string/delete_after_send_summary"
             android:title="@string/delete_after_send"
             android:defaultValue="false"/>
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/high_resolution"
             android:defaultValue="true"
             android:key="high_resolution"
             android:summary="@string/high_resolution_summary"
             android:title="@string/high_resolution" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/show_splash"
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
-        <PreferenceScreen
+       <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"
             android:dependency="showSplash"
@@ -111,12 +120,14 @@
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:key="@string/map_preferences"
-        android:title="@string/map_preferences" >
+        android:title="@string/map_preferences"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
 
-        <ListPreference android:id="@+id/map_sdk_behavior"
+        <ListPreference
+            android:id="@+id/map_sdk_behavior"
             android:defaultValue="google_maps"
             android:dialogTitle="@string/map_sdk_selector_title"
             android:entries="@array/map_sdk_selector_entries"
@@ -124,7 +135,8 @@
             android:key="map_sdk_behavior"
             android:title="@string/map_sdk_behavior" />
 
-        <ListPreference android:id="@+id/map_basemap_behavior"
+        <ListPreference
+            android:id="@+id/map_basemap_behavior"
             android:defaultValue="streets"
             android:dialogTitle="@string/map_basemap_selector_title"
             android:entries="@array/map_google_basemap_selector_entries"
@@ -132,7 +144,6 @@
             android:key="map_basemap_behavior"
             android:title="@string/map_basemap_behavior" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:key="@string/analytics_preferences"
         android:title="@string/analytics_preferences" >

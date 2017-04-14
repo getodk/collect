@@ -37,6 +37,23 @@
 		<item>@string/font_size_small</item>
 		<item>@string/font_size_extra_small</item>
 	</string-array>
+    <!-- DO NOT alter date_format_entry_values - used internally in preferences activity -->
+    <string-array translatable="false"
+        name="date_format_entry_values">
+        <item>phone locale</item>
+        <item>yyyy_dd_mm</item>
+        <item>yyyy_mm_dd</item>
+        <item>mm_dd_yyyy</item>
+        <item>dd_mm_yyyy</item>
+    </string-array>
+    <string-array
+        name="date_format_entries">
+        <item>@string/use_phone_locale</item>
+        <item>@string/yyyy_dd_mm</item>
+        <item>@string/yyyy_mm_dd</item>
+        <item>@string/mm_dd_yyyy</item>
+        <item>@string/dd_mm_yyyy</item>
+    </string-array>
 	<!-- DO NOT alter navigation_entry_values - used internally in preferences activity -->
 	<string-array translatable="false"
 		name="navigation_entry_values">

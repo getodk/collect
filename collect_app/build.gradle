@@ -133,38 +133,43 @@ allprojects {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.0'
-    compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
-    compile group: 'com.google.firebase', name: 'firebase-core', version: '9.2.0'
-    compile group: 'com.google.firebase', name: 'firebase-crash', version: '9.2.0'
-    compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
-    compile group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0'
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
-    compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
-    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.1.0-SNAPSHOT'
-    compile group: 'org.osmdroid', name: 'osmdroid-android', version: '4.2'
-    compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
-    compile group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
-    compile(group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0') { exclude group: 'org.apache.httpcomponents' }
-    compile(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') { exclude group: 'org.apache.httpcomponents' }
-    compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
-
+    compile fileTree(include: '*.jar', dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.firebase:firebase-core:9.2.0'
+    compile 'com.google.firebase:firebase-crash:9.2.0'
+    compile 'com.google.http-client:google-http-client:1.22.0'
+    compile 'com.google.oauth-client:google-oauth-client:1.22.0'
+    compile 'commons-io:commons-io:2.4'
+    compile 'joda-time:joda-time:2.9.7'
+    compile 'net.sf.kxml:kxml2:2.3.0'
+    compile 'net.sf.opencsv:opencsv:2.3'
+    compile 'org.opendatakit:opendatakit-javarosa:2.1.0-SNAPSHOT'
+    compile 'org.osmdroid:osmdroid-android:4.2'
+    compile 'org.slf4j:slf4j-android:1.6.1-RC1'
+    compile 'pub.devrel:easypermissions:0.2.1'
+    compile('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.apis:google-api-services-drive:v3-rev64-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.apis:google-api-services-sheets:v4-rev463-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     // Testing-only dependencies
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
-    testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
-    testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
-    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.1.0'
-    androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
-    androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
-    androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.robolectric:robolectric:3.1.2'
+    testCompile 'org.robolectric:shadows-multidex:3.0'
+    androidTestCompile 'com.android.support:support-annotations:25.1.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
 }
 
 // Must be at bottom to prevent dependency collisions

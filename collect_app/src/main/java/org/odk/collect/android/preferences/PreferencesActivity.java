@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 import android.util.Log;
+import java.text.*;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
@@ -32,6 +33,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_DATE_FORMAT;
 
 /**
  * Handles general preferences.
@@ -128,4 +130,14 @@ public class PreferencesActivity extends PreferenceActivity {
                 KEY_SPLASH_PATH, getString(R.string.default_splash_path));
         splashPathPreference.setSummary(summary);
     }
+
+//    public String setDateFormat(CharSequence entry) {
+//        String pattern = null;
+//        Format dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());;
+//        if ((String)entry == "dd-mm-yyyy") {
+//            pattern = ((SimpleDateFormat) dateFormat).toLocalizedPattern();
+//        }
+//        return pattern;
+//
+//    }
 }

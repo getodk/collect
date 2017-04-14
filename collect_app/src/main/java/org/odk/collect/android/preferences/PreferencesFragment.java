@@ -2,6 +2,7 @@ package org.odk.collect.android.preferences;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -18,9 +20,14 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
+import org.joda.time.format.DateTimeFormatter;
 import org.odk.collect.android.R;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.*;
@@ -46,6 +53,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initNavigationPrefs();
         initConstraintBehaviorPref();
         initFontSizePref();
+        initDateFormatPref();
         initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
@@ -131,6 +139,46 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                     int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                     CharSequence entry = ((ListPreference) preference).getEntries()[index];
                     preference.setSummary(entry);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void initDateFormatPref() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_DATE_FORMAT);
+
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    String entry = (String)((ListPreference) preference).getEntries()[index];
+
+                    final DateFormat sdf;
+                    Calendar cal = Calendar.getInstance();
+                   // private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+                    if (entry.equals("yyyy-dd-mm")) {
+                        sdf = new SimpleDateFormat("yyyy/dd/MM");
+                        preference.setSummary(sdf.format(cal.getTime()));
+                    } else if (entry.equals("yyyy-mm-dd")) {
+                        sdf = new SimpleDateFormat("yyyy/MM/dd");
+                        preference.setSummary(sdf.format(cal.getTime()));
+                    } else if (entry.equals("mm-dd-yyyy")) {
+                        sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+                        preference.setSummary(sdf.format(cal.getTime()));
+                    } else if (entry.equals("dd-mm-yyyy")) {
+                        sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        preference.setSummary(sdf.format(cal.getTime()));
+                    } else {
+                        sdf = new SimpleDateFormat();
+                        preference.setSummary(sdf.format(cal.getTime()));
+                    }
+
                     return true;
                 }
             });
