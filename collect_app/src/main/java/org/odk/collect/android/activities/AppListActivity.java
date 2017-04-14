@@ -79,6 +79,7 @@ abstract class AppListActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         mSearchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
+        restoreSelectedSortingOrder();
         setupSearchBox();
         setupDrawer();
         setupDrawerItems();
