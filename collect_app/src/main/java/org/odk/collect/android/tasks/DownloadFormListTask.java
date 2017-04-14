@@ -27,6 +27,7 @@ import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.WebHelper;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
@@ -49,43 +50,54 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     public static final String DL_ERROR_MSG = "dlerrormessage";
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
+    private final String formListUrl;
+    private final WebHelper webHelper;
+
     private FormListDownloaderListener mStateListener;
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
 
+    public DownloadFormListTask(String formListUrl, WebHelper webHelper) {
+        this.formListUrl = formListUrl;
+        this.webHelper = webHelper;
+    }
+
     private boolean isXformsListNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST);
     }
 
-
-    @Override
-    protected HashMap<String, FormDetails> doInBackground(Void... values) {
+    private String buildDownloadListUrl(String formListUrl) {
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getBaseContext());
+
         String downloadListUrl =
                 settings.getString(PreferenceKeys.KEY_SERVER_URL,
                         Collect.getInstance().getString(R.string.default_server_url));
-        // NOTE: /formlist must not be translated! It is the well-known path on the server.
-        String formListUrl = Collect.getInstance().getApplicationContext().getString(
-                R.string.default_odk_formlist);
+
         String downloadPath = settings.getString(PreferenceKeys.KEY_FORMLIST_URL, formListUrl);
         downloadListUrl += downloadPath;
 
         Collect.getInstance().getActivityLogger().logAction(this, formListUrl, downloadListUrl);
 
+        return downloadListUrl;
+    }
+
+    @Override
+    protected HashMap<String, FormDetails> doInBackground(Void... values) {
+
+        String downloadListUrl = buildDownloadListUrl(formListUrl);
+
+        final HttpContext localContext = Collect.getInstance().getHttpContext();
+        final HttpClient httpClient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
+        final DocumentFetchResult result = webHelper.getXmlDocument(downloadListUrl, localContext, httpClient);
+
         // We populate this with available forms from the specified server.
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
-
-        // get shared HttpContext so that authentication and cookies are retained.
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        DocumentFetchResult result =
-                WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
 
         // If we can't get the document, return the error, cancel the task
         if (result.errorMessage != null) {
