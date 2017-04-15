@@ -20,8 +20,16 @@ import java.util.TreeMap;
 public class LocaleHelper {
 
     public void updateLocale(Context context) {
-        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
+        //Get device system language
+        String systemLanguage = Locale.getDefault().getDisplayLanguage();
+        String localeCode;
+        TreeMap<String, String> supportedLanguages = getEntryListValues();
+        if (supportedLanguages.containsKey(systemLanguage)) {
+            localeCode = supportedLanguages.get(systemLanguage);
+        } else {
+            localeCode = PreferenceManager.getDefaultSharedPreferences(context)
+                    .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
+        }
         Locale locale = getLocale(localeCode);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
