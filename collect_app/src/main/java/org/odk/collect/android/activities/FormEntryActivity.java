@@ -227,7 +227,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
-    private boolean mShowNavigationButtons=false;
+    private boolean mShowNavigationButtons = false;
 
     private FormsDao mFormsDao;
 
@@ -1261,7 +1261,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Disables the back button if it is first question....
      */
-    private void adjustBackNavigationButtonVisibility(){
+    private void adjustBackNavigationButtonVisibility() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         try {
@@ -2624,9 +2624,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // next question
                 if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
-                }
-                // otherwise, we can get the proper toast(s) by saving with constraint check
-                else {
+                } else {
+                    // otherwise, we can get the proper toast(s) by saving with constraint check
                     saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
                 }
 

@@ -260,7 +260,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 gp[3] = Double.valueOf(sa[3]).doubleValue();
 
                 return new GeoPointData(gp);
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }

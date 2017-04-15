@@ -79,7 +79,7 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                     + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " date );" );
+                    + InstanceColumns.DELETED_DATE + " date );");
         }
 
 
@@ -142,7 +142,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-            String sortOrder) {
+                        String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
@@ -342,7 +342,7 @@ public class InstanceProvider extends ContentProvider {
 
                 //We are going to update the status, if the form is submitted
                 //We will not delete the record in table but we will delete the file
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)){
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);

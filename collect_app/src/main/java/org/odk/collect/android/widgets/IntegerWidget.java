@@ -92,7 +92,7 @@ public class IntegerWidget extends StringWidget {
         } else {
             try {
                 return new IntegerData(Integer.parseInt(s));
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }
