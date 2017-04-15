@@ -656,11 +656,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case ALIGNED_IMAGE:
-            /*
-             * We saved the image to the tempfile_path; the app returns the full
-             * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-             * and move it into the instance folder.
-             */
+                /*
+                 * We saved the image to the tempfile_path; the app returns the full
+                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+                 * and move it into the instance folder.
+                 */
                 String path = intent
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
@@ -679,13 +679,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CHOOSER:
-            /*
-             * We have a saved image somewhere, but we really want it to be in:
-             * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-             * it there before inserting it into the content provider. Once the
-             * android image capture bug gets fixed, (read, we move on from
-             * Android 1.6) we want to handle images the audio and video
-             */
+                /*
+                 * We have a saved image somewhere, but we really want it to be in:
+                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+                 * it there before inserting it into the content provider. Once the
+                 * android image capture bug gets fixed, (read, we move on from
+                 * Android 1.6) we want to handle images the audio and video
+                 */
 
                 showDialog(SAVING_IMAGE_DIALOG);
                 Runnable runnable = new Runnable() {
@@ -1160,7 +1160,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                 }
 
-                // Create 'save' button
+                 // Create 'save' button
                  endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
