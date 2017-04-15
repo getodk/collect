@@ -145,7 +145,6 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
                             String id = mCursor.getString(
                                     mCursor.getColumnIndex(FormsColumns._ID));
-
                             idsToDelete.add(id);
                         }
                     }
