@@ -155,10 +155,10 @@ public final class ExternalDataUtil {
                     if (imageColumn != null && imageColumn.startsWith(JR_IMAGES_PREFIX)) {
                         imageColumn = imageColumn.substring(JR_IMAGES_PREFIX.length());
                     }
-//                    if (displayColumns == null || displayColumns.trim().length() == 0) {
-//                        throw new InvalidSyntaxException("The label column in the choices sheet
-// appears to be empty (or has been calculated as empty).");
-//                    }
+                    //                    if (displayColumns == null || displayColumns.trim().length() == 0) {
+                    //                        throw new InvalidSyntaxException("The label column in the choices sheet
+                    // appears to be empty (or has been calculated as empty).");
+                    //                    }
 
                     ExternalDataManager externalDataManager =
                             Collect.getInstance().getExternalDataManager();

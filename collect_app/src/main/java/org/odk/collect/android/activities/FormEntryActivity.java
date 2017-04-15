@@ -630,13 +630,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             case ANNOTATE_IMAGE:
             case SIGNATURE_CAPTURE:
             case IMAGE_CAPTURE:
-            /*
-             * We saved the image to the tempfile_path, but we really want it to
-             * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-             * we move it there before inserting it into the content provider.
-             * Once the android image capture bug gets fixed, (read, we move on
-             * from Android 1.6) we want to handle images the audio and video
-             */
+                /*
+                 * We saved the image to the tempfile_path, but we really want it to
+                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+                 * we move it there before inserting it into the content provider.
+                 * Once the android image capture bug gets fixed, (read, we move on
+                 * from Android 1.6) we want to handle images the audio and video
+                 */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
                 File fi = new File(Collect.TMPFILE_PATH);

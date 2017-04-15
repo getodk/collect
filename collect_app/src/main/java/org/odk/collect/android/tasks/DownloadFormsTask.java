@@ -674,7 +674,7 @@ public class DownloadFormsTask extends
                                 String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
                         Integer
                                 .valueOf(total).toString());
-//                try {
+                //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.filename);
                 File tempMediaFile = new File(tempMediaDir, toDownload.filename);
 
@@ -696,9 +696,9 @@ public class DownloadFormsTask extends
                                 + finalMediaFile.getAbsolutePath());
                     }
                 }
-//                } catch (Exception e) {
-//                    return e.getLocalizedMessage();
-//                }
+                //  } catch (Exception e) {
+                //  return e.getLocalizedMessage();
+                //}
             }
         }
         return null;
