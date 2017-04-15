@@ -261,7 +261,7 @@ public class MainMenuActivity extends Activity {
         mCompletedCount = mFinalizedCursor != null ? mFinalizedCursor.getCount() : 0;
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
                 mContentObserver);
-//        mFinalizedCursor.registerContentObserver(mContentObserver);
+        // mFinalizedCursor.registerContentObserver(mContentObserver);
 
         // count for saved instances
         try {
