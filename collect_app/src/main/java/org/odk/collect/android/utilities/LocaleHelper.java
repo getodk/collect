@@ -25,7 +25,8 @@ public class LocaleHelper {
         String localeCode;
         TreeMap<String, String> supportedLanguages = getEntryListValues();
         if (supportedLanguages.containsKey(systemLanguage)) {
-            localeCode = supportedLanguages.get(systemLanguage);
+            localeCode = PreferenceManager.getDefaultSharedPreferences(context)
+                    .getString(PreferenceKeys.KEY_APP_LANGUAGE, supportedLanguages.get(systemLanguage));
         } else {
             localeCode = PreferenceManager.getDefaultSharedPreferences(context)
                     .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
