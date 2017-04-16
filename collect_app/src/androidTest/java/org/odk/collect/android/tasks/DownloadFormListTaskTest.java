@@ -1,10 +1,16 @@
 package org.odk.collect.android.tasks;
 
-import java.util.Map;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.odk.collect.android.logic.FormDetails;
+
+import okhttp3.mockwebserver.*;
+
+import static org.junit.Assert.*;
+import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 
 public class DownloadFormListTaskTest {
     private MockWebServer server;
@@ -21,15 +27,23 @@ public class DownloadFormListTaskTest {
     }
 
     @Test
-    public void shouldProcessAndReturnAFormList() {
+    public void shouldProcessAndReturnAFormList() throws Exception {
         // given
-        // TODO loads of horrible setup
+        willRespond(server,
+                "Header-1: value-1",
+                "Header-2: value-2",
+                "<some><massiveXml/></some>");
+        // TODO loads of other horrible setup
 
         // when
     	Map<String, FormDetails> fetched = new DownloadFormListTask().doInBackground();
 
         // then
         // TODO assert details of the fetched data
+
+        // and
         // TODO assert an appropriate amount of server interaction
+        RecordedRequest r = server.takeRequest(1, TimeUnit.MILLISECONDS);
+        assertEquals("check what the headers are", r.getHeaders().toString());
     }
 }

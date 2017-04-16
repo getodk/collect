@@ -59,11 +59,11 @@ public class WebUtilsTest {
         assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
     }
 
-    private static String url(String path) {
-        String url = String.format("http://uname:pword@localhost:%s%s", server.getPort(), path);
+    private String url(String path) {
+        return String.format("http://uname:pword@localhost:%s%s", server.getPort(), path);
     }
 
-    private static void doRequest(String path) throws Exception {
+    private void doRequest(String path) throws Exception {
         HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url(path)));
         HttpResponse response = httpClient().execute(req, httpContext());
     }
