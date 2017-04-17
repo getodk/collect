@@ -16,10 +16,12 @@ package org.odk.collect.android.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -40,7 +42,6 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CustomScannerActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
-import org.odk.collect.android.tasks.GenerateQRCode;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -55,6 +56,7 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.utilities.QRCodeUtils.decodeFromBitmap;
+import static org.odk.collect.android.utilities.QRCodeUtils.generateQRBitMap;
 import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 import static org.odk.collect.android.utilities.SharedPreferencesUtils.savePreferencesFromJSON;
 
@@ -217,4 +219,32 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             }
         }
     }
+
+    class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
+        private final QRCodeListener listener;
+        private final Context context;
+
+        public GenerateQRCode(QRCodeListener listener, Context context) {
+            this.listener = listener;
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            listener.preExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            listener.bitmapGenerated(bitmap);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            return generateQRBitMap();
+        }
+    }
+
 }

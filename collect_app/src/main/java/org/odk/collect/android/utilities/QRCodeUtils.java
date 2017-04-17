@@ -15,37 +15,47 @@
 package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import org.json.JSONException;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.SharedPreferencesUtils.getJSONFromPreferences;
 
 /**
  * Created by shobhit on 13/4/17.
  */
 
 public class QRCodeUtils {
-
 
     public static String decodeFromBitmap(Bitmap bitmap) {
         BinaryBitmap binaryBitmap = getBinaryBitmap(bitmap);
@@ -87,5 +97,41 @@ public class QRCodeUtils {
         qrCode.compress(Bitmap.CompressFormat.JPEG, 100, out);
         out.close();
         return shareFile;
+    }
+
+    public static Bitmap generateQRBitMap() {
+        String content;
+        try {
+            content = getJSONFromPreferences();
+            String compressedData = CompressionUtils.compress(content);
+
+            //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
+            if (compressedData.length() > 4000) {
+                ToastUtils.showLongToast(Collect.getInstance().getString(R.string.encoding_max_limit));
+                Timber.e(Collect.getInstance().getString(R.string.encoding_max_limit));
+                return null;
+            }
+
+            Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter
+                    .encode(compressedData, BarcodeFormat.QR_CODE, 400, 400, hints);
+
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            return bmp;
+        } catch (WriterException | IOException | JSONException e) {
+            Timber.e(e);
+        }
+        return null;
     }
 }
