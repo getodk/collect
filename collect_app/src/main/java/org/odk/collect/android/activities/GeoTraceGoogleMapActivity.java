@@ -581,9 +581,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         update_polyline();
     }
 
-/*
-        This functions handels the delay and the Runable for
-*/
+    /*
+            This functions handels the delay and the Runable for
+    */
 
     public void setGeoTraceScheuler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
