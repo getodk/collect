@@ -15,9 +15,12 @@
 package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.NotFoundException;
@@ -32,6 +35,8 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.EnumMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -43,23 +48,35 @@ public class QRCodeUtils {
 
 
     public static String decodeFromBitmap(Bitmap bitmap) {
-        int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
+        BinaryBitmap binaryBitmap = getBinaryBitmap(bitmap);
 
-        //copy pixel data from bitmap into the array
-        bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<DecodeHintType, Object>(
+                DecodeHintType.class);
 
-        LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
-        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+        tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE);
+        tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
 
         Reader reader = new QRCodeMultiReader();
         try {
-            Result result = reader.decode(binaryBitmap);
+            Result result = reader.decode(binaryBitmap, tmpHintsMap);
             return result.getText();
         } catch (FormatException | NotFoundException | ChecksumException e) {
             Timber.i(e);
             ToastUtils.showLongToast("QR Code not found in the selected image");
         }
         return null;
+    }
+
+    @NonNull
+    private static BinaryBitmap getBinaryBitmap(Bitmap bitmap) {
+        int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
+
+        //copy pixel data from bitmap into the array
+        bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
+        return new BinaryBitmap(new HybridBinarizer(source));
     }
 
     public static File saveBitmapToCache(Bitmap qrCode) throws IOException {
