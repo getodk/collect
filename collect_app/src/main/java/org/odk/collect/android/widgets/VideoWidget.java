@@ -121,10 +121,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 }
 
                 // request high resolution if configured for that...
-                boolean high_resolution = settings.getBoolean(
+                boolean highResolution = settings.getBoolean(
                         PreferenceKeys.KEY_HIGH_RESOLUTION,
                         VideoWidget.DEFAULT_HIGH_RESOLUTION);
-                if (high_resolution) {
+                if (highResolution) {
                     i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 }
                 try {
@@ -291,9 +291,11 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Video.Media.DATA, newVideo.getAbsolutePath());
 
-            Uri VideoURI = getContext().getContentResolver().insert(
+            Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting VIDEO returned uri = %s", VideoURI.toString());
+
+            Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
+
         } else {
             Timber.e("Inserting Video file FAILED");
         }

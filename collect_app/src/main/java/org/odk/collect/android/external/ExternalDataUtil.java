@@ -104,15 +104,15 @@ public final class ExternalDataUtil {
         if (matcher.find()) {
             String function = matcher.group(0);
             try {
-                XPathExpression xPathExpression = XPathParseTool.parseXPath(function);
-                if (XPathFuncExpr.class.isAssignableFrom(xPathExpression.getClass())) {
-                    XPathFuncExpr xPathFuncExpr = (XPathFuncExpr) xPathExpression;
-                    if (xPathFuncExpr.id.name.equalsIgnoreCase(
+                XPathExpression xpathExpression = XPathParseTool.parseXPath(function);
+                if (XPathFuncExpr.class.isAssignableFrom(xpathExpression.getClass())) {
+                    XPathFuncExpr xpathFuncExpr = (XPathFuncExpr) xpathExpression;
+                    if (xpathFuncExpr.id.name.equalsIgnoreCase(
                             ExternalDataHandlerSearch.HANDLER_NAME)) {
                         // also check that the args are either 1, 4 or 6.
-                        if (xPathFuncExpr.args.length == 1 || xPathFuncExpr.args.length == 4
-                                || xPathFuncExpr.args.length == 6) {
-                            return xPathFuncExpr;
+                        if (xpathFuncExpr.args.length == 1 || xpathFuncExpr.args.length == 4
+                                || xpathFuncExpr.args.length == 6) {
+                            return xpathFuncExpr;
                         } else {
                             throw new InvalidSyntaxException(Collect.getInstance().getString(
                                     R.string.ext_search_wrong_arguments_error));
@@ -120,7 +120,7 @@ public final class ExternalDataUtil {
                     } else {
                         // this might mean a problem in the regex above. Unit tests required.
                         throw new InvalidSyntaxException(Collect.getInstance().getString(
-                                R.string.ext_search_wrong_function_error, xPathFuncExpr.id.name));
+                                R.string.ext_search_wrong_function_error, xpathFuncExpr.id.name));
                     }
                 } else {
                     // this might mean a problem in the regex above. Unit tests required.
