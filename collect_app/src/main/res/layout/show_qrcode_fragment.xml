@@ -14,31 +14,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:gravity="center"
-        android:padding="5dp"
-        android:text="@string/tv_qrcode" />
+        android:padding="8dp"
+        android:text="@string/tv_qrcode"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttons"
-        android:layout_below="@+id/label"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:id="@+id/qr_iv"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttons"
-        android:layout_below="@+id/label"
-        android:contentDescription="@string/qr_code" />
+        android:layout_below="@id/label">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/qr_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/qr_code" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/buttons"
