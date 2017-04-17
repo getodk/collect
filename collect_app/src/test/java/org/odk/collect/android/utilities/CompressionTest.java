@@ -1,4 +1,4 @@
-package org.odk.collect.android;
+package org.odk.collect.android.utilities;
 
 import org.junit.After;
 import org.junit.Before;
