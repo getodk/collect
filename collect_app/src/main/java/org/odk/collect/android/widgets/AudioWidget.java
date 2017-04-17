@@ -263,7 +263,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 deleteMedia();
             }
             mBinaryName = newAudio.getName();
-            Timber.i("Setting current answer to %s" + newAudio.getName());
+            Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
             Timber.e("Inserting Audio file FAILED");
         }

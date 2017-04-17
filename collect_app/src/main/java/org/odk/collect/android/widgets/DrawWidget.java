@@ -53,7 +53,7 @@ import java.io.File;
  * @author BehrAtherton@gmail.com
  */
 public class DrawWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "DrawWidget";
+
 
     private Button mDrawButton;
     private String mBinaryName;
@@ -231,7 +231,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
             mBinaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
         } else {
-            Timber.e("NO IMAGE EXISTS at: %s" + newImage.getAbsolutePath());
+            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
