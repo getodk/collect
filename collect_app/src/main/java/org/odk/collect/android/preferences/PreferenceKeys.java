@@ -6,7 +6,6 @@ public final class PreferenceKeys {
     public static final String KEY_SHOW_SPLASH              = "showSplash";
     public static final String KEY_SPLASH_PATH              = "splashPath";
     public static final String KEY_FONT_SIZE                = "font_size";
-    public static final String KEY_DATE_FORMAT              = "date_format";
     public static final String KEY_DELETE_AFTER_SEND        = "delete_send";
     public static final String KEY_ANALYTICS                = "analytics";
     public static final String KEY_INSTANCE_SYNC            = "instance_sync";

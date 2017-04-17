@@ -22,18 +22,7 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
-import org.joda.time.format.DateTimeFormatter;
 import org.odk.collect.android.R;
-
-
-import java.text.DateFormat;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import static org.odk.collect.android.preferences.PreferenceKeys.*;
 
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -81,7 +70,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initNavigationPrefs();
         initConstraintBehaviorPref();
         initFontSizePref();
-        initDateFormatPref();
         initLanguagePrefs();
         initAnalyticsPref();
         initSplashPrefs();
@@ -172,47 +160,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             });
         }
     }
-
-
-    private void initDateFormatPref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_DATE_FORMAT);
-
-        if (pref != null) {
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String)((ListPreference) preference).getEntries()[index];
-
-                    final DateFormat sdf;
-                    Calendar cal = Calendar.getInstance();
-                   // private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-
-                    if (entry.equals("yyyy-dd-mm")) {
-                        sdf = new SimpleDateFormat("yyyy/dd/MM");
-                        preference.setSummary(sdf.format(cal.getTime()));
-                    } else if (entry.equals("yyyy-mm-dd")) {
-                        sdf = new SimpleDateFormat("yyyy/MM/dd");
-                        preference.setSummary(sdf.format(cal.getTime()));
-                    } else if (entry.equals("mm-dd-yyyy")) {
-                        sdf = new SimpleDateFormat("MM/dd/yyyy");
-
-                        preference.setSummary(sdf.format(cal.getTime()));
-                    } else if (entry.equals("dd-mm-yyyy")) {
-                        sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        preference.setSummary(sdf.format(cal.getTime()));
-                    } else {
-                        sdf = new SimpleDateFormat();
-                        preference.setSummary(sdf.format(cal.getTime()));
-                    }
-                    return true;
-                }
-            });
-        }
-    }
-
 
     private void initLanguagePrefs() {
         final ListPreference pref = (ListPreference) findPreference(KEY_APP_LANGUAGE);

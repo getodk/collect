@@ -167,13 +167,6 @@
 <string name="submission_url">Submission path</string>
 <string name="font_size">Text font size</string>
 <string name="change_font_size">Text font size</string>
-<string name="use_phone_locale">Use phone locale</string>
-<string name="yyyy_mm_dd">yyyy-mm-dd</string>
-<string name="yyyy_dd_mm">yyyy-dd-mm</string>
-<string name="mm_dd_yyyy">mm-dd-yyyy</string>
-<string name="dd_mm_yyyy">dd-mm-yyyy</string>
-<string name="date_format">Date Format</string>
-<string name="change_date_format">Date Format</string>
 <string name="form_scan_starting">Scanning for forms…</string>
 <string name="access_error">Error while accessing %s: </string>
 <string name="manifest_server_error">Manifest reply does not report an OpenRosa version — bad server?</string>

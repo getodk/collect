@@ -64,14 +64,6 @@
             android:key="font_size"
             android:title="@string/font_size" />
        <ListPreference
-            android:id="@+id/date_format"
-            android:defaultValue="@string/use_phone_locale"
-            android:dialogTitle="@string/change_date_format"
-            android:entries="@array/date_format_entries"
-            android:entryValues="@array/date_format_entry_values"
-            android:key="date_format"
-            android:title="@string/date_format" />
-       <ListPreference
             android:id="@+id/app_language"
             android:defaultValue="en"
             android:dialogTitle="@string/language"
