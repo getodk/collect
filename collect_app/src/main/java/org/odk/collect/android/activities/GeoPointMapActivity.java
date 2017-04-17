@@ -88,7 +88,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private int mLocationCount = 0;
 
     private MapHelper mHelper;
-//private KmlLayer kk;
+    //private KmlLayer kk;
 
     private AlertDialog zoomDialog;
     private View zoomDialogView;
@@ -372,7 +372,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                         this);
             }
         }
-//mShowLocation.setClickable(mMarker != null);
+        //mShowLocation.setClickable(mMarker != null);
         if (!mGPSOn && !mNetworkOn) {
             showGPSDisabledAlertToUser();
         } else {

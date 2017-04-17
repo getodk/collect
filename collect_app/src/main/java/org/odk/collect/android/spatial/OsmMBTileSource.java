@@ -34,7 +34,7 @@ import timber.log.Timber;
 public class OsmMBTileSource extends BitmapTileSourceBase {
 
     // Log log log log ...
-//    private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
+    // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
     private static final String t = "MBTileSource";
     // Database related fields
     public final static String TABLE_TILES = "tiles";

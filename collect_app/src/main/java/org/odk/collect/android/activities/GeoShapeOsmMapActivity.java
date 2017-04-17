@@ -241,7 +241,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
-//            pathOverlay.addPoint(marker.getPosition());
+            // pathOverlay.addPoint(marker.getPosition());
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
             mMap.getOverlays().add(marker);

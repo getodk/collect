@@ -42,7 +42,7 @@ import timber.log.Timber;
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
-    public static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
@@ -105,7 +105,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         ToastUtils.showShortToast("Error creating directory "
-                                        + writeDir.getAbsolutePath());
+                                + writeDir.getAbsolutePath());
                         return false;
                     }
                 }

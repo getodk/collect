@@ -29,7 +29,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 
 public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
-    public static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     @Override
     public void onResume() {

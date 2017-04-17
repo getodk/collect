@@ -139,7 +139,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
-                           //File not found in sdcard but file path found in database
+                            //File not found in sdcard but file path found in database
                             //probably because the file has been deleted or filename was changed in sdcard
                             //Add the ID to list so that they could be deleted all together
 

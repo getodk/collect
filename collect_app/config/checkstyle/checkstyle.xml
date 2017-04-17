@@ -81,6 +81,7 @@
         </module>
         <module name="OneStatementPerLine" />
         <module name="MultipleVariableDeclarations" />
+        <module name="StaticVariableName"/>
         <!-- <module name="ArrayTypeStyle"/> -->
         <!-- <module name="MissingSwitchDefault"/> -->
         <!-- <module name="FallThrough"/> -->
@@ -145,7 +146,7 @@
              value="Interface type name ''{0}'' must match pattern ''{1}''."/>
         </module> -->
         <!-- <module name="NoFinalizer"/> -->
-        <!-- <module name="GenericWhitespace">
+         <module name="GenericWhitespace">
             <message key="ws.followed"
              value="GenericWhitespace ''{0}'' is followed by whitespace."/>
              <message key="ws.preceded"
@@ -154,7 +155,7 @@
              value="GenericWhitespace ''{0}'' should followed by whitespace."/>
              <message key="ws.notPreceded"
              value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
-        </module> -->
+        </module>
         <!-- <module name="Indentation">
             <property name="basicOffset" value="2"/>
             <property name="braceAdjustment" value="0"/>
@@ -219,6 +220,6 @@
         <!-- <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>
         </module> -->
-        <!-- <module name="CommentsIndentation"/> -->
+         <module name="CommentsIndentation"/>
     </module>
 </module>

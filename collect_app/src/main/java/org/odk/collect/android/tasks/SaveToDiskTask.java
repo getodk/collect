@@ -375,7 +375,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         // read from data stream
         byte[] data = new byte[len];
-//        try {
+        // try {
         int read = is.read(data, 0, len);
         if (read > 0) {
             // write xml file
@@ -395,13 +395,13 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 }
             }
         }
-//        } catch (IOException e) {
-//            Log.e(t, "Error reading from payload data stream");
-//            e.printStackTrace();
-//            return false;
-//        }
-//
-//        return false;
+        //        } catch (IOException e) {
+        //            Log.e(t, "Error reading from payload data stream");
+        //            e.printStackTrace();
+        //            return false;
+        //        }
+        //
+        //        return false;
     }
 
     @Override

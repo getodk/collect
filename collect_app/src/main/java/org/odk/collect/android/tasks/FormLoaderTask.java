@@ -137,13 +137,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
 
-//    FormDef.setDefaultEventNotifier(new EventNotifier() {
-//
-//      @Override
-//      public void publishEvent(Event event) {
-//        Log.d("FormDef", event.asLogLine());
-//      }
-//    });
+        //    FormDef.setDefaultEventNotifier(new EventNotifier() {
+        //
+        //      @Override
+        //      public void publishEvent(Event event) {
+        //        Log.d("FormDef", event.asLogLine());
+        //      }
+        //    });
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
