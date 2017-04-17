@@ -16,7 +16,6 @@ package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -57,7 +56,7 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
-    private final static String t = "FileUtils";
+
 
     public static String getMimeType(String fileUrl)
             throws java.io.IOException {
@@ -83,7 +82,7 @@ public class FileUtils {
             // Get the size of the file
             long length = file.length();
             if (length > Integer.MAX_VALUE) {
-                Log.e(t, "File " + file.getName() + "is too large");
+                Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
@@ -142,7 +141,7 @@ public class FileUtils {
             long llength = file.length();
 
             if (llength > Integer.MAX_VALUE) {
-                Log.e(t, "File " + file.getName() + "is too large");
+                Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
@@ -205,8 +204,7 @@ public class FileUtils {
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
         if (b != null) {
-            Log.i(t,
-                    "Screen is " + screenHeight + "x" + screenWidth
+            Timber.i("Screen is " + screenHeight + "x" + screenWidth
                             + ".  Image has been scaled down by "
                             + scale + " to " + b.getHeight() + "x" + b.getWidth());
         }
@@ -241,10 +239,8 @@ public class FileUtils {
         bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
 
         if (bitmap != null) {
-            Log.i(t,
-                    "Screen is " + screenHeight + "x" + screenWidth
-                            + ".  Image has been scaled down by "
-                            + scale + " to " + bitmap.getHeight() + "x" + bitmap.getWidth());
+            Timber.i("Screen is %d x %d.  Image has been scaled down by %f to %d x %d",
+                    screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
         }
 
         return bitmap;
@@ -257,8 +253,7 @@ public class FileUtils {
             if (errorMessage != null) {
                 try {
                     Thread.sleep(500);
-                    Log.e(t, "Retrying to copy the file after 500ms: "
-                            + sourceFile.getAbsolutePath());
+                    Timber.e("Retrying to copy the file after 500ms: %s", sourceFile.getAbsolutePath());
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
                     Timber.e(e);
@@ -267,7 +262,7 @@ public class FileUtils {
             return errorMessage;
         } else {
             String msg = "Source file does not exist: " + sourceFile.getAbsolutePath();
-            Log.e(t, msg);
+            Timber.e(msg);
             return msg;
         }
     }
@@ -368,8 +363,7 @@ public class FileUtils {
                 String uiVersion = cur.getAttributeValue(null, "uiVersion");
                 if (uiVersion != null) {
                     // pre-OpenRosa 1.0 variant of spec
-                    Log.e(t, "Obsolete use of uiVersion -- IGNORED -- only using version: "
-                            + version);
+                    Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s", version);
                 }
 
                 fields.put(FORMID, (id == null) ? xmlns : id);
@@ -414,10 +408,10 @@ public class FileUtils {
         if (file != null && file.exists()) {
             // remove garbage
             if (!file.delete()) {
-                Log.w(t, file.getAbsolutePath() + " will be deleted upon exit.");
+                Timber.w("%s will be deleted upon exit.", file.getAbsolutePath());
                 file.deleteOnExit();
             } else {
-                Log.w(t, file.getAbsolutePath() + " has been deleted.");
+                Timber.w("%s has been deleted.", file.getAbsolutePath());
             }
         }
     }
@@ -432,7 +426,7 @@ public class FileUtils {
      */
     public static void checkMediaPath(File mediaDir) {
         if (mediaDir.exists() && mediaDir.isFile()) {
-            Log.e(t,
+            Timber.e(
                     "The media folder is already there and it is a FILE!! We will need to delete "
                             + "it and create a folder instead");
             boolean deleted = mediaDir.delete();

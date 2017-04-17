@@ -17,7 +17,7 @@ package org.odk.collect.android.utilities;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
+
 
 import org.apache.commons.io.IOUtils;
 import org.kxml2.io.KXmlSerializer;
@@ -70,7 +70,6 @@ import timber.log.Timber;
  * @author mitchellsundt@gmail.com
  */
 public class EncryptionUtils {
-    private static final String t = "EncryptionUtils";
     public static final String RSA_ALGORITHM = "RSA";
     // the symmetric key we are encrypting with RSA is only 256 bits... use SHA-256
     public static final String ASYMMETRIC_ALGORITHM = "RSA/NONE/OAEPWithSHA256AndMGF1Padding";
@@ -154,7 +153,7 @@ public class EncryptionUtils {
                 pkCipher.init(Cipher.ENCRYPT_MODE, rsaPublicKey);
                 byte[] pkEncryptedKey = pkCipher.doFinal(key);
                 String alg = pkCipher.getAlgorithm();
-                Log.i(t, "AlgorithmUsed: " + alg);
+                Timber.i("AlgorithmUsed: %s", alg);
                 base64RsaEncryptedSymmetricKey = wrapper
                         .encodeToString(pkEncryptedKey);
 
@@ -274,7 +273,7 @@ public class EncryptionUtils {
                     instanceCursor = cr.query(uri, null, null, null, null);
                     if (instanceCursor.getCount() != 1) {
                         String msg = Collect.getInstance().getString(R.string.not_exactly_one_record_for_this_instance);
-                        Log.e(t, msg);
+                        Timber.e(msg);
                         throw new EncryptionException(msg, null);
                     }
                     instanceCursor.moveToFirst();
@@ -301,7 +300,7 @@ public class EncryptionUtils {
 
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
-                    Log.e(t, msg);
+                    Timber.e(msg);
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
@@ -309,7 +308,7 @@ public class EncryptionUtils {
                 formCursor = cr.query(uri, null, null, null, null);
                 if (formCursor.getCount() != 1) {
                     String msg = Collect.getInstance().getString(R.string.not_exactly_one_blank_form_for_this_form_id);
-                    Log.e(t, msg);
+                    Timber.e(msg);
                     throw new EncryptionException(msg, null);
                 }
                 formCursor.moveToFirst();
@@ -318,7 +317,7 @@ public class EncryptionUtils {
             formId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
             if (formId == null || formId.length() == 0) {
                 String msg = Collect.getInstance().getString(R.string.no_form_id_specified);
-                Log.e(t, msg);
+                Timber.e(msg);
                 throw new EncryptionException(msg, null);
             }
             int idxVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
@@ -372,7 +371,7 @@ public class EncryptionUtils {
         // submission must have an OpenRosa metadata block with a non-null
         // instanceID value.
         if (instanceMetadata.instanceId == null) {
-            Log.e(t, "No OpenRosa metadata block or no instanceId defined in that block");
+            Timber.e("No OpenRosa metadata block or no instanceId defined in that block");
             return null;
         }
 
@@ -431,9 +430,7 @@ public class EncryptionUtils {
 
             randomAccessFile.write(encryptedData.toByteArray());
 
-            Log.i(t,
-                    "Encrpyted:" + file.getName() + " -> "
-                            + encryptedFile.getName());
+            Timber.i("Encrpyted: %s -> %s", file.getName(), encryptedFile.getName());
         } catch (Exception e) {
             String msg = "Error encrypting: " + file.getName() + " -> "
                     + encryptedFile.getName();
