@@ -175,12 +175,12 @@ public class DateWidget extends QuestionWidget {
 
     private void addViews() {
         if (mShowCalendar) {
-            HorizontalScrollView mScrollView = new HorizontalScrollView(getContext());
+            HorizontalScrollView scrollView = new HorizontalScrollView(getContext());
             LinearLayout ll = new LinearLayout(getContext());
             ll.addView(mDatePickerDialog.getDatePicker());
             ll.setPadding(10, 10, 10, 10);
-            mScrollView.addView(ll);
-            addAnswerView(mScrollView);
+            scrollView.addView(ll);
+            addAnswerView(scrollView);
         } else {
             LinearLayout linearLayout = new LinearLayout(getContext());
             linearLayout.setOrientation(LinearLayout.VERTICAL);

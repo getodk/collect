@@ -95,9 +95,9 @@ public class Collect extends Application {
     public static int getQuestionFontsize() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        String question_font = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
+        String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        return Integer.valueOf(question_font);
+        return Integer.valueOf(questionFont);
     }
 
     /**

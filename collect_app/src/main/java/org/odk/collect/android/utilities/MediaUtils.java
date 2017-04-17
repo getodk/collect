@@ -434,11 +434,11 @@ public class MediaUtils {
                 try {
                     c = ctxt.getContentResolver().query(uri, projection, null,
                             null, null);
-                    int column_index = c.getColumnIndexOrThrow(pathKey);
+                    int columnIndex = c.getColumnIndexOrThrow(pathKey);
                     String path = null;
                     if (c.getCount() > 0) {
                         c.moveToFirst();
-                        path = c.getString(column_index);
+                        path = c.getString(columnIndex);
                     }
                     return path;
                 } finally {

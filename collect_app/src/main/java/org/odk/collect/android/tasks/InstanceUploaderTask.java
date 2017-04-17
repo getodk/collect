@@ -156,14 +156,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     WebUtils.discardEntityBytes(response);
                     if (locations != null && locations.length == 1) {
                         try {
-                            Uri uNew = Uri.parse(
+                            Uri newURI = Uri.parse(
                                     URLDecoder.decode(locations[0].getValue(), "utf-8"));
-                            if (u.getHost().equalsIgnoreCase(uNew.getHost())) {
+                            if (u.getHost().equalsIgnoreCase(newURI.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
                                 // ... and possibly to use https instead.
-                                uriRemap.put(u, uNew);
-                                u = uNew;
+                                uriRemap.put(u, newURI);
+                                u = newURI;
                             } else {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
@@ -172,7 +172,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                         fail
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
-                                                + uNew.toString());
+                                                + newURI.toString());
                                 cv.put(InstanceColumns.STATUS,
                                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()

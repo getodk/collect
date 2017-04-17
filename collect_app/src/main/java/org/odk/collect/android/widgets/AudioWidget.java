@@ -253,9 +253,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
 
-            Uri AudioURI = getContext().getContentResolver().insert(
+            Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting AUDIO returned uri = " + AudioURI.toString());
+            Log.i(t, "Inserting AUDIO returned uri = " + audioURI.toString());
             // when replacing an answer. remove the current media.
             if (mBinaryName != null && !mBinaryName.equals(newAudio.getName())) {
                 deleteMedia();

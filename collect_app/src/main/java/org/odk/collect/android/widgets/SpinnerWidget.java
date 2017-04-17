@@ -58,10 +58,10 @@ public class SpinnerWidget extends QuestionWidget {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        if (xpathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
             mItems = prompt.getSelectChoices();
         }
@@ -92,8 +92,8 @@ public class SpinnerWidget extends QuestionWidget {
         spinner.setSelection(mItems.size());
         if (s != null) {
             for (int i = 0; i < mItems.size(); ++i) {
-                String sMatch = mItems.get(i).getValue();
-                if (sMatch.equals(s)) {
+                String match = mItems.get(i).getValue();
+                if (match.equals(s)) {
                     spinner.setSelection(i);
                 }
             }

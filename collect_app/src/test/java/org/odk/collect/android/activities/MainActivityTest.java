@@ -115,8 +115,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.enter_data_button), dataButton.getText());
 
         dataButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(FormChooserList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -134,8 +134,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.review_data_button), reviewDataButton.getText());
 
         reviewDataButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(InstanceChooserList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -153,8 +153,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.send_data_button), sendDataButton.getText());
 
         sendDataButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(InstanceUploaderList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -172,8 +172,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.view_sent_forms), viewSentFormButton.getText());
 
         viewSentFormButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(InstanceChooserList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -202,8 +202,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.manage_files), manageFilesButton.getText());
 
         manageFilesButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(FileManagerTabs.class.getName(),
                 shadowIntent.getIntentClass().getName());
