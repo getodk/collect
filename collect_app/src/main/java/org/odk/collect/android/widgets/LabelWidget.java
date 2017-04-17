@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -42,6 +41,8 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 
+import timber.log.Timber;
+
 import java.io.File;
 import java.util.List;
 
@@ -56,7 +57,6 @@ import timber.log.Timber;
  * @author Jeff Beorse
  */
 public class LabelWidget extends QuestionWidget {
-    private static final String t = "LabelWidget";
 
     List<SelectChoice> mItems;
     View center;
@@ -142,7 +142,7 @@ public class LabelWidget extends QuestionWidget {
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
+                            Timber.e(errorMsg);
                             mMissingImage = new TextView(getContext());
                             mMissingImage.setText(errorMsg);
 
