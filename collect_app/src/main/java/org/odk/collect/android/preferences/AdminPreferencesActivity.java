@@ -42,7 +42,7 @@ import timber.log.Timber;
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
-    public final static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
