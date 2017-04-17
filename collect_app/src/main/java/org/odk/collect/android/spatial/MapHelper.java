@@ -49,8 +49,8 @@ public class MapHelper {
     public static String[] offilineOverlays;
     private static final String no_folder_key = "None";
 
-    public static GoogleMap mGoogleMap;
-    public static MapView mOsmMap;
+    public GoogleMap mGoogleMap;
+    public MapView mOsmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -77,50 +77,56 @@ public class MapHelper {
     private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
 
 
-    public MapHelper(Context pContext, GoogleMap pGoogleMap) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
+    public MapHelper(Context context, GoogleMap googleMap) {
+        mGoogleMap = null;
+        mOsmMap = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
-        this.mGoogleMap = pGoogleMap;
-        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
+        mGoogleMap = googleMap;
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
     }
 
-    public MapHelper(Context pContext, MapView pOsmMap, IRegisterReceiver pIregisterReceiver) {
-        this.mGoogleMap = null;
-        this.mOsmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pContext);
+    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver) {
+        mGoogleMap = null;
+        mOsmMap = null;
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
-        iRegisterReceiver = pIregisterReceiver;
-        this.mOsmMap = pOsmMap;
-        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(pContext);
+        this.iRegisterReceiver = iregisterReceiver;
+        mOsmMap = osmMap;
+        tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
     }
 
-    private static String _getGoogleBasemap() {
+    private static String getGoogleBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
-    private static String _getOsmBasemap() {
+    private static String getOsmBasemap() {
         return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
         if (mGoogleMap != null) {
-            String basemap = _getGoogleBasemap();
-            if (basemap.equals(GOOGLE_MAP_STREETS)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            } else if (basemap.equals(GOOGLE_MAP_SATELLITE)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            } else if (basemap.equals(GOOGLE_MAP_TERRAIN)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            } else if (basemap.equals(GOOGLE_MAP_HYBRID)) {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            } else {
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            String basemap = getGoogleBasemap();
+            switch (basemap) {
+                case GOOGLE_MAP_STREETS:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
+                case GOOGLE_MAP_SATELLITE:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    break;
+                case GOOGLE_MAP_TERRAIN:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    break;
+                case GOOGLE_MAP_HYBRID:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    break;
+                default:
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
             }
         } else {
             //OSMMAP
-            String basemap = _getOsmBasemap();
+            String basemap = getOsmBasemap();
 
             ITileSource tileSource = null;
 
@@ -171,9 +177,9 @@ public class MapHelper {
         return results.toArray(new String[0]);
     }
 
-    public void showLayersDialog(final Context pContext) {
-        AlertDialog.Builder layerDialod = new AlertDialog.Builder(pContext);
-        layerDialod.setTitle(pContext.getString(R.string.select_offline_layer));
+    public void showLayersDialog(final Context context) {
+        AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
+        layerDialod.setTitle(context.getString(R.string.select_offline_layer));
         AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
                 selected_layer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -221,7 +227,7 @@ public class MapHelper {
                                         mOsmMap.invalidate();
                                         OsmMBTileProvider mbprovider = new OsmMBTileProvider(
                                                 iRegisterReceiver, spfile);
-                                        osmTileOverlay = new TilesOverlay(mbprovider, pContext);
+                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
                                         osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
                                         mOsmMap.getOverlays().add(0, osmTileOverlay);
                                         mOsmMap.invalidate();
@@ -241,13 +247,12 @@ public class MapHelper {
 
     private File[] getFileFromSelectedItem(int item) {
         File directory = new File(Collect.OFFLINE_LAYERS + slash + offilineOverlays[item]);
-        File[] files = directory.listFiles(new FilenameFilter() {
+        return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 return (filename.toLowerCase().endsWith(".mbtiles"));
             }
         });
-        return files;
     }
 
 

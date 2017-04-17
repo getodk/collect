@@ -110,7 +110,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         }
     }
 
-    public void createOptions(List<SelectChoice> mSearchedItems, List<Integer> tagList) {
+    public void createOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {
         removeView(buttonLayout);
         buttons = new ArrayList<RadioButton>();
 
@@ -122,11 +122,11 @@ public class SelectOneSearchWidget extends QuestionWidget implements
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mSearchedItems != null && mSearchedItems.size() > 0) {
-            for (int i = 0; i < mSearchedItems.size(); i++) {
+        if (searchedItems != null && searchedItems.size() > 0) {
+            for (int i = 0; i < searchedItems.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(mSearchedItems.get(i))));
+                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(searchedItems.get(i))));
 
                 if (tagList == null) {
                     r.setTag(Integer.valueOf(i));
@@ -139,10 +139,10 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
                 buttons.add(r);
 
-                if (selectedTag == -1 && mSearchedItems.get(i).getValue().equals(s)) {
+                if (selectedTag == -1 && searchedItems.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                     selectedTag = (Integer) r.getTag();
-                } else if (selectedTag.equals((Integer) r.getTag())) {
+                } else if (selectedTag.equals(r.getTag())) {
                     r.setChecked(true);
                 }
 
@@ -154,7 +154,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
                 mediaLayout.setPlayTextColor(mPlayColor);
                 mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
 
-                if (i != mSearchedItems.size() - 1) {
+                if (i != searchedItems.size() - 1) {
                     // Last, add the dividing line (except for the last element)
                     ImageView divider = new ImageView(getContext());
                     divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
@@ -230,15 +230,15 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(mSearchStr, 0);
-            /*
-             * If you do a multi-question screen after a "add another group" dialog, this won't
-             * automatically pop up. It's an Android issue.
-             *
-             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and
-             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
-             * is focused before the dialog pops up, everything works fine. great.
-             */
+        /*
+         * If you do a multi-question screen after a "add another group" dialog, this won't
+         * automatically pop up. It's an Android issue.
+         *
+         * That is, if I have an edit text in an activity, and pop a dialog, and in that
+         * dialog's button's OnClick() I call edittext.requestFocus() and
+         * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
+         * is focused before the dialog pops up, everything works fine. great.
+         */
     }
 
 

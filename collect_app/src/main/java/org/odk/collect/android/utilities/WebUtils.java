@@ -22,6 +22,7 @@ import android.util.Log;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -47,7 +48,6 @@ import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
 import org.opendatakit.httpclientandroidlib.config.SocketConfig;
 import org.opendatakit.httpclientandroidlib.impl.auth.BasicScheme;
 import org.opendatakit.httpclientandroidlib.impl.client.BasicAuthCache;
-import org.opendatakit.httpclientandroidlib.impl.client.CloseableHttpClient;
 import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import org.xmlpull.v1.XmlPullParser;
@@ -65,6 +65,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
+import timber.log.Timber;
+
 /**
  * Common utility methods for managing the credentials associated with the
  * request context and constructing http context, client and request with the
@@ -74,6 +76,8 @@ import java.util.zip.GZIPInputStream;
  */
 public final class WebUtils {
     public static final String t = "WebUtils";
+
+    private static final String USER_AGENT_HEADER = "User-Agent";
 
     public static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
     public static final String OPEN_ROSA_VERSION = "1.0";
@@ -180,6 +184,14 @@ public final class WebUtils {
         }
     }
 
+    private static final void setCollectHeaders(HttpRequest req) {
+        String userAgent = String.format("%s %s/%s",
+                System.getProperty("http.agent"),
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_NAME);
+        req.setHeader(USER_AGENT_HEADER, userAgent);
+    }
+
     private static final void setOpenRosaHeaders(HttpRequest req) {
         req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
         GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
@@ -190,12 +202,14 @@ public final class WebUtils {
 
     public static final HttpHead createOpenRosaHttpHead(Uri u) {
         HttpHead req = new HttpHead(URI.create(u.toString()));
+        setCollectHeaders(req);
         setOpenRosaHeaders(req);
         return req;
     }
 
     public static final HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();
+        setCollectHeaders(req);
         setOpenRosaHeaders(req);
         setGoogleHeaders(req);
         req.setURI(uri);
@@ -210,16 +224,17 @@ public final class WebUtils {
                 Collect.getInstance().getString(R.string.protocol_odk_default));
 
         // TODO:  this doesn't exist....
-//		if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
-//	        String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-//			if ((auth != null) && (auth.length() > 0)) {
-//				req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-//			}
-//		}
+        //if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
+        //String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
+        //if ((auth != null) && (auth.length() > 0)) {
+        //req.setHeader("Authorization", "GoogleLogin auth=" + auth);
+        //}
+        //}
     }
 
     public static final HttpPost createOpenRosaHttpPost(Uri u) {
         HttpPost req = new HttpPost(URI.create(u.toString()));
+        setCollectHeaders(req);
         setOpenRosaHeaders(req);
         setGoogleHeaders(req);
         return req;
@@ -255,12 +270,10 @@ public final class WebUtils {
                 .setCookieSpec(CookieSpecs.DEFAULT)
                 .build();
 
-        CloseableHttpClient httpClient = HttpClientBuilder.create()
+        return HttpClientBuilder.create()
                 .setDefaultSocketConfig(socketConfig)
                 .setDefaultRequestConfig(requestConfig)
                 .build();
-
-        return httpClient;
 
     }
 
@@ -278,13 +291,12 @@ public final class WebUtils {
                 // read to end of stream...
                 final long count = 1024L;
                 while (is.skip(count) == count) {
-                    ;
                 }
                 is.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Timber.e(e, "Unable read the stream");
             } catch (Exception e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
         }
     }
@@ -300,7 +312,7 @@ public final class WebUtils {
             URL url = new URL(urlString);
             u = url.toURI();
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e, "Error converting URL %s to uri", urlString);
             return new DocumentFetchResult(e.getLocalizedMessage()
                     // + app.getString(R.string.while_accessing) + urlString);
                     + ("while accessing") + urlString, 0);
@@ -384,30 +396,31 @@ public final class WebUtils {
                             // ensure stream is consumed...
                             final long count = 1024L;
                             while (isr.skip(count) == count) {
-                                ;
                             }
                         } catch (Exception e) {
                             // no-op
+                            Timber.e(e);
                         }
                         try {
                             isr.close();
-                        } catch (Exception e) {
+                        } catch (IOException e) {
                             // no-op
+                            Timber.e(e, "Error closing input stream reader");
                         }
                     }
                     if (is != null) {
                         try {
                             is.close();
-                        } catch (Exception e) {
+                        } catch (IOException e) {
+                            Timber.e(e, "Error closing inputstream");
                             // no-op
                         }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
-                Log.e(t, error);
+                Timber.e(e, error);
                 return new DocumentFetchResult(error, 0);
             }
 
@@ -437,7 +450,6 @@ public final class WebUtils {
             }
             return new DocumentFetchResult(doc, isOR);
         } catch (Exception e) {
-            e.printStackTrace();
             String cause;
             Throwable c = e;
             while (c.getCause() != null) {
@@ -447,7 +459,7 @@ public final class WebUtils {
             String error = "Error: " + cause + " while accessing "
                     + u.toString();
 
-            Log.w(t, error);
+            Timber.w(e, error);
             return new DocumentFetchResult(error, 0);
         }
     }

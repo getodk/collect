@@ -25,7 +25,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,14 +40,16 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -60,17 +61,15 @@ import java.util.List;
 
 public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener {
-    private static final String t = "InstanceUploaderList";
     private static final String SHOW_ALL_MODE = "showAllMode";
+    private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_SORT + 1;
+    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
     private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
 
     private static final int INSTANCE_UPLOADER = 0;
 
     private Button mUploadButton;
-
-    private SimpleCursorAdapter mCursorAdapter;
 
     private InstancesDao mInstanceDao;
 
@@ -80,7 +79,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(t, "onCreate");
+        Timber.i("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
 
@@ -135,7 +134,7 @@ public class InstanceUploaderList extends InstanceListActivity
         });
         toggleSelsButton.setOnLongClickListener(this);
 
-        setupAdapter(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        setupAdapter();
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
@@ -200,9 +199,13 @@ public class InstanceUploaderList extends InstanceListActivity
             // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
 
-            Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
-            startActivityForResult(i, INSTANCE_UPLOADER);
+            if (PlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+                Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
+                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                startActivityForResult(i, INSTANCE_UPLOADER);
+            } else {
+                PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(this);
+            }
         } else {
             // otherwise, do the normal aggregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);
@@ -254,6 +257,12 @@ public class InstanceUploaderList extends InstanceListActivity
 
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
 
+        if (getListView().isItemChecked(position)) {
+            mSelectedInstances.add(getListView().getItemIdAtPosition(position));
+        } else {
+            mSelectedInstances.remove(getListView().getItemIdAtPosition(position));
+        }
+
         mUploadButton.setEnabled(areCheckedItems());
         Button toggleSelectionsButton = (Button) findViewById(R.id.toggle_button);
         toggleButtonLabel(toggleSelectionsButton, getListView());
@@ -261,7 +270,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
-        Log.d(t, "onRestoreInstanceState");
+        Timber.d("onRestoreInstanceState");
         super.onRestoreInstanceState(bundle);
         mUploadButton.setEnabled(areCheckedItems());
     }
@@ -282,7 +291,7 @@ public class InstanceUploaderList extends InstanceListActivity
             case INSTANCE_UPLOADER:
                 if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
                     getListView().clearChoices();
-                    if (mCursorAdapter.isEmpty()) {
+                    if (mListAdapter.isEmpty()) {
                         finish();
                     }
                 }
@@ -293,32 +302,48 @@ public class InstanceUploaderList extends InstanceListActivity
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
-    @Override
-    protected void setupAdapter(String sortOrder) {
+    private void setupAdapter() {
         List<Long> checkedInstances = new ArrayList();
         for (long a : getListView().getCheckedItemIds()) {
             checkedInstances.add(a);
         }
-        Cursor cursor;
-        if (mShowAllMode) {
-            cursor = mInstanceDao.getAllCompletedUndeletedInstancesCursor(sortOrder);
-        } else {
-            cursor = mInstanceDao.getFinalizedInstancesCursor(sortOrder);
-        }
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        mCursorAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, cursor, data, view);
-        setListAdapter(mCursorAdapter);
-        checkPreviouslyCheckedItems(checkedInstances, cursor);
+        mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
+        setListAdapter(mListAdapter);
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected String getSortingOrderKey() {
+        return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        mListAdapter.changeCursor(getCursor());
+        checkPreviouslyCheckedItems();
+        mUploadButton.setEnabled(areCheckedItems());
+    }
+
+    private Cursor getCursor() {
+        Cursor cursor;
+        if (mShowAllMode) {
+            cursor = mInstanceDao.getCompletedUndeletedInstancesCursor(getFilterText(), getSortingOrder());
+        } else {
+            cursor = mInstanceDao.getFinalizedInstancesCursor(getFilterText(), getSortingOrder());
+        }
+
+        return cursor;
     }
 
     private void showUnsent() {
         mShowAllMode = false;
-        Cursor c = mInstanceDao.getFinalizedInstancesCursor();
-        Cursor old = mCursorAdapter.getCursor();
+        Cursor c = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
+        Cursor old = mListAdapter.getCursor();
         try {
-            mCursorAdapter.changeCursor(c);
+            mListAdapter.changeCursor(getCursor());
         } finally {
             if (old != null) {
                 old.close();
@@ -330,10 +355,10 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showAll() {
         mShowAllMode = true;
-        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor();
-        Cursor old = mCursorAdapter.getCursor();
+        Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
+        Cursor old = mListAdapter.getCursor();
         try {
-            mCursorAdapter.changeCursor(c);
+            mListAdapter.changeCursor(getCursor());
         } finally {
             if (old != null) {
                 old.close();

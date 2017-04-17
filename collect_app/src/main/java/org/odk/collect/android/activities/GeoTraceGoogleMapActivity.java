@@ -15,11 +15,9 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,7 +41,6 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -54,10 +51,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
-import org.osmdroid.DefaultResourceProxyImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,13 +74,11 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private ScheduledFuture schedulerHandler;
     private Button play_button;
     private Button save_button;
-    public Button polygon_button;
     public Button layers_button;
     public Button clear_button;
     private Button manual_button;
     private Button pause_button;
     private Button location_button;
-    private ProgressDialog progress;
     public AlertDialog.Builder builder;
     private View traceSettingsView;
     public LayoutInflater inflater;
@@ -98,25 +91,16 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean play_check = false;
     private Spinner time_units;
     private Spinner time_delay;
-    private SharedPreferences sharedPreferences;
-    public DefaultResourceProxyImpl resource_proxy;
-    private Boolean inital_location_found = false;
-    private Boolean clear_button_test = false;
-
 
     private GoogleMap mMap;
-    private UiSettings gmapSettings;
     private LocationManager mLocationManager;
     private Boolean mGPSOn = false;
     private Boolean mNetworkOn = false;
     private Location curLocation;
     private LatLng curlatLng;
-    private Boolean initZoom = false;
-    private String basemap;
     private PolylineOptions polylineOptions;
     private Polyline polyline;
     private String final_return_string;
-    private ArrayList<LatLng> latLngsArray = new ArrayList<LatLng>();
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private Button polygon_save;
     private Button polyline_save;
@@ -140,18 +124,13 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         setContentView(R.layout.geotrace_google_layout);
 
-        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoTraceGoogleMapActivity.this)) {
-
-            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    setupMap(googleMap);
-                }
-            });
-        } else {
-            PlayServicesUtil.requestPlayServicesErrorDialog(GeoTraceGoogleMapActivity.this);
-        }
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
     }
 
     private void setupMap(GoogleMap googleMap) {
@@ -186,7 +165,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
         polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
-        resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
         time_delay.setSelection(3);
         time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
@@ -236,8 +214,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                                 R.id.radio_group);
                         int radioButtonID = rb.getCheckedRadioButtonId();
                         View radioButton = rb.findViewById(radioButtonID);
-                        int idx = rb.indexOfChild(radioButton);
-                        TRACE_MODE = idx;
+                        TRACE_MODE = rb.indexOfChild(radioButton);
                         if (TRACE_MODE == 0) {
                             setupManualMode();
                         } else if (TRACE_MODE == 1) {
@@ -365,7 +342,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         } else {
             if (curLocation != null) {
                 curlatLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
-                initZoom = true;
             }
         }
 
@@ -374,7 +350,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
     private void overlayIntentTrace(String str) {
         mMap.setOnMapLongClickListener(null);
-        clear_button_test = true;
         String s = str.replace("; ", ";");
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length); i++) {
@@ -606,9 +581,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         update_polyline();
     }
 
-	/*
-        This functions handels the delay and the Runable for
-	*/
+    /*
+            This functions handels the delay and the Runable for
+    */
 
     public void setGeoTraceScheuler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
@@ -631,7 +606,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             LatLng latLng = markerArray.get(i).getPosition();
             tempLat.add(latLng);
         }
-        latLngsArray = tempLat;
         polyline.setPoints(tempLat);
     }
 
@@ -657,7 +631,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
     private void zoomToMyLocation() {
         if (curLocation != null) {
-            inital_location_found = true;
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curlatLng, 17));
         }
 
@@ -732,7 +705,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         mMap.clear();
         mode_active = false;
         clear_button.setEnabled(false);
-        clear_button_test = false;
         polyline = null;
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.RED);
@@ -844,14 +816,4 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         }
         zoomDialog.show();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
 }

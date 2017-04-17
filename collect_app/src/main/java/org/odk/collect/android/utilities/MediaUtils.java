@@ -42,9 +42,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Consolidate all interactions with media providers here.
- *
+ * <p>
  * The functionality of getPath() was provided by paulburke as described here:
  * See
  * http://stackoverflow.com/questions/20067508/get-real-path-from-uri-android
@@ -129,7 +131,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete image file from media provider");
         } finally {
             if (imageCursor != null) {
                 imageCursor.close();
@@ -174,7 +176,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete images in folder %s", folder.getAbsoluteFile());
         } finally {
             if (imageCursor != null) {
                 imageCursor.close();
@@ -244,7 +246,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete audio file %s ", audioFile);
         } finally {
             if (audioCursor != null) {
                 audioCursor.close();
@@ -289,7 +291,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete audio files in folder %s", folder.getAbsolutePath());
         } finally {
             if (audioCursor != null) {
                 audioCursor.close();
@@ -359,7 +361,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete video file %s", videoFile);
         } finally {
             if (videoCursor != null) {
                 videoCursor.close();
@@ -404,7 +406,7 @@ public class MediaUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e, "Unable to delete video files in folder %s", folder.getAbsolutePath());
         } finally {
             if (videoCursor != null) {
                 videoCursor.close();
@@ -482,9 +484,8 @@ public class MediaUtils {
                 }
 
                 // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+            } else if (isDownloadsDocument(uri)) {
+                // DownloadsProvider
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
@@ -492,9 +493,8 @@ public class MediaUtils {
                         Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
+            } else if (isMediaDocument(uri)) {
+                // MediaProvider
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -514,9 +514,8 @@ public class MediaUtils {
                 return getDataColumn(context, contentUri, selection,
                         selectionArgs);
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // MediaStore (and general)
 
             // Return the remote address
             if (isGooglePhotosUri(uri)) {
@@ -524,9 +523,8 @@ public class MediaUtils {
             }
 
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // File
             return uri.getPath();
         }
 
@@ -570,7 +568,7 @@ public class MediaUtils {
             }
             return new File(filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         } finally {
             IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(outputStream);
@@ -638,7 +636,7 @@ public class MediaUtils {
      * @author paulburke
      */
     public static String getDataColumn(Context context, Uri uri,
-            String selection, String[] selectionArgs) {
+                                       String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";

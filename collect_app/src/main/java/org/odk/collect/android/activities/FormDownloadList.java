@@ -25,7 +25,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +52,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -72,11 +74,11 @@ import java.util.Set;
  */
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
         FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
-    private static final String t = "RemoveFileManageList";
+    private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_SORT + 1;
+    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
@@ -84,6 +86,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String DIALOG_MSG = "dialogmsg";
     private static final String DIALOG_SHOWING = "dialogshowing";
     private static final String FORMLIST = "formlist";
+    private static final String SELECTED_FORMS = "selectedForms";
 
     private static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
@@ -107,6 +110,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private HashMap<String, FormDetails> mFormNamesAndURLs = new HashMap<String, FormDetails>();
     private SimpleAdapter mFormListAdapter;
     private ArrayList<HashMap<String, String>> mFormList;
+    private ArrayList<HashMap<String, String>> mFilteredFormList = new ArrayList<>();
+    private LinkedHashSet<String> mSelectedForms = new LinkedHashSet<>();
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -151,7 +156,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
 
                 downloadFormList();
-                FormDownloadList.this.getListView().clearChoices();
+                mFilteredFormList.clear();
                 clearChoices();
             }
         });
@@ -183,6 +188,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             if (savedInstanceState.containsKey(SHOULD_EXIT)) {
                 mShouldExit = savedInstanceState.getBoolean(SHOULD_EXIT);
             }
+            if (savedInstanceState.containsKey(SELECTED_FORMS)) {
+                mSelectedForms = (LinkedHashSet<String>) savedInstanceState.getSerializable(SELECTED_FORMS);
+            }
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FORMLIST)) {
@@ -193,13 +201,15 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             mFormList = new ArrayList<HashMap<String, String>>();
         }
 
+        mFilteredFormList.addAll(mFormList);
+
         if (getLastNonConfigurationInstance() instanceof DownloadFormListTask) {
             mDownloadFormListTask = (DownloadFormListTask) getLastNonConfigurationInstance();
             if (mDownloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
                 try {
                     dismissDialog(PROGRESS_DIALOG);
                 } catch (IllegalArgumentException e) {
-                    Log.i(t, "Attempting to close a dialog that was not previously opened");
+                    Timber.i("Attempting to close a dialog that was not previously opened");
                 }
                 mDownloadFormsTask = null;
             }
@@ -209,7 +219,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 try {
                     dismissDialog(PROGRESS_DIALOG);
                 } catch (IllegalArgumentException e) {
-                    Log.i(t, "Attempting to close a dialog that was not previously opened");
+                    Timber.i("Attempting to close a dialog that was not previously opened");
                 }
                 mDownloadFormsTask = null;
             }
@@ -226,7 +236,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         };
 
         mFormListAdapter =
-                new SimpleAdapter(this, mFormList, R.layout.two_item_multiple_choice, data, view);
+                new SimpleAdapter(this, mFilteredFormList, R.layout.two_item_multiple_choice, data, view);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
         setListAdapter(mFormListAdapter);
@@ -272,6 +282,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         } else {
             Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                     "<missing form detail>");
+        }
+
+        if (getListView().isItemChecked(position)) {
+            mSelectedForms.add(((HashMap<String, String>) getListAdapter().getItem(position)).get(FORMDETAIL_KEY));
+        } else {
+            mSelectedForms.remove(((HashMap<String, String>) getListAdapter().getItem(position)).get(FORMDETAIL_KEY));
         }
     }
 
@@ -327,6 +343,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         outState.putBoolean(DIALOG_SHOWING, mAlertShowing);
         outState.putBoolean(SHOULD_EXIT, mShouldExit);
         outState.putSerializable(FORMLIST, mFormList);
+        outState.putSerializable(SELECTED_FORMS, mSelectedForms);
     }
 
     @Override
@@ -403,21 +420,51 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     @Override
-    protected void setupAdapter(final String sortOrder) {
+    protected String getSortingOrderKey() {
+        return FORM_DOWNLOAD_LIST_SORTING_ORDER;
+    }
+
+    @Override
+    protected void updateAdapter() {
+        CharSequence charSequence = getFilterText();
+        mFilteredFormList.clear();
+        if (charSequence.length() > 0) {
+            for (HashMap<String, String> form : mFormList) {
+                if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                    mFilteredFormList.add(form);
+                }
+            }
+        } else {
+            mFilteredFormList.addAll(mFormList);
+        }
+        sortList();
+        mFormListAdapter.notifyDataSetChanged();
+        checkPreviouslyCheckedItems();
+    }
+
+    @Override
+    protected void checkPreviouslyCheckedItems() {
         getListView().clearChoices();
-        Collections.sort(mFormList, new Comparator<HashMap<String, String>>() {
+        for (int i = 0; i < getListView().getCount(); i++) {
+            HashMap<String, String> item =
+                    (HashMap<String, String>) getListAdapter().getItem(i);
+            if (mSelectedForms.contains(item.get(FORMDETAIL_KEY))) {
+                getListView().setItemChecked(i, true);
+            }
+        }
+    }
+
+    private void sortList() {
+        Collections.sort(mFilteredFormList, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                if (sortOrder.equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
+                if (getSortingOrder().equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
                     return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
                 } else {
                     return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));
                 }
             }
         });
-
-        mFormListAdapter.notifyDataSetChanged();
-        selectSupersededForms();
     }
 
     /**
@@ -514,7 +561,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public static boolean isLocalFormSuperseded(String formId, String latestVersion) {
 
         if (formId == null) {
-            Log.e(t, "isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
+            Timber.e("isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
             return true;
         }
 
@@ -559,10 +606,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private void selectSupersededForms() {
 
         ListView ls = getListView();
-        for (int idx = 0; idx < mFormList.size(); idx++) {
-            HashMap<String, String> item = mFormList.get(idx);
+        for (int idx = 0; idx < mFilteredFormList.size(); idx++) {
+            HashMap<String, String> item = mFilteredFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
                 ls.setItemChecked(idx, true);
+                mSelectedForms.add(item.get(FORMDETAIL_KEY));
             }
         }
     }
@@ -577,7 +625,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         mDownloadFormListTask = null;
 
         if (result == null) {
-            Log.e(t, "Formlist Downloading returned null.  That shouldn't happen");
+            Timber.e("Formlist Downloading returned null.  That shouldn't happen");
             // Just displayes "error occured" to the user, but this should never happen.
             createAlertDialog(getString(R.string.load_remote_form_error),
                     getString(R.string.error_occured), EXIT);
@@ -629,6 +677,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     mFormList.add(j, item);
                 }
             }
+            mFilteredFormList.addAll(mFormList);
+            updateAdapter();
             selectSupersededForms();
             mFormListAdapter.notifyDataSetChanged();
             mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);

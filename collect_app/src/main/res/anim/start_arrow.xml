@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -14,6 +13,15 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-	<translate android:fromXDelta="25%p" android:toXDelta="-30%p" android:duration="1500" android:repeatCount="5" />
-	<alpha android:fromAlpha="0.0" android:toAlpha="1.0" android:duration="750" android:repeatCount="11" android:repeatMode="reverse" />
+    <translate
+        android:duration="1500"
+        android:fromXDelta="25%p"
+        android:repeatCount="5"
+        android:toXDelta="-30%p" />
+    <alpha
+        android:duration="750"
+        android:fromAlpha="0.0"
+        android:repeatCount="11"
+        android:repeatMode="reverse"
+        android:toAlpha="1.0" />
 </set>

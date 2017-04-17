@@ -25,7 +25,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -46,12 +45,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
-import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -79,19 +79,16 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private Button mAcceptLocation;
     private Button mReloadLocation;
 
-    private boolean mRefreshLocation = true;
     private boolean mIsDragged = false;
     private Button mShowLocation;
     private Button mLayers;
     private boolean mGPSOn = false;
     private boolean mNetworkOn = false;
 
-    private double mLocationAccuracy;
     private int mLocationCount = 0;
 
-    private boolean mZoomed = false;
     private MapHelper mHelper;
-//	private KmlLayer kk;
+    //private KmlLayer kk;
 
     private AlertDialog zoomDialog;
     private View zoomDialogView;
@@ -123,22 +120,18 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         try {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
-            e.printStackTrace();
+            Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
             finish();
             return;
         }
 
-        if (PlayServicesUtil.isGooglePlayServicesAvailable(GeoPointMapActivity.this)) {
-            ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    setupMap(googleMap);
-                }
-            });
-        } else {
-            PlayServicesUtil.requestPlayServicesErrorDialog(GeoPointMapActivity.this);
-        }
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
     }
 
     @Override
@@ -161,14 +154,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             setResult(RESULT_OK, i);
 
         } else if (mIsDragged || read_only || location_from_intent) {
-            Log.i(getClass().getName(), "IsDragged !!!");
+            Timber.i("IsDragged !!!");
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
                     mLatLng.latitude + " " + mLatLng.longitude + " "
                             + 0 + " " + 0);
             setResult(RESULT_OK, i);
         } else if (mLocation != null) {
-            Log.i(getClass().getName(), "IsNotDragged !!!");
+            Timber.i("IsNotDragged !!!");
 
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
@@ -207,8 +200,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         mMarkerOption = new MarkerOptions();
         mHelper = new MapHelper(this, mMap);
-
-        mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mLocationStatus = (TextView) findViewById(R.id.location_status);
@@ -343,14 +334,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 location_from_intent = true;
 
             }
-
-            if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
-                        GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
-            }
         }
-
-		/*Zoom only if there's a previous location*/
+        /*Zoom only if there's a previous location*/
         if (mLatLng != null) {
             mlocationInfo.setVisibility(View.GONE);
             mLocationStatus.setVisibility(View.GONE);
@@ -359,7 +344,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             mMarker = mMap.addMarker(mMarkerOption);
             mCaptureLocation = true;
             foundFirstLocation = true;
-            mZoomed = true;
             zoomToPoint();
         }
 
@@ -388,7 +372,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                         this);
             }
         }
-//		mShowLocation.setClickable(mMarker != null);
+        //mShowLocation.setClickable(mMarker != null);
         if (!mGPSOn && !mNetworkOn) {
             showGPSDisabledAlertToUser();
         } else {
@@ -425,7 +409,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                     mReloadLocation.setEnabled(true);
                 }
                 if (!foundFirstLocation) {
-//					zoomToPoint();
+                    //zoomToPoint();
                     showZoomDialog();
                     foundFirstLocation = true;
                 }
@@ -576,13 +560,4 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PlayServicesUtil.PLAY_SERVICE_ERROR_REQUEST_CODE) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
 }

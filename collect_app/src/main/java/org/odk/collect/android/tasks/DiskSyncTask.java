@@ -27,6 +27,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.UrlUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
-                           //File not found in sdcard but file path found in database
+                            //File not found in sdcard but file path found in database
                             //probably because the file has been deleted or filename was changed in sdcard
                             //Add the ID to list so that they could be deleted all together
 
@@ -301,7 +302,13 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             updateValues.put(FormsColumns.JR_VERSION, version);
         }
         if (submission != null) {
-            updateValues.put(FormsColumns.SUBMISSION_URI, submission);
+            if (UrlUtils.isValidUrl(submission)) {
+                updateValues.put(FormsColumns.SUBMISSION_URI, submission);
+            } else {
+                throw new IllegalArgumentException(
+                        Collect.getInstance().getString(R.string.xform_parse_error,
+                                formDefFile.getName(), "submission url"));
+            }
         }
         if (base64RsaPublicKey != null) {
             updateValues.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, base64RsaPublicKey);
@@ -325,5 +332,4 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             mListener.syncComplete(result);
         }
     }
-
 }

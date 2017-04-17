@@ -17,7 +17,7 @@
   <string name="cancel">Peruuta</string>
   <string name="cancel_loading_form">Peruuta</string>
   <string name="cancel_location">Peruuta</string>
-  <string name="cannot_edit_completed_form">Tätä lomaketta ei voida muokata kun se on merkitty valmiiksi. Lomake saattaa olla salattu.</string>
+  <string name="cannot_edit_completed_form">Tätä lomaketta ei voi muokata, kun se on merkitty vimeistellyksi. Se saattaa olla salattu.</string>
   <string name="capture_audio">Äänitä</string>
   <string name="capture_image">Ota kuva</string>
   <string name="capture_osm">Käynnistä OpenMapKit</string>
@@ -87,13 +87,14 @@
   <string name="location_accuracy">Tarkkuus %1$s m</string>
   <string name="longitude">Pituusaste</string>
   <string name="main_menu">Päävalikko</string>
-  <string name="main_menu_details">Helpotettua tiedonkeruuta...</string>
+  <string name="main_menu_details">Helpotettua tiedonkeruuta…</string>
   <string name="manage_files">Poista tallennettu lomake</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="noselect_error">Pahoittelen, et ole valinnut yhtään lomaketta!</string>
   <string name="no_connection">Ei verkkoyhteyttä käytettävissä</string>
   <string name="no_items_display">Ei mitään näytettävää.</string>
   <string name="no_items_display_forms">Ei näytettävää.\n\nKokeile tyhjän lomakkeen hakemista ja täyttämistä.</string>
+  <string name="no_items_display_sent_forms">Ei näytettävää.\n\nKokeile viimeistellyn lomakkeen lähettämistä ennen tarkastelua.</string>
   <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile tallennetun lomakkeen viimeistelyä ennen lähettämistä.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Pahoittelen, lomake ei ole tulkittavissa.</string>
@@ -120,7 +121,8 @@
   <string name="send_data">Lähetä valmis lomake</string>
   <string name="send_data_button">Lähetä valmis lomake (%s)</string>
   <string name="send_selected_data">Lähetä valitut</string>
-  <string name="server_auth_credentials">Syötä käyttäjätunnus ja salasana palvelimelle: %s</string>
+  <string name="view_sent_forms">Tarkastele lähetettyä lomaketta</string>
+  <string name="view_sent_forms_button">Tarkastele lähetettyä lomaketta (%s)</string>
   <string name="server_requires_auth">Palvelin vaatii tunnistautumista</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Palvelinasetukset</string>
@@ -151,7 +153,7 @@
   <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
-  <string name="form_scan_starting">Etsitään lomakkeita...</string>
+  <string name="form_scan_starting">Etsitään lomakkeita…</string>
   <string name="access_error">Virhe käyttäessä %s:</string>
   <string name="manifest_server_error">Manifestivastaus ei raportoi OpenRosa-versiota - palvelinvika?</string>
   <string name="root_element_error">Juurielementti ei ole &lt;manifest\&gt; — oli %s</string>
@@ -183,16 +185,17 @@
   <string name="change_view">Vaihda näkymää</string>
   <string name="show_sent_and_unsent_forms">Näytä lähetetyt ja lähettämättömät lomakkeet</string>
   <string name="show_unsent_forms">Näytä lähettämättömät lomakkeet</string>
-  <string name="added_on_date_at_time">\'Lisätty\' EEE, dd MMM yyyy \'kello\' HH:nn</string>
+  <string name="added_on_date_at_time">\'Lisätty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Tallennettu\' EEE, dd MMM yyyy \'kello\' HH:nn</string>
+  <string name="saved_on_date_at_time">\'Tallennettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Viimeistelty\' EEE, dd MMM yyyy \'kello\' HH:nn</string>
+  <string name="finalized_on_date_at_time">\'Viimeistelty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Lähetetty\' EEE, dd MMM yyyy \'kello\' HH:nn</string>
+  <string name="sent_on_date_at_time">\'Lähetetty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Lähettäminen epäonnistunut\' EEE, dd MMM yyyy \'kello\' HH:nn</string>
+  <string name="sending_failed_on_date_at_time">\'Lähettäminen epäonnistunut\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Poistettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <string name="version">Versio:</string>
   <string name="parent_form_not_present">Ei voitu muokata tallennettua lomaketta, koska vastaava tyhjää lomaketta ei ole tai se on poistettu.\n\nLomakkeen tunniste: %1$s</string>
   <string name="launch_app">Käynnistä</string>
@@ -213,7 +216,6 @@
   <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="user_access_form_entry">Käyttäjällä pääsy seuraaviin lomakesyöttökohtiin:</string>
-  <string name="admin_advanced_settings">Lisäasetukset (kun suositeltavaa):</string>
   <string name="save_mid">Tallenna lomake</string>
   <string name="enter_new_password">Syötä uusi salasana</string>
   <string name="verify_new_password">Syötä uusi salasana uudelleen</string>
@@ -244,12 +246,6 @@
   <string name="swipe_instructions">Olet lomakkeen %s alussa.\nPyyhkäise ruutua kuten alla siirtyäksesi eteenpäin ja taaksepäin.</string>
   <string name="buttons_instructions">Olet lomakkeen %s alussa. Kosketa nuolipainikkeita alla siirtyäksesi eteenpäin ja taaksepäin.</string>
   <string name="swipe_buttons_instructions">Olet lomakkeen %s alussa. Pyyhkäise ruutua kuten alla tai kosketa nuolipainikkeita siirtyäksesi eteenpäin ja taaksepäin.</string>
-  <string name="form_processing_logic">Lomakkeen prosessointilogiikka</string>
-  <string name="form_processing_logic_recommended">Suositeltu (oletusarvo)</string>
-  <string name="form_processing_logic_0">Tammikuu 2015 (nopein)</string>
-  <string name="form_processing_logic_1">Tammikuu 2015 (turvallisin)</string>
-  <string name="form_processing_logic_2">2014 keskivaihe (hidas)</string>
-  <string name="form_processing_logic_3">Varhainen 2014 (nopea)</string>
   <string name="launch_printer">Käynnistä tulostus</string>
   <string name="no_printer">Pyydettyä tulostinta ei ole asennettu. Asenna tulostin.</string>
   <string name="constraint_behavior">Rajoitusten käsittely</string>
@@ -272,7 +268,7 @@
   <string name="ext_import_generic_error">Ei tuotu dataa lähteestä %1$s. Syy: %2$s</string>
   <string name="ext_import_progress_message">Esiladataan dataa lähteestä \'%1$s\', odota… %2$s</string>
   <string name="ext_import_cancelled_message">Datan lukeminen peruttu!</string>
-  <string name="ext_import_finalizing_message">Viimeistellään esiladattua dataa...</string>
+  <string name="ext_import_finalizing_message">Viimeistellään esiladattua dataa…</string>
   <string name="ext_import_completed_message">Datan lukeminen valmis!</string>
   <string name="ext_not_initialized_error"> ExternalDataManager alustamatta.</string>
   <string name="ext_import_csv_missing_error">Lomakkeen %1$s tarvitsemaa ulkoista dataa ei ole tuotu. Ehkä tiedoston %2$s.csv tuominen lomakkeen ohessa unohtui?</string>
@@ -283,21 +279,21 @@
   <string name="fs_file_copy_error">Ei voitu kopioida \'%1$s\' yli \'%2$s\'. Syy: %3$s</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="survey_multiple_forms_error">Olet ladannut kaksi eri lomaketta, joilla on sama lomake tunnus ja versio. Ehkä ne olivat samat lomake ladattuna eri aikoina tai eri palvelimille. Joka tapauksessa, sinun pitäisi poistaa toinen.</string>
-  <string name="survey_loading_reading_form_message">Luetaan lomakemäärittelyä...</string>
-  <string name="survey_loading_reading_data_message">Luetaan kyselydataa...</string>
-  <string name="survey_loading_reading_csv_message">Luetaan CSV-tiedostoja...</string>
-  <string name="survey_saving_validating_message">Tarkistetaan vastauksia...</string>
-  <string name="survey_saving_collecting_message">Kerätää dataa...</string>
-  <string name="survey_saving_saving_message">Tallennetaan SD-kortille...</string>
-  <string name="survey_saving_finalizing_message">Viimeistellään SD-kortille...</string>
-  <string name="survey_saving_encrypting_message">Salataan dataa...</string>
+  <string name="survey_loading_reading_form_message">Luetaan lomakemäärittelyä…</string>
+  <string name="survey_loading_reading_data_message">Luetaan kyselydataa…</string>
+  <string name="survey_loading_reading_csv_message">Luetaan CSV-tiedostoja…</string>
+  <string name="survey_saving_validating_message">Tarkistetaan vastauksia…</string>
+  <string name="survey_saving_collecting_message">Kerätää dataa…</string>
+  <string name="survey_saving_saving_message">Tallennetaan SD-kortille…</string>
+  <string name="survey_saving_finalizing_message">Viimeistellään SD-kortille…</string>
+  <string name="survey_saving_encrypting_message">Salataan dataa…</string>
   <string name="high_resolution_summary">Aktivoi korkean resoluution videotallennukset</string>
   <string name="high_resolution">Aktivoi hi-res video</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Oma Drive</string>
   <string name="go_shared">Minun kanssani jaetut</string>
-  <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:nn</string>
+  <string name="modified_on_date_at_time">\'Muokattu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <string name="protocol_settings">Konfiguroi alustan asetukset</string>
   <string name="aggregate_preferences">ODK Aggregate -asetukset</string>
   <string name="other_preferences">Muut alustan asetukset</string>
@@ -307,9 +303,7 @@
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="invalid_oauth">OAuth 2 token ei kelpaa</string>
   <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
-  <string name="google_audio_error">Google Sheets ei tällä hetkellä tue äänitiedostoja.</string>
-  <string name="google_video_error">Google Sheets ei tällä hetkellä tue videotiedostoja.</string>
-  <string name="picasa_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
+  <string name="media_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
   <string name="odk_auth_auth_fail">ODK Autosend autentikointivirhe, varmista että asetukset ovat oikein</string>
   <string name="odk_auto_note">ODK Autosend -ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -318,20 +312,23 @@
   <string name="change_server_url">Palvelimen URL</string>
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="no_blank_search">Hakukenttä ei voi olla tyhjä.</string>
-  <string name="google_sheets_url">Google Sheets URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_google_account_needed">Palvelimesi on Google Sheets, valitse vastaava Google-tili Yleisasetuksissa ennen jatkamista</string>
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
-  <string name="google_sheets_access_denied">Pääsy estetty. Varmista että työkirjan omistaja on myöntänyt pääsyn.</string>
-  <string name="google_sheets_update_error">Virhe päivittäessä työkirjaa. Varmista että työkirjan omistaja on myöntänyt muokkausoikeuden.</string>
   <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
+  <string name="about_preferences">Lisätietoja</string>
+  <string name="tell_your_friends">Kerro ystävillesi</string>
+  <string name="tell_your_friends_title">Jaa ODK Collect ystäviesi kanssa</string>
+  <string name="tell_your_friends_msg">Lataa ODK Collect -sovellus!</string>
+  <string name="leave_a_review">Tee arvio</string>
+  <string name="leave_a_review_summary">Tee Google Play -arvio</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kartoitusvalikko</string>
+  <string name="map_preferences">Kartoitus</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
   <string name="map_sdk_behavior">Mapping SDK</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
@@ -381,7 +378,6 @@
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
-  <string name="zoom_to_where">Zoomaa...</string>
   <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
   <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
   <string name="points_captured">%s pistettä kerätty</string>
@@ -413,6 +409,7 @@
   <string name="selected_answer">Valittu: %s</string>
   <string name="version_number">Versio: %s</string>
   <string name="general_settings_about">Tietoja</string>
+  <string name="odk_website">Open Data Kit -verkkosivusto</string>
   <string name="all_open_source_licenses">Avoimen lähdekoodin lisenssit</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
@@ -431,4 +428,36 @@
   <string name="phone_does_not_support_rsa">Laite ei tue RSA-salausta.</string>
   <string name="invalid_rsa_public_key">Kelvoton julkinen RSA-avain.</string>
   <string name="encryption_error_message">%s Lomaketta ei ole tallennettu viimeisteltynä.</string>
+  <string name="analytics_preferences">Käyttötiedot</string>
+  <string name="analytics">Kerää anonyymejä käyttötietoja</string>
+  <string name="analytics_summary">Anonyymit käyttötiedot auttavat ODK-tiimiä priorisoimaan korjauksia ja ominaisuuksia</string>
+  <string name="select_all">Valitse kaikki</string>
+  <string name="clear_all">Tyhjennä kaikki</string>
+  <string name="reset_settings">Kaikki asetukset (sisäiset asetukset, tallennetut asetukset)</string>
+  <string name="reset_saved_forms">Tallennetut lomakkeet (instances -kansio, instances -tietokanta)</string>
+  <string name="reset_blank_forms">Tyhjät lomakkeet (forms -kansio, forms -tietokanta, itemsets -tietokanta)</string>
+  <string name="reset_layers">Karttatasot (layers -kansio)</string>
+  <string name="reset_cache">Lomakkeiden latausvälimuisti (.cache -kansio)</string>
+  <string name="reset_osm_tiles">OSM-tiilien välimuisti (osmdroid -kansio)</string>
+  <string name="reset_settings_dialog_title">Valitse mitä palautetaan alkutilaan</string>
+  <string name="reset_settings_dialog">Palauta sovellus alkutilaan…</string>
+  <string name="reset_settings_button_reset">Palautus alkutilaan</string>
+  <string name="reset_dialog_nothing">Et ole valinnut mitään palautettavaksi alkutilaan.</string>
+  <string name="reset_in_progress">Palautetaan alkutilaan…</string>
+  <string name="resetting_finished">Palautus alkutilaan valmis</string>
+  <string name="reset_app_state_result">Alkutilaan palauttamisen tulokset</string>
+  <string name="reset_app_state_warning">Kaikki valittu data poistetaan pysyvästi. Peruutusmahdollisuutta ei ole.</string>
+  <string name="reset_settings_result">Kaikki asetukset :: %s</string>
+  <string name="reset_saved_forms_result">Tallennetut lomakkeet :: %s</string>
+  <string name="reset_blank_forms_result">Tyhjät lomakkeet :: %s</string>
+  <string name="reset_layers_result">Karttatasot :: %s</string>
+  <string name="reset_cache_result">Lomakkeiden latausvälimuisti :: %s</string>
+  <string name="reset_osm_tiles_result">OSM-tiilien välimuisti :: %s</string>
+  <string name="encrypted_form">Salattu lomake</string>
+  <string name="deleted_form">Poistettu lomake</string>
+  <string name="exit">Poistu</string>
+  <string name="instance_scan_completed">Skannaus valmis.</string>
+  <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
+  <string name="instance_sync">Tuo tallennetut lomakkeet viimeisteltyinä</string>
+  <string name="instance_sync_summary">Tuo tallennetut lomakkeet instances -kansiosta</string>
 </resources>

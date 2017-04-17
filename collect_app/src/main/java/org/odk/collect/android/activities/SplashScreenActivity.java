@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -40,6 +41,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import timber.log.Timber;
 
 public class SplashScreenActivity extends Activity {
 
@@ -62,8 +65,8 @@ public class SplashScreenActivity extends Activity {
             return;
         }
 
-        mImageMaxWidth = getWindowManager().getDefaultDisplay().getWidth();
-
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        mImageMaxWidth = displayMetrics.widthPixels;
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
@@ -79,7 +82,7 @@ public class SplashScreenActivity extends Activity {
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Timber.e(e, "Unable to get package info");
         }
 
         boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
@@ -132,7 +135,7 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                Timber.e(e, "Unable to close file input stream");
             }
 
             int scale = 1;
@@ -154,9 +157,10 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                Timber.e(e, "Unable to close file input stream");
             }
         } catch (FileNotFoundException e) {
+            Timber.e(e);
         }
         return b;
     }
@@ -189,7 +193,7 @@ public class SplashScreenActivity extends Activity {
                         count += 100;
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 } finally {
                     endSplashScreen();
                 }
