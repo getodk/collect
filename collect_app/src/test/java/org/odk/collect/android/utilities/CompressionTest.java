@@ -3,7 +3,6 @@ package org.odk.collect.android.utilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.android.utilities.CompressionUtils;
 
 import java.io.IOException;
 import java.util.zip.DataFormatException;

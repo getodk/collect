@@ -246,5 +246,4 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             return generateQRBitMap();
         }
     }
-
 }
