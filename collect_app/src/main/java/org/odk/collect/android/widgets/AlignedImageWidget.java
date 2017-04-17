@@ -239,7 +239,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                     Uri uri = MediaUtils.getImageUriFromMediaProvider(
                             mInstanceFolder + File.separator + mBinaryName);
                     if (uri != null) {
-                        Timber.i("setting view path to: %d", uri);
+                        Timber.i("setting view path to: %d", uri.toString());
                         i.setDataAndType(uri, "image/*");
                         try {
                             getContext().startActivity(i);
