@@ -81,6 +81,7 @@
         </module>
         <module name="OneStatementPerLine" />
         <module name="MultipleVariableDeclarations" />
+        <module name="StaticVariableName"/>
         <!-- <module name="ArrayTypeStyle"/> -->
         <!-- <module name="MissingSwitchDefault"/> -->
         <!-- <module name="FallThrough"/> -->
