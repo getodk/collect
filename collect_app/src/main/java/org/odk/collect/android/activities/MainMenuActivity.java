@@ -80,7 +80,7 @@ public class MainMenuActivity extends Activity {
     private static final int MENU_ABOUT = Menu.FIRST;
     private static final int MENU_PREFERENCES = Menu.FIRST + 1;
     private static final int MENU_ADMIN = Menu.FIRST + 2;
-    private static boolean EXIT = true;
+    private static final boolean EXIT = true;
     // buttons
     private Button mEnterDataButton;
     private Button mManageFilesButton;

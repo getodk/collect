@@ -12,7 +12,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
  */
 
 public class PlayServicesUtil {
-    private static int PLAY_SERVICE_ERROR_REQUEST_CODE = 1000;
+    private static final int PLAY_SERVICE_ERROR_REQUEST_CODE = 1000;
     private static int resultCode;
 
     private static GoogleApiAvailability googleApiAvailability;
