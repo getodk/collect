@@ -19,7 +19,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -31,6 +30,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+
+import timber.log.Timber;
 
 /**
  * The most basic widget that allows for entry of any text.
@@ -79,8 +80,7 @@ public class StringWidget extends QuestionWidget {
                 mAnswer.setGravity(
                         Gravity.TOP); // to write test starting at the top of the edit area
             } catch (Exception e) {
-                Log.e(this.getClass().getName(),
-                        "Unable to process the rows setting for the answer field: " + e.toString());
+                Timber.e("Unable to process the rows setting for the answer field: %s", e.toString());
             }
         }
 

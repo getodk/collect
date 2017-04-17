@@ -1,5 +1,10 @@
 package org.odk.collect.android.preferences;
 
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +12,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -17,6 +23,7 @@ import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
+
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
 
@@ -42,6 +49,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
+
 
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {

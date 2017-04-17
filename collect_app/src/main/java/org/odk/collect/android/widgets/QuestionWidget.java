@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -51,7 +50,6 @@ import timber.log.Timber;
 public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
 
     @SuppressWarnings("unused")
-    private final static String t = "QuestionWidget";
     private static int idGenerator = 1211322;
 
     /**
@@ -91,8 +89,8 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.e(t, String.format("Error occured in MediaPlayer. what = %1$d, extra = %2$d",
-                        what, extra));
+                Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
+                        what, extra);
                 return false;
             }
         });
@@ -256,7 +254,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      */
     protected void addQuestionMediaLayout(View v) {
         if (v == null) {
-            Log.e(t, "cannot add a null view as questionMediaLayout");
+            Timber.e("cannot add a null view as questionMediaLayout");
             return;
         }
         // default for questionmedialayout
@@ -275,7 +273,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      */
     protected void addHelpTextView(View v) {
         if (v == null) {
-            Log.e(t, "cannot add a null view as helpTextView");
+            Timber.e("cannot add a null view as helpTextView");
             return;
         }
 
@@ -316,7 +314,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      */
     protected void addAnswerView(View v) {
         if (v == null) {
-            Log.e(t, "cannot add a null view as an answerView");
+            Timber.e("cannot add a null view as an answerView");
             return;
         }
         // default place to add answer

@@ -35,6 +35,7 @@
             android:summary="@string/autosend_network_summary"
             android:title="@string/autosend_network" />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client">
@@ -54,7 +55,7 @@
             android:entryValues="@array/navigation_entry_values"
             android:key="navigation"
             android:title="@string/navigation" />
-        <ListPreference
+       <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"
             android:dialogTitle="@string/change_font_size"
@@ -62,25 +63,25 @@
             android:entryValues="@array/font_size_entry_values"
             android:key="font_size"
             android:title="@string/font_size" />
-        <ListPreference
+       <ListPreference
             android:id="@+id/app_language"
             android:defaultValue="en"
             android:dialogTitle="@string/language"
             android:key="app_language"
             android:title="@string/language" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/instance_sync"
             android:defaultValue="true"
             android:key="instance_sync"
             android:summary="@string/instance_sync_summary"
             android:title="@string/instance_sync" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
             android:key="default_completed"
             android:summary="@string/default_completed_summary"
             android:title="@string/default_completed" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/delete_after_send"
             android:defaultValue="false"
             android:key="delete_send"
@@ -92,12 +93,12 @@
             android:key="high_resolution"
             android:summary="@string/high_resolution_summary"
             android:title="@string/high_resolution" />
-        <CheckBoxPreference
+       <CheckBoxPreference
             android:id="@+id/show_splash"
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
-        <PreferenceScreen
+       <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"
             android:dependency="showSplash"
@@ -105,7 +106,6 @@
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:key="@string/map_preferences"
         android:title="@string/map_preferences">
