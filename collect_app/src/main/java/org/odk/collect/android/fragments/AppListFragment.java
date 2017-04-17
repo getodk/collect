@@ -17,6 +17,7 @@ package org.odk.collect.android.fragments;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListFragment extends ListFragment {
     private static final int MENU_SORT = Menu.FIRST;
@@ -61,6 +63,8 @@ abstract class AppListFragment extends ListFragment {
     protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected EditText mInputSearch;
 
+    protected Integer mSelectedSortingOrder;
+
     // toggles to all checked or all unchecked
     // returns:
     // true if result is all checked
@@ -71,7 +75,9 @@ abstract class AppListFragment extends ListFragment {
     // if ALL items are checked, uncheck them all
     public static boolean toggleChecked(ListView lv) {
         // shortcut null case
-        if (lv == null) return false;
+        if (lv == null) {
+            return false;
+        }
 
         boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
         setAllToCheckedState(lv, newCheckState);
@@ -89,20 +95,17 @@ abstract class AppListFragment extends ListFragment {
     }
 
     // Function to toggle button label
-    public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
+    public static void toggleButtonLabel(Button toggleButton, ListView lv) {
         if (lv.getCheckedItemCount() != lv.getCount()) {
-            mToggleButton.setText(R.string.select_all);
+            toggleButton.setText(R.string.select_all);
         } else {
-            mToggleButton.setText(R.string.clear_all);
+            toggleButton.setText(R.string.clear_all);
         }
     }
 
     //to get present drawer status
     public Boolean getDrawerStatus() {
-        if (mDrawerLayout != null) {
-            return mDrawerLayout.isDrawerOpen(Gravity.END);
-        }
-        return false;
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.END);
     }
 
     @Override
@@ -183,27 +186,8 @@ abstract class AppListFragment extends ListFragment {
     }
 
     private void performSelectedSearch(int position) {
-        hideSearchBox();
-        switch (position) {
-            case 0:
-                sortByNameAsc();
-                break;
-            case 1:
-                sortByNameDesc();
-                break;
-            case 2:
-                sortByDateDesc();
-                break;
-            case 3:
-                sortByDateAsc();
-                break;
-            case 4:
-                sortByStatusAsc();
-                break;
-            case 5:
-                sortByStatusDesc();
-                break;
-        }
+        saveSelectedSortingOrder(position);
+        updateAdapter();
     }
 
     @Override
@@ -271,21 +255,9 @@ abstract class AppListFragment extends ListFragment {
         Collect.getInstance().showKeyboard(mInputSearch);
     }
 
-    protected abstract void filter(CharSequence charSequence);
+    protected abstract void updateAdapter();
 
-    protected abstract void sortByNameAsc();
-
-    protected abstract void sortByNameDesc();
-
-    protected abstract void sortByDateAsc();
-
-    protected abstract void sortByDateDesc();
-
-    protected abstract void sortByStatusAsc();
-
-    protected abstract void sortByStatusDesc();
-
-    protected abstract void setupAdapter(String sortOrder);
+    protected abstract String getSortingOrderKey();
 
     protected boolean areCheckedItems() {
         return getCheckedCount() > 0;
@@ -331,5 +303,23 @@ abstract class AppListFragment extends ListFragment {
 
     protected int getCheckedCount() {
         return getListView().getCheckedItemCount();
+    }
+
+    private void saveSelectedSortingOrder(int selectedStringOrder) {
+        mSelectedSortingOrder = selectedStringOrder;
+        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
+                .edit()
+                .putInt(getSortingOrderKey(), selectedStringOrder)
+                .apply();
+    }
+
+    protected void restoreSelectedSortingOrder() {
+        mSelectedSortingOrder = PreferenceManager
+                .getDefaultSharedPreferences(Collect.getInstance())
+                .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected CharSequence getFilterText() {
+        return mInputSearch != null ? mInputSearch.getText() : "";
     }
 }

@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
-		Copyright (C) 2009 University of Washington Licensed under the Apache
-		License, Version 2.0 (the "License"); you may not use this file except
-		in compliance with the License. You may obtain a copy of the License
-		at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
-		applicable law or agreed to in writing, software distributed under the
-		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-		CONDITIONS OF ANY KIND, either express or implied. See the License for
-		the specific language governing permissions and limitations under the
-		License.
+    Copyright (C) 2009 University of Washington Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License
+    at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under the
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+    CONDITIONS OF ANY KIND, either express or implied. See the License for
+    the specific language governing permissions and limitations under the
+    License.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en"
            tools:ignore="MissingTranslation">
@@ -38,7 +38,7 @@
 <string name="capture_video">Record Video</string>
 <string name="change_language">Change Language</string>
 <string name="change_password">ODK Password</string>
-<string name="change_protocol_settings_default">Platform Settings</string>
+<string name="change_protocol_settings_default">Platform settings</string>
 <string name="change_username">ODK Username</string>
 <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
 <string name="clear_answer">Remove response</string>
@@ -186,7 +186,7 @@
 <string name="success">Success</string>
 <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
 <string name="upload_results">Upload Results</string>
-<string name="xform_parse_error">XForm parse error. %1$s is missing element %2$s</string>
+<string name="xform_parse_error">XForm parse error for %1$s: %2$s is missing or invalid.</string>
 <string name="choose_sound">Choose Sound</string>
 <string name="choose_video">Choose Video</string>
 <string name="choose_image">Choose Image</string>
@@ -494,4 +494,18 @@
 <string name="sort_the_list">Sort the list</string>
 <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
 <string name="filter_the_list">Filter the list</string>
+<string name="language">Language</string>
+<string name="google_auth_io_exception_msg">Unable to make API calls. If you are running a local build, please review the project readme.</string>
+<string name="form_metadata_title">Form Metadata</string>
+<string name="form_metadata">Form metadata</string>
+<string name="form_metadata_summary">These values will be added to forms that have username, email and/or telephone preloaded fields to identify the person submitting data.</string>
+<string name="phone_number">Phone number</string>
+<string name="email">Email address</string>
+<string name="user_defined">User-defined</string>
+<string name="device_defined">Device-defined</string>
+<string name="device_id">Device ID</string>
+<string name="subscriber_id">Subscriber ID</string>
+<string name="sim_serial_id">SIM serial number</string>
+<string name="select_date">Select date</string>
+<string name="select_time">Select time</string>
 </resources>

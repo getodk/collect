@@ -152,12 +152,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                         i = new Intent(getContext(), GeoPointOsmMapActivity.class);
                     }
                 } else {
-                    if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-                        i = new Intent(getContext(), GeoPointActivity.class);
-                    } else {
-                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
-                        return;
-                    }
+                    i = new Intent(getContext(), GeoPointActivity.class);
                 }
 
                 String s = mStringAnswer.getText().toString();
@@ -265,7 +260,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 gp[3] = Double.valueOf(sa[3]).doubleValue();
 
                 return new GeoPointData(gp);
-            } catch (Exception NumberFormatException) {
+            } catch (Exception numberFormatException) {
                 return null;
             }
         }
@@ -278,7 +273,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     private String formatGps(double coordinates, String type) {
         String location = Double.toString(coordinates);
-        String degreeSign = "\u00B0";
+        String degreeSign = "°";
         String degree = location.substring(0, location.indexOf("."))
                 + degreeSign;
         location = "0." + location.substring(location.indexOf(".") + 1);

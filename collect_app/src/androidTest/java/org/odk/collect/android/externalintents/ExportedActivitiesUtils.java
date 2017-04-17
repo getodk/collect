@@ -11,9 +11,9 @@ import static org.odk.collect.android.application.Collect.METADATA_PATH;
 import static org.odk.collect.android.application.Collect.ODK_ROOT;
 import static org.odk.collect.android.application.Collect.OFFLINE_LAYERS;
 
-class ImplicitActivitiesUtils {
+class ExportedActivitiesUtils {
 
-    private static String[] DIRS = new String[]{
+    private static final String[] DIRS = new String[]{
             ODK_ROOT, FORMS_PATH, INSTANCES_PATH, CACHE_PATH, METADATA_PATH, OFFLINE_LAYERS
     };
 

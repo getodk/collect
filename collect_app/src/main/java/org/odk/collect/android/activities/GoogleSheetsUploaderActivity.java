@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -70,11 +69,11 @@ import java.util.Set;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import timber.log.Timber;
 
 
 public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener,
         EasyPermissions.PermissionCallbacks {
-    private final static String TAG = "SheetsUploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
     private final static int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
@@ -84,13 +83,14 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     private AlertDialog mAlertDialog;
     private String mAlertMsg;
     private boolean mAlertShowing;
+    private boolean mAuthFailed;
     private Long[] mInstancesToSend;
     private GoogleSheetsInstanceUploaderTask mUlTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate: " + ((savedInstanceState == null) ? "creating" : "re-initializing"));
+        Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         // if we start this activity, the following must be true:
         // 1) Google Sheets is selected in preferences
@@ -99,6 +99,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         // default initializers
         mAlertMsg = getString(R.string.please_wait);
         mAlertShowing = false;
+        mAuthFailed = false;
 
         setTitle(getString(R.string.send_data));
 
@@ -127,11 +128,11 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
         // at this point, we don't expect this to be empty...
         if (mInstancesToSend.length == 0) {
-            Log.e(TAG, "onCreate: No instances to upload!");
+            Timber.e("onCreate: No instances to upload!");
             // drop through --
             // everything will process through OK
         } else {
-            Log.i(TAG, "onCreate: Beginning upload of " + mInstancesToSend.length + " instances!");
+            Timber.i("onCreate: Beginning upload of %d instances!", mInstancesToSend.length);
         }
 
         // Initialize credentials and service object.
@@ -258,7 +259,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 if (resultCode == RESULT_OK) {
                     getResultsFromApi();
                 } else {
-                    Log.d(TAG, "AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
+                    Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
                     finish();
                 }
                 break;
@@ -385,15 +386,20 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             // probably got an auth request, so ignore
             return;
         }
-        Log.i(TAG, "uploadingComplete: Processing results (" + result.size() + ") from upload of "
-                + mInstancesToSend.length + " instances!");
+        Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
+                result.size(), mInstancesToSend.length);
 
         StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();
         StringBuilder message = new StringBuilder();
 
         if (keys.size() == 0) {
-            message.append(getString(R.string.no_forms_uploaded));
+            if (mAuthFailed) {
+                message.append(getString(R.string.google_auth_io_exception_msg));
+                mAuthFailed = false;
+            } else {
+                message.append(getString(R.string.no_forms_uploaded));
+            }
         } else {
             Iterator<String> it = keys.iterator();
 
@@ -420,7 +426,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         message.append(name).append(" - ").append(result.get(id)).append("\n\n");
                     }
                 } else {
-                    message.append(getString(R.string.no_forms_uploaded));
+                    if (mAuthFailed) {
+                        message.append(getString(R.string.google_auth_io_exception_msg));
+                        mAuthFailed = false;
+                    } else {
+                        message.append(getString(R.string.no_forms_uploaded));
+                    }
                 }
             } finally {
                 if (results != null) {
@@ -557,8 +568,10 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 mResults = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
+                Timber.e(e);
+                mAuthFailed = true;
             } catch (MultipleFoldersFoundException e) {
-                Log.e(TAG, e.getMessage(), e);
+                Timber.e(e);
             }
             return mResults;
         }

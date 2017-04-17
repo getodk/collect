@@ -139,7 +139,7 @@ public final class ExternalDataUtil {
     }
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
-            XPathFuncExpr xPathFuncExpr) {
+            XPathFuncExpr xpathfuncexpr) {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
@@ -155,10 +155,10 @@ public final class ExternalDataUtil {
                     if (imageColumn != null && imageColumn.startsWith(JR_IMAGES_PREFIX)) {
                         imageColumn = imageColumn.substring(JR_IMAGES_PREFIX.length());
                     }
-//                    if (displayColumns == null || displayColumns.trim().length() == 0) {
-//                        throw new InvalidSyntaxException("The label column in the choices sheet
-// appears to be empty (or has been calculated as empty).");
-//                    }
+                    //                    if (displayColumns == null || displayColumns.trim().length() == 0) {
+                    //                        throw new InvalidSyntaxException("The label column in the choices sheet
+                    // appears to be empty (or has been calculated as empty).");
+                    //                    }
 
                     ExternalDataManager externalDataManager =
                             Collect.getInstance().getExternalDataManager();
@@ -172,7 +172,7 @@ public final class ExternalDataUtil {
                             new ExternalDataHandlerSearch(externalDataManager, displayColumns,
                                     value, imageColumn));
 
-                    Object eval = xPathFuncExpr.eval(formInstance, evaluationContext);
+                    Object eval = xpathfuncexpr.eval(formInstance, evaluationContext);
                     if (eval.getClass().isAssignableFrom(ArrayList.class)) {
                         @SuppressWarnings("unchecked")
                         List<SelectChoice> dynamicChoices = (ArrayList<SelectChoice>) eval;

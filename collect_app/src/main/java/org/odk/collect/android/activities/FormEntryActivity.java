@@ -32,7 +32,6 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -51,7 +50,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -104,6 +102,8 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -227,7 +227,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
-    private boolean mShowNavigationButtons=false;
+    private boolean mShowNavigationButtons = false;
 
     private FormsDao mFormsDao;
 
@@ -296,12 +296,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
             if (savedInstanceState.containsKey(KEY_XPATH)) {
                 startingXPath = savedInstanceState.getString(KEY_XPATH);
-                Log.i(t, "startingXPath is: " + startingXPath);
+                Timber.i("startingXPath is: %s", startingXPath);
             }
             if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
                 waitingXPath = savedInstanceState
                         .getString(KEY_XPATH_WAITING_FOR_DATA);
-                Log.i(t, "waitingXPath is: " + waitingXPath);
+                Timber.i("waitingXPath is: %s", waitingXPath);
             }
             if (savedInstanceState.containsKey(NEWFORM)) {
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
@@ -332,7 +332,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 if (Collect.getInstance().getFormController() != null) {
                     refreshCurrentView();
                 } else {
-                    Log.w(t, "Reloading form and restoring state.");
+                    Timber.w("Reloading form and restoring state.");
                     // we need to launch the form loader to load the form
                     // controller...
                     mFormLoaderTask = new FormLoaderTask(instancePath,
@@ -516,7 +516,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         }
                     }
                 } else {
-                    Log.e(t, "unrecognized URI");
+                    Timber.e("Unrecognized URI: %s", uri);
                     this.createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
                     return;
                 }
@@ -540,7 +540,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             SavePointTask savePointTask = new SavePointTask(this);
             savePointTask.execute();
         } catch (Exception e) {
-            Log.e(t, "Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
+            Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
         }
     }
 
@@ -582,8 +582,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mFormLoaderTask.setActivityResult(requestCode, resultCode,
                         intent);
             } else {
-                Log.e(t,
-                        "Got an activityResult without any pending form loader");
+                Timber.e("Got an activityResult without any pending form loader");
             }
             return;
         }
@@ -623,7 +622,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     Bundle extras = intent.getExtras();
                     ((ODKView) mCurrentView).setDataForFields(extras);
                 } catch (JavaRosaException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
                 break;
@@ -631,13 +630,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             case ANNOTATE_IMAGE:
             case SIGNATURE_CAPTURE:
             case IMAGE_CAPTURE:
-            /*
-             * We saved the image to the tempfile_path, but we really want it to
-             * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-             * we move it there before inserting it into the content provider.
-             * Once the android image capture bug gets fixed, (read, we move on
-             * from Android 1.6) we want to handle images the audio and video
-             */
+                /*
+                 * We saved the image to the tempfile_path, but we really want it to
+                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+                 * we move it there before inserting it into the content provider.
+                 * Once the android image capture bug gets fixed, (read, we move on
+                 * from Android 1.6) we want to handle images the audio and video
+                 */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
                 File fi = new File(Collect.TMPFILE_PATH);
@@ -648,22 +647,20 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 File nf = new File(s);
                 if (!fi.renameTo(nf)) {
-                    Log.e(t, "Failed to rename " + fi.getAbsolutePath());
+                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
                 } else {
-                    Log.i(t,
-                            "renamed " + fi.getAbsolutePath() + " to "
-                                    + nf.getAbsolutePath());
+                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
                 ((ODKView) mCurrentView).setBinaryData(nf);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case ALIGNED_IMAGE:
-            /*
-             * We saved the image to the tempfile_path; the app returns the full
-             * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-             * and move it into the instance folder.
-             */
+                /*
+                 * We saved the image to the tempfile_path; the app returns the full
+                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+                 * and move it into the instance folder.
+                 */
                 String path = intent
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
@@ -673,24 +670,22 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
                 nf = new File(s);
                 if (!fi.renameTo(nf)) {
-                    Log.e(t, "Failed to rename " + fi.getAbsolutePath());
+                    Timber.e("Failed to rename %s", fi.getAbsolutePath());
                 } else {
-                    Log.i(t,
-                            "renamed " + fi.getAbsolutePath() + " to "
-                                    + nf.getAbsolutePath());
+                    Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
                 ((ODKView) mCurrentView).setBinaryData(nf);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CHOOSER:
-            /*
-             * We have a saved image somewhere, but we really want it to be in:
-             * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-             * it there before inserting it into the content provider. Once the
-             * android image capture bug gets fixed, (read, we move on from
-             * Android 1.6) we want to handle images the audio and video
-             */
+                /*
+                 * We have a saved image somewhere, but we really want it to be in:
+                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+                 * it there before inserting it into the content provider. Once the
+                 * android image capture bug gets fixed, (read, we move on from
+                 * Android 1.6) we want to handle images the audio and video
+                 */
 
                 showDialog(SAVING_IMAGE_DIALOG);
                 Runnable runnable = new Runnable() {
@@ -773,7 +768,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     @Override
                     public void run() {
                         dismissDialog(SAVING_IMAGE_DIALOG);
-                        Log.e(t, "Could not receive chosen image");
+                        Timber.e("Could not receive chosen image");
                         showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
                     }
                 });
@@ -783,7 +778,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 @Override
                 public void run() {
                     dismissDialog(SAVING_IMAGE_DIALOG);
-                    Log.e(t, "Could not receive chosen image due to connection problem");
+                    Timber.e("Could not receive chosen image due to connection problem");
                     showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
@@ -855,6 +850,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+
+        if (mAdminPreferences == null) {
+            return false;
+        }
 
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -956,7 +955,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     return false;
                 }
             } catch (JavaRosaException e) {
-                Log.e(t, e.getMessage(), e);
+                Timber.e(e);
                 createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 return false;
             }
@@ -1161,7 +1160,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                 }
 
-                // Create 'save' button
+                 // Create 'save' button
                  endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
@@ -1201,21 +1200,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             .getGroupsForCurrentIndex();
                     odkv = new ODKView(this, formController.getQuestionPrompts(),
                             groups, advancingPage);
-                    Log.i(t,
-                            "created view for group "
-                                    + (groups.length > 0 ? groups[groups.length - 1]
-                                    .getLongText() : "[top]")
-                                    + " "
-                                    + (prompts.length > 0 ? prompts[0]
-                                    .getQuestionText() : "[no question]"));
+                    Timber.i("Created view for group %s %s",
+                            (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
+                            (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
                 } catch (RuntimeException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
                         createErrorDialog(e.getMessage(), DO_NOT_EXIT);
                     } catch (JavaRosaException e1) {
-                        Log.e(t, e1.getMessage(), e1);
+                        Timber.e(e1);
                         createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
                                 DO_NOT_EXIT);
                     }
@@ -1250,13 +1245,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 return new EmptyView(this);
 
             default:
-                Log.e(t, "Attempted to create a view that does not exist.");
+                Timber.e("Attempted to create a view that does not exist.");
                 // this is badness to avoid a crash.
                 try {
                     event = formController.stepToNextScreenEvent();
                     createErrorDialog(getString(R.string.survey_internal_error), EXIT);
                 } catch (JavaRosaException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), EXIT);
                 }
                 return createView(event, advancingPage);
@@ -1266,7 +1261,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Disables the back button if it is first question....
      */
-    private void adjustBackNavigationButtonVisibility(){
+    private void adjustBackNavigationButtonVisibility() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         try {
@@ -1279,6 +1274,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         } catch (JavaRosaException e) {
             mBackButton.setEnabled(true);
+            Timber.e(e);
         }
     }
 
@@ -1288,7 +1284,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             event = formController.stepToNextScreenEvent();
 
         } catch (JavaRosaException e) {
-            Log.e(t, e.getMessage(), e);
+            Timber.e(e);
             createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
         }
 
@@ -1366,17 +1362,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     showView(next, AnimationType.RIGHT);
                     break;
                 case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                    Log.i(t, "repeat juncture: "
-                            + formController.getFormIndex().getReference());
+                    Timber.i("Repeat juncture: %s", formController.getFormIndex().getReference());
                     // skip repeat junctures until we implement them
                     break;
                 default:
-                    Log.w(t,
-                            "JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+                    Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
                     break;
             }
         } catch (JavaRosaException e) {
-            Log.e(t, e.getMessage(), e);
+            Timber.e(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
     }
@@ -1424,7 +1418,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mBeenSwiped = false;
             }
         } catch (JavaRosaException e) {
-            Log.e(t, e.getMessage(), e);
+            Timber.e(e);
             createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
         }
     }
@@ -1692,6 +1686,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                         try {
                                             Thread.sleep(500);
                                         } catch (InterruptedException e) {
+                                            //This is rare
+                                            Timber.e(e);
                                         }
                                         showNextView();
                                     }
@@ -1874,12 +1870,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         String[] items;
         if (mAdminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
-            String[] two = {getString(R.string.keep_changes),
+            items = new String[]{getString(R.string.keep_changes),
                     getString(R.string.do_not_save)};
-            items = two;
         } else {
-            String[] one = {getString(R.string.do_not_save)};
-            items = one;
+            items = new String[]{getString(R.string.do_not_save)};
         }
 
         Collect.getInstance().getActivityLogger()
@@ -1994,7 +1988,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             // delete media first
             String instanceFolder = formController.getInstancePath()
                     .getParent();
-            Log.i(t, "attempting to delete: " + instanceFolder);
+            Timber.i("Attempting to delete: %s", instanceFolder);
             int images = MediaUtils
                     .deleteImagesInFolderFromMediaProvider(formController
                             .getInstancePath().getParentFile());
@@ -2005,13 +1999,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     .deleteVideoInFolderFromMediaProvider(formController
                             .getInstancePath().getParentFile());
 
-            Log.i(t, "removed from content providers: " + images
-                    + " image files, " + audio + " audio files," + " and "
-                    + video + " video files.");
+            Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
+                    images, audio, video);
             File f = new File(instanceFolder);
             if (f.exists() && f.isDirectory()) {
                 for (File del : f.listFiles()) {
-                    Log.i(t, "deleting file: " + del.getAbsolutePath());
+                    Timber.i("Deleting file: %s", del.getAbsolutePath());
                     del.delete();
                 }
                 f.delete();
@@ -2110,9 +2103,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                         + "=?";
                                 String selectArgs[] = {mFormPath};
                                 int updated = mFormsDao.updateForm(values, selection, selectArgs);
-                                Log.i(t, "Updated language to: "
-                                        + languages[whichButton] + " in "
-                                        + updated + " rows");
+                                Timber.i("Updated language to: %s in %d rows",
+                                        languages[whichButton],
+                                        updated);
 
                                 Collect.getInstance()
                                         .getActivityLogger()
@@ -2153,7 +2146,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Log.e(t, "Creating PROGRESS_DIALOG");
+                Timber.e("Creating PROGRESS_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
@@ -2185,7 +2178,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         loadingButtonListener);
                 return mProgressDialog;
             case SAVING_DIALOG:
-                Log.e(t, "Creating SAVING_DIALOG");
+                Timber.e("Creating SAVING_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
@@ -2234,7 +2227,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         synchronized (saveDialogLock) {
             mSaveToDiskTask.setFormSavedListener(null);
             boolean cancelled = mSaveToDiskTask.cancel(true);
-            Log.w(t, "Cancelled SaveToDiskTask! (" + cancelled + ")");
+            Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
             mSaveToDiskTask = null;
         }
     }
@@ -2243,7 +2236,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * Dismiss any showing dialogs that we manually manage.
      */
     private void dismissDialogs() {
-        Log.e(t, "Dismiss dialogs");
+        Timber.e("Dismiss dialogs");
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
         }
@@ -2402,7 +2395,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private int mAnimationCompletionSet = 0;
 
     private void afterAllAnimations() {
-        Log.i(t, "afterAllAnimations");
+        Timber.i("afterAllAnimations");
         if (mStaleView != null) {
             if (mStaleView instanceof ODKView) {
                 // http://code.google.com/p/android/issues/detail?id=8488
@@ -2419,15 +2412,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        Log.i(t, "onAnimationEnd "
-                + ((animation == mInAnimation) ? "in"
+        Timber.i("onAnimationEnd %s",
+                ((animation == mInAnimation) ? "in"
                 : ((animation == mOutAnimation) ? "out" : "other")));
         if (mInAnimation == animation) {
             mAnimationCompletionSet |= 1;
         } else if (mOutAnimation == animation) {
             mAnimationCompletionSet |= 2;
         } else {
-            Log.e(t, "Unexpected animation");
+            Timber.e("Unexpected animation");
         }
 
         if (mAnimationCompletionSet == 3) {
@@ -2438,16 +2431,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public void onAnimationRepeat(Animation animation) {
         // Added by AnimationListener interface.
-        Log.i(t, "onAnimationRepeat "
-                + ((animation == mInAnimation) ? "in"
+        Timber.i("onAnimationRepeat %s",
+                ((animation == mInAnimation) ? "in"
                 : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
     @Override
     public void onAnimationStart(Animation animation) {
         // Added by AnimationListener interface.
-        Log.i(t, "onAnimationStart "
-                + ((animation == mInAnimation) ? "in"
+        Timber.i("onAnimationStart %s",
+                ((animation == mInAnimation) ? "in"
                 : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
@@ -2501,6 +2494,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
+                Timber.e("Ended up with a bad language. %s", newLanguage);
                 formController.setLanguage(defaultLanguage);
             }
         }
@@ -2630,9 +2624,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // next question
                 if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
-                }
-                // otherwise, we can get the proper toast(s) by saving with constraint check
-                else {
+                } else {
+                    // otherwise, we can get the proper toast(s) by saving with constraint check
                     saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
                 }
 
@@ -2778,9 +2771,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mBeenSwiped = true;
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {
-                        Log.e(t,
-                                "showNextView VelocityX is bogus! " + e1.getX()
-                                        + " > " + e2.getX());
+                        Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
                         Collect.getInstance().getActivityLogger()
                                 .logInstanceAction(this, "onFling", "showNext");
                         showNextView();
@@ -2793,9 +2784,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     }
                 } else {
                     if (e1.getX() < e2.getX()) {
-                        Log.e(t,
-                                "showPreviousView VelocityX is bogus! "
-                                        + e1.getX() + " < " + e2.getX());
+                        Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "onFling",

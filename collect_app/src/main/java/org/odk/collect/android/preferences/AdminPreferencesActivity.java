@@ -31,6 +31,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+
+import timber.log.Timber;
+
+
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
@@ -40,7 +44,7 @@ import java.io.ObjectOutputStream;
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
-    public static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
@@ -58,6 +62,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
 
             res = true;
         } catch (IOException e) {
+            Timber.e(e);
         } finally {
             try {
                 if (output != null) {
@@ -65,6 +70,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                     output.close();
                 }
             } catch (IOException ex) {
+                Timber.e(ex, "Unable to close output stream due to : %s ", ex.getMessage());
             }
         }
         return res;
@@ -98,7 +104,7 @@ public class AdminPreferencesActivity extends PreferenceActivity {
                 if (!writeDir.exists()) {
                     if (!writeDir.mkdirs()) {
                         ToastUtils.showShortToast("Error creating directory "
-                                        + writeDir.getAbsolutePath());
+                                + writeDir.getAbsolutePath());
                         return false;
                     }
                 }

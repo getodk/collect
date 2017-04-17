@@ -42,6 +42,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 /**
  * Static methods used for common file operations.
  *
@@ -97,7 +99,7 @@ public class FileUtils {
                     offset += read;
                 }
             } catch (IOException e) {
-                Log.e(t, "Cannot read " + file.getName());
+                Timber.e(e, "Cannot read file %s", file.getName());
                 return null;
             }
 
@@ -106,6 +108,7 @@ public class FileUtils {
                 try {
                     throw new IOException("Could not completely read file " + file.getName());
                 } catch (IOException e) {
+                    Timber.e(e);
                     return null;
                 }
             }
@@ -113,7 +116,7 @@ public class FileUtils {
             return bytes;
 
         } catch (FileNotFoundException e) {
-            Log.e(t, "Cannot find " + file.getName());
+            Timber.e(e, "Cannot find file %s", file.getName());
             return null;
 
         } finally {
@@ -121,7 +124,7 @@ public class FileUtils {
             try {
                 is.close();
             } catch (IOException e) {
-                Log.e(t, "Cannot close input stream for " + file.getName());
+                Timber.e(e, "Cannot close input stream for file %s", file.getName());
                 return null;
             }
         }
@@ -169,18 +172,16 @@ public class FileUtils {
             is.close();
             return md5;
 
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getMessage());
-            return null;
-
-        } catch (FileNotFoundException e) {
-            Log.e("No Cache File", e.getMessage());
-            return null;
-        } catch (IOException e) {
-            Log.e("Problem reading file", e.getMessage());
+        } catch (NoSuchAlgorithmException | IOException e) {
+            if (e instanceof NoSuchAlgorithmException) {
+                Timber.e(e);
+            } else if (e instanceof FileNotFoundException) {
+                Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            } else {
+                Timber.e(e, "Problem reading file %s", file.getAbsolutePath());
+            }
             return null;
         }
-
     }
 
 
@@ -260,7 +261,7 @@ public class FileUtils {
                             + sourceFile.getAbsolutePath());
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                 }
             }
             return errorMessage;
@@ -284,14 +285,14 @@ public class FileUtils {
             dst.transferFrom(src, 0, src.size());
             dst.force(true);
             return null;
-        } catch (FileNotFoundException e) {
-            Log.e(t, "FileNotFoundException while copying file", e);
-            return e.getMessage();
-        } catch (IOException e) {
-            Log.e(t, "IOException while copying file", e);
-            return e.getMessage();
         } catch (Exception e) {
-            Log.e(t, "Exception while copying file", e);
+            if (e instanceof  FileNotFoundException) {
+                Timber.e(e, "FileNotFoundException while copying file");
+            } else if (e instanceof  IOException) {
+                Timber.e(e, "IOException while copying file");
+            } else {
+                Timber.e(e, "Exception while copying file");
+            }
             return e.getMessage();
         } finally {
             IOUtils.closeQuietly(fileInputStream);
@@ -307,6 +308,7 @@ public class FileUtils {
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
+            Timber.e(e1);
             throw new IllegalStateException(e1);
         }
 
@@ -314,7 +316,7 @@ public class FileUtils {
         try {
             isr = new InputStreamReader(is, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            Log.w(t, "UTF 8 encoding unavailable, trying default encoding");
+            Timber.w(uee, "Trying default encoding as UTF 8 encoding unavailable");
             isr = new InputStreamReader(is);
         }
 
@@ -324,12 +326,13 @@ public class FileUtils {
             try {
                 doc = XFormParser.getXMLDocument(isr);
             } catch (IOException e) {
+                Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
                 throw new IllegalStateException("Unable to parse XML document", e);
             } finally {
                 try {
                     isr.close();
                 } catch (IOException e) {
-                    Log.w(t, xmlFile.getAbsolutePath() + " Error closing form reader");
+                    Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
                 }
             }
 
@@ -384,7 +387,7 @@ public class FileUtils {
                         (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
                                 ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
-                Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
+                Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
                 // and that's totally fine.
             }
 

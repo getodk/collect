@@ -15,11 +15,9 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,7 +41,6 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -56,7 +53,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
-import org.osmdroid.DefaultResourceProxyImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +91,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean play_check = false;
     private Spinner time_units;
     private Spinner time_delay;
-    public DefaultResourceProxyImpl resource_proxy;
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
@@ -170,7 +165,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
         polygonPolylineView = inflater.inflate(R.layout.polygon_polyline_dialog, null);
-        resource_proxy = new DefaultResourceProxyImpl(getApplicationContext());
         time_delay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
         time_delay.setSelection(3);
         time_units = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
@@ -220,8 +214,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                                 R.id.radio_group);
                         int radioButtonID = rb.getCheckedRadioButtonId();
                         View radioButton = rb.findViewById(radioButtonID);
-                        int idx = rb.indexOfChild(radioButton);
-                        TRACE_MODE = idx;
+                        TRACE_MODE = rb.indexOfChild(radioButton);
                         if (TRACE_MODE == 0) {
                             setupManualMode();
                         } else if (TRACE_MODE == 1) {
@@ -588,9 +581,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         update_polyline();
     }
 
-	/*
-        This functions handels the delay and the Runable for
-	*/
+    /*
+            This functions handels the delay and the Runable for
+    */
 
     public void setGeoTraceScheuler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {

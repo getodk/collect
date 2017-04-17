@@ -10,11 +10,15 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.support.customtabs.CustomTabsIntent;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 
 public class AboutPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -25,6 +29,8 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
     public static final String KEY_ODK_WEBSITE = "info";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
     private static final String ODK_WEBSITE = "https://opendatakit.org";
+    private CustomTabHelper mCustomTabHelper;
+    private Uri uri;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -39,7 +45,8 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                 KEY_TELL_YOUR_FRIENDS);
         PreferenceScreen mLeaveAReviewPreference = (PreferenceScreen) findPreference(
                 KEY_LEAVE_A_REVIEW);
-
+        mCustomTabHelper = new CustomTabHelper();
+        uri = Uri.parse(ODK_WEBSITE);
         mODKWebsitePreference.setOnPreferenceClickListener(this);
         mOpenSourceLicensesPreference.setOnPreferenceClickListener(this);
         mTellYourFriendsPreference.setOnPreferenceClickListener(this);
@@ -48,13 +55,26 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
 
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mCustomTabHelper.bindCustomTabsService(this.getActivity(), uri);
+    }
+
+    @Override
     public boolean onPreferenceClick(Preference preference) {
         final String APP_PACKAGE_NAME = getActivity().getPackageName();
 
         switch (preference.getKey()) {
             case KEY_ODK_WEBSITE:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE));
-                startActivity(intent);
+                if (mCustomTabHelper.getPackageName(getActivity()).size() != 0) {
+                    CustomTabsIntent customTabsIntent =
+                            new CustomTabsIntent.Builder()
+                                    .build();
+                    customTabsIntent.intent.setPackage(mCustomTabHelper.getPackageName(getActivity()).get(0));
+                    customTabsIntent.launchUrl(getActivity(), uri);
+                } else {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE)));
+                }
                 break;
 
             case KEY_OPEN_SOURCE_LICENSES:
@@ -76,7 +96,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                 boolean reviewTaken = false;
                 try {
                     // Open the google play store app if present
-                    intent = new Intent(Intent.ACTION_VIEW,
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("market://details?id=" + APP_PACKAGE_NAME));
                     PackageManager packageManager = getActivity().getPackageManager();
                     List<ResolveInfo> list = packageManager.queryIntentActivities(intent, 0);
@@ -92,10 +112,11 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                         }
                     }
                 } catch (android.content.ActivityNotFoundException anfe) {
+                    Timber.e(anfe);
                 }
                 if (!reviewTaken) {
                     // Show a list of all available browsers if user doesn't have a default browser
-                    intent = new Intent(Intent.ACTION_VIEW,
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(GOOGLE_PLAY_URL + APP_PACKAGE_NAME));
                     startActivity(intent);
                 }

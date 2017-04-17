@@ -54,6 +54,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import timber.log.Timber;
+
 /**
  * Background task for downloading a given list of forms. We assume right now that the forms are
  * coming from the same server that presented the form list, but theoretically that won't always be
@@ -363,9 +365,8 @@ public class DownloadFormsTask extends
             // assume the downloadUrl is escaped properly
             URL url = new URL(downloadUrl);
             uri = url.toURI();
-        } catch (MalformedURLException e) {
-            throw e;
-        } catch (URISyntaxException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
+            Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
             throw e;
         }
 
@@ -443,7 +444,6 @@ public class DownloadFormsTask extends
                             // ensure stream is consumed...
                             final long count = 1024L;
                             while (is.skip(count) == count) {
-                                ;
                             }
                         } catch (Exception e) {
                             // no-op
@@ -497,10 +497,10 @@ public class DownloadFormsTask extends
         private final String mediaPath;
         private final boolean isNew;
 
-        private UriResult(Uri uri, String mediaPath, boolean aNew) {
+        private UriResult(Uri uri, String mediaPath, boolean isNew) {
             this.uri = uri;
             this.mediaPath = mediaPath;
-            this.isNew = aNew;
+            this.isNew = isNew;
         }
 
         private Uri getUri() {
@@ -521,9 +521,9 @@ public class DownloadFormsTask extends
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean aNew) {
+        private FileResult(File file, boolean isNew) {
             this.file = file;
-            isNew = aNew;
+            this.isNew = isNew;
         }
 
         private File getFile() {
@@ -624,21 +624,25 @@ public class DownloadFormsTask extends
                         continue;
                     }
                     String tag = child.getName();
-                    if (tag.equals("filename")) {
-                        filename = XFormParser.getXMLText(child, true);
-                        if (filename != null && filename.length() == 0) {
-                            filename = null;
-                        }
-                    } else if (tag.equals("hash")) {
-                        hash = XFormParser.getXMLText(child, true);
-                        if (hash != null && hash.length() == 0) {
-                            hash = null;
-                        }
-                    } else if (tag.equals("downloadUrl")) {
-                        downloadUrl = XFormParser.getXMLText(child, true);
-                        if (downloadUrl != null && downloadUrl.length() == 0) {
-                            downloadUrl = null;
-                        }
+                    switch (tag) {
+                        case "filename":
+                            filename = XFormParser.getXMLText(child, true);
+                            if (filename != null && filename.length() == 0) {
+                                filename = null;
+                            }
+                            break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
                     }
                 }
                 if (filename == null || downloadUrl == null || hash == null) {
@@ -670,7 +674,7 @@ public class DownloadFormsTask extends
                                 String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
                         Integer
                                 .valueOf(total).toString());
-//                try {
+                //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.filename);
                 File tempMediaFile = new File(tempMediaDir, toDownload.filename);
 
@@ -692,9 +696,9 @@ public class DownloadFormsTask extends
                                 + finalMediaFile.getAbsolutePath());
                     }
                 }
-//                } catch (Exception e) {
-//                    return e.getLocalizedMessage();
-//                }
+                //  } catch (Exception e) {
+                //  return e.getLocalizedMessage();
+                //}
             }
         }
         return null;

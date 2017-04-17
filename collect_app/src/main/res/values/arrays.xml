@@ -93,45 +93,45 @@
 		<item>osmdroid</item>
 	</string-array>
 
-	<!-- Basemaps-->
-	<string-array translatable="false" name="map_google_basemap_selector_entry_values">
-		<item>streets</item>
-		<item>satellite</item>
-		<item>terrain‎</item>
-		<item>hybrid</item>
-	</string-array>
-	<string-array name="map_google_basemap_selector_entries">
-		<item>@string/streets</item>
-		<item>@string/satellite</item>
-		<item>@string/terrain</item>
-		<item>@string/hybrid</item>
-	</string-array>
+    <!-- Basemaps-->
+    <string-array name="map_google_basemap_selector_entry_values" translatable="false">
+        <item>streets</item>
+        <item>satellite</item>
+        <item>terrain‎</item>
+        <item>hybrid</item>
+    </string-array>
+    <string-array name="map_google_basemap_selector_entries">
+        <item>@string/streets</item>
+        <item>@string/satellite</item>
+        <item>@string/terrain</item>
+        <item>@string/hybrid</item>
+    </string-array>
 
-	<string-array translatable="false" name="map_osm_basemap_selector_entry_values">
-		<item>openmap_streets</item>
-		<item>openmap_usgs_topo</item>
-		<item>openmap_usgs_sat</item>
-		<item>openmap_stamen_terrain</item>
-		<item>openmap_cartodb_positron</item>
-		<item>openmap_cartodb_darkmatter</item>
-	</string-array>
-	<string-array name="map_osm_basemap_selector_entries">
-		<item>@string/openmap_streets</item>
-		<item>@string/openmap_usgs_topo</item>
-		<item>@string/openmap_usgs_sat</item>
-		<item>@string/openmap_stamen_terrain</item>
-		<item>@string/openmap_cartodb_positron</item>
-		<item>@string/openmap_cartodb_darkmatter</item>
-	</string-array>
-	<string-array name="delay_scale" translatable="false">
-		<item>1</item>
-		<item>5</item>
-		<item>10</item>
-		<item>20</item>
-		<item>30</item>
-	</string-array>
-	<string-array name="time_scale" translatable="false">
-		<item>Seconds</item>
-		<item>Minutes</item>
-	</string-array>
+    <string-array name="map_osm_basemap_selector_entry_values" translatable="false">
+        <item>openmap_streets</item>
+        <item>openmap_usgs_topo</item>
+        <item>openmap_usgs_sat</item>
+        <item>openmap_stamen_terrain</item>
+        <item>openmap_cartodb_positron</item>
+        <item>openmap_cartodb_darkmatter</item>
+    </string-array>
+    <string-array name="map_osm_basemap_selector_entries">
+        <item>@string/openmap_streets</item>
+        <item>@string/openmap_usgs_topo</item>
+        <item>@string/openmap_usgs_sat</item>
+        <item>@string/openmap_stamen_terrain</item>
+        <item>@string/openmap_cartodb_positron</item>
+        <item>@string/openmap_cartodb_darkmatter</item>
+    </string-array>
+    <string-array name="delay_scale" translatable="false">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="time_scale" translatable="false">
+        <item>Seconds</item>
+        <item>Minutes</item>
+    </string-array>
 </resources>

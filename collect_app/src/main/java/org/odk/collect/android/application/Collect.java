@@ -22,11 +22,13 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -34,9 +36,11 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -47,8 +51,10 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 /**
- * Extends the Application class to implement
+ * The Open Data Kit Collect application.
  *
  * @author carlhartung
  */
@@ -63,7 +69,6 @@ public class Collect extends Application {
     public static final String METADATA_PATH = ODK_ROOT + File.separator + "metadata";
     public static final String TMPFILE_PATH = CACHE_PATH + File.separator + "tmp.jpg";
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
-    public static final String TMPXML_PATH = CACHE_PATH + File.separator + "tmp.xml";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
@@ -115,17 +120,13 @@ public class Collect extends Application {
             File dir = new File(dirName);
             if (!dir.exists()) {
                 if (!dir.mkdirs()) {
-                    RuntimeException e =
-                            new RuntimeException("ODK reports :: Cannot create directory: "
-                                    + dirName);
-                    throw e;
+                    throw new RuntimeException("ODK reports :: Cannot create directory: "
+                            + dirName);
                 }
             } else {
                 if (!dir.isDirectory()) {
-                    RuntimeException e =
-                            new RuntimeException("ODK reports :: " + dirName
-                                    + " exists, but is not a directory");
-                    throw e;
+                    throw new RuntimeException("ODK reports :: " + dirName
+                            + " exists, but is not a directory");
                 }
             }
         }
@@ -136,7 +137,7 @@ public class Collect extends Application {
      * ODK Tables instance data directory (e.g., for media attachments).
      */
     public static boolean isODKTablesInstanceDataDirectory(File directory) {
-        /**
+        /*
          * Special check to prevent deletion of files that
          * could be in use by ODK Tables.
          */
@@ -232,22 +233,11 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
+        new LocaleHelper().updateLocale(this);
         singleton = this;
 
-        // // set up logging defaults for apache http component stack
-        // Log log;
-        // log = LogFactory.getLog("org.opendatakit.httpclientandroidlib");
-        // log.enableError(true);
-        // log.enableWarn(true);
-        // log.enableInfo(true);
-        // log.enableDebug(true);
-        // log = LogFactory.getLog("org.opendatakit.httpclientandroidlib.wire");
-        // log.enableError(true);
-        // log.enableWarn(false);
-        // log.enableInfo(false);
-        // log.enableDebug(false);
-
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         super.onCreate();
 
         PropertyManager mgr = new PropertyManager(this);
@@ -255,9 +245,14 @@ public class Collect extends Application {
         FormController.initializeJavaRosa(mgr);
 
         mActivityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY));
+                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        if (timber.log.BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new CrashReportingTree());
+        }
     }
 
     /**
@@ -271,6 +266,21 @@ public class Collect extends Application {
             mTracker = analytics.newTracker(R.xml.global_tracker);
         }
         return mTracker;
+    }
+
+    private static class CrashReportingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
+                return;
+            }
+
+            FirebaseCrash.logcat(priority, tag, message);
+
+            if (t != null && priority == Log.ERROR) {
+                FirebaseCrash.report(t);
+            }
+        }
     }
 
 }

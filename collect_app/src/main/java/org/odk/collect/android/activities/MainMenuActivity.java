@@ -28,7 +28,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,12 +57,13 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -73,7 +73,6 @@ import java.util.Map.Entry;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class MainMenuActivity extends Activity {
-    private static final String t = "MainMenuActivity";
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -81,7 +80,7 @@ public class MainMenuActivity extends Activity {
     private static final int MENU_ABOUT = Menu.FIRST;
     private static final int MENU_PREFERENCES = Menu.FIRST + 1;
     private static final int MENU_ADMIN = Menu.FIRST + 2;
-    private static boolean EXIT = true;
+    private static final boolean EXIT = true;
     // buttons
     private Button mEnterDataButton;
     private Button mManageFilesButton;
@@ -214,7 +213,7 @@ public class MainMenuActivity extends Activity {
 
         // must be at the beginning of any activity that can be called from an
         // external intent
-        Log.i(t, "Starting up, creating directories");
+        Timber.i("Starting up, creating directories");
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
@@ -262,7 +261,7 @@ public class MainMenuActivity extends Activity {
         mCompletedCount = mFinalizedCursor != null ? mFinalizedCursor.getCount() : 0;
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
                 mContentObserver);
-//		mFinalizedCursor.registerContentObserver(mContentObserver);
+        // mFinalizedCursor.registerContentObserver(mContentObserver);
 
         // count for saved instances
         try {
@@ -571,8 +570,7 @@ public class MainMenuActivity extends Activity {
             }
         } else {
             mSendDataButton.setText(getString(R.string.send_data));
-            Log.w(t,
-                    "Cannot update \"Send Finalized\" button label since the database is closed. "
+            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
 
@@ -587,8 +585,7 @@ public class MainMenuActivity extends Activity {
             }
         } else {
             mReviewDataButton.setText(getString(R.string.review_data));
-            Log.w(t,
-                    "Cannot update \"Edit Form\" button label since the database is closed. "
+            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
 
@@ -603,8 +600,7 @@ public class MainMenuActivity extends Activity {
             }
         } else {
             mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Log.w(t,
-                    "Cannot update \"View Sent\" button label since the database is closed. "
+            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
     }
@@ -663,15 +659,15 @@ public class MainMenuActivity extends Activity {
             adminEdit.apply();
 
             res = true;
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
+            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
                 if (input != null) {
                     input.close();
                 }
             } catch (IOException ex) {
+                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
             }
         }
         return res;

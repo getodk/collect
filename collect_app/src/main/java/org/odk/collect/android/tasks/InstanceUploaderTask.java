@@ -68,6 +68,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * Background task for uploading completed forms.
  *
@@ -98,7 +100,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-            Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap, Outcome outcome) {
+                                        Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap, Outcome outcome) {
 
         Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
@@ -178,6 +180,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 return true;
                             }
                         } catch (Exception e) {
+                            Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
                             outcome.mResults.put(id, fail + urlString + " " + e.toString());
                             cv.put(InstanceColumns.STATUS,
                                     InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -205,43 +208,33 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         return true;
                     }
                 }
-            } catch (ClientProtocolException e) {
-                Log.e(t, e.toString());
-                outcome.mResults.put(id, fail + "Client Protocol Exception");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                return true;
-            } catch (ConnectTimeoutException e) {
-                Log.e(t, e.toString());
-                outcome.mResults.put(id, fail + "Connection Timeout");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                return true;
-            } catch (UnknownHostException e) {
-                Log.e(t, e.toString());
-                outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                return true;
-            } catch (SocketTimeoutException e) {
-                Log.e(t, e.toString());
-                outcome.mResults.put(id, fail + "Connection Timeout");
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
-                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
-                return true;
-            } catch (HttpHostConnectException e) {
-                Log.e(t, e.toString());
-                outcome.mResults.put(id, fail + "Network Connection Refused");
+            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
+                if (e instanceof ClientProtocolException) {
+                    outcome.mResults.put(id, fail + "Client Protocol Exception");
+                    Timber.e(e, "Client Protocol Exception");
+                } else if (e instanceof ConnectTimeoutException) {
+                    outcome.mResults.put(id, fail + "Connection Timeout");
+                    Timber.e(e, "Connection Timeout");
+                } else if (e instanceof UnknownHostException) {
+                    outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
+                    Timber.e(e, "Network Connection Failed");
+                } else if (e instanceof SocketTimeoutException) {
+                    outcome.mResults.put(id, fail + "Connection Timeout");
+                    Timber.e(e, "Connection timeout");
+                } else {
+                    outcome.mResults.put(id, fail + "Network Connection Refused");
+                    Timber.e(e, "Network Connection Refused");
+                }
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             } catch (Exception e) {
-                Log.e(t, e.toString());
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
                 }
                 outcome.mResults.put(id, fail + "Generic Exception: " + msg);
+                Timber.e(e);
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
@@ -455,6 +448,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                     ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                             builder.addPart("*isIncomplete*", sb);
                         } catch (Exception e) {
+                            Timber.e(e);
                         }
                         ++j; // advance over the last attachment added...
                         break;
@@ -488,9 +482,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
                         // If response from server is valid use that else use default messaging
-                        if (messageParser.isValid()){
+                        if (messageParser.isValid()) {
                             outcome.mResults.put(id, fail + messageParser.getMessageResponse());
-                        }else{
+                        } else {
                             outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                     + " (" + responseCode + ") at " + urlString);
                         }
@@ -503,7 +497,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     return true;
                 }
             } catch (Exception e) {
-                Log.e(t, e.toString());
+                Timber.e(e);
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
@@ -516,9 +510,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // If response from server is valid use that else use default messaging
-        if (messageParser.isValid()){
+        if (messageParser.isValid()) {
             outcome.mResults.put(id, messageParser.getMessageResponse());
-        }else{
+        } else {
             // Default messaging
             outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
         }
@@ -548,7 +542,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         String selection = selectionBuf.toString();
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                .getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
+                .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
 
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
@@ -582,6 +576,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         // unreachable...
+                        Timber.i(e, "Error encoding URL for device id : %s", deviceId);
                     }
 
                     if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,
@@ -611,7 +606,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             if (!processChunk(low, high, outcome, values)) {
                 return outcome;
             }
-            counter ++;
+            counter++;
         }
         return outcome;
     }
@@ -652,9 +647,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Set<String> keys = outcome.mResults.keySet();
                     Iterator<String> it = keys.iterator();
                     int count = keys.size();
-                    while(count > 0){
+                    while (count > 0) {
                         String[] selectionArgs = null;
-                        if(count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
+                        if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
                             selectionArgs = new String[
                                     ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
                         } else {
@@ -666,7 +661,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         selection.append(InstanceColumns._ID + " IN (");
                         int i = 0;
 
-                        while (it.hasNext() && i < selectionArgs.length - 1){
+                        while (it.hasNext() && i < selectionArgs.length - 1) {
                             selectionArgs[i] = it.next();
                             selection.append("?");
 
@@ -708,9 +703,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 }
 
                             }
-                        } catch (SQLException e){
+                        } catch (SQLException e) {
                             Log.e(t, e.getMessage(), e);
-                        } finally{
+                        } finally {
                             if (results != null) {
                                 results.close();
                             }
@@ -741,7 +736,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
 
     public static void copyToBytes(InputStream input, OutputStream output,
-            int bufferSize) throws IOException {
+                                   int bufferSize) throws IOException {
         byte[] buf = new byte[bufferSize];
         int bytesRead = input.read(buf);
         while (bytesRead != -1) {

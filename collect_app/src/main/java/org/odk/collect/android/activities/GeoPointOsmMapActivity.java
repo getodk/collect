@@ -18,14 +18,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -40,13 +38,12 @@ import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
-import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
-import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
-import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.text.DecimalFormat;
@@ -58,9 +55,8 @@ import java.util.List;
  * @author jonnordling@gmail.com
  */
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
-        OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
-
-	private static final String LOCATION_COUNT = "locationCount";
+        Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
+    private static final String LOCATION_COUNT = "locationCount";
 
     //private GoogleMap mMap;
     private MapView mMap;
@@ -134,7 +130,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         mMap.setBuiltInZoomControls(true);
         mMarker = new Marker(mMap);
         mMarker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
-        mMyLocationOverlay = new MyLocationNewOverlay(this, mMap);
+        mMyLocationOverlay = new MyLocationNewOverlay(mMap);
 
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -235,7 +231,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMarker.remove(mMap);
                 if (mLocation != null) {
                     mReloadLocationButton.setEnabled(true);
-//					mLocationStatus.setVisibility(View.VISIBLE);
+                    //mLocationStatus.setVisibility(View.VISIBLE);
                 }
                 mLocationStatus.setVisibility(View.VISIBLE);
                 mMap.getOverlays().remove(mMarker);
@@ -350,7 +346,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMarker.setOnMarkerDragListener(this);
                 mMarker.setDraggable(true);
             }
-            overlayEventos = new MapEventsOverlay(getBaseContext(), this);
+            overlayEventos = new MapEventsOverlay(this);
             mMap.getOverlays().add(overlayEventos);
         }
 
@@ -435,7 +431,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                     mReloadLocationButton.setEnabled(true);
                 }
                 if (!foundFirstLocation) {
-//                        zoomToPoint();
+                    // zoomToPoint();
                     showZoomDialog();
                     foundFirstLocation = true;
                 }
@@ -450,16 +446,16 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
 
 
-//				if (mLocation.getLatitude() != mMarker.getPosition().getLatitude() & mLocation
-// .getLongitude() != mMarker.getPosition().getLongitude()) {
-//					mReloadLocationButton.setEnabled(true);
-//				}
-//
-//				//If location is accurate enough, stop updating position and make the marker
-// draggable
-//				if (mLocation.getAccuracy() <= mLocationAccuracy) {
-//					stopGeolocating();
-//				}
+        //if (mLocation.getLatitude() != mMarker.getPosition().getLatitude() & mLocation
+        // .getLongitude() != mMarker.getPosition().getLongitude()) {
+        //mReloadLocationButton.setEnabled(true);
+        //}
+        //
+        //If location is accurate enough, stop updating position and make the marker
+        // draggable
+        //if (mLocation.getAccuracy() <= mLocationAccuracy) {
+        //stopGeolocating();
+        //}
 
         } else {
             InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
@@ -490,7 +486,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     @Override
     public void onMarkerDragStart(Marker arg0) {
-//		stopGeolocating();
+        //stopGeolocating();
     }
 
 
@@ -605,5 +601,10 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }
