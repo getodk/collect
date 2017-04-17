@@ -196,7 +196,7 @@ abstract class AppListActivity extends ListActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (position == mSelectedSortingOrder) {
+                if (position == getSelectedSortingOrder()) {
                     textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
                 }
                 textView.setPadding(50, 0, 0, 0);
