@@ -102,11 +102,11 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
                 return null;
             }
 
-            MapTile pTile = state.getMapTile();
+            MapTile mapTile = state.getMapTile();
             InputStream inputStream = null;
 
             try {
-                inputStream = tileSource.getInputStream(pTile);
+                inputStream = tileSource.getInputStream(mapTile);
 
                 if (inputStream != null) {
 

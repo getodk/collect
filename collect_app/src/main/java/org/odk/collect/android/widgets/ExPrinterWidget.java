@@ -161,10 +161,10 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // finish complex layout
-        LinearLayout mPrintLayout = new LinearLayout(getContext());
-        mPrintLayout.setOrientation(LinearLayout.VERTICAL);
-        mPrintLayout.addView(mLaunchIntentButton);
-        addAnswerView( mPrintLayout);
+        LinearLayout printLayout = new LinearLayout(getContext());
+        printLayout.setOrientation(LinearLayout.VERTICAL);
+        printLayout.addView(mLaunchIntentButton);
+        addAnswerView( printLayout);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
