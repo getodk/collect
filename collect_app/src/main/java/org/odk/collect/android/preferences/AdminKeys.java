@@ -116,5 +116,5 @@ public final class AdminKeys {
         return keys;
     }
 
-    static Collection<String> ALL_KEYS = allKeys();
+    final static Collection<String> ALL_KEYS = allKeys();
 }

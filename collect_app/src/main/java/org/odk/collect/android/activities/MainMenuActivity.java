@@ -80,7 +80,7 @@ public class MainMenuActivity extends Activity {
     private static final int MENU_ABOUT = Menu.FIRST;
     private static final int MENU_PREFERENCES = Menu.FIRST + 1;
     private static final int MENU_ADMIN = Menu.FIRST + 2;
-    private static boolean EXIT = true;
+    private static boolean exit = true;
     // buttons
     private Button mEnterDataButton;
     private Button mManageFilesButton;
@@ -217,7 +217,7 @@ public class MainMenuActivity extends Activity {
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            createErrorDialog(e.getMessage(), EXIT);
+            createErrorDialog(e.getMessage(), exit);
             return;
         }
 
@@ -251,7 +251,7 @@ public class MainMenuActivity extends Activity {
         try {
             mFinalizedCursor = instancesDao.getFinalizedInstancesCursor();
         } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
+            createErrorDialog(e.getMessage(), exit);
             return;
         }
 
@@ -267,7 +267,7 @@ public class MainMenuActivity extends Activity {
         try {
             mSavedCursor = instancesDao.getUnsentInstancesCursor();
         } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
+            createErrorDialog(e.getMessage(), exit);
             return;
         }
 
@@ -280,7 +280,7 @@ public class MainMenuActivity extends Activity {
         try {
             mViewSentCursor = instancesDao.getSentInstancesCursor();
         } catch (Exception e) {
-            createErrorDialog(e.getMessage(), EXIT);
+            createErrorDialog(e.getMessage(), exit);
             return;
         }
         if (mViewSentCursor != null) {
