@@ -146,6 +146,12 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(View v) {
                 mDownloadButton.setEnabled(toggleChecked(getListView()));
                 toggleButtonLabel(mToggleButton, getListView());
+                mSelectedForms.clear();
+                if (getListView().getCheckedItemCount() == getListView().getCount()) {
+                    for (HashMap<String, String> map : mFormList) {
+                        mSelectedForms.add(map.get(FORMDETAIL_KEY));
+                    }
+                }
             }
         });
 
@@ -331,6 +337,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         toggleButtonLabel(mToggleButton, getListView());
+        updateAdapter();
     }
 
     @Override
