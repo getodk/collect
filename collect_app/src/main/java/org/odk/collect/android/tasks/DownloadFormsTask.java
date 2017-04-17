@@ -595,8 +595,8 @@ public class DownloadFormsTask extends
             Log.e(t, errMessage);
             return errMessage;
         }
-        int nElements = manifestElement.getChildCount();
-        for (int i = 0; i < nElements; ++i) {
+        int elements = manifestElement.getChildCount();
+        for (int i = 0; i < elements; ++i) {
             if (manifestElement.getType(i) != Element.ELEMENT) {
                 // e.g., whitespace (text)
                 continue;

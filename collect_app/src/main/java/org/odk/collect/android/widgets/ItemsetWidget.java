@@ -94,7 +94,7 @@ public class ItemsetWidget extends QuestionWidget implements
         String nodesetStr = prompt.getQuestion().getAdditionalAttribute(null, "query");
 
         // parse out the list name, between the ''
-        String list_name = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
+        String listName = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
                 nodesetStr.lastIndexOf("'"));
 
         // isolate the string between between the [ ] characters
@@ -166,7 +166,7 @@ public class ItemsetWidget extends QuestionWidget implements
         String[] selectionArgs = new String[arguments.size() + 1];
 
         boolean nullArgs = false; // can't have any null arguments
-        selectionArgs[0] = list_name; // first argument is always listname
+        selectionArgs[0] = listName; // first argument is always listname
 
         // loop through the arguments, evaluate any expressions
         // and build the query string for the DB
@@ -184,10 +184,10 @@ public class ItemsetWidget extends QuestionWidget implements
 
             if (xpr != null) {
                 FormDef form = Collect.getInstance().getFormController().getFormDef();
-                TreeElement mTreeElement = form.getMainInstance().resolveReference(
+                TreeElement treeElement = form.getMainInstance().resolveReference(
                         prompt.getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
-                        mTreeElement.getRef());
+                        treeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
 
                 if (value == null) {

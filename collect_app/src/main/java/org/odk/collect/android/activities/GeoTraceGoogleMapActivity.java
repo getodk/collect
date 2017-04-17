@@ -361,8 +361,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             gp[1] = Double.parseDouble(lng);
             LatLng point = new LatLng(gp[0], gp[1]);
             polylineOptions.add(point);
-            MarkerOptions mMarkerOptions = new MarkerOptions().position(point).draggable(true);
-            Marker marker = mMap.addMarker(mMarkerOptions);
+            MarkerOptions markerOptions = new MarkerOptions().position(point).draggable(true);
+            Marker marker = mMap.addMarker(markerOptions);
             markerArray.add(marker);
         }
         polyline = mMap.addPolyline(polylineOptions);
@@ -402,15 +402,15 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     private String generateReturnString() {
-        String temp_string = "";
+        String tempString = "";
         for (int i = 0; i < markerArray.size(); i++) {
             String lat = Double.toString(markerArray.get(i).getPosition().latitude);
             String lng = Double.toString(markerArray.get(i).getPosition().longitude);
             String alt = "0.0";
             String acu = "0.0";
-            temp_string = temp_string + lat + " " + lng + " " + alt + " " + acu + ";";
+            tempString = tempString + lat + " " + lng + " " + alt + " " + acu + ";";
         }
-        return temp_string;
+        return tempString;
     }
 
 
@@ -536,19 +536,19 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         manual_button.setVisibility(View.VISIBLE);
         String delay = time_delay.getSelectedItem().toString();
         String units = time_units.getSelectedItem().toString();
-        Long time_delay;
-        TimeUnit time_units_value;
+        Long timeDelay;
+        TimeUnit timeUnitsValue;
         if (units == getString(R.string.minutes)) {
-            time_delay = Long.parseLong(delay) * (60 * 60);
-            time_units_value = TimeUnit.SECONDS;
+            timeDelay = Long.parseLong(delay) * (60 * 60);
+            timeUnitsValue = TimeUnit.SECONDS;
 
         } else {
             //in Seconds
-            time_delay = Long.parseLong(delay);
-            time_units_value = TimeUnit.SECONDS;
+            timeDelay = Long.parseLong(delay);
+            timeUnitsValue = TimeUnit.SECONDS;
         }
 
-        setGeoTraceScheuler(time_delay, time_units_value);
+        setGeoTraceScheuler(timeDelay, timeUnitsValue);
         mode_active = true;
     }
 
@@ -611,8 +611,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
     private void addLocationMarker() {
         LatLng latLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
-        MarkerOptions mMarkerOptions = new MarkerOptions().position(latLng).draggable(true);
-        Marker marker = mMap.addMarker(mMarkerOptions);
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).draggable(true);
+        Marker marker = mMap.addMarker(markerOptions);
         markerArray.add(marker);
         if (polyline == null) {
             polylineOptions.add(latLng);
@@ -778,9 +778,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
     public void showZoomDialog() {
         if (zoomDialog == null) {
-            AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
-            p_builder.setTitle(getString(R.string.zoom_to_where));
-            p_builder.setView(zoomDialogView)
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.zoom_to_where));
+            builder.setView(zoomDialogView)
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -793,7 +793,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                             zoomDialog.dismiss();
                         }
                     });
-            zoomDialog = p_builder.create();
+            zoomDialog = builder.create();
         }
 
         if (curLocation != null) {
