@@ -231,7 +231,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMarker.remove(mMap);
                 if (mLocation != null) {
                     mReloadLocationButton.setEnabled(true);
-                //mLocationStatus.setVisibility(View.VISIBLE);
+                    //mLocationStatus.setVisibility(View.VISIBLE);
                 }
                 mLocationStatus.setVisibility(View.VISIBLE);
                 mMap.getOverlays().remove(mMarker);
@@ -431,7 +431,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                     mReloadLocationButton.setEnabled(true);
                 }
                 if (!foundFirstLocation) {
-//                        zoomToPoint();
+                    // zoomToPoint();
                     showZoomDialog();
                     foundFirstLocation = true;
                 }

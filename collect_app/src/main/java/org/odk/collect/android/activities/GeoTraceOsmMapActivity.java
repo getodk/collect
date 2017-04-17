@@ -448,10 +448,10 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void overlayMyLocationLayers() {
-    //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-    //if(mMyLocationOverlay.getMyLocation()!= null){
-    //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-    //}
+        //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+        //if(mMyLocationOverlay.getMyLocation()!= null){
+        //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+        //}
         mapView.getOverlays().add(mMyLocationOverlay);
         mMyLocationOverlay.setEnabled(true);
         mMyLocationOverlay.enableMyLocation();
