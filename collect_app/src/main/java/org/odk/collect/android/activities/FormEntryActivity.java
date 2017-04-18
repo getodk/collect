@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -29,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -113,7 +113,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class FormEntryActivity extends Activity implements AnimationListener,
+public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener {
     private static final String t = "FormEntryActivity";
@@ -231,7 +231,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private FormsDao mFormsDao;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -322,7 +324,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         // Check to see if this is a screen flip or a new form load.
-        Object data = getLastNonConfigurationInstance();
+        Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             mFormLoaderTask = (FormLoaderTask) data;
         } else if (data instanceof SaveToDiskTask) {
@@ -1040,7 +1042,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * If we're loading, then we pass the loading thread to our next instance.
      */
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         // if a form is loading, pass the loader task
@@ -1166,8 +1168,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                 }
 
-                 // Create 'save' button
-                 endView.findViewById(R.id.save_exit_button)
+                // Create 'save' button
+                endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -2420,7 +2422,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == mInAnimation) ? "in"
-                : ((animation == mOutAnimation) ? "out" : "other")));
+                        : ((animation == mOutAnimation) ? "out" : "other")));
         if (mInAnimation == animation) {
             mAnimationCompletionSet |= 1;
         } else if (mOutAnimation == animation) {
@@ -2439,7 +2441,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == mInAnimation) ? "in"
-                : ((animation == mOutAnimation) ? "out" : "other")));
+                        : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
     @Override
@@ -2447,7 +2449,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == mInAnimation) ? "in"
-                : ((animation == mOutAnimation) ? "out" : "other")));
+                        : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
     /**
@@ -2473,7 +2475,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
