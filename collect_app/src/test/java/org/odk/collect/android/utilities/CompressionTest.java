@@ -44,9 +44,9 @@ public class CompressionTest {
 
     @Test
     public void compressNullText() throws IOException {
-        String null_text = "";
-        compressedText = CompressionUtils.compress(null_text);
-        assertTrue(null_text.equals(compressedText));
+        String nullText = "";
+        compressedText = CompressionUtils.compress(nullText);
+        assertTrue(nullText.equals(compressedText));
     }
 
     @Test
@@ -59,9 +59,9 @@ public class CompressionTest {
 
     @Test
     public void decompressNullText() throws IOException, DataFormatException {
-        String null_text = "";
-        decompressedText = CompressionUtils.decompress(null_text);
-        assertTrue(null_text.equals(decompressedText));
+        String nullText = "";
+        decompressedText = CompressionUtils.decompress(nullText);
+        assertTrue(nullText.equals(decompressedText));
     }
 
     @Test(expected = DataFormatException.class)
