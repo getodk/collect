@@ -146,11 +146,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(View v) {
                 mDownloadButton.setEnabled(toggleChecked(getListView()));
                 toggleButtonLabel(mToggleButton, getListView());
+                mSelectedForms.clear();
+                if (getListView().getCheckedItemCount() == getListView().getCount()) {
+                    for (HashMap<String, String> map : mFormList) {
+                        mSelectedForms.add(map.get(FORMDETAIL_KEY));
+                    }
+                }
             }
         });
 
-        Button mRefreshButton = (Button) findViewById(R.id.refresh_button);
-        mRefreshButton.setOnClickListener(new OnClickListener() {
+        Button refreshButton = (Button) findViewById(R.id.refresh_button);
+        refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
@@ -331,6 +337,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         toggleButtonLabel(mToggleButton, getListView());
+        updateAdapter();
     }
 
     @Override
@@ -578,19 +585,19 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // any non-null version on server is newer
                 return (latestVersion != null);
             }
-            String jr_version = formCursor.getString(idxJrVersion);
+            String jrVersion = formCursor.getString(idxJrVersion);
             // apparently, the isNull() predicate above is not respected on all Android OSes???
-            if (jr_version == null && latestVersion == null) {
+            if (jrVersion == null && latestVersion == null) {
                 return false;
             }
-            if (jr_version == null) {
+            if (jrVersion == null) {
                 return true;
             }
             if (latestVersion == null) {
                 return false;
             }
             // if what we have is less, then the server is newer
-            return (jr_version.compareTo(latestVersion) < 0);
+            return (jrVersion.compareTo(latestVersion) < 0);
         } finally {
             if (formCursor != null) {
                 formCursor.close();

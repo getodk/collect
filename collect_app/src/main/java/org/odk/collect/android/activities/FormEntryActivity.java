@@ -640,9 +640,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // The intent is empty, but we know we saved the image to the temp
                 // file
                 File fi = new File(Collect.TMPFILE_PATH);
-                String mInstanceFolder = formController.getInstancePath()
+                String instanceFolder = formController.getInstancePath()
                         .getParent();
-                String s = mInstanceFolder + File.separator
+                String s = instanceFolder + File.separator
                         + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
@@ -664,8 +664,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 String path = intent
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
-                mInstanceFolder = formController.getInstancePath().getParent();
-                s = mInstanceFolder + File.separator + System.currentTimeMillis()
+                instanceFolder = formController.getInstancePath().getParent();
+                s = instanceFolder + File.separator + System.currentTimeMillis()
                         + ".jpg";
 
                 nf = new File(s);
@@ -743,9 +743,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
-        String mInstanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
                 .getParent();
-        String destImagePath = mInstanceFolder1 + File.separator
+        String destImagePath = instanceFolder1 + File.separator
                 + System.currentTimeMillis() + ".jpg";
 
         File chosenImage;
@@ -1312,14 +1312,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     .getFormController();
 
             // get constraint behavior preference value with appropriate default
-            String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+            String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
                     .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
                             PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
 
             if (formController.currentPromptIsQuestion()) {
 
                 // if constraint behavior says we should validate on swipe, do so
-                if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
                         // A constraint was violated so a dialog should be showing.
                         mBeenSwiped = false;
@@ -2615,14 +2615,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
-                String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+                String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
                         .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
                                 PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
                 // next question
-                if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 } else {
                     // otherwise, we can get the proper toast(s) by saving with constraint check
@@ -2751,8 +2751,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             // OR left/right of > .5"
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
-            int xPixelLimit = (int) (dm.xdpi * .25);
-            int yPixelLimit = (int) (dm.ydpi * .25);
+            int xpixellimit = (int) (dm.xdpi * .25);
+            int ypixellimit = (int) (dm.ydpi * .25);
 
             if (mCurrentView != null && mCurrentView instanceof ODKView) {
                 if (((ODKView) mCurrentView).suppressFlingGesture(e1, e2,
@@ -2765,9 +2765,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 return false;
             }
 
-            if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1
-                    .getY() - e2.getY()) < yPixelLimit)
-                    || Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
+            if ((Math.abs(e1.getX() - e2.getX()) > xpixellimit && Math.abs(e1
+                    .getY() - e2.getY()) < ypixellimit)
+                    || Math.abs(e1.getX() - e2.getX()) > xpixellimit * 2) {
                 mBeenSwiped = true;
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {

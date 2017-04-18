@@ -222,8 +222,9 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        // TODO Auto-generated method stub
-
+        createShapeButton.setOnLongClickListener(l);
+        mStringAnswer.setOnLongClickListener(l);
+        mAnswerDisplay.setOnLongClickListener(l);
     }
 
 }

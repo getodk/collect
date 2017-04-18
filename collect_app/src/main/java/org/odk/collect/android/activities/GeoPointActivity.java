@@ -81,8 +81,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
         }
         if (!mGPSOn && !mNetworkOn) {
             ToastUtils.showShortToast(R.string.provider_disabled_error);
-            Intent onGPS_intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(onGPS_intent);
+            Intent onGPSIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(onGPSIntent);
             finish();
         }
 
