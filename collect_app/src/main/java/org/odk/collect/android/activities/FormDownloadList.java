@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -436,7 +437,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         mFilteredFormList.clear();
         if (charSequence.length() > 0) {
             for (HashMap<String, String> form : mFormList) {
-                if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                if (form.get(FORMNAME).toLowerCase(Locale.US).contains(charSequence.toString().toLowerCase(Locale.US))) {
                     mFilteredFormList.add(form);
                 }
             }
