@@ -24,6 +24,9 @@ the License.
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Toolbar -->
+        <include layout="@layout/toolbar"/>
+
         <TextView
             android:id="@+id/status_text"
             android:layout_width="match_parent"

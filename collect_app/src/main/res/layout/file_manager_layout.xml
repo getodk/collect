@@ -22,6 +22,8 @@ limitations under the License.
     android:layout_marginTop="0dp"
     android:orientation="vertical"
     android:padding="0dp">
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar" />
 
     <org.odk.collect.android.views.SlidingTabLayout
         android:id="@+id/tabs"

@@ -13,11 +13,12 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true">
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/buttonholder"
@@ -62,6 +63,7 @@ the License.
         android:id="@+id/searchholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:layout_gravity="center_vertical"
         android:background="#ECECEC"
         android:orientation="horizontal">
@@ -74,13 +76,13 @@ the License.
             android:ellipsize="end"
             android:imeOptions="actionSearch"
             android:inputType="textShortMessage"
+            android:maxLines="1"
             android:minHeight="50dp"
             android:paddingBottom="0dip"
             android:paddingEnd="8dip"
             android:paddingLeft="8dip"
             android:paddingRight="8dip"
-            android:paddingStart="8dip"
-            android:maxLines="1"/>
+            android:paddingStart="8dip" />
 
         <ImageButton
             android:id="@+id/search_button"
