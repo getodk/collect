@@ -12,8 +12,7 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,13 +22,16 @@ the License.
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/search_box_layout"/>
+        <!-- Toolbar -->
+        <include layout="@layout/toolbar" />
+
+        <include layout="@layout/search_box_layout" />
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@android:id/empty"
@@ -83,6 +85,6 @@ the License.
         android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="#DDDDDD"/>
+        android:background="#DDDDDD" />
 
 </android.support.v4.widget.DrawerLayout>
