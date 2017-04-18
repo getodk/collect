@@ -96,7 +96,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.setOrientation(LinearLayout.HORIZONTAL);
         answerLayout.addView(mSignButton);
         answerLayout.addView(mErrorTextView);
 
