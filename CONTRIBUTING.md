@@ -38,7 +38,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Keep your pull request focused on one narrow goal. This could mean addressing an issue with multiple, smaller pull requests. Small pull requests are easier to review and less likely to introduce bugs. If you would like to make stylistic changes to the code, create a separate pull request.
 
-1. Run `gradle lint` and fix any lint errors.
+1. Run `./gradlew lint` and `./gradlew checkstyle` and fix any errors.
 
 1. Write clear code. Use descriptive names and create meaningful abstractions (methods, classes).
 
