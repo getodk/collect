@@ -40,6 +40,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
         prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);

@@ -41,8 +41,8 @@ import timber.log.Timber;
  *         option)
  */
 public class AdminPreferencesActivity extends PreferenceActivity {
-    private static final int SAVE_PREFS_MENU = Menu.FIRST;
     public static final String ADMIN_PREFERENCES = "admin_prefs";
+    private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
@@ -77,11 +77,14 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, new AdminPreferencesFragment())
-                .commit();
         setTitle(getString(R.string.admin_preferences));
+
+        if (savedInstanceState == null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(android.R.id.content, new AdminPreferencesFragment())
+                    .commit();
+        }
     }
 
     @Override

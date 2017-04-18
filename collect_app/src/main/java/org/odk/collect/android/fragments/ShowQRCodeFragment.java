@@ -78,6 +78,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         getActivity().setTitle("Import/Export Settings");
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         Button scan = (Button) view.findViewById(R.id.btnScan);
