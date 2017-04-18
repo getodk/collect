@@ -52,9 +52,6 @@ import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
@@ -733,17 +730,4 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             mStateListener = sl;
         }
     }
-
-
-    public static void copyToBytes(InputStream input, OutputStream output,
-                                   int bufferSize) throws IOException {
-        byte[] buf = new byte[bufferSize];
-        int bytesRead = input.read(buf);
-        while (bytesRead != -1) {
-            output.write(buf, 0, bytesRead);
-            bytesRead = input.read(buf);
-        }
-        output.flush();
-    }
-
 }
