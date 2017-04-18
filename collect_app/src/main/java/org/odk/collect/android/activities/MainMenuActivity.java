@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -100,6 +101,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private Cursor mViewSentCursor;
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
+    private Toolbar mToolbar;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -107,6 +109,7 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        initToolbar();
 
         // enter data button. expects a result.
         mEnterDataButton = (Button) findViewById(R.id.enter_data);
@@ -209,8 +212,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        setTitle(getString(R.string.main_menu));
-
         // must be at the beginning of any activity that can be called from an
         // external intent
         Timber.i("Starting up, creating directories");
@@ -290,6 +291,14 @@ public class MainMenuActivity extends AppCompatActivity {
 
         updateButtons();
         setupGoogleAnalytics();
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mToolbar.setTitle(getString(R.string.main_menu));
     }
 
     @Override

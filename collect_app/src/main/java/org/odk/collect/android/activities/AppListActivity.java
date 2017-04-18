@@ -16,15 +16,17 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -37,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -52,7 +55,7 @@ import java.util.List;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
-abstract class AppListActivity extends ListActivity {
+abstract class AppListActivity extends AppCompatActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
     private static final int MENU_SORT = Menu.FIRST;
@@ -73,7 +76,22 @@ abstract class AppListActivity extends ListActivity {
 
     private boolean mIsSearchBoxShown;
 
-    private Integer mSelectedSortingOrder;
+    protected Integer mSelectedSortingOrder;
+    protected Toolbar mToolbar;
+    protected ListView listView;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
 
     @Override
     protected void onResume() {
@@ -227,13 +245,13 @@ abstract class AppListActivity extends ListActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.sorting_menu_open, R.string.sorting_menu_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
         };
@@ -364,5 +382,17 @@ abstract class AppListActivity extends ListActivity {
 
     protected CharSequence getFilterText() {
         return mInputSearch != null ? mInputSearch.getText() : "";
+    }
+
+    protected ListView getListView() {
+        return listView;
+    }
+
+    protected ListAdapter getListAdapter() {
+        return listView.getAdapter();
+    }
+
+    protected void setListAdapter(ListAdapter adapter){
+        listView.setAdapter(adapter);
     }
 }
