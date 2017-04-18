@@ -46,7 +46,6 @@ import timber.log.Timber;
 import java.io.File;
 import java.util.List;
 
-import timber.log.Timber;
 
 /**
  * The Label Widget does not return an answer. The purpose of this widget is to be the top entry in
