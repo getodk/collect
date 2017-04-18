@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -60,7 +61,7 @@ import timber.log.Timber;
  */
 
 public class InstanceUploaderList extends InstanceListActivity
-        implements OnLongClickListener, DiskSyncListener {
+        implements OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
@@ -80,8 +81,12 @@ public class InstanceUploaderList extends InstanceListActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Timber.i("onCreate");
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.instance_uploader_list);
+
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener(this);
+
+        mToolbar.setTitle(getString(R.string.get_forms));
 
         if (savedInstanceState != null) {
             mShowAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
@@ -151,6 +156,7 @@ public class InstanceUploaderList extends InstanceListActivity
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -232,7 +238,7 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
                 logger.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
@@ -243,7 +249,7 @@ public class InstanceUploaderList extends InstanceListActivity
                 showSentAndUnsentChoices();
                 return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
     private void createPreferencesMenu() {
@@ -252,9 +258,7 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void onListItemClick(ListView listView, View view, int position, long rowId) {
-        super.onListItemClick(listView, view, position, rowId);
-
+    public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
 
         if (getListView().isItemChecked(position)) {

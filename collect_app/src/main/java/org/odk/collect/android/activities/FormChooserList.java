@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends FormListActivity implements DiskSyncListener {
+public class FormChooserList extends FormListActivity implements DiskSyncListener, AdapterView.OnItemClickListener {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
     private static final boolean EXIT = true;
@@ -56,7 +57,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // must be at the beginning of any activity that can be called from an external intent
         try {
@@ -67,7 +67,10 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         }
 
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.enter_data));
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener(this);
+
+        mToolbar.setTitle(getString(R.string.enter_data));
 
         setupAdapter();
 
@@ -89,11 +92,12 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
         };
+        super.onCreate(savedInstanceState);
     }
 
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         // pass the thread on restart
         return mDiskSyncTask;
     }
@@ -111,7 +115,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
      * Stores the path of selected form and finishes.
      */
     @Override
-    protected void onListItemClick(ListView listView, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // get uri to form
         long idFormsTable = getListAdapter().getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
@@ -234,5 +238,4 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
-
 }

@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -74,7 +75,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
-        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
+        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     private static final int PROGRESS_DIALOG = 1;
@@ -125,7 +126,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
-        setTitle(getString(R.string.get_forms));
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener(this);
+
+        mToolbar.setTitle(getString(R.string.get_forms));
         mAlertMsg = getString(R.string.please_wait);
 
         mDownloadButton = (Button) findViewById(R.id.add_button);
@@ -272,8 +276,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         toggleButtonLabel(mToggleButton, getListView());
         mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
 
@@ -367,7 +370,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
                 Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected",
@@ -376,7 +379,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 startActivity(i);
                 return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -509,7 +512,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         if (mDownloadFormsTask != null) {
             return mDownloadFormsTask;
         } else {

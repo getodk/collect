@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -43,7 +44,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener {
+public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener, AdapterView.OnItemClickListener {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
@@ -57,7 +58,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // must be at the beginning of any activity that can be called from an external intent
         try {
@@ -68,6 +68,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         }
 
         setContentView(R.layout.chooser_list_layout);
+
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener(this);
+
+        mToolbar.setTitle(getString(R.string.get_forms));
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -90,6 +95,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -101,7 +107,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
      * Stores the path of selected instance in the parent class and finishes.
      */
     @Override
-    protected void onListItemClick(ListView listView, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Cursor c = (Cursor) getListAdapter().getItem(position);
         startManagingCursor(c);
         Uri instanceUri =
