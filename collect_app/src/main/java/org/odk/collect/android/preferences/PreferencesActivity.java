@@ -128,5 +128,4 @@ public class PreferencesActivity extends PreferenceActivity {
                 KEY_SPLASH_PATH, getString(R.string.default_splash_path));
         splashPathPreference.setSummary(summary);
     }
-
 }
