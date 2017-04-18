@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
@@ -29,18 +31,25 @@ import org.odk.collect.android.views.SlidingTabLayout;
 
 import java.util.ArrayList;
 
-public class FileManagerTabs extends FragmentActivity {
+public class FileManagerTabs extends AppCompatActivity {
 
     private DataManagerList dataManagerList = DataManagerList.newInstance();
     private FormManagerList formManagerList = FormManagerList.newInstance();
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        toolbar.setTitle(getString(R.string.manage_files));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.manage_files));
-
         setContentView(R.layout.file_manager_layout);
+        initToolbar();
 
         String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
