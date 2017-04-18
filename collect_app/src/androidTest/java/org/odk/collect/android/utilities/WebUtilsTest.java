@@ -38,11 +38,8 @@ public class WebUtilsTest {
 
     @Test
     public void httpRequests_shouldHaveUseragentHeader() throws Exception {
-        // given
-        String url = String.format("http://uname:pword@localhost:%s/some-path", server.getPort());
-
         // when
-        doRequest(url);
+        doRequest("/some-path");
 
         // then
         RecordedRequest r = server.takeRequest(1, TimeUnit.MILLISECONDS);
@@ -50,10 +47,32 @@ public class WebUtilsTest {
         assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
     }
 
-    private static void doRequest(String url) throws Exception {
-        HttpContext localContext = Collect.getInstance().getHttpContext();
-        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-        HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url));
-        HttpResponse response = httpclient.execute(req, localContext);
+    @Test
+    public void getXmlDocument_request_shouldSupplyExpectedHeaders() throws Exception {
+        // when
+        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+
+        // then
+        RecordedRequest r = server.takeRequest(1, TimeUnit.MILLISECONDS);
+        assertEquals("GET /list-forms HTTP/1.1", r.getRequestLine());
+        assertEquals(6, r.getHeaders().size());
+        assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
+    }
+
+    private String url(String path) {
+        return String.format("http://uname:pword@localhost:%s%s", server.getPort(), path);
+    }
+
+    private void doRequest(String path) throws Exception {
+        HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url(path)));
+        HttpResponse response = httpClient().execute(req, httpContext());
+    }
+
+    private static HttpClient httpClient() {
+        return WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+    }
+
+    private static HttpContext httpContext() {
+        return Collect.getInstance().getHttpContext();
     }
 }
