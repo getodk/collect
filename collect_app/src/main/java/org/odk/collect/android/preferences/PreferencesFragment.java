@@ -1,10 +1,6 @@
 package org.odk.collect.android.preferences;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Context;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +8,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -26,7 +21,6 @@ import org.odk.collect.android.R;
 
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
-
 import java.util.TreeMap;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
