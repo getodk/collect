@@ -595,8 +595,8 @@ public class DownloadFormsTask extends
             Log.e(t, errMessage);
             return errMessage;
         }
-        int nElements = manifestElement.getChildCount();
-        for (int i = 0; i < nElements; ++i) {
+        int elements = manifestElement.getChildCount();
+        for (int i = 0; i < elements; ++i) {
             if (manifestElement.getType(i) != Element.ELEMENT) {
                 // e.g., whitespace (text)
                 continue;
@@ -674,7 +674,7 @@ public class DownloadFormsTask extends
                                 String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
                         Integer
                                 .valueOf(total).toString());
-//                try {
+                //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.filename);
                 File tempMediaFile = new File(tempMediaDir, toDownload.filename);
 
@@ -696,9 +696,9 @@ public class DownloadFormsTask extends
                                 + finalMediaFile.getAbsolutePath());
                     }
                 }
-//                } catch (Exception e) {
-//                    return e.getLocalizedMessage();
-//                }
+                //  } catch (Exception e) {
+                //  return e.getLocalizedMessage();
+                //}
             }
         }
         return null;

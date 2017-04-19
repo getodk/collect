@@ -434,6 +434,8 @@ public class DrawActivity extends Activity {
         private Path mOffscreenPath; // Adjusted for position of the bitmap in the view
         private Paint mBitmapPaint;
         private File mBackgroundBitmapFile;
+        private float mX;
+        private float mY;
 
         public DrawView(final Context c) {
             super(c);
@@ -502,9 +504,6 @@ public class DrawActivity extends Activity {
             canvas.drawPath(mCurrentPath, paint);
         }
 
-        private float mX;
-        private float mY;
-
         private void touch_start(float x, float y) {
             mCurrentPath.reset();
             mCurrentPath.moveTo(x, y);
@@ -565,22 +564,22 @@ public class DrawActivity extends Activity {
             return true;
         }
 
-        public int getBitmapHeight(){
+        public int getBitmapHeight() {
             return mBitmap.getHeight();
         }
 
-        public int getBitmapWidth(){
+        public int getBitmapWidth() {
             return mBitmap.getWidth();
         }
 
-        private int getBitmapLeft(){
+        private int getBitmapLeft() {
             // Centered horizontally
-            return (getWidth() - mBitmap.getWidth())/2;
+            return (getWidth() - mBitmap.getWidth()) / 2;
         }
 
-        private int getBitmapTop(){
+        private int getBitmapTop() {
             // Centered vertically
-            return (getHeight() - mBitmap.getHeight())/2;
+            return (getHeight() - mBitmap.getHeight()) / 2;
         }
     }
 

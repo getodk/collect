@@ -794,7 +794,12 @@ public class GoogleDriveActivity extends ListActivity implements
                 return null;
             } catch (IOException e) {
                 Timber.e(e);
-                createAlertDialog(getString(R.string.google_auth_io_exception_msg));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAlertDialog(getString(R.string.google_auth_io_exception_msg));
+                    }
+                });
             }
             if (rootId == null) {
                 Timber.e("Unable to fetch drive contents");
@@ -953,22 +958,22 @@ public class GoogleDriveActivity extends ListActivity implements
             for (int k = 0; k < fileItems.size(); k++) {
                 DriveListItem fileItem = fileItems.get(k);
 
-                FileOutputStream fStream = null;
+                FileOutputStream fileOutputStream = null;
                try {
                     com.google.api.services.drive.model.File df = mDriveService.files()
                             .get(fileItem.getDriveId()).execute();
 
-                    fStream = new FileOutputStream
+                    fileOutputStream = new FileOutputStream
                             (new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
-                    downloadFile(df).writeTo(fStream);
+                    downloadFile(df).writeTo(fileOutputStream);
                 } catch (Exception e) {
                     Timber.e(e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
                 } finally {
                     try {
-                        if (fStream != null) {
-                            fStream.close();
+                        if (fileOutputStream != null) {
+                            fileOutputStream.close();
                         }
                     } catch (IOException e) {
                         Timber.e(e, "Unable to close the file output stream");

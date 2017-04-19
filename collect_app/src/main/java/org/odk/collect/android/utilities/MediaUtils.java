@@ -46,7 +46,7 @@ import timber.log.Timber;
 
 /**
  * Consolidate all interactions with media providers here.
- *
+ * <p>
  * The functionality of getPath() was provided by paulburke as described here:
  * See
  * http://stackoverflow.com/questions/20067508/get-real-path-from-uri-android
@@ -434,11 +434,11 @@ public class MediaUtils {
                 try {
                     c = ctxt.getContentResolver().query(uri, projection, null,
                             null, null);
-                    int column_index = c.getColumnIndexOrThrow(pathKey);
+                    int columnIndex = c.getColumnIndexOrThrow(pathKey);
                     String path = null;
                     if (c.getCount() > 0) {
                         c.moveToFirst();
-                        path = c.getString(column_index);
+                        path = c.getString(columnIndex);
                     }
                     return path;
                 } finally {
@@ -484,9 +484,8 @@ public class MediaUtils {
                 }
 
                 // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+            } else if (isDownloadsDocument(uri)) {
+                // DownloadsProvider
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
@@ -494,9 +493,8 @@ public class MediaUtils {
                         Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
+            } else if (isMediaDocument(uri)) {
+                // MediaProvider
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -516,9 +514,8 @@ public class MediaUtils {
                 return getDataColumn(context, contentUri, selection,
                         selectionArgs);
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // MediaStore (and general)
 
             // Return the remote address
             if (isGooglePhotosUri(uri)) {
@@ -526,9 +523,8 @@ public class MediaUtils {
             }
 
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // File
             return uri.getPath();
         }
 
@@ -640,7 +636,7 @@ public class MediaUtils {
      * @author paulburke
      */
     public static String getDataColumn(Context context, Uri uri,
-            String selection, String[] selectionArgs) {
+                                       String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";

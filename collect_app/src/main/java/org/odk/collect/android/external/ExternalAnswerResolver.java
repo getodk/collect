@@ -53,9 +53,9 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
             boolean containsSearchExpression = false;
 
-            XPathFuncExpr xPathExpression = null;
+            XPathFuncExpr xpathExpression = null;
             try {
-                xPathExpression = ExternalDataUtil.getSearchXPathExpression(
+                xpathExpression = ExternalDataUtil.getSearchXPathExpression(
                         questionDef.getAppearanceAttr());
             } catch (Exception e) {
                 Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
@@ -63,7 +63,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 containsSearchExpression = true;
             }
 
-            if (xPathExpression != null || containsSearchExpression) {
+            if (xpathExpression != null || containsSearchExpression) {
                 // that means that we have dynamic selects
 
                 // read the static choices from the options sheet

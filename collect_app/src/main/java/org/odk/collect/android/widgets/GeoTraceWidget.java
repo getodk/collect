@@ -215,9 +215,9 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        // TODO Auto-generated method stub
-
-
+        createTraceButton.setOnLongClickListener(l);
+        mStringAnswer.setOnLongClickListener(l);
+        mAnswerDisplay.setOnLongClickListener(l);
     }
 
 }

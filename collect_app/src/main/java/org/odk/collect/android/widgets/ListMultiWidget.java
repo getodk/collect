@@ -84,10 +84,10 @@ public class ListMultiWidget extends QuestionWidget {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        if (xpathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
             mItems = prompt.getSelectChoices();
         }
@@ -150,8 +150,8 @@ public class ListMultiWidget extends QuestionWidget {
                 }
 
                 // build image view (if an image is provided)
-                ImageView mImageView = null;
-                TextView mMissingImage = null;
+                ImageView imageView = null;
+                TextView missingImage = null;
 
                 final int labelId = QuestionWidget.newUniqueId();
 
@@ -176,11 +176,11 @@ public class ListMultiWidget extends QuestionWidget {
                             }
 
                             if (b != null) {
-                                mImageView = new ImageView(getContext());
-                                mImageView.setPadding(2, 2, 2, 2);
-                                mImageView.setAdjustViewBounds(true);
-                                mImageView.setImageBitmap(b);
-                                mImageView.setId(labelId);
+                                imageView = new ImageView(getContext());
+                                imageView.setPadding(2, 2, 2, 2);
+                                imageView.setAdjustViewBounds(true);
+                                imageView.setImageBitmap(b);
+                                imageView.setId(labelId);
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
@@ -198,11 +198,11 @@ public class ListMultiWidget extends QuestionWidget {
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
                             Log.e(t, errorMsg);
-                            mMissingImage = new TextView(getContext());
-                            mMissingImage.setText(errorMsg);
+                            missingImage = new TextView(getContext());
+                            missingImage.setText(errorMsg);
 
-                            mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(labelId);
+                            missingImage.setPadding(2, 2, 2, 2);
+                            missingImage.setId(labelId);
                         }
                     } catch (InvalidReferenceException e) {
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
@@ -234,14 +234,14 @@ public class ListMultiWidget extends QuestionWidget {
                                 LayoutParams.WRAP_CONTENT);
                 buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-                if (mImageView != null) {
-                    mImageView.setScaleType(ScaleType.CENTER);
+                if (imageView != null) {
+                    imageView.setScaleType(ScaleType.CENTER);
                     if (!displayLabel) {
-                        mImageView.setVisibility(View.GONE);
+                        imageView.setVisibility(View.GONE);
                     }
-                    answer.addView(mImageView, headerParams);
-                } else if (mMissingImage != null) {
-                    answer.addView(mMissingImage, headerParams);
+                    answer.addView(imageView, headerParams);
+                } else if (missingImage != null) {
+                    answer.addView(missingImage, headerParams);
                 } else {
                     if (displayLabel) {
                         label.setId(labelId);

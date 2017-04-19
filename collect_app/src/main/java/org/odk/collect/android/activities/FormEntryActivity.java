@@ -227,7 +227,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     }
 
     private SharedPreferences mAdminPreferences;
-    private boolean mShowNavigationButtons=false;
+    private boolean mShowNavigationButtons = false;
 
     private FormsDao mFormsDao;
 
@@ -630,19 +630,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             case ANNOTATE_IMAGE:
             case SIGNATURE_CAPTURE:
             case IMAGE_CAPTURE:
-            /*
-             * We saved the image to the tempfile_path, but we really want it to
-             * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
-             * we move it there before inserting it into the content provider.
-             * Once the android image capture bug gets fixed, (read, we move on
-             * from Android 1.6) we want to handle images the audio and video
-             */
+                /*
+                 * We saved the image to the tempfile_path, but we really want it to
+                 * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
+                 * we move it there before inserting it into the content provider.
+                 * Once the android image capture bug gets fixed, (read, we move on
+                 * from Android 1.6) we want to handle images the audio and video
+                 */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
                 File fi = new File(Collect.TMPFILE_PATH);
-                String mInstanceFolder = formController.getInstancePath()
+                String instanceFolder = formController.getInstancePath()
                         .getParent();
-                String s = mInstanceFolder + File.separator
+                String s = instanceFolder + File.separator
                         + System.currentTimeMillis() + ".jpg";
 
                 File nf = new File(s);
@@ -656,16 +656,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case ALIGNED_IMAGE:
-            /*
-             * We saved the image to the tempfile_path; the app returns the full
-             * path to the saved file in the EXTRA_OUTPUT extra. Take that file
-             * and move it into the instance folder.
-             */
+                /*
+                 * We saved the image to the tempfile_path; the app returns the full
+                 * path to the saved file in the EXTRA_OUTPUT extra. Take that file
+                 * and move it into the instance folder.
+                 */
                 String path = intent
                         .getStringExtra(android.provider.MediaStore.EXTRA_OUTPUT);
                 fi = new File(path);
-                mInstanceFolder = formController.getInstancePath().getParent();
-                s = mInstanceFolder + File.separator + System.currentTimeMillis()
+                instanceFolder = formController.getInstancePath().getParent();
+                s = instanceFolder + File.separator + System.currentTimeMillis()
                         + ".jpg";
 
                 nf = new File(s);
@@ -679,13 +679,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CHOOSER:
-            /*
-             * We have a saved image somewhere, but we really want it to be in:
-             * /sdcard/odk/instances/[current instnace]/something.jpg so we move
-             * it there before inserting it into the content provider. Once the
-             * android image capture bug gets fixed, (read, we move on from
-             * Android 1.6) we want to handle images the audio and video
-             */
+                /*
+                 * We have a saved image somewhere, but we really want it to be in:
+                 * /sdcard/odk/instances/[current instnace]/something.jpg so we move
+                 * it there before inserting it into the content provider. Once the
+                 * android image capture bug gets fixed, (read, we move on from
+                 * Android 1.6) we want to handle images the audio and video
+                 */
 
                 showDialog(SAVING_IMAGE_DIALOG);
                 Runnable runnable = new Runnable() {
@@ -743,9 +743,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
-        String mInstanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
                 .getParent();
-        String destImagePath = mInstanceFolder1 + File.separator
+        String destImagePath = instanceFolder1 + File.separator
                 + System.currentTimeMillis() + ".jpg";
 
         File chosenImage;
@@ -1160,7 +1160,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                 }
 
-                // Create 'save' button
+                 // Create 'save' button
                  endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
@@ -1261,7 +1261,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     /**
      * Disables the back button if it is first question....
      */
-    private void adjustBackNavigationButtonVisibility(){
+    private void adjustBackNavigationButtonVisibility() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         try {
@@ -1312,14 +1312,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     .getFormController();
 
             // get constraint behavior preference value with appropriate default
-            String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+            String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
                     .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
                             PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
 
             if (formController.currentPromptIsQuestion()) {
 
                 // if constraint behavior says we should validate on swipe, do so
-                if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
                         // A constraint was violated so a dialog should be showing.
                         mBeenSwiped = false;
@@ -2615,18 +2615,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
-                String constraint_behavior = PreferenceManager.getDefaultSharedPreferences(this)
+                String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
                         .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
                                 PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
                 // next question
-                if (constraint_behavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
-                }
-                // otherwise, we can get the proper toast(s) by saving with constraint check
-                else {
+                } else {
+                    // otherwise, we can get the proper toast(s) by saving with constraint check
                     saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
                 }
 
@@ -2752,8 +2751,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             // OR left/right of > .5"
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
-            int xPixelLimit = (int) (dm.xdpi * .25);
-            int yPixelLimit = (int) (dm.ydpi * .25);
+            int xpixellimit = (int) (dm.xdpi * .25);
+            int ypixellimit = (int) (dm.ydpi * .25);
 
             if (mCurrentView != null && mCurrentView instanceof ODKView) {
                 if (((ODKView) mCurrentView).suppressFlingGesture(e1, e2,
@@ -2766,9 +2765,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 return false;
             }
 
-            if ((Math.abs(e1.getX() - e2.getX()) > xPixelLimit && Math.abs(e1
-                    .getY() - e2.getY()) < yPixelLimit)
-                    || Math.abs(e1.getX() - e2.getX()) > xPixelLimit * 2) {
+            if ((Math.abs(e1.getX() - e2.getX()) > xpixellimit && Math.abs(e1
+                    .getY() - e2.getY()) < ypixellimit)
+                    || Math.abs(e1.getX() - e2.getX()) > xpixellimit * 2) {
                 mBeenSwiped = true;
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {

@@ -24,11 +24,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 public abstract class InstanceListFragment extends FileManagerFragment {
     protected String getSortingOrder() {
-        if (mSelectedSortingOrder == null) {
-            restoreSelectedSortingOrder();
-        }
         String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
-        switch (mSelectedSortingOrder) {
+        switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
                 sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
                 break;

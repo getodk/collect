@@ -43,6 +43,7 @@ import org.osmdroid.views.overlay.TilesOverlay;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MapHelper {
     private static SharedPreferences sharedPreferences;
@@ -250,7 +251,7 @@ public class MapHelper {
         return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return (filename.toLowerCase().endsWith(".mbtiles"));
+                return (filename.toLowerCase(Locale.US).endsWith(".mbtiles"));
             }
         });
     }

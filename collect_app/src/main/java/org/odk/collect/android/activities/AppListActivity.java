@@ -19,8 +19,10 @@ package org.odk.collect.android.activities;
 import android.app.ListActivity;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
@@ -71,12 +73,13 @@ abstract class AppListActivity extends ListActivity {
 
     private boolean mIsSearchBoxShown;
 
-    protected Integer mSelectedSortingOrder;
+    private Integer mSelectedSortingOrder;
 
     @Override
     protected void onResume() {
         super.onResume();
         mSearchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
+        restoreSelectedSortingOrder();
         setupSearchBox();
         setupDrawer();
         setupDrawerItems();
@@ -193,15 +196,19 @@ abstract class AppListActivity extends ListActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (position == getSelectedSortingOrder()) {
+                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
+                }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
             }
         };
-
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
+                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.light_blue));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
@@ -263,7 +270,9 @@ abstract class AppListActivity extends ListActivity {
         return getCheckedCount() > 0;
     }
 
-    /** Returns the IDs of the checked items, using the ListView provided */
+    /**
+     * Returns the IDs of the checked items, using the ListView provided
+     */
     protected long[] getCheckedIds(ListView lv) {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
         // IDs were “stable” (see the getCheckedItemIds doc).
@@ -273,7 +282,7 @@ abstract class AppListActivity extends ListActivity {
         int resultIndex = 0;
         for (int posIdx = 0; posIdx < itemCount; posIdx++) {
             if (lv.isItemChecked(posIdx)) {
-                checkedIds      [resultIndex] = lv.getItemIdAtPosition(posIdx);
+                checkedIds[resultIndex] = lv.getItemIdAtPosition(posIdx);
                 resultIndex++;
             }
         }
@@ -326,9 +335,9 @@ abstract class AppListActivity extends ListActivity {
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-           mDrawerLayout.closeDrawer(Gravity.END);
+            mDrawerLayout.closeDrawer(Gravity.END);
         } else {
-           super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -344,6 +353,13 @@ abstract class AppListActivity extends ListActivity {
         mSelectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected int getSelectedSortingOrder() {
+        if (mSelectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return mSelectedSortingOrder;
     }
 
     protected CharSequence getFilterText() {

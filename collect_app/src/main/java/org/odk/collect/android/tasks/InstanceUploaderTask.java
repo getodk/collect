@@ -52,9 +52,6 @@ import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
@@ -100,7 +97,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-            Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap, Outcome outcome) {
+                                        Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap, Outcome outcome) {
 
         Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
@@ -156,14 +153,14 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     WebUtils.discardEntityBytes(response);
                     if (locations != null && locations.length == 1) {
                         try {
-                            Uri uNew = Uri.parse(
+                            Uri newURI = Uri.parse(
                                     URLDecoder.decode(locations[0].getValue(), "utf-8"));
-                            if (u.getHost().equalsIgnoreCase(uNew.getHost())) {
+                            if (u.getHost().equalsIgnoreCase(newURI.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
                                 // ... and possibly to use https instead.
-                                uriRemap.put(u, uNew);
-                                u = uNew;
+                                uriRemap.put(u, newURI);
+                                u = newURI;
                             } else {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
@@ -172,7 +169,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                         fail
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
-                                                + uNew.toString());
+                                                + newURI.toString());
                                 cv.put(InstanceColumns.STATUS,
                                         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()
@@ -209,21 +206,21 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     }
                 }
             } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
-                if (e instanceof  ClientProtocolException) {
+                if (e instanceof ClientProtocolException) {
                     outcome.mResults.put(id, fail + "Client Protocol Exception");
                     Timber.e(e, "Client Protocol Exception");
-                } else if (e instanceof  ConnectTimeoutException) {
+                } else if (e instanceof ConnectTimeoutException) {
                     outcome.mResults.put(id, fail + "Connection Timeout");
                     Timber.e(e, "Connection Timeout");
-                } else if (e instanceof  UnknownHostException) {
+                } else if (e instanceof UnknownHostException) {
                     outcome.mResults.put(id, fail + e.toString() + " :: Network Connection Failed");
                     Timber.e(e, "Network Connection Failed");
-                } else if (e instanceof  SocketTimeoutException) {
+                } else if (e instanceof SocketTimeoutException) {
                     outcome.mResults.put(id, fail + "Connection Timeout");
                     Timber.e(e, "Connection timeout");
                 } else {
                     outcome.mResults.put(id, fail + "Network Connection Refused");
-                    Timber.e(e,"Network Connection Refused");
+                    Timber.e(e, "Network Connection Refused");
                 }
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -482,9 +479,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 + " (" + responseCode + ") at " + urlString);
                     } else {
                         // If response from server is valid use that else use default messaging
-                        if (messageParser.isValid()){
+                        if (messageParser.isValid()) {
                             outcome.mResults.put(id, fail + messageParser.getMessageResponse());
-                        }else{
+                        } else {
                             outcome.mResults.put(id, fail + response.getStatusLine().getReasonPhrase()
                                     + " (" + responseCode + ") at " + urlString);
                         }
@@ -510,9 +507,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // If response from server is valid use that else use default messaging
-        if (messageParser.isValid()){
+        if (messageParser.isValid()) {
             outcome.mResults.put(id, messageParser.getMessageResponse());
-        }else{
+        } else {
             // Default messaging
             outcome.mResults.put(id, Collect.getInstance().getString(R.string.success));
         }
@@ -606,7 +603,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             if (!processChunk(low, high, outcome, values)) {
                 return outcome;
             }
-            counter ++;
+            counter++;
         }
         return outcome;
     }
@@ -647,9 +644,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Set<String> keys = outcome.mResults.keySet();
                     Iterator<String> it = keys.iterator();
                     int count = keys.size();
-                    while(count > 0){
+                    while (count > 0) {
                         String[] selectionArgs = null;
-                        if(count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
+                        if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
                             selectionArgs = new String[
                                     ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
                         } else {
@@ -661,7 +658,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         selection.append(InstanceColumns._ID + " IN (");
                         int i = 0;
 
-                        while (it.hasNext() && i < selectionArgs.length - 1){
+                        while (it.hasNext() && i < selectionArgs.length - 1) {
                             selectionArgs[i] = it.next();
                             selection.append("?");
 
@@ -703,9 +700,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 }
 
                             }
-                        } catch (SQLException e){
+                        } catch (SQLException e) {
                             Log.e(t, e.getMessage(), e);
-                        } finally{
+                        } finally {
                             if (results != null) {
                                 results.close();
                             }
@@ -733,17 +730,4 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             mStateListener = sl;
         }
     }
-
-
-    public static void copyToBytes(InputStream input, OutputStream output,
-            int bufferSize) throws IOException {
-        byte[] buf = new byte[bufferSize];
-        int bytesRead = input.read(buf);
-        while (bytesRead != -1) {
-            output.write(buf, 0, bytesRead);
-            bytesRead = input.read(buf);
-        }
-        output.flush();
-    }
-
 }

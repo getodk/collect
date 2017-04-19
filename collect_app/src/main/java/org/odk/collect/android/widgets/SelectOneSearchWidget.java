@@ -43,6 +43,7 @@ import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
@@ -68,10 +69,10 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         this.prompt = prompt;
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        if (xpathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
             mItems = prompt.getSelectChoices();
         }
@@ -95,18 +96,18 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         if (searchStr == null || searchStr.trim().length() == 0) {
             createOptions(mItems, null);
         } else { // Create a List with items that are relevant to the search text
-            List<SelectChoice> mSearchedItems = new ArrayList<SelectChoice>();
+            List<SelectChoice> searchedItems = new ArrayList<SelectChoice>();
             List<Integer> tagList = new ArrayList<Integer>();
-            searchStr = searchStr.toLowerCase();
+            searchStr = searchStr.toLowerCase(Locale.US);
             for (int i = 0; i < mItems.size(); i++) {
-                String choiceText = prompt.getSelectChoiceText(mItems.get(i)).toLowerCase();
+                String choiceText = prompt.getSelectChoiceText(mItems.get(i)).toLowerCase(Locale.US);
                 if (choiceText.contains(searchStr)) {
-                    mSearchedItems.add(mItems.get(i));
+                    searchedItems.add(mItems.get(i));
                     tagList.add(i);
                 }
 
             }
-            createOptions(mSearchedItems, tagList);
+            createOptions(searchedItems, tagList);
         }
     }
 
@@ -230,15 +231,15 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(mSearchStr, 0);
-            /*
-             * If you do a multi-question screen after a "add another group" dialog, this won't
-             * automatically pop up. It's an Android issue.
-             *
-             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and
-             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
-             * is focused before the dialog pops up, everything works fine. great.
-             */
+        /*
+         * If you do a multi-question screen after a "add another group" dialog, this won't
+         * automatically pop up. It's an Android issue.
+         *
+         * That is, if I have an edit text in an activity, and pop a dialog, and in that
+         * dialog's button's OnClick() I call edittext.requestFocus() and
+         * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
+         * is focused before the dialog pops up, everything works fine. great.
+         */
     }
 
 

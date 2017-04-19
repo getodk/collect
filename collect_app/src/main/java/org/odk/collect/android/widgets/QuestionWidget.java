@@ -63,11 +63,11 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     }
 
     protected FormEntryPrompt mPrompt;
+    protected MediaLayout mQuestionMediaLayout;
 
     protected final int mQuestionFontsize;
     protected final int mAnswerFontsize;
 
-    private MediaLayout mQuestionMediaLayout;
     private TextView mHelpTextView;
 
     protected MediaPlayer mPlayer;

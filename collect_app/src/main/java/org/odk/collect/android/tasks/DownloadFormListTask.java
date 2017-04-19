@@ -119,8 +119,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                 R.string.parse_openrosa_formlist_failed, error)));
                 return formList;
             }
-            int nElements = xformsElement.getChildCount();
-            for (int i = 0; i < nElements; ++i) {
+            int elements = xformsElement.getChildCount();
+            for (int i = 0; i < elements; ++i) {
                 if (xformsElement.getType(i) != Element.ELEMENT) {
                     // e.g., whitespace (text)
                     continue;

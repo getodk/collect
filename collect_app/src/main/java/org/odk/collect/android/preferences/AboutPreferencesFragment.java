@@ -37,20 +37,20 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.about_preferences);
 
-        PreferenceScreen mODKWebsitePreference = (PreferenceScreen) findPreference(
+        PreferenceScreen odkWebsitePreference = (PreferenceScreen) findPreference(
                 KEY_ODK_WEBSITE);
-        PreferenceScreen mOpenSourceLicensesPreference = (PreferenceScreen) findPreference(
+        PreferenceScreen openSourceLicensesPreference = (PreferenceScreen) findPreference(
                 KEY_OPEN_SOURCE_LICENSES);
-        PreferenceScreen mTellYourFriendsPreference = (PreferenceScreen) findPreference(
+        PreferenceScreen tellYourFriendsPreference = (PreferenceScreen) findPreference(
                 KEY_TELL_YOUR_FRIENDS);
-        PreferenceScreen mLeaveAReviewPreference = (PreferenceScreen) findPreference(
+        PreferenceScreen leaveAReviewPreference = (PreferenceScreen) findPreference(
                 KEY_LEAVE_A_REVIEW);
         mCustomTabHelper = new CustomTabHelper();
         uri = Uri.parse(ODK_WEBSITE);
-        mODKWebsitePreference.setOnPreferenceClickListener(this);
-        mOpenSourceLicensesPreference.setOnPreferenceClickListener(this);
-        mTellYourFriendsPreference.setOnPreferenceClickListener(this);
-        mLeaveAReviewPreference.setOnPreferenceClickListener(this);
+        odkWebsitePreference.setOnPreferenceClickListener(this);
+        openSourceLicensesPreference.setOnPreferenceClickListener(this);
+        tellYourFriendsPreference.setOnPreferenceClickListener(this);
+        leaveAReviewPreference.setOnPreferenceClickListener(this);
     }
 
 

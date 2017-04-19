@@ -50,13 +50,13 @@ public class ResponseMessageParser {
     public String parseXMLMessage() {
         String message = null;
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder;
+        DocumentBuilder builder;
         try {
-            dBuilder = dbFactory.newDocumentBuilder();
+            builder = dbFactory.newDocumentBuilder();
             Document doc = null;
             try {
                 String httpEntityString = EntityUtils.toString(httpEntity);
-                doc = dBuilder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
+                doc = builder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
                 doc.getDocumentElement().normalize();
 
                 if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null) {

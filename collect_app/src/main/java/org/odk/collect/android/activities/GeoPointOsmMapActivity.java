@@ -231,7 +231,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 mMarker.remove(mMap);
                 if (mLocation != null) {
                     mReloadLocationButton.setEnabled(true);
-                //mLocationStatus.setVisibility(View.VISIBLE);
+                    //mLocationStatus.setVisibility(View.VISIBLE);
                 }
                 mLocationStatus.setVisibility(View.VISIBLE);
                 mMap.getOverlays().remove(mMarker);
@@ -431,7 +431,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                     mReloadLocationButton.setEnabled(true);
                 }
                 if (!foundFirstLocation) {
-//                        zoomToPoint();
+                    // zoomToPoint();
                     showZoomDialog();
                     foundFirstLocation = true;
                 }
@@ -528,9 +528,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     public void showZoomDialog() {
 
         if (zoomDialog == null) {
-            AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
-            p_builder.setTitle(getString(R.string.zoom_to_where));
-            p_builder.setView(zoomDialogView)
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.zoom_to_where));
+            builder.setView(zoomDialogView)
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -543,7 +543,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                             zoomDialog.dismiss();
                         }
                     });
-            zoomDialog = p_builder.create();
+            zoomDialog = builder.create();
         }
         //If feature enable zoom to button else disable
         if (mMyLocationOverlay.getMyLocation() != null) {

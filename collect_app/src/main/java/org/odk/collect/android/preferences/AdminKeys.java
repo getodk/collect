@@ -32,7 +32,7 @@ public final class AdminKeys {
     public static final String KEY_MARK_AS_FINALIZED            = "mark_as_finalized";
 
     // server
-            static final String KEY_CHANGE_ADMIN_PASSWORD       = "admin_password";
+    static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     private static final String KEY_CHANGE_SERVER               = "change_server";
     private static final String KEY_CHANGE_PROTOCOL_SETTINGS    = "change_protocol_settings";
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
@@ -116,5 +116,5 @@ public final class AdminKeys {
         return keys;
     }
 
-    static Collection<String> ALL_KEYS = allKeys();
+    final static Collection<String> ALL_KEYS = allKeys();
 }
