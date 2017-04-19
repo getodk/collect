@@ -101,8 +101,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.addView(mSignButton);
         answerLayout.addView(mErrorTextView);
         Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
-        int width=display.getWidth();
-        int height=display.getHeight();
+        int width = display.getWidth();
+        int height = display.getHeight();
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
         answerLayout.setLayoutParams(parms);
 
