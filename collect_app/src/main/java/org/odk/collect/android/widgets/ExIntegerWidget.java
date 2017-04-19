@@ -29,6 +29,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
+import java.util.Locale;
+
 
 /**
  * Launch an external app to supply an integer value. If the app
@@ -72,7 +74,7 @@ public class ExIntegerWidget extends ExStringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(String.format("%d", i.toString()));
+            mAnswer.setText(String.format(Locale.getDefault(), "%d", i.toString()));
         }
     }
 

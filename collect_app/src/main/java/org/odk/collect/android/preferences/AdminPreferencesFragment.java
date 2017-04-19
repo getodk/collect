@@ -27,7 +27,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PAS
 
 public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
-    public static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
-        mChangeAdminPwPreference.setOnPreferenceClickListener(this);
+        Preference changeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+        changeAdminPwPreference.setOnPreferenceClickListener(this);
     }
 
     @Override

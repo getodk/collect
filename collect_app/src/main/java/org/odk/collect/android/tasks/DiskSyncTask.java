@@ -80,7 +80,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             File formDir = new File(Collect.FORMS_PATH);
             if (formDir.exists() && formDir.isDirectory()) {
                 // Get all the files in the /odk/foms directory
-                List<File> xFormsToAdd = new LinkedList<File>();
+                List<File> formsToAdd = new LinkedList<File>();
 
                 // Step 1: assemble the candidate form files
                 //         discard files beginning with "."
@@ -92,7 +92,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         if (!addMe.getName().startsWith(".")
                                 && (addMe.getName().endsWith(".xml") || addMe.getName().endsWith(
                                 ".xhtml"))) {
-                            xFormsToAdd.add(addMe);
+                            formsToAdd.add(addMe);
                         } else {
                             Log.i(t, "[" + instance + "] Ignoring: " + addMe.getAbsolutePath());
                         }
@@ -103,11 +103,11 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 // parse and update; this is quick, as we only calculate the md5
                 // and see if it has changed.
                 List<UriFile> uriToUpdate = new ArrayList<UriFile>();
-                Cursor mCursor = null;
+                Cursor cursor = null;
                 // open the cursor within a try-catch block so it can always be closed.
                 try {
-                    mCursor = mFormsDao.getFormsCursor();
-                    if (mCursor == null) {
+                    cursor = mFormsDao.getFormsCursor();
+                    if (cursor == null) {
                         Log.e(t, "[" + instance + "] Forms Content Provider returned NULL");
                         errors.append(
                                 "Internal Error: Unable to access Forms content provider").append(
@@ -115,42 +115,44 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         return errors.toString();
                     }
 
-                    mCursor.moveToPosition(-1);
+                    cursor.moveToPosition(-1);
 
-                    while (mCursor.moveToNext()) {
+                    while (cursor.moveToNext()) {
                         // For each element in the provider, see if the file already exists
                         String sqlFilename =
-                                mCursor.getString(
-                                        mCursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                        String md5 = mCursor.getString(
-                                mCursor.getColumnIndex(FormsColumns.MD5_HASH));
+                                cursor.getString(
+                                        cursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                        String md5 = cursor.getString(
+                                cursor.getColumnIndex(FormsColumns.MD5_HASH));
                         File sqlFile = new File(sqlFilename);
                         if (sqlFile.exists()) {
                             // remove it from the list of forms (we only want forms
                             // we haven't added at the end)
-                            xFormsToAdd.remove(sqlFile);
+                            formsToAdd.remove(sqlFile);
                             String md5Computed = FileUtils.getMd5Hash(sqlFile);
                             if (md5Computed == null || md5 == null || !md5Computed.equals(md5)) {
                                 // Probably someone overwrite the file on the sdcard
                                 // So re-parse it and update it's information
-                                String id = mCursor.getString(
-                                        mCursor.getColumnIndex(FormsColumns._ID));
+                                String id = cursor.getString(
+                                        cursor.getColumnIndex(FormsColumns._ID));
                                 Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
-                           //File not found in sdcard but file path found in database
+                            //File not found in sdcard but file path found in database
                             //probably because the file has been deleted or filename was changed in sdcard
                             //Add the ID to list so that they could be deleted all together
 
-                            String id = mCursor.getString(
-                                    mCursor.getColumnIndex(FormsColumns._ID));
+
+                            String id = cursor.getString(
+                                    cursor.getColumnIndex(FormsColumns._ID));
+
                             idsToDelete.add(id);
                         }
                     }
                 } finally {
-                    if (mCursor != null) {
-                        mCursor.close();
+                    if (cursor != null) {
+                        cursor.close();
                     }
                 }
                 
@@ -189,9 +191,9 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 // Step 4: go through the newly-discovered files in xFormsToAdd and add them.
                 // This is slow because buildContentValues(...) is slow.
                 //
-                Collections.shuffle(xFormsToAdd); // Big win if multiple DiskSyncTasks running
-                while (!xFormsToAdd.isEmpty()) {
-                    File formDefFile = xFormsToAdd.remove(0);
+                Collections.shuffle(formsToAdd); // Big win if multiple DiskSyncTasks running
+                while (!formsToAdd.isEmpty()) {
+                    File formDefFile = formsToAdd.remove(0);
 
                     // Since parsing is so slow, if there are multiple tasks,
                     // they may have already updated the database.

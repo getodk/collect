@@ -80,7 +80,7 @@ public class MainMenuActivity extends Activity {
     private static final int MENU_ABOUT = Menu.FIRST;
     private static final int MENU_PREFERENCES = Menu.FIRST + 1;
     private static final int MENU_ADMIN = Menu.FIRST + 2;
-    private static boolean EXIT = true;
+    private static final boolean EXIT = true;
     // buttons
     private Button mEnterDataButton;
     private Button mManageFilesButton;
@@ -261,7 +261,7 @@ public class MainMenuActivity extends Activity {
         mCompletedCount = mFinalizedCursor != null ? mFinalizedCursor.getCount() : 0;
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
                 mContentObserver);
-//        mFinalizedCursor.registerContentObserver(mContentObserver);
+        // mFinalizedCursor.registerContentObserver(mContentObserver);
 
         // count for saved instances
         try {
@@ -328,9 +328,9 @@ public class MainMenuActivity extends Activity {
             }
         }
 
-        boolean view_sent = sharedPreferences.getBoolean(
+        boolean viewSent = sharedPreferences.getBoolean(
                 AdminKeys.KEY_VIEW_SENT, true);
-        if (!view_sent) {
+        if (!viewSent) {
             if (mViewSentFormsButton != null) {
                 mViewSentFormsButton.setVisibility(View.GONE);
             }
@@ -340,9 +340,9 @@ public class MainMenuActivity extends Activity {
             }
         }
 
-        boolean get_blank = sharedPreferences.getBoolean(
+        boolean getBlank = sharedPreferences.getBoolean(
                 AdminKeys.KEY_GET_BLANK, true);
-        if (!get_blank) {
+        if (!getBlank) {
             if (mGetFormsButton != null) {
                 mGetFormsButton.setVisibility(View.GONE);
             }
@@ -358,9 +358,9 @@ public class MainMenuActivity extends Activity {
             }
         }
 
-        boolean delete_saved = sharedPreferences.getBoolean(
+        boolean deleteSaved = sharedPreferences.getBoolean(
                 AdminKeys.KEY_DELETE_SAVED, true);
-        if (!delete_saved) {
+        if (!deleteSaved) {
             if (mManageFilesButton != null) {
                 mManageFilesButton.setVisibility(View.GONE);
             }

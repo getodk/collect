@@ -134,9 +134,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             toUpload.toArray(toSendArray);
 
 
-            GoogleAccountCredential mCredential;
+            GoogleAccountCredential accountCredential;
             // Initialize credentials and service object.
-            mCredential = GoogleAccountCredential.usingOAuth2(
+            accountCredential = GoogleAccountCredential.usingOAuth2(
                     Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
                     .setBackOff(new ExponentialBackOff());
 
@@ -146,7 +146,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     context.getString(R.string.protocol_odk_default));
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, mCredential);
+                mGoogleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, accountCredential);
                 String googleUsername = settings.getString(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -154,7 +154,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     running = false;
                     return;
                 }
-                mCredential.setSelectedAccountName(googleUsername);
+                accountCredential.setSelectedAccountName(googleUsername);
                 mGoogleSheetsUploadTask.setUploaderListener(this);
                 mGoogleSheetsUploadTask.execute(toSendArray);
 
@@ -242,7 +242,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
                 notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Collect.getInstance())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(Collect.getInstance())
                 .setSmallIcon(R.drawable.notes)
                 .setContentTitle(Collect.getInstance().getString(R.string.odk_auto_note))
                 .setContentIntent(pendingNotify)
@@ -252,9 +252,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                         BitmapFactory.decodeResource(Collect.getInstance().getResources(),
                                 android.R.drawable.ic_dialog_info));
 
-        NotificationManager mNotificationManager = (NotificationManager) Collect.getInstance()
+        NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(1328974928, mBuilder.build());
+        notificationManager.notify(1328974928, builder.build());
     }
 
 

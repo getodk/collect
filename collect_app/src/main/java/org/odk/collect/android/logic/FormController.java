@@ -910,23 +910,23 @@ public class FormController {
         String constraintText = getBindAttribute(index, XFormParser.NAMESPACE_JAVAROSA,
                 "requiredMsg");
         if (constraintText != null) {
-            XPathExpression xPathRequiredMsg;
+            XPathExpression xpathRequiredMsg;
             try {
-                xPathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
+                xpathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
             } catch (Exception e) {
                 // Expected in probably most cases.
                 // This is a string literal, so no need to evaluate anything.
                 return constraintText;
             }
 
-            if (xPathRequiredMsg != null) {
+            if (xpathRequiredMsg != null) {
                 try {
                     FormDef form = mFormEntryController.getModel().getForm();
-                    TreeElement mTreeElement = form.getMainInstance().resolveReference(
+                    TreeElement treeElement = form.getMainInstance().resolveReference(
                             index.getReference());
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
-                            mTreeElement.getRef());
-                    Object value = xPathRequiredMsg.eval(form.getMainInstance(), ec);
+                            treeElement.getRef());
+                    Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
                     if (value != "") {
                         return (String) value;
                     }

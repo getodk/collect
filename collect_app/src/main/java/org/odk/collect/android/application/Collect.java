@@ -95,9 +95,9 @@ public class Collect extends Application {
     public static int getQuestionFontsize() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        String question_font = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
+        String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        return Integer.valueOf(question_font);
+        return Integer.valueOf(questionFont);
     }
 
     /**
@@ -248,7 +248,7 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
-        if (timber.log.BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashReportingTree());

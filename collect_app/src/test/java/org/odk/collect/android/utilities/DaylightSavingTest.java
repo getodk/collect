@@ -93,12 +93,12 @@ public class DaylightSavingTest {
 
     private DateWidget prepareDateWidget(int year, int month, int day) {
         QuestionDef questionDefStub = mock(QuestionDef.class);
-        IFormElement iFormElementStub = mock(IFormElement.class);
+        IFormElement iformElementStub = mock(IFormElement.class);
         FormEntryPrompt formEntryPromptStub = mock(FormEntryPrompt.class);
 
-        stub(iFormElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
+        stub(iformElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
         stub(formEntryPromptStub.getQuestion()).toReturn(questionDefStub);
-        stub(formEntryPromptStub.getFormElement()).toReturn(iFormElementStub);
+        stub(formEntryPromptStub.getFormElement()).toReturn(iformElementStub);
         stub(formEntryPromptStub.getQuestion().getAppearanceAttr()).toReturn("no-calendar");
 
         DatePickerDialog datePickerDialog = mock(DatePickerDialog.class);
@@ -116,12 +116,12 @@ public class DaylightSavingTest {
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
         QuestionDef questionDefStub = mock(QuestionDef.class);
-        IFormElement iFormElementStub = mock(IFormElement.class);
+        IFormElement iformElementStub = mock(IFormElement.class);
         FormEntryPrompt formEntryPromptStub = mock(FormEntryPrompt.class);
 
-        stub(iFormElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
+        stub(iformElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
         stub(formEntryPromptStub.getQuestion()).toReturn(questionDefStub);
-        stub(formEntryPromptStub.getFormElement()).toReturn(iFormElementStub);
+        stub(formEntryPromptStub.getFormElement()).toReturn(iformElementStub);
         stub(formEntryPromptStub.getQuestion().getAppearanceAttr()).toReturn("no-calendar");
 
         DateWidget dateWidget = mock(DateWidget.class);

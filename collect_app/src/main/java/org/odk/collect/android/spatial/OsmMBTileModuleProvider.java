@@ -87,7 +87,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
         if (tileSource instanceof OsmMBTileSource) {
             this.tileSource = (OsmMBTileSource) tileSource;
         } else {
-//            logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
+        // logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
 
         }
     }
@@ -102,11 +102,11 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
                 return null;
             }
 
-            MapTile pTile = state.getMapTile();
+            MapTile mapTile = state.getMapTile();
             InputStream inputStream = null;
 
             try {
-                inputStream = tileSource.getInputStream(pTile);
+                inputStream = tileSource.getInputStream(mapTile);
 
                 if (inputStream != null) {
 
