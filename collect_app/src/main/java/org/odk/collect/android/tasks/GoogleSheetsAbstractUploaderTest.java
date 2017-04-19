@@ -1,15 +1,19 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.tasks;
+
+/**
+ * Created by simran on 4/19/2017.
+ */
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 
 
-public class RegexMatcher extends TypeSafeMatcher<String> {
+public class GoogleSheetsAbstractUploaderTest extends TypeSafeMatcher<String> {
 
     private  String regex;
 
-    public RegexMatcher( String regex) {
+    public GoogleSheetsAbstractUploaderTest(String regex) {
         this.regex = regex;
     }
 
@@ -24,7 +28,7 @@ public class RegexMatcher extends TypeSafeMatcher<String> {
     }
 
 
-    public static RegexMatcher matchesRegex(String regex) {
-        return new RegexMatcher(regex);
+    public static GoogleSheetsAbstractUploaderTest matchesRegex(String regex) {
+        return new GoogleSheetsAbstractUploaderTest(regex);
     }
 }

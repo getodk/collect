@@ -940,16 +940,12 @@ public abstract class GoogleSheetsAbstractUploader extends
      */
 
     private boolean isValidGoogleSheetsString(String name) {
-        Pattern p = Pattern
-                .compile(VALID_GOOGLE_SHEETS_ID);
-        Matcher m = p.matcher(name);
-        return m.matches();
+        return Pattern
+                .compile(VALID_GOOGLE_SHEETS_ID).matcher(name).matches();
     }
     public static boolean isValidLocation(String answer) {
-        Pattern p = Pattern
-                .compile(GPS_LOCATION);
-        Matcher m = p.matcher(answer);
-        return m.matches();
+        return Pattern
+                .compile(GPS_LOCATION).matcher(answer).matches();
     }
 
 
