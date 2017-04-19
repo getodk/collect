@@ -25,6 +25,7 @@ import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -99,6 +100,11 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.setOrientation(LinearLayout.HORIZONTAL);
         answerLayout.addView(mSignButton);
         answerLayout.addView(mErrorTextView);
+        Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
+        int width=display.getWidth();
+        int height=display.getHeight();
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
+        answerLayout.setLayoutParams(parms);
 
         // and hide the sign button if read-only
         if (prompt.isReadOnly()) {
