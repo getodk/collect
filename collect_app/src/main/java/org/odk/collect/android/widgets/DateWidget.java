@@ -213,6 +213,7 @@ public class DateWidget extends QuestionWidget {
                         setDate();
                     }
                 }, 0, 0, 0);
+        mDatePickerDialog.setCanceledOnTouchOutside(false);
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
