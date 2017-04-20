@@ -123,7 +123,7 @@ public class DateWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
 
-        if (mNullAnswer) {
+        if (mNullAnswer && !mShowCalendar) {
             return null;
         } else {
             LocalDateTime ldt = new LocalDateTime()
@@ -264,6 +264,10 @@ public class DateWidget extends QuestionWidget {
 
     public int getDay() {
         return mDatePickerDialog.getDatePicker().getDayOfMonth();
+    }
+
+    public boolean isNullAnswer() {
+        return mNullAnswer;
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {

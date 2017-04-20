@@ -55,38 +55,52 @@ public class DateTimeWidget extends QuestionWidget {
             linearLayout.addView(mTimeWidget);
         }
         addAnswerView(linearLayout);
+        if (mDateWidget.isCalendarShown()) {
+            mTimeWidget.setNullAnswer(false);
+            mTimeWidget.setTimeToCurrent();
+        }
     }
 
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
 
-        boolean hideDay = mDateWidget.isDayHidden();
-        boolean hideMonth = mDateWidget.isMonthHidden();
-        boolean showCalendar = mDateWidget.isCalendarShown();
+        if (mDateWidget.isNullAnswer() && mTimeWidget.isNullAnswer()) {
+            return null;
+        } else {
+            if (mTimeWidget.isNullAnswer()) {
+                mTimeWidget.setNullAnswer(false);
+                mTimeWidget.setTimeToCurrent();
+            }
+            boolean hideDay = mDateWidget.isDayHidden();
+            boolean hideMonth = mDateWidget.isMonthHidden();
+            boolean showCalendar = mDateWidget.isCalendarShown();
 
-        int year = mDateWidget.getYear();
-        int month = mDateWidget.getMonth();
-        int day = mDateWidget.getDay();
-        int hour = mTimeWidget.getHour();
-        int minute = mTimeWidget.getMinute();
+            int year = mDateWidget.getYear();
+            int month = mDateWidget.getMonth();
+            int day = mDateWidget.getDay();
+            int hour = mTimeWidget.getHour();
+            int minute = mTimeWidget.getMinute();
 
-        LocalDateTime ldt = new LocalDateTime()
-                .withYear(year)
-                .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
-                .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
-                .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
-                .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
-                .withSecondOfMinute(0);
+            LocalDateTime ldt = new LocalDateTime()
+                    .withYear(year)
+                    .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
+                    .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
+                    .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
+                    .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
+                    .withSecondOfMinute(0);
 
-        ldt = skipDaylightSavingGapIfExists(ldt);
-        return new DateTimeData(ldt.toDate());
+            ldt = skipDaylightSavingGapIfExists(ldt);
+            return new DateTimeData(ldt.toDate());
+        }
     }
 
     @Override
     public void clearAnswer() {
-        mDateWidget.clearAnswer();
-        mTimeWidget.clearAnswer();
+        if (!mDateWidget.isCalendarShown()) {
+            mDateWidget.clearAnswer();
+            mTimeWidget.clearAnswer();
+        }
     }
 
     @Override

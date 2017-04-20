@@ -72,8 +72,8 @@ public class TimeWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
         // use picker time, convert to today's date, store as utc
-        DateTime ldt = (new DateTime()).withTime(mHourOfDay, mMinuteOfHour, 0, 0);
-        return mNullAnswer ? null : new TimeData(ldt.toDate());
+        DateTime dt = (new DateTime()).withTime(mHourOfDay, mMinuteOfHour, 0, 0);
+        return mNullAnswer ? null : new TimeData(dt.toDate());
     }
 
     @Override
@@ -113,11 +113,10 @@ public class TimeWidget extends QuestionWidget {
             @Override
             public void onClick(View v) {
                 if (mNullAnswer) {
-                    DateTime dt = new DateTime();
-                    mHourOfDay = dt.getHourOfDay();
-                    mMinuteOfHour = dt.getMinuteOfHour();
+                    setTimeToCurrent();
+                } else {
+                    mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
                 }
-                mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
                 mTimePickerDialog.show();
             }
         });
@@ -170,6 +169,22 @@ public class TimeWidget extends QuestionWidget {
 
     public int getMinute() {
         return mMinuteOfHour;
+    }
+
+    public boolean isNullAnswer() {
+        return mNullAnswer;
+    }
+
+    public void setTimeToCurrent() {
+        DateTime dt = new DateTime();
+        mHourOfDay = dt.getHourOfDay();
+        mMinuteOfHour = dt.getMinuteOfHour();
+        mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+        setTime(mHourOfDay, mMinuteOfHour);
+    }
+
+    public void setNullAnswer(boolean value){
+        mNullAnswer = value;
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
