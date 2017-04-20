@@ -22,27 +22,37 @@ public final class MockedServerTestUtils {
         return server;
     }
 
-    public static void willRespond(MockWebServer server, String rawResponse) {
-        MockResponse response = new MockResponse();
+    public static void willRespond(MockWebServer server, String... rawResponses) {
+        for (String rawResponse : rawResponses) {
+            MockResponse response = new MockResponse();
 
-        String[] parts = rawResponse.split("\r\n\r\n", 2);
+            String[] parts = rawResponse.split("\r\n\r\n", 2);
 
-        String[] headerLines = parts[0].split("\r\n");
+            String[] headerLines = parts[0].split("\r\n");
 
-        response.setStatus(headerLines[0]);
+            response.setStatus(headerLines[0]);
 
-        for (int i = 1; i < headerLines.length; ++i) {
-            String[] headerParts = headerLines[i].split(": ", 2);
-            response.addHeader(headerParts[0], headerParts[1]);
+            for (int i = 1; i < headerLines.length; ++i) {
+                String[] headerParts = headerLines[i].split(": ", 2);
+                response.addHeader(headerParts[0], headerParts[1]);
+            }
+
+            response.setBody(parts[1]);
+
+            server.enqueue(response);
         }
-
-        response.setBody(parts[1]);
-
-        server.enqueue(response);
     }
 
-    public static RecordedRequest firstRequestFor(MockWebServer server) throws Exception {
+    public static RecordedRequest nextRequestFor(MockWebServer server) throws Exception {
         return server.takeRequest(1, TimeUnit.MILLISECONDS);
+    }
+
+    public static String join(String... strings) {
+        StringBuilder bob = new StringBuilder();
+        for (String s : strings) {
+            bob.append(s).append('\n');
+        }
+        return bob.toString();
     }
 
     private static void configAppFor(MockWebServer server) {

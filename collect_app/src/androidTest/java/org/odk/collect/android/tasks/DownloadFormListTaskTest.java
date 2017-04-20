@@ -12,8 +12,9 @@ import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.odk.collect.android.test.MockedServerTestUtils.firstRequestFor;
+import static org.odk.collect.android.test.MockedServerTestUtils.join;
 import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
+import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
 import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
@@ -39,7 +40,9 @@ public class DownloadFormListTaskTest {
         Map<String, FormDetails> fetched = new DownloadFormListTask().doInBackground();
 
         // then
-        RecordedRequest r = firstRequestFor(server);
+        RecordedRequest r = nextRequestFor(server);
+        assertEquals("GET", r.getMethod());
+        assertEquals("/formList", r.getPath());
         assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
         assertEquals("1.0", r.getHeader("X-OpenRosa-Version"));
         assertEquals("gzip", r.getHeader("Accept-Encoding"));
@@ -94,12 +97,4 @@ public class DownloadFormListTaskTest {
         "<downloadUrl>https://example.com/formXml?formId=two</downloadUrl>",
         "</xform>",
         "</xforms>");
-
-    private static String join(String... strings) {
-        StringBuilder bob = new StringBuilder();
-        for (String s : strings) {
-            bob.append(s).append('\n');
-        }
-        return bob.toString();
-    }
 }
