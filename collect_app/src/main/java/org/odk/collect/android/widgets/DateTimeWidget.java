@@ -55,7 +55,7 @@ public class DateTimeWidget extends QuestionWidget {
             linearLayout.addView(mTimeWidget);
         }
         addAnswerView(linearLayout);
-        if (mDateWidget.isCalendarShown()) {
+        if (mDateWidget.isCalendarShown() && mTimeWidget.getAnswer() == null) {
             mTimeWidget.setTimeToCurrent();
             mTimeWidget.setTimeLabel();
         }

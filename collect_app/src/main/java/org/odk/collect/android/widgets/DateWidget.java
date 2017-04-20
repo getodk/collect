@@ -213,10 +213,8 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    private void setDate(int year, int month, int dayOfMonth) {
-        mYear = year;
-        mMonth = month;
-        mDayOfMonth = dayOfMonth;
+    private void setDateLabel() {
+        mNullAnswer = false;
         mDateTextView.setText(getAnswer().getDisplayText());
     }
 
@@ -225,8 +223,10 @@ public class DateWidget extends QuestionWidget {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mNullAnswer = false;
-                        setDate(year, monthOfYear + 1, dayOfMonth);
+                        mYear = year;
+                        mMonth = monthOfYear + 1;
+                        mDayOfMonth = dayOfMonth;
+                        setDateLabel();
                     }
                 }, 0, 0, 0);
 
@@ -242,8 +242,11 @@ public class DateWidget extends QuestionWidget {
             }
         } else {
             DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            setDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
-            mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
+            mYear = dt.getYear();
+            mMonth = dt.getMonthOfYear();
+            mDayOfMonth = dt.getDayOfMonth();
+            setDateLabel();
+            mDatePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
         }
     }
 
