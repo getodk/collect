@@ -126,6 +126,11 @@ public class DateWidget extends QuestionWidget {
         if (mNullAnswer && !mShowCalendar) {
             return null;
         } else {
+            if (mShowCalendar) {
+                mYear = mDatePickerDialog.getDatePicker().getYear();
+                mMonth = mDatePickerDialog.getDatePicker().getMonth() + 1;
+                mDayOfMonth = mDatePickerDialog.getDatePicker().getDayOfMonth();
+            }
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(mYear)
                     .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mMonth)
