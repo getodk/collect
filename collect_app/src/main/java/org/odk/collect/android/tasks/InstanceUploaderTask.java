@@ -73,6 +73,44 @@ import timber.log.Timber;
  */
 public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
 
+    private static enum ContentTypeMapping {
+        XML("xml",  ContentType.TEXT_XML),
+      _3GPP("3gpp", ContentType.create("audio/3gpp")),
+       _3GP("3gp",  ContentType.create("video/3gpp")),
+        AVI("avi",  ContentType.create("video/avi")),
+        AMR("amr",  ContentType.create("audio/amr")),
+        CSV("csv",  ContentType.create("text/csv")),
+        JPG("jpg",  ContentType.create("image/jpeg")),
+        MP3("mp3",  ContentType.create("audio/mp3")),
+        MP4("mp4",  ContentType.create("video/mp4")),
+        OGA("oga",  ContentType.create("audio/ogg")),
+        OGG("ogg",  ContentType.create("audio/ogg")),
+        OGV("ogv",  ContentType.create("video/ogg")),
+        WAV("wav",  ContentType.create("audio/wav")),
+       WEBM("webm", ContentType.create("video/webm")),
+        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
+
+        private String extension;
+        private ContentType contentType;
+
+        ContentTypeMapping(String extension, ContentType contentType) {
+            this.extension = extension;
+            this.contentType = contentType;
+        }
+
+        public static ContentType of(String fileName) {
+            String extension = getFileExtension(fileName);
+
+            for (ContentTypeMapping m : values()) {
+                if (m.extension.equals(extension)) {
+                    return m.contentType;
+                }
+            }
+
+            return null;
+        }
+    }
+
     // it can take up to 27 seconds to spin up Aggregate
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
@@ -278,21 +316,17 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         for (File f : allFiles) {
             String fileName = f.getName();
 
-            int dotIndex = fileName.lastIndexOf(".");
-            String extension = "";
-            if (dotIndex != -1) {
-                extension = fileName.substring(dotIndex + 1);
-            }
-
             if (fileName.startsWith(".")) {
-                // ignore invisible files
-                continue;
-            }
-            if (fileName.equals(instanceFile.getName())) {
+                continue; // ignore invisible files
+            } else if (fileName.equals(instanceFile.getName())) {
                 continue; // the xml file has already been added
             } else if (fileName.equals(submissionFile.getName())) {
                 continue; // the xml file has already been added
-            } else if (openRosaServer) {
+            }
+
+            String extension = getFileExtension(fileName);
+
+            if (openRosaServer) {
                 files.add(f);
             } else if (extension.equals("jpg")) { // legacy 0.9x
                 files.add(f);
@@ -333,53 +367,20 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
             for (; j < files.size(); j++) {
                 File f = files.get(j);
-                String fileName = f.getName();
-                int idx = fileName.lastIndexOf(".");
-                String extension = "";
-                if (idx != -1) {
-                    extension = fileName.substring(idx + 1);
-                }
-                String contentType = m.getMimeTypeFromExtension(extension);
 
                 // we will be processing every one of these, so
                 // we only need to deal with the content type determination...
-                if (extension.equals("xml")) {
-                    fb = new FileBody(f, ContentType.TEXT_XML);
-                } else if (extension.equals("3gpp")) {
-                    fb = new FileBody(f, ContentType.create("audio/3gpp"));
-                } else if (extension.equals("3gp")) {
-                    fb = new FileBody(f, ContentType.create("video/3gpp"));
-                } else if (extension.equals("avi")) {
-                    fb = new FileBody(f, ContentType.create("video/avi"));
-                } else if (extension.equals("amr")) {
-                    fb = new FileBody(f, ContentType.create("audio/amr"));
-                } else if (extension.equals("csv")) {
-                    fb = new FileBody(f, ContentType.create("text/csv"));
-                } else if (extension.equals("jpg")) {
-                    fb = new FileBody(f, ContentType.create("image/jpeg"));
-                } else if (extension.equals("mp3")) {
-                    fb = new FileBody(f, ContentType.create("audio/mp3"));
-                } else if (extension.equals("mp4")) {
-                    fb = new FileBody(f, ContentType.create("video/mp4"));
-                } else if (extension.equals("oga")) {
-                    fb = new FileBody(f, ContentType.create("audio/ogg"));
-                } else if (extension.equals("ogg")) {
-                    fb = new FileBody(f, ContentType.create("audio/ogg"));
-                } else if (extension.equals("ogv")) {
-                    fb = new FileBody(f, ContentType.create("video/ogg"));
-                } else if (extension.equals("wav")) {
-                    fb = new FileBody(f, ContentType.create("audio/wav"));
-                } else if (extension.equals("webm")) {
-                    fb = new FileBody(f, ContentType.create("video/webm"));
-                } else if (extension.equals("xls")) {
-                    fb = new FileBody(f, ContentType.create("application/vnd.ms-excel"));
-                } else if (contentType != null) {
-                    fb = new FileBody(f, ContentType.create(contentType));
-                } else {
-                    contentType = "application/octet-stream";
-                    fb = new FileBody(f, ContentType.APPLICATION_OCTET_STREAM);
-                    Timber.w("Unrecognised content type '%s' for file: %s", contentType, f.getName());
+                ContentType contentType = ContentTypeMapping.of(f.getName());
+                if (contentType == null) {
+                    String mime = m.getMimeTypeFromExtension(getFileExtension(f.getName()));
+                    if (mime != null) {
+                        contentType = ContentType.create(mime);
+                    } else {
+                        Timber.w("No specific MIME type found for file: %s", f.getName());
+                        contentType = ContentType.APPLICATION_OCTET_STREAM;
+                    }
                 }
+                fb = new FileBody(f, contentType);
                 builder.addPart(f.getName(), fb);
                 byteCount += f.length();
                 Timber.i("added file of type '%s' %s", contentType, f.getName());
@@ -679,5 +680,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         synchronized (this) {
             mStateListener = sl;
         }
+    }
+
+    private static String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex == -1) {
+            return "";
+        }
+        return fileName.substring(dotIndex + 1).toLowerCase();
     }
 }
