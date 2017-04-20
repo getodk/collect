@@ -345,90 +345,59 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 // we only need to deal with the content type determination...
                 if (extension.equals("xml")) {
                     fb = new FileBody(f, ContentType.TEXT_XML);
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added xml file %s", f.getName());
                 } else if (extension.equals("3gpp")) {
                     fb = new FileBody(f, ContentType.create("audio/3gpp"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("3gp")) {
                     fb = new FileBody(f, ContentType.create("video/3gpp"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("avi")) {
                     fb = new FileBody(f, ContentType.create("video/avi"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("amr")) {
                     fb = new FileBody(f, ContentType.create("audio/amr"));
-                    builder.addPart(f.getName(), fb);
                     Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("csv")) {
                     fb = new FileBody(f, ContentType.create("text/csv"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added csv file %s", f.getName());
                 } else if (extension.equals("jpg")) {
                     fb = new FileBody(f, ContentType.create("image/jpeg"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added image file %s", f.getName());
                 } else if (extension.equals("mp3")) {
                     fb = new FileBody(f, ContentType.create("audio/mp3"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("mp4")) {
                     fb = new FileBody(f, ContentType.create("video/mp4"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("oga")) {
                     fb = new FileBody(f, ContentType.create("audio/ogg"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("ogg")) {
                     fb = new FileBody(f, ContentType.create("audio/ogg"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("ogv")) {
                     fb = new FileBody(f, ContentType.create("video/ogg"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("wav")) {
                     fb = new FileBody(f, ContentType.create("audio/wav"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("webm")) {
                     fb = new FileBody(f, ContentType.create("video/webm"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("xls")) {
                     fb = new FileBody(f, ContentType.create("application/vnd.ms-excel"));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added xls file %s", f.getName());
                 } else if (contentType != null) {
                     fb = new FileBody(f, ContentType.create(contentType));
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.i("added recognized filetype (%s) %s", contentType, f.getName());
                 } else {
                     contentType = "application/octet-stream";
                     fb = new FileBody(f, ContentType.APPLICATION_OCTET_STREAM);
-                    builder.addPart(f.getName(), fb);
-                    byteCount += f.length();
                     Timber.w("added unrecognized file (%s) %s", contentType, f.getName());
                 }
+                builder.addPart(f.getName(), fb);
+                byteCount += f.length();
 
                 // we've added at least one attachment to the request...
                 if (j + 1 < files.size()) {
