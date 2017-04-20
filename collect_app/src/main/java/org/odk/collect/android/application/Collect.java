@@ -17,6 +17,7 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -50,6 +51,7 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -87,6 +89,9 @@ public class Collect extends Application {
     private FormController mFormController = null;
     private ExternalDataManager externalDataManager;
     private Tracker mTracker;
+
+    public static String defaultSysLanguage;
+    public static boolean isUsingSysLanguage = false;
 
     public static Collect getInstance() {
         return singleton;
@@ -233,7 +238,7 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
-        new LocaleHelper().updateLocale(this);
+        defaultSysLanguage = Locale.getDefault().getLanguage();
         singleton = this;
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -266,6 +271,16 @@ public class Collect extends Application {
             mTracker = analytics.newTracker(R.xml.global_tracker);
         }
         return mTracker;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        defaultSysLanguage = newConfig.locale.getLanguage();
+        if (!Collect.isUsingSysLanguage) {
+            new LocaleHelper().updateLocale(this);
+        }
     }
 
     private static class CrashReportingTree extends Timber.Tree {

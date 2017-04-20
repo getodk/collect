@@ -6,6 +6,8 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.Locale;
@@ -20,17 +22,12 @@ import java.util.TreeMap;
 public class LocaleHelper {
 
     public void updateLocale(Context context) {
-        //Get device system language
-        String systemLanguage = Locale.getDefault().getDisplayLanguage();
-        String localeCode;
-        TreeMap<String, String> supportedLanguages = getEntryListValues();
-        if (supportedLanguages.containsKey(systemLanguage)) {
-            localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                    .getString(PreferenceKeys.KEY_APP_LANGUAGE, supportedLanguages.get(systemLanguage));
-        } else {
-            localeCode = PreferenceManager.getDefaultSharedPreferences(context)
+       String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
                     .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
-        }
+        updateLocale(context, localeCode);
+    }
+
+    public void updateLocale(Context context, String localeCode) {
         Locale locale = getLocale(localeCode);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
@@ -47,6 +44,8 @@ public class LocaleHelper {
     public TreeMap<String, String> getEntryListValues() {
         //Holds language as key and language code as value
         TreeMap<String, String> languageList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        languageList.put(Collect.getInstance().getApplicationContext().getResources()
+                .getString(R.string.use_phone_locale), Collect.defaultSysLanguage);
         for (String language : ApplicationConstants.TRANSLATIONS_AVAILABLE) {
             Locale locale = getLocale(language);
             languageList.put(locale.getDisplayName(locale), language);
