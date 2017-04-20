@@ -43,6 +43,7 @@ import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
@@ -97,9 +98,9 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         } else { // Create a List with items that are relevant to the search text
             List<SelectChoice> searchedItems = new ArrayList<SelectChoice>();
             List<Integer> tagList = new ArrayList<Integer>();
-            searchStr = searchStr.toLowerCase();
+            searchStr = searchStr.toLowerCase(Locale.US);
             for (int i = 0; i < mItems.size(); i++) {
-                String choiceText = prompt.getSelectChoiceText(mItems.get(i)).toLowerCase();
+                String choiceText = prompt.getSelectChoiceText(mItems.get(i)).toLowerCase(Locale.US);
                 if (choiceText.contains(searchStr)) {
                     searchedItems.add(mItems.get(i));
                     tagList.add(i);

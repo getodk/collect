@@ -11,11 +11,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class InstanceListActivity extends AppListActivity {
     protected String getSortingOrder() {
-        if (mSelectedSortingOrder == null) {
-            restoreSelectedSortingOrder();
-        }
         String sortingOrder = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + " DESC";
-        switch (mSelectedSortingOrder) {
+        switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
                 sortingOrder = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + " DESC";
                 break;
