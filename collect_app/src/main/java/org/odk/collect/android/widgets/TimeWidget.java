@@ -61,7 +61,7 @@ public class TimeWidget extends QuestionWidget {
         createTimePickerDialog();
         addViews();
     }
-    
+
     @Override
     public void clearAnswer() {
         mNullAnswer = true;

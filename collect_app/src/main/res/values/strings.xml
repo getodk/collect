@@ -502,4 +502,5 @@
 <string name="select_date">Select date</string>
 <string name="select_time">Select time</string>
 <string name="no_time_selected">No time selected</string>
+<string name="no_date_selected">No date selected</string>
 </resources>

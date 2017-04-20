@@ -61,6 +61,8 @@ public class DateWidget extends QuestionWidget {
     private int mMonth;
     private int mDayOfMonth;
 
+    private boolean mNullAnswer;
+
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -105,17 +107,10 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    /**
-     * Resets date to today.
-     */
     @Override
     public void clearAnswer() {
-        DateTime dt = new DateTime();
-        mYear = dt.getYear();
-        mMonth = dt.getMonthOfYear();
-        mDayOfMonth = dt.getDayOfMonth();
-        mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
-        setDate();
+        mNullAnswer = true;
+        mDateTextView.setText(R.string.no_date_selected);
     }
 
     @Override
@@ -129,7 +124,7 @@ public class DateWidget extends QuestionWidget {
                 .withHourOfDay(0)
                 .withMinuteOfHour(0);
 
-        return new DateData(ldt.toDate());
+        return mNullAnswer ? null : new DateData(ldt.toDate());
     }
 
     @Override
@@ -168,6 +163,12 @@ public class DateWidget extends QuestionWidget {
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mNullAnswer) {
+                    DateTime dt = new DateTime();
+                    mYear = dt.getYear();
+                    mMonth = dt.getMonthOfYear();
+                    mDayOfMonth = dt.getDayOfMonth();
+                }
                 mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
                 mDatePickerDialog.show();
             }
@@ -207,6 +208,7 @@ public class DateWidget extends QuestionWidget {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mNullAnswer = false;
                         mYear = year;
                         mMonth = monthOfYear + 1;
                         mDayOfMonth = dayOfMonth;
@@ -214,17 +216,14 @@ public class DateWidget extends QuestionWidget {
                     }
                 }, 0, 0, 0);
 
-        // If there's an answer, use it.
-        if (mPrompt.getAnswerValue() != null) {
-            // create a new date from date object using default time zone
-            DateTime ldt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            mYear = ldt.getYear();
-            mMonth = ldt.getMonthOfYear();
-            mDayOfMonth = ldt.getDayOfMonth();
-            setDate();
-        } else {
-            // create date widget with current time as of right now
+        if (mPrompt.getAnswerValue() == null) {
             clearAnswer();
+        } else {
+            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
+            mYear = dt.getYear();
+            mMonth = dt.getMonthOfYear();
+            mDayOfMonth = dt.getDayOfMonth();
+            setDate();
         }
     }
 
