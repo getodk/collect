@@ -19,7 +19,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.test.MockedServerTestUtils.firstRequestFor;
+import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
 import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
@@ -45,7 +45,7 @@ public class WebUtilsTest {
         doRequest("/some-path");
 
         // then
-        RecordedRequest r = firstRequestFor(server);
+        RecordedRequest r = nextRequestFor(server);
         assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
         assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
     }
@@ -57,7 +57,7 @@ public class WebUtilsTest {
 
         // then
         assertMatches("Dalvik/.* org.odk.collect.android/.*",
-                firstRequestFor(server).getHeader("User-Agent"));
+                nextRequestFor(server).getHeader("User-Agent"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class WebUtilsTest {
 
         // then
         assertEquals("1.0",
-                firstRequestFor(server).getHeader("X-OpenRosa-Version"));
+                nextRequestFor(server).getHeader("X-OpenRosa-Version"));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class WebUtilsTest {
 
         // then
         assertEquals("gzip",
-                firstRequestFor(server).getHeader("Accept-Encoding"));
+                nextRequestFor(server).getHeader("Accept-Encoding"));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class WebUtilsTest {
         WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
 
         // then
-        assertNull(firstRequestFor(server).getHeader("Authorization"));
+        assertNull(nextRequestFor(server).getHeader("Authorization"));
     }
 
     @Test
