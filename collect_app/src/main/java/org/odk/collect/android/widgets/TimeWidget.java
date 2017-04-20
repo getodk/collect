@@ -152,6 +152,7 @@ public class TimeWidget extends QuestionWidget {
                         setTime(hourOfDay, minuteOfHour);
                     }
                 }, 0, 0);
+        mTimePickerDialog.setCanceledOnTouchOutside(false);
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
