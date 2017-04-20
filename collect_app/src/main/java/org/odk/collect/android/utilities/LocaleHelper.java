@@ -6,7 +6,6 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.Locale;
