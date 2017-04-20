@@ -9,7 +9,6 @@ import android.util.DisplayMetrics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.TreeMap;
 
@@ -41,19 +40,14 @@ public class LocaleHelper {
         context.getApplicationContext().getResources().updateConfiguration(configuration, displayMetrics);
     }
 
-    public HashMap<String, String> getEntryListValues(Context context) {
+    public TreeMap<String, String> getEntryListValues() {
         //Holds language as key and language code as value
         TreeMap<String, String> languageList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         for (String language : ApplicationConstants.TRANSLATIONS_AVAILABLE) {
             Locale locale = getLocale(language);
             languageList.put(locale.getDisplayName(locale), language);
         }
-        HashMap<String, String> finalList = new HashMap<>();
-        //Insert "Use phone locale" as first option
-        finalList.put(context.getResources()
-                .getString(R.string.use_phone_locale), "");
-        finalList.putAll(languageList);
-        return finalList;
+        return languageList;
     }
 
     private Locale getLocale(String splitLocaleCode) {
