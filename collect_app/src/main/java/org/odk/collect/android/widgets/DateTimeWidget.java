@@ -56,8 +56,8 @@ public class DateTimeWidget extends QuestionWidget {
         }
         addAnswerView(linearLayout);
         if (mDateWidget.isCalendarShown()) {
-            mTimeWidget.setNullAnswer(false);
             mTimeWidget.setTimeToCurrent();
+            mTimeWidget.setTimeLabel();
         }
     }
 
@@ -69,8 +69,8 @@ public class DateTimeWidget extends QuestionWidget {
             return null;
         } else {
             if (mTimeWidget.isNullAnswer()) {
-                mTimeWidget.setNullAnswer(false);
                 mTimeWidget.setTimeToCurrent();
+                mTimeWidget.setTimeLabel();
             }
             boolean hideDay = mDateWidget.isDayHidden();
             boolean hideMonth = mDateWidget.isMonthHidden();

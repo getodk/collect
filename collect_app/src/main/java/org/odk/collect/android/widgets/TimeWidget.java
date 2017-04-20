@@ -137,10 +137,8 @@ public class TimeWidget extends QuestionWidget {
         addAnswerView(linearLayout);
     }
 
-    private void setTime(int hourOfDay, int minuteOfHour) {
-        mHourOfDay = hourOfDay;
-        mMinuteOfHour = minuteOfHour;
-
+    public void setTimeLabel() {
+        mNullAnswer = false;
         mTimeTextView.setText(getAnswer().getDisplayText());
     }
 
@@ -149,8 +147,9 @@ public class TimeWidget extends QuestionWidget {
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-                        mNullAnswer = false;
-                        setTime(hourOfDay, minuteOfHour);
+                        mHourOfDay = hourOfDay;
+                        mMinuteOfHour = minuteOfHour;
+                        setTimeLabel();
                     }
                 }, 0, 0);
 
@@ -158,7 +157,9 @@ public class TimeWidget extends QuestionWidget {
             clearAnswer();
         } else {
             DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            setTime(dt.getHourOfDay(), dt.getMinuteOfHour());
+            mHourOfDay = dt.getHourOfDay();
+            mMinuteOfHour = dt.getMinuteOfHour();
+            setTimeLabel();
             mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
         }
     }
@@ -180,11 +181,6 @@ public class TimeWidget extends QuestionWidget {
         mHourOfDay = dt.getHourOfDay();
         mMinuteOfHour = dt.getMinuteOfHour();
         mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
-        setTime(mHourOfDay, mMinuteOfHour);
-    }
-
-    public void setNullAnswer(boolean value){
-        mNullAnswer = value;
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
