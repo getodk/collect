@@ -68,6 +68,7 @@ public class DateWidget extends QuestionWidget {
 
         setGravity(Gravity.START);
 
+        readAppearance();
         createDateButton();
         createDateTextView();
         createDatePickerDialog();
@@ -79,7 +80,7 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    private void hideDayFieldIfNotInFormat() {
+    private void readAppearance() {
         String appearance = mPrompt.getQuestion().getAppearanceAttr();
         if ("month-year".equals(appearance)) {
             mHideDay = true;
@@ -89,6 +90,11 @@ public class DateWidget extends QuestionWidget {
         } else if (!"no-calendar".equals(appearance)) {
             mHideDay = true;
             mShowCalendar = true;
+        }
+    }
+
+    private void hideDayFieldIfNotInFormat() {
+        if (mShowCalendar) {
             mDatePickerDialog.getDatePicker().setCalendarViewShown(true);
             CalendarView cv = mDatePickerDialog.getDatePicker().getCalendarView();
             cv.setShowWeekNumber(false);
@@ -117,14 +123,17 @@ public class DateWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
 
-        LocalDateTime ldt = new LocalDateTime()
-                .withYear(mYear)
-                .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mMonth)
-                .withDayOfMonth((!mShowCalendar && (mHideMonth || mHideDay)) ? 1 : mDayOfMonth)
-                .withHourOfDay(0)
-                .withMinuteOfHour(0);
-
-        return mNullAnswer ? null : new DateData(ldt.toDate());
+        if (mNullAnswer) {
+            return null;
+        } else {
+            LocalDateTime ldt = new LocalDateTime()
+                    .withYear(mYear)
+                    .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mMonth)
+                    .withDayOfMonth((!mShowCalendar && (mHideMonth || mHideDay)) ? 1 : mDayOfMonth)
+                    .withHourOfDay(0)
+                    .withMinuteOfHour(0);
+            return new DateData(ldt.toDate());
+        }
     }
 
     @Override
@@ -199,7 +208,10 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    private void setDate() {
+    private void setDate(int year, int month, int dayOfMonth) {
+        mYear = year;
+        mMonth = month;
+        mDayOfMonth = dayOfMonth;
         mDateTextView.setText(getAnswer().getDisplayText());
     }
 
@@ -209,21 +221,24 @@ public class DateWidget extends QuestionWidget {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         mNullAnswer = false;
-                        mYear = year;
-                        mMonth = monthOfYear + 1;
-                        mDayOfMonth = dayOfMonth;
-                        setDate();
+                        setDate(year, monthOfYear + 1, dayOfMonth);
                     }
                 }, 0, 0, 0);
 
         if (mPrompt.getAnswerValue() == null) {
-            clearAnswer();
+            if (mShowCalendar) {
+                DateTime dt = new DateTime();
+                mYear = dt.getYear();
+                mMonth = dt.getMonthOfYear();
+                mDayOfMonth = dt.getDayOfMonth();
+                mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
+            } else {
+                clearAnswer();
+            }
         } else {
             DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            mYear = dt.getYear();
-            mMonth = dt.getMonthOfYear();
-            mDayOfMonth = dt.getDayOfMonth();
-            setDate();
+            setDate(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth());
+            mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
         }
     }
 

@@ -151,8 +151,6 @@ public class TimeWidget extends QuestionWidget {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
                         mNullAnswer = false;
-                        mHourOfDay = hourOfDay;
-                        mMinuteOfHour = minuteOfHour;
                         setTime(hourOfDay, minuteOfHour);
                     }
                 }, 0, 0);
