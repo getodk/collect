@@ -41,11 +41,12 @@ public class LocaleHelper {
         context.getApplicationContext().getResources().updateConfiguration(configuration, displayMetrics);
     }
 
-    public TreeMap<String, String> getEntryListValues() {
+    public TreeMap<String, String> getEntryListValues(Context context) {
         //Holds language as key and language code as value
         TreeMap<String, String> languageList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        languageList.put(Collect.getInstance().getApplicationContext().getResources()
-                .getString(R.string.use_phone_locale), Collect.defaultSysLanguage);
+        //Insert "Use phone locale" as first option
+        languageList.put(context.getResources()
+                .getString(R.string.use_phone_locale), "");
         for (String language : ApplicationConstants.TRANSLATIONS_AVAILABLE) {
             Locale locale = getLocale(language);
             languageList.put(locale.getDisplayName(locale), language);

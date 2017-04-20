@@ -159,7 +159,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         if (pref != null) {
             final LocaleHelper localeHelper = new LocaleHelper();
-            TreeMap<String, String> languageList = localeHelper.getEntryListValues();
+            TreeMap<String, String> languageList = localeHelper.getEntryListValues(getActivity());
             int length = languageList.size();
             pref.setEntryValues(languageList.values().toArray(new String[length]));
             pref.setEntries(languageList.keySet().toArray(new String[length]));

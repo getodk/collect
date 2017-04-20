@@ -91,7 +91,7 @@ public class Collect extends Application {
     private Tracker mTracker;
 
     public static String defaultSysLanguage;
-    public static boolean isUsingSysLanguage = false;
+    public static boolean isUsingSysLanguage = true;
 
     public static Collect getInstance() {
         return singleton;
