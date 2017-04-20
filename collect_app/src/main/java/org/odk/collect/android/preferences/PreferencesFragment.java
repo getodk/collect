@@ -21,7 +21,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.LocaleHelper;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
@@ -159,7 +159,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
         if (pref != null) {
             final LocaleHelper localeHelper = new LocaleHelper();
-            TreeMap<String, String> languageList = localeHelper.getEntryListValues(getActivity());
+            HashMap<String, String> languageList = localeHelper.getEntryListValues(getActivity());
             int length = languageList.size();
             pref.setEntryValues(languageList.values().toArray(new String[length]));
             pref.setEntries(languageList.keySet().toArray(new String[length]));
