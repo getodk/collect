@@ -676,8 +676,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         Cursor results = null;
                         try {
                             results =
-                                    new InstancesDao().getInstancesCursor(selection.toString()
-                                            , selectionArgs);
+                                    new InstancesDao().getInstancesCursor(selection.toString(),
+                                            selectionArgs);
                             if (results.getCount() > 0) {
                                 Long[] toDelete = new Long[results.getCount()];
                                 results.moveToPosition(-1);

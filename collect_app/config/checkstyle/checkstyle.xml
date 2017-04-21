@@ -95,11 +95,11 @@
             <property name="tokens" value="DOT"/>
             <property name="option" value="nl"/>
         </module>
-        <!-- <module name="SeparatorWrap">
+        <module name="SeparatorWrap">
             <property name="id" value="SeparatorWrapComma"/>
             <property name="tokens" value="COMMA"/>
             <property name="option" value="EOL"/>
-        </module> -->
+        </module>
         <!-- <module name="PackageName">
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
             <message key="name.invalidPattern"
