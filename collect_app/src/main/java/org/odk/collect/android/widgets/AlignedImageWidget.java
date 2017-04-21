@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -34,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -43,6 +41,8 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+
+import timber.log.Timber;
 
 import java.io.File;
 
@@ -68,8 +68,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
     private static final String FILE_PATH_EXTRA = "filePath";
 
-    private final static String t = "AlignedImageWidget";
-
     private Button mCaptureButton;
     private Button mChooseButton;
     private ImageView mImageView;
@@ -89,7 +87,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         String alignments = appearance.substring(appearance.indexOf(":") + 1);
         String[] splits = alignments.split(" ");
         if (splits.length != 6) {
-            Log.w(t, "Only have " + splits.length + " alignment values");
+            Timber.w("Only have %d alignment values", splits.length);
         }
         for (int i = 0; i < 6; ++i) {
             if (splits.length <= i) {
@@ -241,7 +239,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                     Uri uri = MediaUtils.getImageUriFromMediaProvider(
                             mInstanceFolder + File.separator + mBinaryName);
                     if (uri != null) {
-                        Log.i(t, "setting view path to: " + uri);
+                        Timber.i("setting view path to: %d", uri.toString());
                         i.setDataAndType(uri, "image/*");
                         try {
                             getContext().startActivity(i);
@@ -269,7 +267,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         // delete from media provider
         int del = MediaUtils.deleteImageFileFromMediaProvider(
                 mInstanceFolder + File.separator + name);
-        Log.i(t, "Deleted " + del + " rows from media content provider");
+        Timber.i("Deleted %d rows from media content provider", del);
     }
 
 
@@ -316,12 +314,12 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting image returned uri = " + imageURI.toString());
+            Timber.i("Inserting image returned uri = %s", imageURI.toString());
 
             mBinaryName = newImage.getName();
-            Log.i(t, "Setting current answer to " + newImage.getName());
+            Timber.i("Setting current answer to %s", newImage.getName());
         } else {
-            Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
+            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
         Collect.getInstance().getFormController().setIndexWaitingForData(null);

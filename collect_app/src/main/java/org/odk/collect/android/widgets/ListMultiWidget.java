@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -65,7 +64,6 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListMultiWidget extends QuestionWidget {
-    private static final String t = "ListMultiWidget";
 
     // Holds the entire question and answers. It is a horizontally aligned linear layout
     // needed because it is created in the super() constructor via addQuestionText() call.
@@ -197,10 +195,9 @@ public class ListMultiWidget extends QuestionWidget {
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
+                            Timber.e(errorMsg);
                             missingImage = new TextView(getContext());
                             missingImage.setText(errorMsg);
-
                             missingImage.setPadding(2, 2, 2, 2);
                             missingImage.setId(labelId);
                         }

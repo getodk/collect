@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -51,6 +50,8 @@ import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
+
+import timber.log.Timber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -239,7 +240,7 @@ public class GridMultiWidget extends QuestionWidget {
                     missingImage.setText(choices[i]);
                 } else {
                     // errorMsg is only set when an error has occurred
-                    Log.e("GridMultiWidget", errorMsg);
+                    Timber.e(errorMsg);
                     missingImage.setText(errorMsg);
                 }
 

@@ -25,7 +25,6 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -56,7 +55,6 @@ import timber.log.Timber;
  * @author carlhartung
  */
 public class MediaLayout extends RelativeLayout implements OnClickListener {
-    private static final String t = "AVTLayout";
 
     private String mSelectionDesignator;
     private FormIndex mIndex;
@@ -269,7 +267,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
                 if (errorMsg != null) {
                     // errorMsg is only set when an error has occurred
-                    Log.e(t, errorMsg);
+                    Timber.e(errorMsg);
                     mMissingImage = new TextView(getContext());
                     mMissingImage.setText(errorMsg);
                     mMissingImage.setPadding(10, 10, 10, 10);
@@ -417,7 +415,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // No picture
             dividerParams.addRule(RelativeLayout.BELOW, mView_Text.getId());
         } else {
-            Log.e(t, "Tried to add divider to uninitialized ATVWidget");
+            Timber.e("Tried to add divider to uninitialized ATVWidget");
             return;
         }
         addView(v, dividerParams);

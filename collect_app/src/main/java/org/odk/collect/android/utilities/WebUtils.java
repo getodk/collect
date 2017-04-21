@@ -18,7 +18,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
-import android.util.Log;
+
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
@@ -75,7 +75,7 @@ import timber.log.Timber;
  * @author mitchellsundt@gmail.com
  */
 public final class WebUtils {
-    public static final String t = "WebUtils";
+
 
     private static final String USER_AGENT_HEADER = "User-Agent";
 
@@ -108,7 +108,7 @@ public final class WebUtils {
     public static final void clearAllCredentials() {
         CredentialsProvider credsProvider = Collect.getInstance()
                 .getCredentialsProvider();
-        Log.i(t, "clearAllCredentials");
+        Timber.i("clearAllCredentials");
         credsProvider.clear();
     }
 
@@ -133,7 +133,7 @@ public final class WebUtils {
     public static final void clearHostCredentials(String host) {
         CredentialsProvider credsProvider = Collect.getInstance()
                 .getCredentialsProvider();
-        Log.i(t, "clearHostCredentials: " + host);
+        Timber.i("clearHostCredentials: %s", host);
         List<AuthScope> asList = buildAuthScopes(host);
         for (AuthScope a : asList) {
             credsProvider.setCredentials(a, null);
@@ -151,8 +151,8 @@ public final class WebUtils {
         // host...
         clearHostCredentials(host);
         if (username != null && username.trim().length() != 0) {
-            Log.i(t, "adding credential for host: " + host + " username:"
-                    + username);
+            Timber.i("adding credential for host: %s" + host + " username: %s",
+                     host, username);
             Credentials c = new UsernamePasswordCredentials(username, password);
             addCredentials(c, host);
         }
@@ -353,7 +353,7 @@ public final class WebUtils {
 
             if (entity == null) {
                 String error = "No entity body returned from: " + u.toString();
-                Log.e(t, error);
+                Timber.e(error);
                 return new DocumentFetchResult(error, 0);
             }
 
@@ -366,7 +366,7 @@ public final class WebUtils {
                         + u.toString()
                         + " is not text/xml.  This is often caused a network proxy.  Do you need "
                         + "to login to your network?";
-                Log.e(t, error);
+                Timber.e(error);
                 return new DocumentFetchResult(error, 0);
             }
             // parse response
@@ -444,8 +444,8 @@ public final class WebUtils {
                     b.append(h.getValue());
                 }
                 if (!versionMatch) {
-                    Log.w(t, WebUtils.OPEN_ROSA_VERSION_HEADER
-                            + " unrecognized version(s): " + b.toString());
+                    Timber.w("%s unrecognized version(s): %s",
+                            WebUtils.OPEN_ROSA_VERSION_HEADER, b.toString());
                 }
             }
             return new DocumentFetchResult(doc, isOR);
