@@ -308,8 +308,6 @@ public class GridWidget extends QuestionWidget {
                     }
                     selected[i] = false;
                     imageViews[i].setBackgroundColor(0);
-                    if (imageViews[i] != null) {
-                    }
                 }
                 selected[position] = true;
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,

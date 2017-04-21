@@ -176,8 +176,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
             MyDrive = false;
 
-            if (isDeviceOnline()) {
-            } else {
+            if (!isDeviceOnline()) {
                 createAlertDialog(getString(R.string.no_connection));
             }
         }

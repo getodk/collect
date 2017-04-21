@@ -516,8 +516,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             setupManualMode();
         } else if (TRACE_MODE == 1) {
             setupAutomaticMode();
-        } else {
-
         }
         play_button.setVisibility(View.GONE);
         pause_button.setVisibility(View.VISIBLE);

@@ -52,10 +52,10 @@
         <module name="AvoidStarImport" />
         <module name="OneTopLevelClass"/>
         <!-- <module name="NoLineWrap"/> -->
-        <!-- <module name="EmptyBlock">
+        <module name="EmptyBlock">
             <property name="option" value="TEXT"/>
             <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
-        </module> -->
+        </module>
         <module name="NeedBraces" />
         <module name="LeftCurly">
             <property name="maxLineLength" value="100"/>
