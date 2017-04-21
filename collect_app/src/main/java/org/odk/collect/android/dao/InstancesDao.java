@@ -269,8 +269,8 @@ public class InstancesDao {
             count -= selectionArgs.length;
             selection.append(")");
             Collect.getInstance().getContentResolver()
-                    .delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI
-                            , selection.toString(), selectionArgs);
+                    .delete(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                            selection.toString(), selectionArgs);
 
         }
     }
