@@ -74,8 +74,8 @@ import timber.log.Timber;
 
 public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener,
         EasyPermissions.PermissionCallbacks {
-    private final static int PROGRESS_DIALOG = 1;
-    private final static int GOOGLE_USER_DIALOG = 3;
+    private static final int PROGRESS_DIALOG = 1;
+    private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
     protected GoogleAccountCredential mCredential;

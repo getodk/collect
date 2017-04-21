@@ -69,7 +69,7 @@ public class MapHelper {
     private int selected_layer = 0;
 
     public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
-    private final static String slash = File.separator;
+    private static final String slash = File.separator;
 
     private TilesOverlay osmTileOverlay;
     private TileOverlay googleTileOverlay;

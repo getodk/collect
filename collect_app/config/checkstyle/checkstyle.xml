@@ -86,7 +86,7 @@
         <!-- <module name="MissingSwitchDefault"/> -->
         <!-- <module name="FallThrough"/> -->
         <!-- <module name="UpperEll"/> -->
-        <!-- <module name="ModifierOrder"/> -->
+        <module name="ModifierOrder"/>
         <!-- <module name="EmptyLineSeparator">
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
         </module> -->

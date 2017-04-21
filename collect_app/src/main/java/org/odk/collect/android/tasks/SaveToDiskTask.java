@@ -47,7 +47,7 @@ import java.io.RandomAccessFile;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
-    private final static String t = "SaveToDiskTask";
+    private static final String t = "SaveToDiskTask";
 
     private FormSavedListener mSavedListener;
     private Boolean mSave;

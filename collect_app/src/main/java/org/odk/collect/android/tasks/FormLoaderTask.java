@@ -72,7 +72,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
-    private final static String t = "FormLoaderTask";
+    private static final String t = "FormLoaderTask";
     private static final String ITEMSETS_CSV = "itemsets.csv";
 
     private FormLoaderListener mStateListener;

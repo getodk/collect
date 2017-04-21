@@ -52,7 +52,7 @@ import java.io.File;
  * @author BehrAtherton@gmail.com
  */
 public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "SignatureWidget";
+    private static final String t = "SignatureWidget";
 
     private Button mSignButton;
     private String mBinaryName;

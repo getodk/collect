@@ -47,7 +47,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  */
 public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
-    private final static String TAG = "InstanceSyncTask";
+    private static final String TAG = "InstanceSyncTask";
 
     private static int counter = 0;
 
