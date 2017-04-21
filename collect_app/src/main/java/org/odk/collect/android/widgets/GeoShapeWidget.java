@@ -16,6 +16,7 @@
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.widgets;
 
 import android.app.Activity;
