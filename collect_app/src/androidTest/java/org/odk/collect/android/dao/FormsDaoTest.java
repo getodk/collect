@@ -135,7 +135,7 @@ public class FormsDaoTest {
 
 
         String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
-        String selectionArgs[] = {"Miramare"};
+        String[] selectionArgs = {"Miramare"};
 
         cursor = mFormsDao.getFormsCursor(null, selection, selectionArgs, null);
         forms = mFormsDao.getFormsFromCursor(cursor);

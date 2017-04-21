@@ -42,7 +42,7 @@ public class FormsDao {
             cursor = getFormsCursor(sortOrder);
         } else {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
-            String selectionArgs[] = new String[]{"%" + charSequence + "%"};
+            String[] selectionArgs = new String[]{"%" + charSequence + "%"};
             cursor = getFormsCursor(null, selection, selectionArgs, sortOrder);
         }
         return cursor;
@@ -58,21 +58,21 @@ public class FormsDao {
 
     public Cursor getFormsCursorForFormId(String formId) {
         String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=?";
-        String selectionArgs[] = {formId};
+        String[] selectionArgs = {formId};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
     public Cursor getFormsCursorForFormFilePath(String formFIlePath) {
         String selection = FormsProviderAPI.FormsColumns.FORM_FILE_PATH + "=?";
-        String selectionArgs[] = {formFIlePath};
+        String[] selectionArgs = {formFIlePath};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
     public Cursor getFormsCursorForMd5Hash(String md5Hash) {
         String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
-        String selectionArgs[] = {md5Hash};
+        String[] selectionArgs = {md5Hash};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
