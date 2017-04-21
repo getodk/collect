@@ -285,8 +285,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                         filename
                 };
                 Cursor c = Collect.getInstance().getContentResolver()
-                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection
-                                , selectionArgs, null);
+                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
+                                selectionArgs, null);
                 if (c.getCount() != 1) {
                     c.close();
                     try {
