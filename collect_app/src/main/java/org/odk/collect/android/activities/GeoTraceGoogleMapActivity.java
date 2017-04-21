@@ -354,7 +354,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length); i++) {
             String[] sp = sa[i].split(" ");
-            double gp[] = new double[4];
+            double[] gp = new double[4];
             String lat = sp[0].replace(" ", "");
             String lng = sp[1].replace(" ", "");
             gp[0] = Double.parseDouble(lat);

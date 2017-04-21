@@ -2101,7 +2101,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                         languages[whichButton]);
                                 String selection = FormsColumns.FORM_FILE_PATH
                                         + "=?";
-                                String selectArgs[] = {mFormPath};
+                                String[] selectArgs = {mFormPath};
                                 int updated = mFormsDao.updateForm(values, selection, selectArgs);
                                 Timber.i("Updated language to: %s in %d rows",
                                         languages[whichButton],

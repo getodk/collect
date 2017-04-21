@@ -23,9 +23,9 @@ import java.util.ArrayList;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final ArrayList<Fragment> mFragments;
-    private final CharSequence mTabTitles[];
+    private final CharSequence[] mTabTitles;
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence titles[],
+    public ViewPagerAdapter(FragmentManager fm, CharSequence[] titles,
                             ArrayList<Fragment> fragments) {
         super(fm);
         mTabTitles = titles;
