@@ -51,7 +51,7 @@
         </module> -->
         <module name="AvoidStarImport" />
         <module name="OneTopLevelClass"/>
-        <!-- <module name="NoLineWrap"/> -->
+        <module name="NoLineWrap"/>
         <module name="EmptyBlock">
             <property name="option" value="TEXT"/>
             <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
@@ -85,7 +85,7 @@
         <module name="ArrayTypeStyle"/>
         <!-- <module name="MissingSwitchDefault"/> -->
         <!-- <module name="FallThrough"/> -->
-        <!-- <module name="UpperEll"/> -->
+        <module name="UpperEll"/>
         <module name="ModifierOrder"/>
         <module name="EmptyLineSeparator">
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
@@ -100,15 +100,15 @@
             <property name="tokens" value="COMMA"/>
             <property name="option" value="EOL"/>
         </module>
-        <!-- <module name="PackageName">
+        <module name="PackageName">
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
             <message key="name.invalidPattern"
              value="Package name ''{0}'' must match pattern ''{1}''."/>
-        </module> -->
-        <!-- <module name="TypeName">
+        </module>
+        <module name="TypeName">
             <message key="name.invalidPattern"
              value="Type name ''{0}'' must match pattern ''{1}''."/>
-        </module> -->
+        </module>
         <!-- <module name="MemberName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
@@ -135,16 +135,16 @@
             <message key="name.invalidPattern"
              value="Class type name ''{0}'' must match pattern ''{1}''."/>
         </module> -->
-        <!-- <module name="MethodTypeParameterName">
+        <module name="MethodTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern"
              value="Method type name ''{0}'' must match pattern ''{1}''."/>
-        </module> -->
-        <!-- <module name="InterfaceTypeParameterName">
+        </module>
+        <module name="InterfaceTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern"
              value="Interface type name ''{0}'' must match pattern ''{1}''."/>
-        </module> -->
+        </module>
         <!-- <module name="NoFinalizer"/> -->
          <module name="GenericWhitespace">
             <message key="ws.followed"
@@ -181,15 +181,15 @@
             <property name="option" value="NL"/>
             <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF "/>
         </module> -->
-        <!-- <module name="AnnotationLocation">
+        <module name="AnnotationLocation">
             <property name="id" value="AnnotationLocationMostCases"/>
             <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF"/>
-        </module> -->
-        <!-- <module name="AnnotationLocation">
+        </module>
+        <module name="AnnotationLocation">
             <property name="id" value="AnnotationLocationVariables"/>
             <property name="tokens" value="VARIABLE_DEF"/>
             <property name="allowSamelineMultipleAnnotations" value="true"/>
-        </module> -->
+        </module>
         <!-- <module name="NonEmptyAtclauseDescription"/> -->
         <!-- <module name="JavadocTagContinuationIndentation"/> -->
         <!-- <module name="SummaryJavadoc">
