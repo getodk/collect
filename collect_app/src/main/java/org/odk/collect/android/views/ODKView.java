@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -58,6 +57,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import timber.log.Timber;
 
 /**
  * This class is
@@ -162,11 +163,11 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                             ((Activity) getContext()).startActivityForResult(i,
                                     FormEntryActivity.EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
-                            Log.e("ExternalParamsException", e.getMessage(), e);
+                            Timber.e(e);
 
                             ToastUtils.showShortToast(e.getMessage());
                         } catch (ActivityNotFoundException e) {
-                            Log.e("ActivityNotFoundExcept", e.getMessage(), e);
+                            Timber.e(e);
 
                             ToastUtils.showShortToast(errorString);
                         }
@@ -315,7 +316,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     try {
                         ((IBinaryWidget) q).setBinaryData(answer);
                     } catch (Exception e) {
-                        Log.e(t, e.getMessage(), e);
+                        Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
                                         e.getMessage()));
                     }
@@ -326,8 +327,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         if (!set) {
-            Log.w(t,
-                    "Attempting to return data to a widget or set of widgets not looking for data");
+            Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
         }
     }
 
@@ -381,7 +381,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         if (count != 1) {
-            Log.w(t,
+            Timber.w(
                     "Attempting to cancel waiting for binary data to a widget or set of widgets "
                             + "not looking for data");
         }

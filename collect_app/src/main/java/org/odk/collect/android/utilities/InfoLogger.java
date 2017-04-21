@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import android.util.Log;
+
 
 import org.odk.collect.android.application.Collect;
 
@@ -32,7 +32,7 @@ import timber.log.Timber;
  * @author mitchellsundt@gmail.com
  */
 public class InfoLogger {
-    private static final String t = "InfoLogger";
+
 
     private static final String LOG_DIRECTORY = "logging";
     private static final String LOG_FILE = "geotrace.log";
@@ -42,7 +42,7 @@ public class InfoLogger {
     }
 
     private static final void geologToLogcat(String msg) {
-        Log.i(t, msg);
+        Timber.i(msg);
     }
 
     @SuppressWarnings("unused")

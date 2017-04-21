@@ -38,6 +38,7 @@ public final class AdminKeys {
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
+
     private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
@@ -45,6 +46,7 @@ public final class AdminKeys {
     private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
     private static final String KEY_APP_LANGUAGE                = "app_language";
+
 
     private static final String KEY_AUTOSEND_WIFI               = "autosend_wifi";
     private static final String KEY_AUTOSEND_NETWORK            = "autosend_network";

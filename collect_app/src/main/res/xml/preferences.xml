@@ -35,6 +35,7 @@
             android:summary="@string/autosend_network_summary"
             android:title="@string/autosend_network" />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="@string/client"
         android:title="@string/client">
@@ -45,7 +46,8 @@
             android:entries="@array/constraint_behavior_entries"
             android:entryValues="@array/constraint_behavior_entry_values"
             android:key="constraint_behavior"
-            android:title="@string/constraint_behavior" />
+            android:title="@string/constraint_behavior"
+            android:layout_height="match_parent" />
         <ListPreference
             android:id="@+id/navigation"
             android:defaultValue="swipe"
@@ -105,7 +107,6 @@
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:key="@string/map_preferences"
         android:title="@string/map_preferences">

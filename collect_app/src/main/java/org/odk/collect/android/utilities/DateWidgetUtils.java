@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-import android.util.Log;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -8,6 +8,7 @@ import android.widget.CalendarView;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import timber.log.Timber;
 /**
  * The function fixCalendarViewIfJellyBean fixes the Calendar view bug for Android 4.1.2 devices
  *
@@ -58,7 +59,7 @@ public class DateWidgetUtils {
                             }
                         }
                     } catch (Exception e) {
-                        Log.e("DateTimeWidget", e.getMessage(), e);
+                        Timber.e(e);
                     }
                 }
 
@@ -67,7 +68,7 @@ public class DateWidgetUtils {
                 }
             });
         } catch (Exception e) {
-            Log.e("DateTimeWidget", e.getMessage(), e);
+            Timber.e(e);
         }
     }
 
