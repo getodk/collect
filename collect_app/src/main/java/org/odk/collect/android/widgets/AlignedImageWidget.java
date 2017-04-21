@@ -80,7 +80,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
     private TextView mErrorTextView;
 
-    private int iArray[] = new int[6];
+    private int[] iArray = new int[6];
 
     public AlignedImageWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

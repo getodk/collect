@@ -47,7 +47,7 @@ public class LocaleHelper {
 
     private Locale getLocale(String splitLocaleCode) {
         if (splitLocaleCode.contains("_")) {
-            String arg[] = splitLocaleCode.split("_");
+            String[] arg = splitLocaleCode.split("_");
             return new Locale(arg[0], arg[1]);
         } else {
             return new Locale(splitLocaleCode);

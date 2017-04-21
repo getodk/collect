@@ -389,7 +389,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length); i++) {
             String[] sp = sa[i].split(" ");
-            double gp[] = new double[4];
+            double[] gp = new double[4];
             String lat = sp[0].replace(" ", "");
             String lng = sp[1].replace(" ", "");
             String altStr = sp[2].replace(" ", "");
