@@ -21,13 +21,18 @@
             android:id="@+id/btnSelectColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="@string/set_color" />
 
         <Button
             android:id="@+id/btnFinishDraw"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/save_and_close" />
 
         <Button
@@ -35,6 +40,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/reset_image" />
 
         <Button
@@ -42,6 +49,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/cancel" />
     </LinearLayout>
 

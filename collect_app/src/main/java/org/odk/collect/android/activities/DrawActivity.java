@@ -197,10 +197,6 @@ public class DrawActivity extends Activity {
         pointPaint.setStrokeWidth(10);
 
         btnDrawColor = (Button) findViewById(R.id.btnSelectColor);
-        btnDrawColor.setTextColor(getInverseColor(currentColor));
-        btnDrawColor.getBackground().setColorFilter(currentColor,
-                PorterDuff.Mode.SRC_ATOP);
-        btnDrawColor.setText(getString(R.string.set_color));
         btnDrawColor.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Collect.getInstance()
