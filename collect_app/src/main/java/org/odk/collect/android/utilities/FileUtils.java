@@ -57,7 +57,7 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
-    private final static String t = "FileUtils";
+    private static final String t = "FileUtils";
 
     public static String getMimeType(String fileUrl)
             throws java.io.IOException {

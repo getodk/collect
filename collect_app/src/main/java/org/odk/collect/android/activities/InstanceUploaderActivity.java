@@ -51,10 +51,10 @@ import timber.log.Timber;
  */
 public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
-    private final static int PROGRESS_DIALOG = 1;
-    private final static int AUTH_DIALOG = 2;
+    private static final int PROGRESS_DIALOG = 1;
+    private static final int AUTH_DIALOG = 2;
 
-    private final static String AUTH_URI = "auth";
+    private static final String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
     private static final String TO_SEND = "tosend";

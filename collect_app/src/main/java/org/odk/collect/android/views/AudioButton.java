@@ -38,7 +38,7 @@ import timber.log.Timber;
  * @author carlhartung
  */
 public class AudioButton extends AppCompatImageButton {
-    private final static String t = "AudioButton";
+    private static final String t = "AudioButton";
 
     /**
      * Useful class for handling the playing and stopping of audio prompts.

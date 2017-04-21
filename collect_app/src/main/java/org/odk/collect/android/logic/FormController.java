@@ -93,7 +93,7 @@ public class FormController {
     /**
      * Classes needed to serialize objects. Need to put anything from JR in here.
      */
-    private final static String[] SERIALIABLE_CLASSES = {
+    private static final String[] SERIALIABLE_CLASSES = {
             "org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
             "org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
             "org.javarosa.core.model.FormDef",

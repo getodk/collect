@@ -36,7 +36,7 @@ public class WidgetFactory {
      * @param context          Android context
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
+    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
             boolean readOnlyOverride) {
 
         // get appearance hint and clean it up so it is lower case and never null...

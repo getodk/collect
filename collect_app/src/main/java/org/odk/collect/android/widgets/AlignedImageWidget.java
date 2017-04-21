@@ -68,7 +68,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
     private static final String FILE_PATH_EXTRA = "filePath";
 
-    private final static String t = "AlignedImageWidget";
+    private static final String t = "AlignedImageWidget";
 
     private Button mCaptureButton;
     private Button mChooseButton;
