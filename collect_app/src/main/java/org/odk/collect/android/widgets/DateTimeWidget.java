@@ -71,7 +71,11 @@ public class DateTimeWidget extends QuestionWidget {
             if (mTimeWidget.isNullAnswer()) {
                 mTimeWidget.setTimeToCurrent();
                 mTimeWidget.setTimeLabel();
+            } else if (mDateWidget.isNullAnswer()) {
+                mDateWidget.setDateToCurrent();
+                mDateWidget.setDateLabel();
             }
+            
             boolean hideDay = mDateWidget.isDayHidden();
             boolean hideMonth = mDateWidget.isMonthHidden();
             boolean showCalendar = mDateWidget.isCalendarShown();
