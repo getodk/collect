@@ -44,6 +44,7 @@ public class PreferencesActivity extends PreferenceActivity {
     protected static final int IMAGE_CHOOSER = 0;
     private static final String TAG = "PreferenceActivity";
     private PreferencesFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
