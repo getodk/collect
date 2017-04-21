@@ -29,8 +29,8 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment = new AdminPreferencesFragment();
         startFragment(adminPreferencesFragment);
 
-        sharedPreferences = adminPreferencesFragment.getActivity().
-                getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+        sharedPreferences = adminPreferencesFragment.getActivity()
+                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
     }
 
     @Test
