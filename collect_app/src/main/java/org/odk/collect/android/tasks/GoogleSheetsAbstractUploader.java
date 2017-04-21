@@ -77,7 +77,9 @@ public abstract class GoogleSheetsAbstractUploader extends
     private static final String oauth_fail = "OAUTH Error: ";
     private final static String TAG = "GoogleSheetsUploadTask";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
-
+    public static final String VALID_GOOGLE_SHEETS_ID = "^[a-zA-Z0-9\\-]+$";
+    public static final String GPS_LOCATION= "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+            + ".[0-9]+\\s[0-9]+\\.[0-9]+$";
     private final static String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
@@ -555,12 +557,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     // try to match a fairly specific pattern to determine
                     // if it's a location
                     // [-]#.# [-]#.# #.# #.#
-                    Pattern p = Pattern
-                            .compile(
-                                    "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                                            + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
-                    Matcher m = p.matcher(answer);
-                    if (m.matches()) {
+
+                    if (isValidLocation(answer)) {
                         // get rid of everything after the second space
                         int firstSpace = answer.indexOf(" ");
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
@@ -940,12 +938,20 @@ public abstract class GoogleSheetsAbstractUploader extends
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
+
     private boolean isValidGoogleSheetsString(String name) {
         Pattern p = Pattern
-                .compile("^[a-zA-Z0-9\\-]+$");
+                .compile(VALID_GOOGLE_SHEETS_ID);
         Matcher m = p.matcher(name);
         return m.matches();
     }
+    public static boolean isValidLocation(String answer) {
+        Pattern p = Pattern
+                .compile(GPS_LOCATION);
+        Matcher m = p.matcher(answer);
+        return m.matches();
+    }
+
 
     /**
      * Fetches the spreadsheet with the provided mSpreadsheetId
