@@ -208,7 +208,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         ArrayList<String> columnNames = new ArrayList<String>();
         try {
             getColumns(formFilePath, columnNames);
-        } catch ( XmlPullParserException | IOException | FormException e2) {
+        } catch (XmlPullParserException | IOException | FormException e2) {
             Timber.e(e2, "Exception thrown while getting columns from form file");
             mResults.put(id, e2.getMessage());
             return false;
