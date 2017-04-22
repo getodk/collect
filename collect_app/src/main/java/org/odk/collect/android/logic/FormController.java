@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.logic;
 
-import android.util.Log;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -51,6 +50,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
  * javarosa as the form engine, you should only need to replace the methods in this file. Also, we
@@ -61,7 +62,6 @@ import java.util.List;
  */
 public class FormController {
 
-    private static final String t = "FormController";
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
@@ -226,7 +226,7 @@ public class FormController {
             case "endOfForm":
                 return FormIndex.createEndOfFormIndex();
             case "unexpected":
-                Log.e(t, "Unexpected string from XPath");
+                Timber.e("Unexpected string from XPath");
                 throw new IllegalArgumentException("unexpected string from XPath");
             default:
                 FormIndex returned = null;
@@ -618,13 +618,11 @@ public class FormController {
                             // otherwise it's not a field-list group, so just skip it
                             break;
                         case FormEntryController.EVENT_REPEAT_JUNCTURE:
-                            Log.i(t, "repeat juncture: "
-                                    + getFormIndex().getReference());
+                            Timber.i("repeat juncture: %s", getFormIndex().getReference().toString());
                             // skip repeat junctures until we implement them
                             break;
                         default:
-                            Log.w(t,
-                                    "JavaRosa added a new EVENT type and didn't tell us... shame "
+                            Timber.w("JavaRosa added a new EVENT type and didn't tell us... shame "
                                             + "on them.");
                             break;
                     }
@@ -705,10 +703,8 @@ public class FormController {
                         saveAnswer(index, answer);
                     }
                 } else {
-                    Log.w(t,
-                            "Attempted to save an index referencing something other than a "
-                                    + "question: "
-                                    + index.getReference());
+                    Timber.w("Attempted to save an index referencing something other than a question: %",
+                                    index.getReference().toString());
                 }
             }
         }
@@ -868,7 +864,7 @@ public class FormController {
                             "Only questions are allowed in 'field-list'.  Bad node is: "
                                     + index.getReference().toString(false);
                     RuntimeException e = new RuntimeException(errorMsg);
-                    Log.e(t, errorMsg);
+                    Timber.e(errorMsg);
                     throw e;
                 }
 
@@ -932,7 +928,7 @@ public class FormController {
                     }
                     return null;
                 } catch (Exception e) {
-                    Log.e(t, "Error evaluating a valid-looking required xpath ", e);
+                    Timber.e(e, "Error evaluating a valid-looking required xpath ");
                     return constraintText;
                 }
             } else {
