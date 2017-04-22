@@ -25,6 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import timber.log.Timber;
 
@@ -37,17 +38,14 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_DELETE_AFTER_SEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_LAST_VERSION;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.NAVIGATION_SWIPE;
 
 /**
  * Created by shobhit on 12/4/17.
@@ -58,27 +56,17 @@ public class SharedPreferencesUtils {
 
     private final Context mContext = Collect.getInstance();
     private final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+    private final SharedPreferences.Editor mEditor = sharedPrefs.edit();
 
-    public static void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
-        Context context = Collect.getInstance();
-        final SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_PROTOCOL, settingsJson.getString(KEY_PROTOCOL));
-        editor.putString(KEY_SERVER_URL, settingsJson.getString(KEY_SERVER_URL));
-        editor.putString(KEY_GOOGLE_SHEETS_URL, settingsJson.getString(KEY_GOOGLE_SHEETS_URL));
-        editor.putString(KEY_FORMLIST_URL, settingsJson.getString(KEY_FORMLIST_URL));
-        editor.putString(KEY_SUBMISSION_URL, settingsJson.getString(KEY_SUBMISSION_URL));
-        editor.putString(KEY_USERNAME, settingsJson.getString(KEY_USERNAME));
-        editor.putString(KEY_PASSWORD, settingsJson.getString(KEY_PASSWORD));
-        editor.apply();
-
-        //settings import confirmation toast
-        ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
+    private static Collection<String> getAllKeys() {
+        Collection<String> allKeys = ALL_KEYS;
+        for (String key : ALL_GENERAL_KEYS) {
+            allKeys.add(key);
+        }
+        return allKeys;
     }
 
-    public static String getJSONFromPreferences() throws JSONException {
+    static String getJSONFromPreferences() throws JSONException {
         SharedPreferencesUtils obj = new SharedPreferencesUtils();
         JSONObject sharedPrefJson = obj.getModifiedPrefs();
         Timber.i(sharedPrefJson.toString());
@@ -164,6 +152,7 @@ public class SharedPreferencesUtils {
             case KEY_AUTOSEND_WIFI:
             case KEY_AUTOSEND_NETWORK:
             case KEY_DELETE_AFTER_SEND:
+            case KEY_SHOW_SPLASH:
                 defValue = false;
                 break;
             default:
@@ -198,12 +187,26 @@ public class SharedPreferencesUtils {
         return defValue;
     }
 
-    private Collection<String> getAllKeys() {
-        Collection<String> allKeys = ALL_KEYS;
-        for (String key : ALL_GENERAL_KEYS) {
-            allKeys.add(key);
+    public void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
+
+        Collection<String> allKeys = getAllKeys();
+        for (String key : allKeys) {
+            if (settingsJson.has(key)) {
+                try {
+                    mEditor.putString(key, settingsJson.getString(key));
+                } catch (JSONException e) {
+                    try {
+                        mEditor.putBoolean(key, settingsJson.getBoolean(key));
+                    } catch (JSONException e1) {
+                        mEditor.putLong(key, settingsJson.getLong(key));
+                    }
+                }
+            }
         }
-        return allKeys;
+        mEditor.apply();
+
+        //settings import confirmation toast
+        ToastUtils.showLongToast(mContext.getString(R.string.successfully_imported_settings));
     }
 }
 

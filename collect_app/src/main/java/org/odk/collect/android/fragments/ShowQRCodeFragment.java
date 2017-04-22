@@ -42,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CustomScannerActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -57,7 +58,6 @@ import static android.view.View.VISIBLE;
 import static org.odk.collect.android.utilities.QRCodeUtils.decodeFromBitmap;
 import static org.odk.collect.android.utilities.QRCodeUtils.generateQRBitMap;
 import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.savePreferencesFromJSON;
 
 
 /**
@@ -170,7 +170,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         try {
             decompressedData = CompressionUtils.decompress(content);
             JSONObject jsonObject = new JSONObject(decompressedData);
-            savePreferencesFromJSON(jsonObject);
+            SharedPreferencesUtils prefUtils = new SharedPreferencesUtils();
+            prefUtils.savePreferencesFromJSON(jsonObject);
         } catch (DataFormatException e) {
             Timber.e(e);
             ToastUtils.showShortToast("QR Code does not contains valid settings");
