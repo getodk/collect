@@ -143,6 +143,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                             //probably because the file has been deleted or filename was changed in sdcard
                             //Add the ID to list so that they could be deleted all together
 
+
                             String id = cursor.getString(
                                     cursor.getColumnIndex(FormsColumns._ID));
 
