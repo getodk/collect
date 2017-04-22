@@ -16,21 +16,38 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
 
+import java.util.Collection;
+
+import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
+import static org.odk.collect.android.preferences.PreferenceKeys.ALL_GENERAL_KEYS;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_NETWORK;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WIFI;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_DELETE_AFTER_SEND;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_LAST_VERSION;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.NAVIGATION_SWIPE;
 
 /**
  * Created by shobhit on 12/4/17.
@@ -38,6 +55,9 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 public class SharedPreferencesUtils {
 
+
+    private final Context mContext = Collect.getInstance();
+    private final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
     public static void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
         Context context = Collect.getInstance();
@@ -59,23 +79,131 @@ public class SharedPreferencesUtils {
     }
 
     public static String getJSONFromPreferences() throws JSONException {
-        Context context = Collect.getInstance();
-        final SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferencesUtils obj = new SharedPreferencesUtils();
+        JSONObject sharedPrefJson = obj.getModifiedPrefs();
+        Timber.i(sharedPrefJson.toString());
+        return sharedPrefJson.toString();
+    }
 
+
+    private JSONObject getModifiedPrefs() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(KEY_PROTOCOL, sharedPreferences.getString(KEY_PROTOCOL, null));
-        jsonObject.put(KEY_SERVER_URL, sharedPreferences.getString(KEY_SERVER_URL,
-                context.getString(R.string.default_server_url)));
-        jsonObject.put(KEY_GOOGLE_SHEETS_URL, sharedPreferences.getString(KEY_GOOGLE_SHEETS_URL,
-                context.getString(R.string.default_google_sheets_url)));
-        jsonObject.put(KEY_FORMLIST_URL, sharedPreferences.getString(PreferenceKeys.KEY_FORMLIST_URL,
-                context.getString(R.string.default_odk_formlist)));
-        jsonObject.put(KEY_SUBMISSION_URL, sharedPreferences.getString(PreferenceKeys.KEY_SUBMISSION_URL,
-                context.getString(R.string.default_odk_submission)));
-        jsonObject.put(KEY_USERNAME, sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, ""));
-        jsonObject.put(KEY_PASSWORD, sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, ""));
-        return jsonObject.toString();
+
+        Collection<String> allKeys = getAllKeys();
+        for (String key : allKeys) {
+            String stringValue;
+            String defaultStringValue;
+            try {
+                stringValue = getStringValue(key);
+                defaultStringValue = getDefaultStringValue(key);
+                if (!stringValue.equals(defaultStringValue)) {
+                    jsonObject.put(key, stringValue);
+                }
+            } catch (ClassCastException e) {
+                try {
+                    boolean booleanValue = getBooleanValue(key);
+                    boolean defaultBooleanValue = getDefaultBooleanValue(key);
+                    if (booleanValue != defaultBooleanValue) {
+                        jsonObject.put(key, booleanValue);
+                    }
+                } catch (ClassCastException e1) {
+                    long longValue = getLongValue(key);
+                    long defaultLongValue = getDefaultLongValue(key);
+                    if (longValue != defaultLongValue) {
+                        jsonObject.put(key, longValue);
+                    }
+                }
+            }
+        }
+        return jsonObject;
+    }
+
+
+    private String getDefaultStringValue(String key) {
+        String defValue;
+        switch (key) {
+            case KEY_SERVER_URL:
+                defValue = mContext.getString(R.string.default_server_url);
+                break;
+            case KEY_FORMLIST_URL:
+                defValue = mContext.getString(R.string.default_odk_formlist);
+                break;
+            case KEY_SUBMISSION_URL:
+                defValue = mContext.getString(R.string.default_odk_submission);
+                break;
+            case KEY_APP_LANGUAGE:
+                defValue = "en";
+                break;
+            case KEY_NAVIGATION:
+                defValue = "swipe";
+                break;
+            case KEY_CONSTRAINT_BEHAVIOR:
+                defValue = "on_swipe";
+                break;
+            case KEY_FONT_SIZE:
+                defValue = "21";
+                break;
+            case KEY_PROTOCOL:
+                defValue = "odk_default";
+                break;
+            case KEY_MAP_SDK:
+                defValue = "google_maps";
+                break;
+            case KEY_MAP_BASEMAP:
+                defValue = "streets";
+                break;
+            default:
+                defValue = "";
+        }
+        return defValue;
+    }
+
+    private boolean getDefaultBooleanValue(String key) {
+        boolean defValue;
+        switch (key) {
+            case KEY_AUTOSEND_WIFI:
+            case KEY_AUTOSEND_NETWORK:
+            case KEY_DELETE_AFTER_SEND:
+                defValue = false;
+                break;
+            default:
+                defValue = true;
+        }
+        return defValue;
+    }
+
+    private String getStringValue(String key) {
+        return sharedPrefs.getString(key, getDefaultStringValue(key));
+    }
+
+    private boolean getBooleanValue(String key) {
+        return sharedPrefs.getBoolean(key, getDefaultBooleanValue(key));
+    }
+
+    private long getLongValue(String key) {
+        return sharedPrefs.getLong(key, getDefaultLongValue(key));
+    }
+
+    private long getDefaultLongValue(String key) {
+        long defValue = 0;
+        switch (key) {
+            case KEY_LAST_VERSION:
+                try {
+                    defValue = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),
+                            PackageManager.GET_META_DATA).versionCode;
+                } catch (PackageManager.NameNotFoundException e) {
+                    Timber.e(e, "Unable to get package info");
+                }
+        }
+        return defValue;
+    }
+
+    private Collection<String> getAllKeys() {
+        Collection<String> allKeys = ALL_KEYS;
+        for (String key : ALL_GENERAL_KEYS) {
+            allKeys.add(key);
+        }
+        return allKeys;
     }
 }
 
