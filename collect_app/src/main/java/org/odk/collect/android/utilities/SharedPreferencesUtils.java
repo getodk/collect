@@ -25,7 +25,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import timber.log.Timber;
 
