@@ -229,7 +229,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length - 1); i++) {
             String[] sp = sa[i].split(" ");
-            double gp[] = new double[4];
+            double[] gp = new double[4];
             String lat = sp[0].replace(" ", "");
             String lng = sp[1].replace(" ", "");
             gp[0] = Double.parseDouble(lat);

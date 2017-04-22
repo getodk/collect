@@ -425,7 +425,7 @@ public class DownloadFormsTask extends
                         is = new GZIPInputStream(is);
                     }
                     os = new FileOutputStream(tempFile);
-                    byte buf[] = new byte[4096];
+                    byte[] buf = new byte[4096];
                     int len;
                     while ((len = is.read(buf)) > 0 && !isCancelled()) {
                         os.write(buf, 0, len);

@@ -69,8 +69,8 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                 public void onClick(DialogInterface dialog, int which) {
                     String pw = passwordEditText.getText().toString();
                     if (!pw.equals("")) {
-                        SharedPreferences.Editor editor = getActivity().
-                                getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                        SharedPreferences.Editor editor = getActivity()
+                                .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
                         ToastUtils.showShortToast(R.string.admin_password_changed);
                         editor.apply();
@@ -78,8 +78,8 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "CHANGED");
                     } else {
-                        SharedPreferences.Editor editor = getActivity().
-                                getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                        SharedPreferences.Editor editor = getActivity()
+                                .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
                         editor.apply();
                         ToastUtils.showShortToast(R.string.admin_password_disabled);

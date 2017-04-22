@@ -105,6 +105,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         }
         return v;
     }
+
     @Override
     public boolean isEnabled(int position) {
         return enabled;

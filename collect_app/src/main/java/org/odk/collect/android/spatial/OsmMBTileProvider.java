@@ -15,6 +15,7 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import org.osmdroid.tileprovider.IRegisterReceiver;

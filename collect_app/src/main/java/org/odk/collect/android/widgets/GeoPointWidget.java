@@ -158,7 +158,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 String s = mStringAnswer.getText().toString();
                 if (s.length() != 0) {
                     String[] sa = s.split(" ");
-                    double gp[] = new double[4];
+                    double[] gp = new double[4];
                     gp[0] = Double.valueOf(sa[0]).doubleValue();
                     gp[1] = Double.valueOf(sa[1]).doubleValue();
                     gp[2] = Double.valueOf(sa[2]).doubleValue();
@@ -253,7 +253,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             try {
                 // segment lat and lon
                 String[] sa = s.split(" ");
-                double gp[] = new double[4];
+                double[] gp = new double[4];
                 gp[0] = Double.valueOf(sa[0]).doubleValue();
                 gp[1] = Double.valueOf(sa[1]).doubleValue();
                 gp[2] = Double.valueOf(sa[2]).doubleValue();

@@ -17,7 +17,6 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -51,7 +50,6 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -260,6 +258,7 @@ public class Collect extends Application {
         }
     }
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -277,7 +276,7 @@ public class Collect extends Application {
      *
      * @return tracker
      */
-    synchronized public Tracker getDefaultTracker() {
+    public synchronized Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             mTracker = analytics.newTracker(R.xml.global_tracker);
