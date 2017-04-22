@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -90,7 +89,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     public void generateCode() {
-        new GenerateQRCode(this, getActivity()).execute();
+        new GenerateQRCode(this).execute();
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
@@ -181,8 +180,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             return;
         }
 
-        // update the QR Code
-        generateCode();
+        getActivity().finish();
     }
 
     @Override
@@ -221,13 +219,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
+    private class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
         private final QRCodeListener listener;
-        private final Context context;
 
-        public GenerateQRCode(QRCodeListener listener, Context context) {
+        GenerateQRCode(QRCodeListener listener) {
             this.listener = listener;
-            this.context = context;
         }
 
         @Override
