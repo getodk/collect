@@ -55,7 +55,7 @@ import java.util.Date;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "MediaWidget";
+    private static final String t = "MediaWidget";
 
     private Button mCaptureButton;
     private Button mChooseButton;

@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -127,7 +128,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setTitle(getString(R.string.get_forms));
         mAlertMsg = getString(R.string.please_wait);
 
-
         mDownloadButton = (Button) findViewById(R.id.add_button);
         mDownloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
         mDownloadButton.setOnClickListener(new OnClickListener() {
@@ -146,11 +146,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             public void onClick(View v) {
                 mDownloadButton.setEnabled(toggleChecked(getListView()));
                 toggleButtonLabel(mToggleButton, getListView());
+                mSelectedForms.clear();
+                if (getListView().getCheckedItemCount() == getListView().getCount()) {
+                    for (HashMap<String, String> map : mFormList) {
+                        mSelectedForms.add(map.get(FORMDETAIL_KEY));
+                    }
+                }
             }
         });
 
-        Button mRefreshButton = (Button) findViewById(R.id.refresh_button);
-        mRefreshButton.setOnClickListener(new OnClickListener() {
+        Button refreshButton = (Button) findViewById(R.id.refresh_button);
+        refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
@@ -172,7 +178,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             // how many items we've selected
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
-                mDownloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) >  0);
+                mDownloadButton.setEnabled(savedInstanceState.getInt(BUNDLE_SELECTED_COUNT) > 0);
             }
 
             // to restore alert dialog.
@@ -331,6 +337,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         toggleButtonLabel(mToggleButton, getListView());
+        updateAdapter();
     }
 
     @Override
@@ -430,7 +437,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         mFilteredFormList.clear();
         if (charSequence.length() > 0) {
             for (HashMap<String, String> form : mFormList) {
-                if (form.get(FORMNAME).toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                if (form.get(FORMNAME).toLowerCase(Locale.US).contains(charSequence.toString().toLowerCase(Locale.US))) {
                     mFilteredFormList.add(form);
                 }
             }
@@ -578,19 +585,19 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // any non-null version on server is newer
                 return (latestVersion != null);
             }
-            String jr_version = formCursor.getString(idxJrVersion);
+            String jrVersion = formCursor.getString(idxJrVersion);
             // apparently, the isNull() predicate above is not respected on all Android OSes???
-            if (jr_version == null && latestVersion == null) {
+            if (jrVersion == null && latestVersion == null) {
                 return false;
             }
-            if (jr_version == null) {
+            if (jrVersion == null) {
                 return true;
             }
             if (latestVersion == null) {
                 return false;
             }
             // if what we have is less, then the server is newer
-            return (jr_version.compareTo(latestVersion) < 0);
+            return (jrVersion.compareTo(latestVersion) < 0);
         } finally {
             if (formCursor != null) {
                 formCursor.close();

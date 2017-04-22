@@ -57,7 +57,7 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
-    private final static String t = "FileUtils";
+    private static final String t = "FileUtils";
 
     public static String getMimeType(String fileUrl)
             throws java.io.IOException {
@@ -139,14 +139,14 @@ public class FileUtils {
             byte[] chunk = new byte[chunkSize];
 
             // Get the size of the file
-            long lLength = file.length();
+            long llength = file.length();
 
-            if (lLength > Integer.MAX_VALUE) {
+            if (llength > Integer.MAX_VALUE) {
                 Log.e(t, "File " + file.getName() + "is too large");
                 return null;
             }
 
-            int length = (int) lLength;
+            int length = (int) llength;
 
             InputStream is = null;
             is = new FileInputStream(file);

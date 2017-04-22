@@ -51,7 +51,7 @@ import timber.log.Timber;
 public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
 
     @SuppressWarnings("unused")
-    private final static String t = "QuestionWidget";
+    private static final String t = "QuestionWidget";
     private static int idGenerator = 1211322;
 
     /**
@@ -63,11 +63,11 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     }
 
     protected FormEntryPrompt mPrompt;
+    protected MediaLayout mQuestionMediaLayout;
 
     protected final int mQuestionFontsize;
     protected final int mAnswerFontsize;
 
-    private MediaLayout mQuestionMediaLayout;
     private TextView mHelpTextView;
 
     protected MediaPlayer mPlayer;

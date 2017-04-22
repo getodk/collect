@@ -38,7 +38,7 @@ import timber.log.Timber;
  * @author carlhartung
  */
 public class AudioButton extends AppCompatImageButton {
-    private final static String t = "AudioButton";
+    private static final String t = "AudioButton";
 
     /**
      * Useful class for handling the playing and stopping of audio prompts.
@@ -53,11 +53,11 @@ public class AudioButton extends AppCompatImageButton {
         private String URI;
         private MediaPlayer mPlayer;
 
-        public AudioHandler(FormIndex index, String selectionDesignator, String URI,
+        public AudioHandler(FormIndex index, String selectionDesignator, String uri,
                 MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
-            this.URI = URI;
+            this.URI = uri;
             mPlayer = player;
         }
 
@@ -104,10 +104,10 @@ public class AudioButton extends AppCompatImageButton {
 
     AudioHandler handler;
 
-    public AudioButton(Context context, FormIndex index, String selectionDesignator, String URI,
+    public AudioButton(Context context, FormIndex index, String selectionDesignator, String uri,
             MediaPlayer player) {
         super(context);
-        handler = new AudioHandler(index, selectionDesignator, URI, player);
+        handler = new AudioHandler(index, selectionDesignator, uri, player);
         Bitmap b =
                 BitmapFactory.decodeResource(context.getResources(),
                         android.R.drawable.ic_lock_silent_mode_off);

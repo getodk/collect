@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android;
 
 import android.content.ContentValues;
@@ -40,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -70,8 +72,8 @@ public class ResetAppStateTestCase {
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        assertEquals(null, settings.getString(PreferenceKeys.KEY_USERNAME, null));
-        assertEquals(null, settings.getString(PreferenceKeys.KEY_PASSWORD, null));
+        assertNull(settings.getString(PreferenceKeys.KEY_USERNAME, null));
+        assertNull(settings.getString(PreferenceKeys.KEY_PASSWORD, null));
         assertEquals(true, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());

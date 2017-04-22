@@ -27,7 +27,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PAS
 
 public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
-    public static String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        Preference mChangeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
-        mChangeAdminPwPreference.setOnPreferenceClickListener(this);
+        Preference changeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
+        changeAdminPwPreference.setOnPreferenceClickListener(this);
     }
 
     @Override
@@ -69,17 +69,17 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                 public void onClick(DialogInterface dialog, int which) {
                     String pw = passwordEditText.getText().toString();
                     if (!pw.equals("")) {
-                        SharedPreferences.Editor editor = getActivity().
-                                getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                        SharedPreferences.Editor editor = getActivity()
+                                .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, pw);
                         ToastUtils.showShortToast(R.string.admin_password_changed);
                         editor.apply();
                         dialog.dismiss();
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "AdminPasswordDialog", "CHANGED");
-                    } else{
-                        SharedPreferences.Editor editor = getActivity().
-                                getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
+                    } else {
+                        SharedPreferences.Editor editor = getActivity()
+                                .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
                         editor.putString(KEY_ADMIN_PW, "");
                         editor.apply();
                         ToastUtils.showShortToast(R.string.admin_password_disabled);

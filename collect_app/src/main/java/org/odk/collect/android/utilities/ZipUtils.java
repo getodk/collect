@@ -36,7 +36,7 @@ import java.util.zip.ZipInputStream;
  */
 public final class ZipUtils {
 
-    final static String t = "ZipUtils";
+    static final String t = "ZipUtils";
 
     public static void unzip(File[] zipFiles) {
         for (File zipFile : zipFiles) {

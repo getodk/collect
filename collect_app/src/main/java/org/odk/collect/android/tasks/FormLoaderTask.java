@@ -59,6 +59,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -71,7 +72,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
-    private final static String t = "FormLoaderTask";
+    private static final String t = "FormLoaderTask";
     private static final String ITEMSETS_CSV = "itemsets.csv";
 
     private FormLoaderListener mStateListener;
@@ -109,9 +110,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String XPath, String waitingXPath) {
+    public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
         mInstancePath = instancePath;
-        mXPath = XPath;
+        mXPath = xpath;
         mWaitingXPath = waitingXPath;
     }
 
@@ -137,13 +138,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
 
 
-//    FormDef.setDefaultEventNotifier(new EventNotifier() {
-//
-//      @Override
-//      public void publishEvent(Event event) {
-//        Log.d("FormDef", event.asLogLine());
-//      }
-//    });
+        //    FormDef.setDefaultEventNotifier(new EventNotifier() {
+        //
+        //      @Override
+        //      public void publishEvent(Event event) {
+        //        Log.d("FormDef", event.asLogLine());
+        //      }
+        //    });
 
         if (formBin.exists()) {
             // if we have binary, deserialize binary
@@ -360,7 +361,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         File[] zipFiles = mediaFolder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
-                return file.getName().toLowerCase().endsWith(".zip");
+                return file.getName().toLowerCase(Locale.US).endsWith(".zip");
             }
         });
 
@@ -377,7 +378,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         File[] csvFiles = mediaFolder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
-                String lowerCaseName = file.getName().toLowerCase();
+                String lowerCaseName = file.getName().toLowerCase(Locale.US);
                 return lowerCaseName.endsWith(".csv") && !lowerCaseName.equalsIgnoreCase(
                         ITEMSETS_CSV);
             }

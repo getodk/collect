@@ -16,9 +16,11 @@ package org.odk.collect.android.fragments;
 
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
@@ -63,7 +65,7 @@ abstract class AppListFragment extends ListFragment {
     protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
     protected EditText mInputSearch;
 
-    protected Integer mSelectedSortingOrder;
+    private Integer mSelectedSortingOrder;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -95,11 +97,11 @@ abstract class AppListFragment extends ListFragment {
     }
 
     // Function to toggle button label
-    public static void toggleButtonLabel(Button mToggleButton, ListView lv) {
+    public static void toggleButtonLabel(Button toggleButton, ListView lv) {
         if (lv.getCheckedItemCount() != lv.getCount()) {
-            mToggleButton.setText(R.string.select_all);
+            toggleButton.setText(R.string.select_all);
         } else {
-            mToggleButton.setText(R.string.clear_all);
+            toggleButton.setText(R.string.clear_all);
         }
     }
 
@@ -171,6 +173,9 @@ abstract class AppListFragment extends ListFragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
+                if (position == getSelectedSortingOrder()) {
+                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
+                }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
             }
@@ -179,6 +184,8 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
+                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
                 performSelectedSearch(position);
                 mDrawerLayout.closeDrawer(Gravity.END);
             }
@@ -204,8 +211,8 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList = (ListView) rootView.findViewById(R.id.sortingMenu);
         mDrawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mDrawerToggle = new ActionBarDrawerToggle
-                (getActivity(), mDrawerLayout,
+        mDrawerToggle = new ActionBarDrawerToggle(
+                getActivity(), mDrawerLayout,
                         R.string.sorting_menu_open, R.string.sorting_menu_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -317,6 +324,13 @@ abstract class AppListFragment extends ListFragment {
         mSelectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
+    }
+
+    protected int getSelectedSortingOrder() {
+        if (mSelectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return mSelectedSortingOrder;
     }
 
     protected CharSequence getFilterText() {

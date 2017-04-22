@@ -62,7 +62,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             v = vi.inflate(id, null);
         }
               
-               /* create a new view of my layout and inflate it in the row */
+        /* create a new view of my layout and inflate it in the row */
         //convertView = ( RelativeLayout ) inflater.inflate( resource, null );
 
         final DriveListItem o = items.get(position);
@@ -105,6 +105,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
         }
         return v;
     }
+
     @Override
     public boolean isEnabled(int position) {
         return enabled;

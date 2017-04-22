@@ -67,16 +67,16 @@ import java.util.Set;
 public class ODKView extends ScrollView implements OnLongClickListener {
 
     // starter random number for view IDs
-    private final static int VIEW_ID = 12345;
+    private static final int VIEW_ID = 12345;
 
-    private final static String t = "ODKView";
+    private static final String t = "ODKView";
 
     private LinearLayout mView;
     private LinearLayout.LayoutParams mLayout;
     private ArrayList<QuestionWidget> widgets;
     private Handler h = null;
 
-    public final static String FIELD_LIST = "field-list";
+    public static final String FIELD_LIST = "field-list";
 
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
@@ -120,15 +120,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 params.setMargins(7, 5, 7, 5);
 
                 // set button formatting
-                Button mLaunchIntentButton = new Button(getContext());
-                mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
-                mLaunchIntentButton.setText(buttonText);
-                mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+                Button launchIntentButton = new Button(getContext());
+                launchIntentButton.setId(QuestionWidget.newUniqueId());
+                launchIntentButton.setText(buttonText);
+                launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                         Collect.getQuestionFontsize() + 2);
-                mLaunchIntentButton.setPadding(20, 20, 20, 20);
-                mLaunchIntentButton.setLayoutParams(params);
+                launchIntentButton.setPadding(20, 20, 20, 20);
+                launchIntentButton.setLayoutParams(params);
 
-                mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
+                launchIntentButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String intentName = ExternalAppsUtils.extractIntentName(intentString);
@@ -178,7 +178,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 divider.setMinimumHeight(3);
                 mView.addView(divider);
 
-                mView.addView(mLaunchIntentButton, mLayout);
+                mView.addView(launchIntentButton, mLayout);
             }
         }
 

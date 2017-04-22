@@ -15,6 +15,7 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import android.graphics.drawable.Drawable;
@@ -87,7 +88,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
         if (tileSource instanceof OsmMBTileSource) {
             this.tileSource = (OsmMBTileSource) tileSource;
         } else {
-//            logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
+        // logger.warn("*** Warning: and it wasn't even an MBTileSource! That's just rude!");
 
         }
     }
@@ -95,18 +96,18 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
     private class TileLoader extends MapTileModuleProviderBase.TileLoader {
 
         @Override
-        public Drawable loadTile(final MapTileRequestState pState) {
+        public Drawable loadTile(final MapTileRequestState state) {
 
             // if there's no sdcard then don't do anything
             if (!isSdCardAvailable()) {
                 return null;
             }
 
-            MapTile pTile = pState.getMapTile();
+            MapTile mapTile = state.getMapTile();
             InputStream inputStream = null;
 
             try {
-                inputStream = tileSource.getInputStream(pTile);
+                inputStream = tileSource.getInputStream(mapTile);
 
                 if (inputStream != null) {
 

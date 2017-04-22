@@ -42,7 +42,7 @@ public class FileManagerTabs extends FragmentActivity {
 
         setContentView(R.layout.file_manager_layout);
 
-        String tabNames[] = {getString(R.string.data), getString(R.string.forms)};
+        String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
@@ -50,8 +50,8 @@ public class FileManagerTabs extends FragmentActivity {
         fragments.add(dataManagerList);
         fragments.add(formManagerList);
 
-        viewPager.setAdapter(new ViewPagerAdapter
-                (getSupportFragmentManager(), tabNames, fragments));
+        viewPager.setAdapter(new ViewPagerAdapter(
+                getSupportFragmentManager(), tabNames, fragments));
 
         // Give the SlidingTabLayout the ViewPager
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);

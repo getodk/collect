@@ -15,6 +15,7 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import android.database.Cursor;
@@ -34,14 +35,14 @@ import timber.log.Timber;
 public class OsmMBTileSource extends BitmapTileSourceBase {
 
     // Log log log log ...
-//    private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
+    // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
     private static final String t = "MBTileSource";
     // Database related fields
-    public final static String TABLE_TILES = "tiles";
-    public final static String COL_TILES_ZOOM_LEVEL = "zoom_level";
-    public final static String COL_TILES_TILE_COLUMN = "tile_column";
-    public final static String COL_TILES_TILE_ROW = "tile_row";
-    public final static String COL_TILES_TILE_DATA = "tile_data";
+    public static final String TABLE_TILES = "tiles";
+    public static final String COL_TILES_ZOOM_LEVEL = "zoom_level";
+    public static final String COL_TILES_TILE_COLUMN = "tile_column";
+    public static final String COL_TILES_TILE_ROW = "tile_row";
+    public static final String COL_TILES_TILE_DATA = "tile_data";
 
     protected SQLiteDatabase database;
     protected File archive;
@@ -136,14 +137,14 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         return value;
     }
 
-    public InputStream getInputStream(MapTile pTile) {
+    public InputStream getInputStream(MapTile mapTile) {
 
         try {
             InputStream ret = null;
             final String[] tile = {COL_TILES_TILE_DATA};
-            final String[] xyz = {Integer.toString(pTile.getX()),
-                    Double.toString(Math.pow(2, pTile.getZoomLevel()) - pTile.getY() - 1),
-                    Integer.toString(pTile.getZoomLevel())};
+            final String[] xyz = {Integer.toString(mapTile.getX()),
+                    Double.toString(Math.pow(2, mapTile.getZoomLevel()) - mapTile.getY() - 1),
+                    Integer.toString(mapTile.getZoomLevel())};
 
             final Cursor cur = database.query(TABLE_TILES,
                     tile,
@@ -165,7 +166,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             }
 
         } catch (final Throwable e) {
-            Timber.w(e, "Error getting db stream: %s", pTile);
+            Timber.w(e, "Error getting db stream: %s", mapTile);
         }
 
         return null;

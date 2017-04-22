@@ -107,10 +107,10 @@ public class GridWidget extends QuestionWidget {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        if (xpathFuncExpr != null) {
+            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
             mItems = prompt.getSelectChoices();
         }
@@ -308,8 +308,6 @@ public class GridWidget extends QuestionWidget {
                     }
                     selected[i] = false;
                     imageViews[i].setBackgroundColor(0);
-                    if (imageViews[i] != null) {
-                    }
                 }
                 selected[position] = true;
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
@@ -332,9 +330,9 @@ public class GridWidget extends QuestionWidget {
         }
 
         for (int i = 0; i < mItems.size(); ++i) {
-            String sMatch = mItems.get(i).getValue();
+            String match = mItems.get(i).getValue();
 
-            selected[i] = sMatch.equals(s);
+            selected[i] = match.equals(s);
             if (selected[i]) {
                 imageViews[i].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
@@ -364,6 +362,7 @@ public class GridWidget extends QuestionWidget {
     public void clearAnswer() {
         for (int i = 0; i < mItems.size(); ++i) {
             selected[i] = false;
+            imageViews[i].setBackgroundColor(0);
         }
 
     }

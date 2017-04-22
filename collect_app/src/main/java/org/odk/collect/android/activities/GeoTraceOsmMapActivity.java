@@ -389,7 +389,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length); i++) {
             String[] sp = sa[i].split(" ");
-            double gp[] = new double[4];
+            double[] gp = new double[4];
             String lat = sp[0].replace(" ", "");
             String lng = sp[1].replace(" ", "");
             String altStr = sp[2].replace(" ", "");
@@ -441,17 +441,17 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private void overlayMapLayerListner() {
         polyline = new Polyline();
         polyline.setColor(Color.RED);
-        Paint pPaint = polyline.getPaint();
-        pPaint.setStrokeWidth(5);
+        Paint paint = polyline.getPaint();
+        paint.setStrokeWidth(5);
         mapView.getOverlays().add(polyline);
         mapView.invalidate();
     }
 
     private void overlayMyLocationLayers() {
-//		mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-//		if(mMyLocationOverlay.getMyLocation()!= null){
-//			mMyLocationOverlay.runOnFirstFix(centerAroundFix);
-//		}
+        //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+        //if(mMyLocationOverlay.getMyLocation()!= null){
+        //mMyLocationOverlay.runOnFirstFix(centerAroundFix);
+        //}
         mapView.getOverlays().add(mMyLocationOverlay);
         mMyLocationOverlay.setEnabled(true);
         mMyLocationOverlay.enableMyLocation();
@@ -631,32 +631,32 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         mManualCaptureButton.setVisibility(View.VISIBLE);
         String delay = time_delay.getSelectedItem().toString();
         String units = time_units.getSelectedItem().toString();
-        Long time_delay;
-        TimeUnit time_units_value;
+        Long timeDelay;
+        TimeUnit timeUnitsValue;
         if (units == getString(R.string.minutes)) {
-            time_delay = Long.parseLong(delay) * (60); //Convert minutes to seconds
-            time_units_value = TimeUnit.SECONDS;
+            timeDelay = Long.parseLong(delay) * (60); //Convert minutes to seconds
+            timeUnitsValue = TimeUnit.SECONDS;
         } else {
             //in Seconds
-            time_delay = Long.parseLong(delay);
-            time_units_value = TimeUnit.SECONDS;
+            timeDelay = Long.parseLong(delay);
+            timeUnitsValue = TimeUnit.SECONDS;
         }
 
-        setGeoTraceScheuler(time_delay, time_units_value);
+        setGeoTraceScheuler(timeDelay, timeUnitsValue);
         mode_active = true;
     }
 
     private void addLocationMarker() {
         Marker marker = new Marker(mapView);
         marker.setPosition(mMyLocationOverlay.getMyLocation());
-        Float last_know_acuracy =
+        Float lastKnownAcuracy =
                 mMyLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         mMyLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setDraggable(true);
         marker.setOnMarkerDragListener(draglistner);
-        marker.setSubDescription(Float.toString(last_know_acuracy));
+        marker.setSubDescription(Float.toString(lastKnownAcuracy));
         map_markers.add(marker);
 
         marker.setOnMarkerClickListener(nullmarkerlistner);
@@ -686,15 +686,15 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 
     private String generateReturnString() {
-        String temp_string = "";
+        String tempString = "";
         for (int i = 0; i < map_markers.size(); i++) {
             String lat = Double.toString(map_markers.get(i).getPosition().getLatitude());
             String lng = Double.toString(map_markers.get(i).getPosition().getLongitude());
             String alt = Double.toString(map_markers.get(i).getPosition().getAltitude());
             String acu = map_markers.get(i).getSubDescription();
-            temp_string = temp_string + lat + " " + lng + " " + alt + " " + acu + ";";
+            tempString = tempString + lat + " " + lng + " " + alt + " " + acu + ";";
         }
-        return temp_string;
+        return tempString;
     }
 
     private void returnLocation() {
@@ -794,18 +794,18 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                 double maxLong = Double.MIN_VALUE;
                 Integer size = map_markers.size();
                 for (int i = 0; i < size; i++) {
-                    GeoPoint temp_marker = map_markers.get(i).getPosition();
-                    if (temp_marker.getLatitude() < minLat) {
-                        minLat = temp_marker.getLatitude();
+                    GeoPoint tempMarker = map_markers.get(i).getPosition();
+                    if (tempMarker.getLatitude() < minLat) {
+                        minLat = tempMarker.getLatitude();
                     }
-                    if (temp_marker.getLatitude() > maxLat) {
-                        maxLat = temp_marker.getLatitude();
+                    if (tempMarker.getLatitude() > maxLat) {
+                        maxLat = tempMarker.getLatitude();
                     }
-                    if (temp_marker.getLongitude() < minLong) {
-                        minLong = temp_marker.getLongitude();
+                    if (tempMarker.getLongitude() < minLong) {
+                        minLong = tempMarker.getLongitude();
                     }
-                    if (temp_marker.getLongitude() > maxLong) {
-                        maxLong = temp_marker.getLongitude();
+                    if (tempMarker.getLongitude() > maxLong) {
+                        maxLong = tempMarker.getLongitude();
                     }
                 }
                 BoundingBox boundingBox = new BoundingBox(maxLat, maxLong, minLat, minLong);
@@ -820,9 +820,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     public void showZoomDialog() {
         if (zoomDialog == null) {
-            AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
-            p_builder.setTitle(getString(R.string.zoom_to_where));
-            p_builder.setView(zoomDialogView)
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.zoom_to_where));
+            builder.setView(zoomDialogView)
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -835,7 +835,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                             zoomDialog.dismiss();
                         }
                     });
-            zoomDialog = p_builder.create();
+            zoomDialog = builder.create();
         }
 
         if (mMyLocationOverlay.getMyLocation() != null) {

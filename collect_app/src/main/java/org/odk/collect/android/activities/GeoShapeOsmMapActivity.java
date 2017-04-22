@@ -229,7 +229,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         String[] sa = s.split(";");
         for (int i = 0; i < (sa.length - 1); i++) {
             String[] sp = sa[i].split(" ");
-            double gp[] = new double[4];
+            double[] gp = new double[4];
             String lat = sp[0].replace(" ", "");
             String lng = sp[1].replace(" ", "");
             gp[0] = Double.parseDouble(lat);
@@ -241,7 +241,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setOnMarkerClickListener(nullmarkerlistner);
             map_markers.add(marker);
-//            pathOverlay.addPoint(marker.getPosition());
+            // pathOverlay.addPoint(marker.getPosition());
             marker.setDraggable(true);
             marker.setOnMarkerDragListener(draglistner);
             mMap.getOverlays().add(marker);
@@ -323,8 +323,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         OverlayEventos = new MapEventsOverlay(mReceive);
         polyline = new Polyline();
         polyline.setColor(Color.RED);
-        Paint pPaint = polyline.getPaint();
-        pPaint.setStrokeWidth(stroke_width);
+        Paint paint = polyline.getPaint();
+        paint.setStrokeWidth(stroke_width);
         mMap.getOverlays().add(polyline);
         mMap.getOverlays().add(OverlayEventos);
         mMap.invalidate();
@@ -378,7 +378,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private String generateReturnString() {
-        String temp_string = "";
+        String tempString = "";
         if (map_markers.size() > 1) {
             map_markers.add(map_markers.get(0));
             for (int i = 0; i < map_markers.size(); i++) {
@@ -386,10 +386,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 String lng = Double.toString(map_markers.get(i).getPosition().getLongitude());
                 String alt = "0.0";
                 String acu = "0.0";
-                temp_string = temp_string + lat + " " + lng + " " + alt + " " + acu + ";";
+                tempString = tempString + lat + " " + lng + " " + alt + " " + acu + ";";
             }
         }
-        return temp_string;
+        return tempString;
     }
 
     private void returnLocation() {
@@ -502,18 +502,18 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 double maxLong = Double.MIN_VALUE;
                 Integer size = map_markers.size();
                 for (int i = 0; i < size; i++) {
-                    GeoPoint temp_marker = map_markers.get(i).getPosition();
-                    if (temp_marker.getLatitude() < minLat) {
-                        minLat = temp_marker.getLatitude();
+                    GeoPoint tempMarker = map_markers.get(i).getPosition();
+                    if (tempMarker.getLatitude() < minLat) {
+                        minLat = tempMarker.getLatitude();
                     }
-                    if (temp_marker.getLatitude() > maxLat) {
-                        maxLat = temp_marker.getLatitude();
+                    if (tempMarker.getLatitude() > maxLat) {
+                        maxLat = tempMarker.getLatitude();
                     }
-                    if (temp_marker.getLongitude() < minLong) {
-                        minLong = temp_marker.getLongitude();
+                    if (tempMarker.getLongitude() < minLong) {
+                        minLong = tempMarker.getLongitude();
                     }
-                    if (temp_marker.getLongitude() > maxLong) {
-                        maxLong = temp_marker.getLongitude();
+                    if (tempMarker.getLongitude() > maxLong) {
+                        maxLong = tempMarker.getLongitude();
                     }
                 }
                 BoundingBox boundingBox = new BoundingBox(maxLat, maxLong, minLat, minLong);
@@ -528,9 +528,9 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public void showZoomDialog() {
 
         if (zoomDialog == null) {
-            AlertDialog.Builder p_builder = new AlertDialog.Builder(this);
-            p_builder.setTitle(getString(R.string.zoom_to_where));
-            p_builder.setView(zoomDialogView)
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.zoom_to_where));
+            builder.setView(zoomDialogView)
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -543,7 +543,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                             zoomDialog.dismiss();
                         }
                     });
-            zoomDialog = p_builder.create();
+            zoomDialog = builder.create();
         }
         //If feature enable zoom to button else disable
         if (mMyLocationOverlay.getMyLocation() != null) {

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.dao;
 
 import android.database.Cursor;
@@ -135,7 +136,7 @@ public class FormsDaoTest {
 
 
         String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
-        String selectionArgs[] = {"Miramare"};
+        String[] selectionArgs = {"Miramare"};
 
         cursor = mFormsDao.getFormsCursor(null, selection, selectionArgs, null);
         forms = mFormsDao.getFormsFromCursor(cursor);

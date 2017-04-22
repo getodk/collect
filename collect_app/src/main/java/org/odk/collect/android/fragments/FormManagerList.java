@@ -52,7 +52,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private static final String syncMsgKey = "syncmsgkey";
-    private static String TAG = "FormManagerList";
     BackgroundTasks mBackgroundTasks; // handled across orientation changes
     private AlertDialog mAlertDialog;
 

@@ -236,7 +236,7 @@ public class DrawActivity extends Activity {
                                 DrawActivity.this,
                                 "saveAndCloseButton",
                                 "click");
-                SaveAndClose();
+                saveAndClose();
             }
         });
         btnReset = (Button) findViewById(R.id.btnResetDraw);
@@ -249,7 +249,7 @@ public class DrawActivity extends Activity {
                                 DrawActivity.this,
                                 "resetButton",
                                 "click");
-                Reset();
+                reset();
             }
         });
         btnCancel = (Button) findViewById(R.id.btnCancelDraw);
@@ -262,7 +262,7 @@ public class DrawActivity extends Activity {
                                 DrawActivity.this,
                                 "cancelAndCloseButton",
                                 "click");
-                CancelAndClose();
+                cancelAndClose();
             }
         });
 
@@ -276,7 +276,7 @@ public class DrawActivity extends Activity {
         return Color.argb(alpha, 255 - red, 255 - green, 255 - blue);
     }
 
-    private void SaveAndClose() {
+    private void saveAndClose() {
         try {
             saveFile(output);
             setResult(Activity.RESULT_OK);
@@ -311,7 +311,7 @@ public class DrawActivity extends Activity {
         }
     }
 
-    private void Reset() {
+    private void reset() {
         savepointImage.delete();
         if (!OPTION_SIGNATURE.equals(loadOption) && refImage != null
                 && refImage.exists()) {
@@ -321,7 +321,7 @@ public class DrawActivity extends Activity {
         drawView.invalidate();
     }
 
-    private void CancelAndClose() {
+    private void cancelAndClose() {
         setResult(Activity.RESULT_CANCELED);
         this.finish();
     }
@@ -401,7 +401,7 @@ public class DrawActivity extends Activity {
                                         .logInstanceAction(this,
                                                 "createQuitDrawDialog",
                                                 "saveAndExit");
-                                SaveAndClose();
+                                saveAndClose();
                                 break;
 
                             case 1: // discard changes and exit
@@ -411,7 +411,7 @@ public class DrawActivity extends Activity {
                                         .logInstanceAction(this,
                                                 "createQuitDrawDialog",
                                                 "discardAndExit");
-                                CancelAndClose();
+                                cancelAndClose();
                                 break;
 
                             case 2:// do nothing
@@ -434,6 +434,8 @@ public class DrawActivity extends Activity {
         private Path mOffscreenPath; // Adjusted for position of the bitmap in the view
         private Paint mBitmapPaint;
         private File mBackgroundBitmapFile;
+        private float mX;
+        private float mY;
 
         public DrawView(final Context c) {
             super(c);
@@ -502,9 +504,6 @@ public class DrawActivity extends Activity {
             canvas.drawPath(mCurrentPath, paint);
         }
 
-        private float mX;
-        private float mY;
-
         private void touch_start(float x, float y) {
             mCurrentPath.reset();
             mCurrentPath.moveTo(x, y);
@@ -565,22 +564,22 @@ public class DrawActivity extends Activity {
             return true;
         }
 
-        public int getBitmapHeight(){
+        public int getBitmapHeight() {
             return mBitmap.getHeight();
         }
 
-        public int getBitmapWidth(){
+        public int getBitmapWidth() {
             return mBitmap.getWidth();
         }
 
-        private int getBitmapLeft(){
+        private int getBitmapLeft() {
             // Centered horizontally
-            return (getWidth() - mBitmap.getWidth())/2;
+            return (getWidth() - mBitmap.getWidth()) / 2;
         }
 
-        private int getBitmapTop(){
+        private int getBitmapTop() {
             // Centered vertically
-            return (getHeight() - mBitmap.getHeight())/2;
+            return (getHeight() - mBitmap.getHeight()) / 2;
         }
     }
 

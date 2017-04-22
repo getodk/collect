@@ -97,8 +97,8 @@ public class GoogleDriveActivity extends ListActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, EasyPermissions.PermissionCallbacks {
 
-    private final static int PROGRESS_DIALOG = 1;
-    private final static int GOOGLE_USER_DIALOG = 3;
+    private static final int PROGRESS_DIALOG = 1;
+    private static final int GOOGLE_USER_DIALOG = 3;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
     private static final int COMPLETE_AUTHORIZATION_REQUEST_CODE = 4322;
     private static final String MY_DRIVE_KEY = "mydrive";
@@ -176,8 +176,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
             MyDrive = false;
 
-            if (isDeviceOnline()) {
-            } else {
+            if (!isDeviceOnline()) {
                 createAlertDialog(getString(R.string.no_connection));
             }
         }
@@ -794,7 +793,12 @@ public class GoogleDriveActivity extends ListActivity implements
                 return null;
             } catch (IOException e) {
                 Timber.e(e);
-                createAlertDialog(getString(R.string.google_auth_io_exception_msg));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAlertDialog(getString(R.string.google_auth_io_exception_msg));
+                    }
+                });
             }
             if (rootId == null) {
                 Timber.e("Unable to fetch drive contents");
@@ -953,22 +957,22 @@ public class GoogleDriveActivity extends ListActivity implements
             for (int k = 0; k < fileItems.size(); k++) {
                 DriveListItem fileItem = fileItems.get(k);
 
-                FileOutputStream fStream = null;
+                FileOutputStream fileOutputStream = null;
                try {
                     com.google.api.services.drive.model.File df = mDriveService.files()
                             .get(fileItem.getDriveId()).execute();
 
-                    fStream = new FileOutputStream
-                            (new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
-                    downloadFile(df).writeTo(fStream);
+                    fileOutputStream = new FileOutputStream(
+                            new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
+                    downloadFile(df).writeTo(fileOutputStream);
                 } catch (Exception e) {
                     Timber.e(e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
                 } finally {
                     try {
-                        if (fStream != null) {
-                            fStream.close();
+                        if (fileOutputStream != null) {
+                            fileOutputStream.close();
                         }
                     } catch (IOException e) {
                         Timber.e(e, "Unable to close the file output stream");

@@ -57,7 +57,7 @@ import java.util.Locale;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class VideoWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "MediaWidget";
+    private static final String t = "MediaWidget";
 
     private Button mCaptureButton;
     private Button mPlayButton;
@@ -121,10 +121,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 }
 
                 // request high resolution if configured for that...
-                boolean high_resolution = settings.getBoolean(
+                boolean highResolution = settings.getBoolean(
                         PreferenceKeys.KEY_HIGH_RESOLUTION,
                         VideoWidget.DEFAULT_HIGH_RESOLUTION);
-                if (high_resolution) {
+                if (highResolution) {
                     i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 }
                 try {
@@ -291,9 +291,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
             values.put(Video.Media.DATA, newVideo.getAbsolutePath());
 
-            Uri VideoURI = getContext().getContentResolver().insert(
+            Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting VIDEO returned uri = " + VideoURI.toString());
+            Log.i(t, "Inserting VIDEO returned uri = " + videoURI.toString());
         } else {
             Log.e(t, "Inserting Video file FAILED");
         }

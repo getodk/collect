@@ -425,7 +425,7 @@ public class DownloadFormsTask extends
                         is = new GZIPInputStream(is);
                     }
                     os = new FileOutputStream(tempFile);
-                    byte buf[] = new byte[4096];
+                    byte[] buf = new byte[4096];
                     int len;
                     while ((len = is.read(buf)) > 0 && !isCancelled()) {
                         os.write(buf, 0, len);
@@ -497,10 +497,10 @@ public class DownloadFormsTask extends
         private final String mediaPath;
         private final boolean isNew;
 
-        private UriResult(Uri uri, String mediaPath, boolean aNew) {
+        private UriResult(Uri uri, String mediaPath, boolean isNew) {
             this.uri = uri;
             this.mediaPath = mediaPath;
-            this.isNew = aNew;
+            this.isNew = isNew;
         }
 
         private Uri getUri() {
@@ -521,9 +521,9 @@ public class DownloadFormsTask extends
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean aNew) {
+        private FileResult(File file, boolean isNew) {
             this.file = file;
-            isNew = aNew;
+            this.isNew = isNew;
         }
 
         private File getFile() {
@@ -595,8 +595,8 @@ public class DownloadFormsTask extends
             Log.e(t, errMessage);
             return errMessage;
         }
-        int nElements = manifestElement.getChildCount();
-        for (int i = 0; i < nElements; ++i) {
+        int elements = manifestElement.getChildCount();
+        for (int i = 0; i < elements; ++i) {
             if (manifestElement.getType(i) != Element.ELEMENT) {
                 // e.g., whitespace (text)
                 continue;
@@ -674,7 +674,7 @@ public class DownloadFormsTask extends
                                 String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
                         Integer
                                 .valueOf(total).toString());
-//                try {
+                //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.filename);
                 File tempMediaFile = new File(tempMediaDir, toDownload.filename);
 
@@ -696,9 +696,9 @@ public class DownloadFormsTask extends
                                 + finalMediaFile.getAbsolutePath());
                     }
                 }
-//                } catch (Exception e) {
-//                    return e.getLocalizedMessage();
-//                }
+                //  } catch (Exception e) {
+                //  return e.getLocalizedMessage();
+                //}
             }
         }
         return null;

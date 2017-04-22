@@ -94,7 +94,7 @@ public class ItemsetWidget extends QuestionWidget implements
         String nodesetStr = prompt.getQuestion().getAdditionalAttribute(null, "query");
 
         // parse out the list name, between the ''
-        String list_name = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
+        String listName = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
                 nodesetStr.lastIndexOf("'"));
 
         // isolate the string between between the [ ] characters
@@ -122,7 +122,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 || (orIndex = queryString.indexOf(" or ")) != -1) {
             if (andIndex != -1) {
                 String subString = queryString.substring(0, andIndex);
-                String pair[] = subString.split("=");
+                String[] pair = subString.split("=");
                 if (pair.length == 2) {
                     selection.append(pair[0].trim() + "=? and ");
                     arguments.add(pair[1].trim());
@@ -134,7 +134,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 andIndex = -1;
             } else if (orIndex != -1) {
                 String subString = queryString.substring(0, orIndex);
-                String pair[] = subString.split("=");
+                String[] pair = subString.split("=");
                 if (pair.length == 2) {
                     selection.append(pair[0].trim() + "=? or ");
                     arguments.add(pair[1].trim());
@@ -150,7 +150,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
         // parse the last segment (or only segment if there are no 'and' or 'or'
         // clauses
-        String pair[] = queryString.split("=");
+        String[] pair = queryString.split("=");
         if (pair.length == 2) {
             selection.append(pair[0].trim() + "=?");
             arguments.add(pair[1].trim());
@@ -166,7 +166,7 @@ public class ItemsetWidget extends QuestionWidget implements
         String[] selectionArgs = new String[arguments.size() + 1];
 
         boolean nullArgs = false; // can't have any null arguments
-        selectionArgs[0] = list_name; // first argument is always listname
+        selectionArgs[0] = listName; // first argument is always listname
 
         // loop through the arguments, evaluate any expressions
         // and build the query string for the DB
@@ -184,10 +184,10 @@ public class ItemsetWidget extends QuestionWidget implements
 
             if (xpr != null) {
                 FormDef form = Collect.getInstance().getFormController().getFormDef();
-                TreeElement mTreeElement = form.getMainInstance().resolveReference(
+                TreeElement treeElement = form.getMainInstance().resolveReference(
                         prompt.getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
-                        mTreeElement.getRef());
+                        treeElement.getRef());
                 Object value = xpr.eval(form.getMainInstance(), ec);
 
                 if (value == null) {

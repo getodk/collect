@@ -100,7 +100,7 @@ public class FormController {
     /**
      * Classes needed to serialize objects. Need to put anything from JR in here.
      */
-    private final static String[] SERIALIABLE_CLASSES = {
+    private static final String[] SERIALIABLE_CLASSES = {
             "org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
             "org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
             "org.javarosa.core.model.FormDef",
@@ -226,8 +226,8 @@ public class FormController {
         return value;
     }
 
-    public FormIndex getIndexFromXPath(String xPath) {
-        switch (xPath) {
+    public FormIndex getIndexFromXPath(String xpath) {
+        switch (xpath) {
             case "beginningOfForm":
                 return FormIndex.createBeginningOfFormIndex();
             case "endOfForm":
@@ -246,7 +246,7 @@ public class FormController {
                     while (event != FormEntryController.EVENT_END_OF_FORM) {
                         String candidateXPath = getXPath(getFormIndex());
                         // Log.i(t, "xpath: " + candidateXPath);
-                        if (candidateXPath.equals(xPath)) {
+                        if (candidateXPath.equals(xpath)) {
                             returned = getFormIndex();
                             break;
                         }
@@ -917,23 +917,23 @@ public class FormController {
         String constraintText = getBindAttribute(index, XFormParser.NAMESPACE_JAVAROSA,
                 "requiredMsg");
         if (constraintText != null) {
-            XPathExpression xPathRequiredMsg;
+            XPathExpression xpathRequiredMsg;
             try {
-                xPathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
+                xpathRequiredMsg = XPathParseTool.parseXPath("string(" + constraintText + ")");
             } catch (Exception e) {
                 // Expected in probably most cases.
                 // This is a string literal, so no need to evaluate anything.
                 return constraintText;
             }
 
-            if (xPathRequiredMsg != null) {
+            if (xpathRequiredMsg != null) {
                 try {
                     FormDef form = mFormEntryController.getModel().getForm();
-                    TreeElement mTreeElement = form.getMainInstance().resolveReference(
+                    TreeElement treeElement = form.getMainInstance().resolveReference(
                             index.getReference());
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
-                            mTreeElement.getRef());
-                    Object value = xPathRequiredMsg.eval(form.getMainInstance(), ec);
+                            treeElement.getRef());
+                    Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
                     if (value != "") {
                         return (String) value;
                     }
