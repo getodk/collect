@@ -54,7 +54,7 @@ import java.io.File;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "AnnotateWidget";
+    private static final String t = "AnnotateWidget";
 
     private Button mCaptureButton;
     private Button mChooseButton;

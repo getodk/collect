@@ -20,7 +20,9 @@ import java.util.TreeMap;
 
 public class LocaleHelper {
 
-    public void updateLocale(Context context, String localeCode) {
+    public void updateLocale(Context context) {
+        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
         Locale locale = getLocale(localeCode);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
@@ -43,7 +45,7 @@ public class LocaleHelper {
         }
         updateLocale(context, localeCode);
     }
-
+  
     public TreeMap<String, String> getEntryListValues() {
         //Holds language as key and language code as value
         TreeMap<String, String> languageList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -56,7 +58,7 @@ public class LocaleHelper {
 
     private Locale getLocale(String splitLocaleCode) {
         if (splitLocaleCode.contains("_")) {
-            String arg[] = splitLocaleCode.split("_");
+            String[] arg = splitLocaleCode.split("_");
             return new Locale(arg[0], arg[1]);
         } else {
             return new Locale(splitLocaleCode);

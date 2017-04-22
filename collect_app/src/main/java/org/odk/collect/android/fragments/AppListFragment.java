@@ -211,8 +211,8 @@ abstract class AppListFragment extends ListFragment {
         mDrawerList = (ListView) rootView.findViewById(R.id.sortingMenu);
         mDrawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mDrawerToggle = new ActionBarDrawerToggle
-                (getActivity(), mDrawerLayout,
+        mDrawerToggle = new ActionBarDrawerToggle(
+                getActivity(), mDrawerLayout,
                         R.string.sorting_menu_open, R.string.sorting_menu_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
