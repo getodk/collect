@@ -91,7 +91,6 @@ public class Collect extends Application {
     private Tracker mTracker;
 
     public static String defaultSysLanguage;
-    public static boolean isUsingSysLanguage = true;
 
     public static Collect getInstance() {
         return singleton;
@@ -239,6 +238,7 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         defaultSysLanguage = Locale.getDefault().getLanguage();
+        new LocaleHelper().updateLocale(this);
         singleton = this;
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -265,7 +265,9 @@ public class Collect extends Application {
         super.onConfigurationChanged(newConfig);
 
         defaultSysLanguage = newConfig.locale.getLanguage();
-        if (!Collect.isUsingSysLanguage) {
+        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this).
+                getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
+        if ( !isUsingSysLanguage ) {
             new LocaleHelper().updateLocale(this);
         }
     }

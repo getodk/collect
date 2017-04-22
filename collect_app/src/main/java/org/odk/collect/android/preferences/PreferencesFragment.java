@@ -18,7 +18,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.util.ArrayList;
@@ -189,14 +188,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                     edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                     edit.apply();
 
-                    if (index == 0) {
-                        Collect.isUsingSysLanguage = true;
-                        //Pass updated defaultSysLanguage
-                        localeHelper.updateLocale(getActivity(), Collect.defaultSysLanguage);
-                    } else {
-                        Collect.isUsingSysLanguage = false;
-                        localeHelper.updateLocale(getActivity());
-                    }
+                    localeHelper.updateLocale(getActivity());
 
                     Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
                     getActivity().startActivity(intent);

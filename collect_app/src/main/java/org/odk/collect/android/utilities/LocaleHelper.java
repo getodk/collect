@@ -6,6 +6,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.Locale;
@@ -35,7 +36,11 @@ public class LocaleHelper {
 
     public void updateLocale(Context context) {
         String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
+                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "");
+        boolean isUsingSysLanguage = localeCode.equals("");
+        if ( isUsingSysLanguage ) {
+            localeCode = Collect.defaultSysLanguage;
+        }
         updateLocale(context, localeCode);
     }
 
