@@ -270,10 +270,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 if (errorMsg != null) {
                     // errorMsg is only set when an error has occurred
                     Log.e(t, errorMsg);
-                    mMissingImage = new TextView(getContext());
-                    mMissingImage.setText(errorMsg);
-                    mMissingImage.setPadding(10, 10, 10, 10);
-                    mMissingImage.setId(imageId);
+                    mImageView = new ImageView(getContext());
+                    mImageView.setPadding(2, 2, 2, 2);
+                    mImageView.setImageResource(R.drawable.filenotfound);
+                    mImageView.setId(imageId);
                 }
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage() );
