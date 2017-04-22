@@ -147,9 +147,12 @@ public class TimeWidget extends QuestionWidget {
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+                        mHourOfDay = hourOfDay;
+                        mMinuteOfHour = minuteOfHour;
                         setTime(hourOfDay, minuteOfHour);
                     }
                 }, 0, 0);
+        mTimePickerDialog.setCanceledOnTouchOutside(false);
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
@@ -171,7 +174,7 @@ public class TimeWidget extends QuestionWidget {
         return mMinuteOfHour;
     }
 
-    private class CustomTimePickerDialog extends TimePickerDialog implements TimePickerDialog.OnTimeSetListener {
+    private class CustomTimePickerDialog extends TimePickerDialog {
         private String mDialogTitle = getContext().getString(R.string.select_time);
 
         public CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
@@ -181,12 +184,6 @@ public class TimeWidget extends QuestionWidget {
 
         public void setTitle(CharSequence title) {
             super.setTitle(mDialogTitle);
-        }
-
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            mHourOfDay = hourOfDay;
-            mMinuteOfHour = minute;
         }
     }
 }

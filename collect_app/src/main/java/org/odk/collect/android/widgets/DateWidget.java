@@ -57,6 +57,10 @@ public class DateWidget extends QuestionWidget {
     private boolean mHideMonth;
     private boolean mShowCalendar;
 
+    private int mYear;
+    private int mMonth;
+    private int mDayOfMonth;
+
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -107,7 +111,10 @@ public class DateWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         DateTime dt = new DateTime();
-        mDatePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
+        mYear = dt.getYear();
+        mMonth = dt.getMonthOfYear();
+        mDayOfMonth = dt.getDayOfMonth();
+        mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
         setDate();
     }
 
@@ -116,9 +123,9 @@ public class DateWidget extends QuestionWidget {
         clearFocus();
 
         LocalDateTime ldt = new LocalDateTime()
-                .withYear(mDatePickerDialog.getDatePicker().getYear())
-                .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mDatePickerDialog.getDatePicker().getMonth() + 1)
-                .withDayOfMonth((!mShowCalendar && (mHideMonth || mHideDay)) ? 1 : mDatePickerDialog.getDatePicker().getDayOfMonth())
+                .withYear(mYear)
+                .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mMonth)
+                .withDayOfMonth((!mShowCalendar && (mHideMonth || mHideDay)) ? 1 : mDayOfMonth)
                 .withHourOfDay(0)
                 .withMinuteOfHour(0);
 
@@ -161,6 +168,7 @@ public class DateWidget extends QuestionWidget {
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
                 mDatePickerDialog.show();
             }
         });
@@ -199,16 +207,21 @@ public class DateWidget extends QuestionWidget {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mDatePickerDialog.updateDate(year, monthOfYear, dayOfMonth);
+                        mYear = year;
+                        mMonth = monthOfYear + 1;
+                        mDayOfMonth = dayOfMonth;
                         setDate();
                     }
                 }, 0, 0, 0);
+        mDatePickerDialog.setCanceledOnTouchOutside(false);
 
         // If there's an answer, use it.
         if (mPrompt.getAnswerValue() != null) {
             // create a new date from date object using default time zone
             DateTime ldt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            mDatePickerDialog.updateDate(ldt.getYear(), ldt.getMonthOfYear() - 1, ldt.getDayOfMonth());
+            mYear = ldt.getYear();
+            mMonth = ldt.getMonthOfYear();
+            mDayOfMonth = ldt.getDayOfMonth();
             setDate();
         } else {
             // create date widget with current time as of right now

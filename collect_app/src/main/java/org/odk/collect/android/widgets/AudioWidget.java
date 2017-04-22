@@ -50,7 +50,7 @@ import java.io.File;
  */
 
 public class AudioWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "MediaWidget";
+    private static final String t = "MediaWidget";
 
     private Button mCaptureButton;
     private Button mPlayButton;

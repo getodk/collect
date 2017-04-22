@@ -97,8 +97,8 @@ public class GoogleDriveActivity extends ListActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, EasyPermissions.PermissionCallbacks {
 
-    private final static int PROGRESS_DIALOG = 1;
-    private final static int GOOGLE_USER_DIALOG = 3;
+    private static final int PROGRESS_DIALOG = 1;
+    private static final int GOOGLE_USER_DIALOG = 3;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
     private static final int COMPLETE_AUTHORIZATION_REQUEST_CODE = 4322;
     private static final String MY_DRIVE_KEY = "mydrive";
@@ -176,8 +176,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
             MyDrive = false;
 
-            if (isDeviceOnline()) {
-            } else {
+            if (!isDeviceOnline()) {
                 createAlertDialog(getString(R.string.no_connection));
             }
         }
@@ -794,7 +793,12 @@ public class GoogleDriveActivity extends ListActivity implements
                 return null;
             } catch (IOException e) {
                 Timber.e(e);
-                createAlertDialog(getString(R.string.google_auth_io_exception_msg));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAlertDialog(getString(R.string.google_auth_io_exception_msg));
+                    }
+                });
             }
             if (rootId == null) {
                 Timber.e("Unable to fetch drive contents");
