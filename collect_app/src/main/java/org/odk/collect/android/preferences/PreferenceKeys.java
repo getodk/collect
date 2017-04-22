@@ -71,7 +71,6 @@ public final class PreferenceKeys {
      * General keys
      */
     public static final Collection<String> ALL_GENERAL_KEYS = Arrays.asList(
-            KEY_LAST_VERSION,
             KEY_SHOW_SPLASH,
             KEY_SPLASH_PATH,
             KEY_FONT_SIZE,

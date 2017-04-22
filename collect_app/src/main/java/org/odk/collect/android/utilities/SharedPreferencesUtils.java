@@ -177,11 +177,14 @@ public class SharedPreferencesUtils {
         switch (key) {
             case KEY_LAST_VERSION:
                 try {
-                    defValue = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),
+                    defValue = (long) mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),
                             PackageManager.GET_META_DATA).versionCode;
                 } catch (PackageManager.NameNotFoundException e) {
                     Timber.e(e, "Unable to get package info");
                 }
+                break;
+            default:
+                defValue = 0;
         }
         return defValue;
     }
@@ -193,11 +196,24 @@ public class SharedPreferencesUtils {
             if (settingsJson.has(key)) {
                 try {
                     mEditor.putString(key, settingsJson.getString(key));
-                } catch (JSONException e) {
+                } catch (ClassCastException e) {
                     try {
                         mEditor.putBoolean(key, settingsJson.getBoolean(key));
-                    } catch (JSONException e1) {
+                    } catch (ClassCastException e1) {
                         mEditor.putLong(key, settingsJson.getLong(key));
+                    }
+                }
+            } else {
+                try {
+                    String stringValue = getStringValue(key);
+                    mEditor.putString(key, getDefaultStringValue(key));
+                } catch (ClassCastException e) {
+                    try {
+                        boolean booleanValue = getBooleanValue(key);
+                        mEditor.putBoolean(key, getDefaultBooleanValue(key));
+                    } catch (ClassCastException e1) {
+                        long longValue = getLongValue(key);
+                        mEditor.putLong(key, getDefaultLongValue(key));
                     }
                 }
             }
