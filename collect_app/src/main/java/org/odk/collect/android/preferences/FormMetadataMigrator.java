@@ -24,8 +24,8 @@ public class FormMetadataMigrator {
     @SuppressLint("ApplySharedPref")
     public static void migrate(SharedPreferences sharedPreferences) {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
-        Timber.i("migrate called, %b",
-                (migrationAlreadyDone ? "migration already done" : "will migrate"));
+        Timber.i(String.format("migrate called, %b",
+                (migrationAlreadyDone ? "migration already done" : "will migrate")));
 
         if (! migrationAlreadyDone) {
             SharedPreferences.Editor editor = sharedPreferences.edit();

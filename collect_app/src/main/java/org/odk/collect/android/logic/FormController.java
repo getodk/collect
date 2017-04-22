@@ -703,7 +703,7 @@ public class FormController {
                         saveAnswer(index, answer);
                     }
                 } else {
-                    Timber.w("Attempted to save an index referencing something other than a question: %",
+                    Timber.w("Attempted to save an index referencing something other than a question: %s",
                                     index.getReference().toString());
                 }
             }
