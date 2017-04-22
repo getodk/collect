@@ -43,7 +43,7 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class DiskSyncTask extends AsyncTask<Void, String, String> {
-    private final static String t = "DiskSyncTask";
+    private static final String t = "DiskSyncTask";
 
     private static int counter = 0;
 

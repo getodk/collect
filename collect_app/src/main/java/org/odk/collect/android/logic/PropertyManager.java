@@ -44,12 +44,12 @@ public class PropertyManager implements IPropertyManager {
 
     private static final String TAG = "PropertyManager";
 
-    public final static String PROPMGR_DEVICE_ID        = "deviceid";
-    public final static String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
-    public final static String PROPMGR_SIM_SERIAL       = "simserial";
-    public final static String PROPMGR_PHONE_NUMBER     = "phonenumber";
-    public final static String PROPMGR_USERNAME         = "username";
-    public final static String PROPMGR_EMAIL            = "email";
+    public static final String PROPMGR_DEVICE_ID        = "deviceid";
+    public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
+    public static final String PROPMGR_SIM_SERIAL       = "simserial";
+    public static final String PROPMGR_PHONE_NUMBER     = "phonenumber";
+    public static final String PROPMGR_USERNAME         = "username";
+    public static final String PROPMGR_EMAIL            = "email";
 
     private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
 
@@ -112,7 +112,7 @@ public class PropertyManager implements IPropertyManager {
         if (deviceId == null) {
             // no SIM -- WiFi only
             // Retrieve WiFiManager
-            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
             // Get WiFi status
             WifiInfo info = wifi.getConnectionInfo();

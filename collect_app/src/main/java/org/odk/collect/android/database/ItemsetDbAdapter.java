@@ -143,7 +143,7 @@ public class ItemsetDbAdapter {
     public boolean tableExists(String tableName) {
         // select name from sqlite_master where type = 'table'
         String selection = "type=? and name=?";
-        String selectionArgs[] = {
+        String[] selectionArgs = {
                 "table", DATABASE_TABLE + tableName
         };
         Cursor c = mDb.query("sqlite_master", null, selection, selectionArgs,

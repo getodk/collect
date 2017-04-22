@@ -119,6 +119,7 @@ public class AuthDialogUtility {
 
     public interface AuthDialogUtilityResultListener {
         void updatedCredentials();
+
         void cancelledUpdatingCredentials();
     }
 }

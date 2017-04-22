@@ -11,7 +11,7 @@ import org.odk.collect.android.application.Collect;
 
 public class NotificationActivity extends Activity {
 
-    public final static String NOTIFICATION_KEY = "message";
+    public static final String NOTIFICATION_KEY = "message";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

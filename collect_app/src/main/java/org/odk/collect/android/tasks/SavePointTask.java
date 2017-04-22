@@ -35,7 +35,7 @@ import java.io.File;
  */
 public class SavePointTask extends AsyncTask<Void, Void, String> {
 
-    private final static String t = "SavePointTask";
+    private static final String t = "SavePointTask";
     private static final Object lock = new Object();
     private static int lastPriorityUsed = 0;
 

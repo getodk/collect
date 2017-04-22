@@ -49,8 +49,8 @@ public class DateWidgetUtils {
                             if (field.getName().equals("mMonthNumDrawPaint")) { // the paint is stored inside the view
                                 field.setAccessible(true);
                                 object = field.get(object);
-                                Method method = object.getClass().
-                                        getDeclaredMethod("setTextSize", float.class); // finally set text size
+                                Method method = object.getClass()
+                                        .getDeclaredMethod("setTextSize", float.class); // finally set text size
                                 method.setAccessible(true);
                                 method.invoke(object, (Object) mDateTextSize);
 

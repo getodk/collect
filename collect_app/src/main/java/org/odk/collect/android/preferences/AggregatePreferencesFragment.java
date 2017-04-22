@@ -132,8 +132,8 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getX() >= (v.getWidth() - ((EditText) v)
                     .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                InputMethodManager imm = (InputMethodManager) getActivity().
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 mListPopupWindow.show();
                 return true;
@@ -157,8 +157,8 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
                 if (UrlUtils.isValidUrl(url)) {
                     preference.setSummary(newValue.toString());
-                    SharedPreferences prefs = PreferenceManager.
-                            getDefaultSharedPreferences(getActivity().getApplicationContext());
+                    SharedPreferences prefs = PreferenceManager
+                            .getDefaultSharedPreferences(getActivity().getApplicationContext());
                     String urlListString = prefs.getString(KNOWN_URL_LIST, "");
 
                     mUrlList =
