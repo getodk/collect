@@ -67,6 +67,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         }
 
         setContentView(R.layout.chooser_list_layout);
+        super.onCreate(savedInstanceState);
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
 
@@ -92,7 +93,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
         };
-        super.onCreate(savedInstanceState);
     }
 
 

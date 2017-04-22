@@ -38,10 +38,8 @@ public class FileManagerTabs extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setTitle(getString(R.string.manage_files));
+        setSupportActionBar(toolbar);
     }
 
     @Override

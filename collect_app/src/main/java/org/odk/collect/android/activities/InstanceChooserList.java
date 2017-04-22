@@ -68,6 +68,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         }
 
         setContentView(R.layout.chooser_list_layout);
+        super.onCreate(savedInstanceState);
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
@@ -95,7 +96,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
-        super.onCreate(savedInstanceState);
     }
 
     @Override

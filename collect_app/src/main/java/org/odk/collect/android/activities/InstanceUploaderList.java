@@ -82,6 +82,7 @@ public class InstanceUploaderList extends InstanceListActivity
     public void onCreate(Bundle savedInstanceState) {
         Timber.i("onCreate");
         setContentView(R.layout.instance_uploader_list);
+        super.onCreate(savedInstanceState);
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
@@ -156,7 +157,6 @@ public class InstanceUploaderList extends InstanceListActivity
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
-        super.onCreate(savedInstanceState);
     }
 
     @Override
