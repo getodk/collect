@@ -36,7 +36,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
     // Log log log log ...
     // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
-    private static final String t = "MBTileSource";
     // Database related fields
     public static final String TABLE_TILES = "tiles";
     public static final String COL_TILES_ZOOM_LEVEL = "zoom_level";

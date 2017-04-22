@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -38,12 +37,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  *
  */
 public class InstanceProvider extends ContentProvider {
 
-    private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
     private static final int DATABASE_VERSION = 4;
@@ -105,9 +105,8 @@ public class InstanceProvider extends ContentProvider {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                         InstanceColumns.DELETED_DATE + " date;");
             }
-            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
-                    + newVersion
-                    + ", without destroying all the old data");
+            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
+                    initialVersion, newVersion);
         }
     }
 
@@ -264,9 +263,8 @@ public class InstanceProvider extends ContentProvider {
                 int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
                 int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
 
-                Log.i(t, "removed from content providers: " + images
-                        + " image files, " + audio + " audio files,"
-                        + " and " + video + " video files.");
+                Timber.i("removed from content providers: %d image files, %d audio files,"
+                        + " and %d video files.", images, audio, video);
 
                 // delete all the files in the directory
                 File[] files = directory.listFiles();
