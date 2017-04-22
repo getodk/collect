@@ -696,8 +696,8 @@ public abstract class GoogleSheetsAbstractUploader extends
         return folder;
     }
 
-    private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive
-            (String folderName,
+    private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
+            String folderName,
              String parentId) throws IOException {
 
         ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
