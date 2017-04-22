@@ -47,8 +47,8 @@ public class UrlUtils {
             if (cursor.getCount() > 0) {
                 cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
-                    int subIdx = cursor.getColumnIndex
-                            (InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
+                    int subIdx = cursor.getColumnIndex(
+                            InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
                     urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
 
                     // if we didn't find one in the content provider,
@@ -73,8 +73,8 @@ public class UrlUtils {
         final String googleHeader = "docs.google.com/spreadsheets/d/";
         String spreadsheetId;
         if (urlString == null || urlString.length() < googleHeader.length()) {
-            throw new BadUrlException
-                    (Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
+            throw new BadUrlException(
+                    Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
         } else {
             int start = urlString.indexOf(googleHeader) + googleHeader.length();
             int end = urlString.indexOf("/", start);
@@ -83,8 +83,8 @@ public class UrlUtils {
                 end = urlString.length();
             }
             if (start == -1 || end == -1) {
-                throw new BadUrlException
-                        (Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
+                throw new BadUrlException(
+                        Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
             }
             spreadsheetId = urlString.substring(start, end);
             return spreadsheetId;
