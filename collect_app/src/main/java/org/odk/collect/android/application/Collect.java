@@ -265,8 +265,8 @@ public class Collect extends Application {
         super.onConfigurationChanged(newConfig);
 
         defaultSysLanguage = newConfig.locale.getLanguage();
-        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this).
-                getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
+        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
         if ( !isUsingSysLanguage ) {
             new LocaleHelper().updateLocale(this);
         }
