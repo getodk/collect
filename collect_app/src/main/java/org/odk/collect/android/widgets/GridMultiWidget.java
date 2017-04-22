@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -239,7 +238,7 @@ public class GridMultiWidget extends QuestionWidget {
                     missingImage.setText(choices[i]);
                 } else {
                     // errorMsg is only set when an error has occurred
-                    Log.e("GridMultiWidget", errorMsg);
+                    Timber.e(errorMsg);
                     missingImage.setText(errorMsg);
                 }
 
