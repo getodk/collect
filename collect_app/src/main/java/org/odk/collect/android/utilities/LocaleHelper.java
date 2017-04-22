@@ -19,7 +19,9 @@ import java.util.TreeMap;
 
 public class LocaleHelper {
 
-    public void updateLocale(Context context, String localeCode) {
+    public void updateLocale(Context context) {
+        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
         Locale locale = getLocale(localeCode);
         Locale.setDefault(locale);
         Configuration configuration = new Configuration();
@@ -31,12 +33,6 @@ public class LocaleHelper {
         }
         context.getResources().updateConfiguration(configuration, displayMetrics);
         context.getApplicationContext().getResources().updateConfiguration(configuration, displayMetrics);
-    }
-
-    public void updateLocale(Context context) {
-        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "en");
-        updateLocale(context, localeCode);
     }
 
     public TreeMap<String, String> getEntryListValues() {
