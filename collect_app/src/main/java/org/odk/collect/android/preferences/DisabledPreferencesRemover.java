@@ -20,16 +20,16 @@ import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 class DisabledPreferencesRemover {
-    private static final String t = "DisabledPrefRemover"; // Full name was too long
 
     /** A map used to find the parent category of any preference */ // ToDo: find a better way?
     private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
@@ -77,7 +77,7 @@ class DisabledPreferencesRemover {
                 PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
                 if (preferenceCategory != null && pref != null) { // Neither should ever be null
                     preferenceCategory.removePreference(pref);
-                    Log.d(t, "Removed " + pref.toString());
+                    Timber.d("Removed %s", pref.toString());
                 }
             }
         }

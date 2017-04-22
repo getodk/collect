@@ -2,7 +2,6 @@ package org.odk.collect.android.preferences;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_MIGRATED;
@@ -10,9 +9,10 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
+import timber.log.Timber;
+
 /** Migrates existing preference values to metadata */
 public class FormMetadataMigrator {
-    private static final String TAG = "FormMetadataMigrator";
 
     /** The migration flow, from source to target */
     static final String[][] sourceTargetValuePairs = new String[][]{
@@ -24,7 +24,7 @@ public class FormMetadataMigrator {
     @SuppressLint("ApplySharedPref")
     public static void migrate(SharedPreferences sharedPreferences) {
         boolean migrationAlreadyDone = sharedPreferences.getBoolean(KEY_METADATA_MIGRATED, false);
-        Log.i(TAG, "migrate called, " +
+        Timber.i("migrate called, %b",
                 (migrationAlreadyDone ? "migration already done" : "will migrate"));
 
         if (! migrationAlreadyDone) {
@@ -33,7 +33,7 @@ public class FormMetadataMigrator {
             for (String[] pair : sourceTargetValuePairs) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();
                 if (! migratingValue.isEmpty()) {
-                    Log.i(TAG, String.format("Copying %s from %s to %s",
+                    Timber.i(String.format("Copying %s from %s to %s",
                             migratingValue, pair[0], pair[1]));
                     editor.putString(pair[1], migratingValue);
                 }
