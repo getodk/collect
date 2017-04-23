@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -248,7 +249,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         setContentView(R.layout.form_entry);
-        setTitle(getString(R.string.loading_form));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.loading_form));
 
         mFormsDao = new FormsDao();
 
