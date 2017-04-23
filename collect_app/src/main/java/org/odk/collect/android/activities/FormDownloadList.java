@@ -672,7 +672,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // Insert the new form in alphabetical order.
                 if (mFormList.size() == 0) {
                     mFormList.add(item);
+                    emptyView.setVisibility(View.VISIBLE);
                 } else {
+                    emptyView.setVisibility(View.GONE);
                     int j;
                     for (j = 0; j < mFormList.size(); j++) {
                         HashMap<String, String> compareMe = mFormList.get(j);
