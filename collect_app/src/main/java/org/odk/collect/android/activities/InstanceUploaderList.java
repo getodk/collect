@@ -84,9 +84,6 @@ public class InstanceUploaderList extends InstanceListActivity
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 
-        listView = (ListView) findViewById(android.R.id.list);
-        listView.setOnItemClickListener(this);
-
         mToolbar.setTitle(getString(R.string.get_forms));
 
         if (savedInstanceState != null) {

@@ -83,6 +83,8 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
         initToolbar();
     }
 
