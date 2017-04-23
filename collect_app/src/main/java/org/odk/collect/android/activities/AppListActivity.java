@@ -390,7 +390,7 @@ abstract class AppListActivity extends AppCompatActivity {
         return listView.getAdapter();
     }
 
-    protected void setListAdapter(ListAdapter adapter){
+    protected void setListAdapter(ListAdapter adapter) {
         listView.setAdapter(adapter);
     }
 }
