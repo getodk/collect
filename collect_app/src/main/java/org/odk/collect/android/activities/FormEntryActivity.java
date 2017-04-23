@@ -922,7 +922,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
 
                 mTimerLogger.exitView();
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -1079,7 +1079,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 
         mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
-                event, formController.getFormIndex().getReference(), advancingPage);
+                event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1720,7 +1720,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         };
 
         mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
-                FormEntryController.EVENT_PROMPT_NEW_REPEAT, null, false);
+                FormEntryController.EVENT_PROMPT_NEW_REPEAT, null, false, true);
 
         if (formController.getLastRepeatCount() > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
@@ -1865,9 +1865,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         // Log user events
         if (complete) {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+        } else if(exit) {
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
         } else {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, true);
         }
 
         synchronized (saveDialogLock) {
@@ -2573,7 +2578,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mTimerLogger = new TimerLogger(instanceFile,
                         PreferenceManager.getDefaultSharedPreferences(this),
                         formController);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
 
             }
         } else {
@@ -2588,7 +2593,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mTimerLogger = new TimerLogger(formController.getInstancePath(),
                         PreferenceManager.getDefaultSharedPreferences(this),
                         formController);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);

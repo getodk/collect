@@ -132,13 +132,13 @@ public class TimerLogger {
                             sType = "group questions";
                             break;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            sType = "prompt repeat";
+                            sType = "add repeat";
                             break;
-                        case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                            sType = "begin";
+                        case FormEntryController.EVENT_REPEAT:
+                            sType = "delete repeat";
                             break;
                         case FormEntryController.EVENT_END_OF_FORM:
-                            sType = "end";
+                            sType = "end screen";
                             break;
                         default:
                             sType = "Unknown FEC: " + fecType;
@@ -212,7 +212,14 @@ public class TimerLogger {
         }
     }
 
-    public void logTimerEvent(EventTypes eventType, int fecType, TreeReference ref, boolean advancingPage) {
+    /*
+     * Log an event
+     */
+    public void logTimerEvent(EventTypes eventType,
+                              int fecType,
+                              TreeReference ref,
+                              boolean advancingPage,
+                              boolean writeImmediatelyToDisk) {
 
         if (mTimerEnabled) {
             // Calculate the time and add the event to the events array
@@ -221,15 +228,10 @@ public class TimerLogger {
 
             Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
 
-            // If the user is exiting then add a save event if they are finalizing add an exit event
-            if (eventType == EventTypes.FORM_EXIT || eventType == EventTypes.FORM_FINALIZE) {
-                mEvents.add(new Event(start, EventTypes.FORM_SAVE, 0, "", false));
-                if (eventType == EventTypes.FORM_FINALIZE) {
-                    mEvents.add(new Event(start, EventTypes.FORM_EXIT, 0, "", false));
-                }
-            }
-
-            // Ignore the event if we are already in an interval view event ie the question has been refreshed
+            /*
+             * Ignore the event if we are already in an interval view event
+             * This can happen if the user is on a question page and the page gets refreshed
+             */
             if (newEvent.isIntervalViewEvent()) {
                 for (int i = 0; i < mEvents.size(); i++) {
                     if (mEvents.get(i).isIntervalViewEvent() && !mEvents.get(i).endTimeSet) {
@@ -237,9 +239,20 @@ public class TimerLogger {
                     }
                 }
             }
+
+            /*
+             * Ignore beginning of form events
+             */
+            if (newEvent.eventType == EventTypes.FEC.FEC &&
+                    newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                return;
+            }
+
             mEvents.add(newEvent);
 
-            writeEvents();
+            if(writeImmediatelyToDisk) {
+                writeEvents();
+            }
         }
 
     }
