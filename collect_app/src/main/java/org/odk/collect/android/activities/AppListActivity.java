@@ -79,12 +79,14 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer mSelectedSortingOrder;
     protected Toolbar mToolbar;
     protected ListView listView;
+    protected TextView emptyView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        emptyView = (TextView) findViewById(android.R.id.empty);
         initToolbar();
     }
 
