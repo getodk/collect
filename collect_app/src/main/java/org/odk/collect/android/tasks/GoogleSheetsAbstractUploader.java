@@ -706,16 +706,15 @@ public abstract class GoogleSheetsAbstractUploader extends
         do {
             if (parentId == null) {
                 fileList = mDriveService.files().list()
-                        .setQ("name = '" + folderName + "' and " +
-                                "mimeType = 'application/vnd.google-apps.folder'" +
-                                " and trashed=false")
+                        .setQ("name = '" + folderName + "' and "
+                                + "mimeType = 'application/vnd.google-apps.folder'"
+                                + " and trashed=false")
                         .execute();
             } else {
                 fileList = mDriveService.files().list()
-                        .setQ("name = '" + folderName + "' and " +
-                                "mimeType = 'application/vnd.google-apps.folder'" +
-                                " and '" + parentId + "' in parents" +
-                                " and trashed=false")
+                        .setQ("name = '" + folderName + "' and "
+                                + "mimeType = 'application/vnd.google-apps.folder'"
+                                + " and '" + parentId + "' in parents" + " and trashed=false")
                         .execute();
             }
             for (com.google.api.services.drive.model.File file : fileList.getFiles()) {
