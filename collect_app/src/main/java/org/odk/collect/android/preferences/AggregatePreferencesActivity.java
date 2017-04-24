@@ -15,7 +15,10 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import org.odk.collect.android.R;
 
 
 /**
@@ -23,13 +26,22 @@ import android.preference.PreferenceActivity;
  *
  * @author Carl Hartung (chartung@nafundi.com)
  */
-public class AggregatePreferencesActivity extends PreferenceActivity {
+public class AggregatePreferencesActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new AggregatePreferencesFragment()).commit();
+        setContentView(R.layout.preference_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.admin_preferences));
+        setSupportActionBar(toolbar);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, new AggregatePreferencesFragment())
+                .commit();
     }
 }
 
