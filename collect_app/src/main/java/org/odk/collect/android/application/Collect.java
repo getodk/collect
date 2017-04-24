@@ -88,6 +88,8 @@ public class Collect extends Application {
     private ExternalDataManager externalDataManager;
     private Tracker mTracker;
 
+    public static String defaultSysLanguage;
+
     public static Collect getInstance() {
         return singleton;
     }
@@ -233,6 +235,7 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
+        defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
@@ -252,6 +255,19 @@ public class Collect extends Application {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashReportingTree());
+        }
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        defaultSysLanguage = newConfig.locale.getLanguage();
+        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
+            .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
+        if ( !isUsingSysLanguage ) {
+            new LocaleHelper().updateLocale(this);
         }
     }
 

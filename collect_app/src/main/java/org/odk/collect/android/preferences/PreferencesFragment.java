@@ -19,6 +19,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 import timber.log.Timber;
 
@@ -158,9 +159,20 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         if (pref != null) {
             final LocaleHelper localeHelper = new LocaleHelper();
             TreeMap<String, String> languageList = localeHelper.getEntryListValues();
-            int length = languageList.size();
-            pref.setEntryValues(languageList.values().toArray(new String[length]));
-            pref.setEntries(languageList.keySet().toArray(new String[length]));
+            int length = languageList.size() + 1;
+            ArrayList<String> entryValues = new ArrayList<>();
+            entryValues.add(0, "");
+            entryValues.addAll(languageList.values());
+            pref.setEntryValues(entryValues.toArray(new String[length]));
+            ArrayList<String> entries = new ArrayList<>();
+            entries.add(0, getActivity().getResources()
+                    .getString(R.string.use_phone_locale));
+            entries.addAll(languageList.keySet());
+            pref.setEntries(entries.toArray(new String[length]));
+            if (pref.getValue() == null ) {
+                //set Default value to "Use phone locale"
+                pref.setValueIndex(0);
+            }
             pref.setSummary(pref.getEntry());
             pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -174,6 +186,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                             .getDefaultSharedPreferences(getActivity()).edit();
                     edit.putString(KEY_APP_LANGUAGE, newValue.toString());
                     edit.apply();
+
                     localeHelper.updateLocale(getActivity());
 
                     Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);

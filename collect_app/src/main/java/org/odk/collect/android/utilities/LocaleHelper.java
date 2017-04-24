@@ -6,6 +6,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.Locale;
@@ -35,6 +36,16 @@ public class LocaleHelper {
         context.getApplicationContext().getResources().updateConfiguration(configuration, displayMetrics);
     }
 
+    public void updateLocale(Context context) {
+        String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "");
+        boolean isUsingSysLanguage = localeCode.equals("");
+        if ( isUsingSysLanguage ) {
+            localeCode = Collect.defaultSysLanguage;
+        }
+        updateLocale(context, localeCode);
+    }
+  
     public TreeMap<String, String> getEntryListValues() {
         //Holds language as key and language code as value
         TreeMap<String, String> languageList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
