@@ -164,7 +164,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
         printLayout.addView(mLaunchIntentButton);
-        addAnswerView( printLayout);
+        addAnswerView(printLayout);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
