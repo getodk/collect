@@ -19,10 +19,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
@@ -30,9 +31,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
 /**
  * Handles general preferences.
@@ -40,7 +41,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com;
  *         constraint behavior option)
  */
-public class PreferencesActivity extends PreferenceActivity {
+public class PreferencesActivity extends AppCompatActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
     private PreferencesFragment fragment;
@@ -49,14 +50,17 @@ public class PreferencesActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Timber.d("onCreate");
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.preference_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.general_preferences));
+        setSupportActionBar(toolbar);
+
         fragment = new PreferencesFragment();
         getFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, fragment)
+                .replace(R.id.content_frame, fragment)
                 .commit();
-
-        setTitle(getString(R.string.general_preferences));
-
     }
 
     @Override
