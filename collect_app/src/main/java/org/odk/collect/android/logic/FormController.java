@@ -420,13 +420,6 @@ public class FormController {
 
     }
 
-    public boolean currentPromptIsQuestion() {
-        return (getEvent() == FormEntryController.EVENT_QUESTION
-                || ((getEvent() == FormEntryController.EVENT_GROUP
-                || getEvent() == FormEntryController.EVENT_REPEAT)
-                && indexIsInFieldList()));
-    }
-
     /**
      * Tests if the current FormIndex is located inside a group that is marked as a "field-list"
      *
@@ -436,6 +429,12 @@ public class FormController {
         return indexIsInFieldList(getFormIndex());
     }
 
+    public boolean currentPromptIsQuestion() {
+        return (getEvent() == FormEntryController.EVENT_QUESTION
+                || ((getEvent() == FormEntryController.EVENT_GROUP
+                || getEvent() == FormEntryController.EVENT_REPEAT)
+                && indexIsInFieldList()));
+    }
 
     /**
      * Attempts to save answer into the given FormIndex into the data model.
