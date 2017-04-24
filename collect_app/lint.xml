@@ -19,4 +19,5 @@
     <issue id="SuspiciousImport"  severity="error" />
     <issue id="WifiManagerPotentialLeak"  severity="error" />
     <issue id="InefficientWeight" severity="error" />
+    <issue id="MergeRootFrame" severity="error" />
 </lint>
