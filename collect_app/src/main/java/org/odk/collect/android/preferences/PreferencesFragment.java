@@ -169,7 +169,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
                     .getString(R.string.use_phone_language));
             entries.addAll(languageList.keySet());
             pref.setEntries(entries.toArray(new String[length]));
-            if (pref.getValue() == null ) {
+            if (pref.getValue() == null) {
                 //set Default value to "Use phone locale"
                 pref.setValueIndex(0);
             }
