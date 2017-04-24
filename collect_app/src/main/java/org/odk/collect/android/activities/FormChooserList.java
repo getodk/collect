@@ -68,7 +68,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 
-        mToolbar.setTitle(getString(R.string.enter_data));
+        setTitle(getString(R.string.enter_data));
 
         setupAdapter();
 

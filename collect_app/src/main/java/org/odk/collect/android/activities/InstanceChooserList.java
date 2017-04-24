@@ -69,8 +69,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 
-        mToolbar.setTitle(getString(R.string.get_forms));
-
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(R.string.review_data));

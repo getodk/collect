@@ -37,7 +37,7 @@ public class FileManagerTabs extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.manage_files));
+        setTitle(getString(R.string.manage_files));
         setSupportActionBar(toolbar);
     }
 
