@@ -19,7 +19,6 @@
 package org.odk.collect.android.spatial;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -33,11 +32,12 @@ import org.osmdroid.tileprovider.util.StreamUtils;
 import java.io.File;
 import java.io.InputStream;
 
+import timber.log.Timber;
+
 
 public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     protected OsmMBTileSource tileSource;
-    private static final String t = "MBTileModuleProvider";
 
     public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar,
             File file, OsmMBTileSource tileSource) {
@@ -84,7 +84,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     @Override
     public void setTileSource(ITileSource tileSource) {
-        Log.w(t, "*** Warning: someone's trying to reassign MBTileModuleProvider's tileSource!");
+        Timber.w("*** Warning: someone's trying to reassign MBTileModuleProvider's tileSource!");
         if (tileSource instanceof OsmMBTileSource) {
             this.tileSource = (OsmMBTileSource) tileSource;
         } else {
@@ -117,7 +117,7 @@ public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
                 }
 
             } catch (Throwable e) {
-                Log.e(t, "Error loading tile", e);
+                Timber.e(e, "Error loading tile");
 
             } finally {
                 if (inputStream != null) {

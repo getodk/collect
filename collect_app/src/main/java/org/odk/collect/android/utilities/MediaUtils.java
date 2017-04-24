@@ -28,7 +28,6 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
-import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.odk.collect.android.application.Collect;
@@ -56,7 +55,6 @@ import timber.log.Timber;
  * @author paulburke
  */
 public class MediaUtils {
-    private static final String t = "MediaUtils";
 
     private MediaUtils() {
         // static methods only
@@ -126,7 +124,7 @@ public class MediaUtils {
                 } while (imageCursor.moveToNext());
 
                 for (Uri uri : imagesToDelete) {
-                    Log.i(t, "attempting to delete: " + uri);
+                    Timber.i("attempting to delete: %s", uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -171,7 +169,7 @@ public class MediaUtils {
                 } while (imageCursor.moveToNext());
 
                 for (Uri uri : imagesToDelete) {
-                    Log.i(t, "attempting to delete: " + uri);
+                    Timber.i("attempting to delete: %s", uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -241,7 +239,7 @@ public class MediaUtils {
                 } while (audioCursor.moveToNext());
 
                 for (Uri uri : audioToDelete) {
-                    Log.i(t, "attempting to delete: " + uri);
+                    Timber.i("attempting to delete: %s", uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -286,7 +284,7 @@ public class MediaUtils {
                 } while (audioCursor.moveToNext());
 
                 for (Uri uri : audioToDelete) {
-                    Log.i(t, "attempting to delete: " + uri);
+                    Timber.i("attempting to delete: %s", uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -356,7 +354,7 @@ public class MediaUtils {
                 } while (videoCursor.moveToNext());
 
                 for (Uri uri : videoToDelete) {
-                    Log.i(t, "attempting to delete: " + uri);
+                    Timber.i("attempting to delete: %s", uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -401,7 +399,7 @@ public class MediaUtils {
                 } while (videoCursor.moveToNext());
 
                 for (Uri uri : videoToDelete) {
-                    Log.i(t, "attempting to delete: " + uri);
+                    Timber.i("attempting to delete: %s", uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }

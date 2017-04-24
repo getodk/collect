@@ -23,7 +23,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
@@ -32,6 +31,8 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
+
+import timber.log.Timber;
 
 /**
  * Handles general preferences.
@@ -42,12 +43,11 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH
 public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
-    private static final String TAG = "PreferenceActivity";
     private PreferencesFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
+        Timber.d("onCreate");
         super.onCreate(savedInstanceState);
         fragment = new PreferencesFragment();
         getFragmentManager()
@@ -61,14 +61,14 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart");
+        Timber.d("onStart");
         super.onStart();
     }
 
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause");
+        Timber.d("onPause");
         super.onPause();
 
         // the property manager should be re-assigned, as properties
@@ -79,7 +79,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.d(TAG, "onActivityResult " + requestCode + " " + resultCode);
+        Timber.d("onActivityResult %d %d", requestCode, resultCode);
         super.onActivityResult(requestCode, resultCode, intent);
         if (resultCode == RESULT_CANCELED) {
             // request was canceled, so do nothing
@@ -102,19 +102,19 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop");
+        Timber.d("onStop");
         super.onStop();
     }
 
     @Override
     protected void onRestart() {
-        Log.d(TAG, "onRestart");
+        Timber.d("onRestart");
         super.onRestart();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy");
+        Timber.d("onDestroy");
         super.onDestroy();
     }
 

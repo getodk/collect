@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -64,7 +63,6 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-    private static final String t = "ListWidget";
 
     // Holds the entire question and answers. It is a horizontally aligned linear layout
     // needed because it is created in the super() constructor via addQuestionText() call.
@@ -168,7 +166,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
+                            Timber.e(errorMsg);
                             missingImage = new TextView(getContext());
                             missingImage.setText(errorMsg);
 

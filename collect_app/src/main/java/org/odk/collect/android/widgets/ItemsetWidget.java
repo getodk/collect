@@ -57,8 +57,6 @@ import timber.log.Timber;
 public class ItemsetWidget extends QuestionWidget implements
         CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-    private static String tag = "ItemsetWidget";
-
     boolean mReadOnly;
     private boolean mAutoAdvanceToNext;
 

@@ -21,7 +21,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
@@ -74,7 +73,6 @@ import timber.log.Timber;
  */
 public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
 
-    private static final String t = "InstanceUploaderTask";
     // it can take up to 27 seconds to spin up Aggregate
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
@@ -121,7 +119,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
             }
 
-            Log.i(t, "Using Uri remap for submission " + id + ". Now: " + u.toString());
+            Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
         } else {
 
             // if https then enable preemptive basic auth...
@@ -135,7 +133,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             // prepare response
             HttpResponse response = null;
             try {
-                Log.i(t, "Issuing HEAD request for " + id + " to: " + u.toString());
+                Timber.i("Issuing HEAD request for %s to: %s", id, u.toString());
 
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -190,7 +188,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     // may be a server that does not handle
                     WebUtils.discardEntityBytes(response);
 
-                    Log.w(t, "Status code on Head request: " + statusCode);
+                    Timber.w("Status code on Head request: %d", statusCode);
                     if (statusCode >= HttpStatus.SC_OK
                             && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
                         outcome.mResults.put(
@@ -260,8 +258,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         // figure out what to do with them.
         File submissionFile = new File(instanceFile.getParentFile(), "submission.xml");
         if (submissionFile.exists()) {
-            Log.w(t,
-                    "submission.xml will be uploaded instead of " + instanceFile.getAbsolutePath());
+            Timber.w("submission.xml will be uploaded instead of %s", instanceFile.getAbsolutePath());
         } else {
             submissionFile = instanceFile;
         }
@@ -308,7 +305,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             } else if (extension.equals("osm")) { // legacy 0.9x
                 files.add(f);
             } else {
-                Log.w(t, "unrecognized file type " + f.getName());
+                Timber.w("unrecognized file type %s", f.getName());
             }
         }
 
@@ -331,7 +328,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             // add the submission file first...
             FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
             builder.addPart("xml_submission_file", fb);
-            Log.i(t, "added xml_submission_file: " + submissionFile.getName());
+            Timber.i("added xml_submission_file: %s", submissionFile.getName());
             byteCount += submissionFile.length();
 
             for (; j < files.size(); j++) {
@@ -350,88 +347,87 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     fb = new FileBody(f, ContentType.TEXT_XML);
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added xml file " + f.getName());
+                    Timber.i("added xml file %s", f.getName());
                 } else if (extension.equals("3gpp")) {
                     fb = new FileBody(f, ContentType.create("audio/3gpp"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added audio file " + f.getName());
+                    Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("3gp")) {
                     fb = new FileBody(f, ContentType.create("video/3gpp"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added video file " + f.getName());
+                    Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("avi")) {
                     fb = new FileBody(f, ContentType.create("video/avi"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added video file " + f.getName());
+                    Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("amr")) {
                     fb = new FileBody(f, ContentType.create("audio/amr"));
                     builder.addPart(f.getName(), fb);
-                    Log.i(t, "added audio file " + f.getName());
+                    Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("csv")) {
                     fb = new FileBody(f, ContentType.create("text/csv"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added csv file " + f.getName());
+                    Timber.i("added csv file %s", f.getName());
                 } else if (extension.equals("jpg")) {
                     fb = new FileBody(f, ContentType.create("image/jpeg"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added image file " + f.getName());
+                    Timber.i("added image file %s", f.getName());
                 } else if (extension.equals("mp3")) {
                     fb = new FileBody(f, ContentType.create("audio/mp3"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added audio file " + f.getName());
+                    Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("mp4")) {
                     fb = new FileBody(f, ContentType.create("video/mp4"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added video file " + f.getName());
+                    Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("oga")) {
                     fb = new FileBody(f, ContentType.create("audio/ogg"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added audio file " + f.getName());
+                    Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("ogg")) {
                     fb = new FileBody(f, ContentType.create("audio/ogg"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added video file " + f.getName());
+                    Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("ogv")) {
                     fb = new FileBody(f, ContentType.create("video/ogg"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added video file " + f.getName());
+                    Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("wav")) {
                     fb = new FileBody(f, ContentType.create("audio/wav"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added audio file " + f.getName());
+                    Timber.i("added audio file %s", f.getName());
                 } else if (extension.equals("webm")) {
                     fb = new FileBody(f, ContentType.create("video/webm"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added video file " + f.getName());
+                    Timber.i("added video file %s", f.getName());
                 } else if (extension.equals("xls")) {
                     fb = new FileBody(f, ContentType.create("application/vnd.ms-excel"));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t, "added xls file " + f.getName());
+                    Timber.i("added xls file %s", f.getName());
                 } else if (contentType != null) {
                     fb = new FileBody(f, ContentType.create(contentType));
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.i(t,
-                            "added recognized filetype (" + contentType + ") " + f.getName());
+                    Timber.i("added recognized filetype (%s) %s", contentType, f.getName());
                 } else {
                     contentType = "application/octet-stream";
                     fb = new FileBody(f, ContentType.APPLICATION_OCTET_STREAM);
                     builder.addPart(f.getName(), fb);
                     byteCount += f.length();
-                    Log.w(t, "added unrecognized file (" + contentType + ") " + f.getName());
+                    Timber.w("added unrecognized file (%s) %s", contentType, f.getName());
                 }
 
                 // we've added at least one attachment to the request...
@@ -439,7 +435,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     if ((j - lastJ + 1 > 100) || (byteCount + files.get(j + 1).length()
                             > 10000000L)) {
                         // the next file would exceed the 10MB threshold...
-                        Log.i(t, "Extremely long post is being split into multiple posts");
+                        Timber.i("Extremely long post is being split into multiple posts");
                         try {
                             StringBody sb = new StringBody("yes",
                                     ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
@@ -459,13 +455,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             HttpResponse response = null;
 
             try {
-                Log.i(t, "Issuing POST request for " + id + " to: " + u.toString());
+                Timber.i("Issuing POST request for %s to: %s", id, u.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 HttpEntity httpEntity = response.getEntity();
                 messageParser = new ResponseMessageParser(httpEntity);
                 WebUtils.discardEntityBytes(response);
-                Log.i(t, "Response code:" + responseCode);
+                Timber.i("Response code:%d", responseCode);
                 // verify that the response was a 201 or 202.
                 // If it wasn't, the submission has failed.
                 if (responseCode != HttpStatus.SC_CREATED
@@ -701,7 +697,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                             }
                         } catch (SQLException e) {
-                            Log.e(t, e.getMessage(), e);
+                            Timber.e(e);
                         } finally {
                             if (results != null) {
                                 results.close();
