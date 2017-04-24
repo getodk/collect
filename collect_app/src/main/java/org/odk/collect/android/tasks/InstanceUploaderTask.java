@@ -561,8 +561,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                     // Use the app's configured URL unless the form included a submission URL
                     int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx) ?
-                            getServerSubmissionURL() : c.getString(subIdx).trim();
+                    String urlString = c.isNull(subIdx)
+                            ? getServerSubmissionURL() : c.getString(subIdx).trim();
 
                     // add the deviceID to the request...
                     try {

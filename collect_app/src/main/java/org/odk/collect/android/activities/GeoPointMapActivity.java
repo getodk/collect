@@ -423,8 +423,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 }
             }
         } else {
-            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-                    " onLocationChanged(" + mLocationCount + ") null location");
+            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
+                    + " onLocationChanged(" + mLocationCount + ") null location");
         }
 
     }

@@ -206,7 +206,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         ArrayList<String> columnNames = new ArrayList<String>();
         try {
             getColumns(formFilePath, columnNames);
-        } catch ( XmlPullParserException | IOException | FormException e2) {
+        } catch (XmlPullParserException | IOException | FormException e2) {
             Timber.e(e2, "Exception thrown while getting columns from form file");
             mResults.put(id, e2.getMessage());
             return false;
@@ -704,16 +704,15 @@ public abstract class GoogleSheetsAbstractUploader extends
         do {
             if (parentId == null) {
                 fileList = mDriveService.files().list()
-                        .setQ("name = '" + folderName + "' and " +
-                                "mimeType = 'application/vnd.google-apps.folder'" +
-                                " and trashed=false")
+                        .setQ("name = '" + folderName + "' and "
+                                + "mimeType = 'application/vnd.google-apps.folder'"
+                                + " and trashed=false")
                         .execute();
             } else {
                 fileList = mDriveService.files().list()
-                        .setQ("name = '" + folderName + "' and " +
-                                "mimeType = 'application/vnd.google-apps.folder'" +
-                                " and '" + parentId + "' in parents" +
-                                " and trashed=false")
+                        .setQ("name = '" + folderName + "' and "
+                                + "mimeType = 'application/vnd.google-apps.folder'"
+                                + " and '" + parentId + "' in parents" + " and trashed=false")
                         .execute();
             }
             for (com.google.api.services.drive.model.File file : fileList.getFiles()) {

@@ -316,8 +316,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
             showDialog(PROGRESS_DIALOG);
 
-            if (mDownloadFormListTask != null &&
-                    mDownloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
+            if (mDownloadFormListTask != null
+                    && mDownloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
                 return; // we are already doing the download!!!
             } else if (mDownloadFormListTask != null) {
                 mDownloadFormListTask.setDownloaderListener(null);
@@ -663,8 +663,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 item.put(FORMNAME, details.formName);
                 item.put(FORMID_DISPLAY,
                         ((details.formVersion == null) ? "" : (getString(R.string.version) + " "
-                                + details.formVersion + " ")) +
-                                "ID: " + details.formID);
+                                + details.formVersion + " ")) + "ID: " + details.formID);
                 item.put(FORMDETAIL_KEY, formDetailsKey);
                 item.put(FORM_ID_KEY, details.formID);
                 item.put(FORM_VERSION_KEY, details.formVersion);
@@ -752,13 +751,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         Set<FormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
         for (FormDetails k : keys) {
-            b.append(k.formName +
-                    " (" +
-                    ((k.formVersion != null) ?
-                            (this.getString(R.string.version) + ": " + k.formVersion + " ")
-                            : "") +
-                    "ID: " + k.formID + ") - " +
-                    result.get(k));
+            b.append(k.formName + " ("
+                    + ((k.formVersion != null)
+                            ? (this.getString(R.string.version) + ": " + k.formVersion + " ")
+                            : "") + "ID: " + k.formID + ") - " + result.get(k));
             b.append("\n\n");
         }
 

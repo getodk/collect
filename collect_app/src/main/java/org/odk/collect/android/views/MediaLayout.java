@@ -274,7 +274,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                     mMissingImage.setId(imageId);
                 }
             } catch (InvalidReferenceException e) {
-                Timber.e(e, "Invalid image reference due to %s ", e.getMessage() );
+                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
             }
         } else {
             // There's no imageURI listed, so just ignore it.
