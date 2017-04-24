@@ -167,7 +167,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             pref.setEntryValues(entryValues.toArray(new String[length]));
             ArrayList<String> entries = new ArrayList<>();
             entries.add(0, getActivity().getResources()
-                    .getString(R.string.use_phone_locale));
+                    .getString(R.string.use_phone_language));
             entries.addAll(languageList.keySet());
             pref.setEntries(entries.toArray(new String[length]));
             if (pref.getValue() == null ) {
