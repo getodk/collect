@@ -101,7 +101,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private Cursor mViewSentCursor;
     private IncomingHandler mHandler = new IncomingHandler(this);
     private MyContentObserver mContentObserver = new MyContentObserver();
-    private Toolbar mToolbar;
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -294,8 +293,9 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        mToolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setTitle(getString(R.string.main_menu));
+        setSupportActionBar(toolbar);
     }
 
     @Override

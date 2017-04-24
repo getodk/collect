@@ -3,9 +3,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#eeeeee"
+    android:background="?attr/colorPrimary"
     android:elevation="5dp"
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
-
-    <!--android:background="?attr/colorPrimary"-->

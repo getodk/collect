@@ -84,8 +84,6 @@ public class InstanceUploaderList extends InstanceListActivity
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 
-        mToolbar.setTitle(getString(R.string.get_forms));
-
         if (savedInstanceState != null) {
             mShowAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
