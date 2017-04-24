@@ -81,8 +81,8 @@ public class GooglePreferencesFragment extends PreferenceFragment {
 
         String currentGoogleSheetsURL = mGoogleSheetsUrlPreference.getText();
         if (currentGoogleSheetsURL.length() > 0) {
-            mGoogleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n" +
-                    getString(R.string.google_sheets_url_hint));
+            mGoogleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
+                    + getString(R.string.google_sheets_url_hint));
         }
 
         mGoogleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{

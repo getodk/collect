@@ -87,11 +87,11 @@ public class ResetUtility {
                 .clear()
                 .commit();
 
-        boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists() ||
-                deleteFolderContents(Collect.SETTINGS);
+        boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
+                || deleteFolderContents(Collect.SETTINGS);
 
-        boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists() ||
-                (new File(Collect.ODK_ROOT + "/collect.settings").delete());
+        boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
+                || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
 
         if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsFolderContest && deletedSettingsFile) {
             mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));

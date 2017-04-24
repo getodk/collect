@@ -422,8 +422,8 @@ public class FormController {
 
     public boolean currentPromptIsQuestion() {
         return (getEvent() == FormEntryController.EVENT_QUESTION
-                || ((getEvent() == FormEntryController.EVENT_GROUP ||
-                getEvent() == FormEntryController.EVENT_REPEAT)
+                || ((getEvent() == FormEntryController.EVENT_GROUP
+                || getEvent() == FormEntryController.EVENT_REPEAT)
                 && indexIsInFieldList()));
     }
 
@@ -489,8 +489,8 @@ public class FormController {
      * @return the next event that should be handled by a view.
      */
     public int stepToNextEvent(boolean stepIntoGroup) {
-        if ((getEvent() == FormEntryController.EVENT_GROUP ||
-                getEvent() == FormEntryController.EVENT_REPEAT)
+        if ((getEvent() == FormEntryController.EVENT_GROUP
+                || getEvent() == FormEntryController.EVENT_REPEAT)
                 && indexIsInFieldList() && !stepIntoGroup) {
             return stepOverGroup();
         } else {
@@ -548,10 +548,10 @@ public class FormController {
             if (getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 int event = stepToPreviousEvent();
 
-                while (event == FormEntryController.EVENT_REPEAT_JUNCTURE ||
-                        event == FormEntryController.EVENT_PROMPT_NEW_REPEAT ||
-                        (event == FormEntryController.EVENT_QUESTION && indexIsInFieldList()) ||
-                        ((event == FormEntryController.EVENT_GROUP
+                while (event == FormEntryController.EVENT_REPEAT_JUNCTURE
+                        || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT
+                        || (event == FormEntryController.EVENT_QUESTION && indexIsInFieldList())
+                        || ((event == FormEntryController.EVENT_GROUP
                                 || event == FormEntryController.EVENT_REPEAT)
                                 && !indexIsInFieldList())) {
                     event = stepToPreviousEvent();
@@ -574,8 +574,8 @@ public class FormController {
                             if (fclist.length > 1) {
                                 FormEntryCaption fc = fclist[fclist.length - 2];
                                 GroupDef pd = (GroupDef) fc.getFormElement();
-                                if (pd.getChildren().size() == 1 &&
-                                        ODKView.FIELD_LIST.equalsIgnoreCase(
+                                if (pd.getChildren().size() == 1
+                                        && ODKView.FIELD_LIST.equalsIgnoreCase(
                                                 pd.getAppearanceAttr())) {
                                     mFormEntryController.jumpToIndex(fc.getIndex());
                                 }

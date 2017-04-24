@@ -87,23 +87,22 @@ public class InstanceProvider extends ContentProvider {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             int initialVersion = oldVersion;
             if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " +
-                        InstanceColumns.STATUS + " IS NOT NULL AND " +
-                        InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
+                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
+                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                         + "'");
                 oldVersion = 2;
             }
             if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.JR_VERSION + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.JR_VERSION + " text;");
             }
             if (oldVersion == 3) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.DELETED_DATE + " date;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.DELETED_DATE + " date;");
             }
             Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
                     + newVersion

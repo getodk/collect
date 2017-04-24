@@ -388,8 +388,8 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             try {
                 FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
                 formController.stepToNextScreenEvent();
-                while (formController.currentCaptionPromptIsQuestion() &&
-                        formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                while (formController.currentCaptionPromptIsQuestion()
+                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
                     formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
                     formController.stepToNextScreenEvent();
                 }

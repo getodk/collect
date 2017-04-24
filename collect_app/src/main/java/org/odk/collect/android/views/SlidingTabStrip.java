@@ -134,10 +134,10 @@ class SlidingTabStrip extends LinearLayout {
 
                 // Draw the selection partway between the tabs
                 View nextTitle = getChildAt(mSelectedPosition + 1);
-                left = (int) (mSelectionOffset * nextTitle.getLeft() +
-                        (1.0f - mSelectionOffset) * left);
-                right = (int) (mSelectionOffset * nextTitle.getRight() +
-                        (1.0f - mSelectionOffset) * right);
+                left = (int) (mSelectionOffset * nextTitle.getLeft()
+                        + (1.0f - mSelectionOffset) * left);
+                right = (int) (mSelectionOffset * nextTitle.getRight()
+                        + (1.0f - mSelectionOffset) * right);
             }
 
             mSelectedIndicatorPaint.setColor(color);
