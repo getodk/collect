@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Xml;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -75,7 +74,6 @@ public abstract class GoogleSheetsAbstractUploader extends
 
     protected static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private static final String oauth_fail = "OAUTH Error: ";
-    private static final String TAG = "GoogleSheetsUploadTask";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
 
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
@@ -124,7 +122,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
                     if (md5 == null) {
                         // fail and exit
-                        Log.e(TAG, "no md5");
+                        Timber.e("no md5");
                         return;
                     }
 
@@ -790,7 +788,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     }
                     break;
                 default:
-                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Timber.i("DEFAULTING: %s :: %d", parser.getName(), parser.getEventType());
                     break;
             }
             event = parser.next();
@@ -844,7 +842,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     path.remove(path.size() - 1);
                     break;
                 default:
-                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Timber.i("DEFAULTING: %s :: %d",parser.getName(), parser.getEventType());
                     break;
             }
             event = parser.next();

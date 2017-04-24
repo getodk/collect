@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 
@@ -18,7 +17,6 @@ public class ItemsetDbAdapter {
 
     public static final String KEY_ID = "_id";
 
-    private static final String TAG = "ItemsetDbAdapter";
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
@@ -53,8 +51,7 @@ public class ItemsetDbAdapter {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
+            Timber.w("Upgrading database from version %d to %d, which will destroy all old data", oldVersion, newVersion);
             // first drop all of our generated itemset tables
             Cursor c = db.query(ITEMSET_TABLE, null, null, null, null, null, null);
             if (c != null) {
@@ -115,7 +112,7 @@ public class ItemsetDbAdapter {
         sb.append(");");
 
         String tableCreate = sb.toString();
-        Log.i(TAG, "create string: " + tableCreate);
+        Timber.i("create string: %s", tableCreate);
         mDb.execSQL(tableCreate);
 
         ContentValues cv = new ContentValues();

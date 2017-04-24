@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -21,6 +20,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.util.TreeMap;
+import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
@@ -46,7 +46,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMA
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
-    private static final String TAG = "PreferencesFragment";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
 
     @Override
     public void onResume() {
-        Log.d(TAG, "onResume");
+        Timber.d("onResume");
         super.onResume();
 
         // has to go in onResume because it may get updated by

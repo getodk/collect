@@ -51,7 +51,6 @@ import java.util.regex.Pattern;
  */
 public final class ExternalDataUtil {
 
-    public static final String LOGGER_NAME = "ExternalData";
     public static final String EXTERNAL_DATA_TABLE_NAME = "externalData";
     public static final String SORT_COLUMN_NAME = "c_sortby";
 

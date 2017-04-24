@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -40,12 +39,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  *
  */
 public class FormsProvider extends ContentProvider {
 
-    private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
     private static final int DATABASE_VERSION = 4;
@@ -100,9 +100,8 @@ public class FormsProvider extends ContentProvider {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             if (oldVersion < 2) {
-                Log.w(t, "Upgrading database from version " + oldVersion
-                        + " to " + newVersion
-                        + ", which will destroy all old data");
+                Timber.w("Upgrading database from version %d to %d"
+                        + ", which will destroy all old data", oldVersion, newVersion);
                 db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
                 onCreate(db);
                 return;
@@ -225,9 +224,8 @@ public class FormsProvider extends ContentProvider {
                         + TEMP_FORMS_TABLE_NAME);
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
 
-                Log.w(t, "Successfully upgraded database from version "
-                        + oldVersion + " to " + newVersion
-                        + ", without destroying all the old data");
+                Timber.w("Successfully upgraded database from version %d to %d"
+                        + ", without destroying all the old data", oldVersion, newVersion);
             }
         }
     }
@@ -419,22 +417,20 @@ public class FormsProvider extends ContentProvider {
                 int video = MediaUtils
                         .deleteVideoInFolderFromMediaProvider(file);
 
-                Log.i(t, "removed from content providers: " + images
-                        + " image files, " + audio + " audio files," + " and "
-                        + video + " video files.");
+                Timber.i("removed from content providers: %d image files, %d audio files, and %d"
+                        + " video files.", images, audio, video);
 
                 // delete all the containing files
                 File[] files = file.listFiles();
                 for (File f : files) {
                     // should make this recursive if we get worried about
                     // the media directory containing directories
-                    Log.i(t,
-                            "attempting to delete file: " + f.getAbsolutePath());
+                    Timber.i("attempting to delete file: %s", f.getAbsolutePath());
                     f.delete();
                 }
             }
             file.delete();
-            Log.i(t, "attempting to delete file: " + file.getAbsolutePath());
+            Timber.i("attempting to delete file: %s", file.getAbsolutePath());
         }
     }
 
@@ -677,7 +673,7 @@ public class FormsProvider extends ContentProvider {
                                         + (!TextUtils.isEmpty(where) ? " AND ("
                                         + where + ')' : ""), whereArgs);
                     } else {
-                        Log.e(t, "Attempting to update row that does not exist");
+                        Timber.e("Attempting to update row that does not exist");
                     }
                 } finally {
                     if (update != null) {
