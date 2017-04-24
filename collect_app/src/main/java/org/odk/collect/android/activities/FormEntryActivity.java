@@ -32,6 +32,7 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -705,8 +706,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 if (filePath != null) {
                     new File(filePath).delete();
                 }
-                getContentResolver().delete(mediaUri, null, null);
-                break;
+                try {
+                    getContentResolver().delete(mediaUri, null, null);
+                } catch(Exception e){
+                    Toast.makeText(this, e.getMessage() , Toast.LENGTH_SHORT).show();
+                }
+                    break;
             case AUDIO_CHOOSER:
             case VIDEO_CHOOSER:
                 saveAudioVideoAnswer(intent.getData());
