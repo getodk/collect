@@ -38,7 +38,7 @@ public class LocaleHelper {
         String localeCode = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PreferenceKeys.KEY_APP_LANGUAGE, "");
         boolean isUsingSysLanguage = localeCode.equals("");
-        if ( isUsingSysLanguage ) {
+        if (isUsingSysLanguage) {
             localeCode = Collect.defaultSysLanguage;
         }
         updateLocale(context, localeCode);
