@@ -87,17 +87,17 @@ public final class ActivityLogger {
     private static final String PARAM2 = "param2";
 
     private static final String DATABASE_CREATE =
-            "create table " + DATABASE_TABLE + " (" +
-                    ID + " integer primary key autoincrement, " +
-                    TIMESTAMP + " integer not null, " +
-                    DEVICEID + " text not null, " +
-                    CLASS + " text not null, " +
-                    CONTEXT + " text not null, " +
-                    ACTION + " text, " +
-                    INSTANCE_PATH + " text, " +
-                    QUESTION + " text, " +
-                    PARAM1 + " text, " +
-                    PARAM2 + " text);";
+            "create table " + DATABASE_TABLE + " ("
+                    + ID + " integer primary key autoincrement, "
+                    + TIMESTAMP + " integer not null, "
+                    + DEVICEID + " text not null, "
+                    + CLASS + " text not null, "
+                    + CONTEXT + " text not null, "
+                    + ACTION + " text, "
+                    + INSTANCE_PATH + " text, "
+                    + QUESTION + " text, "
+                    + PARAM1 + " text, "
+                    + PARAM2 + " text);";
 
     private final boolean mLoggingEnabled;
     private final String mDeviceId;
@@ -194,8 +194,8 @@ public final class ActivityLogger {
                 ContentValues lastCv = mScrollActions.get(mScrollActions.size() - 1);
                 long oldTimeStamp = lastCv.getAsLong(TIMESTAMP);
                 int oldDistance = Integer.parseInt(lastCv.getAsString(PARAM1));
-                if (Integer.signum(distance) == Integer.signum(oldDistance) &&
-                        timeStamp - oldTimeStamp < MIN_SCROLL_DELAY) {
+                if (Integer.signum(distance) == Integer.signum(oldDistance)
+                        && timeStamp - oldTimeStamp < MIN_SCROLL_DELAY) {
                     lastCv.put(PARAM1, oldDistance + distance);
                     lastCv.put(TIMESTAMP, timeStamp);
                     return;
