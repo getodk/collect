@@ -92,6 +92,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                         return new SelectOneData(selection);
                                     }
                                 }
+                                break;
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
                                 // we should search in a potential comma-separated string of
