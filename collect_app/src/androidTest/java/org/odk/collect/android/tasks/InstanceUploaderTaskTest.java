@@ -22,7 +22,9 @@ import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
 import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
 import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
+import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.test.TestUtils.createTempFile;
+import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
 
 public class InstanceUploaderTaskTest {
     private InstancesDao dao;
@@ -30,6 +32,8 @@ public class InstanceUploaderTaskTest {
 
     @Before
     public void setUp() throws Exception {
+        resetInstancesContentProvider();
+
         dao = new InstancesDao();
         server = mockWebServer();
     }
@@ -37,6 +41,8 @@ public class InstanceUploaderTaskTest {
     @After
     public void tearDown() throws Exception {
         server.shutdown();
+        cleanUpTempFiles();
+        resetInstancesContentProvider();
     }
 
     @Test
