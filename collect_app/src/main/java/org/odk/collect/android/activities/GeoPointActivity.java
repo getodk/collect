@@ -89,28 +89,28 @@ public class GeoPointActivity extends Activity implements LocationListener {
         if (mGPSOn) {
             Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc != null) {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                        " lastKnownLocation(GPS) lat: " +
-                        loc.getLatitude() + " long: " +
-                        loc.getLongitude() + " acc: " +
-                        loc.getAccuracy());
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                        + " lastKnownLocation(GPS) lat: "
+                        + loc.getLatitude() + " long: "
+                        + loc.getLongitude() + " acc: "
+                        + loc.getAccuracy());
             } else {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                        " lastKnownLocation(GPS) null location");
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                        + " lastKnownLocation(GPS) null location");
             }
         }
 
         if (mNetworkOn) {
             Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (loc != null) {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                        " lastKnownLocation(Network) lat: " +
-                        loc.getLatitude() + " long: " +
-                        loc.getLongitude() + " acc: " +
-                        loc.getAccuracy());
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                        + " lastKnownLocation(Network) lat: "
+                        + loc.getLatitude() + " long: "
+                        + loc.getLongitude() + " acc: "
+                        + loc.getAccuracy());
             } else {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                        " lastKnownLocation(Network) null location");
+                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                        + " lastKnownLocation(Network) null location");
             }
         }
 
@@ -232,11 +232,11 @@ public class GeoPointActivity extends Activity implements LocationListener {
             // Bug report: cached GeoPoint is being returned as the first value.
             // Wait for the 2nd value to be returned, which is hopefully not cached?
             ++mLocationCount;
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                    " onLocationChanged(" + mLocationCount + ") lat: " +
-                    mLocation.getLatitude() + " long: " +
-                    mLocation.getLongitude() + " acc: " +
-                    mLocation.getAccuracy());
+            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                    + " onLocationChanged(" + mLocationCount + ") lat: "
+                    + mLocation.getLatitude() + " long: "
+                    + mLocation.getLongitude() + " acc: "
+                    + mLocation.getAccuracy());
 
             if (mLocationCount > 1) {
                 mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
@@ -247,8 +247,8 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 }
             }
         } else {
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis() +
-                    " onLocationChanged(" + mLocationCount + ") null location");
+            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                    + " onLocationChanged(" + mLocationCount + ") null location");
         }
     }
 

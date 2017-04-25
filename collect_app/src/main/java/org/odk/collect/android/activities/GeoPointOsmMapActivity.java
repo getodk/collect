@@ -458,8 +458,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         //}
 
         } else {
-            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis() +
-                    " onLocationChanged(" + mLocationCount + ") null location");
+            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
+                    + " onLocationChanged(" + mLocationCount + ") null location");
         }
     }
 

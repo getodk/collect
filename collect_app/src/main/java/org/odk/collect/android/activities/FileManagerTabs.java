@@ -50,8 +50,8 @@ public class FileManagerTabs extends FragmentActivity {
         fragments.add(dataManagerList);
         fragments.add(formManagerList);
 
-        viewPager.setAdapter(new ViewPagerAdapter
-                (getSupportFragmentManager(), tabNames, fragments));
+        viewPager.setAdapter(new ViewPagerAdapter(
+                getSupportFragmentManager(), tabNames, fragments));
 
         // Give the SlidingTabLayout the ViewPager
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);

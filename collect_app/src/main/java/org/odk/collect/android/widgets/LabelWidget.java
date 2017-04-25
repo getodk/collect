@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -56,7 +55,6 @@ import timber.log.Timber;
  * @author Jeff Beorse
  */
 public class LabelWidget extends QuestionWidget {
-    private static final String t = "LabelWidget";
 
     List<SelectChoice> mItems;
     View center;
@@ -142,7 +140,7 @@ public class LabelWidget extends QuestionWidget {
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
+                            Timber.e(errorMsg);
                             missingImage = new TextView(getContext());
                             missingImage.setText(errorMsg);
 

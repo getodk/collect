@@ -64,7 +64,6 @@
             android:title="@string/font_size" />
         <ListPreference
             android:id="@+id/app_language"
-            android:defaultValue="en"
             android:dialogTitle="@string/language"
             android:key="app_language"
             android:title="@string/language" />

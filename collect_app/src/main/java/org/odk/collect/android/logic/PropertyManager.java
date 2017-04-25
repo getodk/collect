@@ -21,7 +21,6 @@ import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
@@ -30,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
@@ -42,7 +43,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
  */
 public class PropertyManager implements IPropertyManager {
 
-    private static final String TAG = "PropertyManager";
 
     public static final String PROPMGR_DEVICE_ID        = "deviceid";
     public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
@@ -78,7 +78,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager(Context context) {
-        Log.i(TAG, "calling constructor");
+        Timber.i("calling constructor");
 
         // Device-defined properties
         TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

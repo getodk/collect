@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -46,13 +45,14 @@ import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 /**
  * Signature widget.
  *
  * @author BehrAtherton@gmail.com
  */
 public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
-    private static final String t = "SignatureWidget";
 
     private Button mSignButton;
     private String mBinaryName;
@@ -178,7 +178,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         // delete from media provider
         int del = MediaUtils.deleteImageFileFromMediaProvider(
                 mInstanceFolder + File.separator + name);
-        Log.i(t, "Deleted " + del + " rows from media content provider");
+        Timber.i("Deleted %d rows from media content provider", del);
     }
 
 
@@ -225,12 +225,12 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting image returned uri = " + imageURI.toString());
+            Timber.i("Inserting image returned uri = %s", imageURI.toString());
 
             mBinaryName = newImage.getName();
-            Log.i(t, "Setting current answer to " + newImage.getName());
+            Timber.i("Setting current answer to %s", newImage.getName());
         } else {
-            Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
+            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
         Collect.getInstance().getFormController().setIndexWaitingForData(null);

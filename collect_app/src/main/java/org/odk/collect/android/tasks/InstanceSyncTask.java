@@ -18,7 +18,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -41,13 +40,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
+import timber.log.Timber;
+
 /**
  * Background task for syncing form instances from the instances folder to the instances table.
  * Returns immediately if it detects an error.
  */
 public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
-    private static final String TAG = "InstanceSyncTask";
 
     private static int counter = 0;
 
@@ -65,7 +65,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
     @Override
     protected String doInBackground(Void... params) {
         int instance = ++counter;
-        Log.i(TAG, "[" + instance + "] doInBackground begins!");
+        Timber.i("[%d] doInBackground begins!", instance);
 
         currentStatus = Collect.getInstance().getString(R.string.instance_scan_completed);
         try {
@@ -74,7 +74,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
                 if (instanceFolders.length == 0) {
-                    Log.i(TAG, "[" + instance + "] Empty instance folder. Stopping scan process.");
+                    Timber.i("[%d] Empty instance folder. Stopping scan process.", instance);
                     return currentStatus;
                 }
 
@@ -84,7 +84,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     if (instanceFile.exists() && instanceFile.canRead()) {
                         candidateInstances.add(instanceFile.getAbsolutePath());
                     } else {
-                        Log.i(TAG, "[" + instance + "] Ignoring: " + instanceDir.getAbsolutePath());
+                        Timber.i("[%d] Ignoring: %s", instance, instanceDir.getAbsolutePath());
                     }
                 }
                 Collections.sort(candidateInstances);
@@ -98,7 +98,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     instanceCursor = Collect.getInstance().getContentResolver()
                             .query(InstanceColumns.CONTENT_URI, null, null, null, sortOrder);
                     if (instanceCursor == null) {
-                        Log.e(TAG, "[" + instance + "] Instance content provider returned null");
+                        Timber.e("[%d] Instance content provider returned null", instance);
                         return currentStatus;
                     }
 
@@ -157,8 +157,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 values.put(InstanceColumns.DISPLAY_NAME, formName);
                                 values.put(InstanceColumns.JR_FORM_ID, jrFormId);
                                 values.put(InstanceColumns.JR_VERSION, jrVersion);
-                                values.put(InstanceColumns.STATUS, instanceSyncFlag ?
-                                        InstanceProviderAPI.STATUS_COMPLETE : InstanceProviderAPI.STATUS_INCOMPLETE);
+                                values.put(InstanceColumns.STATUS, instanceSyncFlag
+                                        ? InstanceProviderAPI.STATUS_COMPLETE : InstanceProviderAPI.STATUS_INCOMPLETE);
                                 values.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(true));
                                 // save the new instance object
                                 Collect.getInstance().getContentResolver()
@@ -179,7 +179,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
             }
         } finally {
-            Log.i(TAG, "[" + instance + "] doInBackground ends!");
+            Timber.i("[%d] doInBackground ends!", instance);
         }
         return currentStatus;
     }
@@ -193,7 +193,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             Element element = document.getDocumentElement();
             instanceFormId = element.getAttribute("id");
         } catch (Exception e) {
-            Log.w(TAG, "Unable to read form id from " + instancePath);
+            Timber.w("Unable to read form id from %s", instancePath);
         }
         return instanceFormId;
     }

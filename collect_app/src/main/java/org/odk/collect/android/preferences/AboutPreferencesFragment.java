@@ -86,8 +86,8 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                 Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL +
-                                APP_PACKAGE_NAME);
+                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
+                                + APP_PACKAGE_NAME);
                 startActivity(Intent.createChooser(shareIntent,
                         getString(R.string.tell_your_friends_title)));
                 break;
