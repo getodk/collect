@@ -36,7 +36,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.DateWidgetUtils;
+import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.util.Date;
 
@@ -76,7 +76,7 @@ public class DateWidget extends QuestionWidget {
         addViews();
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
-            DateWidgetUtils.fixCalendarViewIfJellyBean(mDatePickerDialog.getDatePicker().getCalendarView());
+            DateTimeUtils.fixCalendarViewIfJellyBean(mDatePickerDialog.getDatePicker().getCalendarView());
         }
     }
 

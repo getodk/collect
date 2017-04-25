@@ -9,14 +9,13 @@ import java.lang.reflect.Method;
 
 import timber.log.Timber;
 
-/**
- * The function fixCalendarViewIfJellyBean fixes the Calendar view bug for Android 4.1.2 devices
- *
- * For more info read the complete solution at this link : http://stackoverflow.com/a/36321828/5479029
- */
+public class DateTimeUtils {
 
-public class DateWidgetUtils {
-
+    /**
+     * The function fixCalendarViewIfJellyBean fixes the Calendar view bug for Android 4.1.2 devices
+     *
+     * For more info read the complete solution at this link : http://stackoverflow.com/a/36321828/5479029
+     */
     public static void fixCalendarViewIfJellyBean(CalendarView calendarView) {
         try {
             Object object = calendarView;
