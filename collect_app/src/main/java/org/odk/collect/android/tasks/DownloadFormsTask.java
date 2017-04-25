@@ -437,7 +437,7 @@ public class DownloadFormsTask extends
                         try {
                             os.close();
                         } catch (Exception e) {
-                            Timber.e(e, "Unable to close stream due to: %s", e.getMessage());
+                            Timber.e(e);
                         }
                     }
                     if (is != null) {
@@ -453,7 +453,7 @@ public class DownloadFormsTask extends
                         try {
                             is.close();
                         } catch (Exception e) {
-                            Timber.e(e, "Unable to close stream due to: %s", e.getMessage());
+                            Timber.e(e);
                         }
                     }
                 }
