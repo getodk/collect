@@ -43,13 +43,12 @@ import org.odk.collect.android.application.Collect;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.SharedPreferencesUtils.getJSONFromPreferences;
 
 /**
  * Created by shobhit on 13/4/17.
@@ -99,10 +98,11 @@ public class QRCodeUtils {
         return shareFile;
     }
 
-    public static Bitmap generateQRBitMap() {
+    public static Bitmap generateQRBitMap(Collection<String> keys) {
         String content;
         try {
-            content = getJSONFromPreferences();
+            SharedPreferencesUtils obj = new SharedPreferencesUtils();
+            content = obj.getJSONFromPreferences(keys);
             String compressedData = CompressionUtils.compress(content);
 
             //Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)

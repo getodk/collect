@@ -15,7 +15,9 @@
 package org.odk.collect.android.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -49,12 +52,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.zip.DataFormatException;
 
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.utilities.QRCodeUtils.decodeFromBitmap;
 import static org.odk.collect.android.utilities.QRCodeUtils.generateQRBitMap;
 import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
@@ -67,9 +74,13 @@ import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
+    private final String[] items = new String[]{"Admin Password", "Server Password"};
+    Collection<String> keys = new ArrayList<>();
+    private boolean[] checkedItems = new boolean[]{false, false};
     private ImageView qrImageView;
     private ProgressBar progressBar;
     private Intent mShareIntent;
+    private TextView generateQRCode;
 
     @Nullable
     @Override
@@ -80,15 +91,23 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        generateQRCode = (TextView) view.findViewById(R.id.generateQRCode);
+        generateQRCode.setOnClickListener(this);
         Button scan = (Button) view.findViewById(R.id.btnScan);
         scan.setOnClickListener(this);
         Button select = (Button) view.findViewById(R.id.btnSelect);
         select.setOnClickListener(this);
-        generateCode();
         return view;
     }
 
     public void generateCode() {
+        if (checkedItems[0]) {
+            keys.add(KEY_ADMIN_PW);
+        }
+
+        if (checkedItems[1]) {
+            keys.add(KEY_PASSWORD);
+        }
         new GenerateQRCode(this).execute();
     }
 
@@ -103,7 +122,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         mShareIntent.setType("image/*");
         mShareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
     }
-
 
     @Override
     public void onClick(View v) {
@@ -123,6 +141,36 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                break;
+
+            case R.id.generateQRCode:
+                keys.clear();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                        .setTitle("Click to share the passwords too")
+                        .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                checkedItems[which] = isChecked;
+                            }
+                        })
+                        .setCancelable(false)
+                        .setPositiveButton("Generate", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                generateQRCode.setVisibility(View.GONE);
+                                generateCode();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 break;
         }
     }
@@ -241,7 +289,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            return generateQRBitMap();
+            return generateQRBitMap(keys);
         }
     }
 }

@@ -24,11 +24,14 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
+import static android.content.Context.MODE_PRIVATE;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 import static org.odk.collect.android.preferences.PreferenceKeys.ALL_GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_NETWORK;
@@ -41,6 +44,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_LAST_VERSIO
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
@@ -52,30 +56,39 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_
 
 public class SharedPreferencesUtils {
 
+    private final Context context = Collect.getInstance();
+    private final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    private final SharedPreferences.Editor editor = sharedPrefs.edit();
+    private final SharedPreferences adminSharedPrefs =
+            Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE);
+    private final SharedPreferences.Editor adminEditor = adminSharedPrefs.edit();
 
-    private final Context mContext = Collect.getInstance();
-    private final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-    private final SharedPreferences.Editor mEditor = sharedPrefs.edit();
-
-    private static Collection<String> getAllKeys() {
-        return ALL_GENERAL_KEYS;
-    }
-
-    static String getJSONFromPreferences() throws JSONException {
+    String getJSONFromPreferences(Collection<String> keys) throws JSONException {
         SharedPreferencesUtils obj = new SharedPreferencesUtils();
-        JSONObject sharedPrefJson = obj.getModifiedPrefs();
+        keys.addAll(ALL_GENERAL_KEYS);
+        JSONObject sharedPrefJson = obj.getModifiedPrefs(keys);
         Timber.i(sharedPrefJson.toString());
         return sharedPrefJson.toString();
     }
 
-
-    private JSONObject getModifiedPrefs() throws JSONException {
+    private JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 
-        Collection<String> allKeys = getAllKeys();
-        for (String key : allKeys) {
+        for (String key : keys) {
             String stringValue;
             String defaultStringValue;
+
+            // checking for admin password
+            if (key.equals(KEY_ADMIN_PW)) {
+                stringValue = adminSharedPrefs.getString(key, "");
+                if (!stringValue.equals("")) {
+                    jsonObject.put(key, stringValue);
+
+                    //skip further checking
+                    continue;
+                }
+            }
+
             try {
                 stringValue = getStringValue(key);
                 defaultStringValue = getDefaultStringValue(key);
@@ -101,18 +114,17 @@ public class SharedPreferencesUtils {
         return jsonObject;
     }
 
-
     private String getDefaultStringValue(String key) {
         String defValue;
         switch (key) {
             case KEY_SERVER_URL:
-                defValue = mContext.getString(R.string.default_server_url);
+                defValue = context.getString(R.string.default_server_url);
                 break;
             case KEY_FORMLIST_URL:
-                defValue = mContext.getString(R.string.default_odk_formlist);
+                defValue = context.getString(R.string.default_odk_formlist);
                 break;
             case KEY_SUBMISSION_URL:
-                defValue = mContext.getString(R.string.default_odk_submission);
+                defValue = context.getString(R.string.default_odk_submission);
                 break;
             case KEY_APP_LANGUAGE:
                 defValue = "";
@@ -173,7 +185,7 @@ public class SharedPreferencesUtils {
         switch (key) {
             case KEY_LAST_VERSION:
                 try {
-                    defValue = (long) mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),
+                    defValue = (long) context.getPackageManager().getPackageInfo(context.getPackageName(),
                             PackageManager.GET_META_DATA).versionCode;
                 } catch (PackageManager.NameNotFoundException e) {
                     Timber.e(e, "Unable to get package info");
@@ -189,41 +201,58 @@ public class SharedPreferencesUtils {
 
         Collection<String> allKeys = getAllKeys();
         for (String key : allKeys) {
+
+            if (key.equals(KEY_ADMIN_PW) && settingsJson.has(key)) {
+                adminEditor.putString(key, settingsJson.getString(key));
+                adminEditor.apply();
+
+                // skip further checking
+                continue;
+            }
+
             if (settingsJson.has(key)) {
                 try {
-                    mEditor.putString(key, settingsJson.getString(key));
+                    editor.putString(key, settingsJson.getString(key));
                     Timber.i(key + " : string (applied)");
                 } catch (Exception e) {
                     try {
-                        mEditor.putBoolean(key, settingsJson.getBoolean(key));
+                        editor.putBoolean(key, settingsJson.getBoolean(key));
                         Timber.i(key, " : boolean (applied)");
                     } catch (Exception e1) {
-                        mEditor.putLong(key, settingsJson.getLong(key));
+                        editor.putLong(key, settingsJson.getLong(key));
                         Timber.i(key, " : long (applied)");
                     }
                 }
             } else {
                 try {
                     String stringValue = getStringValue(key);
-                    mEditor.putString(key, getDefaultStringValue(key));
+                    editor.putString(key, getDefaultStringValue(key));
                     Timber.i(key + " : string (default)");
                 } catch (ClassCastException e) {
                     try {
                         boolean booleanValue = getBooleanValue(key);
-                        mEditor.putBoolean(key, getDefaultBooleanValue(key));
+                        editor.putBoolean(key, getDefaultBooleanValue(key));
                         Timber.i(key + " : boolean (default)");
                     } catch (ClassCastException e1) {
                         long longValue = getLongValue(key);
-                        mEditor.putLong(key, getDefaultLongValue(key));
+                        editor.putLong(key, getDefaultLongValue(key));
                         Timber.i(key + " : long (default)");
                     }
                 }
             }
         }
-        mEditor.apply();
+        editor.apply();
 
         //settings import confirmation toast
-        ToastUtils.showLongToast(mContext.getString(R.string.successfully_imported_settings));
+        ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
+    }
+
+    private Collection<String> getAllKeys() {
+        Collection<String> keys = new ArrayList<>();
+        keys.addAll(ALL_GENERAL_KEYS);
+        keys.add(KEY_ADMIN_PW);
+        keys.add(KEY_PASSWORD);
+        return keys;
     }
 }
 

@@ -512,4 +512,5 @@
 <string name="select_qrcode">Select code from SD Card</string>
 <string name="turn_on_flashlight">Turn on flashlight</string>
 <string name="turn_off_flashlight">Turn off flashlight</string>
+<string name="click_to_generate_qr_code">Click here to generate QR code</string>
 </resources>

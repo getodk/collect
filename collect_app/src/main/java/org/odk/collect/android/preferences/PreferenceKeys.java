@@ -80,7 +80,6 @@ public final class PreferenceKeys {
             KEY_PROTOCOL_SETTINGS,
             KEY_SELECTED_GOOGLE_ACCOUNT,
             KEY_USERNAME,
-            KEY_PASSWORD,
             KEY_FORM_METADATA,
             KEY_METADATA_USERNAME,
             KEY_METADATA_PHONENUMBER,
