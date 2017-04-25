@@ -708,7 +708,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 try {
                     getContentResolver().delete(mediaUri, null, null);
                 } catch (Exception e) {
-                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Timber.e(e);
                 }
                 break;
 
