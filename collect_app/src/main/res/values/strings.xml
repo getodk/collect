@@ -502,13 +502,13 @@
 <string name="select_date">Select date</string>
 <string name="select_time">Select time</string>
 <string name="import_settings">Import/Export settings</string>
-<string name="qr_code">QR Code</string>
+<string name="qr_code">QR code</string>
 <string name="tv_qrcode">Scan this QRCode to copy the settings</string>
 <string name="scan_qrcode">Scan code from other device</string>
 <string name="successfully_imported_settings">Settings imported successfully</string>
-<string name="encoding_max_limit">Maximum characters limit reached QRCode can\'t be generated for all settings</string>
+<string name="encoding_max_limit">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
 <string name="share">Share</string>
-<string name="select_qrcode">Select QR Code from SD Card</string>
-<string name="turn_on_flashlight">Turn on Flashlight</string>
-<string name="turn_off_flashlight">Turn off Flashlight</string>
+<string name="select_qrcode">Select code from SD Card</string>
+<string name="turn_on_flashlight">Turn on flashlight</string>
+<string name="turn_off_flashlight">Turn off flashlight</string>
 </resources>

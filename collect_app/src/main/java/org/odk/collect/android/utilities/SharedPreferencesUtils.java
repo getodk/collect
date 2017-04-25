@@ -119,7 +119,7 @@ public class SharedPreferencesUtils {
                 defValue = mContext.getString(R.string.default_odk_submission);
                 break;
             case KEY_APP_LANGUAGE:
-                defValue = "en";
+                defValue = "";
                 break;
             case KEY_NAVIGATION:
                 defValue = "swipe";
