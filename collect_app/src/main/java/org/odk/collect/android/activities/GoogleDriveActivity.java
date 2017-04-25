@@ -194,7 +194,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
 
         // restore any task state
-        if (getLastNonConfigurationInstance() instanceof RetrieveDriveFileContentsAsyncTask) {
+        if (getLastCustomNonConfigurationInstance() instanceof RetrieveDriveFileContentsAsyncTask) {
             mRetrieveDriveFileContentsAsyncTask =
                     (RetrieveDriveFileContentsAsyncTask) getLastNonConfigurationInstance();
             setProgressBarIndeterminateVisibility(true);
