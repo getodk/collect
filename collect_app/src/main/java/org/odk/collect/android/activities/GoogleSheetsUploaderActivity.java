@@ -239,8 +239,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {

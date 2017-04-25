@@ -19,7 +19,6 @@
 package org.odk.collect.android.external;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -27,6 +26,8 @@ import org.odk.collect.android.tasks.FormLoaderTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * Author: Meletis Margaritis
@@ -53,9 +54,8 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
                     // this means the someone updated the csv file, so we need to reload it
                     boolean deleted = dbFile.delete();
                     if (!deleted) {
-                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName()
-                                + " has changed but we could not delete the previous DB at "
-                                + dbFile.getAbsolutePath());
+                        Timber.e("%s has changed but we could not delete the previous DB at %s",
+                                dataSetFile.getName(), dbFile.getAbsolutePath());
                         continue;
                     }
                 }
@@ -64,13 +64,13 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
                 externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, formLoaderTask);
 
                 if (formLoaderTask.isCancelled()) {
-                    Log.w(ExternalDataUtil.LOGGER_NAME,
+                    Timber.w(
                             "The import was cancelled, so we need to rollback.");
 
                     // we need to drop the database file since it might be partially populated.
                     // It will be re-created next time.
 
-                    Log.w(ExternalDataUtil.LOGGER_NAME, "Closing database to be deleted " + dbFile);
+                    Timber.w("Closing database to be deleted %s", dbFile.toString());
 
                     // then close the database
                     SQLiteDatabase db = externalSQLiteOpenHelper.getReadableDatabase();
@@ -79,9 +79,9 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
                     // the physically delete the db.
                     try {
                         FileUtils.forceDelete(dbFile);
-                        Log.w(ExternalDataUtil.LOGGER_NAME, "Deleted " + dbFile.getName());
+                        Timber.w("Deleted %s", dbFile.getName());
                     } catch (IOException e) {
-                        Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
+                        Timber.e(e);
                     }
 
                     // then just exit and do not process any other CSVs.
@@ -94,13 +94,10 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
                             dataSetFile.getName() + ".imported");
                     boolean renamed = dataSetFile.renameTo(importedFile);
                     if (!renamed) {
-                        Log.e(ExternalDataUtil.LOGGER_NAME, dataSetFile.getName()
-                                + " could not be renamed to be archived. It will be re-imported "
-                                + "again! :(");
+                        Timber.e("%s could not be renamed to be archived. It will be re-imported "
+                                + "again! :(", dataSetFile.getName());
                     } else {
-                        Log.e(ExternalDataUtil.LOGGER_NAME,
-                                dataSetFile.getName() + " was renamed to "
-                                        + importedFile.getName());
+                        Timber.e("%s was renamed to %s", dataSetFile.getName(), importedFile.getName());
                     }
                 }
             }

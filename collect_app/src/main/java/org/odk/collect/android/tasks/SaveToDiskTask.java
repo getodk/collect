@@ -18,7 +18,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
@@ -40,6 +39,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
+import timber.log.Timber;
+
 /**
  * Background task for loading a form.
  *
@@ -47,7 +48,6 @@ import java.io.RandomAccessFile;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
-    private static final String t = "SaveToDiskTask";
 
     private FormSavedListener mSavedListener;
     private Boolean mSave;
@@ -91,7 +91,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 return saveResult;
             }
         } catch (Exception e) {
-            Log.e(t, e.getMessage(), e);
+            Timber.e(e);
 
             // SCTO-825
             // that means that we have a bad design
@@ -137,7 +137,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             saveResult.setSaveErrorMessage(e.getMessage());
             saveResult.setSaveResult(ENCRYPTION_ERROR);
         } catch (Exception e) {
-            Log.e(t, e.getMessage(), e);
+            Timber.e(e);
 
             saveResult.setSaveErrorMessage(e.getMessage());
             saveResult.setSaveResult(SAVE_ERROR);
@@ -169,11 +169,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             int updated = Collect.getInstance().getContentResolver().update(mUri, values, null,
                     null);
             if (updated > 1) {
-                Log.w(t, "Updated more than one entry, that's not good: " + mUri.toString());
+                Timber.w("Updated more than one entry, that's not good: %s", mUri.toString());
             } else if (updated == 1) {
-                Log.i(t, "Instance successfully updated");
+                Timber.i("Instance successfully updated");
             } else {
-                Log.e(t, "Instance doesn't exist but we have its Uri!! " + mUri.toString());
+                Timber.e("Instance doesn't exist but we have its Uri!! %s", mUri.toString());
             }
         } else if (Collect.getInstance().getContentResolver().getType(mUri).equals(
                 FormsColumns.CONTENT_ITEM_TYPE)) {
@@ -189,12 +189,12 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             };
             int updated = new InstancesDao().updateInstance(values, where, whereArgs);
             if (updated > 1) {
-                Log.w(t, "Updated more than one entry, that's not good: " + instancePath);
+                Timber.w("Updated more than one entry, that's not good: %s", instancePath);
             } else if (updated == 1) {
-                Log.i(t, "Instance found and successfully updated: " + instancePath);
+                Timber.i("Instance found and successfully updated: %s", instancePath);
                 // already existed and updated just fine
             } else {
-                Log.i(t, "No instance found, creating");
+                Timber.i("No instance found, creating");
                 // Entry didn't exist, so create it.
                 Cursor c = null;
                 try {
@@ -326,7 +326,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 if (!instanceXml.delete()) {
                     String msg = "Error deleting " + instanceXml.getAbsolutePath()
                             + " prior to renaming submission.xml";
-                    Log.e(t, msg);
+                    Timber.e(msg);
                     throw new IOException(msg);
                 }
 
@@ -334,7 +334,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 if (!submissionXml.renameTo(instanceXml)) {
                     String msg =
                             "Error renaming submission.xml to " + instanceXml.getAbsolutePath();
-                    Log.e(t, msg);
+                    Timber.e(msg);
                     throw new IOException(msg);
                 }
             } else {
@@ -344,7 +344,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 if (!submissionXml.delete()) {
                     String msg = "Error deleting " + submissionXml.getAbsolutePath()
                             + " (instance is re-openable)";
-                    Log.w(t, msg);
+                    Timber.w(msg);
                 }
             }
 
@@ -352,7 +352,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
-                    Log.e(t, "Error deleting plaintext files for " + instanceXml.getAbsolutePath());
+                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
                 }
             }
         }
@@ -389,7 +389,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     try {
                         randomAccessFile.close();
                     } catch (IOException e) {
-                        Log.e(t, "Error closing RandomAccessFile: " + path, e);
+                        Timber.e(e, "Error closing RandomAccessFile: %s", path);
                     }
                 }
             }
