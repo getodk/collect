@@ -58,11 +58,7 @@ public class SharedPreferencesUtils {
     private final SharedPreferences.Editor mEditor = sharedPrefs.edit();
 
     private static Collection<String> getAllKeys() {
-        Collection<String> allKeys = ALL_KEYS;
-        for (String key : ALL_GENERAL_KEYS) {
-            allKeys.add(key);
-        }
-        return allKeys;
+        return ALL_GENERAL_KEYS;
     }
 
     static String getJSONFromPreferences() throws JSONException {
@@ -196,24 +192,30 @@ public class SharedPreferencesUtils {
             if (settingsJson.has(key)) {
                 try {
                     mEditor.putString(key, settingsJson.getString(key));
-                } catch (ClassCastException e) {
+                    Timber.i(key + " : string (applied)");
+                } catch (Exception e) {
                     try {
                         mEditor.putBoolean(key, settingsJson.getBoolean(key));
-                    } catch (ClassCastException e1) {
+                        Timber.i(key, " : boolean (applied)");
+                    } catch (Exception e1) {
                         mEditor.putLong(key, settingsJson.getLong(key));
+                        Timber.i(key, " : long (applied)");
                     }
                 }
             } else {
                 try {
                     String stringValue = getStringValue(key);
                     mEditor.putString(key, getDefaultStringValue(key));
+                    Timber.i(key + " : string (default)");
                 } catch (ClassCastException e) {
                     try {
                         boolean booleanValue = getBooleanValue(key);
                         mEditor.putBoolean(key, getDefaultBooleanValue(key));
+                        Timber.i(key + " : boolean (default)");
                     } catch (ClassCastException e1) {
                         long longValue = getLongValue(key);
                         mEditor.putLong(key, getDefaultLongValue(key));
+                        Timber.i(key + " : long (default)");
                     }
                 }
             }
