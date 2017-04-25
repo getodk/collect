@@ -30,6 +30,7 @@ import java.util.Collection;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
+import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 import static org.odk.collect.android.preferences.PreferenceKeys.ALL_GENERAL_KEYS;
@@ -72,7 +73,9 @@ public class SharedPreferencesUtils {
     }
 
     private JSONObject getModifiedPrefs(Collection<String> keys) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject prefs = new JSONObject();
+        JSONObject adminPrefs = new JSONObject();
+        JSONObject generalPrefs = new JSONObject();
 
         for (String key : keys) {
             String stringValue;
@@ -82,7 +85,7 @@ public class SharedPreferencesUtils {
             if (key.equals(KEY_ADMIN_PW)) {
                 stringValue = adminSharedPrefs.getString(key, "");
                 if (!stringValue.equals("")) {
-                    jsonObject.put(key, stringValue);
+                    adminPrefs.put(key, stringValue);
 
                     //skip further checking
                     continue;
@@ -93,25 +96,37 @@ public class SharedPreferencesUtils {
                 stringValue = getStringValue(key);
                 defaultStringValue = getDefaultStringValue(key);
                 if (!stringValue.equals(defaultStringValue)) {
-                    jsonObject.put(key, stringValue);
+                    generalPrefs.put(key, stringValue);
                 }
             } catch (ClassCastException e) {
                 try {
                     boolean booleanValue = getBooleanValue(key);
                     boolean defaultBooleanValue = getDefaultBooleanValue(key);
                     if (booleanValue != defaultBooleanValue) {
-                        jsonObject.put(key, booleanValue);
+                        generalPrefs.put(key, booleanValue);
                     }
                 } catch (ClassCastException e1) {
                     long longValue = getLongValue(key);
                     long defaultLongValue = getDefaultLongValue(key);
                     if (longValue != defaultLongValue) {
-                        jsonObject.put(key, longValue);
+                        generalPrefs.put(key, longValue);
                     }
                 }
             }
         }
-        return jsonObject;
+        prefs.put("general", generalPrefs);
+
+        for (String key : ALL_KEYS) {
+            boolean value;
+
+            value = adminSharedPrefs.getBoolean(key, true);
+            if (!value) {
+                adminPrefs.put(key, false);
+            }
+        }
+        prefs.put("admin", adminPrefs);
+
+        return prefs;
     }
 
     private String getDefaultStringValue(String key) {
@@ -199,49 +214,55 @@ public class SharedPreferencesUtils {
 
     public void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
 
+        JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
+        JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
+
         Collection<String> allKeys = getAllKeys();
         for (String key : allKeys) {
 
-            if (key.equals(KEY_ADMIN_PW) && settingsJson.has(key)) {
-                adminEditor.putString(key, settingsJson.getString(key));
+            if (key.equals(KEY_ADMIN_PW) && generalPrefsJson.has(key)) {
+                adminEditor.putString(key, generalPrefsJson.getString(key));
                 adminEditor.apply();
 
                 // skip further checking
                 continue;
             }
 
-            if (settingsJson.has(key)) {
+            if (generalPrefsJson.has(key)) {
                 try {
-                    editor.putString(key, settingsJson.getString(key));
-                    Timber.i(key + " : string (applied)");
+                    editor.putString(key, generalPrefsJson.getString(key));
                 } catch (Exception e) {
                     try {
-                        editor.putBoolean(key, settingsJson.getBoolean(key));
-                        Timber.i(key, " : boolean (applied)");
+                        editor.putBoolean(key, generalPrefsJson.getBoolean(key));
                     } catch (Exception e1) {
-                        editor.putLong(key, settingsJson.getLong(key));
-                        Timber.i(key, " : long (applied)");
+                        editor.putLong(key, generalPrefsJson.getLong(key));
                     }
                 }
             } else {
                 try {
                     String stringValue = getStringValue(key);
                     editor.putString(key, getDefaultStringValue(key));
-                    Timber.i(key + " : string (default)");
                 } catch (ClassCastException e) {
                     try {
                         boolean booleanValue = getBooleanValue(key);
                         editor.putBoolean(key, getDefaultBooleanValue(key));
-                        Timber.i(key + " : boolean (default)");
                     } catch (ClassCastException e1) {
                         long longValue = getLongValue(key);
                         editor.putLong(key, getDefaultLongValue(key));
-                        Timber.i(key + " : long (default)");
                     }
                 }
             }
         }
         editor.apply();
+
+        for (String key : ALL_KEYS) {
+            if (adminPrefsJson.has(key)) {
+                adminEditor.putBoolean(key, false);
+            } else {
+                adminEditor.putBoolean(key, true);
+            }
+            adminEditor.apply();
+        }
 
         //settings import confirmation toast
         ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
