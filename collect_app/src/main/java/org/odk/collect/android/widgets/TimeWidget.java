@@ -49,6 +49,8 @@ public class TimeWidget extends QuestionWidget {
     private int mHourOfDay;
     private int mMinuteOfHour;
 
+    private boolean mNullAnswer;
+
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -60,22 +62,18 @@ public class TimeWidget extends QuestionWidget {
         addViews();
     }
 
-    /**
-     * Resets time to today.
-     */
     @Override
     public void clearAnswer() {
-        DateTime dt = new DateTime();
-        setTime(dt.getHourOfDay(), dt.getMinuteOfHour());
-        mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+        mNullAnswer = true;
+        mTimeTextView.setText(R.string.no_time_selected);
     }
 
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
         // use picker time, convert to today's date, store as utc
-        DateTime ldt = (new DateTime()).withTime(mHourOfDay, mMinuteOfHour, 0, 0);
-        return new TimeData(ldt.toDate());
+        DateTime dt = (new DateTime()).withTime(mHourOfDay, mMinuteOfHour, 0, 0);
+        return mNullAnswer ? null : new TimeData(dt.toDate());
     }
 
     @Override
@@ -114,7 +112,11 @@ public class TimeWidget extends QuestionWidget {
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+                if (mNullAnswer) {
+                    setTimeToCurrent();
+                } else {
+                    mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+                }
                 mTimePickerDialog.show();
             }
         });
@@ -135,10 +137,8 @@ public class TimeWidget extends QuestionWidget {
         addAnswerView(linearLayout);
     }
 
-    private void setTime(int hourOfDay, int minuteOfHour) {
-        mHourOfDay = hourOfDay;
-        mMinuteOfHour = minuteOfHour;
-
+    public void setTimeLabel() {
+        mNullAnswer = false;
         mTimeTextView.setText(getAnswer().getDisplayText());
     }
 
@@ -149,20 +149,19 @@ public class TimeWidget extends QuestionWidget {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
                         mHourOfDay = hourOfDay;
                         mMinuteOfHour = minuteOfHour;
-                        setTime(hourOfDay, minuteOfHour);
+                        setTimeLabel();
                     }
                 }, 0, 0);
         mTimePickerDialog.setCanceledOnTouchOutside(false);
 
-        // If there's an answer, use it.
-        if (mPrompt.getAnswerValue() != null) {
-            // create a new date time from date object using default time zone
-            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            setTime(dt.getHourOfDay(), dt.getMinuteOfHour());
-            mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
-        } else {
-            // create time widget with current time as of right now
+        if (mPrompt.getAnswerValue() == null) {
             clearAnswer();
+        } else {
+            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
+            mHourOfDay = dt.getHourOfDay();
+            mMinuteOfHour = dt.getMinuteOfHour();
+            setTimeLabel();
+            mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
         }
     }
 
@@ -172,6 +171,17 @@ public class TimeWidget extends QuestionWidget {
 
     public int getMinute() {
         return mMinuteOfHour;
+    }
+
+    public boolean isNullAnswer() {
+        return mNullAnswer;
+    }
+
+    public void setTimeToCurrent() {
+        DateTime dt = new DateTime();
+        mHourOfDay = dt.getHourOfDay();
+        mMinuteOfHour = dt.getMinuteOfHour();
+        mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
