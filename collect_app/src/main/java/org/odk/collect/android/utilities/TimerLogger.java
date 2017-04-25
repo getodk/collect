@@ -19,6 +19,14 @@ import java.util.ArrayList;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
+ * Notes:
+ * 1) If the user has saved the form, resumes editing, then exits without saving then the timing data during the
+ *    second editing session will be saved.  This is OK as it records user activity.  However if the user exits
+ *    without saving and they have never saved the form then the timing data is lost as the form editing will be
+ *    restarted from scratch.
+ * 2) The times for questions in a group are not shown.  Only the time for the group is shown.
+ *
+ * - However if the user
  */
 public class TimerLogger {
 
@@ -92,29 +100,6 @@ public class TimerLogger {
                 this.endTimeSet = true;
             }
 
-        }
-
-        /*
-         * Return true if the event can be saved to the timer log
-         * This will return false if at least one of the events is waiting for an end time
-         */
-        public boolean canSave() {
-            if (this.endTimeSet == false && (isIntervalViewEvent())) {
-                return false;
-            }
-            return true;
-        }
-
-        /*
-         * Return true if the event is a currently open interval view event
-         */
-        public boolean inIntervalView() {
-
-            if (this.endTimeSet == false && isIntervalViewEvent()) {
-                return true;
-            }
-
-            return false;
         }
 
         /*
@@ -222,6 +207,7 @@ public class TimerLogger {
                               boolean writeImmediatelyToDisk) {
 
         if (mTimerEnabled) {
+
             // Calculate the time and add the event to the events array
             long start = getEventTime();
             String node = ref == null ? "" : ref.toString();
@@ -250,7 +236,7 @@ public class TimerLogger {
 
             mEvents.add(newEvent);
 
-            if(writeImmediatelyToDisk) {
+            if (writeImmediatelyToDisk) {
                 writeEvents();
             }
         }
@@ -258,42 +244,28 @@ public class TimerLogger {
     }
 
     /*
-     * Exit a question, repeat dialog, language select etc
+     * Exit a question
      */
     public void exitView() {
 
         if (mTimerEnabled) {
-
-            // Calculate the time and add the event to the events array
-            long end = getEventTime();
-            for (int i = 0; i < mEvents.size(); i++) {
-                mEvents.get(i).setEnd(end);
-            }
             writeEvents();
         }
     }
 
     private void writeEvents() {
 
+        // Calculate the time and add the event to the events array
+        long end = getEventTime();
+        for (int i = 0; i < mEvents.size(); i++) {
+            mEvents.get(i).setEnd(end);
+        }
+
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
-            // Verify that all the pending events are ready to send, may require us to wait for an "exit" event
-            boolean canSave = true;
-            for (int i = 0; i < mEvents.size(); i++) {
-                Event pe = mEvents.get(i);
-                if (!pe.canSave()) {
-                    canSave = false;
-                    break;
-                }
-            }
-
-            if (canSave) {
-                Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
-                saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
-                mEvents = new ArrayList<Event>();
-            } else {
-                Log.e(t, "Queueing Timer Event");
-            }
+            Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
+            saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
+            mEvents = new ArrayList<Event>();
 
         } else {
             Log.e(t, "Queueing Timer Event");

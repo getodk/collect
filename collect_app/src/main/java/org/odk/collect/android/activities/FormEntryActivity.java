@@ -921,7 +921,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                mTimerLogger.exitView();
                 mTimerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
@@ -1718,9 +1717,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
             }
         };
-
-        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
-                FormEntryController.EVENT_PROMPT_NEW_REPEAT, null, false, true);
 
         if (formController.getLastRepeatCount() > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
