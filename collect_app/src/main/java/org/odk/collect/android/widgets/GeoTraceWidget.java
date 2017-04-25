@@ -201,7 +201,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         // TODO Auto-generated method stub
         mStringAnswer.setText(null);
         mAnswerDisplay.setText(null);
-
+        updateButtonLabelsAndVisibility(false);
     }
 
     @Override
