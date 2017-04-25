@@ -1,17 +1,54 @@
 package org.odk.collect.android.test;
 
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 public final class TestUtils {
     private TestUtils() {}
+
+    public static Map<String, ?> backupPreferences() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
+        return Collections.unmodifiableMap(prefs.getAll());
+    }
+
+    public static void restorePreferences(Map<String, ?> backup) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext()).edit();
+
+        editor.clear();
+
+        for (Map.Entry<String, ?> e : backup.entrySet()) {
+            Object v = e.getValue();
+            if (v instanceof Boolean) {
+                editor.putBoolean(e.getKey(), (Boolean) v);
+            } else if (v instanceof Float) {
+                editor.putFloat(e.getKey(), (Float) v);
+            } else if (v instanceof Integer) {
+                editor.putInt(e.getKey(), (Integer) v);
+            } else if (v instanceof Long) {
+                editor.putLong(e.getKey(), (Long) v);
+            } else if (v instanceof String) {
+                editor.putString(e.getKey(), (String) v);
+            } else if (v instanceof Set) {
+                editor.putStringSet(e.getKey(), (Set<String>) v);
+            } else {
+                throw new RuntimeException("Unhandled preference value type: " + v);
+            }
+        }
+
+        editor.commit();
+    }
 
     public static File createTempFile(String content) throws Exception {
         File f = createTempFile();

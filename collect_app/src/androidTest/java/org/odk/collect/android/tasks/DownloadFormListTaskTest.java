@@ -17,18 +17,30 @@ import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
 import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
 import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
+import static org.odk.collect.android.test.TestUtils.backupPreferences;
+import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
 public class DownloadFormListTaskTest {
+    private Map<String, ?> prefsBackup;
+
     private MockWebServer server;
 
     @Before
     public void setUp() throws Exception {
+        prefsBackup = backupPreferences();
+
         server = mockWebServer();
     }
 
     @After
     public void tearDown() throws Exception {
-        server.shutdown();
+        if (server != null) {
+            server.shutdown();
+        }
+
+        if (prefsBackup != null) {
+            restorePreferences(prefsBackup);
+        }
     }
 
     @Test

@@ -3,6 +3,7 @@ package org.odk.collect.android.tasks;
 import android.net.Uri;
 
 import java.io.File;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,16 +23,22 @@ import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
 import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
 import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
+import static org.odk.collect.android.test.TestUtils.backupPreferences;
 import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.test.TestUtils.createTempFile;
 import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
+import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
 public class InstanceUploaderTaskTest {
+    private Map<String, ?> prefsBackup;
+
     private InstancesDao dao;
     private MockWebServer server;
 
     @Before
     public void setUp() throws Exception {
+        prefsBackup = backupPreferences();
+
         resetInstancesContentProvider();
 
         dao = new InstancesDao();
@@ -40,9 +47,16 @@ public class InstanceUploaderTaskTest {
 
     @After
     public void tearDown() throws Exception {
-        server.shutdown();
+        if (server != null) {
+            server.shutdown();
+        }
+
         cleanUpTempFiles();
         resetInstancesContentProvider();
+
+        if (prefsBackup != null) {
+            restorePreferences(prefsBackup);
+        }
     }
 
     @Test

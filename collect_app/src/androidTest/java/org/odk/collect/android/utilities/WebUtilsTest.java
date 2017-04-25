@@ -1,6 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,12 +23,18 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
 import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
+import static org.odk.collect.android.test.TestUtils.backupPreferences;
+import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
 public class WebUtilsTest {
+    private Map<String, ?> prefsBackup;
+
     private MockWebServer server;
 
     @Before
     public void setUp() throws Exception {
+        prefsBackup = backupPreferences();
+
         server = mockWebServer();
 
         // server hangs without a response queued:
@@ -36,7 +43,13 @@ public class WebUtilsTest {
 
     @After
     public void tearDown() throws Exception {
-        server.shutdown();
+        if (server != null) {
+            server.shutdown();
+        }
+
+        if (prefsBackup != null) {
+            restorePreferences(prefsBackup);
+        }
     }
 
     @Test
