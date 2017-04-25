@@ -777,12 +777,7 @@ public class GoogleDriveActivity extends ListActivity implements
             HashMap<String, Object> results = new HashMap<>();
 
             String currentDir = params[0];
-            String query = null;
-            if (params.length == 2) {
-                // TODO: *.xml or .xml or xml
-                // then search mimetype
-                query = "fullText contains '" + params[1] + "' and trashed=false";
-            }
+            String query;
 
             if (rootId == null) {
                 try {
@@ -817,6 +812,12 @@ public class GoogleDriveActivity extends ListActivity implements
                     parentId = folderIdStack.peek();
                 }
                 query = "'" + parentId + "' in parents";
+
+                if (params.length == 2) {
+                    // TODO: *.xml or .xml or xml
+                    // then search mimetype
+                    query = "fullText contains '" + params[1] + "' and trashed=false";
+                }
 
                 // SharedWithMe, and root:
                 if (!MyDrive && currentDir.equals(ROOT_KEY)) {
