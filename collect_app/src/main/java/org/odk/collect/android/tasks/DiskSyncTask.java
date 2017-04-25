@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -36,6 +35,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
  * sdcard manually. Returns immediately if it detects an error.
@@ -43,7 +44,6 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class DiskSyncTask extends AsyncTask<Void, String, String> {
-    private final static String t = "DiskSyncTask";
 
     private static int counter = 0;
 
@@ -69,7 +69,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     protected String doInBackground(Void... params) {
         mFormsDao = new FormsDao();
         instance = ++counter; // roughly track the scan # we're on... logging use only
-        Log.i(t, "[" + instance + "] doInBackground begins!");
+        Timber.i("[%d] doInBackground begins!", instance);
         
         List<String> idsToDelete = new ArrayList<>();
 
@@ -94,7 +94,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 ".xhtml"))) {
                             formsToAdd.add(addMe);
                         } else {
-                            Log.i(t, "[" + instance + "] Ignoring: " + addMe.getAbsolutePath());
+                            Timber.i("[%d] Ignoring: %s", instance, addMe.getAbsolutePath());
                         }
                     }
                 }
@@ -108,7 +108,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 try {
                     cursor = mFormsDao.getFormsCursor();
                     if (cursor == null) {
-                        Log.e(t, "[" + instance + "] Forms Content Provider returned NULL");
+                        Timber.e("[%d] Forms Content Provider returned NULL", instance);
                         errors.append(
                                 "Internal Error: Unable to access Forms content provider").append(
                                 "\r\n");
@@ -183,7 +183,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     int count =
                             Collect.getInstance().getContentResolver()
                                     .update(updateUri, values, null, null);
-                    Log.i(t, "[" + instance + "] " + count + " records successfully updated");
+                    Timber.i("[%d] %d records successfully updated", instance, count);
                 }
                 uriToUpdate.clear();
 
@@ -198,8 +198,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     // they may have already updated the database.
                     // Skip this file if that is the case.
                     if (isAlreadyDefined(formDefFile)) {
-                        Log.i(t, "[" + instance + "] skipping -- definition already recorded: "
-                                + formDefFile.getAbsolutePath());
+                        Timber.i("[%d] skipping -- definition already recorded: %s",
+                                instance, formDefFile.getAbsolutePath());
                         continue;
                     }
 
@@ -223,7 +223,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         // DiskSync scanners are active.
                         mFormsDao.saveForm(values);
                     } catch (SQLException e) {
-                        Log.i(t, "[" + instance + "] " + e.toString());
+                        Timber.i("[%d] %s", instance, e.toString());
                     }
                 }
             }
@@ -234,7 +234,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             }
             return statusMessage;
         } finally {
-            Log.i(t, "[" + instance + "] doInBackground ends!");
+            Timber.i("[%d] doInBackground ends!", instance);
         }
     }
 

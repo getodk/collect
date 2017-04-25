@@ -1,12 +1,13 @@
 package org.odk.collect.android.utilities;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import timber.log.Timber;
 
 /**
  * The function fixCalendarViewIfJellyBean fixes the Calendar view bug for Android 4.1.2 devices
@@ -49,8 +50,8 @@ public class DateWidgetUtils {
                             if (field.getName().equals("mMonthNumDrawPaint")) { // the paint is stored inside the view
                                 field.setAccessible(true);
                                 object = field.get(object);
-                                Method method = object.getClass().
-                                        getDeclaredMethod("setTextSize", float.class); // finally set text size
+                                Method method = object.getClass()
+                                        .getDeclaredMethod("setTextSize", float.class); // finally set text size
                                 method.setAccessible(true);
                                 method.invoke(object, (Object) mDateTextSize);
 
@@ -58,7 +59,7 @@ public class DateWidgetUtils {
                             }
                         }
                     } catch (Exception e) {
-                        Log.e("DateTimeWidget", e.getMessage(), e);
+                        Timber.e(e);
                     }
                 }
 
@@ -67,7 +68,7 @@ public class DateWidgetUtils {
                 }
             });
         } catch (Exception e) {
-            Log.e("DateTimeWidget", e.getMessage(), e);
+            Timber.e(e);
         }
     }
 

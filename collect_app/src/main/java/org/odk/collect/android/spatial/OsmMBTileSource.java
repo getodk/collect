@@ -15,6 +15,7 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import android.database.Cursor;
@@ -35,13 +36,12 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
     // Log log log log ...
     // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
-    private static final String t = "MBTileSource";
     // Database related fields
-    public final static String TABLE_TILES = "tiles";
-    public final static String COL_TILES_ZOOM_LEVEL = "zoom_level";
-    public final static String COL_TILES_TILE_COLUMN = "tile_column";
-    public final static String COL_TILES_TILE_ROW = "tile_row";
-    public final static String COL_TILES_TILE_DATA = "tile_data";
+    public static final String TABLE_TILES = "tiles";
+    public static final String COL_TILES_ZOOM_LEVEL = "zoom_level";
+    public static final String COL_TILES_TILE_COLUMN = "tile_column";
+    public static final String COL_TILES_TILE_ROW = "tile_row";
+    public static final String COL_TILES_TILE_DATA = "tile_data";
 
     protected SQLiteDatabase database;
     protected File archive;

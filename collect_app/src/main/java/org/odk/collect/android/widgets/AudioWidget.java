@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -41,6 +40,8 @@ import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
@@ -50,7 +51,6 @@ import java.io.File;
  */
 
 public class AudioWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "MediaWidget";
 
     private Button mCaptureButton;
     private Button mPlayButton;
@@ -210,7 +210,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         // delete from media provider
         int del = MediaUtils.deleteAudioFileFromMediaProvider(
                 mInstanceFolder + File.separator + name);
-        Log.i(t, "Deleted " + del + " rows from media content provider");
+        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -255,15 +255,15 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting AUDIO returned uri = " + audioURI.toString());
+            Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
             // when replacing an answer. remove the current media.
             if (mBinaryName != null && !mBinaryName.equals(newAudio.getName())) {
                 deleteMedia();
             }
             mBinaryName = newAudio.getName();
-            Log.i(t, "Setting current answer to " + newAudio.getName());
+            Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
-            Log.e(t, "Inserting Audio file FAILED");
+            Timber.e("Inserting Audio file FAILED");
         }
 
         Collect.getInstance().getFormController().setIndexWaitingForData(null);

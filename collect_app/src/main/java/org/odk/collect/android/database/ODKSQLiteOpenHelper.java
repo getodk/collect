@@ -18,12 +18,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
+
+import timber.log.Timber;
 
 
 /**
@@ -45,7 +46,6 @@ import java.io.File;
  * </p>
  */
 public abstract class ODKSQLiteOpenHelper {
-    private static final String t = ODKSQLiteOpenHelper.class.getSimpleName();
 
     private final String mPath;
     private final String mName;
@@ -185,7 +185,7 @@ public abstract class ODKSQLiteOpenHelper {
             if (mName == null) {
                 throw e; // Can't open a temp database read-only!
             }
-            Log.e(t, "Couldn't open " + mName + " for writing (will try read-only):", e);
+            Timber.e(e, "Couldn't open %s for writing (will try read-only):", mName);
         }
 
         SQLiteDatabase db = null;
@@ -196,7 +196,7 @@ public abstract class ODKSQLiteOpenHelper {
             try {
                 db = SQLiteDatabase.openDatabase(path, mFactory, SQLiteDatabase.OPEN_READONLY);
             } catch (RuntimeException e) {
-                Log.e(t, e.getMessage(), e);
+                Timber.e(e);
                 String cardstatus = Environment.getExternalStorageState();
                 if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
                     throw new RuntimeException(
@@ -212,7 +212,7 @@ public abstract class ODKSQLiteOpenHelper {
             }
 
             onOpen(db);
-            Log.w(t, "Opened " + mName + " in read-only mode");
+            Timber.w("Opened %s in read-only mode", mName);
             mDatabase = db;
             return mDatabase;
         } finally {

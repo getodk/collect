@@ -501,6 +501,6 @@
 <string name="sim_serial_id">SIM serial number</string>
 <string name="select_date">Select date</string>
 <string name="select_time">Select time</string>
-<string name="no_time_selected">No time selected</string>
 <string name="no_date_selected">No date selected</string>
+<string name="use_phone_language">Use phone language</string>
 </resources>

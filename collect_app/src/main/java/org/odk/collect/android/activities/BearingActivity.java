@@ -157,13 +157,13 @@ public class BearingActivity extends Activity implements SensorEventListener {
         }
 
         if (mAccelerometer != null && mGeomagnetic != null) {
-            float rot[] = new float[9];
-            float inclination[] = new float[9];
+            float[] rot = new float[9];
+            float[] inclination = new float[9];
             boolean success = SensorManager.getRotationMatrix(rot, inclination, mAccelerometer,
                     mGeomagnetic);
 
             if (success) {
-                float orientation[] = new float[3];
+                float[] orientation = new float[3];
                 SensorManager.getOrientation(rot, orientation);
                 // at this point, orientation contains the azimuth(direction),
                 // pitch and roll values.
@@ -190,8 +190,8 @@ public class BearingActivity extends Activity implements SensorEventListener {
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                mBearingDialog.setMessage(getString(R.string.direction, dir) +
-                        "\n" + getString(R.string.bearing, degrees));
+                mBearingDialog.setMessage(getString(R.string.direction, dir)
+                        + "\n" + getString(R.string.bearing, degrees));
 
             }
         }

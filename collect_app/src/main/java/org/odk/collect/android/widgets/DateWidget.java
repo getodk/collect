@@ -227,6 +227,7 @@ public class DateWidget extends QuestionWidget {
                         setDateLabel();
                     }
                 }, 0, 0, 0);
+        mDatePickerDialog.setCanceledOnTouchOutside(false);
 
         if (mPrompt.getAnswerValue() == null) {
             if (mShowCalendar) {

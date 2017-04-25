@@ -57,8 +57,6 @@ import timber.log.Timber;
 public class ItemsetWidget extends QuestionWidget implements
         CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-    private static String tag = "ItemsetWidget";
-
     boolean mReadOnly;
     private boolean mAutoAdvanceToNext;
 
@@ -122,7 +120,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 || (orIndex = queryString.indexOf(" or ")) != -1) {
             if (andIndex != -1) {
                 String subString = queryString.substring(0, andIndex);
-                String pair[] = subString.split("=");
+                String[] pair = subString.split("=");
                 if (pair.length == 2) {
                     selection.append(pair[0].trim() + "=? and ");
                     arguments.add(pair[1].trim());
@@ -134,7 +132,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 andIndex = -1;
             } else if (orIndex != -1) {
                 String subString = queryString.substring(0, orIndex);
-                String pair[] = subString.split("=");
+                String[] pair = subString.split("=");
                 if (pair.length == 2) {
                     selection.append(pair[0].trim() + "=? or ");
                     arguments.add(pair[1].trim());
@@ -150,7 +148,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
         // parse the last segment (or only segment if there are no 'and' or 'or'
         // clauses
-        String pair[] = queryString.split("=");
+        String[] pair = queryString.split("=");
         if (pair.length == 2) {
             selection.append(pair[0].trim() + "=?");
             arguments.add(pair[1].trim());

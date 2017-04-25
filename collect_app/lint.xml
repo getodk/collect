@@ -16,4 +16,8 @@
     <issue id="RtlHardcoded" severity="error" />
     <issue id="Deprecated"  severity="error" />
     <issue id="DefaultLocale"  severity="error" />
+    <issue id="SuspiciousImport"  severity="error" />
+    <issue id="WifiManagerPotentialLeak"  severity="error" />
+    <issue id="InefficientWeight" severity="error" />
+    <issue id="MergeRootFrame" severity="error" />
 </lint>

@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,6 +41,8 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.util.Map;
+
+import timber.log.Timber;
 
 
 /**
@@ -87,7 +88,6 @@ import java.util.Map;
  */
 public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
-    private final String t = getClass().getName();
 
     private boolean mHasExApp = true;
     private Button mLaunchIntentButton;
@@ -161,10 +161,10 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                             mPrompt.getIndex());
                     fireActivity(i);
                 } catch (ExternalParamsException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                     onException(e.getMessage());
                 } catch (ActivityNotFoundException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                     onException(errorString);
                 }
             }

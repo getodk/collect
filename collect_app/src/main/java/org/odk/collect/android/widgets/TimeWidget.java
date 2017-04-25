@@ -152,6 +152,7 @@ public class TimeWidget extends QuestionWidget {
                         setTimeLabel();
                     }
                 }, 0, 0);
+        mTimePickerDialog.setCanceledOnTouchOutside(false);
 
         if (mPrompt.getAnswerValue() == null) {
             clearAnswer();

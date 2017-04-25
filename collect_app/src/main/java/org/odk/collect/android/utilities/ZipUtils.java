@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 
@@ -29,6 +28,8 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import timber.log.Timber;
+
 /**
  * Author: Meletis Margaritis
  * Date: 2/12/14
@@ -36,7 +37,7 @@ import java.util.zip.ZipInputStream;
  */
 public final class ZipUtils {
 
-    final static String t = "ZipUtils";
+    static final String t = "ZipUtils";
 
     public static void unzip(File[] zipFiles) {
         for (File zipFile : zipFiles) {
@@ -48,7 +49,7 @@ public final class ZipUtils {
                     doExtractInTheSameFolder(zipFile, zipInputStream, zipEntry);
                 }
             } catch (Exception e) {
-                Log.e(t, e.getMessage(), e);
+                Timber.e(e);
             } finally {
                 IOUtils.closeQuietly(zipInputStream);
             }
@@ -81,11 +82,11 @@ public final class ZipUtils {
         File targetFile;
         String fileName = zipEntry.getName();
 
-        Log.w(t, "Found zipEntry with name: " + fileName);
+        Timber.w("Found zipEntry with name: %s", fileName);
 
         if (fileName.contains("/") || fileName.contains("\\")) {
             // that means that this is a directory of a file inside a directory, so ignore it
-            Log.w(t, "Ignored: " + fileName);
+            Timber.w("Ignored: %s", fileName);
             return null;
         }
 
@@ -99,7 +100,7 @@ public final class ZipUtils {
             IOUtils.closeQuietly(fileOutputStream);
         }
 
-        Log.w(t, "Extracted file \"" + fileName + "\" out of " + zipFile.getName());
+        Timber.w("Extracted file \"%s\" out of %s", fileName, zipFile.getName());
         return targetFile;
     }
 }
