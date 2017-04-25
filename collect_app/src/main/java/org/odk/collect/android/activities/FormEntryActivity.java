@@ -354,7 +354,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
 
             Intent intent = getIntent();
             if (intent != null) {
