@@ -199,7 +199,7 @@ public class TimerLogger {
     }
 
     /*
-     * Log an event
+     * Log a new event
      */
     public void logTimerEvent(EventTypes eventType,
                               int fecType,
@@ -208,6 +208,12 @@ public class TimerLogger {
                               boolean writeImmediatelyToDisk) {
 
         if (mTimerEnabled) {
+
+            // For any existing interval events, calculate the end time
+            long end = getEventTime();
+            for (int i = 0; i < mEvents.size(); i++) {
+                mEvents.get(i).setEnd(end);
+            }
 
             // Calculate the time and add the event to the events array
             long start = getEventTime();
@@ -250,17 +256,18 @@ public class TimerLogger {
     public void exitView() {
 
         if (mTimerEnabled) {
+
+            // Calculate the time and add the event to the events array
+            long end = getEventTime();
+            for (int i = 0; i < mEvents.size(); i++) {
+                mEvents.get(i).setEnd(end);
+            }
+
             writeEvents();
         }
     }
 
     private void writeEvents() {
-
-        // Calculate the time and add the event to the events array
-        long end = getEventTime();
-        for (int i = 0; i < mEvents.size(); i++) {
-            mEvents.get(i).setEnd(end);
-        }
 
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
