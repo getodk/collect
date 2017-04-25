@@ -19,14 +19,14 @@ import java.util.ArrayList;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
+ * 
  * Notes:
  * 1) If the user has saved the form, resumes editing, then exits without saving then the timing data during the
- *    second editing session will be saved.  This is OK as it records user activity.  However if the user exits
- *    without saving and they have never saved the form then the timing data is lost as the form editing will be
- *    restarted from scratch.
+ * second editing session will be saved.  This is OK as it records user activity.  However if the user exits
+ * without saving and they have never saved the form then the timing data is lost as the form editing will be
+ * restarted from scratch.
  * 2) The times for questions in a group are not shown.  Only the time for the group is shown.
  *
- * - However if the user
  */
 public class TimerLogger {
 
@@ -65,7 +65,8 @@ public class TimerLogger {
             this.fecType = fecType;
             this.node = node;
 
-            if (eventType == EventTypes.FEC && fecType == FormEntryController.EVENT_QUESTION) {
+            if (eventType == EventTypes.FEC &&
+                    (fecType == FormEntryController.EVENT_QUESTION || fecType == FormEntryController.EVENT_GROUP)) {
                 this.dirn = advancingPage ? "fwd" : "back";
             } else {
                 this.dirn = "";
