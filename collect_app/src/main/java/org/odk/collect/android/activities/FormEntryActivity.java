@@ -932,7 +932,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_PREFERENCES");
-
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
                 return true;
@@ -1717,7 +1716,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
             }
         };
-
         if (formController.getLastRepeatCount() > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             mAlertDialog.setMessage(getString(R.string.add_another_repeat,
@@ -2582,8 +2580,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             if (!showFirst) {
-                // we've just loaded a saved form, so start in the hierarchy
-                // view
+                // we've just loaded a saved form, so start in the hierarchy view
 
                 // Create the timer logger and then log the resume event
                 mTimerLogger = new TimerLogger(formController.getInstancePath(),
