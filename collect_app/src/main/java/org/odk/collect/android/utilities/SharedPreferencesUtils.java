@@ -230,10 +230,12 @@ public class SharedPreferencesUtils {
 
             if (generalPrefsJson.has(key)) {
                 try {
-                    editor.putString(key, generalPrefsJson.getString(key));
+                    boolean bool = generalPrefsJson.getBoolean(key);
+                    editor.putBoolean(key, bool);
                 } catch (Exception e) {
                     try {
-                        editor.putBoolean(key, generalPrefsJson.getBoolean(key));
+                        String string = generalPrefsJson.getString(key);
+                        editor.putString(key, string);
                     } catch (Exception e1) {
                         editor.putLong(key, generalPrefsJson.getLong(key));
                     }
