@@ -25,6 +25,8 @@ import org.odk.collect.android.application.Collect;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 
 /**
  * We've taken this from Android's SQLiteOpenHelper. However, we can't appropriately lock the
@@ -144,6 +146,7 @@ public abstract class ODKSQLiteOpenHelper {
                     try {
                         mDatabase.close();
                     } catch (Exception e) {
+                        Timber.e(e, "Unable to close database due to: %s", e.getMessage());
                     }
                     // mDatabase.unlock();
                 }

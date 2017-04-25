@@ -291,6 +291,7 @@ public final class WebUtils {
                 // read to end of stream...
                 final long count = 1024L;
                 while (is.skip(count) == count) {
+                    // skipping to the end of the http entity
                 }
                 is.close();
             } catch (IOException e) {
@@ -396,6 +397,7 @@ public final class WebUtils {
                             // ensure stream is consumed...
                             final long count = 1024L;
                             while (isr.skip(count) == count) {
+                                // skipping to the end of the http entity
                             }
                         } catch (Exception e) {
                             // no-op

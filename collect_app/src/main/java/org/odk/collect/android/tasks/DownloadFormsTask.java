@@ -437,6 +437,7 @@ public class DownloadFormsTask extends
                         try {
                             os.close();
                         } catch (Exception e) {
+                            Timber.e(e, "Unable to close stream due to: %s", e.getMessage());
                         }
                     }
                     if (is != null) {
@@ -444,6 +445,7 @@ public class DownloadFormsTask extends
                             // ensure stream is consumed...
                             final long count = 1024L;
                             while (is.skip(count) == count) {
+                                // skipping to the end of the http entity
                             }
                         } catch (Exception e) {
                             // no-op
@@ -451,6 +453,7 @@ public class DownloadFormsTask extends
                         try {
                             is.close();
                         } catch (Exception e) {
+                            Timber.e(e, "Unable to close stream due to: %s", e.getMessage());
                         }
                     }
                 }
