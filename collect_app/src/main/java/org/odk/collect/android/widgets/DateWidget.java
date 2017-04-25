@@ -213,7 +213,8 @@ public class DateWidget extends QuestionWidget {
 
     public void setDateLabel() {
         mNullAnswer = false;
-        mDateTextView.setText(getAnswer().getDisplayText());
+        mDateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
+                (Date) getAnswer().getValue(), mPrompt.getQuestion().getAppearanceAttr(), false));
     }
 
     private void createDatePickerDialog() {

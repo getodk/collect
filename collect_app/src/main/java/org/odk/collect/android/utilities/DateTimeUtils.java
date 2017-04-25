@@ -76,10 +76,10 @@ public class DateTimeUtils {
         }
     }
 
-    public static String getDateTimeBasedOnUserLocale(Date date, String appearance) {
+    public static String getDateTimeBasedOnUserLocale(Date date, String appearance, boolean containsTime) {
         DateFormat dateFormatter;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), getDateTimePattern(true, appearance));
+            String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), getDateTimePattern(containsTime, appearance));
             dateFormatter = new SimpleDateFormat(format, Locale.getDefault());
         } else {
             dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
@@ -87,9 +87,9 @@ public class DateTimeUtils {
         return dateFormatter.format(date);
     }
 
-    private static String getDateTimePattern(boolean isDateTime, String appearance) {
+    private static String getDateTimePattern(boolean containsTime, String appearance) {
         String datePattern;
-        if (isDateTime) {
+        if (containsTime) {
             datePattern = "yyyyMMMdd HHmm";
         } else {
             datePattern = "yyyyMMMdd";
