@@ -345,7 +345,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 Long removeMe = Long.valueOf(itr.next());
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
-                    Timber.i("%l was already sent, removing from queue before restarting task",
+                    Timber.i("%d was already sent, removing from queue before restarting task",
                             removeMe);
                 }
             }
