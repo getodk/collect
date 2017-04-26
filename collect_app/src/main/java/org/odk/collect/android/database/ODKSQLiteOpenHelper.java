@@ -144,6 +144,7 @@ public abstract class ODKSQLiteOpenHelper {
                     try {
                         mDatabase.close();
                     } catch (Exception e) {
+                        Timber.e(e);
                     }
                     // mDatabase.unlock();
                 }
