@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -687,6 +688,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         if (dotIndex == -1) {
             return "";
         }
-        return fileName.substring(dotIndex + 1).toLowerCase();
+        return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 }
