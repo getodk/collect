@@ -33,8 +33,7 @@ public class FormMetadataMigrator {
             for (String[] pair : sourceTargetValuePairs) {
                 String migratingValue = sharedPreferences.getString(pair[0], "").trim();
                 if (! migratingValue.isEmpty()) {
-                    Timber.i(String.format("Copying %s from %s to %s",
-                            migratingValue, pair[0], pair[1]));
+                    Timber.i("Copying %s from %s to %s", migratingValue, pair[0], pair[1]);
                     editor.putString(pair[1], migratingValue);
                 }
             }
