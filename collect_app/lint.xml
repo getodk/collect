@@ -20,5 +20,6 @@
     <issue id="WifiManagerPotentialLeak"  severity="error" />
     <issue id="InefficientWeight" severity="error" />
     <issue id="MergeRootFrame" severity="error" />
+    <issue id="LogNotTimber" severity="error" />
     <issue id="StringFormatInTimber" severity="error" />
 </lint>
