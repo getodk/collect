@@ -95,6 +95,8 @@ public final class PreferenceKeys {
             KEY_MAP_BASEMAP,
             OSM_BASEMAP_KEY,
             GOOGLE_MAPS_BASEMAP_DEFAULT,
-            OSM_MAPS_BASEMAP_DEFAULT
+            OSM_MAPS_BASEMAP_DEFAULT,
+            KEY_AUTOSEND_WIFI,
+            KEY_AUTOSEND_NETWORK
     );
 }
