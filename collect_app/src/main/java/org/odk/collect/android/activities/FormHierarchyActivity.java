@@ -38,6 +38,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -307,9 +308,9 @@ public class FormHierarchyActivity extends ListActivity {
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
-                            String answerDisplay = fp.getAnswerText();
+                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
                             formList.add(
-                                    new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
+                                    new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));
                         }
                         break;
