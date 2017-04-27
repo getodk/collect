@@ -3,7 +3,6 @@ package org.odk.collect.android.tasks;
 import android.net.Uri;
 
 import java.io.File;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,58 +11,37 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.InstanceUploaderTask.Outcome;
+import org.odk.collect.android.test.MockedServerTest;
 
-import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.odk.collect.android.test.MockedServerTestUtils.join;
-import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
-import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
-import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
-import static org.odk.collect.android.test.TestUtils.backupPreferences;
 import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.test.TestUtils.createTempFile;
 import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
-import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
-public class InstanceUploaderTaskTest {
-    private Map<String, ?> prefsBackup;
-
+public class InstanceUploaderTaskTest extends MockedServerTest {
     private InstancesDao dao;
-    private MockWebServer server;
 
     @Before
     public void setUp() throws Exception {
-        prefsBackup = backupPreferences();
-
         resetInstancesContentProvider();
-
         dao = new InstancesDao();
-        server = mockWebServer();
     }
 
     @After
     public void tearDown() throws Exception {
-        if (server != null) {
-            server.shutdown();
-        }
-
         cleanUpTempFiles();
         resetInstancesContentProvider();
-
-        if (prefsBackup != null) {
-            restorePreferences(prefsBackup);
-        }
     }
 
     @Test
     public void shouldUploadAnInstance() throws Exception {
         // given
         Long id = createStoredInstance();
-        willRespond(server, headResponse(), postResponse());
+        willRespondWith(headResponse(), postResponse());
 
         // when
         Outcome o = new InstanceUploaderTask().doInBackground(id);
@@ -75,7 +53,7 @@ public class InstanceUploaderTaskTest {
 
         // and
         HEAD: {
-            RecordedRequest r = nextRequestFor(server);
+            RecordedRequest r = nextRequest();
             assertEquals("HEAD", r.getMethod());
             assertMatches("/submission\\?deviceID=\\w+%3A\\w+", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
@@ -85,7 +63,7 @@ public class InstanceUploaderTaskTest {
 
         // and
         POST: {
-            RecordedRequest r = nextRequestFor(server);
+            RecordedRequest r = nextRequest();
             assertEquals("POST", r.getMethod());
             assertEquals("/submission", r.getPath());
             assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));

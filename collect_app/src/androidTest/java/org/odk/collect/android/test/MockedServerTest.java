@@ -3,8 +3,11 @@ package org.odk.collect.android.test;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
+import org.junit.Before;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
@@ -12,17 +15,33 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public final class MockedServerTestUtils {
-    private MockedServerTestUtils() {}
+import static org.odk.collect.android.test.TestUtils.backupPreferences;
+import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
-    public static MockWebServer mockWebServer() throws Exception {
-        MockWebServer server = new MockWebServer();
-        server.start();
-        configAppFor(server);
-        return server;
+public abstract class MockedServerTest {
+    private Map<String, ?> prefsBackup;
+
+    protected MockWebServer server;
+
+    @Before
+    public void http_setUp() throws Exception {
+        prefsBackup = backupPreferences();
+
+        server = mockWebServer();
     }
 
-    public static void willRespond(MockWebServer server, String... rawResponses) {
+    @After
+    public void http_tearDown() throws Exception {
+        if (server != null) {
+            server.shutdown();
+        }
+
+        if (prefsBackup != null) {
+            restorePreferences(prefsBackup);
+        }
+    }
+
+    protected void willRespondWith(String... rawResponses) {
         for (String rawResponse : rawResponses) {
             MockResponse response = new MockResponse();
 
@@ -43,16 +62,23 @@ public final class MockedServerTestUtils {
         }
     }
 
-    public static RecordedRequest nextRequestFor(MockWebServer server) throws Exception {
+    protected RecordedRequest nextRequest() throws Exception {
         return server.takeRequest(1, TimeUnit.MILLISECONDS);
     }
 
-    public static String join(String... strings) {
+   protected static String join(String... strings) {
         StringBuilder bob = new StringBuilder();
         for (String s : strings) {
             bob.append(s).append('\n');
         }
         return bob.toString();
+    }
+
+    private static MockWebServer mockWebServer() throws Exception {
+        MockWebServer server = new MockWebServer();
+        server.start();
+        configAppFor(server);
+        return server;
     }
 
     private static void configAppFor(MockWebServer server) {

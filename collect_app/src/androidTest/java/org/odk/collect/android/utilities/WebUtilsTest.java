@@ -1,55 +1,30 @@
 package org.odk.collect.android.utilities;
 
 import java.net.URI;
-import java.util.Map;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.test.MockedServerTest;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
-import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
-import static org.odk.collect.android.test.TestUtils.backupPreferences;
-import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
-public class WebUtilsTest {
-    private Map<String, ?> prefsBackup;
-
-    private MockWebServer server;
-
+public class WebUtilsTest extends MockedServerTest {
     @Before
     public void setUp() throws Exception {
-        prefsBackup = backupPreferences();
-
-        server = mockWebServer();
-
         // server hangs without a response queued:
         server.enqueue(new MockResponse());
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (server != null) {
-            server.shutdown();
-        }
-
-        if (prefsBackup != null) {
-            restorePreferences(prefsBackup);
-        }
     }
 
     @Test
@@ -58,7 +33,7 @@ public class WebUtilsTest {
         doRequest("/some-path");
 
         // then
-        RecordedRequest r = nextRequestFor(server);
+        RecordedRequest r = nextRequest();
         assertEquals("GET /some-path HTTP/1.1", r.getRequestLine());
         assertTrue(r.getHeader("User-Agent").matches("Dalvik/.* org.odk.collect.android/.*"));
     }
@@ -70,7 +45,7 @@ public class WebUtilsTest {
 
         // then
         assertMatches("Dalvik/.* org.odk.collect.android/.*",
-                nextRequestFor(server).getHeader("User-Agent"));
+                nextRequest().getHeader("User-Agent"));
     }
 
     @Test
@@ -80,7 +55,7 @@ public class WebUtilsTest {
 
         // then
         assertEquals("1.0",
-                nextRequestFor(server).getHeader("X-OpenRosa-Version"));
+                nextRequest().getHeader("X-OpenRosa-Version"));
     }
 
     @Test
@@ -90,7 +65,7 @@ public class WebUtilsTest {
 
         // then
         assertEquals("gzip",
-                nextRequestFor(server).getHeader("Accept-Encoding"));
+                nextRequest().getHeader("Accept-Encoding"));
     }
 
     @Test
@@ -99,7 +74,7 @@ public class WebUtilsTest {
         WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
 
         // then
-        assertNull(nextRequestFor(server).getHeader("Authorization"));
+        assertNull(nextRequest().getHeader("Authorization"));
     }
 
     @Test
