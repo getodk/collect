@@ -153,6 +153,7 @@ public class MainMenuActivity extends Activity {
 
         //View sent forms
         mViewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        mViewSentFormsButton.setText(getString(R.string.view_sent_forms_button));
         mViewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
