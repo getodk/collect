@@ -506,7 +506,6 @@
 <string name="use_phone_language">Use phone language</string>
 <string name="import_settings">Import/Export settings</string>
 <string name="qr_code">QR code</string>
-<string name="tv_qrcode">Scan this QRCode to copy the settings</string>
 <string name="scan_qrcode">Scan code from other device</string>
 <string name="successfully_imported_settings">Settings imported successfully</string>
 <string name="encoding_max_limit">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
@@ -514,5 +513,6 @@
 <string name="select_qrcode">Select code from SD Card</string>
 <string name="turn_on_flashlight">Turn on flashlight</string>
 <string name="turn_off_flashlight">Turn off flashlight</string>
-<string name="click_to_generate_qr_code">Click here to generate QR code</string>
+<string name="qrcode_with_password" formatted="false">This QR code includes your %s password%s. Please treat it carefully. \n(Click to edit)</string>
+<string name="qrcode_without_password">This QR code does not contain your admin or server passwords. \n(Click to edit)</string>
 </resources>

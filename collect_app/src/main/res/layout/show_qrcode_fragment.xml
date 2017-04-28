@@ -14,33 +14,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="@string/tv_qrcode"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
     <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/buttons"
-        android:layout_below="@id/label">
-
-        <TextView
-            android:id="@+id/generateQRCode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/click_to_generate_qr_code"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_alignParentTop="true">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -54,14 +37,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/qr_code" />
-
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/status"
         android:layout_margin="5dp"
         android:orientation="vertical">
 
@@ -80,4 +62,30 @@
             android:text="@string/select_qrcode" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:src="@android:drawable/ic_dialog_alert"
+            android:tint="#ffff00" />
+
+        <TextView
+            android:id="@+id/edit_qrcode"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="@string/qrcode_with_password" />
+    </LinearLayout>
 </RelativeLayout>

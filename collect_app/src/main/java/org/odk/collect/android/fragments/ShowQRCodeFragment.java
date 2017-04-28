@@ -76,11 +76,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private static final int SELECT_PHOTO = 111;
     private final String[] items = new String[]{"Admin Password", "Server Password"};
     Collection<String> keys = new ArrayList<>();
-    private boolean[] checkedItems = new boolean[]{false, false};
+    private boolean[] checkedItems = new boolean[]{true, true};
     private ImageView qrImageView;
     private ProgressBar progressBar;
     private Intent mShareIntent;
-    private TextView generateQRCode;
+    private TextView editQRCode;
 
     @Nullable
     @Override
@@ -91,23 +91,42 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        generateQRCode = (TextView) view.findViewById(R.id.generateQRCode);
-        generateQRCode.setOnClickListener(this);
+        editQRCode = (TextView) view.findViewById(R.id.edit_qrcode);
+        editQRCode.setOnClickListener(this);
         Button scan = (Button) view.findViewById(R.id.btnScan);
         scan.setOnClickListener(this);
         Button select = (Button) view.findViewById(R.id.btnSelect);
         select.setOnClickListener(this);
+        generateCode();
         return view;
     }
 
     public void generateCode() {
+        StringBuilder status = new StringBuilder();
         if (checkedItems[0]) {
             keys.add(KEY_ADMIN_PW);
+            status.append("admin");
         }
 
         if (checkedItems[1]) {
             keys.add(KEY_PASSWORD);
+            if (status.length() != 0) {
+                status.append(" and ");
+            }
+            status.append("server");
         }
+
+        String status_string;
+        if (status.length() != 0) {
+            status_string = getActivity().getString(R.string.qrcode_with_password,
+                    status.toString(),
+                    checkedItems[0] && checkedItems[1] ? "s" : "");
+        } else {
+            status_string = getActivity().getString(R.string.qrcode_without_password);
+        }
+
+        editQRCode.setText(status_string);
+
         new GenerateQRCode(this).execute();
     }
 
@@ -143,11 +162,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
                 break;
 
-            case R.id.generateQRCode:
+            case R.id.edit_qrcode:
                 keys.clear();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                        .setTitle("Click to share the passwords too")
+                        .setTitle("Passwords Included in Code")
                         .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -158,7 +177,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                         .setPositiveButton("Generate", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                generateQRCode.setVisibility(View.GONE);
                                 generateCode();
                                 dialog.dismiss();
                             }
