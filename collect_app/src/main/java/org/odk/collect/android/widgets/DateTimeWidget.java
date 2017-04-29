@@ -47,7 +47,10 @@ public class DateTimeWidget extends QuestionWidget {
         mTimeWidget = new TimeWidget(context, prompt);
 
         mDateWidget.mQuestionMediaLayout.getView_Text().setVisibility(GONE);
+        mDateWidget.getHelpTextView().setVisibility(GONE);
+
         mTimeWidget.mQuestionMediaLayout.getView_Text().setVisibility(GONE);
+        mTimeWidget.getHelpTextView().setVisibility(GONE);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
