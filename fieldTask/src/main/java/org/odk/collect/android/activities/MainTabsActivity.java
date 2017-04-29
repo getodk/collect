@@ -223,7 +223,7 @@ public class MainTabsActivity extends TabActivity implements
                 Toast.makeText(
                         MainTabsActivity.this,
                         getString(R.string.smap_nfc_not_enabled),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             } else {
                 /*
                  * Set up NFC adapter
@@ -244,7 +244,7 @@ public class MainTabsActivity extends TabActivity implements
                 Toast.makeText(
                         MainTabsActivity.this,
                         getString(R.string.smap_nfc_is_available),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
 
             }
         }

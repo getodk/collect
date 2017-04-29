@@ -134,7 +134,7 @@ public final class STFileUtils {
         		source = source.substring(0, idx);
         	} 
         }
-        return source;
+        return source.trim().toLowerCase();
     }
     
     /*

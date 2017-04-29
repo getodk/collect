@@ -374,11 +374,11 @@ public class Utilities {
 
         String selectClause = null;
         if(all_non_synchronised) {
-            selectClause = "(" + InstanceColumns.SOURCE + " = ?" +
+            selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_IS_SYNC + " = ? ";
         } else {
-            selectClause = "(" + InstanceColumns.SOURCE + " = ?" +
+            selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
         }

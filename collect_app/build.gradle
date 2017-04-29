@@ -81,7 +81,7 @@ android {
     }
 
     dexOptions {
-        javaMaxHeapSize "2048M"
+        javaMaxHeapSize "4096M"
     }
 
     lintOptions {

@@ -15,7 +15,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion(10)
         targetSdkVersion(10)
-        versionCode(4010)
+        versionCode(4011)
         versionName getVersionName()
         multiDexEnabled true
     }
@@ -23,26 +23,26 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "4.11"
+            versionName "4.12"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "4.11-plan"
+            versionName "4.12-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "4.11-kontrolid"
+            versionName "4.12-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "4.11-pop"
+            versionName "4.12-pop"
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled(true)
-            //minifyEnabled(false)
+            //minifyEnabled(true)
+            minifyEnabled(false)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
