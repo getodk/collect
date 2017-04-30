@@ -22,7 +22,6 @@
   <string name="capture_video">भिडियो रेकर्ड गर्नुहोस् </string>
   <string name="change_language">भाषा परिवर्तन गर्नुहोस् |</string>
   <string name="change_password">ODK पासवर्ड </string>
-  <string name="change_protocol_settings_default">प्लेटफर्म सेटिङस् </string>
   <string name="change_username">ODK प्रयोगकर्ता नाम </string>
   <string name="clearanswer_confirm">\"%s\"को जवाफ हटाउनु हुन्छ ?</string>
   <string name="clear_answer">जवाफ हटाउनुहोस् </string>
@@ -159,7 +158,6 @@
   <string name="success">सफल</string>
   <string name="no_forms_uploaded">माफ गर्नुहोस्, कुनै फारम पनि अपलोड गरिएन |</string>
   <string name="upload_results">अपलोडको परिणामहरु </string>
-  <string name="xform_parse_error">Xफारमको शब्द-सम्मतीमा गल्ति भयो | %1$s मा %2$s तत्व छुटेको छ |</string>
   <string name="choose_sound">आवाज छान्नुहोस् </string>
   <string name="choose_video">भिडियो छान्नुहोस् </string>
   <string name="choose_image">तस्विर छान्नुहोस् </string>

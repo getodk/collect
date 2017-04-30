@@ -158,7 +158,6 @@
   <string name="success">Voltooid</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>
-  <string name="xform_parse_error">XForm parse error. %1$s is missing element %2$s</string>
   <string name="choose_sound">Selecteer audio</string>
   <string name="choose_video">Selecteer video</string>
   <string name="choose_image">Selecteer afbeelding</string>

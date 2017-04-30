@@ -24,7 +24,6 @@
   <string name="capture_video">Video salvestamine</string>
   <string name="change_language">Muuda keelt</string>
   <string name="change_password">ODK salasõna</string>
-  <string name="change_protocol_settings_default">Platvormi seaded</string>
   <string name="change_username">ODK kasutajanimi</string>
   <string name="clearanswer_confirm">Eemalda vastus \"%s\"?</string>
   <string name="clear_answer">Eemalda vastus</string>
@@ -165,7 +164,6 @@
   <string name="success">Õnnestus</string>
   <string name="no_forms_uploaded">Vabandage, ühtegi vormi ei ole üles laetud.</string>
   <string name="upload_results">Tulemuste üles laadimine</string>
-  <string name="xform_parse_error">XForm töötlemise viga. %1$s puudub element %2$s</string>
   <string name="choose_sound">Vali heli</string>
   <string name="choose_video">Vali video</string>
   <string name="choose_image">Vali pilt</string>
@@ -303,7 +301,6 @@
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
   <string name="invalid_oauth">Vale OAuth 2 token</string>
   <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
-  <string name="media_upload_error">Pildi %1$s üleslaadimine ebaõnestus. Fail on puudu.</string>
   <string name="odk_auth_auth_fail">ODK automaatse saatmise autentimine ebaõnnestus. Veendu, et seaded oleksid õiged. </string>
   <string name="odk_auto_note">ODK automaatse saatmise teated</string>
   <string name="notification_error">Viga teate näitamisel </string>
