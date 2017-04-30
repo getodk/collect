@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2017 Shobhit
+/* Copyright (C) 2017 Shobhit
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -116,16 +115,16 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             status.append("server");
         }
 
-        String status_string;
+        String statusString;
         if (status.length() != 0) {
-            status_string = getActivity().getString(R.string.qrcode_with_password,
+            statusString = getActivity().getString(R.string.qrcode_with_password,
                     status.toString(),
                     checkedItems[0] && checkedItems[1] ? "s" : "");
         } else {
-            status_string = getActivity().getString(R.string.qrcode_without_password);
+            statusString = getActivity().getString(R.string.qrcode_without_password);
         }
 
-        editQRCode.setText(status_string);
+        editQRCode.setText(statusString);
 
         new GenerateQRCode(this).execute();
     }
