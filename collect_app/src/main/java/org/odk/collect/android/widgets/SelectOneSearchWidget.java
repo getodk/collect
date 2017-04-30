@@ -56,9 +56,9 @@ import java.util.Locale;
 public class SelectOneSearchWidget extends QuestionWidget implements
         OnCheckedChangeListener, AudioPlayListener {
 
-    List<SelectChoice> mItems; // may take a while to compute
+    List<SelectChoice> items; // may take a while to compute
     ArrayList<RadioButton> buttons;
-    protected EditText mSearchStr;
+    protected EditText searchStr;
 
     protected LinearLayout buttonLayout;
     protected FormEntryPrompt prompt;
@@ -72,20 +72,20 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
 
-        mSearchStr = new EditText(context);
-        mSearchStr.setId(QuestionWidget.newUniqueId());
-        mSearchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        searchStr = new EditText(context);
+        searchStr.setId(QuestionWidget.newUniqueId());
+        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
-        mSearchStr.setLayoutParams(params);
+        searchStr.setLayoutParams(params);
         setupChangeListener();
-        addAnswerView(mSearchStr);
+        addAnswerView(searchStr);
 
         doSearch("");
     }
@@ -94,15 +94,15 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
         // First check if there is nothing on search
         if (searchStr == null || searchStr.trim().length() == 0) {
-            createOptions(mItems, null);
+            createOptions(items, null);
         } else { // Create a List with items that are relevant to the search text
             List<SelectChoice> searchedItems = new ArrayList<SelectChoice>();
             List<Integer> tagList = new ArrayList<Integer>();
             searchStr = searchStr.toLowerCase(Locale.US);
-            for (int i = 0; i < mItems.size(); i++) {
-                String choiceText = prompt.getSelectChoiceText(mItems.get(i)).toLowerCase(Locale.US);
+            for (int i = 0; i < items.size(); i++) {
+                String choiceText = prompt.getSelectChoiceText(items.get(i)).toLowerCase(Locale.US);
                 if (choiceText.contains(searchStr)) {
-                    searchedItems.add(mItems.get(i));
+                    searchedItems.add(items.get(i));
                     tagList.add(i);
                 }
 
@@ -170,14 +170,14 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, mSearchStr.getId());
+        params.addRule(RelativeLayout.BELOW, searchStr.getId());
         params.setMargins(10, 0, 10, 0);
         addView(buttonLayout, params);
     }
 
 
     protected void setupChangeListener() {
-        mSearchStr.addTextChangedListener(new TextWatcher() {
+        searchStr.addTextChangedListener(new TextWatcher() {
             private String oldText = "";
 
             @Override
@@ -219,7 +219,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -227,10 +227,10 @@ public class SelectOneSearchWidget extends QuestionWidget implements
     @Override
     public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
-        mSearchStr.requestFocus();
+        searchStr.requestFocus();
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(mSearchStr, 0);
+        inputManager.showSoftInput(searchStr, 0);
         /*
          * If you do a multi-question screen after a "add another group" dialog, this won't
          * automatically pop up. It's an Android issue.
@@ -268,7 +268,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         }
 
         selectedTag = (Integer) buttonView.getTag();
-        SelectChoice choice = mItems.get(selectedTag);
+        SelectChoice choice = items.get(selectedTag);
 
         if (choice != null) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",

@@ -49,7 +49,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     public static final String DL_ERROR_MSG = "dlerrormessage";
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
-    private FormListDownloaderListener mStateListener;
+    private FormListDownloaderListener stateListener;
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
@@ -272,8 +272,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     @Override
     protected void onPostExecute(HashMap<String, FormDetails> value) {
         synchronized (this) {
-            if (mStateListener != null) {
-                mStateListener.formListDownloadingComplete(value);
+            if (stateListener != null) {
+                stateListener.formListDownloadingComplete(value);
             }
         }
     }
@@ -281,7 +281,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     public void setDownloaderListener(FormListDownloaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 

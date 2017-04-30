@@ -59,13 +59,13 @@ import timber.log.Timber;
  */
 public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
-    private Button mCaptureButton;
-    private Button mPlayButton;
-    private Button mChooseButton;
+    private Button captureButton;
+    private Button playButton;
+    private Button chooseButton;
 
-    private String mBinaryName;
+    private String binaryName;
 
-    private String mInstanceFolder;
+    private String instanceFolder;
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
 
@@ -78,23 +78,23 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mInstanceFolder = Collect.getInstance().getFormController()
+        instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
         // setup capture button
-        mCaptureButton = new Button(getContext());
-        mCaptureButton.setId(QuestionWidget.newUniqueId());
-        mCaptureButton.setText(getContext().getString(R.string.capture_video));
-        mCaptureButton
+        captureButton = new Button(getContext());
+        captureButton.setId(QuestionWidget.newUniqueId());
+        captureButton.setText(getContext().getString(R.string.capture_video));
+        captureButton
                 .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mCaptureButton.setPadding(20, 20, 20, 20);
-        mCaptureButton.setEnabled(!prompt.isReadOnly());
-        mCaptureButton.setLayoutParams(params);
+        captureButton.setPadding(20, 20, 20, 20);
+        captureButton.setEnabled(!prompt.isReadOnly());
+        captureButton.setLayoutParams(params);
 
         // launch capture intent on click
-        mCaptureButton.setOnClickListener(new View.OnClickListener() {
+        captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
@@ -146,16 +146,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup capture button
-        mChooseButton = new Button(getContext());
-        mChooseButton.setId(QuestionWidget.newUniqueId());
-        mChooseButton.setText(getContext().getString(R.string.choose_video));
-        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mChooseButton.setPadding(20, 20, 20, 20);
-        mChooseButton.setEnabled(!prompt.isReadOnly());
-        mChooseButton.setLayoutParams(params);
+        chooseButton = new Button(getContext());
+        chooseButton.setId(QuestionWidget.newUniqueId());
+        chooseButton.setText(getContext().getString(R.string.choose_video));
+        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton.setEnabled(!prompt.isReadOnly());
+        chooseButton.setLayoutParams(params);
 
         // launch capture intent on click
-        mChooseButton.setOnClickListener(new View.OnClickListener() {
+        chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
@@ -186,15 +186,15 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup play button
-        mPlayButton = new Button(getContext());
-        mPlayButton.setId(QuestionWidget.newUniqueId());
-        mPlayButton.setText(getContext().getString(R.string.play_video));
-        mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mPlayButton.setPadding(20, 20, 20, 20);
-        mPlayButton.setLayoutParams(params);
+        playButton = new Button(getContext());
+        playButton.setId(QuestionWidget.newUniqueId());
+        playButton.setText(getContext().getString(R.string.play_video));
+        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        playButton.setPadding(20, 20, 20, 20);
+        playButton.setLayoutParams(params);
 
         // on play, launch the appropriate viewer
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
@@ -202,8 +202,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                         .logInstanceAction(VideoWidget.this, "playButton",
                                 "click", mPrompt.getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(mInstanceFolder + File.separator
-                        + mBinaryName);
+                File f = new File(instanceFolder + File.separator
+                        + binaryName);
                 i.setDataAndType(Uri.fromFile(f), "video/*");
                 try {
                     getContext().startActivity(i);
@@ -217,37 +217,37 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // retrieve answer from data model and update ui
-        mBinaryName = prompt.getAnswerText();
-        if (mBinaryName != null) {
-            mPlayButton.setEnabled(true);
+        binaryName = prompt.getAnswerText();
+        if (binaryName != null) {
+            playButton.setEnabled(true);
         } else {
-            mPlayButton.setEnabled(false);
+            playButton.setEnabled(false);
         }
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mCaptureButton);
-        answerLayout.addView(mChooseButton);
-        answerLayout.addView(mPlayButton);
+        answerLayout.addView(captureButton);
+        answerLayout.addView(chooseButton);
+        answerLayout.addView(playButton);
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
         if (mPrompt.isReadOnly()) {
-            mCaptureButton.setVisibility(View.GONE);
-            mChooseButton.setVisibility(View.GONE);
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
         }
 
     }
 
     private void deleteMedia() {
         // get the file path and delete the file
-        String name = mBinaryName;
+        String name = binaryName;
         // clean up variables
-        mBinaryName = null;
+        binaryName = null;
         // delete from media provider
         int del = MediaUtils.deleteVideoFileFromMediaProvider(
-                mInstanceFolder + File.separator + name);
+                instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
@@ -257,13 +257,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         deleteMedia();
 
         // reset buttons
-        mPlayButton.setEnabled(false);
+        playButton.setEnabled(false);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        if (mBinaryName != null) {
-            return new StringData(mBinaryName);
+        if (binaryName != null) {
+            return new StringData(binaryName);
         } else {
             return null;
         }
@@ -276,7 +276,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
                 Video.Media.DATA);
         String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
-        String destVideoPath = mInstanceFolder + File.separator
+        String destVideoPath = instanceFolder + File.separator
                 + System.currentTimeMillis() + extension;
 
         File source = new File(binaryPath);
@@ -298,11 +298,11 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             Timber.e("Inserting Video file FAILED");
         }
         // you are replacing an answer. remove the media.
-        if (mBinaryName != null && !mBinaryName.equals(newVideo.getName())) {
+        if (binaryName != null && !binaryName.equals(newVideo.getName())) {
             deleteMedia();
         }
 
-        mBinaryName = newVideo.getName();
+        binaryName = newVideo.getName();
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
 
         // Need to have this ugly code to account for
@@ -338,17 +338,17 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mCaptureButton.setOnLongClickListener(l);
-        mChooseButton.setOnLongClickListener(l);
-        mPlayButton.setOnLongClickListener(l);
+        captureButton.setOnLongClickListener(l);
+        chooseButton.setOnLongClickListener(l);
+        playButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mCaptureButton.cancelLongPress();
-        mChooseButton.cancelLongPress();
-        mPlayButton.cancelLongPress();
+        captureButton.cancelLongPress();
+        chooseButton.cancelLongPress();
+        playButton.cancelLongPress();
     }
 
     /*

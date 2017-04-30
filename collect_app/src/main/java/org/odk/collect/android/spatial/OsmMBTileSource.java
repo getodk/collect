@@ -38,7 +38,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
     // Database related fields
     public static final String TABLE_TILES = "tiles";
-    public static final String COL_TILES_ZOOM_LEVEL = "zoom_level";
+    public static final String COL_TILES_ZOOM_LEVEL = "zoomLevel";
     public static final String COL_TILES_TILE_COLUMN = "tile_column";
     public static final String COL_TILES_TILE_ROW = "tile_row";
     public static final String COL_TILES_TILE_DATA = "tile_data";
@@ -96,11 +96,11 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
 
         // Get the minimum zoomlevel from the MBTiles file
-        value = getInt(db, "SELECT MIN(zoom_level) FROM tiles;");
+        value = getInt(db, "SELECT MIN(zoomLevel) FROM tiles;");
         minZoomLevel = value > -1 ? value : minZoom;
 
         // Get the maximum zoomlevel from the MBTiles file
-        value = getInt(db, "SELECT MAX(zoom_level) FROM tiles;");
+        value = getInt(db, "SELECT MAX(zoomLevel) FROM tiles;");
         maxZoomLevel = value > -1 ? value : maxZoom;
 
         // Get the tile size
@@ -147,7 +147,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
             final Cursor cur = database.query(TABLE_TILES,
                     tile,
-                    "tile_column=? and tile_row=? and zoom_level=?",
+                    "tile_column=? and tile_row=? and zoomLevel=?",
                     xyz,
                     null,
                     null,

@@ -48,7 +48,7 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SpinnerWidget extends QuestionWidget {
-    List<SelectChoice> mItems;
+    List<SelectChoice> items;
     Spinner spinner;
     String[] choices;
     private static final int BROWN = 0xFF936931;
@@ -61,17 +61,17 @@ public class SpinnerWidget extends QuestionWidget {
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
 
         spinner = new Spinner(context);
-        choices = new String[mItems.size() + 1];
-        for (int i = 0; i < mItems.size(); i++) {
-            choices[i] = prompt.getSelectChoiceText(mItems.get(i));
+        choices = new String[items.size() + 1];
+        for (int i = 0; i < items.size(); i++) {
+            choices[i] = prompt.getSelectChoiceText(items.get(i));
         }
-        choices[mItems.size()] = getContext().getString(R.string.select_one);
+        choices[items.size()] = getContext().getString(R.string.select_one);
 
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
@@ -89,10 +89,10 @@ public class SpinnerWidget extends QuestionWidget {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        spinner.setSelection(mItems.size());
+        spinner.setSelection(items.size());
         if (s != null) {
-            for (int i = 0; i < mItems.size(); ++i) {
-                String match = mItems.get(i).getValue();
+            for (int i = 0; i < items.size(); ++i) {
+                String match = items.get(i).getValue();
                 if (match.equals(s)) {
                     spinner.setSelection(i);
                 }
@@ -104,14 +104,14 @@ public class SpinnerWidget extends QuestionWidget {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                     int position, long id) {
-                if (position == mItems.size()) {
+                if (position == items.size()) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged.clearValue",
                             "", mPrompt.getIndex());
                 } else {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged",
-                            mItems.get(position).getValue(), mPrompt.getIndex());
+                            items.get(position).getValue(), mPrompt.getIndex());
                 }
             }
 
@@ -130,10 +130,10 @@ public class SpinnerWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
         int i = spinner.getSelectedItemPosition();
-        if (i == -1 || i == mItems.size()) {
+        if (i == -1 || i == items.size()) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -143,7 +143,7 @@ public class SpinnerWidget extends QuestionWidget {
     public void clearAnswer() {
         // It seems that spinners cannot return a null answer. This resets the answer
         // to its original value, but it is not null.
-        spinner.setSelection(mItems.size());
+        spinner.setSelection(items.size());
     }
 
 

@@ -89,11 +89,11 @@ import timber.log.Timber;
 public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
 
-    private boolean mHasExApp = true;
-    private Button mLaunchIntentButton;
-    private Drawable mTextBackground;
+    private boolean hasExApp = true;
+    private Button launchIntentButton;
+    private Drawable textBackground;
 
-    protected EditText mAnswer;
+    protected EditText answer;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -102,32 +102,32 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         params.setMargins(7, 5, 7, 5);
 
         // set text formatting
-        mAnswer = new EditText(context);
-        mAnswer.setId(QuestionWidget.newUniqueId());
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswer.setLayoutParams(params);
-        mTextBackground = mAnswer.getBackground();
-        mAnswer.setBackground(null);
+        answer = new EditText(context);
+        answer.setId(QuestionWidget.newUniqueId());
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        answer.setLayoutParams(params);
+        textBackground = answer.getBackground();
+        answer.setBackground(null);
 
         // capitalize nothing
-        mAnswer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
+        answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
 
         // needed to make long read only text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answer.setHorizontallyScrolling(false);
+        answer.setSingleLine(false);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mAnswer.setText(s);
+            answer.setText(s);
         }
 
         if (mPrompt.isReadOnly()) {
-            mAnswer.setBackground(null);
+            answer.setBackground(null);
         }
 
-        if (mPrompt.isReadOnly() || mHasExApp) {
-            mAnswer.setFocusable(false);
-            mAnswer.setClickable(false);
+        if (mPrompt.isReadOnly() || hasExApp) {
+            answer.setFocusable(false);
+            answer.setClickable(false);
         }
 
         String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
@@ -141,15 +141,15 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
         // set button formatting
-        mLaunchIntentButton = new Button(getContext());
-        mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
-        mLaunchIntentButton.setText(buttonText);
-        mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mLaunchIntentButton.setPadding(20, 20, 20, 20);
-        mLaunchIntentButton.setEnabled(!mPrompt.isReadOnly());
-        mLaunchIntentButton.setLayoutParams(params);
+        launchIntentButton = new Button(getContext());
+        launchIntentButton.setId(QuestionWidget.newUniqueId());
+        launchIntentButton.setText(buttonText);
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton.setEnabled(!mPrompt.isReadOnly());
+        launchIntentButton.setLayoutParams(params);
 
-        mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
+        launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
@@ -170,28 +170,28 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             }
 
             private void onException(String toastText) {
-                mHasExApp = false;
+                hasExApp = false;
                 if (!mPrompt.isReadOnly()) {
-                    mAnswer.setBackground(mTextBackground);
-                    mAnswer.setFocusable(true);
-                    mAnswer.setFocusableInTouchMode(true);
-                    mAnswer.setClickable(true);
+                    answer.setBackground(textBackground);
+                    answer.setFocusable(true);
+                    answer.setFocusableInTouchMode(true);
+                    answer.setClickable(true);
                 }
-                mLaunchIntentButton.setEnabled(false);
-                mLaunchIntentButton.setFocusable(false);
+                launchIntentButton.setEnabled(false);
+                launchIntentButton.setFocusable(false);
                 Collect.getInstance().getFormController().setIndexWaitingForData(null);
                 Toast.makeText(getContext(),
                         toastText, Toast.LENGTH_SHORT)
                         .show();
-                ExStringWidget.this.mAnswer.requestFocus();
+                ExStringWidget.this.answer.requestFocus();
             }
         });
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mLaunchIntentButton);
-        answerLayout.addView(mAnswer);
+        answerLayout.addView(launchIntentButton);
+        answerLayout.addView(answer);
         addAnswerView(answerLayout);
     }
 
@@ -205,13 +205,13 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void clearAnswer() {
-        mAnswer.setText(null);
+        answer.setText(null);
     }
 
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -226,7 +226,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        mAnswer.setText(stringData == null ? null : stringData.getValue().toString());
+        this.answer.setText(stringData == null ? null : stringData.getValue().toString());
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
@@ -235,15 +235,15 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         // Put focus on text input field and display soft keyboard if appropriate.
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (mHasExApp) {
+        if (hasExApp) {
             // hide keyboard
-            inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
+            inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
             // focus on launch button
-            mLaunchIntentButton.requestFocus();
+            launchIntentButton.requestFocus();
         } else {
             if (!mPrompt.isReadOnly()) {
-                mAnswer.requestFocus();
-                inputManager.showSoftInput(mAnswer, 0);
+                answer.requestFocus();
+                inputManager.showSoftInput(answer, 0);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -255,7 +255,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
+                inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
             }
         }
     }
@@ -279,16 +279,16 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mAnswer.setOnLongClickListener(l);
-        mLaunchIntentButton.setOnLongClickListener(l);
+        answer.setOnLongClickListener(l);
+        launchIntentButton.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mAnswer.cancelLongPress();
-        mLaunchIntentButton.cancelLongPress();
+        answer.cancelLongPress();
+        launchIntentButton.cancelLongPress();
     }
 
 

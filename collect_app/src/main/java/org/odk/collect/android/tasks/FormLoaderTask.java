@@ -73,11 +73,11 @@ import timber.log.Timber;
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private static final String ITEMSETS_CSV = "itemsets.csv";
 
-    private FormLoaderListener mStateListener;
-    private String mErrorMsg;
-    private String mInstancePath;
-    private final String mXPath;
-    private final String mWaitingXPath;
+    private FormLoaderListener stateListener;
+    private String errorMsg;
+    private String instancePath;
+    private final String xpath;
+    private final String waitingXPath;
     private boolean pendingActivityResult = false;
     private int requestCode = 0;
     private int resultCode = 0;
@@ -109,9 +109,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     FECWrapper data;
 
     public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
-        mInstancePath = instancePath;
-        mXPath = xpath;
-        mWaitingXPath = waitingXPath;
+        this.instancePath = instancePath;
+        this.xpath = xpath;
+        this.waitingXPath = waitingXPath;
     }
 
     /**
@@ -124,7 +124,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FormEntryController fec = null;
         FormDef fd = null;
         FileInputStream fis = null;
-        mErrorMsg = null;
+        errorMsg = null;
 
         String formPath = path[0];
 
@@ -165,19 +165,19 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 fis = new FileInputStream(formXml);
                 fd = XFormUtils.getFormFromInputStream(fis);
                 if (fd == null) {
-                    mErrorMsg = "Error reading XForm file";
+                    errorMsg = "Error reading XForm file";
                 } else {
                     serializeFormDef(fd, formPath);
                 }
             } catch (Exception e) {
                 Timber.e(e);
-                mErrorMsg = e.getMessage();
+                errorMsg = e.getMessage();
             } finally {
                 IOUtils.closeQuietly(fis);
             }
         }
 
-        if (mErrorMsg != null || fd == null) {
+        if (errorMsg != null || fd == null) {
             return null;
         }
 
@@ -196,7 +196,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             loadExternalData(formMediaDir);
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while loading external data");
-            mErrorMsg = e.getMessage();
+            errorMsg = e.getMessage();
             return null;
         }
 
@@ -213,8 +213,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         try {
             // import existing data into formdef
-            if (mInstancePath != null) {
-                File instance = new File(mInstancePath);
+            if (instancePath != null) {
+                File instance = new File(instancePath);
                 File shadowInstance = SaveToDiskTask.savepointFile(instance);
                 if (shadowInstance.exists() && (shadowInstance.lastModified()
                         > instance.lastModified())) {
@@ -238,7 +238,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                             // this means that the .save file is corrupted or 0-sized, so
                             // don't use it.
                             usedSavepoint = false;
-                            mInstancePath = null;
+                            instancePath = null;
                             fd.initialize(true, new InstanceInitializationFactory());
                         } else {
                             // this means that the saved instance is corrupted.
@@ -263,7 +263,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 Timber.w("We have a syntactically correct instance, but the data threw an "
                                 + "exception inside JR. We should allow editing.");
             } else {
-                mErrorMsg = e.getMessage();
+                errorMsg = e.getMessage();
                 return null;
             }
         }
@@ -331,16 +331,16 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         formXml = null;
         formPath = null;
 
-        FormController fc = new FormController(formMediaDir, fec, mInstancePath == null ? null
-                : new File(mInstancePath));
-        if (mXPath != null) {
+        FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
+                : new File(instancePath));
+        if (xpath != null) {
             // we are resuming after having terminated -- set index to this
             // position...
-            FormIndex idx = fc.getIndexFromXPath(mXPath);
+            FormIndex idx = fc.getIndexFromXPath(xpath);
             fc.jumpToIndex(idx);
         }
-        if (mWaitingXPath != null) {
-            FormIndex idx = fc.getIndexFromXPath(mWaitingXPath);
+        if (waitingXPath != null) {
+            FormIndex idx = fc.getIndexFromXPath(waitingXPath);
             fc.setIndexWaitingForData(idx);
         }
         data = new FECWrapper(fc, usedSavepoint);
@@ -405,9 +405,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     @Override
     protected void onProgressUpdate(String... values) {
         synchronized (this) {
-            if (mStateListener != null && values != null) {
+            if (stateListener != null && values != null) {
                 if (values.length == 1) {
-                    mStateListener.onProgressStep(values[0]);
+                    stateListener.onProgressStep(values[0]);
                 }
             }
         }
@@ -523,11 +523,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     protected void onPostExecute(FECWrapper wrapper) {
         synchronized (this) {
             try {
-                if (mStateListener != null) {
+                if (stateListener != null) {
                     if (wrapper == null) {
-                        mStateListener.loadingError(mErrorMsg);
+                        stateListener.loadingError(errorMsg);
                     } else {
-                        mStateListener.loadingComplete(this);
+                        stateListener.loadingComplete(this);
                     }
                 }
             } catch (Exception e) {
@@ -538,7 +538,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     public void setFormLoaderListener(FormLoaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 

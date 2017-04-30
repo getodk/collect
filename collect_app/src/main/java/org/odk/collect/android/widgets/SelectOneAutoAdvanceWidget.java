@@ -53,7 +53,7 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnCheckedChangeListener, View.OnClickListener {
-    List<SelectChoice> mItems; // may take a while to compute
+    List<SelectChoice> items; // may take a while to compute
     ArrayList<RadioButton> buttons;
     AdvanceToNextListener listener;
 
@@ -67,9 +67,9 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
 
         buttons = new ArrayList<RadioButton>();
@@ -84,10 +84,10 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         Bitmap b = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.expander_ic_right);
 
-        if (mItems != null) {
+        if (items != null) {
             LinearLayout answerLayout = new LinearLayout(getContext());
             answerLayout.setOrientation(LinearLayout.VERTICAL);
-            for (int i = 0; i < mItems.size(); i++) {
+            for (int i = 0; i < items.size(); i++) {
 
                 RelativeLayout thisParentLayout =
                         (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
@@ -97,7 +97,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                r.setText(prompt.getSelectChoiceText(mItems.get(i)));
+                r.setText(prompt.getSelectChoiceText(items.get(i)));
                 r.setTag(Integer.valueOf(i));
                 r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly());
@@ -107,7 +107,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 buttons.add(r);
 
-                if (mItems.get(i).getValue().equals(s)) {
+                if (items.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                 }
 
@@ -116,28 +116,28 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 String audioURI = null;
                 audioURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        prompt.getSpecialFormSelectChoiceText(items.get(i),
                                 FormEntryCaption.TEXT_FORM_AUDIO);
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
                 String videoURI = null;
-                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
+                videoURI = prompt.getSpecialFormSelectChoiceText(items.get(i), "video");
 
                 String bigImageURI = null;
-                bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
+                bigImageURI = prompt.getSpecialFormSelectChoiceText(items.get(i), "big-image");
 
                 MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
                 mediaLayout.setAVT(prompt.getIndex(), "", r, audioURI, imageURI, videoURI,
                         bigImageURI);
 
-                if (i != mItems.size() - 1) {
+                if (i != items.size() - 1) {
                     // Last, add the dividing line (except for the last element)
                     ImageView divider = new ImageView(getContext());
                     divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
@@ -168,7 +168,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -210,7 +210,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
+                items.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
     }
 
 

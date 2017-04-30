@@ -62,15 +62,15 @@ public class ExDecimalWidget extends ExStringWidget {
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        answer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // only allows numbers and no periods
-        mAnswer.setKeyListener(new DigitsKeyListener(true, true));
+        answer.setKeyListener(new DigitsKeyListener(true, true));
 
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);
-        mAnswer.setFilters(fa);
+        answer.setFilters(fa);
 
         Double d = getDoubleAnswerValue();
 
@@ -83,8 +83,8 @@ public class ExDecimalWidget extends ExStringWidget {
             // truncate to 15 digits max...
             String string = nf.format(d);
             d = Double.parseDouble(string.replace(',', '.')); // in case , is decimal pt
-            //mAnswer.setText(d.toString());
-            mAnswer.setText(String.format(Locale.ENGLISH, "%f", d));
+            //answer.setText(d.toString());
+            answer.setText(String.format(Locale.ENGLISH, "%f", d));
         }
     }
 
@@ -101,7 +101,7 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -120,7 +120,7 @@ public class ExDecimalWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
-        mAnswer.setText(decimalData == null ? null : decimalData.getValue().toString());
+        this.answer.setText(decimalData == null ? null : decimalData.getValue().toString());
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 

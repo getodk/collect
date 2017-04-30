@@ -48,15 +48,15 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class TimeWidget extends QuestionWidget {
-    private TimePickerDialog mTimePickerDialog;
+    private TimePickerDialog timePickerDialog;
 
-    private Button mTimeButton;
-    private TextView mTimeTextView;
+    private Button timeButton;
+    private TextView timeTextView;
 
-    private int mHourOfDay;
-    private int mMinuteOfHour;
+    private int hourOfDay;
+    private int minuteOfHour;
 
-    private boolean mNullAnswer;
+    private boolean nullAnswer;
 
     public TimeWidget(Context context, final FormEntryPrompt prompt) {
         super(context, prompt);
@@ -71,16 +71,16 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        mNullAnswer = true;
-        mTimeTextView.setText(R.string.no_time_selected);
+        nullAnswer = true;
+        timeTextView.setText(R.string.no_time_selected);
     }
 
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
         // use picker time, convert to today's date, store as utc
-        DateTime dt = (new DateTime()).withTime(mHourOfDay, mMinuteOfHour, 0, 0);
-        return mNullAnswer ? null : new TimeData(dt.toDate());
+        DateTime dt = (new DateTime()).withTime(hourOfDay, minuteOfHour, 0, 0);
+        return nullAnswer ? null : new TimeData(dt.toDate());
     }
 
     @Override
@@ -93,115 +93,115 @@ public class TimeWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mTimeButton.setOnLongClickListener(l);
-        mTimeTextView.setOnLongClickListener(l);
+        timeButton.setOnLongClickListener(l);
+        timeTextView.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mTimeButton.cancelLongPress();
-        mTimeTextView.cancelLongPress();
+        timeButton.cancelLongPress();
+        timeTextView.cancelLongPress();
     }
 
     private void createTimeButton() {
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
-        mTimeButton = new Button(getContext());
-        mTimeButton.setId(QuestionWidget.newUniqueId());
-        mTimeButton.setText(R.string.select_time);
-        mTimeButton.setPadding(20, 20, 20, 20);
-        mTimeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mTimeButton.setLayoutParams(params);
-        mTimeButton.setEnabled(!mPrompt.isReadOnly());
+        timeButton = new Button(getContext());
+        timeButton.setId(QuestionWidget.newUniqueId());
+        timeButton.setText(R.string.select_time);
+        timeButton.setPadding(20, 20, 20, 20);
+        timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        timeButton.setLayoutParams(params);
+        timeButton.setEnabled(!mPrompt.isReadOnly());
 
-        mTimeButton.setOnClickListener(new View.OnClickListener() {
+        timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mNullAnswer) {
+                if (nullAnswer) {
                     setTimeToCurrent();
                 } else {
-                    mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+                    timePickerDialog.updateTime(hourOfDay, minuteOfHour);
                 }
-                mTimePickerDialog.show();
+                timePickerDialog.show();
             }
         });
     }
 
     private void createTimeTextView() {
-        mTimeTextView = new TextView(getContext());
-        mTimeTextView.setId(QuestionWidget.newUniqueId());
-        mTimeTextView.setPadding(20, 20, 20, 20);
-        mTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        timeTextView = new TextView(getContext());
+        timeTextView.setId(QuestionWidget.newUniqueId());
+        timeTextView.setPadding(20, 20, 20, 20);
+        timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
     }
 
     private void addViews() {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(mTimeButton);
-        linearLayout.addView(mTimeTextView);
+        linearLayout.addView(timeButton);
+        linearLayout.addView(timeTextView);
         addAnswerView(linearLayout);
     }
 
     public void setTimeLabel() {
-        mNullAnswer = false;
-        mTimeTextView.setText(getAnswer().getDisplayText());
+        nullAnswer = false;
+        timeTextView.setText(getAnswer().getDisplayText());
     }
 
     private void createTimePickerDialog() {
-        mTimePickerDialog = new CustomTimePickerDialog(getContext(),
+        timePickerDialog = new CustomTimePickerDialog(getContext(),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-                        mHourOfDay = hourOfDay;
-                        mMinuteOfHour = minuteOfHour;
+                        TimeWidget.this.hourOfDay = hourOfDay;
+                        TimeWidget.this.minuteOfHour = minuteOfHour;
                         setTimeLabel();
                     }
                 }, 0, 0);
-        mTimePickerDialog.setCanceledOnTouchOutside(false);
+        timePickerDialog.setCanceledOnTouchOutside(false);
 
         if (mPrompt.getAnswerValue() == null) {
             clearAnswer();
         } else {
             DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            mHourOfDay = dt.getHourOfDay();
-            mMinuteOfHour = dt.getMinuteOfHour();
+            hourOfDay = dt.getHourOfDay();
+            minuteOfHour = dt.getMinuteOfHour();
             setTimeLabel();
-            mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+            timePickerDialog.updateTime(hourOfDay, minuteOfHour);
         }
     }
 
     public int getHour() {
-        return mHourOfDay;
+        return hourOfDay;
     }
 
     public int getMinute() {
-        return mMinuteOfHour;
+        return minuteOfHour;
     }
 
     public boolean isNullAnswer() {
-        return mNullAnswer;
+        return nullAnswer;
     }
 
     public void setTimeToCurrent() {
         DateTime dt = new DateTime();
-        mHourOfDay = dt.getHourOfDay();
-        mMinuteOfHour = dt.getMinuteOfHour();
-        mTimePickerDialog.updateTime(mHourOfDay, mMinuteOfHour);
+        hourOfDay = dt.getHourOfDay();
+        minuteOfHour = dt.getMinuteOfHour();
+        timePickerDialog.updateTime(hourOfDay, minuteOfHour);
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
-        private String mDialogTitle = getContext().getString(R.string.select_time);
+        private String dialogTitle = getContext().getString(R.string.select_time);
 
         CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
             super(context, callBack, hour, minute, DateFormat.is24HourFormat(context));
-            setTitle(mDialogTitle);
+            setTitle(dialogTitle);
             fixSpinner(context, hour, minute, DateFormat.is24HourFormat(context));
         }
 
         public void setTitle(CharSequence title) {
-            super.setTitle(mDialogTitle);
+            super.setTitle(dialogTitle);
         }
 
         /**

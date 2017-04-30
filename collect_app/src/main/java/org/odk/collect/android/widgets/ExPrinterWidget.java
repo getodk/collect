@@ -117,7 +117,7 @@ import org.odk.collect.android.application.Collect;
  */
 public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
-    private Button mLaunchIntentButton;
+    private Button launchIntentButton;
 
     public ExPrinterWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -137,14 +137,14 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         errorString = (v != null) ? v : context.getString(R.string.no_printer);
 
         // set button formatting
-        mLaunchIntentButton = new Button(getContext());
-        mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
-        mLaunchIntentButton.setText(buttonText);
-        mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mLaunchIntentButton.setPadding(20, 20, 20, 20);
-        mLaunchIntentButton.setLayoutParams(params);
+        launchIntentButton = new Button(getContext());
+        launchIntentButton.setId(QuestionWidget.newUniqueId());
+        launchIntentButton.setText(buttonText);
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton.setLayoutParams(params);
 
-        mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
+        launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -163,7 +163,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
-        printLayout.addView(mLaunchIntentButton);
+        printLayout.addView(launchIntentButton);
         addAnswerView(printLayout);
     }
 
@@ -237,7 +237,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setFocus(Context context) {
         // focus on launch button
-        mLaunchIntentButton.requestFocus();
+        launchIntentButton.requestFocus();
     }
 
 
@@ -259,13 +259,13 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mLaunchIntentButton.setOnLongClickListener(l);
+        launchIntentButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mLaunchIntentButton.cancelLongPress();
+        launchIntentButton.cancelLongPress();
     }
 
 

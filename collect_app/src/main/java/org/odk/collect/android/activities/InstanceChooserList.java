@@ -73,14 +73,14 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(R.string.review_data));
             mEditMode = true;
-            mSortingOptions = new String[]{
+            sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
                     getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
             };
         } else {
             setTitle(getString(R.string.view_sent_forms));
-            mSortingOptions = new String[]{
+            sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
             };
@@ -193,11 +193,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         };
 
         if (mEditMode) {
-            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
         } else {
-            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
         }
-        setListAdapter(mListAdapter);
+        setListAdapter(listAdapter);
     }
 
     @Override
@@ -207,7 +207,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     protected void updateAdapter() {
-        mListAdapter.changeCursor(getCursor());
+        listAdapter.changeCursor(getCursor());
     }
 
     private Cursor getCursor() {

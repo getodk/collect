@@ -72,7 +72,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
                     "tile_data"
             };
             int row = ((int) (Math.pow(2, z) - y) - 1);
-            String predicate = "tile_row = ? AND tile_column = ? AND zoom_level = ?";
+            String predicate = "tile_row = ? AND tile_column = ? AND zoomLevel = ?";
             String[] values = {
                     String.valueOf(row), String.valueOf(x), String.valueOf(z)
             };

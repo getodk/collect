@@ -40,9 +40,9 @@ import org.odk.collect.android.application.Collect;
  * @author Carl Hartung (chartung@nafundi.com)
  */
 public class BearingWidget extends QuestionWidget implements IBinaryWidget {
-    private Button mGetBearingButton;
-    private TextView mStringAnswer;
-    private TextView mAnswerDisplay;
+    private Button getBearingButton;
+    private TextView stringAnswer;
+    private TextView answerDisplay;
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -50,37 +50,37 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
-        mGetBearingButton = new Button(getContext());
-        mGetBearingButton.setId(QuestionWidget.newUniqueId());
-        mGetBearingButton.setPadding(20, 20, 20, 20);
-        mGetBearingButton.setText(getContext()
+        getBearingButton = new Button(getContext());
+        getBearingButton.setId(QuestionWidget.newUniqueId());
+        getBearingButton.setPadding(20, 20, 20, 20);
+        getBearingButton.setText(getContext()
                 .getString(R.string.get_bearing));
-        mGetBearingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+        getBearingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                 mAnswerFontsize);
-        mGetBearingButton.setEnabled(!prompt.isReadOnly());
-        mGetBearingButton.setLayoutParams(params);
+        getBearingButton.setEnabled(!prompt.isReadOnly());
+        getBearingButton.setLayoutParams(params);
         if (prompt.isReadOnly()) {
-            mGetBearingButton.setVisibility(View.GONE);
+            getBearingButton.setVisibility(View.GONE);
         }
 
-        mStringAnswer = new TextView(getContext());
-        mStringAnswer.setId(QuestionWidget.newUniqueId());
+        stringAnswer = new TextView(getContext());
+        stringAnswer.setId(QuestionWidget.newUniqueId());
 
-        mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay.setId(QuestionWidget.newUniqueId());
-        mAnswerDisplay
+        answerDisplay = new TextView(getContext());
+        answerDisplay.setId(QuestionWidget.newUniqueId());
+        answerDisplay
                 .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswerDisplay.setGravity(Gravity.CENTER);
+        answerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            mGetBearingButton.setText(getContext().getString(
+            getBearingButton.setText(getContext().getString(
                     R.string.replace_bearing));
             setBinaryData(s);
         }
 
         // when you press the button
-        mGetBearingButton.setOnClickListener(new View.OnClickListener() {
+        getBearingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
@@ -99,23 +99,23 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mGetBearingButton);
-        answerLayout.addView(mAnswerDisplay);
+        answerLayout.addView(getBearingButton);
+        answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
     }
 
     @Override
     public void clearAnswer() {
-        mStringAnswer.setText(null);
-        mAnswerDisplay.setText(null);
-        mGetBearingButton.setText(getContext()
+        stringAnswer.setText(null);
+        answerDisplay.setText(null);
+        getBearingButton.setText(getContext()
                 .getString(R.string.get_bearing));
 
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mStringAnswer.getText().toString();
+        String s = stringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -134,9 +134,9 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String s = (String) answer;
-        mStringAnswer.setText(s);
+        stringAnswer.setText(s);
 
-        mAnswerDisplay.setText(s);
+        answerDisplay.setText(s);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
@@ -154,17 +154,17 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mGetBearingButton.setOnLongClickListener(l);
-        mStringAnswer.setOnLongClickListener(l);
-        mAnswerDisplay.setOnLongClickListener(l);
+        getBearingButton.setOnLongClickListener(l);
+        stringAnswer.setOnLongClickListener(l);
+        answerDisplay.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mGetBearingButton.cancelLongPress();
-        mStringAnswer.cancelLongPress();
-        mAnswerDisplay.cancelLongPress();
+        getBearingButton.cancelLongPress();
+        stringAnswer.cancelLongPress();
+        answerDisplay.cancelLongPress();
     }
 
 }

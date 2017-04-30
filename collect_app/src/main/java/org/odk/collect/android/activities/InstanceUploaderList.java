@@ -147,7 +147,7 @@ public class InstanceUploaderList extends InstanceListActivity
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
 
-        mSortingOptions = new String[]{
+        sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
@@ -258,9 +258,9 @@ public class InstanceUploaderList extends InstanceListActivity
         logger.logAction(this, "onListItemClick", Long.toString(rowId));
 
         if (getListView().isItemChecked(position)) {
-            mSelectedInstances.add(getListView().getItemIdAtPosition(position));
+            selectedInstances.add(getListView().getItemIdAtPosition(position));
         } else {
-            mSelectedInstances.remove(getListView().getItemIdAtPosition(position));
+            selectedInstances.remove(getListView().getItemIdAtPosition(position));
         }
 
         mUploadButton.setEnabled(areCheckedItems());
@@ -291,7 +291,7 @@ public class InstanceUploaderList extends InstanceListActivity
             case INSTANCE_UPLOADER:
                 if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
                     getListView().clearChoices();
-                    if (mListAdapter.isEmpty()) {
+                    if (listAdapter.isEmpty()) {
                         finish();
                     }
                 }
@@ -310,8 +310,8 @@ public class InstanceUploaderList extends InstanceListActivity
         String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
         int[] view = new int[]{R.id.text1, R.id.text2};
 
-        mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
-        setListAdapter(mListAdapter);
+        listAdapter = new SimpleCursorAdapter(this, R.layout.two_item_multiple_choice, getCursor(), data, view);
+        setListAdapter(listAdapter);
         checkPreviouslyCheckedItems();
     }
 
@@ -322,7 +322,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     protected void updateAdapter() {
-        mListAdapter.changeCursor(getCursor());
+        listAdapter.changeCursor(getCursor());
         checkPreviouslyCheckedItems();
         mUploadButton.setEnabled(areCheckedItems());
     }
@@ -341,9 +341,9 @@ public class InstanceUploaderList extends InstanceListActivity
     private void showUnsent() {
         mShowAllMode = false;
         Cursor c = mInstanceDao.getFinalizedInstancesCursor(getSortingOrder());
-        Cursor old = mListAdapter.getCursor();
+        Cursor old = listAdapter.getCursor();
         try {
-            mListAdapter.changeCursor(getCursor());
+            listAdapter.changeCursor(getCursor());
         } finally {
             if (old != null) {
                 old.close();
@@ -356,9 +356,9 @@ public class InstanceUploaderList extends InstanceListActivity
     private void showAll() {
         mShowAllMode = true;
         Cursor c = mInstanceDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
-        Cursor old = mListAdapter.getCursor();
+        Cursor old = listAdapter.getCursor();
         try {
-            mListAdapter.changeCursor(getCursor());
+            listAdapter.changeCursor(getCursor());
         } finally {
             if (old != null) {
                 old.close();

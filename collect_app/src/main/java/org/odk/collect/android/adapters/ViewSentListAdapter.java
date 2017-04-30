@@ -34,11 +34,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ViewSentListAdapter extends SimpleCursorAdapter {
-    private Context mContext;
+    private Context context;
 
     public ViewSentListAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
         super(context, layout, c, from, to);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
@@ -74,12 +74,12 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
 
             if (date != 0) {
                 visibilityOffCause.setText(
-                        new SimpleDateFormat(mContext.getString(R.string.deleted_on_date_at_time),
+                        new SimpleDateFormat(context.getString(R.string.deleted_on_date_at_time),
                                 Locale.getDefault()).format(new Date(date)));
             } else if (!formExists) {
-                visibilityOffCause.setText(mContext.getString(R.string.deleted_form));
+                visibilityOffCause.setText(context.getString(R.string.deleted_form));
             } else {
-                visibilityOffCause.setText(mContext.getString(R.string.encrypted_form));
+                visibilityOffCause.setText(context.getString(R.string.encrypted_form));
             }
         } else {
             visibilityOffCause.setVisibility(View.GONE);
