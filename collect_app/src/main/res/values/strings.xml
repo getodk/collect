@@ -513,6 +513,6 @@
 <string name="select_qrcode">Select code from SD Card</string>
 <string name="turn_on_flashlight">Turn on flashlight</string>
 <string name="turn_off_flashlight">Turn off flashlight</string>
-<string name="qrcode_with_password" formatted="false">This QR code includes your %s password%s. Please treat it carefully. \n(Click to edit)</string>
-<string name="qrcode_without_password">This QR code does not contain your admin or server passwords. \n(Click to edit)</string>
+<string name="qrcode_with_password" formatted="false">This QR code includes your %s password%s. Please treat it carefully. \n(Tap to remove the passwords)</string>
+<string name="qrcode_without_password">This QR code does not contain your admin or server passwords. \n(Tap to remove the passwords)</string>
 </resources>
