@@ -269,7 +269,7 @@
   <string name="ext_import_generic_error">Tidak dapat mengimpor data dari %1$s. Penyebab: %2$s</string>
   <string name="ext_import_progress_message">Pra-memuat data dari \'%1$s\', silahkan tunggu.. %2$s</string>
   <string name="ext_import_cancelled_message">Pembacaan data dibatalkan!</string>
-  <string name="ext_import_finalizing_message">Menyelesaikan Pra-memuat data...</string>
+  <string name="ext_import_finalizing_message">Menyelesaikan Pra-memuat data…</string>
   <string name="ext_import_completed_message">Selesai membaca data!</string>
   <string name="ext_not_initialized_error">ExternalDataManager belum diinisialisasi.</string>
   <string name="ext_import_csv_missing_error">Data eksternal untuk %1$s belum diimpor. Mungkin anda lupa untuk memasukkan file %2$s.csv menggunakan formulir anda?</string>
@@ -280,14 +280,14 @@
   <string name="fs_file_copy_error">Tidak dapat menyalin \'%1$s\' terhadap \'%2$s\'. Penyebab: %3$s</string>
   <string name="survey_internal_error">Kesalahan internal: langkah menuju pertanyaan selanjutnya gagal.</string>
   <string name="survey_multiple_forms_error">Kamu mengunduh dua formulir berbeda tapi memiliki ID dan versi formulir yang sama. Kemungkinan keduanya adalah formulir sama yang diunggah pada saat yang berbeda atau pada server yang berbeda. Pada kasus ini, hapus salah satu formulir.</string>
-  <string name="survey_loading_reading_form_message">Membaca definisi formulir...</string>
-  <string name="survey_loading_reading_data_message">Membaca data survei...</string>
-  <string name="survey_loading_reading_csv_message">Membaca berkas CSV...</string>
-  <string name="survey_saving_validating_message">Memvalidasi jawaban...</string>
-  <string name="survey_saving_collecting_message">Menghimpun data...</string>
-  <string name="survey_saving_saving_message">Menyimpan ke SD card...</string>
-  <string name="survey_saving_finalizing_message">Menyempurnakan ke SD card...</string>
-  <string name="survey_saving_encrypting_message">Mengenkripsi data...</string>
+  <string name="survey_loading_reading_form_message">Membaca definisi formulir…</string>
+  <string name="survey_loading_reading_data_message">Membaca data survei…</string>
+  <string name="survey_loading_reading_csv_message">Membaca berkas CSV…</string>
+  <string name="survey_saving_validating_message">Memvalidasi jawaban…</string>
+  <string name="survey_saving_collecting_message">Menghimpun data…</string>
+  <string name="survey_saving_saving_message">Menyimpan ke SD card…</string>
+  <string name="survey_saving_finalizing_message">Menyempurnakan ke SD card…</string>
+  <string name="survey_saving_encrypting_message">Mengenkripsi data…</string>
   <string name="high_resolution_summary">Mengaktifkan perekaman video beresolusi tinggi.</string>
   <string name="high_resolution">Mengaktifkan video resolusi tinggi</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -374,7 +374,7 @@
   <string name="geopoint_instruction">tekan yang lama untuk menandai atau tap tombol tambah marker.</string>
   <string name="geopoint_no_draggable_instruction">Tap tombol tambah marker</string>
   <string name="discard">Buang</string>
-  <string name="zoom_to_where">Zoom ke...</string>
+  <string name="zoom_to_where">Zoom ke…</string>
   <string name="zoom_to_location">Zoom ke lokasi saat ini</string>
   <string name="zoom_to_feature">Zoom ke fitur yang tersimpan</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->

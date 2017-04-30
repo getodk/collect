@@ -268,7 +268,7 @@
   <string name="ext_search_bad_function_error">មានបញ្ហាវាក្យសម្ព័ន្ធក្នុងមុខងារស្វែងរក (search): \'%s\' មិន​អាច​វាយ​តម្លៃ​ថា​ជា​មុខ​ងារ​ណា​មួយ​បាន​</string>
   <string name="ext_search_return_error">ការដោះស្រាយស្វែងរកបានត្រឡប់នូវវត្ថុមួយ​ប្រភេទ \'%s\'.</string>
   <string name="ext_import_generic_error">មិន​អាច​នាំ​ចូល​ទិន្នន័យពី %1$s។ មូលហេតុ: %2$s</string>
-  <string name="ext_import_progress_message">កំពុងផ្ទុកទិន្នន័យជាមុនពី \'%1$s\' សូមរងចាំ... %2$s</string>
+  <string name="ext_import_progress_message">កំពុងផ្ទុកទិន្នន័យជាមុនពី \'%1$s\' សូមរងចាំ… %2$s</string>
   <string name="ext_import_cancelled_message">ការអានទិន្នន័យ​បានបោះបង់</string>
   <string name="ext_import_finalizing_message">កំពុងបញ្ចប់ការផ្ទុកទិន្នន័យមុន</string>
   <string name="ext_import_completed_message">ការអានទិន្នន័យ​បានបញ្ចប់!</string>
@@ -281,8 +281,8 @@
   <string name="fs_file_copy_error">មិនអាចចម្លងបាន \'%1$s\' លើសពី \'%2$s\' ។ មូលហេតុ: %3$s</string>
   <string name="survey_internal_error">កំហុសខាងក្នុង: ជំហានដើម្បីជំរុញឱ្យបរាជ័យ។</string>
   <string name="survey_multiple_forms_error">អ្នក​បាន​ទាញ​យក​សំណុំ​បែប​បទ​ពីរខុស​គ្នា​ដែល​មាន​លេខ​សម្គាល់​ទម្រង់​ និង​កំណែ។ ពួក​វា​ប្រហែល​ជា​សំណុំ​បែប​បទ​តែ​មួយ​ដែល​បាន​ផ្ទុក​ឡើង​នៅ​ម៉ោង​ ឬ​ម៉ាស៊ីន​មេ​ខុស​គ្នា។ សូម​អ្នក​លុប​វាមួយ​ក្នុង​​ករណី​ណា​មួយ។</string>
-  <string name="survey_loading_reading_form_message">កំពុង​អាន​ទម្រង់​សំណុំបែប​បទ​...</string>
-  <string name="survey_loading_reading_data_message">ការអានទិន្នន័យស្ទង់មតិ ...</string>
+  <string name="survey_loading_reading_form_message">កំពុង​អាន​ទម្រង់​សំណុំបែប​បទ​…</string>
+  <string name="survey_loading_reading_data_message">ការអានទិន្នន័យស្ទង់មតិ …</string>
   <string name="survey_loading_reading_csv_message">កំពុង​អាន​ឯកសារ CSV</string>
   <string name="survey_saving_validating_message">កំពុងផ្ទៀងផ្ទាត់ចម្លើយ</string>
   <string name="survey_saving_collecting_message">កំពុងប្រមូលទិន្នន័យ</string>
@@ -379,7 +379,7 @@
   <string name="geopoint_instruction">ចុចយូរដើម្បីដាក់ស្លាកកន្លែង ឬប៉ះប៊ូតុងបន្ថែមស្លាក</string>
   <string name="geopoint_no_draggable_instruction">ប៉ះដើម្បីបន្ថែមប៊ូតុងសម្គាល់</string>
   <string name="discard">បោះបង់</string>
-  <string name="zoom_to_where">ពង្រីកទៅ...</string>
+  <string name="zoom_to_where">ពង្រីកទៅ…</string>
   <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
   <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
   <string name="points_captured">%s  ចំនុចចាប់យក</string>
