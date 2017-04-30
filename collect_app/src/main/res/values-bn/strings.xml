@@ -24,7 +24,6 @@
   <string name="capture_video">ভিডিও রেকর্ড</string>
   <string name="change_language">ভাষা পরিবর্তন </string>
   <string name="change_password">পাসওয়ার্ড পরিবর্তন </string>
-  <string name="change_protocol_settings_default">প্ল্যাটফরম সেটিংস</string>
   <string name="change_username">ব্যবহারকারীর নাম পরিবর্তন </string>
   <string name="clearanswer_confirm"> উত্তর মুছে \"%s\" ফেলতে চান?</string>
   <string name="clear_answer">উত্তর মুছে ফেলুন</string>

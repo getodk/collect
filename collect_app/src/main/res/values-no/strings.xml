@@ -24,7 +24,6 @@
   <string name="capture_video">Ta opp video</string>
   <string name="change_language">Endre språk</string>
   <string name="change_password">Passord</string>
-  <string name="change_protocol_settings_default">Plattforminnstillinger</string>
   <string name="change_username">ODK brukernavn</string>
   <string name="clearanswer_confirm">Slette svar til \"%s\"?</string>
   <string name="clear_answer">Slett svar</string>
@@ -161,7 +160,6 @@
   <string name="success">Suksess</string>
   <string name="no_forms_uploaded">Beklager, opplasting feilet.</string>
   <string name="upload_results">Vis oversikt</string>
-  <string name="xform_parse_error">XForm parse error. %1$s is missing element %2$s</string>
   <string name="choose_sound">Velg lyd</string>
   <string name="choose_video">Velg video</string>
   <string name="choose_image">Velg bilde</string>
@@ -296,7 +294,6 @@
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
   <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
-  <string name="media_upload_error">Feil ved opplasting av bilde: %1$s</string>
   <string name="odk_auth_auth_fail">Feil ved autentisering av ODK Autosend. Sjekk innstillingene dine.</string>
   <string name="odk_auto_note">ODK Autosend kvittering</string>
   <string name="notification_error">Feil ved visning av kvitteringstekst</string>

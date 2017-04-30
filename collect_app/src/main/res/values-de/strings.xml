@@ -124,6 +124,7 @@
   <string name="send_selected_data">Auswahl hochladen</string>
   <string name="view_sent_forms">Gesendete Formulare anzeigen</string>
   <string name="view_sent_forms_button">Gesendetes Formular (%s) anzeigen</string>
+  <string name="server_auth_credentials">Ungültiger Benutzername oder Passwort für Server: %s</string>
   <string name="server_requires_auth">Server verlangt Authentifizierung</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Servereinstellungen</string>
@@ -166,7 +167,7 @@
   <string name="success">Erfolg</string>
   <string name="no_forms_uploaded">Kein Formular wurde hochgeladen.</string>
   <string name="upload_results">Upload-Ergebnisse</string>
-  <string name="xform_parse_error">XForm parse error. Bei %1$s fehlt Element %2$s</string>
+  <string name="xform_parse_error">XForm parse error. Bei %1$s fehlt Element %2$s oder ist ungültig.</string>
   <string name="choose_sound">Tonaufnahme auswählen</string>
   <string name="choose_video">Video auswählen</string>
   <string name="choose_image">Bild auswählen</string>
@@ -299,6 +300,7 @@
   <string name="aggregate_preferences">ODK-Aggregate-Einstellungen</string>
   <string name="other_preferences">Andere Plattform-Einsteillungen</string>
   <string name="google_preferences">Google-Sheets-Einstellungen</string>
+  <string name="google_sheets_url_hint">Formulare müssen eine Speicherort-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
   <string name="drive_get_file">Lade %1$s und Mediendateien.</string>
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
@@ -313,11 +315,13 @@
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
   <string name="no_blank_search">Suchfeld darf nicht leer sein.</string>
+  <string name="google_sheets_url">Ersatzspeicherort-URL</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="sheets_google_account_needed">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
+  <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
   <string name="google_sheets_missing_columns">Die folgenden Spalten fehlen in der Tabelle: %1$s</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
@@ -379,6 +383,7 @@
   <string name="geopoint_instruction">Lange Drücken um eine Markierung zu platzieren oder Button Markierung hinzufügen antippen.</string>
   <string name="geopoint_no_draggable_instruction">Button Markierung hinzufügen antippen.</string>
   <string name="discard">Verwerfen</string>
+  <string name="zoom_to_where">Heranzoomen…</string>
   <string name="zoom_to_location">Aktuellen Standort heranzoomen</string>
   <string name="zoom_to_feature">Gespeicherten Punkt heranzoomen</string>
   <string name="points_captured">%s Punkte erfasst</string>
@@ -470,4 +475,18 @@
   <string name="sorting_menu_open">Sortier-Menü öffnen</string>
   <string name="sorting_menu_close">Sortier-Menü schließen</string>
   <string name="sort_the_list">Die Liste sortieren</string>
+  <string name="request_permissions_google_account">ODK Collect benötigt Zugriff auf Ihr Google-Konto um leere Formulare zu laden und ausgefüllte Formulare hochzuladen.</string>
+  <string name="filter_the_list">Liste filtern</string>
+  <string name="language">Sprache</string>
+  <string name="google_auth_io_exception_msg">API-Aufrufe nicht möglich. Wenn Sie einen lokalen Build laufen lassen, beachten Sie die Readme des Projekts.</string>
+  <string name="form_metadata_title">Formular-Metadaten</string>
+  <string name="form_metadata">Formular-Metadaten</string>
+  <string name="form_metadata_summary">Diese Werte werden Formularen hinzugefügt, die Usernamen, E-Mail und/oder Telefon vorbelegte Felder beinhalten um die Person zu identifizieren, die die Daten eingibt.</string>
+  <string name="phone_number">Telefonnummer</string>
+  <string name="email">E-Mail-Adresse</string>
+  <string name="user_defined">Benutzerdefiniert</string>
+  <string name="device_defined">Gerätedefiniert</string>
+  <string name="device_id">Geräte-ID</string>
+  <string name="subscriber_id">Mobilfunk-Teilnehmerkennung</string>
+  <string name="sim_serial_id">SIM-Seriennummer</string>
 </resources>
