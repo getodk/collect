@@ -24,7 +24,6 @@
   <string name="capture_video">ვიდეოგადაღება</string>
   <string name="change_language">ენის შეცვლა</string>
   <string name="change_password">პაროლი</string>
-  <string name="change_protocol_settings_default">პლატფორმის პარამეტრები</string>
   <string name="change_username">ODK-ის მომხმარებლის სახელი</string>
   <string name="clearanswer_confirm">შევცვალოთ ეს გამოპასუხება \"%s\"-ით?</string>
   <string name="clear_answer">გამოპასუხების მოცილება</string>
@@ -86,7 +85,7 @@
   <string name="location_accuracy">აკურატულობა %1$s მეტრია</string>
   <string name="longitude">განედი</string>
   <string name="main_menu">მთავარი მენიუ</string>
-  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა…</string>
+  <string name="main_menu_details">მონაცემების შეგროვება უფრო გაადვილდა...</string>
   <string name="manage_files">შენახული ფორმების წაშლა</string>
   <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="noselect_error">უკაცრავად, თქვენ ფორმა არ აგირჩევიათ!</string>
@@ -161,7 +160,6 @@
   <string name="success">წარმატება</string>
   <string name="no_forms_uploaded">უკაცრავად, ფორმები ვერ აიტვირთა.</string>
   <string name="upload_results">ატვირთვის შედეგი</string>
-  <string name="xform_parse_error">XForm დამუშავების შეცდომა. %1$s აკლია ელემენტი %2$s</string>
   <string name="choose_sound">ხმის ჩანაწერის არჩევა</string>
   <string name="choose_video">ვიდეოს არჩევა</string>
   <string name="choose_image">სურათის არჩევა</string>

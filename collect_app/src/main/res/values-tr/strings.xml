@@ -64,7 +64,7 @@
   <string name="leave_repeat_yes">Ekleme</string>
   <string name="loading_form">Form Yükleniyor</string>
   <string name="main_menu">Ana Menu</string>
-  <string name="main_menu_details">Daha Kolay veri toplama…</string>
+  <string name="main_menu_details">Daha Kolay veri toplama...</string>
   <string name="manage_files">Kayitli Formu Sil</string>
   <string name="mark_finished">Bitirilen Formu işaretle</string>
   <string name="noselect_error">Herhangi bir form seçilmedi !</string>
@@ -126,7 +126,6 @@
   <string name="success">Başarılı</string>
   <string name="no_forms_uploaded">Herhangi bir form gönderilmedi.</string>
   <string name="upload_results">Gönderme Sonucu</string>
-  <string name="xform_parse_error">XForm parse hatasi. %1$s element kayip %2$s</string>
   <string name="choose_sound">Seskaydi Seçimi</string>
   <string name="choose_video">Video Seçimi</string>
   <string name="choose_image">Fotoğraf Seçimi</string>

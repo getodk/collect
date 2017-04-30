@@ -24,7 +24,6 @@
   <string name="capture_video">Ta opp video</string>
   <string name="change_language">Endre språk</string>
   <string name="change_password">Passord</string>
-  <string name="change_protocol_settings_default">Plattforminnstillinger</string>
   <string name="change_username">ODK brukernavn</string>
   <string name="clearanswer_confirm">Slette svar til \"%s\"?</string>
   <string name="clear_answer">Slett svar</string>
@@ -161,7 +160,6 @@
   <string name="success">Suksess</string>
   <string name="no_forms_uploaded">Beklager, opplasting feilet.</string>
   <string name="upload_results">Vis oversikt</string>
-  <string name="xform_parse_error">XForm parse error. %1$s is missing element %2$s</string>
   <string name="choose_sound">Velg lyd</string>
   <string name="choose_video">Velg video</string>
   <string name="choose_image">Velg bilde</string>
@@ -272,14 +270,14 @@
   <string name="fs_file_copy_error">Kan ikke kopiere \'%1$s\' over \'%2$s\'. Årsak: %3$s</string>
   <string name="survey_internal_error">Intern feil: step to prompt feilet.</string>
   <string name="survey_multiple_forms_error">Du har lastet ned to ulike skjemamaler med samme skjema-ID og versjon. Kanskje er samme skjemamal lastet opp til ulike tidspunkt eller til ulike servere. Uansett bør du slette en av dem. </string>
-  <string name="survey_loading_reading_form_message">Leser inn skjemadefinisjoner…</string>
-  <string name="survey_loading_reading_data_message">Leser skjemadata…</string>
-  <string name="survey_loading_reading_csv_message">Leser CSV filer…</string>
-  <string name="survey_saving_validating_message">Validerer svar…</string>
-  <string name="survey_saving_collecting_message">Henter data…</string>
-  <string name="survey_saving_saving_message">Lagrer til SD-kort…</string>
-  <string name="survey_saving_finalizing_message">Fullfører til SD-kort…</string>
-  <string name="survey_saving_encrypting_message">Krypterer data…</string>
+  <string name="survey_loading_reading_form_message">Leser inn skjemadefinisjoner...</string>
+  <string name="survey_loading_reading_data_message">Leser skjemadata...</string>
+  <string name="survey_loading_reading_csv_message">Leser CSV filer...</string>
+  <string name="survey_saving_validating_message">Validerer svar...</string>
+  <string name="survey_saving_collecting_message">Henter data...</string>
+  <string name="survey_saving_saving_message">Lagrer til SD-kort...</string>
+  <string name="survey_saving_finalizing_message">Fullfører til SD-kort...</string>
+  <string name="survey_saving_encrypting_message">Krypterer data...</string>
   <string name="high_resolution_summary">Slå på høyoppløst videoopptak.</string>
   <string name="high_resolution">Slå på høyoppløst video.</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
@@ -296,7 +294,6 @@
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
   <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
-  <string name="media_upload_error">Feil ved opplasting av bilde: %1$s</string>
   <string name="odk_auth_auth_fail">Feil ved autentisering av ODK Autosend. Sjekk innstillingene dine.</string>
   <string name="odk_auto_note">ODK Autosend kvittering</string>
   <string name="notification_error">Feil ved visning av kvitteringstekst</string>
