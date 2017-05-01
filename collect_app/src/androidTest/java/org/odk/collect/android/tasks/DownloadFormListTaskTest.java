@@ -2,45 +2,28 @@ package org.odk.collect.android.tasks;
 
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.test.MockedServerTest;
 
-import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.odk.collect.android.test.MockedServerTestUtils.join;
-import static org.odk.collect.android.test.MockedServerTestUtils.mockWebServer;
-import static org.odk.collect.android.test.MockedServerTestUtils.nextRequestFor;
-import static org.odk.collect.android.test.MockedServerTestUtils.willRespond;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
-public class DownloadFormListTaskTest {
-    private MockWebServer server;
-
-    @Before
-    public void setUp() throws Exception {
-        server = mockWebServer();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        server.shutdown();
-    }
+public class DownloadFormListTaskTest extends MockedServerTest {
 
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {
         // given
-        willRespond(server, RESPONSE);
+        willRespondWith(RESPONSE);
 
         // when
         Map<String, FormDetails> fetched = new DownloadFormListTask().doInBackground();
 
         // then
-        RecordedRequest r = nextRequestFor(server);
+        RecordedRequest r = nextRequest();
         assertEquals("GET", r.getMethod());
         assertEquals("/formList", r.getPath());
         assertMatches("Dalvik/.* org.odk.collect.android/.*", r.getHeader("User-Agent"));
