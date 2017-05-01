@@ -55,6 +55,7 @@ the License.
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:text="@string/select_all"
+                android:textAllCaps="false"
                 android:textSize="16sp" />
 
             <Button
@@ -64,6 +65,7 @@ the License.
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:text="@string/refresh"
+                android:textAllCaps="false"
                 android:textSize="16sp" />
 
             <Button
@@ -73,6 +75,7 @@ the License.
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:text="@string/download"
+                android:textAllCaps="false"
                 android:textSize="16sp" />
 
         </LinearLayout>

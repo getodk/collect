@@ -20,7 +20,7 @@ the License.
         android:orientation="vertical">
 
         <!-- Toolbar -->
-        <include layout="@layout/toolbar"/>
+        <include layout="@layout/toolbar" />
 
         <TextView
             android:id="@+id/status_text"
@@ -69,6 +69,7 @@ the License.
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:text="@string/select_all"
+                android:textAllCaps="false"
                 android:textSize="16sp" />
 
             <Button
@@ -78,6 +79,7 @@ the License.
                 android:layout_weight="1"
                 android:padding="12dp"
                 android:text="@string/send_selected_data"
+                android:textAllCaps="false"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
