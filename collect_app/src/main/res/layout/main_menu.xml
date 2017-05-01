@@ -29,6 +29,7 @@
         android:paddingBottom="1dp"
         android:paddingTop="6dp"
         android:text="@string/app_name"
+        android:textColor="@color/black"
         android:textSize="21sp"
         android:textStyle="bold" />
 
@@ -39,6 +40,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="1dp"
         android:text="@string/main_menu_details"
+        android:textColor="@color/black"
         android:textSize="17sp" />
 
     <ScrollView
@@ -65,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textAllCaps="false"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:textStyle="normal" />
 
             <View
                 android:layout_width="match_parent"
@@ -77,7 +80,8 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textAllCaps="false"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/review_spacer"
@@ -90,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textAllCaps="false"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:textStyle="normal" />
 
             <View
                 android:layout_width="match_parent"
@@ -103,7 +108,8 @@
                 android:padding="20dp"
                 android:text="@string/view_sent_forms"
                 android:textAllCaps="false"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:textStyle="normal" />
 
             <View
                 android:layout_width="match_parent"
@@ -115,7 +121,8 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textAllCaps="false"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/get_forms_spacer"
@@ -128,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:textAllCaps="false"
-                android:textSize="21sp" />
+                android:textSize="21sp"
+                android:textStyle="normal" />
         </LinearLayout>
     </ScrollView>
 
