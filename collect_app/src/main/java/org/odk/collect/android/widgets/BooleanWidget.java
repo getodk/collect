@@ -28,12 +28,12 @@ import org.odk.collect.android.application.Collect;
 
 public class BooleanWidget extends QuestionWidget {
 
-    private CheckBox mBooleanButton;
-    private FormEntryPrompt mPrompt;
+    private CheckBox booleanButton;
+    private FormEntryPrompt prompt;
 
     public BooleanWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        mPrompt = prompt;
+        this.prompt = prompt;
 
         setupBooleanButton();
         readSavedAnswer();
@@ -41,12 +41,12 @@ public class BooleanWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        mBooleanButton.setChecked(false);
+        booleanButton.setChecked(false);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return new BooleanData(mBooleanButton.isChecked());
+        return new BooleanData(booleanButton.isChecked());
     }
 
     @Override
@@ -56,28 +56,28 @@ public class BooleanWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mBooleanButton.setOnLongClickListener(l);
+        booleanButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mBooleanButton.cancelLongPress();
+        booleanButton.cancelLongPress();
     }
 
     private void readSavedAnswer() {
-        if (mPrompt.getAnswerValue() != null
-                && mPrompt.getAnswerValue().getValue().equals(Boolean.TRUE)) {
-            mBooleanButton.setChecked(true);
+        if (prompt.getAnswerValue() != null
+                && prompt.getAnswerValue().getValue().equals(Boolean.TRUE)) {
+            booleanButton.setChecked(true);
         }
     }
 
     private void setupBooleanButton() {
-        mBooleanButton = new CheckBox(getContext());
-        mBooleanButton.setId(QuestionWidget.newUniqueId());
-        mBooleanButton.setText(getContext().getString(R.string.trigger));
-        mBooleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mBooleanButton.setEnabled(!mPrompt.isReadOnly());
-        addAnswerView(mBooleanButton);
+        booleanButton = new CheckBox(getContext());
+        booleanButton.setId(QuestionWidget.newUniqueId());
+        booleanButton.setText(getContext().getString(R.string.trigger));
+        booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        booleanButton.setEnabled(!prompt.isReadOnly());
+        addAnswerView(booleanButton);
     }
 }
