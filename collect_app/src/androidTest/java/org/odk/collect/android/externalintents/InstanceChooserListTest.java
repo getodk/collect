@@ -19,7 +19,7 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class InstanceChooserListTest {
 
     @Rule
-    public ActivityTestRule<InstanceChooserList> mInstanceChooserListRule =
+    public ActivityTestRule<InstanceChooserList> instanceChooserListRule =
             new ExportedActivityTestRule<>(InstanceChooserList.class);
 
     @Test

@@ -16,7 +16,7 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class MainMenuActivityTest {
 
     @Rule
-    public ActivityTestRule<MainMenuActivity> mMainMenuActivityRule =
+    public ActivityTestRule<MainMenuActivity> mainMenuActivityRule =
             new ExportedActivityTestRule<>(MainMenuActivity.class);
 
     @Test

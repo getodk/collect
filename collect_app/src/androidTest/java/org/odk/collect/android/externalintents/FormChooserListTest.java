@@ -16,7 +16,7 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class FormChooserListTest {
 
     @Rule
-    public ActivityTestRule<FormChooserList> mFormChooserListRule =
+    public ActivityTestRule<FormChooserList> formChooserListRule =
             new ExportedActivityTestRule<>(FormChooserList.class);
 
     @Test
