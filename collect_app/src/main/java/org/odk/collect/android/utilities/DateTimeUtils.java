@@ -1,22 +1,26 @@
 package org.odk.collect.android.utilities;
 
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import timber.log.Timber;
 
-/**
- * The function fixCalendarViewIfJellyBean fixes the Calendar view bug for Android 4.1.2 devices
- *
- * For more info read the complete solution at this link : http://stackoverflow.com/a/36321828/5479029
- */
+public class DateTimeUtils {
 
-public class DateWidgetUtils {
-
+    /**
+     * The function fixCalendarViewIfJellyBean fixes the Calendar view bug for Android 4.1.2 devices
+     *
+     * For more info read the complete solution at this link : http://stackoverflow.com/a/36321828/5479029
+     */
     public static void fixCalendarViewIfJellyBean(CalendarView calendarView) {
         try {
             Object object = calendarView;
@@ -72,4 +76,29 @@ public class DateWidgetUtils {
         }
     }
 
+    public static String getDateTimeBasedOnUserLocale(Date date, String appearance, boolean containsTime) {
+        DateFormat dateFormatter;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), getDateTimePattern(containsTime, appearance));
+            dateFormatter = new SimpleDateFormat(format, Locale.getDefault());
+        } else {
+            dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
+        }
+        return dateFormatter.format(date);
+    }
+
+    private static String getDateTimePattern(boolean containsTime, String appearance) {
+        String datePattern;
+        if (containsTime) {
+            datePattern = "yyyyMMMdd HHmm";
+        } else {
+            datePattern = "yyyyMMMdd";
+        }
+        if ("year".equals(appearance)) {
+            datePattern = "yyyy";
+        } else if ("month-year".equals(appearance)) {
+            datePattern = "yyyyMMM";
+        }
+        return datePattern;
+    }
 }

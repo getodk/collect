@@ -151,7 +151,6 @@
   <string name="success">Sėkmingai</string>
   <string name="no_forms_uploaded">Deja, formos nepavyko išsiųsti.</string>
   <string name="upload_results">Išsiuntimo rezultatai</string>
-  <string name="xform_parse_error">XForm\'os apdorojimo klaida. %1$s trūksta elemento %2$s</string>
   <string name="choose_sound">Pasirinkite garsą</string>
   <string name="choose_video">Pasirinkite video</string>
   <string name="choose_image">Pasirinkite paveikslėlį</string>

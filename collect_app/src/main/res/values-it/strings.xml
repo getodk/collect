@@ -24,7 +24,6 @@
   <string name="capture_video">Registra Video</string>
   <string name="change_language">Cambia Lingua</string>
   <string name="change_password">Password ODK</string>
-  <string name="change_protocol_settings_default">Impostazioni Piattaforma</string>
   <string name="change_username">Nome utente ODK</string>
   <string name="clearanswer_confirm">Rimuovere la risposta a \"%s\"?</string>
   <string name="clear_answer">Rimuovere la risposta</string>
@@ -162,7 +161,6 @@
   <string name="success">Successo</string>
   <string name="no_forms_uploaded">Spiacenti, nessun modulo è stato caricato.</string>
   <string name="upload_results">Risultati del caricamento</string>
-  <string name="xform_parse_error">Errore di \'XForm parse\'. %1$s manca elemento %2$s</string>
   <string name="choose_sound">Seleziona Suono</string>
   <string name="choose_video">Seleziona Video</string>
   <string name="choose_image">Seleziona Foto</string>
@@ -297,7 +295,6 @@
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
   <string name="invalid_oauth">Token OAuth 2 non valido</string>
   <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
-  <string name="media_upload_error">Impossibile caricare foto inesistente: %1$s</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
   <string name="odk_auto_note">Notifica ODK Autosend</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>

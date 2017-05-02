@@ -24,7 +24,6 @@
   <string name="capture_video">Înregistrează videoclipul</string>
   <string name="change_language">Schimbă limba</string>
   <string name="change_password">Parola ODK</string>
-  <string name="change_protocol_settings_default">Setările platformei</string>
   <string name="change_username">Nume utilizator ODK</string>
   <string name="clearanswer_confirm">Ștergeți răspunsul de la \"%s\"?</string>
   <string name="clear_answer">Ștergeți răspunsul</string>
@@ -161,7 +160,6 @@
   <string name="success">Succes</string>
   <string name="no_forms_uploaded">Ne pare rău, niciun formular nu a fost încărcat.</string>
   <string name="upload_results">Încărcați rezultate</string>
-  <string name="xform_parse_error">Eroare la examinarea XForm. %1$s îi lipsește elementul %2$s</string>
   <string name="choose_sound">Alegeți sunet</string>
   <string name="choose_video">Alegeți video</string>
   <string name="choose_image">Alegeți imagine</string>
@@ -298,7 +296,6 @@
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
   <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="media_upload_error">Nu am putut încărca o fotografie care nu există: %1$s</string>
   <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
   <string name="odk_auto_note">Notificare ODK Autosend</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
@@ -316,6 +313,7 @@
   <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
   <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
   <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
+  <string name="about_preferences">Descriere</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_sdk_selector_title">SDK cartografiere</string>
   <string name="map_sdk_behavior">SDK cartografiere</string>
@@ -346,7 +344,9 @@
   <string name="polygon_save">Salvare ca poligon</string>
   <string name="polyline_save">Salvare ca Polyline</string>
   <string name="gps_enable_message">GPS-ul este dezactivat în dispozitivul dumneavoastră. Doriți să-l activați?</string>
+  <string name="minutes">Minute</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="general_settings_about">Descriere</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

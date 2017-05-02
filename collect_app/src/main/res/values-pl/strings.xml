@@ -25,7 +25,6 @@
   <string name="capture_video">Nagraj Wideo</string>
   <string name="change_language">Zmień Język</string>
   <string name="change_password">Hasło ODK</string>
-  <string name="change_protocol_settings_default">Ustawienia Platformy</string>
   <string name="change_username">Nazwa użytkownika ODK</string>
   <string name="clearanswer_confirm">Czy usunąć odpowiedź na \"%s\"?</string>
   <string name="clear_answer">Usuń odpowiedź</string>
@@ -165,7 +164,6 @@
   <string name="success">Sukces</string>
   <string name="no_forms_uploaded">Przykro mi, nie wysłano żadnego formularza.</string>
   <string name="upload_results">Wyślij Wyniki</string>
-  <string name="xform_parse_error">Błąd analizy XForm. Brakuje elementu %2$s w %1$s</string>
   <string name="choose_sound">Wybierz Dźwięk</string>
   <string name="choose_video">Wybierz Wideo</string>
   <string name="choose_image">Wybierz Obraz</string>
@@ -303,7 +301,6 @@
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
   <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
   <string name="google_repeat_error">Powtórzenia obecnie nie są wspierane przez Google Sheets.</string>
-  <string name="media_upload_error">Nie udało się wysłać nieistniejącego zdjęcia: %1$s</string>
   <string name="odk_auth_auth_fail">Błąd autentykacji ODK Autosend, proszę upewnij się, że twoje ustawienia są poprawne</string>
   <string name="odk_auto_note">Powiadomienie ODK Autosend</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
