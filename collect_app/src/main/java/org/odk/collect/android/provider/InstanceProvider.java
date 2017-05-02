@@ -101,7 +101,7 @@ public class InstanceProvider extends ContentProvider {
                         + InstanceColumns.JR_VERSION + " text;");
             }
             if (oldVersion == 3) {
-                Cursor cursor = db.rawQuery("PRAGMA table_info(" + INSTANCES_TABLE_NAME + ")", null);
+                Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
                 int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
                 cursor.close();
 
