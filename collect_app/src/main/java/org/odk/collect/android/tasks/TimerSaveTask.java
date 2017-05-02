@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static android.os.SystemClock.sleep;
+import timber.log.Timber;
 
 /**
  * Background task for appending a timer event to the timer log
@@ -18,7 +18,7 @@ import static android.os.SystemClock.sleep;
 public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
     private final static String t = "TimerSaveTask";
     private static File file;
-    private static String TIMING_CSV_HEADER = "event, node, start, end, dirn";
+    private static final String TIMING_CSV_HEADER = "event, node, start, end, dirn";
 
     public TimerSaveTask(File file) {
         this.file = file;
@@ -40,13 +40,12 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
                 }
             }
         } catch (IOException e) {
-            Log.e(t, "error writing timer log", e);
+            Timber.e("error writing timer log", e);
         } finally {
             try {
                 fw.close();
             } catch (Exception e) {
             }
-            ;
         }
         return null;
     }

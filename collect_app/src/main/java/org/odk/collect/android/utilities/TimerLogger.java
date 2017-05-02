@@ -19,14 +19,13 @@ import timber.log.Timber;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
- * 
+ * <p>
  * Notes:
  * 1) If the user has saved the form, resumes editing, then exits without saving then the timing data during the
  * second editing session will be saved.  This is OK as it records user activity.  However if the user exits
  * without saving and they have never saved the form then the timing data is lost as the form editing will be
  * restarted from scratch.
  * 2) The times for questions in a group are not shown.  Only the time for the group is shown.
- *
  */
 public class TimerLogger {
 
