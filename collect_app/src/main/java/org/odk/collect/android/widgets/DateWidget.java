@@ -235,7 +235,7 @@ public class DateWidget extends QuestionWidget {
                         mDayOfMonth = dayOfMonth;
                         setDateLabel();
                     }
-                }, 0, 0, 0);
+                }, 1971, 1, 1); // placeholder date that is valid
         mDatePickerDialog.setCanceledOnTouchOutside(false);
 
         if (mPrompt.getAnswerValue() == null) {
