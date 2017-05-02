@@ -57,26 +57,26 @@ import timber.log.Timber;
 public class ItemsetWidget extends QuestionWidget implements
         CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-    boolean mReadOnly;
-    private boolean mAutoAdvanceToNext;
+    boolean readOnly;
+    private boolean autoAdvanceToNext;
 
-    private ArrayList<RadioButton> mButtons;
-    private String mAnswer = null;
+    private ArrayList<RadioButton> buttons;
+    private String answer = null;
     // Hashmap linking label:value
-    private HashMap<String, String> mAnswers;
-    private AdvanceToNextListener mAutoAdvanceToNextListener;
+    private HashMap<String, String> answers;
+    private AdvanceToNextListener autoAdvanceToNextListener;
 
     protected ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
                             boolean autoAdvanceToNext) {
         super(context, prompt);
 
-        mReadOnly = prompt.isReadOnly() || readOnlyOverride;
-        mAnswers = new HashMap<String, String>();
+        readOnly = prompt.isReadOnly() || readOnlyOverride;
+        answers = new HashMap<String, String>();
 
-        mButtons = new ArrayList<>();
-        mAutoAdvanceToNext = autoAdvanceToNext;
+        buttons = new ArrayList<>();
+        this.autoAdvanceToNext = autoAdvanceToNext;
         if (autoAdvanceToNext) {
-            mAutoAdvanceToNextListener = (AdvanceToNextListener) context;
+            autoAdvanceToNextListener = (AdvanceToNextListener) context;
         }
 
         // Layout holds the vertical list of buttons
@@ -244,18 +244,18 @@ public class ItemsetWidget extends QuestionWidget implements
 
                         // the actual value is stored in name
                         val = c.getString(c.getColumnIndex("name"));
-                        mAnswers.put(label, val);
+                        answers.put(label, val);
 
                         RadioButton rb = new RadioButton(context);
 
                         rb.setOnCheckedChangeListener(this);
                         rb.setOnClickListener(this);
-                        rb.setTextSize(mAnswerFontsize);
+                        rb.setTextSize(answerFontsize);
                         rb.setText(label);
                         rb.setTag(index);
                         rb.setId(QuestionWidget.newUniqueId());
 
-                        mButtons.add(rb);
+                        buttons.add(rb);
 
                         // have to add it to the radiogroup before checking it,
                         // else it lets two buttons be checked...
@@ -275,7 +275,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         singleOptionLayout.addView(rb, textParams);
 
-                        if (mAutoAdvanceToNext) {
+                        if (this.autoAdvanceToNext) {
                             ImageView rightArrow = new ImageView(getContext());
                             rightArrow.setImageBitmap(
                                     BitmapFactory.decodeResource(getContext().getResources(),
@@ -324,8 +324,8 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public void clearAnswer() {
-        mAnswer = null;
-        for (RadioButton button : mButtons) {
+        answer = null;
+        for (RadioButton button : buttons) {
             if (button.isChecked()) {
                 button.setChecked(false);
                 clearNextLevelsOfCascadingSelect();
@@ -336,10 +336,10 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public IAnswerData getAnswer() {
-        if (mAnswer == null) {
+        if (answer == null) {
             return null;
         } else {
-            return new StringData(mAnswer);
+            return new StringData(answer);
         }
     }
 
@@ -358,7 +358,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        for (RadioButton r : mButtons) {
+        for (RadioButton r : buttons) {
             r.setOnLongClickListener(l);
         }
     }
@@ -366,7 +366,7 @@ public class ItemsetWidget extends QuestionWidget implements
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        for (RadioButton button : mButtons) {
+        for (RadioButton button : buttons) {
             button.cancelLongPress();
         }
     }
@@ -374,12 +374,12 @@ public class ItemsetWidget extends QuestionWidget implements
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            for (RadioButton button : mButtons) {
+            for (RadioButton button : buttons) {
                 if (button.isChecked() && !(buttonView == button)) {
                     button.setChecked(false);
                     clearNextLevelsOfCascadingSelect();
                 } else {
-                    mAnswer = mAnswers.get(buttonView.getText().toString());
+                    answer = answers.get(buttonView.getText().toString());
                 }
             }
         }
@@ -387,8 +387,8 @@ public class ItemsetWidget extends QuestionWidget implements
 
     @Override
     public void onClick(View v) {
-        if (mAutoAdvanceToNext) {
-            mAutoAdvanceToNextListener.advance();
+        if (autoAdvanceToNext) {
+            autoAdvanceToNextListener.advance();
         }
     }
 }

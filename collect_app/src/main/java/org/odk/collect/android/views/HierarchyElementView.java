@@ -27,9 +27,9 @@ import org.odk.collect.android.widgets.QuestionWidget;
 
 public class HierarchyElementView extends RelativeLayout {
 
-    private TextView mPrimaryTextView;
-    private TextView mSecondaryTextView;
-    private ImageView mIcon;
+    private TextView primaryTextView;
+    private TextView secondaryTextView;
+    private ImageView icon;
 
 
     public HierarchyElementView(Context context, HierarchyElement it) {
@@ -37,36 +37,36 @@ public class HierarchyElementView extends RelativeLayout {
 
         setColor(it.getColor());
 
-        mIcon = new ImageView(context);
-        mIcon.setImageDrawable(it.getIcon());
-        mIcon.setId(QuestionWidget.newUniqueId());
-        mIcon.setPadding(0, 0, dipToPx(4), 0);
+        icon = new ImageView(context);
+        icon.setImageDrawable(it.getIcon());
+        icon.setId(QuestionWidget.newUniqueId());
+        icon.setPadding(0, 0, dipToPx(4), 0);
 
-        addView(mIcon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+        addView(icon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
-        mPrimaryTextView = new TextView(context);
-        mPrimaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
+        primaryTextView = new TextView(context);
+        primaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
         setPrimaryText(it.getPrimaryText());
-        mPrimaryTextView.setId(QuestionWidget.newUniqueId());
-        mPrimaryTextView.setGravity(Gravity.CENTER_VERTICAL);
+        primaryTextView.setId(QuestionWidget.newUniqueId());
+        primaryTextView.setGravity(Gravity.CENTER_VERTICAL);
         LayoutParams l =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
-        l.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
-        addView(mPrimaryTextView, l);
+        l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        addView(primaryTextView, l);
 
-        mSecondaryTextView = new TextView(context);
-        mSecondaryTextView.setText(it.getSecondaryText());
-        mSecondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
-        mSecondaryTextView.setGravity(Gravity.CENTER_VERTICAL);
+        secondaryTextView = new TextView(context);
+        secondaryTextView.setText(it.getSecondaryText());
+        secondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
+        secondaryTextView.setGravity(Gravity.CENTER_VERTICAL);
 
         LayoutParams lp =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.BELOW, mPrimaryTextView.getId());
-        lp.addRule(RelativeLayout.RIGHT_OF, mIcon.getId());
-        addView(mSecondaryTextView, lp);
+        lp.addRule(RelativeLayout.BELOW, primaryTextView.getId());
+        lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
+        addView(secondaryTextView, lp);
 
         setPadding(dipToPx(8), dipToPx(4), dipToPx(8), dipToPx(8));
 
@@ -74,17 +74,17 @@ public class HierarchyElementView extends RelativeLayout {
 
 
     public void setPrimaryText(String text) {
-        mPrimaryTextView.setText(TextUtils.textToHtml(text));
+        primaryTextView.setText(TextUtils.textToHtml(text));
     }
 
 
     public void setSecondaryText(String text) {
-        mSecondaryTextView.setText(TextUtils.textToHtml(text));
+        secondaryTextView.setText(TextUtils.textToHtml(text));
     }
 
 
     public void setIcon(Drawable icon) {
-        mIcon.setImageDrawable(icon);
+        this.icon.setImageDrawable(icon);
     }
 
 
@@ -95,11 +95,11 @@ public class HierarchyElementView extends RelativeLayout {
 
     public void showSecondary(boolean bool) {
         if (bool) {
-            mSecondaryTextView.setVisibility(VISIBLE);
+            secondaryTextView.setVisibility(VISIBLE);
             setMinimumHeight(dipToPx(64));
 
         } else {
-            mSecondaryTextView.setVisibility(GONE);
+            secondaryTextView.setVisibility(GONE);
             setMinimumHeight(dipToPx(32));
 
         }

@@ -88,7 +88,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setText(getContext().getString(R.string.capture_video));
         captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         captureButton.setPadding(20, 20, 20, 20);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setLayoutParams(params);
@@ -102,7 +102,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "captureButton",
-                                "click", mPrompt.getIndex());
+                                "click", formEntryPrompt.getIndex());
                 Intent i = new Intent(
                         android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 
@@ -129,7 +129,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 }
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.VIDEO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
@@ -149,7 +149,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         chooseButton = new Button(getContext());
         chooseButton.setId(QuestionWidget.newUniqueId());
         chooseButton.setText(getContext().getString(R.string.choose_video));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         chooseButton.setPadding(20, 20, 20, 20);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setLayoutParams(params);
@@ -161,7 +161,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "chooseButton",
-                                "click", mPrompt.getIndex());
+                                "click", formEntryPrompt.getIndex());
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("video/*");
                 // Intent i =
@@ -169,7 +169,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.VIDEO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
@@ -189,7 +189,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         playButton = new Button(getContext());
         playButton.setId(QuestionWidget.newUniqueId());
         playButton.setText(getContext().getString(R.string.play_video));
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         playButton.setPadding(20, 20, 20, 20);
         playButton.setLayoutParams(params);
 
@@ -200,7 +200,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "playButton",
-                                "click", mPrompt.getIndex());
+                                "click", formEntryPrompt.getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(instanceFolder + File.separator
                         + binaryName);
@@ -233,7 +233,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
-        if (mPrompt.isReadOnly()) {
+        if (formEntryPrompt.isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
         }
@@ -326,7 +326,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

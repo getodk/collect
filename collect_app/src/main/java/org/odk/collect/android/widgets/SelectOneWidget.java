@@ -90,7 +90,7 @@ public class SelectOneWidget extends QuestionWidget implements
                     choiceDisplayName = "";
                 }
                 RadioButton r = new RadioButton(getContext());
-                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 r.setText(choiceDisplayName);
                 r.setMovementMethod(LinkMovementMethod.getInstance());
                 r.setTag(Integer.valueOf(i));
@@ -126,13 +126,13 @@ public class SelectOneWidget extends QuestionWidget implements
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(
                         items.get(i), "big-image");
 
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
                 mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, audioURI,
                         imageURI,
                         videoURI, bigImageURI);
                 mediaLayout.setAudioListener(this);
-                mediaLayout.setPlayTextColor(mPlayColor);
-                mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+                mediaLayout.setPlayTextColor(playColor);
+                mediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
                 playList.add(mediaLayout);
 
                 if (i != items.size() - 1) {
@@ -208,10 +208,10 @@ public class SelectOneWidget extends QuestionWidget implements
 
         if (choice != null) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    choice.getValue(), mPrompt.getIndex());
+                    choice.getValue(), formEntryPrompt.getIndex());
         } else {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    "<no matching choice>", mPrompt.getIndex());
+                    "<no matching choice>", formEntryPrompt.getIndex());
         }
     }
 
@@ -237,7 +237,7 @@ public class SelectOneWidget extends QuestionWidget implements
         }
         // if there's more, set up to play the next item
         if (playcounter < playList.size()) {
-            mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     resetQuestionTextColor();
@@ -251,8 +251,8 @@ public class SelectOneWidget extends QuestionWidget implements
 
         } else {
             playcounter = 0;
-            mPlayer.setOnCompletionListener(null);
-            mPlayer.reset();
+            player.setOnCompletionListener(null);
+            player.reset();
         }
 
     }
@@ -262,7 +262,7 @@ public class SelectOneWidget extends QuestionWidget implements
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+        player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetQuestionTextColor();

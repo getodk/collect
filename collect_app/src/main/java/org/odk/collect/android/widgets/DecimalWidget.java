@@ -35,7 +35,7 @@ import java.util.Locale;
 public class DecimalWidget extends StringWidget {
 
     private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = mPrompt.getAnswerValue();
+        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
         Double d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
@@ -54,7 +54,7 @@ public class DecimalWidget extends StringWidget {
         super(context, prompt, readOnlyOverride, true);
 
         // formatting
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // needed to make long readonly text scroll

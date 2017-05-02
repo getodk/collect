@@ -56,7 +56,7 @@ import timber.log.Timber;
  */
 public class LabelWidget extends QuestionWidget {
 
-    List<SelectChoice> mItems;
+    List<SelectChoice> items;
     View center;
 
 
@@ -67,9 +67,9 @@ public class LabelWidget extends QuestionWidget {
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
 
         // Layout holds the horizontal list of buttons
@@ -80,14 +80,14 @@ public class LabelWidget extends QuestionWidget {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
@@ -157,8 +157,8 @@ public class LabelWidget extends QuestionWidget {
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
-                label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                label.setText(prompt.getSelectChoiceText(items.get(i)));
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 // answer layout holds the label text/image on top and the radio button on bottom

@@ -59,7 +59,7 @@ public class SelectMultiWidget extends QuestionWidget {
     @SuppressWarnings("unchecked")
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        mPrompt = prompt;
+        formEntryPrompt = prompt;
         checkBoxes = new ArrayList<CheckBox>();
         playList = new ArrayList<MediaLayout>();
 
@@ -94,7 +94,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 c.setId(QuestionWidget.newUniqueId());
                 c.setText(choiceDisplayName);
                 c.setMovementMethod(LinkMovementMethod.getInstance());
-                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
 
@@ -111,19 +111,19 @@ public class SelectMultiWidget extends QuestionWidget {
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkboxInit && mPrompt.isReadOnly()) {
+                        if (!checkboxInit && formEntryPrompt.isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.deselect",
                                         items.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
+                                        formEntryPrompt.getIndex());
                             } else {
                                 buttonView.setChecked(true);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.select",
                                         items.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
+                                        formEntryPrompt.getIndex());
                             }
                         }
                     }
@@ -148,7 +148,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 String bigImageURI = null;
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(items.get(i), "big-image");
 
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
                 mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), c, audioURI,
                         imageURI, videoURI, bigImageURI);
 
@@ -230,7 +230,7 @@ public class SelectMultiWidget extends QuestionWidget {
         }
         // if there's more, set up to play the next item
         if (playcounter < playList.size()) {
-            mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     resetQuestionTextColor();
@@ -244,8 +244,8 @@ public class SelectMultiWidget extends QuestionWidget {
 
         } else {
             playcounter = 0;
-            mPlayer.setOnCompletionListener(null);
-            mPlayer.reset();
+            player.setOnCompletionListener(null);
+            player.reset();
         }
 
     }
@@ -255,7 +255,7 @@ public class SelectMultiWidget extends QuestionWidget {
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+        player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetQuestionTextColor();

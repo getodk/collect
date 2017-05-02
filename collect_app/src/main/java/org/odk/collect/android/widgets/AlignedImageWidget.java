@@ -112,7 +112,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         captureButton = new Button(getContext());
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setText(getContext().getString(R.string.capture_image));
-        captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         captureButton.setPadding(20, 20, 20, 20);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setLayoutParams(params);
@@ -122,7 +122,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
-                        "click", mPrompt.getIndex());
+                        "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
 
                 Intent i = new Intent();
@@ -144,7 +144,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 // FormEntyActivity will also need to be updated.
                 try {
                     Collect.getInstance().getFormController().setIndexWaitingForData(
-                            mPrompt.getIndex());
+                            formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.ALIGNED_IMAGE);
                 } catch (ActivityNotFoundException e) {
@@ -162,7 +162,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         chooseButton = new Button(getContext());
         chooseButton.setId(QuestionWidget.newUniqueId());
         chooseButton.setText(getContext().getString(R.string.choose_image));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         chooseButton.setPadding(20, 20, 20, 20);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setLayoutParams(params);
@@ -172,14 +172,14 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
-                        "click", mPrompt.getIndex());
+                        "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
 
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
@@ -235,7 +235,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton",
-                            "click", mPrompt.getIndex());
+                            "click", formEntryPrompt.getIndex());
                     Intent i = new Intent("android.intent.action.VIEW");
                     Uri uri = MediaUtils.getImageUriFromMediaProvider(
                             instanceFolder + File.separator + binaryName);
@@ -337,7 +337,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 

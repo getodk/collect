@@ -55,7 +55,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         getBarcodeButton.setId(QuestionWidget.newUniqueId());
         getBarcodeButton.setText(getContext().getString(R.string.get_barcode));
         getBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                mAnswerFontsize);
+                answerFontsize);
         getBarcodeButton.setPadding(20, 20, 20, 20);
         getBarcodeButton.setEnabled(!prompt.isReadOnly());
         getBarcodeButton.setLayoutParams(params);
@@ -67,11 +67,11 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBarcode", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 Intent i = new Intent("com.google.zxing.client.android.SCAN");
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.BARCODE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
@@ -89,7 +89,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         // set text formatting
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         stringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
@@ -145,7 +145,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

@@ -104,7 +104,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         // set text formatting
         answer = new EditText(context);
         answer.setId(QuestionWidget.newUniqueId());
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
@@ -121,11 +121,11 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             answer.setText(s);
         }
 
-        if (mPrompt.isReadOnly()) {
+        if (formEntryPrompt.isReadOnly()) {
             answer.setBackground(null);
         }
 
-        if (mPrompt.isReadOnly() || hasExApp) {
+        if (formEntryPrompt.isReadOnly() || hasExApp) {
             answer.setFocusable(false);
             answer.setClickable(false);
         }
@@ -135,18 +135,18 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
         final String buttonText;
         final String errorString;
-        String v = mPrompt.getSpecialFormQuestionText("buttonText");
+        String v = formEntryPrompt.getSpecialFormQuestionText("buttonText");
         buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-        v = mPrompt.getSpecialFormQuestionText("noAppErrorString");
+        v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
         // set button formatting
         launchIntentButton = new Button(getContext());
         launchIntentButton.setId(QuestionWidget.newUniqueId());
         launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         launchIntentButton.setPadding(20, 20, 20, 20);
-        launchIntentButton.setEnabled(!mPrompt.isReadOnly());
+        launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
         launchIntentButton.setLayoutParams(params);
 
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
@@ -155,10 +155,10 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent(intentName);
                 try {
                     ExternalAppsUtils.populateParameters(i, exParams,
-                            mPrompt.getIndex().getReference());
+                            formEntryPrompt.getIndex().getReference());
 
                     Collect.getInstance().getFormController().setIndexWaitingForData(
-                            mPrompt.getIndex());
+                            formEntryPrompt.getIndex());
                     fireActivity(i);
                 } catch (ExternalParamsException e) {
                     Timber.e(e);
@@ -171,7 +171,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
             private void onException(String toastText) {
                 hasExApp = false;
-                if (!mPrompt.isReadOnly()) {
+                if (!formEntryPrompt.isReadOnly()) {
                     answer.setBackground(textBackground);
                     answer.setFocusable(true);
                     answer.setFocusableInTouchMode(true);
@@ -196,9 +196,9 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", mPrompt.getAnswerText());
+        i.putExtra("value", formEntryPrompt.getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), mPrompt.getIndex());
+                i.getAction(), formEntryPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_STRING_CAPTURE);
     }
@@ -241,7 +241,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
-            if (!mPrompt.isReadOnly()) {
+            if (!formEntryPrompt.isReadOnly()) {
                 answer.requestFocus();
                 inputManager.showSoftInput(answer, 0);
             /*
@@ -263,7 +263,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 

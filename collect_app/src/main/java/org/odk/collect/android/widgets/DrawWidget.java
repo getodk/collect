@@ -77,7 +77,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         drawButton = new Button(getContext());
         drawButton.setId(QuestionWidget.newUniqueId());
         drawButton.setText(getContext().getString(R.string.draw_image));
-        drawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        drawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         drawButton.setPadding(20, 20, 20, 20);
         drawButton.setEnabled(!prompt.isReadOnly());
         drawButton.setLayoutParams(params);
@@ -88,7 +88,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "drawButton", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 launchDrawActivity();
             }
         });
@@ -99,7 +99,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
 
-        if (mPrompt.isReadOnly()) {
+        if (formEntryPrompt.isReadOnly()) {
             drawButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
@@ -136,7 +136,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this, "viewImage", "click",
-                                    mPrompt.getIndex());
+                                    formEntryPrompt.getIndex());
                     launchDrawActivity();
                 }
             });
@@ -161,7 +161,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
         try {
             Collect.getInstance().getFormController()
-                    .setIndexWaitingForData(mPrompt.getIndex());
+                    .setIndexWaitingForData(formEntryPrompt.getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.DRAW_IMAGE);
         } catch (ActivityNotFoundException e) {
@@ -247,7 +247,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

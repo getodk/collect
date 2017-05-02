@@ -81,7 +81,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
             items = prompt.getSelectChoices();
         }
 
-        mPrompt = prompt;
+        formEntryPrompt = prompt;
 
         selections = new boolean[items.size()];
         answerItems = new CharSequence[items.size()];
@@ -95,11 +95,11 @@ public class SpinnerMultiWidget extends QuestionWidget {
         }
 
         selectionText.setText(context.getString(R.string.selected));
-        selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         selectionText.setVisibility(View.GONE);
 
         button.setText(context.getString(R.string.select_answer));
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         button.setPadding(0, 0, 0, 7);
 
         // Give the button a click listener. This defines the alert as well. All the
@@ -107,7 +107,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                alertBuilder.setTitle(mPrompt.getQuestionText()).setPositiveButton(R.string.ok,
+                alertBuilder.setTitle(formEntryPrompt.getQuestionText()).setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 List<String> selectedValues = new ArrayList<>();

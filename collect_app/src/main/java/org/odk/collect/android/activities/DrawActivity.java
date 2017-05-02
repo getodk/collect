@@ -288,7 +288,7 @@ public class DrawActivity extends Activity {
 
     private void saveFile(File f) throws FileNotFoundException {
         if (drawView.getWidth() == 0 || drawView.getHeight() == 0) {
-            // apparently on 4.x, the orientation change notification can occur
+            // apparently on 4.x1, the orientation change notification can occur
             // sometime before the view is rendered. In that case, the view
             // dimensions will not be known.
             Timber.e("View has zero width or zero height");
@@ -434,8 +434,8 @@ public class DrawActivity extends Activity {
         private Path offscreenPath; // Adjusted for position of the bitmap in the view
         private Paint bitmapPaint;
         private File backgroundBitmapFile;
-        private float x;
-        private float y;
+        private float x1;
+        private float y1;
 
         public DrawView(final Context c) {
             super(c);
@@ -510,8 +510,8 @@ public class DrawActivity extends Activity {
             offscreenPath.reset();
             offscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
 
-            this.x = x;
-            this.y = y;
+            this.x1 = x;
+            this.y1 = y;
         }
 
         public void drawSignLine() {
@@ -520,19 +520,19 @@ public class DrawActivity extends Activity {
         }
 
         private void touch_move(float x, float y) {
-            currentPath.quadTo(this.x, this.y, (x + this.x) / 2, (y + this.y) / 2);
-            offscreenPath.quadTo(this.x - getBitmapLeft(), this.y - getBitmapTop(),
-                    (x + this.x) / 2 - getBitmapLeft(), (y + this.y) / 2 - getBitmapTop());
-            this.x = x;
-            this.y = y;
+            currentPath.quadTo(this.x1, this.y1, (x + this.x1) / 2, (y + this.y1) / 2);
+            offscreenPath.quadTo(this.x1 - getBitmapLeft(), this.y1 - getBitmapTop(),
+                    (x + this.x1) / 2 - getBitmapLeft(), (y + this.y1) / 2 - getBitmapTop());
+            this.x1 = x;
+            this.y1 = y;
         }
 
         private void touch_up() {
             if (currentPath.isEmpty()) {
-                canvas.drawPoint(x, y, pointPaint);
+                canvas.drawPoint(x1, y1, pointPaint);
             } else {
-                currentPath.lineTo(x, y);
-                offscreenPath.lineTo(x - getBitmapLeft(), y - getBitmapTop());
+                currentPath.lineTo(x1, y1);
+                offscreenPath.lineTo(x1 - getBitmapLeft(), y1 - getBitmapTop());
 
                 // commit the path to our offscreen
                 canvas.drawPath(offscreenPath, paint);

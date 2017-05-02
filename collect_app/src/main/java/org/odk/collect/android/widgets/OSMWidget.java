@@ -102,7 +102,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         launchOpenMapKitButton.setPadding(20, 20, 20, 20);
         launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -116,7 +116,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
                 launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "launchOpenMapKitButton",
-                        "click", mPrompt.getIndex());
+                        "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
                 launchOpenMapKit();
             }
@@ -194,7 +194,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             if (isIntentSafe) {
                 // notify that the form is waiting for data
                 Collect.getInstance().getFormController().setIndexWaitingForData(
-                        mPrompt.getIndex());
+                        formEntryPrompt.getIndex());
                 // launch
                 ((Activity) ctx).startActivityForResult(launchIntent,
                         FormEntryActivity.OSM_CAPTURE);
@@ -235,7 +235,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

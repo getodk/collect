@@ -79,12 +79,12 @@ public abstract class GoogleSheetsAbstractUploader extends
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
-    protected HashMap<String, String> mResults;
-    private String mSpreadsheetName;
-    private String mSpreadsheetId;
+    protected HashMap<String, String> results;
+    private String spreadsheetName;
+    private String spreadsheetId;
     private boolean hasWritePermissonToSheet = false;
-    private String mSpreadsheetFileName;
-    private Integer mSheetId;
+    private String spreadsheetFileName;
+    private Integer sheetId;
 
     /**
      * @param selection
@@ -149,17 +149,17 @@ public abstract class GoogleSheetsAbstractUploader extends
                                         String token, String formFilePath) {
         // if the token is null fail immediately
         if (token == null) {
-            mResults.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
+            results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
             return false;
         }
 
         // get spreadsheet id
-        if (mSpreadsheetId == null) {
+        if (spreadsheetId == null) {
             try {
-                mSpreadsheetId = UrlUtils.getSpreadsheetID(id);
+                spreadsheetId = UrlUtils.getSpreadsheetID(id);
             } catch (BadUrlException e) {
                 Timber.e(e);
-                mResults.put(id, e.getMessage());
+                results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -167,18 +167,18 @@ public abstract class GoogleSheetsAbstractUploader extends
         // checking for write permissions to the spreadsheet
         if (!hasWritePermissonToSheet) {
             try {
-                mSpreadsheetName = getSpreadSheetName();
+                spreadsheetName = getSpreadSheetName();
 
                 //// TODO: 22/3/17 Find a better way to check the write permissions
                 List<Request> requests = new ArrayList<>();
                 requests.add(new Request()
                         .setUpdateSpreadsheetProperties(new UpdateSpreadsheetPropertiesRequest()
                                 .setProperties(new SpreadsheetProperties()
-                                        .setTitle(mSpreadsheetFileName))
+                                        .setTitle(spreadsheetFileName))
                                 .setFields("title")));
 
-                mSheetsService.spreadsheets()
-                        .batchUpdate(mSpreadsheetId, new BatchUpdateSpreadsheetRequest()
+                sheetsService.spreadsheets()
+                        .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
                                 .setRequests(requests))
                         .execute();
             } catch (GoogleJsonResponseException e) {
@@ -186,10 +186,10 @@ public abstract class GoogleSheetsAbstractUploader extends
                 if (e.getDetails().getCode() == 403) {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 }
-                mResults.put(id, message);
+                results.put(id, message);
                 return false;
             } catch (IOException e) {
-                mResults.put(id, e.getMessage());
+                results.put(id, e.getMessage());
                 return false;
             }
             hasWritePermissonToSheet = true;
@@ -208,17 +208,17 @@ public abstract class GoogleSheetsAbstractUploader extends
             getColumns(formFilePath, columnNames);
         } catch (XmlPullParserException | IOException | FormException e2) {
             Timber.e(e2, "Exception thrown while getting columns from form file");
-            mResults.put(id, e2.getMessage());
+            results.put(id, e2.getMessage());
             return false;
         }
 
         if (columnNames.size() == 0) {
-            mResults.put(id, "No columns found in the form to upload");
+            results.put(id, "No columns found in the form to upload");
             return false;
         }
 
         if (columnNames.size() > 255) {
-            mResults.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
+            results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
                     String.valueOf(columnNames.size())));
             return false;
         }
@@ -226,7 +226,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // make sure column names are legal
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id,
+                results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
                 return false;
@@ -238,12 +238,12 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
         } catch (FormException e) {
-            mResults.put(id,
+            results.put(id,
                     Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
         } catch (XmlPullParserException | IOException e) {
             Timber.e(e, "Exception thrown while parsing the file");
-            mResults.put(id, e.getMessage());
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -256,7 +256,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, Collect.getInstance()
+                results.put(id, Collect.getInstance()
                         .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
@@ -301,7 +301,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     folderId = createOrGetIDOfFolderWithName(jrFormId);
                 } catch (IOException | MultipleFoldersFoundException e) {
                     Timber.e(e);
-                    mResults.put(id, e.getMessage());
+                    results.put(id, e.getMessage());
                     return false;
                 }
 
@@ -313,13 +313,13 @@ public abstract class GoogleSheetsAbstractUploader extends
                             folderId, toUpload);
                 } catch (IOException e) {
                     Timber.e(e, "Exception thrown while uploading the file to drive");
-                    mResults.put(id, e.getMessage());
+                    results.put(id, e.getMessage());
                     return false;
                 }
 
                 //checking if file was successfully uploaded
                 if (uploadedFileId == null) {
-                    mResults.put(id, "Unable to upload the media files. Try again");
+                    results.put(id, "Unable to upload the media files. Try again");
                     return false;
                 }
 
@@ -334,15 +334,15 @@ public abstract class GoogleSheetsAbstractUploader extends
         List headerFeed = null;
 
         try {
-            values = getHeaderFeed(mSpreadsheetId, mSpreadsheetName);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, "No data found");
+                results.put(id, "No data found");
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
             Timber.e(e);
-            mResults.put(id, e.getMessage());
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -366,7 +366,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
             //resizing the spreadsheet
             SheetProperties sheetProperties = new SheetProperties()
-                    .setSheetId(mSheetId)
+                    .setSheetId(sheetId)
                     .setGridProperties(new GridProperties()
                             .setColumnCount(columnNames.size()));
 
@@ -377,13 +377,13 @@ public abstract class GoogleSheetsAbstractUploader extends
                             .setFields("gridProperties.columnCount")));
 
             try {
-                mSheetsService.spreadsheets()
-                        .batchUpdate(mSpreadsheetId, new BatchUpdateSpreadsheetRequest()
+                sheetsService.spreadsheets()
+                        .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
                                 .setRequests(requests))
                         .execute();
             } catch (IOException e) {
                 Timber.e(e);
-                mResults.put(id, e.getMessage());
+                results.put(id, e.getMessage());
                 return false;
             }
 
@@ -401,9 +401,9 @@ public abstract class GoogleSheetsAbstractUploader extends
             /*
              *  Appends the data at the last row
              *
-             *  append(mSpreadsheetId, range, ValueRange)
+             *  append(spreadsheetId, range, ValueRange)
              *
-             *  mSpreadsheetId   :   Unique sheet id
+             *  spreadsheetId   :   Unique sheet id
              *  range           :   A1 notation range. It specifies the range within which the
              *                      spreadsheet should be searched.
              *              hint   "Giving only sheetName in range searches in the complete sheet"
@@ -415,13 +415,13 @@ public abstract class GoogleSheetsAbstractUploader extends
             // Send the new row to the API for insertion.
             // write the headers
             try {
-                mSheetsService.spreadsheets().values()
-                        .append(mSpreadsheetId, mSpreadsheetName, row)
+                sheetsService.spreadsheets().values()
+                        .append(spreadsheetId, spreadsheetName, row)
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
                 Timber.e(e);
-                mResults.put(id, e.getMessage());
+                results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -430,16 +430,16 @@ public abstract class GoogleSheetsAbstractUploader extends
         // update the feed
 
         try {
-            values = getHeaderFeed(mSpreadsheetId, mSpreadsheetName);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, "No data found");
+                results.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while getting the header feed");
-            mResults.put(id, e.getMessage());
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -471,12 +471,12 @@ public abstract class GoogleSheetsAbstractUploader extends
             row.setValues(content);
 
             try {
-                mSheetsService.spreadsheets().values()
-                        .update(mSpreadsheetId, mSpreadsheetName + "!A1:1", row)
+                sheetsService.spreadsheets().values()
+                        .update(spreadsheetId, spreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
                 Timber.e(e);
-                mResults.put(id, e.getMessage());
+                results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -485,16 +485,16 @@ public abstract class GoogleSheetsAbstractUploader extends
         // update the feed
 
         try {
-            values = getHeaderFeed(mSpreadsheetId, mSpreadsheetName);
+            values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, "No data found");
+                results.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while getting the header feed");
-            mResults.put(id, e.getMessage());
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -505,7 +505,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 sheetCols.add(column.toString());
             }
         } else {
-            mResults.put(id, "couldn't get header feed");
+            results.put(id, "couldn't get header feed");
             return false;
         }
 
@@ -525,7 +525,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     missingString += ", ";
                 }
             }
-            mResults.put(id, Collect.getInstance().getString(
+            results.put(id, Collect.getInstance().getString(
                     R.string.google_sheets_missing_columns, missingString));
             return false;
         }
@@ -578,28 +578,28 @@ public abstract class GoogleSheetsAbstractUploader extends
 
         // Send the new row to the API for insertion.
         try {
-            mSheetsService.spreadsheets().values()
-                    .append(mSpreadsheetId, mSpreadsheetName, row)
+            sheetsService.spreadsheets().values()
+                    .append(spreadsheetId, spreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
             Timber.e(e);
-            mResults.put(id, e.getMessage());
+            results.put(id, e.getMessage());
             return false;
         }
 
-        mResults.put(id, Collect.getInstance().getString(R.string.success));
+        results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
     }
 
     private String getSpreadSheetName() throws IOException {
         Spreadsheet response;
-        response = mSheetsService.spreadsheets()
-                .get(mSpreadsheetId)
+        response = sheetsService.spreadsheets()
+                .get(spreadsheetId)
                 .setIncludeGridData(false)
                 .execute();
 
-        mSpreadsheetFileName = response.getProperties().getTitle();
-        mSheetId = response.getSheets().get(0).getProperties().getSheetId();
+        spreadsheetFileName = response.getProperties().getTitle();
+        sheetId = response.getSheets().get(0).getProperties().getSheetId();
         return response.getSheets().get(0).getProperties().getTitle();
     }
 
@@ -656,7 +656,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         String type = FileUtils.getMimeType(toUpload.getPath());
         FileContent mediaContent = new FileContent(type, toUpload);
         com.google.api.services.drive.model.File file;
-        file = mDriveService.files().create(fileMetadata, mediaContent)
+        file = driveService.files().create(fileMetadata, mediaContent)
                 .setFields("id, parents")
                 .setIgnoreDefaultVisibility(true)
                 .execute();
@@ -678,7 +678,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         }
 
         com.google.api.services.drive.model.File folder;
-        folder = mDriveService.files().create(fileMetadata)
+        folder = driveService.files().create(fileMetadata)
                 .setFields("id")
                 .execute();
 
@@ -687,7 +687,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .setType("anyone")
                 .setRole("reader");
 
-        mDriveService.permissions().create(folder.getId(), sharePermission)
+        driveService.permissions().create(folder.getId(), sharePermission)
                 .setFields("id")
                 .execute();
 
@@ -703,13 +703,13 @@ public abstract class GoogleSheetsAbstractUploader extends
         String pageToken;
         do {
             if (parentId == null) {
-                fileList = mDriveService.files().list()
+                fileList = driveService.files().list()
                         .setQ("name = '" + folderName + "' and "
                                 + "mimeType = 'application/vnd.google-apps.folder'"
                                 + " and trashed=false")
                         .execute();
             } else {
-                fileList = mDriveService.files().list()
+                fileList = driveService.files().list()
                         .setQ("name = '" + folderName + "' and "
                                 + "mimeType = 'application/vnd.google-apps.folder'"
                                 + " and '" + parentId + "' in parents" + " and trashed=false")
@@ -866,8 +866,8 @@ public abstract class GoogleSheetsAbstractUploader extends
     @Override
     protected void onPostExecute(HashMap<String, String> results) {
         synchronized (this) {
-            if (mStateListener != null) {
-                mStateListener.uploadingComplete(results);
+            if (stateListener != null) {
+                stateListener.uploadingComplete(results);
 
                 if (results != null && !results.isEmpty()) {
                     StringBuilder selection = new StringBuilder();
@@ -927,9 +927,9 @@ public abstract class GoogleSheetsAbstractUploader extends
     @Override
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {
-            if (mStateListener != null) {
+            if (stateListener != null) {
                 // update progress and total
-                mStateListener.progressUpdate(values[0], values[1]);
+                stateListener.progressUpdate(values[0], values[1]);
             }
         }
     }
@@ -945,7 +945,7 @@ public abstract class GoogleSheetsAbstractUploader extends
     }
 
     /**
-     * Fetches the spreadsheet with the provided mSpreadsheetId
+     * Fetches the spreadsheet with the provided spreadsheetId
      * <p>
      * get(sheetId, range) method requires two parameters
      * <p>
@@ -963,7 +963,7 @@ public abstract class GoogleSheetsAbstractUploader extends
      */
     private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
             throws IOException {
-        ValueRange response = mSheetsService.spreadsheets()
+        ValueRange response = sheetsService.spreadsheets()
                 .values()
                 .get(spreadsheetId, spreadsheetName)
                 .execute();

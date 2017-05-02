@@ -85,13 +85,13 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
         answerDisplay = new TextView(getContext());
         answerDisplay.setId(QuestionWidget.newUniqueId());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answerDisplay.setGravity(Gravity.CENTER);
 
         createShapeButton = new Button(getContext());
         createShapeButton.setId(QuestionWidget.newUniqueId());
         createShapeButton.setText(getContext().getString(R.string.get_shape));
-        createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         createShapeButton.setPadding(20, 20, 20, 20);
         createShapeButton.setLayoutParams(params);
 
@@ -99,7 +99,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
                 startGeoShapeActivity();
             }
         });
@@ -165,11 +165,11 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        Boolean test = mPrompt.getIndex().equals(
+        Boolean test = formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
 
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

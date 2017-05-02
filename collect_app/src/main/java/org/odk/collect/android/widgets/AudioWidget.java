@@ -73,7 +73,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         captureButton.setId(QuestionWidget.newUniqueId());
         captureButton.setText(getContext().getString(R.string.capture_audio));
         captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         captureButton.setPadding(20, 20, 20, 20);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setLayoutParams(params);
@@ -85,7 +85,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "captureButton", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 Intent i = new Intent(
                         android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
                 i.putExtra(
@@ -94,7 +94,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                                 .toString());
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
@@ -114,7 +114,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         chooseButton = new Button(getContext());
         chooseButton.setId(QuestionWidget.newUniqueId());
         chooseButton.setText(getContext().getString(R.string.choose_sound));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         chooseButton.setPadding(20, 20, 20, 20);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setLayoutParams(params);
@@ -126,12 +126,12 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "chooseButton", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
@@ -150,7 +150,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         playButton = new Button(getContext());
         playButton.setId(QuestionWidget.newUniqueId());
         playButton.setText(getContext().getString(R.string.play_audio));
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         playButton.setPadding(20, 20, 20, 20);
         playButton.setLayoutParams(params);
 
@@ -161,7 +161,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "playButton", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(instanceFolder + File.separator
                         + binaryName);
@@ -195,7 +195,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
-        if (mPrompt.isReadOnly()) {
+        if (formEntryPrompt.isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
         }
@@ -279,7 +279,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

@@ -57,7 +57,7 @@ public class StringWidget extends QuestionWidget {
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 

@@ -459,11 +459,11 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     }
 
-    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     private Runnable centerAroundFix = new Runnable() {
         public void run() {
-            mHandler.post(new Runnable() {
+            handler.post(new Runnable() {
                 public void run() {
                     locationButton.setEnabled(true);
                     playButton.setEnabled(true);

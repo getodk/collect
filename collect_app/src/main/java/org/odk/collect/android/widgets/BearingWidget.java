@@ -56,7 +56,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
         getBearingButton.setText(getContext()
                 .getString(R.string.get_bearing));
         getBearingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                mAnswerFontsize);
+                answerFontsize);
         getBearingButton.setEnabled(!prompt.isReadOnly());
         getBearingButton.setLayoutParams(params);
         if (prompt.isReadOnly()) {
@@ -69,7 +69,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay = new TextView(getContext());
         answerDisplay.setId(QuestionWidget.newUniqueId());
         answerDisplay
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
@@ -86,12 +86,12 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBearing", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 Intent i = null;
                 i = new Intent(getContext(), BearingActivity.class);
 
                 Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(mPrompt.getIndex());
+                        .setIndexWaitingForData(formEntryPrompt.getIndex());
                 ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.BEARING_CAPTURE);
             }
@@ -142,7 +142,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }

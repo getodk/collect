@@ -87,7 +87,7 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void readAppearance() {
-        String appearance = mPrompt.getQuestion().getAppearanceAttr();
+        String appearance = formEntryPrompt.getQuestion().getAppearanceAttr();
         if ("month-year".equals(appearance)) {
             hideDay = true;
         } else if ("year".equals(appearance)) {
@@ -178,9 +178,9 @@ public class DateWidget extends QuestionWidget {
         dateButton.setId(QuestionWidget.newUniqueId());
         dateButton.setText(R.string.select_date);
         dateButton.setPadding(20, 20, 20, 20);
-        dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         dateButton.setLayoutParams(params);
-        dateButton.setEnabled(!mPrompt.isReadOnly());
+        dateButton.setEnabled(!formEntryPrompt.isReadOnly());
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,7 +199,7 @@ public class DateWidget extends QuestionWidget {
         dateTextView = new TextView(getContext());
         dateTextView.setId(QuestionWidget.newUniqueId());
         dateTextView.setPadding(20, 20, 20, 20);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
 
     private void addViews() {
@@ -222,7 +222,7 @@ public class DateWidget extends QuestionWidget {
     public void setDateLabel() {
         nullAnswer = false;
         dateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
-                (Date) getAnswer().getValue(), mPrompt.getQuestion().getAppearanceAttr(), false));
+                (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false));
     }
 
     private void createDatePickerDialog() {
@@ -238,14 +238,14 @@ public class DateWidget extends QuestionWidget {
                 }, 1971, 1, 1); // placeholder date that is valid
         datePickerDialog.setCanceledOnTouchOutside(false);
 
-        if (mPrompt.getAnswerValue() == null) {
+        if (formEntryPrompt.getAnswerValue() == null) {
             if (showCalendar) {
                 setDateToCurrent();
             } else {
                 clearAnswer();
             }
         } else {
-            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
+            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
             year = dt.getYear();
             month = dt.getMonthOfYear();
             dayOfMonth = dt.getDayOfMonth();

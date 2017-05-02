@@ -53,7 +53,7 @@ public class UrlWidget extends QuestionWidget {
         openUrlButton.setId(QuestionWidget.newUniqueId());
         openUrlButton.setText(getContext().getString(R.string.open_url));
         openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                mAnswerFontsize);
+                answerFontsize);
         openUrlButton.setPadding(20, 20, 20, 20);
         openUrlButton.setEnabled(!prompt.isReadOnly());
         openUrlButton.setLayoutParams(params);
@@ -64,7 +64,7 @@ public class UrlWidget extends QuestionWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "openUrl", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
 
                 if (stringAnswer != null & stringAnswer.getText() != null
                         && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
@@ -80,7 +80,7 @@ public class UrlWidget extends QuestionWidget {
         // set text formatting
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         stringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();

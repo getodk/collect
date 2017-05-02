@@ -77,7 +77,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         signButton = new Button(getContext());
         signButton.setId(QuestionWidget.newUniqueId());
         signButton.setText(getContext().getString(R.string.sign_button));
-        signButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        signButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         signButton.setPadding(20, 20, 20, 20);
         signButton.setEnabled(!prompt.isReadOnly());
         signButton.setLayoutParams(params);
@@ -88,7 +88,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "signButton", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 launchSignatureActivity();
             }
         });
@@ -135,7 +135,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
-                            "click", mPrompt.getIndex());
+                            "click", formEntryPrompt.getIndex());
                     launchSignatureActivity();
                 }
             });
@@ -159,7 +159,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
 
         try {
-            Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+            Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.SIGNATURE_CAPTURE);
         } catch (ActivityNotFoundException e) {
@@ -247,7 +247,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 

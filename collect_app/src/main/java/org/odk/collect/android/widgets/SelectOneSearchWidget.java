@@ -79,7 +79,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
         searchStr = new EditText(context);
         searchStr.setId(QuestionWidget.newUniqueId());
-        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -126,7 +126,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
         if (searchedItems != null && searchedItems.size() > 0) {
             for (int i = 0; i < searchedItems.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
-                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(searchedItems.get(i))));
 
                 if (tagList == null) {
@@ -149,11 +149,11 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
                 r.setOnCheckedChangeListener(this);
 
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
                 mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, null, null,
                         null, null);
-                mediaLayout.setPlayTextColor(mPlayColor);
-                mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+                mediaLayout.setPlayTextColor(playColor);
+                mediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
 
                 if (i != searchedItems.size() - 1) {
                     // Last, add the dividing line (except for the last element)
@@ -272,10 +272,10 @@ public class SelectOneSearchWidget extends QuestionWidget implements
 
         if (choice != null) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    choice.getValue(), mPrompt.getIndex());
+                    choice.getValue(), formEntryPrompt.getIndex());
         } else {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    "<no matching choice>", mPrompt.getIndex());
+                    "<no matching choice>", formEntryPrompt.getIndex());
         }
     }
 

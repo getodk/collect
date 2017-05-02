@@ -28,13 +28,13 @@ public abstract class GoogleSheetsTask<Params, Progress, Result> extends
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
 
-    protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
-    protected com.google.api.services.drive.Drive mDriveService = null;
-    InstanceUploaderListener mStateListener;
+    protected com.google.api.services.sheets.v4.Sheets sheetsService = null;
+    protected com.google.api.services.drive.Drive driveService = null;
+    InstanceUploaderListener stateListener;
 
     public void setUploaderListener(InstanceUploaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 

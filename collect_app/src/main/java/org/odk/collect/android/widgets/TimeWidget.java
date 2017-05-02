@@ -112,9 +112,9 @@ public class TimeWidget extends QuestionWidget {
         timeButton.setId(QuestionWidget.newUniqueId());
         timeButton.setText(R.string.select_time);
         timeButton.setPadding(20, 20, 20, 20);
-        timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         timeButton.setLayoutParams(params);
-        timeButton.setEnabled(!mPrompt.isReadOnly());
+        timeButton.setEnabled(!formEntryPrompt.isReadOnly());
 
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +133,7 @@ public class TimeWidget extends QuestionWidget {
         timeTextView = new TextView(getContext());
         timeTextView.setId(QuestionWidget.newUniqueId());
         timeTextView.setPadding(20, 20, 20, 20);
-        timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
 
     private void addViews() {
@@ -161,10 +161,10 @@ public class TimeWidget extends QuestionWidget {
                 }, 0, 0);
         timePickerDialog.setCanceledOnTouchOutside(false);
 
-        if (mPrompt.getAnswerValue() == null) {
+        if (formEntryPrompt.getAnswerValue() == null) {
             clearAnswer();
         } else {
-            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
+            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
             hourOfDay = dt.getHourOfDay();
             minuteOfHour = dt.getMinuteOfHour();
             setTimeLabel();

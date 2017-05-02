@@ -96,7 +96,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
 
                 RadioButton r = new RadioButton(getContext());
-                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 r.setText(prompt.getSelectChoiceText(items.get(i)));
                 r.setTag(Integer.valueOf(i));
                 r.setId(QuestionWidget.newUniqueId());
@@ -133,7 +133,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 String bigImageURI = null;
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(items.get(i), "big-image");
 
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
                 mediaLayout.setAVT(prompt.getIndex(), "", r, audioURI, imageURI, videoURI,
                         bigImageURI);
 
@@ -210,7 +210,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                items.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
+                items.get((Integer) buttonView.getTag()).getValue(), formEntryPrompt.getIndex());
     }
 
 

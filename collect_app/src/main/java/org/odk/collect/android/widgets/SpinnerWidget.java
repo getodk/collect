@@ -76,7 +76,7 @@ public class SpinnerWidget extends QuestionWidget {
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
                 new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                        TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+                        TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
@@ -107,11 +107,11 @@ public class SpinnerWidget extends QuestionWidget {
                 if (position == items.size()) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged.clearValue",
-                            "", mPrompt.getIndex());
+                            "", formEntryPrompt.getIndex());
                 } else {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged",
-                            items.get(position).getValue(), mPrompt.getIndex());
+                            items.get(position).getValue(), formEntryPrompt.getIndex());
                 }
             }
 
