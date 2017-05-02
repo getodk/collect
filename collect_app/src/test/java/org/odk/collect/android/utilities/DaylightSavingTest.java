@@ -110,7 +110,7 @@ public class DaylightSavingTest {
         stub(datePickerDialog.getDatePicker().getDayOfMonth()).toReturn(day);
 
         DateWidget dateWidget = new DateWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        Whitebox.setInternalState(dateWidget, "mDatePickerDialog", datePickerDialog);
+        Whitebox.setInternalState(dateWidget, "datePickerDialog", datePickerDialog);
 
         return dateWidget;
     }
@@ -135,8 +135,8 @@ public class DaylightSavingTest {
         stub(timeWidget.getMinute()).toReturn(minute);
 
         DateTimeWidget dateTimeWidget = new DateTimeWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        Whitebox.setInternalState(dateTimeWidget, "mDateWidget", dateWidget);
-        Whitebox.setInternalState(dateTimeWidget, "mTimeWidget", timeWidget);
+        Whitebox.setInternalState(dateTimeWidget, "dateWidget", dateWidget);
+        Whitebox.setInternalState(dateTimeWidget, "timeWidget", timeWidget);
 
         return dateTimeWidget;
     }
