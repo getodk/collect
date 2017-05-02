@@ -4,18 +4,18 @@ package org.odk.collect.android.utilities;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.SystemClock;
-import android.util.Log;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
@@ -65,8 +65,9 @@ public class TimerLogger {
             this.fecType = fecType;
             this.node = node;
 
-            if (eventType == EventTypes.FEC &&
-                    (fecType == FormEntryController.EVENT_QUESTION || fecType == FormEntryController.EVENT_GROUP)) {
+            if (eventType == EventTypes.FEC
+                    && (fecType == FormEntryController.EVENT_QUESTION
+                    || fecType == FormEntryController.EVENT_GROUP)) {
                 this.dirn = advancingPage ? "fwd" : "back";
             } else {
                 this.dirn = "";
@@ -107,58 +108,57 @@ public class TimerLogger {
          * convert the event into a record to write to the CSV file
          */
         public String toString() {
-            String sType = null;
+            String textValue = null;
             switch (eventType) {
                 case FEC:
                     switch (fecType) {
                         case FormEntryController.EVENT_QUESTION:
-                            sType = "question";
+                            textValue = "question";
                             break;
                         case FormEntryController.EVENT_GROUP:
-                            sType = "group questions";
+                            textValue = "group questions";
                             break;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            sType = "add repeat";
+                            textValue = "add repeat";
                             break;
                         case FormEntryController.EVENT_REPEAT:
-                            sType = "delete repeat";
+                            textValue = "delete repeat";
                             break;
                         case FormEntryController.EVENT_END_OF_FORM:
-                            sType = "end screen";
+                            textValue = "end screen";
                             break;
                         default:
-                            sType = "Unknown FEC: " + fecType;
+                            textValue = "Unknown FEC: " + fecType;
                     }
                     break;
                 case FORM_START:
-                    sType = "form start";
+                    textValue = "form start";
                     break;
                 case FORM_EXIT:
-                    sType = "form exit";
+                    textValue = "form exit";
                     break;
                 case FORM_RESUME:
-                    sType = "form resume";
+                    textValue = "form resume";
                     break;
                 case FORM_SAVE:
-                    sType = "form save";
+                    textValue = "form save";
                     break;
                 case FORM_FINALIZE:
-                    sType = "form finalize";
+                    textValue = "form finalize";
                     break;
                 case HIERARCHY:
-                    sType = "jump";
+                    textValue = "jump";
                     break;
                 default:
-                    sType = "Unknown Event Type: " + eventType;
+                    textValue = "Unknown Event Type: " + eventType;
                     break;
             }
-            return sType + "," + node + "," + String.valueOf(start) + ","
+            return textValue + "," + node + "," + String.valueOf(start) + ","
                     + (end != 0 ? String.valueOf(end) : "") + ","
                     + dirn;
         }
     }
 
-    private final static String t = "TimerLogger";
     private static AsyncTask saveTask = null;
     private ArrayList<Event> mEvents = null;
     private String filename = null;
@@ -236,8 +236,8 @@ public class TimerLogger {
             /*
              * Ignore beginning of form events
              */
-            if (newEvent.eventType == EventTypes.FEC.FEC &&
-                    newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+            if (newEvent.eventType == EventTypes.FEC.FEC
+                    && newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 return;
             }
 
@@ -271,12 +271,12 @@ public class TimerLogger {
 
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
-            Event[] eArray = mEvents.toArray(new Event[mEvents.size()]);
-            saveTask = new TimerSaveTask(timerlogFile).execute(eArray);
+            Event[] eventArray = mEvents.toArray(new Event[mEvents.size()]);
+            saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
             mEvents = new ArrayList<Event>();
 
         } else {
-            Log.e(t, "Queueing Timer Event");
+            Timber.i("Queueing Timer Event");
         }
     }
 
