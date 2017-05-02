@@ -154,7 +154,6 @@
   <string name="success">Success</string>
   <string name="no_forms_uploaded">Pole, Hakuna Fomu ya Kupakiwa.</string>
   <string name="upload_results">Matokeo ya Kupakiwa</string>
-  <string name="xform_parse_error">Tatizo la kuchanganua XForm. %1$s is missing element %2$s</string>
   <string name="choose_sound">Chagua Sauti</string>
   <string name="choose_video">Chagua Video</string>
   <string name="choose_image">Chagua Picha</string>

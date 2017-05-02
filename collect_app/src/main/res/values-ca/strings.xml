@@ -26,7 +26,6 @@
   <string name="capture_video">Enregistrar Vídeo</string>
   <string name="change_language">Canvia idioma</string>
   <string name="change_password">Clau d\'accés ODK</string>
-  <string name="change_protocol_settings_default">Característiques de la plataforma</string>
   <string name="change_username">nom d\'usuari ODK</string>
   <string name="clearanswer_confirm">Eliminar la resposta a \"%s\"?</string>
   <string name="clear_answer">Eliminar resposta</string>
@@ -166,7 +165,6 @@
   <string name="success">Correcte</string>
   <string name="no_forms_uploaded">No s\'ha carregat cap formulari.</string>
   <string name="upload_results">Resultats de la càrrega</string>
-  <string name="xform_parse_error">Error d\'analisi XForm. %1$s falta element %2$s</string>
   <string name="choose_sound">Escollir so</string>
   <string name="choose_video">Escollir vídeo</string>
   <string name="choose_image">Escollir imatge</string>
@@ -304,7 +302,6 @@
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
-  <string name="media_upload_error">No pot pujar una foto que no existeix: %1$s</string>
   <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
   <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>

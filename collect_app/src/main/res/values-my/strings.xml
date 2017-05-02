@@ -151,7 +151,6 @@
   <string name="success">ေအာင္ျမင္ပါၿပီ</string>
   <string name="no_forms_uploaded">ပံုစံမရယူႏိုင္ေသးပါ</string>
   <string name="upload_results">ရယူမွုရလဒ္မ်ား</string>
-  <string name="xform_parse_error">X ပံုစံ မွားယြင္းမွု. %1$s လိုအပ္ေနပါသည္ %2$s</string>
   <string name="choose_sound">အသံေရြးခ်ယ္ရန္</string>
   <string name="choose_video">ဗြီဒီယို ေရြးခ်ယ္ရန္</string>
   <string name="choose_image">ပံုေရြးခ်ယ္ရန္</string>

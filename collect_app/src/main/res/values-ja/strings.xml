@@ -26,7 +26,7 @@
   <string name="capture_video">ビデオを録画</string>
   <string name="change_language">言語を変更</string>
   <string name="change_password">ODK パスワード</string>
-  <string name="change_protocol_settings_default">プラットフォームの設定</string>
+  <string name="change_protocol_settings_default">プラットフォーム設定</string>
   <string name="change_username">ODK ユーザー名</string>
   <string name="clearanswer_confirm">\"%s\" への回答を削除しますか?</string>
   <string name="clear_answer">回答を削除</string>
@@ -167,7 +167,7 @@
   <string name="success">成功しました</string>
   <string name="no_forms_uploaded">申し訳ありません、アップロードしたフォームはありません。</string>
   <string name="upload_results">アップロード結果</string>
-  <string name="xform_parse_error">XForm 解析エラー。 %1$s はエレメントがありません %2$s</string>
+  <string name="xform_parse_error">%1$s の XForm 解析エラー: %2$s が不足しているか正しくありません。 </string>
   <string name="choose_sound">サウンドを選択</string>
   <string name="choose_video">ビデオを選択</string>
   <string name="choose_image">画像を選択</string>
@@ -477,4 +477,21 @@
   <string name="sort_the_list">一覧の並び替え</string>
   <string name="request_permissions_google_account">ODK Collect は、空白のフォームを取得して、入力フォームを送信するために、Google アカウントへのアクセスが必要です。</string>
   <string name="filter_the_list">一覧をフィルター</string>
+  <string name="language">言語</string>
+  <string name="google_auth_io_exception_msg">API 呼び出しを行うことができません。 ローカルビルドを実行している場合は、プロジェクトのreadmeを確認してください。</string>
+  <string name="form_metadata_title">フォームメタデータ</string>
+  <string name="form_metadata">フォームメタデータ</string>
+  <string name="form_metadata_summary">これらの値は、プリロードしたフィールドのユーザー名、メール、電話を持つフォームに追加され、データの送信者を識別します。</string>
+  <string name="phone_number">電話番号</string>
+  <string name="email">メールアドレス</string>
+  <string name="user_defined">ユーザー定義</string>
+  <string name="device_defined">デバイス定義</string>
+  <string name="device_id">デバイス ID</string>
+  <string name="subscriber_id">サブスクライバー ID</string>
+  <string name="sim_serial_id">SIM シリアル番号</string>
+  <string name="select_date">日付を選択</string>
+  <string name="select_time">時間を選択</string>
+  <string name="no_date_selected">日付が選択されていません</string>
+  <string name="no_time_selected">時刻が選択されていません</string>
+  <string name="use_phone_language">電話の言語を使用する</string>
 </resources>

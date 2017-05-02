@@ -237,7 +237,7 @@ public class FileUtils {
         bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
 
         if (bitmap != null) {
-            Timber.i("Screen is %dx%d.  Image has been scaled down by %d to %dx%d",
+            Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
                     screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
         }
 
