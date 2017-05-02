@@ -106,7 +106,7 @@ public class InstanceProvider extends ContentProvider {
                 cursor.close();
 
                 // Only add the column if it doesn't already exist
-                if (columnIndex != -1) {
+                if (columnIndex == -1) {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                             + InstanceColumns.DELETED_DATE + " date;");
                 }
