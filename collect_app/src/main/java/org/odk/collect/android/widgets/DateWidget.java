@@ -106,7 +106,7 @@ public class DateWidget extends QuestionWidget {
             cv.setShowWeekNumber(false);
             datePickerDialog.getDatePicker().setSpinnersShown(true);
            } else {
-            mDatePickerDialog.getDatePicker().setCalendarViewShown(false);
+            datePickerDialog.getDatePicker().setCalendarViewShown(false);
         }
 
         if (hideDay) {
