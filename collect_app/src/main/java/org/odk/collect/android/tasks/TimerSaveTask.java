@@ -2,7 +2,6 @@
 package org.odk.collect.android.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.odk.collect.android.utilities.TimerLogger;
 
@@ -16,7 +15,6 @@ import timber.log.Timber;
  * Background task for appending a timer event to the timer log
  */
 public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
-    private final static String t = "TimerSaveTask";
     private static File file;
     private static final String TIMING_CSV_HEADER = "event, node, start, end, dirn";
 
@@ -45,6 +43,7 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
             try {
                 fw.close();
             } catch (Exception e) {
+                Timber.e(e);
             }
         }
         return null;
