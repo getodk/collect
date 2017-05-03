@@ -74,7 +74,6 @@ import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.tasks.GoogleSheetsTask;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -92,6 +91,10 @@ import java.util.Stack;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
+
+import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_AUTHORIZATION;
+import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 public class GoogleDriveActivity extends ListActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
@@ -353,7 +356,7 @@ public class GoogleDriveActivity extends ListActivity implements
      * function will be rerun automatically whenever the GET_ACCOUNTS permission
      * is granted.
      */
-    @AfterPermissionGranted(GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS)
+    @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
                 this, Manifest.permission.GET_ACCOUNTS)) {
@@ -368,14 +371,14 @@ public class GoogleDriveActivity extends ListActivity implements
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
-                        GoogleSheetsTask.REQUEST_ACCOUNT_PICKER);
+                        REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
                     getString(R.string.request_permissions_google_account),
-                    GoogleSheetsTask.REQUEST_PERMISSION_GET_ACCOUNTS,
+                    REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
     }
@@ -555,7 +558,7 @@ public class GoogleDriveActivity extends ListActivity implements
     protected void onActivityResult(final int requestCode, final int resultCode,
                                     final Intent data) {
         switch (requestCode) {
-            case GoogleSheetsTask.REQUEST_ACCOUNT_PICKER:
+            case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -570,7 +573,7 @@ public class GoogleDriveActivity extends ListActivity implements
                     }
                 }
                 break;
-            case GoogleSheetsTask.REQUEST_AUTHORIZATION:
+            case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
                     getResultsFromApi();
                 }
