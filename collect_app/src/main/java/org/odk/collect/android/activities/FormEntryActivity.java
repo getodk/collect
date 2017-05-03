@@ -861,7 +861,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             return false;
         }
 
-        FormController formController = Collect.getInstance()
+        final FormController formController = Collect.getInstance()
                 .getFormController();
 
         boolean useability;
@@ -1618,7 +1618,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * repeat of the current group.
      */
     private void createRepeatDialog() {
-        FormController formController = Collect.getInstance()
+        final FormController formController = Collect.getInstance()
                 .getFormController();
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createRepeatDialog", "show");
@@ -2097,7 +2097,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
-                                FormController formController = Collect
+                                final FormController formController = Collect
                                         .getInstance().getFormController();
                                 // Update the language in the content provider
                                 // when selecting a new
@@ -2458,9 +2458,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void loadingComplete(FormLoaderTask task) {
         dismissDialog(PROGRESS_DIALOG);
 
-        FormController formController = task.getFormController();
-        boolean pendingActivityResult = task.hasPendingActivityResult();
-        boolean hasUsedSavepoint = task.hasUsedSavepoint();
+        final FormController formController = task.getFormController();
+        final boolean pendingActivityResult = task.hasPendingActivityResult();
+        final boolean hasUsedSavepoint = task.hasUsedSavepoint();
         int requestCode = task.getRequestCode(); // these are bogus if
         // pendingActivityResult is
         // false

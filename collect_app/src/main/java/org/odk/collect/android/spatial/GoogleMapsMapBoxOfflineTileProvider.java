@@ -132,11 +132,11 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
                     "value"
             };
 
-            String[] minArgs = new String[]{
+            final String[] minArgs = new String[]{
                     "minzoom"
             };
 
-            String[] maxArgs = new String[]{
+            final String[] maxArgs = new String[]{
                     "maxzoom"
             };
 

@@ -774,8 +774,6 @@ public class GoogleDriveActivity extends ListActivity implements
 
         @Override
         protected HashMap<String, Object> doInBackground(String... params) {
-            HashMap<String, Object> results = new HashMap<>();
-
             String currentDir = params[0];
             String query;
 
@@ -832,6 +830,7 @@ public class GoogleDriveActivity extends ListActivity implements
             }
             request.setFields("nextPageToken, files(modifiedTime, id, name, mimeType)");
 
+            HashMap<String, Object> results = new HashMap<>();
             results.put(PARENT_ID_KEY, parentId);
             results.put(CURRENT_ID_KEY, currentDir);
             do {

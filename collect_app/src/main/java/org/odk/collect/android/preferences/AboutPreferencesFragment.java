@@ -13,8 +13,8 @@ import android.preference.PreferenceScreen;
 import android.support.customtabs.CustomTabsIntent;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
+import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
 
@@ -37,20 +37,16 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.about_preferences);
 
-        PreferenceScreen odkWebsitePreference = (PreferenceScreen) findPreference(
-                KEY_ODK_WEBSITE);
-        PreferenceScreen openSourceLicensesPreference = (PreferenceScreen) findPreference(
-                KEY_OPEN_SOURCE_LICENSES);
-        PreferenceScreen tellYourFriendsPreference = (PreferenceScreen) findPreference(
-                KEY_TELL_YOUR_FRIENDS);
-        PreferenceScreen leaveAReviewPreference = (PreferenceScreen) findPreference(
-                KEY_LEAVE_A_REVIEW);
+        PreferenceScreen odkWebsitePreference = (PreferenceScreen) findPreference(KEY_ODK_WEBSITE);
+        odkWebsitePreference.setOnPreferenceClickListener(this);
+        PreferenceScreen openSourceLicensesPreference = (PreferenceScreen) findPreference(KEY_OPEN_SOURCE_LICENSES);
+        openSourceLicensesPreference.setOnPreferenceClickListener(this);
+        PreferenceScreen tellYourFriendsPreference = (PreferenceScreen) findPreference(KEY_TELL_YOUR_FRIENDS);
+        tellYourFriendsPreference.setOnPreferenceClickListener(this);
+        PreferenceScreen leaveAReviewPreference = (PreferenceScreen) findPreference(KEY_LEAVE_A_REVIEW);
+        leaveAReviewPreference.setOnPreferenceClickListener(this);
         mCustomTabHelper = new CustomTabHelper();
         uri = Uri.parse(ODK_WEBSITE);
-        odkWebsitePreference.setOnPreferenceClickListener(this);
-        openSourceLicensesPreference.setOnPreferenceClickListener(this);
-        tellYourFriendsPreference.setOnPreferenceClickListener(this);
-        leaveAReviewPreference.setOnPreferenceClickListener(this);
     }
 
 

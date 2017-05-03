@@ -102,7 +102,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     if (isCancelled()) {
                         return;
                     }
-                    String instance = c.getString(c
+                    final String instance = c.getString(c
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     String jrformid = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));

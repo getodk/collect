@@ -351,7 +351,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             lastJ = j;
             first = false;
 
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
+            HttpPost httppost;
+            httppost = WebUtils.createOpenRosaHttpPost(u);
 
             MimeTypeMap m = MimeTypeMap.getSingleton();
 

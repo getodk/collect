@@ -88,7 +88,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
         int value;
         int minZoomLevel;
-        int maxZoomLevel;
         int tileSize = tileSizePixels;
         InputStream is = null;
 
@@ -101,7 +100,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
         // Get the maximum zoomlevel from the MBTiles file
         value = getInt(db, "SELECT MAX(zoom_level) FROM tiles;");
-        maxZoomLevel = value > -1 ? value : maxZoom;
+        int maxZoomLevel = value > -1 ? value : maxZoom;
 
         // Get the tile size
         Cursor cursor = db.rawQuery("SELECT tile_data FROM images LIMIT 0,1",
