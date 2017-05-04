@@ -40,7 +40,7 @@
         android:title="@string/logging" >
         <CheckBoxPreference
             android:id="@+id/timer_log"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="timer_log"
             android:summary="@string/timer_log_summary"
             android:title="@string/timer_log" />
