@@ -34,7 +34,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle("Admin Settings");
+        getActivity().setTitle(getString(R.string.admin_preferences));
     }
 
     @Override

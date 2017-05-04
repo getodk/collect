@@ -76,13 +76,13 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private boolean[] checkedItems = new boolean[]{true, true};
     private ImageView qrImageView;
     private ProgressBar progressBar;
-    private Intent mShareIntent;
+    private Intent shareIntent;
     private TextView editQRCode;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Import/Export Settings");
+        getActivity().setTitle(getString(R.string.import_export_settings));
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -106,13 +106,13 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     private void addPasswordStatusString() {
         String status;
         if (checkedItems[0] && checkedItems[1]) {
-            status = getActivity().getString(R.string.qrcode_with_both_passwords);
+            status = getString(R.string.qrcode_with_both_passwords);
         } else if (checkedItems[0]) {
-            status = getActivity().getString(R.string.qrcode_with_admin_password);
+            status = getString(R.string.qrcode_with_admin_password);
         } else if (checkedItems[1]) {
-            status = getActivity().getString(R.string.qrcode_with_server_password);
+            status = getString(R.string.qrcode_with_server_password);
         } else {
-            status = getActivity().getString(R.string.qrcode_without_passwords);
+            status = getString(R.string.qrcode_without_passwords);
         }
         editQRCode.setText(status);
     }
@@ -123,10 +123,10 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         File shareFile = saveBitmapToCache(qrCode);
 
         // Sent a intent to share saved image
-        mShareIntent = new Intent();
-        mShareIntent.setAction(Intent.ACTION_SEND);
-        mShareIntent.setType("image/*");
-        mShareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
+        shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                         .setBeepEnabled(true)
                         .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
                         .setOrientationLocked(false)
-                        .setPrompt("Place the QRCode inside the rectangle")
+                        .setPrompt(getString(R.string.qrcode_scanner_prompt))
                         .initiateScan();
                 break;
 
@@ -150,10 +150,12 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.edit_qrcode:
-                String[] items = new String[]{"Admin Password", "Server Password"};
+                String[] items = new String[]{
+                        getString(R.string.admin_password),
+                        getString(R.string.server_password)};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                        .setTitle("Passwords Included in Code")
+                        .setTitle(R.string.include_password_dialog)
                         .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -161,14 +163,14 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                             }
                         })
                         .setCancelable(false)
-                        .setPositiveButton("Generate", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 generateCode();
                                 dialog.dismiss();
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -189,7 +191,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         if (result != null) {
             if (result.getContents() == null) {
                 // request was canceled...
-                ToastUtils.showShortToast("Scanning Cancelled");
+                Timber.i("QR code scanning cancelled");
             } else {
                 applySettings(result.getContents());
                 return;
@@ -212,7 +214,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                     Timber.e(e);
                 }
             } else {
-                ToastUtils.showShortToast("Cancelled");
+                Timber.i("Choosing QR code from sdcard cancelled");
             }
         }
     }
@@ -227,7 +229,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             prefUtils.savePreferencesFromJSON(jsonObject);
         } catch (DataFormatException e) {
             Timber.e(e);
-            ToastUtils.showShortToast("QR Code does not contains valid settings");
+            ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
             return;
         } catch (IOException | JSONException e) {
             Timber.e(e);
@@ -246,7 +248,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_item_share) {
-            getActivity().startActivity(Intent.createChooser(mShareIntent, "Share QR Code"));
+            getActivity().startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
         }
         return super.onOptionsItemSelected(item);
     }
