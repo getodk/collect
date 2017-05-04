@@ -85,6 +85,7 @@ public class TimerLogger {
         public boolean isIntervalViewEvent() {
             if (eventType == EventTypes.HIERARCHY || (eventType == EventTypes.FEC
                     && (fecType == FormEntryController.EVENT_QUESTION
+                    || fecType == FormEntryController.EVENT_GROUP
                     || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT))) {
                 return true;
             }
@@ -219,7 +220,9 @@ public class TimerLogger {
 
             // Set the node value from the question reference
             String node = ref == null ? "" : ref.toString();
-            if (node != null && eventType == EventTypes.FEC && fecType == FormEntryController.EVENT_QUESTION) {
+            if (node != null && eventType == EventTypes.FEC
+                    && (fecType == FormEntryController.EVENT_QUESTION
+                    || fecType == FormEntryController.EVENT_GROUP)) {
                 int idx = node.lastIndexOf('[');
                 if (idx > 0) {
                     node = node.substring(0, idx);
