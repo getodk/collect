@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Xml;
@@ -42,6 +43,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.FormException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -70,21 +72,33 @@ import timber.log.Timber;
  * @author carlhartung (chartung@nafundi.com)
  */
 public abstract class GoogleSheetsAbstractUploader extends
-        GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
+        AsyncTask<Long, Integer, HashMap<String, String>> {
 
+    public static final int REQUEST_ACCOUNT_PICKER = 1000;
+    public static final int REQUEST_AUTHORIZATION = 1001;
+    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
     protected static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
-
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
     protected HashMap<String, String> results;
     private String spreadsheetName;
     private String spreadsheetId;
+    protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
+    protected com.google.api.services.drive.Drive mDriveService = null;
+    InstanceUploaderListener mStateListener;
     private boolean hasWritePermissonToSheet = false;
     private String spreadsheetFileName;
     private Integer sheetId;
+
+    public void setUploaderListener(InstanceUploaderListener sl) {
+        synchronized (this) {
+            mStateListener = sl;
+        }
+    }
 
     /**
      * @param selection
@@ -696,7 +710,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
     private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
             String folderName,
-             String parentId) throws IOException {
+            String parentId) throws IOException {
 
         ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
         FileList fileList;
@@ -842,7 +856,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     path.remove(path.size() - 1);
                     break;
                 default:
-                    Timber.i("DEFAULTING: %s :: %d",parser.getName(), parser.getEventType());
+                    Timber.i("DEFAULTING: %s :: %d", parser.getName(), parser.getEventType());
                     break;
             }
             event = parser.next();

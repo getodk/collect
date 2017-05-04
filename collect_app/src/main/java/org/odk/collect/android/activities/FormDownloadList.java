@@ -622,7 +622,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
     }
 
-    /**
+    /*
      * Called when the form list has finished downloading. results will either contain a set of
      * <formname, formdetails> tuples, or one tuple of DL.ERROR.MSG and the associated message.
      */

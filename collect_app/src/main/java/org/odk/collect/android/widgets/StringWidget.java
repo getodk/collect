@@ -61,7 +61,7 @@ public class StringWidget extends QuestionWidget {
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 
-        /**
+        /*
          * If a 'rows' attribute is on the input tag, set the minimum number of lines
          * to display in the field to that value.
          *
