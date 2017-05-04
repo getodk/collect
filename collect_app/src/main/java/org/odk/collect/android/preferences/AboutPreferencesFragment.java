@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.support.customtabs.CustomTabsIntent;
 
 import org.odk.collect.android.R;
@@ -37,18 +36,13 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.about_preferences);
 
-        PreferenceScreen odkWebsitePreference = (PreferenceScreen) findPreference(KEY_ODK_WEBSITE);
-        odkWebsitePreference.setOnPreferenceClickListener(this);
-        PreferenceScreen openSourceLicensesPreference = (PreferenceScreen) findPreference(KEY_OPEN_SOURCE_LICENSES);
-        openSourceLicensesPreference.setOnPreferenceClickListener(this);
-        PreferenceScreen tellYourFriendsPreference = (PreferenceScreen) findPreference(KEY_TELL_YOUR_FRIENDS);
-        tellYourFriendsPreference.setOnPreferenceClickListener(this);
-        PreferenceScreen leaveAReviewPreference = (PreferenceScreen) findPreference(KEY_LEAVE_A_REVIEW);
-        leaveAReviewPreference.setOnPreferenceClickListener(this);
+        findPreference(KEY_ODK_WEBSITE).setOnPreferenceClickListener(this);
+        findPreference(KEY_OPEN_SOURCE_LICENSES).setOnPreferenceClickListener(this);
+        findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);
+        findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
         mCustomTabHelper = new CustomTabHelper();
         uri = Uri.parse(ODK_WEBSITE);
     }
-
 
     @Override
     public void onStart() {

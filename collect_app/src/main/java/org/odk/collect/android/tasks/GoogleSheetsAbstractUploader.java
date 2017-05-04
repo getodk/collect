@@ -102,8 +102,6 @@ public abstract class GoogleSheetsAbstractUploader extends
                     if (isCancelled()) {
                         return;
                     }
-                    final String instance = c.getString(c
-                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     String jrformid = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
@@ -127,6 +125,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     }
 
                     publishProgress(c.getPosition() + 1, c.getCount());
+                    String instance = c.getString(c
+                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -696,7 +696,7 @@ public abstract class GoogleSheetsAbstractUploader extends
 
     private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
             String folderName,
-             String parentId) throws IOException {
+            String parentId) throws IOException {
 
         ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
         FileList fileList;
@@ -842,7 +842,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     path.remove(path.size() - 1);
                     break;
                 default:
-                    Timber.i("DEFAULTING: %s :: %d",parser.getName(), parser.getEventType());
+                    Timber.i("DEFAULTING: %s :: %d", parser.getName(), parser.getEventType());
                     break;
             }
             event = parser.next();
