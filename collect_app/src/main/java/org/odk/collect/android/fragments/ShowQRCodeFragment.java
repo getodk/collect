@@ -73,7 +73,6 @@ import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
-    Collection<String> keys = new ArrayList<>();
     private boolean[] checkedItems = new boolean[]{true, true};
     private ImageView qrImageView;
     private ProgressBar progressBar;
@@ -105,30 +104,17 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     private void addPasswordStatusString() {
-        StringBuilder status = new StringBuilder();
-        if (checkedItems[0]) {
-            keys.add(KEY_ADMIN_PW);
-            status.append("admin");
-        }
-
-        if (checkedItems[1]) {
-            keys.add(KEY_PASSWORD);
-            if (status.length() != 0) {
-                status.append(" and ");
-            }
-            status.append("server");
-        }
-
-        String statusString;
-        if (status.length() != 0) {
-            statusString = getActivity().getString(R.string.qrcode_with_password,
-                    status.toString(),
-                    checkedItems[0] && checkedItems[1] ? "s" : "");
+        String status;
+        if (checkedItems[0] && checkedItems[1]) {
+            status = getActivity().getString(R.string.qrcode_with_both_passwords);
+        } else if (checkedItems[0]) {
+            status = getActivity().getString(R.string.qrcode_with_admin_password);
+        } else if (checkedItems[1]) {
+            status = getActivity().getString(R.string.qrcode_with_server_password);
         } else {
-            statusString = getActivity().getString(R.string.qrcode_without_password);
+            status = getActivity().getString(R.string.qrcode_without_passwords);
         }
-
-        editQRCode.setText(statusString);
+        editQRCode.setText(status);
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
@@ -164,7 +150,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.edit_qrcode:
-                keys.clear();
                 String[] items = new String[]{"Admin Password", "Server Password"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -288,6 +273,20 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    private Collection<String> getSelectedPasswordKeys() {
+        Collection<String> keys = new ArrayList<>();
+
+        //adding the selected password keys
+        if (checkedItems[0]) {
+            keys.add(KEY_ADMIN_PW);
+        }
+
+        if (checkedItems[1]) {
+            keys.add(KEY_PASSWORD);
+        }
+        return keys;
+    }
+
     private class GenerateQRCode extends AsyncTask<Void, Void, Bitmap> {
         private final QRCodeListener listener;
 
@@ -309,7 +308,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            return generateQRBitMap(keys);
+            return generateQRBitMap(getSelectedPasswordKeys());
         }
     }
 }
