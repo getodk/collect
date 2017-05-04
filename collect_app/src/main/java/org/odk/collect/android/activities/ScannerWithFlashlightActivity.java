@@ -17,7 +17,7 @@ import org.odk.collect.android.R;
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class CustomScannerActivity extends Activity implements
+public class ScannerWithFlashlightActivity extends Activity implements
         DecoratedBarcodeView.TorchListener {
 
     private CaptureManager capture;

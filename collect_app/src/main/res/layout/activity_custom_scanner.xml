@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.odk.collect.android.activities.CustomScannerActivity">
+    tools:context="org.odk.collect.android.activities.ScannerWithFlashlightActivity">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/zxing_barcode_scanner"

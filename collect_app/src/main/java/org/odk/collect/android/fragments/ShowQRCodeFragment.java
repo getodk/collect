@@ -41,7 +41,7 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CustomScannerActivity;
+import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -147,7 +147,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
             case R.id.btnScan:
                 IntentIntegrator integrator = IntentIntegrator.forFragment(this);
                 integrator
-                        .setCaptureActivity(CustomScannerActivity.class)
+                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
                         .setBeepEnabled(true)
                         .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
                         .setOrientationLocked(false)
