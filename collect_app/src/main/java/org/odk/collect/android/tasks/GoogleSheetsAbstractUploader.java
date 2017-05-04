@@ -87,16 +87,16 @@ public abstract class GoogleSheetsAbstractUploader extends
     protected HashMap<String, String> results;
     private String spreadsheetName;
     private String spreadsheetId;
-    protected com.google.api.services.sheets.v4.Sheets mSheetsService = null;
-    protected com.google.api.services.drive.Drive mDriveService = null;
-    InstanceUploaderListener mStateListener;
+    protected com.google.api.services.sheets.v4.Sheets sheetsService = null;
+    protected com.google.api.services.drive.Drive driveService = null;
+    private InstanceUploaderListener stateListener;
     private boolean hasWritePermissonToSheet = false;
     private String spreadsheetFileName;
     private Integer sheetId;
 
     public void setUploaderListener(InstanceUploaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 
