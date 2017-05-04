@@ -73,7 +73,6 @@ import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
-    private final String[] items = new String[]{"Admin Password", "Server Password"};
     Collection<String> keys = new ArrayList<>();
     private boolean[] checkedItems = new boolean[]{true, true};
     private ImageView qrImageView;
@@ -101,6 +100,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     public void generateCode() {
+        addPasswordStatusString();
+        new GenerateQRCode(this).execute();
+    }
+
+    private void addPasswordStatusString() {
         StringBuilder status = new StringBuilder();
         if (checkedItems[0]) {
             keys.add(KEY_ADMIN_PW);
@@ -125,8 +129,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         }
 
         editQRCode.setText(statusString);
-
-        new GenerateQRCode(this).execute();
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
@@ -163,6 +165,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
             case R.id.edit_qrcode:
                 keys.clear();
+                String[] items = new String[]{"Admin Password", "Server Password"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                         .setTitle("Passwords Included in Code")
