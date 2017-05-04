@@ -38,7 +38,7 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
                 }
             }
         } catch (IOException e) {
-            Timber.e("error writing timer log", e);
+            Timber.e(e);
         } finally {
             try {
                 fw.close();
