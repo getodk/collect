@@ -38,9 +38,9 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-
 import timber.log.Timber;
+
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
 /**
  * Background task for syncing form instances from the instances folder to the instances table.
@@ -143,13 +143,14 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
                             if (formCursor != null && formCursor.moveToFirst()) {
-                                String jrFormId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
-                                String jrVersion = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_VERSION));
-                                String formName = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
                                 String submissionUri = null;
                                 if (!formCursor.isNull(formCursor.getColumnIndex(FormsColumns.SUBMISSION_URI))) {
                                     submissionUri = formCursor.getString(formCursor.getColumnIndex(FormsColumns.SUBMISSION_URI));
                                 }
+                                String jrFormId = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_FORM_ID));
+                                String jrVersion = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_VERSION));
+                                String formName = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
+
                                 // add missing fields into content values
                                 ContentValues values = new ContentValues();
                                 values.put(InstanceColumns.INSTANCE_FILE_PATH, candidateInstance);

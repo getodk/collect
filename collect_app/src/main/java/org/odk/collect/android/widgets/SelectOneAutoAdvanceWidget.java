@@ -91,18 +91,14 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
 
                 RelativeLayout thisParentLayout =
                         (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
-
-                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
-                ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
-
                 RadioButton r = new RadioButton(getContext());
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
                 r.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                r.setTag(Integer.valueOf(i));
+                r.setTag(i);
                 r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
-
+                ImageView rightArrow = (ImageView) thisParentLayout.getChildAt(1);
                 rightArrow.setImageBitmap(b);
 
                 buttons.add(r);
@@ -114,7 +110,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                 r.setOnCheckedChangeListener(this);
                 r.setOnClickListener(this);
 
-                String audioURI = null;
+                String audioURI;
                 audioURI =
                         prompt.getSpecialFormSelectChoiceText(mItems.get(i),
                                 FormEntryCaption.TEXT_FORM_AUDIO);
@@ -143,6 +139,7 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
                     divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                     mediaLayout.addDivider(divider);
                 }
+                LinearLayout questionLayout = (LinearLayout) thisParentLayout.getChildAt(0);
                 questionLayout.addView(mediaLayout);
                 answerLayout.addView(thisParentLayout);
             }

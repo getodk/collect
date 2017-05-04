@@ -70,20 +70,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
+    public Button layers_button;
+    public Button clear_button;
+    public AlertDialog.Builder builder;
+    public LayoutInflater inflater;
+    public AlertDialog.Builder p_builder;
+    public Button layers;
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     private Button play_button;
     private Button save_button;
-    public Button layers_button;
-    public Button clear_button;
     private Button manual_button;
     private Button pause_button;
     private Button location_button;
-    public AlertDialog.Builder builder;
     private View traceSettingsView;
-    public LayoutInflater inflater;
     private AlertDialog alert;
-    public AlertDialog.Builder p_builder;
     private View polygonPolylineView;
     private AlertDialog p_alert;
     private Boolean beenPaused = false;
@@ -91,7 +92,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean play_check = false;
     private Spinner time_units;
     private Spinner time_delay;
-
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Boolean mGPSOn = false;
@@ -104,7 +104,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private Button polygon_save;
     private Button polyline_save;
-    public Button layers;
     private MapHelper mHelper;
 
     private AlertDialog zoomDialog;
@@ -331,11 +330,11 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             if (intent.hasExtra(GeoTraceWidget.TRACE_LOCATION)) {
-                String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
                 play_button.setEnabled(false);
                 clear_button.setEnabled(true);
                 firstLocationFound = true;
                 location_button.setEnabled(true);
+                String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
                 overlayIntentTrace(s);
                 zoomtoBounds();
             }
