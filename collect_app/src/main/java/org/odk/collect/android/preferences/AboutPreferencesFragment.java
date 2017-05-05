@@ -40,7 +40,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         findPreference(KEY_OPEN_SOURCE_LICENSES).setOnPreferenceClickListener(this);
         findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);
         findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
-        mCustomTabHelper = new CustomTabHelper();
+        customTabHelper = new CustomTabHelper();
         uri = Uri.parse(ODK_WEBSITE);
     }
 
