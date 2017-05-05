@@ -19,9 +19,8 @@ import timber.log.Timber;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
- * <p>
  * Notes:
- * 1) If the user has saved the form, resumes editing, then exits without saving then the timing data during the
+ * 1) If the user has saved the form, then resumes editing, then exits without saving then the timing data during the
  * second editing session will be saved.  This is OK as it records user activity.  However if the user exits
  * without saving and they have never saved the form then the timing data is lost as the form editing will be
  * restarted from scratch.
@@ -173,16 +172,16 @@ public class TimerLogger {
         /*
          * The timer logger is enabled if:
          *  1) The meta section of the form contains a logging entry
-         *      <orx:logging />
+         *      <orx:audit />
          *  2) And logging has been enabled in the device preferences
          */
-        boolean loggingEnabledInForm = formController.getSubmissionMetadata().logging;
+        boolean loggingEnabledInForm = formController.getSubmissionMetadata().audit;
         boolean loggingEnabledInPref = sharedPreferences.getBoolean(
                 AdminKeys.KEY_TIMER_LOG_ENABLED, false);
         mTimerEnabled = loggingEnabledInForm && loggingEnabledInPref;
 
         if (mTimerEnabled) {
-            filename = "timing.csv";
+            filename = "audit.csv";
             if (instanceFile != null) {
                 File instanceFolder = instanceFile.getParentFile();
                 timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
@@ -246,7 +245,7 @@ public class TimerLogger {
             /*
              * Ignore beginning of form events
              */
-            if (newEvent.eventType == EventTypes.FEC.FEC
+            if (newEvent.eventType == EventTypes.FEC
                     && newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 return;
             }
