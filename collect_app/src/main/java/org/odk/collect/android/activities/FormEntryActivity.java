@@ -861,7 +861,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             return false;
         }
 
-        FormController formController = Collect.getInstance()
+        final FormController formController = Collect.getInstance()
                 .getFormController();
 
         boolean useability;
@@ -1618,8 +1618,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * repeat of the current group.
      */
     private void createRepeatDialog() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createRepeatDialog", "show");
 
@@ -1705,6 +1703,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 }
             }
         };
+        FormController formController = Collect.getInstance()
+                .getFormController();
         if (formController.getLastRepeatCount() > 0) {
             alertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             alertDialog.setMessage(getString(R.string.add_another_repeat,
@@ -2097,8 +2097,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
-                                FormController formController = Collect
-                                        .getInstance().getFormController();
                                 // Update the language in the content provider
                                 // when selecting a new
                                 // language
@@ -2120,6 +2118,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                                 "createLanguageDialog",
                                                 "changeLanguage."
                                                         + languages[whichButton]);
+                                FormController formController = Collect
+                                        .getInstance().getFormController();
                                 formController
                                         .setLanguage(languages[whichButton]);
                                 dialog.dismiss();
@@ -2458,9 +2458,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void loadingComplete(FormLoaderTask task) {
         dismissDialog(PROGRESS_DIALOG);
 
-        FormController formController = task.getFormController();
-        boolean pendingActivityResult = task.hasPendingActivityResult();
-        boolean hasUsedSavepoint = task.hasUsedSavepoint();
         int requestCode = task.getRequestCode(); // these are bogus if
         // pendingActivityResult is
         // false
@@ -2472,6 +2469,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         formLoaderTask = null;
         t.cancel(true);
         t.destroy();
+
+        FormController formController = task.getFormController();
         Collect.getInstance().setFormController(formController);
         invalidateOptionsMenu();
 
@@ -2505,6 +2504,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         }
 
+        boolean pendingActivityResult = task.hasPendingActivityResult();
         if (pendingActivityResult) {
             // set the current view to whatever group we were at...
             refreshCurrentView();
@@ -2522,6 +2522,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // returned to ODK Collect and chose Edit Saved Form, but that the
         // savepoint for that
         // form is newer than the last saved version of their form data.
+        boolean hasUsedSavepoint = task.hasUsedSavepoint();
         if (hasUsedSavepoint) {
             runOnUiThread(new Runnable() {
                 @Override

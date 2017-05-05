@@ -91,10 +91,6 @@ public class ItemsetWidget extends QuestionWidget implements
         // itemset widget.
         String nodesetStr = prompt.getQuestion().getAdditionalAttribute(null, "query");
 
-        // parse out the list name, between the ''
-        String listName = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
-                nodesetStr.lastIndexOf("'"));
-
         // isolate the string between between the [ ] characters
         String queryString = nodesetStr.substring(nodesetStr.indexOf("[") + 1,
                 nodesetStr.lastIndexOf("]"));
@@ -162,6 +158,11 @@ public class ItemsetWidget extends QuestionWidget implements
 
         // +1 is for the list_name
         String[] selectionArgs = new String[arguments.size() + 1];
+
+        // parse out the list name, between the ''
+        String listName = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
+                nodesetStr.lastIndexOf("'"));
+
 
         boolean nullArgs = false; // can't have any null arguments
         selectionArgs[0] = listName; // first argument is always listname
@@ -264,8 +265,6 @@ public class ItemsetWidget extends QuestionWidget implements
                             rb.setChecked(true);
                         }
 
-                        RelativeLayout singleOptionLayout = new RelativeLayout(getContext());
-
                         RelativeLayout.LayoutParams textParams =
                                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                                         LayoutParams.WRAP_CONTENT);
@@ -273,6 +272,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                         textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                         textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        RelativeLayout singleOptionLayout = new RelativeLayout(getContext());
                         singleOptionLayout.addView(rb, textParams);
 
                         if (this.autoAdvanceToNext) {

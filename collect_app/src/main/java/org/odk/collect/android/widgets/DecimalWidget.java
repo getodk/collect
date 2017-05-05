@@ -69,12 +69,13 @@ public class DecimalWidget extends StringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         answer.setFilters(fa);
 
-        Double d = getDoubleAnswerValue();
-
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
         nf.setMaximumFractionDigits(15);
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
+
+        Double d = getDoubleAnswerValue();
+
         if (d != null) {
             // truncate to 15 digits max...
             String string = nf.format(d);

@@ -331,11 +331,11 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             if (intent.hasExtra(GeoTraceWidget.TRACE_LOCATION)) {
-                String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
                 playButton.setEnabled(false);
                 clearButton.setEnabled(true);
                 firstLocationFound = true;
                 locationButton.setEnabled(true);
+                String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
                 overlayIntentTrace(s);
                 zoomtoBounds();
             }

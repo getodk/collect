@@ -38,7 +38,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
     // Database related fields
     public static final String TABLE_TILES = "tiles";
-    public static final String COL_TILES_ZOOM_LEVEL = "zoomLevel";
+    public static final String COL_TILES_ZOOM_LEVEL = "zoom_level";
     public static final String COL_TILES_TILE_COLUMN = "tile_column";
     public static final String COL_TILES_TILE_ROW = "tile_row";
     public static final String COL_TILES_TILE_DATA = "tile_data";
@@ -62,10 +62,10 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
      * @param file
      */
     protected OsmMBTileSource(int minZoom,
-            int maxZoom,
-            int tileSizePixels,
-            File file,
-            SQLiteDatabase db) {
+                              int maxZoom,
+                              int tileSizePixels,
+                              File file,
+                              SQLiteDatabase db) {
         super("MBTiles", minZoom, maxZoom, tileSizePixels, ".png");
 
         archive = file;
@@ -74,7 +74,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
     /**
      * Creates a new MBTileSource from file.
-     *
+     * <p>
      * Parameters minZoom, maxZoom en tileSizePixels are obtained from the
      * database. If they cannot be obtained from the DB, the default values as
      * defined by this class are used.
@@ -83,25 +83,11 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
      * @return
      */
     public static OsmMBTileSource createFromFile(File file) {
-        SQLiteDatabase db;
         int flags = SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READONLY;
-
-        int value;
-        int minZoomLevel;
-        int maxZoomLevel;
         int tileSize = tileSizePixels;
-        InputStream is = null;
 
         // Open the database
-        db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
-
-        // Get the minimum zoomlevel from the MBTiles file
-        value = getInt(db, "SELECT MIN(zoomLevel) FROM tiles;");
-        minZoomLevel = value > -1 ? value : minZoom;
-
-        // Get the maximum zoomlevel from the MBTiles file
-        value = getInt(db, "SELECT MAX(zoomLevel) FROM tiles;");
-        maxZoomLevel = value > -1 ? value : maxZoom;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
 
         // Get the tile size
         Cursor cursor = db.rawQuery("SELECT tile_data FROM images LIMIT 0,1",
@@ -109,15 +95,21 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
-            is = new ByteArrayInputStream(cursor.getBlob(0));
+            InputStream is = new ByteArrayInputStream(cursor.getBlob(0));
 
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             tileSize = bitmap.getHeight();
             Timber.w("Found a tile size of %d", tileSize);
         }
-
         cursor.close();
-        // db.close();
+
+        // Get the minimum zoomlevel from the MBTiles file
+        int value = getInt(db, "SELECT MIN(zoom_level) FROM tiles;");
+        int minZoomLevel = value > -1 ? value : minZoom;
+
+        // Get the maximum zoomlevel from the MBTiles file
+        value = getInt(db, "SELECT MAX(zoom_level) FROM tiles;");
+        int maxZoomLevel = value > -1 ? value : maxZoom;
 
         return new OsmMBTileSource(minZoomLevel, maxZoomLevel, tileSize, file, db);
     }
@@ -147,7 +139,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
             final Cursor cur = database.query(TABLE_TILES,
                     tile,
-                    "tile_column=? and tile_row=? and zoomLevel=?",
+                    "tile_column=? and tile_row=? and zoom_level=?",
                     xyz,
                     null,
                     null,
@@ -167,9 +159,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         } catch (final Throwable e) {
             Timber.w(e, "Error getting db stream: %s", mapTile);
         }
-
         return null;
-
     }
-
 }

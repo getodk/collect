@@ -112,13 +112,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     }
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt p) {
-        String imageURI = p.getImageText();
-        String audioURI = p.getAudioText();
-        String videoURI = p.getSpecialFormQuestionText("video");
-
-        // shown when image is clicked
-        String bigImageURI = p.getSpecialFormQuestionText("big-image");
-
         String promptText = p.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
@@ -134,6 +127,13 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         if (promptText == null || promptText.length() == 0) {
             questionText.setVisibility(GONE);
         }
+
+        String imageURI = p.getImageText();
+        String audioURI = p.getAudioText();
+        String videoURI = p.getSpecialFormQuestionText("video");
+
+        // shown when image is clicked
+        String bigImageURI = p.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext(), player);

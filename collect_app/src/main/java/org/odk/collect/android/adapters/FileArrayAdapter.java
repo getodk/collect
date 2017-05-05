@@ -75,9 +75,6 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                         .format(new Date(o.getDate().getValue()));
             }
 
-
-            TextView t1 = (TextView) v.findViewById(R.id.text1);
-            TextView t2 = (TextView) v.findViewById(R.id.text2);
             ImageView iv = (ImageView) v.findViewById(R.id.image);
             CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
 
@@ -94,6 +91,9 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_folder);
                 iv.setImageDrawable(d);
             }
+
+            TextView t1 = (TextView) v.findViewById(R.id.text1);
+            TextView t2 = (TextView) v.findViewById(R.id.text2);
 
             if (t1 != null) {
                 t1.setText(o.getName());

@@ -121,7 +121,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      */
     @Override
     protected FECWrapper doInBackground(String... path) {
-        FormEntryController fec = null;
         FormDef fd = null;
         FileInputStream fis = null;
         errorMsg = null;
@@ -207,7 +206,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         // create FormEntryController from formdef
         FormEntryModel fem = new FormEntryModel(fd);
-        fec = new FormEntryController(fem);
+        FormEntryController fec = new FormEntryController(fem);
 
         boolean usedSavepoint = false;
 

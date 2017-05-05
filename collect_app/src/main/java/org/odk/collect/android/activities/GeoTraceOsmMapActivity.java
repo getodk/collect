@@ -653,10 +653,10 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                 myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+        marker.setSubDescription(Float.toString(lastKnownAcuracy));
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setDraggable(true);
         marker.setOnMarkerDragListener(draglistner);
-        marker.setSubDescription(Float.toString(lastKnownAcuracy));
         mapMarkers.add(marker);
 
         marker.setOnMarkerClickListener(nullmarkerlistner);

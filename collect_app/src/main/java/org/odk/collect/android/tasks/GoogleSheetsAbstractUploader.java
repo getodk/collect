@@ -116,8 +116,6 @@ public abstract class GoogleSheetsAbstractUploader extends
                     if (isCancelled()) {
                         return;
                     }
-                    String instance = c.getString(c
-                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     String jrformid = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
@@ -141,6 +139,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     }
 
                     publishProgress(c.getPosition() + 1, c.getCount());
+                    String instance = c.getString(c
+                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);

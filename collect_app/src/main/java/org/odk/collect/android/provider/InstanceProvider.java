@@ -85,7 +85,7 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
+            final int initialVersion = oldVersion;
             if (oldVersion == 1) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                         + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
