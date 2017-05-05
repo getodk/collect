@@ -134,7 +134,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
             Cursor c;
 
-            c = this.mDatabase.query("metadata", projection, "name = ?", minArgs, null, null, null);
+            c = this.database.query("metadata", projection, "name = ?", minArgs, null, null, null);
 
             c.moveToFirst();
             if (!c.isAfterLast()) {
