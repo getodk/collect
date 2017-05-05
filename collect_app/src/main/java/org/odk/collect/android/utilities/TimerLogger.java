@@ -208,12 +208,6 @@ public class TimerLogger {
 
         if (mTimerEnabled) {
 
-            // For any existing interval events, calculate the end time
-            long end = getEventTime();
-            for (int i = 0; i < mEvents.size(); i++) {
-                mEvents.get(i).setEnd(end);
-            }
-
             // Calculate the time and add the event to the events array
             long start = getEventTime();
 
@@ -250,6 +244,15 @@ public class TimerLogger {
                 return;
             }
 
+            /*
+             * Having got to this point we are going to keep the new Event
+             * Close any existing interval events
+             */
+            for (int i = 0; i < mEvents.size(); i++) {
+                mEvents.get(i).setEnd(start);
+            }
+
+            Timber.i("Log timer Event: " + eventType + " : " + fecType + " : " + ref);
             mEvents.add(newEvent);
 
             if (writeImmediatelyToDisk) {
