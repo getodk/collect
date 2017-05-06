@@ -82,10 +82,11 @@ public class TimerLogger {
          *  Prompt for repeat
          */
         public boolean isIntervalViewEvent() {
-            if (eventType == EventTypes.HIERARCHY || (eventType == EventTypes.FEC
+            if (eventType == EventTypes.FEC
                     && (fecType == FormEntryController.EVENT_QUESTION
                     || fecType == FormEntryController.EVENT_GROUP
-                    || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT))) {
+                    || fecType == FormEntryController.EVENT_END_OF_FORM
+                    || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT)) {
                 return true;
             }
             return false;
@@ -225,12 +226,14 @@ public class TimerLogger {
             Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
 
             /*
-             * Ignore the event if we are already in an interval view event
+             * Ignore the event if we are already in an interval view event or have jumped
              * This can happen if the user is on a question page and the page gets refreshed
+             * The exception is hierarchy events since they interrupt an existing interval event
              */
             if (newEvent.isIntervalViewEvent()) {
                 for (int i = 0; i < mEvents.size(); i++) {
                     if (mEvents.get(i).isIntervalViewEvent() && !mEvents.get(i).endTimeSet) {
+                        Timber.i("Log timer Event: Ignore refresh event: " + eventType + " : " + fecType + " : " + ref);
                         return;
                     }
                 }
@@ -241,6 +244,7 @@ public class TimerLogger {
              */
             if (newEvent.eventType == EventTypes.FEC
                     && newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                Timber.i("Log timer Event: Ignore beginning of form event: " + eventType + " : " + fecType + " : " + ref);
                 return;
             }
 
@@ -255,7 +259,10 @@ public class TimerLogger {
             Timber.i("Log timer Event: " + eventType + " : " + fecType + " : " + ref);
             mEvents.add(newEvent);
 
-            if (writeImmediatelyToDisk) {
+            /*
+             * Write the event unless it is an interval event in which case we need to wait for the end of that event
+             */
+            if (writeImmediatelyToDisk && !newEvent.isIntervalViewEvent()) {
                 writeEvents();
             }
         }
