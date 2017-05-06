@@ -1958,6 +1958,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                             .logInstanceAction(this,
                                                     "createQuitDialog",
                                                     "discardAndExit");
+                                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                     removeTempInstance();
                                     finishReturnInstance();
                                 }
@@ -1973,6 +1974,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 // close all open databases of external data.
                                 Collect.getInstance().getExternalDataManager().close();
 
+                                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                 removeTempInstance();
                                 finishReturnInstance();
                                 break;
