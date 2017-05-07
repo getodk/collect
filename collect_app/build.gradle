@@ -135,7 +135,7 @@ allprojects {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.0'
+    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.3.1'
     compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
     compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
     compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
@@ -164,14 +164,15 @@ dependencies {
     compile(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
-    compile group: 'com.android.support', name: 'customtabs', version: '25.1.0'
+    compile group: 'com.android.support', name: 'customtabs', version: '25.3.1'
+    compile group: 'com.android.support', name: 'design', version: '25.3.1'
     
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
     testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
     testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
-    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.1.0'
+    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.3.1'
     androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
     androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
