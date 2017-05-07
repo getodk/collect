@@ -18,6 +18,12 @@ the License.
 
     <include layout="@layout/toolbar" />
 
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"/>
+
     <TextView
         android:id="@+id/pathtext"
         android:layout_below="@id/toolbar"
@@ -40,7 +46,6 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/jump_to_previous"
-            android:textAllCaps="false"
             android:textSize="16sp" />
 
         <Button
@@ -50,7 +55,6 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/jump_to_beginning"
-            android:textAllCaps="false"
             android:textSize="16sp" />
 
         <Button
@@ -60,7 +64,6 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/jump_to_end"
-            android:textAllCaps="false"
             android:textSize="16sp" />
 
         <Button
@@ -69,7 +72,6 @@ the License.
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="12dp"
-            android:textAllCaps="false"
             android:text="@string/exit"
             android:textSize="16sp"
             android:visibility="gone" />
