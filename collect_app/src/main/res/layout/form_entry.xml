@@ -12,7 +12,8 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -20,8 +21,13 @@ the License.
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_below="@id/toolbar"/>
 
     <LinearLayout
         android:id="@+id/questionholder"
@@ -29,7 +35,7 @@ the License.
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonholder"
         android:layout_below="@id/toolbar"
-        android:orientation="horizontal" />
+        android:orientation="horizontal"/>
 
     <LinearLayout
         android:id="@+id/buttonholder"
@@ -51,7 +57,7 @@ the License.
             android:layout_weight="1"
             android:contentDescription="@string/form_backward"
             android:src="@drawable/ic_menu_backward"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
         <ImageButton
             android:id="@+id/form_forward_button"
@@ -60,7 +66,7 @@ the License.
             android:layout_weight="1"
             android:contentDescription="@string/form_forward"
             android:src="@drawable/ic_menu_forward"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </RelativeLayout>
