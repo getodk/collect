@@ -17,14 +17,10 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.Constants;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -110,7 +106,7 @@ public class WidgetFactory {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.equals("numbers")) {
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
-                                    new HashMap<String, BigDecimal>());
+                                    null, null, null);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
@@ -227,26 +223,12 @@ public class WidgetFactory {
         return questionWidget;
     }
 
-    /**
-     * Collects the range attributes, "start", "end", and "step", if valid, into a Map from the
-     * attribute name to a BigDecimal containing the value, and from that Map constructs a
-     * StringNumberWidget (or perhaps in the future a more suitable widget).
-     **/
+    /** Creates a widget to handle the range question. */
     private static QuestionWidget createRangeWidget(FormEntryPrompt fep, Context context, boolean readOnlyOverride) {
-        final Map<String, BigDecimal> rangeAttribs = new HashMap<>();
+        RangeQuestion question = (RangeQuestion) fep.getQuestion();
 
-        for (TreeElement elem: fep.getQuestion().getAdditionalAttributes()) {
-            IAnswerData answerData = elem.getValue();
-            String cleanedString = answerData.getValue().toString().replaceAll("[, ]", "");
-            try {
-                BigDecimal bd = new BigDecimal(cleanedString);
-                rangeAttribs.put(elem.getName(), bd);
-            } catch (NumberFormatException nfe) {
-                // ToDo communicate error to user, or prevent invalid data from getting to this point
-            }
-        }
-
-        return new StringNumberWidget(context, fep, readOnlyOverride, rangeAttribs);
+        // ToDo: Create a more appropriate widget
+        return new StringNumberWidget(context, fep, readOnlyOverride, question.getRangeStart(),
+                question.getRangeEnd(), question.getRangeStep());
     }
-
 }

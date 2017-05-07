@@ -22,7 +22,6 @@ import android.util.TypedValue;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 /**
  * Widget that restricts values to decimal numbers.
@@ -32,7 +31,8 @@ import java.util.Map;
 public class StringNumberWidget extends StringWidget {
 
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
-                              Map<String, BigDecimal> rangeAttribs /* ToDo adapt this, or another widget to handle the range */) {
+                              BigDecimal rangeStart, BigDecimal rangeEnd, BigDecimal rangeStep
+                              /* ToDo adapt this, or another widget to handle the range */) {
         super(context, prompt, readOnlyOverride, true);
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
