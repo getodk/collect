@@ -20,7 +20,6 @@ package org.odk.collect.android.activities;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,10 +37,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -50,7 +47,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -135,6 +131,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
     private ArrayList<DriveListItem> toDownload;
     private Drive mDriveService;
     private ListView listView;
+    private TextView emptyView;
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -152,6 +149,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         setContentView(R.layout.drive_layout);
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
+        emptyView = (TextView) findViewById(android.R.id.empty);
 
         initToolbar();
 
@@ -176,16 +174,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements
             adapter.setEnabled(true);
         } else {
             // new
-            TextView emptyView = new TextView(this);
-            emptyView.setText(getString(R.string.google_search_browse));
-            emptyView.setGravity(Gravity.CENTER);
-            emptyView.setTextSize(21);
-
-            emptyView.setVisibility(View.INVISIBLE);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT);
-            ((ViewGroup) listView.getParent()).addView(emptyView, lp);
-
             MyDrive = false;
 
             if (!isDeviceOnline()) {
@@ -426,10 +414,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        listView.getEmptyView().setVisibility(View.INVISIBLE);
-        TextView empty = (TextView) findViewById(android.R.id.empty);
-        empty.setVisibility(View.VISIBLE);
-        listView.setEmptyView(empty);
         adapter.setEnabled(false);
         DriveListItem o = adapter.getItem(position);
         if (o != null && o.getType() == DriveListItem.DIR) {
@@ -745,10 +729,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements
                 mRootButton.setEnabled(false);
                 mDownloadButton.setEnabled(false);
                 toDownload.clear();
-                listView.getEmptyView().setVisibility(View.INVISIBLE);
-                TextView empty = (TextView) findViewById(android.R.id.empty);
-                empty.setVisibility(View.VISIBLE);
-                listView.setEmptyView(empty);
                 if (isDeviceOnline()) {
                     if (folderIdStack.empty()) {
                         mParentId = ROOT_KEY;
@@ -913,6 +893,12 @@ public class GoogleDriveActivity extends AppCompatActivity implements
             Collections.sort(dirs);
             Collections.sort(forms);
             dirs.addAll(forms);
+
+            if (dirs.size() == 0) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.INVISIBLE);
+            }
 
             if (adapter == null) {
                 adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image,
