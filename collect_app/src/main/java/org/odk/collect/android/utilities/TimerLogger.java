@@ -262,10 +262,13 @@ public class TimerLogger {
 
             /*
              * Having got to this point we are going to keep the new Event
-             * Close any existing interval events
+             * Close any existing interval events if the view is being exited
              */
-            for (int i = 0; i < mEvents.size(); i++) {
-                mEvents.get(i).setEnd(start);
+            if (newEvent.eventType == EventTypes.FORM_EXIT
+                    || newEvent.eventType == EventTypes.HIERARCHY) {
+                for (int i = 0; i < mEvents.size(); i++) {
+                    mEvents.get(i).setEnd(start);
+                }
             }
 
             Timber.i("Log timer Event: " + eventType + " : " + fecType + " : " + ref);

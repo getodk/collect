@@ -1329,8 +1329,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            mTimerLogger.exitView();    // Close timer events waiting for an end time
-
             // get constraint behavior preference value with appropriate default
             String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
                     .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
@@ -1364,6 +1362,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 mBeenSwiped = false;
                 return;
             }
+
+            mTimerLogger.exitView();    // Close timer events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1405,8 +1405,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            mTimerLogger.exitView();    // Close timer events
-
             // The answer is saved on a back swipe, but question constraints are
             // ignored.
             if (formController.currentPromptIsQuestion()) {
@@ -1435,6 +1433,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         nonblockingCreateSavePointData();
                     }
                 }
+                mTimerLogger.exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -2628,17 +2627,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, true);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                if(saveResult.getComplete()) {
+                if (saveResult.getComplete()) {
                     mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
-                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
                 sendSavedBroadcast();
                 finishReturnInstance();
