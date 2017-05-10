@@ -32,6 +32,7 @@ public class SaveResult {
     public int getSaveResult() {
         return saveResult;
     }
+
     public boolean getComplete() {
         return complete;
     }
