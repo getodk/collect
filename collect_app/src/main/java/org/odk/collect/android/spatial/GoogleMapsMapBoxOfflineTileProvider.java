@@ -128,21 +128,11 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
     private void calculateZoomConstraints() {
         if (this.isDatabaseAvailable()) {
-            String[] projection = new String[]{
-                    "value"
-            };
 
-            String[] minArgs = new String[]{
-                    "minzoom"
-            };
+            String[] projection = new String[]{"value"};
+            String[] minArgs = new String[]{"minzoom"};
 
-            String[] maxArgs = new String[]{
-                    "maxzoom"
-            };
-
-            Cursor c;
-
-            c = this.mDatabase.query("metadata", projection, "name = ?", minArgs, null, null, null);
+            Cursor c = this.mDatabase.query("metadata", projection, "name = ?", minArgs, null, null, null);
 
             c.moveToFirst();
             if (!c.isAfterLast()) {
@@ -150,6 +140,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
             }
             c.close();
 
+            String[] maxArgs = new String[]{"maxzoom"};
             c = this.mDatabase.query("metadata", projection, "name = ?", maxArgs, null, null, null);
 
             c.moveToFirst();

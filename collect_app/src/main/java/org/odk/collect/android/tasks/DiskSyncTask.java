@@ -54,23 +54,13 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     String statusMessage;
 
     private FormsDao mFormsDao;
-   
-    private static class UriFile {
-        public final Uri uri;
-        public final File file;
-
-        UriFile(Uri uri, File file) {
-            this.uri = uri;
-            this.file = file;
-        }
-    }
 
     @Override
     protected String doInBackground(Void... params) {
         mFormsDao = new FormsDao();
         instance = ++counter; // roughly track the scan # we're on... logging use only
         Timber.i("[%d] doInBackground begins!", instance);
-        
+
         List<String> idsToDelete = new ArrayList<>();
 
         try {
@@ -154,7 +144,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         cursor.close();
                     }
                 }
-                
+
                 //Delete the forms not found in sdcard from the database
                 mFormsDao.deleteFormsFromIDs(idsToDelete.toArray(new String[idsToDelete.size()]));
 
@@ -274,15 +264,11 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
             throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());
         }
 
-        String title = fields.get(FileUtils.TITLE);
-        String version = fields.get(FileUtils.VERSION);
-        String formid = fields.get(FileUtils.FORMID);
-        String submission = fields.get(FileUtils.SUBMISSIONURI);
-        String base64RsaPublicKey = fields.get(FileUtils.BASE64_RSA_PUBLIC_KEY);
-
         // update date
         Long now = Long.valueOf(System.currentTimeMillis());
         updateValues.put(FormsColumns.DATE, now);
+
+        String title = fields.get(FileUtils.TITLE);
 
         if (title != null) {
             updateValues.put(FormsColumns.DISPLAY_NAME, title);
@@ -291,6 +277,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     Collect.getInstance().getString(R.string.xform_parse_error,
                             formDefFile.getName(), "title"));
         }
+        String formid = fields.get(FileUtils.FORMID);
         if (formid != null) {
             updateValues.put(FormsColumns.JR_FORM_ID, formid);
         } else {
@@ -298,9 +285,11 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     Collect.getInstance().getString(R.string.xform_parse_error,
                             formDefFile.getName(), "id"));
         }
+        String version = fields.get(FileUtils.VERSION);
         if (version != null) {
             updateValues.put(FormsColumns.JR_VERSION, version);
         }
+        String submission = fields.get(FileUtils.SUBMISSIONURI);
         if (submission != null) {
             if (UrlUtils.isValidUrl(submission)) {
                 updateValues.put(FormsColumns.SUBMISSION_URI, submission);
@@ -310,6 +299,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 formDefFile.getName(), "submission url"));
             }
         }
+        String base64RsaPublicKey = fields.get(FileUtils.BASE64_RSA_PUBLIC_KEY);
         if (base64RsaPublicKey != null) {
             updateValues.put(FormsColumns.BASE64_RSA_PUBLIC_KEY, base64RsaPublicKey);
         }
@@ -324,12 +314,21 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         mListener = l;
     }
 
-
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         if (mListener != null) {
             mListener.syncComplete(result);
+        }
+    }
+
+    private static class UriFile {
+        public final Uri uri;
+        public final File file;
+
+        UriFile(Uri uri, File file) {
+            this.uri = uri;
+            this.file = file;
         }
     }
 }

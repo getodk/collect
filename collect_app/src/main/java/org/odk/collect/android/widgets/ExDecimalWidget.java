@@ -72,13 +72,14 @@ public class ExDecimalWidget extends ExStringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         mAnswer.setFilters(fa);
 
-        Double d = getDoubleAnswerValue();
-
         // apparently an attempt at rounding to no more than 15 digit precision???
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(15);
         nf.setMaximumIntegerDigits(15);
         nf.setGroupingUsed(false);
+
+        Double d = getDoubleAnswerValue();
+
         if (d != null) {
             // truncate to 15 digits max...
             String string = nf.format(d);
