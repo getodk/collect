@@ -1863,18 +1863,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
         }
 
-        // Log user events
-        if (complete) {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
-        } else if (exit) {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-        } else {
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, true);
-        }
-
         synchronized (saveDialogLock) {
             mSaveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
                     updatedSaveName);
@@ -2640,15 +2628,24 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, true);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                if(saveResult.getComplete()) {
+                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);
+                } else {
+                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2658,12 +2655,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
+                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default

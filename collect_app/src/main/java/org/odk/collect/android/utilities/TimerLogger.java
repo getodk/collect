@@ -35,7 +35,10 @@ public class TimerLogger {
         FORM_RESUME,        // Resume filling in the form after previously exiting
         FORM_SAVE,          // Save the form
         FORM_FINALIZE,      // Finalize the form
-        HIERARCHY
+        HIERARCHY,          // Jump to a question
+        SAVE_ERROR,         // Error in save
+        FINALIZE_ERROR,     // Error in finalize
+        CONSTRAINT_ERROR    // Contraint or missing answer error on save
     }
 
     public class Event {
@@ -148,6 +151,15 @@ public class TimerLogger {
                     break;
                 case HIERARCHY:
                     textValue = "jump";
+                    break;
+                case SAVE_ERROR:
+                    textValue = "save error";
+                    break;
+                case FINALIZE_ERROR:
+                    textValue = "finalize error";
+                    break;
+                case CONSTRAINT_ERROR:
+                    textValue = "constraint error";
                     break;
                 default:
                     textValue = "Unknown Event Type: " + eventType;
