@@ -866,9 +866,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             return false;
         }
 
-        final FormController formController = Collect.getInstance()
-                .getFormController();
-
         boolean useability;
         useability = mAdminPreferences.getBoolean(
                 AdminKeys.KEY_SAVE_MID, true);
@@ -880,6 +877,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
         menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
                 .setEnabled(useability);
+
+        FormController formController = Collect.getInstance()
+                .getFormController();
 
         useability = mAdminPreferences.getBoolean(
                 AdminKeys.KEY_CHANGE_LANGUAGE, true)
@@ -2476,6 +2476,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void loadingComplete(FormLoaderTask task) {
         dismissDialog(PROGRESS_DIALOG);
 
+        final FormController formController = task.getFormController();
         int requestCode = task.getRequestCode(); // these are bogus if
         // pendingActivityResult is
         // false
@@ -2487,8 +2488,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         mFormLoaderTask = null;
         t.cancel(true);
         t.destroy();
-
-        FormController formController = task.getFormController();
         Collect.getInstance().setFormController(formController);
         invalidateOptionsMenu();
 
@@ -2523,6 +2522,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         boolean pendingActivityResult = task.hasPendingActivityResult();
+
         if (pendingActivityResult) {
             // set the current view to whatever group we were at...
             refreshCurrentView();
@@ -2540,7 +2540,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // returned to ODK Collect and chose Edit Saved Form, but that the
         // savepoint for that
         // form is newer than the last saved version of their form data.
+
         boolean hasUsedSavepoint = task.hasUsedSavepoint();
+
         if (hasUsedSavepoint) {
             runOnUiThread(new Runnable() {
                 @Override
