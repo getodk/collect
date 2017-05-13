@@ -79,7 +79,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
-        mDiskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
+        mDiskSyncTask = (DiskSyncTask) getLastCustomNonConfigurationInstance();
         if (mDiskSyncTask == null) {
             Timber.i("Starting new disk sync task");
             mDiskSyncTask = new DiskSyncTask();
