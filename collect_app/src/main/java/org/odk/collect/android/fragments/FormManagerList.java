@@ -82,8 +82,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             mBackgroundTasks.mDiskSyncTask.execute((Void[]) null);
         }
         super.onViewCreated(rootView, savedInstanceState);
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.notes);
     }
 
 
