@@ -23,6 +23,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -205,6 +206,13 @@ abstract class AppListFragment extends ListFragment {
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.notes);
     }
 
     private void setupDrawer(View rootView) {

@@ -136,7 +136,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         mDownloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // this is callled in downloadSelectedFiles():
+                // this is called in downloadSelectedFiles():
                 //    Collect.getInstance().getActivityLogger().logAction(this,
                 // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
@@ -253,8 +253,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         mSortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
-    }
 
+        if (!mFormList.isEmpty()) {
+            emptyView.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -757,8 +760,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         for (FormDetails k : keys) {
             b.append(k.formName + " ("
                     + ((k.formVersion != null)
-                            ? (this.getString(R.string.version) + ": " + k.formVersion + " ")
-                            : "") + "ID: " + k.formID + ") - " + result.get(k));
+                    ? (this.getString(R.string.version) + ": " + k.formVersion + " ")
+                    : "") + "ID: " + k.formID + ") - " + result.get(k));
             b.append("\n\n");
         }
 

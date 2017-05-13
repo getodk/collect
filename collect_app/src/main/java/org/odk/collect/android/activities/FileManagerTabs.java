@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,6 +67,13 @@ public class FileManagerTabs extends AppCompatActivity {
         slidingTabLayout.setFontColor(android.R.color.white);
         slidingTabLayout.setBackgroundColor(Color.DKGRAY);
         slidingTabLayout.setViewPager(viewPager);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.notes);
     }
 
     @Override
