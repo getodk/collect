@@ -170,6 +170,12 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     public void syncComplete(String result) {
         TextView textView = (TextView) findViewById(R.id.status_text);
         textView.setText(result);
+
+        if (mListAdapter.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override

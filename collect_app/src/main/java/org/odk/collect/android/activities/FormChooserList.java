@@ -175,6 +175,12 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         Timber.i("Disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
+
+        if (mListAdapter.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     private void setupAdapter() {
