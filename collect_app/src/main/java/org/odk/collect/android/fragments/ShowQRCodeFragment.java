@@ -47,7 +47,6 @@ import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -118,15 +117,11 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     }
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
-
-        //Save the bitmap to a file
-        File shareFile = saveBitmapToCache(qrCode);
-
-        // Sent a intent to share saved image
+        // Send a intent to share saved image
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + saveBitmapToCache(qrCode)));
     }
 
     @Override
