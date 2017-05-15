@@ -84,10 +84,12 @@ public class AdminPreferencesActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.admin_preferences));
         setSupportActionBar(toolbar);
 
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_frame, new AdminPreferencesFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame, new AdminPreferencesFragment())
+                    .commit();
+        }
     }
 
     @Override

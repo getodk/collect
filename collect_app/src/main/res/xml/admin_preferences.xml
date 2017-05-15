@@ -28,6 +28,11 @@
         android:positiveButtonText="@string/reset_settings_button_reset"
         android:negativeButtonText="@string/cancel" />
 
+    <Preference
+        android:id="@+id/import_settings"
+        android:key="import_settings"
+        android:title="@string/import_settings" />
+
     <PreferenceCategory android:title="@string/user_access_main_menu" >
         <CheckBoxPreference
             android:id="@+id/edit_saved"

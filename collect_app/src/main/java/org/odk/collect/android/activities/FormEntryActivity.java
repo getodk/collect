@@ -866,9 +866,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return false;
         }
 
-        FormController formController = Collect.getInstance()
-                .getFormController();
-
         boolean useability;
         useability = mAdminPreferences.getBoolean(
                 AdminKeys.KEY_SAVE_MID, true);
@@ -880,6 +877,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
                 .setEnabled(useability);
+
+        FormController formController = Collect.getInstance()
+                .getFormController();
 
         useability = mAdminPreferences.getBoolean(
                 AdminKeys.KEY_CHANGE_LANGUAGE, true)
@@ -1623,8 +1623,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * repeat of the current group.
      */
     private void createRepeatDialog() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createRepeatDialog", "show");
 
@@ -1710,6 +1708,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             }
         };
+        FormController formController = Collect.getInstance()
+                .getFormController();
         if (formController.getLastRepeatCount() > 0) {
             mAlertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             mAlertDialog.setMessage(getString(R.string.add_another_repeat,
@@ -2102,8 +2102,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
-                                FormController formController = Collect
-                                        .getInstance().getFormController();
                                 // Update the language in the content provider
                                 // when selecting a new
                                 // language
@@ -2125,6 +2123,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                                 "createLanguageDialog",
                                                 "changeLanguage."
                                                         + languages[whichButton]);
+                                FormController formController = Collect
+                                        .getInstance().getFormController();
                                 formController
                                         .setLanguage(languages[whichButton]);
                                 dialog.dismiss();
@@ -2463,9 +2463,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void loadingComplete(FormLoaderTask task) {
         dismissDialog(PROGRESS_DIALOG);
 
-        FormController formController = task.getFormController();
-        boolean pendingActivityResult = task.hasPendingActivityResult();
-        boolean hasUsedSavepoint = task.hasUsedSavepoint();
+        final FormController formController = task.getFormController();
         int requestCode = task.getRequestCode(); // these are bogus if
         // pendingActivityResult is
         // false
@@ -2510,6 +2508,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
+        boolean pendingActivityResult = task.hasPendingActivityResult();
+
         if (pendingActivityResult) {
             // set the current view to whatever group we were at...
             refreshCurrentView();
@@ -2527,6 +2527,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // returned to ODK Collect and chose Edit Saved Form, but that the
         // savepoint for that
         // form is newer than the last saved version of their form data.
+
+        boolean hasUsedSavepoint = task.hasUsedSavepoint();
+
         if (hasUsedSavepoint) {
             runOnUiThread(new Runnable() {
                 @Override

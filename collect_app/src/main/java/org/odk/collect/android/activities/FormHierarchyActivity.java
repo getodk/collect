@@ -77,6 +77,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         setSupportActionBar(toolbar);
 
         FormController formController = Collect.getInstance().getFormController();
+        // https://github.com/opendatakit/collect/issues/998
+        if (formController == null) {
+            finish();
+            return;
+        }
 
         // We use a static FormEntryController to make jumping faster.
         mStartIndex = formController.getFormIndex();
