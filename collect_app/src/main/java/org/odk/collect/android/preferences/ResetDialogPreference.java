@@ -174,7 +174,7 @@ public class ResetDialogPreference extends DialogPreference {
                     break;
             }
             if (resetActions.indexOf(action) < resetActions.size() - 1) {
-                resultMessage.append("\n");
+                resultMessage.append("\n\n");
             }
         }
         showResultDialog(String.valueOf(resultMessage));

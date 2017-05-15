@@ -689,7 +689,7 @@ public class GoogleDriveActivity extends ListActivity implements
 
         while (it.hasNext()) {
             String id = it.next();
-            sb.append(id + " :: " + results.get(id) + "\n");
+            sb.append(id + " :: " + results.get(id) + "\n\n");
         }
         if (sb.length() > 1) {
             sb.setLength(sb.length() - 1);
