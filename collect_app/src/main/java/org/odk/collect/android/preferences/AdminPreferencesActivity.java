@@ -18,10 +18,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -82,8 +84,11 @@ public class AdminPreferencesActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.admin_preferences));
-        setSupportActionBar(toolbar);
-
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
+        }
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()

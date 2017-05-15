@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -45,6 +46,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -117,7 +119,6 @@ import timber.log.Timber;
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener {
-    private static final String t = "FormEntryActivity";
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -181,9 +182,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final String KEY_AUTO_SAVED = "autosaved";
 
     private static final int MENU_LANGUAGES = Menu.FIRST;
-    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
-    private static final int MENU_SAVE = Menu.FIRST + 2;
-    private static final int MENU_PREFERENCES = Menu.FIRST + 3;
+    private static final int MENU_PREFERENCES = Menu.FIRST + 1;
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
@@ -222,6 +221,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton mBackButton;
 
     private String stepMessage = "";
+    private Toolbar toolbar;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -249,10 +249,43 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         setContentView(R.layout.form_entry);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.loading_form));
+        toolbar.inflateMenu(R.menu.form_menu);
+        toolbar.findViewById(R.id.menu_save).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "onOptionsItemSelected",
+                                "MENU_SAVE");
+                // don't exit
+                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
+            }
+        });
 
+        toolbar.findViewById(R.id.menu_goto).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FormController formController = Collect.getInstance()
+                        .getFormController();
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "onOptionsItemSelected",
+                                "MENU_HIERARCHY_VIEW");
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
+                Intent i = new Intent(FormEntryActivity.this, FormHierarchyActivity.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                startActivityForResult(i, HIERARCHY_ACTIVITY);
+            }
+        });
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
+        }
         mFormsDao = new FormsDao();
 
         mErrorMessage = null;
@@ -837,16 +870,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         super.onCreateOptionsMenu(menu);
 
         menu
-                .add(0, MENU_SAVE, 0, R.string.save_all_answers)
-                .setIcon(android.R.drawable.ic_menu_save)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        menu
-                .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
-                .setIcon(R.drawable.ic_menu_goto)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        menu
                 .add(0, MENU_LANGUAGES, 0, R.string.change_language)
                 .setIcon(R.drawable.ic_menu_start_conversation)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -870,12 +893,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         useability = mAdminPreferences.getBoolean(
                 AdminKeys.KEY_SAVE_MID, true);
 
-        menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
+        toolbar.getMenu().findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
         useability = mAdminPreferences.getBoolean(
                 AdminKeys.KEY_JUMP_TO, true);
 
-        menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
+        toolbar.getMenu().findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
         FormController formController = Collect.getInstance()
@@ -900,8 +923,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         switch (item.getItemId()) {
             case MENU_LANGUAGES:
                 Collect.getInstance()
@@ -909,26 +930,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_LANGUAGES");
                 createLanguageDialog();
-                return true;
-            case MENU_SAVE:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_SAVE");
-                // don't exit
-                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
-                return true;
-            case MENU_HIERARCHY_VIEW:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_HIERARCHY_VIEW");
-                if (formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
             case MENU_PREFERENCES:
                 Collect.getInstance()
@@ -1076,7 +1077,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private View createView(int event, boolean advancingPage) {
         FormController formController = Collect.getInstance()
                 .getFormController();
-        setTitle(formController.getFormTitle());
+        toolbar.setTitle(formController.getFormTitle());
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
