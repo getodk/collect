@@ -142,7 +142,7 @@ public class InstanceUploaderList extends InstanceListActivity
         mUploadButton.setEnabled(false);
 
         // set title
-        setTitle(getString(R.string.send_data));
+        mToolbar.setTitle(getString(R.string.send_data));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
