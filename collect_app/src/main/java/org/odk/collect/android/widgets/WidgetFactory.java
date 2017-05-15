@@ -212,7 +212,7 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_TRIGGER:
-                questionWidget = new TriggerWidget(context, fep);
+                questionWidget = new TriggerWidget(context, fep, fep.getDataType() == Constants.DATATYPE_BOOLEAN);
                 break;
             default:
                 questionWidget = new StringWidget(context, fep, readOnlyOverride);

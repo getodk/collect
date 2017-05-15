@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import org.javarosa.core.model.data.BooleanData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -41,15 +42,17 @@ public class TriggerWidget extends QuestionWidget {
 
     private FormEntryPrompt mPrompt;
 
+    private boolean mIsBooleanDataType;
 
     public FormEntryPrompt getPrompt() {
         return mPrompt;
     }
 
 
-    public TriggerWidget(Context context, FormEntryPrompt prompt) {
+    public TriggerWidget(Context context, FormEntryPrompt prompt, boolean isBooleanDataType) {
         super(context, prompt);
         mPrompt = prompt;
+        mIsBooleanDataType = isBooleanDataType;
 
         mTriggerButton = new CheckBox(getContext());
         mTriggerButton.setId(QuestionWidget.newUniqueId());
@@ -82,7 +85,7 @@ public class TriggerWidget extends QuestionWidget {
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            if (s.equals(mOK)) {
+            if (s.equals(mOK) || s.equals("True")) {
                 mTriggerButton.setChecked(true);
             } else {
                 mTriggerButton.setChecked(false);
@@ -109,7 +112,7 @@ public class TriggerWidget extends QuestionWidget {
         if (s == null || s.equals("")) {
             return null;
         } else {
-            return new StringData(s);
+            return mIsBooleanDataType ? new BooleanData(mTriggerButton.isChecked()) : new StringData(s);
         }
     }
 
