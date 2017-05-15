@@ -504,4 +504,24 @@
 <string name="no_date_selected">No date selected</string>
 <string name="no_time_selected">No time selected</string>
 <string name="use_phone_language">Use phone language</string>
+<string name="import_settings">Import/Export settings</string>
+<string name="qr_code">QR code</string>
+<string name="scan_qrcode">Scan code from other device</string>
+<string name="successfully_imported_settings">Settings imported successfully</string>
+<string name="encoding_max_limit">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
+<string name="share">Share</string>
+<string name="select_qrcode">Select code from SD Card</string>
+<string name="turn_on_flashlight">Turn on flashlight</string>
+<string name="turn_off_flashlight">Turn off flashlight</string>
+<string name="qrcode_with_both_passwords">This QR code includes your admin and server passwords. Please treat it carefully. \n(Tap to remove the passwords)</string>
+<string name="qrcode_without_passwords">This QR code does not contain your admin or server passwords. \n(Tap to add the passwords)</string>
+<string name="qrcode_with_admin_password">This QR code includes your admin password. Please treat it carefully. \n(Tap to remove the password)</string>
+<string name="qrcode_with_server_password">This QR code includes your server password. \n(Tap to remove the passwords)</string>
+<string name="import_export_settings">Import/Export Settings</string>
+<string name="qrcode_scanner_prompt">Place the QR code inside the rectangle</string>
+<string name="server_password">Server Password</string>
+<string name="include_password_dialog">Passwords Included in Code</string>
+<string name="generate">Generate</string>
+<string name="invalid_qrcode">QR code does not contain valid settings</string>
+    <string name="share_qrcode">Share QR code</string>
 </resources>

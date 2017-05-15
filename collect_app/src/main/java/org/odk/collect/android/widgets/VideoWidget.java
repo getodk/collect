@@ -97,8 +97,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                        .getInstance());
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "captureButton",
@@ -119,6 +117,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                             Video.Media.EXTERNAL_CONTENT_URI.toString());
                 }
+
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
+                        .getInstance());
 
                 // request high resolution if configured for that...
                 boolean highResolution = settings.getBoolean(

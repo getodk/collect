@@ -44,7 +44,6 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
 
         String formId = getCursor().getString(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
         Cursor cursor = new FormsDao().getFormsCursorForFormId(formId);
@@ -66,6 +65,8 @@ public class ViewSentListAdapter extends SimpleCursorAdapter {
 
         TextView visibilityOffCause = (TextView) view.findViewById(R.id.text4);
         ImageView visibleOff = (ImageView) view.findViewById(R.id.visible_off);
+        Long date = getCursor().getLong(getCursor().getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE));
+
         visibleOff.setScaleX(0.9f);
         visibleOff.setScaleY(0.9f);
         if (date != 0 || !formExists || isFormEncrypted) {

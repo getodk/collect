@@ -351,8 +351,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             lastJ = j;
             first = false;
 
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
-
             MimeTypeMap m = MimeTypeMap.getSingleton();
 
             long byteCount = 0L;
@@ -405,10 +403,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 }
             }
 
+            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
             httppost.setEntity(builder.build());
 
             // prepare response and return uploaded
-            HttpResponse response = null;
+            HttpResponse response;
 
             try {
                 Timber.i("Issuing POST request for %s to: %s", id, u.toString());
