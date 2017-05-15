@@ -522,6 +522,6 @@
 <string name="server_password">Server Password</string>
 <string name="include_password_dialog">Passwords Included in Code</string>
 <string name="generate">Generate</string>
-<string name="invalid_qrcode">QR code does not contains valid settings</string>
+<string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="share_qrcode">Share QR code</string>
 </resources>
