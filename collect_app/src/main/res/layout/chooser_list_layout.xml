@@ -50,23 +50,28 @@ the License.
 
             <include layout="@layout/search_box_layout"/>
 
-            <ListView
-                android:id="@id/android:list"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@android:id/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingEnd="20dip"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingStart="20dip"
-                android:text="@string/no_items_display_forms"
-                android:textColor="@drawable/black"
-                android:textSize="21sp"/>
+                <ListView
+                    android:id="@id/android:list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@android:id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingEnd="20dip"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingStart="20dip"
+                    android:text="@string/no_items_display_forms"
+                    android:textColor="@drawable/black"
+                    android:textSize="21sp"/>
+            </FrameLayout>
         </LinearLayout>
 
         <include
