@@ -119,13 +119,13 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     private void updateShareIntent(Bitmap qrCode) throws IOException {
 
-        //Save the bitmap to a file
-        File shareFile = saveBitmapToCache(qrCode);
-
-        // Sent a intent to share saved image
+        // Send an intent to share saved image
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
+
+        // Save the bitmap to a file
+        File shareFile = saveBitmapToCache(qrCode);
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + shareFile));
     }
 
