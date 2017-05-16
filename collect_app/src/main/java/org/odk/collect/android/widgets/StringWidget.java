@@ -144,11 +144,7 @@ public class StringWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
         String s = mAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        return s.equals("") ? null : new StringData(s);
     }
 
 

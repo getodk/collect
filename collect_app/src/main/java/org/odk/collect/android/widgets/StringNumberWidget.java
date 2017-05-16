@@ -19,18 +19,20 @@ import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.math.BigDecimal;
+
 /**
- * Widget that restricts values to integers.
+ * Widget that restricts values to decimal numbers.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class StringNumberWidget extends StringWidget {
 
-    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
+                              BigDecimal rangeStart, BigDecimal rangeEnd, BigDecimal rangeStep
+                              /* ToDo adapt this, or another widget to handle the range */) {
         super(context, prompt, readOnlyOverride, true);
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
@@ -43,9 +45,7 @@ public class StringNumberWidget extends StringWidget {
         mAnswer.setKeyListener(new DigitsKeyListener() {
             @Override
             protected char[] getAcceptedChars() {
-                return new char[]{
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
-                };
+                return "0123456789.-+ ,".toCharArray(); // ToDo consider disallowing comma, since they could be put in the wrong places
             }
         });
 
@@ -66,21 +66,4 @@ public class StringNumberWidget extends StringWidget {
 
         setupChangeListener();
     }
-
-
-    @Override
-    public IAnswerData getAnswer() {
-        clearFocus();
-        String s = mAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            try {
-                return new StringData(s);
-            } catch (Exception numberFormatException) {
-                return null;
-            }
-        }
-    }
-
 }

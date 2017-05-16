@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 
 import org.javarosa.core.model.Constants;
+import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.Locale;
@@ -104,7 +105,8 @@ public class WidgetFactory {
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.equals("numbers")) {
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
+                                    null, null, null);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
@@ -118,6 +120,9 @@ public class WidgetFactory {
                         questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
+                break;
+            case Constants.CONTROL_RANGE:
+                questionWidget = createRangeWidget(fep, context, readOnlyOverride);
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals("web")) {
@@ -221,4 +226,12 @@ public class WidgetFactory {
         return questionWidget;
     }
 
+    /** Creates a widget to handle the range question. */
+    private static QuestionWidget createRangeWidget(FormEntryPrompt fep, Context context, boolean readOnlyOverride) {
+        RangeQuestion question = (RangeQuestion) fep.getQuestion();
+
+        // ToDo: Create a more appropriate widget
+        return new StringNumberWidget(context, fep, readOnlyOverride, question.getRangeStart(),
+                question.getRangeEnd(), question.getRangeStep());
+    }
 }
