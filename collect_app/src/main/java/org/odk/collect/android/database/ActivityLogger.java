@@ -99,37 +99,37 @@ public final class ActivityLogger {
                     + PARAM1 + " text, "
                     + PARAM2 + " text);";
 
-    private final boolean mLoggingEnabled;
-    private final String mDeviceId;
-    private DatabaseHelper mDbHelper = null;
-    private SQLiteDatabase mDb = null;
-    private boolean mIsOpen = false;
+    private final boolean loggingEnabled;
+    private final String deviceId;
+    private DatabaseHelper databaseHelper = null;
+    private SQLiteDatabase database = null;
+    private boolean isOpen = false;
     // We buffer scroll actions to make sure there aren't too many pauses
     // during scrolling.  This list is flushed every time any other type of
     // action is logged.
-    private LinkedList<ContentValues> mScrollActions = new LinkedList<ContentValues>();
+    private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
     public ActivityLogger(String deviceId) {
-        this.mDeviceId = deviceId;
-        mLoggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
+        this.deviceId = deviceId;
+        loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
         open();
     }
 
     public boolean isOpen() {
-        return mLoggingEnabled && mIsOpen;
+        return loggingEnabled && isOpen;
     }
 
     public void open() throws SQLException {
-        if (!mLoggingEnabled || mIsOpen) {
+        if (!loggingEnabled || isOpen) {
             return;
         }
         try {
-            mDbHelper = new DatabaseHelper();
-            mDb = mDbHelper.getWritableDatabase();
-            mIsOpen = true;
+            databaseHelper = new DatabaseHelper();
+            database = databaseHelper.getWritableDatabase();
+            isOpen = true;
         } catch (SQLiteException e) {
             System.err.println("Error: " + e.getMessage());
-            mIsOpen = false;
+            isOpen = false;
         }
     }
 
@@ -138,10 +138,10 @@ public final class ActivityLogger {
     private FormIndex cachedXPathIndex = null;
     private String cachedXPathValue = null;
 
-    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
-    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
-    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
-    // DO NOT CALL THIS OUTSIDE OF synchronized(mScrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
+    // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
     private String getXPath(FormIndex index) {
         if (index == cachedXPathIndex) {
             return cachedXPathValue;
@@ -160,7 +160,7 @@ public final class ActivityLogger {
         }
 
         ContentValues cv = new ContentValues();
-        cv.put(DEVICEID, mDeviceId);
+        cv.put(DEVICEID, deviceId);
         cv.put(CLASS, object);
         cv.put(CONTEXT, context);
         cv.put(ACTION, action);
@@ -186,12 +186,12 @@ public final class ActivityLogger {
             return;
         }
 
-        synchronized (mScrollActions) {
+        synchronized (scrollActions) {
             long timeStamp = Calendar.getInstance().getTimeInMillis();
 
             // Check to see if we can add this scroll action to the previous action.
-            if (!mScrollActions.isEmpty()) {
-                ContentValues lastCv = mScrollActions.get(mScrollActions.size() - 1);
+            if (!scrollActions.isEmpty()) {
+                ContentValues lastCv = scrollActions.get(scrollActions.size() - 1);
                 long oldTimeStamp = lastCv.getAsLong(TIMESTAMP);
                 int oldDistance = Integer.parseInt(lastCv.getAsString(PARAM1));
                 if (Integer.signum(distance) == Integer.signum(oldDistance)
@@ -202,7 +202,7 @@ public final class ActivityLogger {
                 }
             }
 
-            if (mScrollActions.size() >= MAX_SCROLL_ACTION_BUFFER_SIZE) {
+            if (scrollActions.size() >= MAX_SCROLL_ACTION_BUFFER_SIZE) {
                 insertContentValues(null, null); // flush scroll list...
             }
 
@@ -216,7 +216,7 @@ public final class ActivityLogger {
 
             // Add a new scroll action to the buffer.
             ContentValues cv = new ContentValues();
-            cv.put(DEVICEID, mDeviceId);
+            cv.put(DEVICEID, deviceId);
             cv.put(CLASS, t.getClass().getName());
             cv.put(CONTEXT, "scroll");
             cv.put(ACTION, "");
@@ -225,16 +225,16 @@ public final class ActivityLogger {
             cv.put(INSTANCE_PATH, instancePath);
             cv.put(TIMESTAMP, timeStamp);
             cv.put(PARAM2, timeStamp);
-            mScrollActions.add(cv);
+            scrollActions.add(cv);
         }
     }
 
     private void insertContentValues(ContentValues cv, FormIndex index) {
-        synchronized (mScrollActions) {
+        synchronized (scrollActions) {
             try {
-                while (!mScrollActions.isEmpty()) {
-                    ContentValues scv = mScrollActions.removeFirst();
-                    mDb.insert(DATABASE_TABLE, null, scv);
+                while (!scrollActions.isEmpty()) {
+                    ContentValues scv = scrollActions.removeFirst();
+                    database.insert(DATABASE_TABLE, null, scv);
                 }
 
                 if (cv != null) {
@@ -243,7 +243,7 @@ public final class ActivityLogger {
                         idx = getXPath(index);
                     }
                     cv.put(QUESTION, idx);
-                    mDb.insert(DATABASE_TABLE, null, cv);
+                    database.insert(DATABASE_TABLE, null, cv);
                 }
             } catch (SQLiteConstraintException e) {
                 System.err.println("Error: " + e.getMessage());

@@ -48,10 +48,10 @@ import java.util.List;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class SelectMultiWidget extends QuestionWidget {
-    private boolean mCheckboxInit = true;
-    List<SelectChoice> mItems;
+    private boolean checkboxInit = true;
+    List<SelectChoice> items;
 
-    private ArrayList<CheckBox> mCheckboxes;
+    private ArrayList<CheckBox> checkBoxes;
     ArrayList<MediaLayout> playList;
     private int playcounter = 0;
 
@@ -59,17 +59,17 @@ public class SelectMultiWidget extends QuestionWidget {
     @SuppressWarnings("unchecked")
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        mPrompt = prompt;
-        mCheckboxes = new ArrayList<CheckBox>();
+        formEntryPrompt = prompt;
+        checkBoxes = new ArrayList<CheckBox>();
         playList = new ArrayList<MediaLayout>();
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
 
         List<Selection> ve = new ArrayList<Selection>();
@@ -79,9 +79,9 @@ public class SelectMultiWidget extends QuestionWidget {
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                String choiceName = prompt.getSelectChoiceText(mItems.get(i));
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                String choiceName = prompt.getSelectChoiceText(items.get(i));
                 CharSequence choiceDisplayName;
                 if (choiceName != null) {
                     choiceDisplayName = TextUtils.textToHtml(choiceName);
@@ -94,36 +94,36 @@ public class SelectMultiWidget extends QuestionWidget {
                 c.setId(QuestionWidget.newUniqueId());
                 c.setText(choiceDisplayName);
                 c.setMovementMethod(LinkMovementMethod.getInstance());
-                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
 
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
-                    if (mItems.get(i).getValue().equals(ve.get(vi).getValue())) {
+                    if (items.get(i).getValue().equals(ve.get(vi).getValue())) {
                         c.setChecked(true);
                         break;
                     }
 
                 }
-                mCheckboxes.add(c);
+                checkBoxes.add(c);
                 // when clicked, check for readonly before toggling
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
+                        if (!checkboxInit && formEntryPrompt.isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.deselect",
-                                        mItems.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
+                                        items.get((Integer) buttonView.getTag()).getValue(),
+                                        formEntryPrompt.getIndex());
                             } else {
                                 buttonView.setChecked(true);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.select",
-                                        mItems.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
+                                        items.get((Integer) buttonView.getTag()).getValue(),
+                                        formEntryPrompt.getIndex());
                             }
                         }
                     }
@@ -131,31 +131,31 @@ public class SelectMultiWidget extends QuestionWidget {
 
                 String audioURI = null;
                 audioURI =
-                        prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                        prompt.getSpecialFormSelectChoiceText(items.get(i),
                                 FormEntryCaption.TEXT_FORM_AUDIO);
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
                 String videoURI = null;
-                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "video");
+                videoURI = prompt.getSpecialFormSelectChoiceText(items.get(i), "video");
 
                 String bigImageURI = null;
-                bigImageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i), "big-image");
+                bigImageURI = prompt.getSpecialFormSelectChoiceText(items.get(i), "big-image");
 
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
                 mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), c, audioURI,
                         imageURI, videoURI, bigImageURI);
 
                 playList.add(mediaLayout);
 
                 // Last, add the dividing line between elements (except for the last element)
-                if (i != mItems.size() - 1) {
+                if (i != items.size() - 1) {
                     ImageView divider = new ImageView(getContext());
                     divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                     mediaLayout.addDivider(divider);
@@ -165,14 +165,14 @@ public class SelectMultiWidget extends QuestionWidget {
             addAnswerView(answerLayout);
         }
 
-        mCheckboxInit = false;
+        checkboxInit = false;
 
     }
 
 
     @Override
     public void clearAnswer() {
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             if (c.isChecked()) {
                 c.setChecked(false);
             }
@@ -183,10 +183,10 @@ public class SelectMultiWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         List<Selection> vc = new ArrayList<Selection>();
-        for (int i = 0; i < mCheckboxes.size(); ++i) {
-            CheckBox c = mCheckboxes.get(i);
+        for (int i = 0; i < checkBoxes.size(); ++i) {
+            CheckBox c = checkBoxes.get(i);
             if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i)));
+                vc.add(new Selection(items.get(i)));
             }
         }
 
@@ -210,7 +210,7 @@ public class SelectMultiWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             c.setOnLongClickListener(l);
         }
     }
@@ -219,7 +219,7 @@ public class SelectMultiWidget extends QuestionWidget {
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             c.cancelLongPress();
         }
     }
@@ -230,7 +230,7 @@ public class SelectMultiWidget extends QuestionWidget {
         }
         // if there's more, set up to play the next item
         if (playcounter < playList.size()) {
-            mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     resetQuestionTextColor();
@@ -244,8 +244,8 @@ public class SelectMultiWidget extends QuestionWidget {
 
         } else {
             playcounter = 0;
-            mPlayer.setOnCompletionListener(null);
-            mPlayer.reset();
+            player.setOnCompletionListener(null);
+            player.reset();
         }
 
     }
@@ -255,7 +255,7 @@ public class SelectMultiWidget extends QuestionWidget {
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+        player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetQuestionTextColor();

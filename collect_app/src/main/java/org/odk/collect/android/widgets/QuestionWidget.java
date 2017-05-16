@@ -61,33 +61,33 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         return ++idGenerator;
     }
 
-    protected FormEntryPrompt mPrompt;
-    protected MediaLayout mQuestionMediaLayout;
+    protected FormEntryPrompt formEntryPrompt;
+    protected MediaLayout questionMediaLayout;
 
-    protected final int mQuestionFontsize;
-    protected final int mAnswerFontsize;
+    protected final int questionFontsize;
+    protected final int answerFontsize;
 
-    private TextView mHelpTextView;
+    private TextView helpTextView;
 
-    protected MediaPlayer mPlayer;
+    protected MediaPlayer player;
 
-    protected int mPlayColor = Color.BLUE;
-    protected int mPlayBackgroundColor = Color.WHITE;
+    protected int playColor = Color.BLUE;
+    protected int playBackgroundColor = Color.WHITE;
 
     public QuestionWidget(Context context, FormEntryPrompt p) {
         super(context);
 
-        mPlayer = new MediaPlayer();
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+        player = new MediaPlayer();
+        player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                mQuestionMediaLayout.resetTextFormatting();
+                questionMediaLayout.resetTextFormatting();
                 mediaPlayer.reset();
             }
 
         });
 
-        mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
@@ -96,26 +96,26 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             }
         });
 
-        mQuestionFontsize = Collect.getQuestionFontsize();
-        mAnswerFontsize = mQuestionFontsize + 2;
+        questionFontsize = Collect.getQuestionFontsize();
+        answerFontsize = questionFontsize + 2;
 
-        mPrompt = p;
+        formEntryPrompt = p;
 
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        mQuestionMediaLayout = createQuestionMediaLayout(p);
-        mHelpTextView = createHelpText(p);
+        questionMediaLayout = createQuestionMediaLayout(p);
+        helpTextView = createHelpText(p);
 
-        addQuestionMediaLayout(mQuestionMediaLayout);
-        addHelpTextView(mHelpTextView);
+        addQuestionMediaLayout(questionMediaLayout);
+        addHelpTextView(helpTextView);
     }
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt p) {
         String promptText = p.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
@@ -136,7 +136,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         String bigImageURI = p.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        MediaLayout questionMediaLayout = new MediaLayout(getContext(), mPlayer);
+        MediaLayout questionMediaLayout = new MediaLayout(getContext(), player);
         questionMediaLayout.setId(QuestionWidget.newUniqueId()); // assign random id
         questionMediaLayout.setAVT(p.getIndex(), "", questionText, audioURI, imageURI, videoURI,
                 bigImageURI);
@@ -145,33 +145,33 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         String playColorString = p.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
             try {
-                mPlayColor = Color.parseColor(playColorString);
+                playColor = Color.parseColor(playColorString);
             } catch (IllegalArgumentException e) {
                 Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
-        questionMediaLayout.setPlayTextColor(mPlayColor);
+        questionMediaLayout.setPlayTextColor(playColor);
 
         String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null,
                 "playBackgroundColor");
         if (playBackgroundColorString != null) {
             try {
-                mPlayBackgroundColor = Color.parseColor(playBackgroundColorString);
+                playBackgroundColor = Color.parseColor(playBackgroundColorString);
             } catch (IllegalArgumentException e) {
                 Timber.e(e, "Argument %s is incorrect", playBackgroundColorString);
             }
         }
-        questionMediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+        questionMediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
 
         return questionMediaLayout;
     }
 
     public MediaLayout getQuestionMediaLayout() {
-        return mQuestionMediaLayout;
+        return questionMediaLayout;
     }
 
     public TextView getHelpTextView() {
-        return mHelpTextView;
+        return helpTextView;
     }
 
     public void playAudio() {
@@ -179,15 +179,15 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     }
 
     public void playVideo() {
-        mQuestionMediaLayout.playVideo();
+        questionMediaLayout.playVideo();
     }
 
     public FormEntryPrompt getPrompt() {
-        return mPrompt;
+        return formEntryPrompt;
     }
 
     public MediaLayout getQuestionMediaView() {
-        return mQuestionMediaLayout;
+        return questionMediaLayout;
     }
 
     // http://code.google.com/p/android/issues/detail?id=8488
@@ -282,7 +282,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, mQuestionMediaLayout.getId());
+        params.addRule(RelativeLayout.BELOW, questionMediaLayout.getId());
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
@@ -293,7 +293,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
 
         if (s != null && !s.equals("")) {
             helpText.setId(QuestionWidget.newUniqueId());
-            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize - 3);
+            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 3);
             helpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);
@@ -322,10 +322,10 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        if (mHelpTextView.getVisibility() == View.VISIBLE) {
-            params.addRule(RelativeLayout.BELOW, mHelpTextView.getId());
+        if (helpTextView.getVisibility() == View.VISIBLE) {
+            params.addRule(RelativeLayout.BELOW, helpTextView.getId());
         } else {
-            params.addRule(RelativeLayout.BELOW, mQuestionMediaLayout.getId());
+            params.addRule(RelativeLayout.BELOW, questionMediaLayout.getId());
         }
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
@@ -337,11 +337,11 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (mQuestionMediaLayout != null) {
-            mQuestionMediaLayout.cancelLongPress();
+        if (questionMediaLayout != null) {
+            questionMediaLayout.cancelLongPress();
         }
-        if (mHelpTextView != null) {
-            mHelpTextView.cancelLongPress();
+        if (helpTextView != null) {
+            helpTextView.cancelLongPress();
         }
     }
 
@@ -349,31 +349,31 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
      * Prompts with items must override this
      */
     public void playAllPromptText() {
-        mQuestionMediaLayout.playAudio();
+        questionMediaLayout.playAudio();
     }
 
     public void setQuestionTextColor(int color) {
-        mQuestionMediaLayout.setTextcolor(color);
+        questionMediaLayout.setTextcolor(color);
     }
 
     public void resetQuestionTextColor() {
-        mQuestionMediaLayout.resetTextFormatting();
+        questionMediaLayout.resetTextFormatting();
     }
 
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
-            if (mPlayer.isPlaying()) {
-                mPlayer.stop();
-                mPlayer.reset();
+            if (player.isPlaying()) {
+                player.stop();
+                player.reset();
             }
         }
     }
 
     public void stopAudio() {
-        if (mPlayer.isPlaying()) {
-            mPlayer.stop();
-            mPlayer.reset();
+        if (player.isPlaying()) {
+            player.stop();
+            player.reset();
         }
     }
 

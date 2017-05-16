@@ -33,12 +33,12 @@ import java.util.List;
 
 public class ResetUtility {
 
-    private List<Integer> mFailedResetActions;
+    private List<Integer> failedResetActions;
 
     public List<Integer> reset(final Context context, List<Integer> resetActions) {
 
-        mFailedResetActions = new ArrayList<>();
-        mFailedResetActions.addAll(resetActions);
+        failedResetActions = new ArrayList<>();
+        failedResetActions.addAll(resetActions);
 
         for (int action : resetActions) {
             switch (action) {
@@ -53,23 +53,23 @@ public class ResetUtility {
                     break;
                 case ResetAction.RESET_LAYERS:
                     if (deleteFolderContents(Collect.OFFLINE_LAYERS)) {
-                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_LAYERS));
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_LAYERS));
                     }
                     break;
                 case ResetAction.RESET_CACHE:
                     if (deleteFolderContents(Collect.CACHE_PATH)) {
-                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_CACHE));
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_CACHE));
                     }
                     break;
                 case ResetAction.RESET_OSM_DROID:
                     if (deleteFolderContents(Configuration.getInstance().getOsmdroidTileCache().getPath())) {
-                        mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
+                        failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_OSM_DROID));
                     }
                     break;
             }
         }
 
-        return mFailedResetActions;
+        return failedResetActions;
     }
 
     private void resetPreferences(Context context) {
@@ -94,7 +94,7 @@ public class ResetUtility {
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
 
         if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsFolderContest && deletedSettingsFile) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
     }
 
@@ -102,7 +102,7 @@ public class ResetUtility {
         new InstancesDao().deleteInstancesDatabase();
 
         if (deleteFolderContents(Collect.INSTANCES_PATH)) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_INSTANCES));
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_INSTANCES));
         }
     }
 
@@ -112,7 +112,7 @@ public class ResetUtility {
         File itemsetDbFile = new File(Collect.METADATA_PATH + File.separator + ItemsetDbAdapter.DATABASE_NAME);
 
         if (deleteFolderContents(Collect.FORMS_PATH) && (!itemsetDbFile.exists() || itemsetDbFile.delete())) {
-            mFailedResetActions.remove(mFailedResetActions.indexOf(ResetAction.RESET_FORMS));
+            failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_FORMS));
         }
     }
 

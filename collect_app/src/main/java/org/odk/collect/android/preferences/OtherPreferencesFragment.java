@@ -12,8 +12,8 @@ import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 
 public class OtherPreferencesFragment extends AggregatePreferencesFragment implements Preference.OnPreferenceChangeListener {
 
-    protected EditTextPreference mSubmissionUrlPreference;
-    protected EditTextPreference mFormListUrlPreference;
+    protected EditTextPreference submissionUrlPreference;
+    protected EditTextPreference formListUrlPreference;
 
 
     @Override
@@ -21,22 +21,22 @@ public class OtherPreferencesFragment extends AggregatePreferencesFragment imple
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.other_preferences);
 
-        mFormListUrlPreference = (EditTextPreference) findPreference(
+        formListUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_FORMLIST_URL);
-        mSubmissionUrlPreference = (EditTextPreference) findPreference(
+        submissionUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_SUBMISSION_URL);
 
         InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
 
-        mServerUrlPreference.getEditText().setFilters(filters);
+        serverUrlPreference.getEditText().setFilters(filters);
 
-        mFormListUrlPreference.setOnPreferenceChangeListener(this);
-        mFormListUrlPreference.setSummary(mFormListUrlPreference.getText());
-        mFormListUrlPreference.getEditText().setFilters(filters);
+        formListUrlPreference.setOnPreferenceChangeListener(this);
+        formListUrlPreference.setSummary(formListUrlPreference.getText());
+        formListUrlPreference.getEditText().setFilters(filters);
 
-        mSubmissionUrlPreference.setOnPreferenceChangeListener(this);
-        mSubmissionUrlPreference.setSummary(mSubmissionUrlPreference.getText());
-        mSubmissionUrlPreference.getEditText().setFilters(filters);
+        submissionUrlPreference.setOnPreferenceChangeListener(this);
+        submissionUrlPreference.setSummary(submissionUrlPreference.getText());
+        submissionUrlPreference.getEditText().setFilters(filters);
 
     }
 

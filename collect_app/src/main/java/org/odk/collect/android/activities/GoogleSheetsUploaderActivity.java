@@ -81,14 +81,14 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
-    protected GoogleAccountCredential mCredential;
-    private ProgressDialog mProgressDialog;
-    private AlertDialog mAlertDialog;
-    private String mAlertMsg;
-    private boolean mAlertShowing;
-    private boolean mAuthFailed;
-    private Long[] mInstancesToSend;
-    private GoogleSheetsInstanceUploaderTask mUlTask;
+    protected GoogleAccountCredential credential;
+    private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
+    private String alertMsg;
+    private boolean alertShowing;
+    private boolean authFailed;
+    private Long[] instancesToSend;
+    private GoogleSheetsInstanceUploaderTask uiTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +100,9 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         // 2) A google user is selected
 
         // default initializers
-        mAlertMsg = getString(R.string.please_wait);
-        mAlertShowing = false;
-        mAuthFailed = false;
+        alertMsg = getString(R.string.please_wait);
+        alertShowing = false;
+        authFailed = false;
 
         setTitle(getString(R.string.send_data));
 
@@ -110,10 +110,10 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         // resets alert message and showing dialog if the screen is rotated
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
-                mAlertMsg = savedInstanceState.getString(ALERT_MSG);
+                alertMsg = savedInstanceState.getString(ALERT_MSG);
             }
             if (savedInstanceState.containsKey(ALERT_SHOWING)) {
-                mAlertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
+                alertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
             }
         }
 
@@ -122,24 +122,24 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         Intent intent = getIntent();
         selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
 
-        mInstancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
+        instancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
         if (selectedInstanceIDs != null) {
             for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                mInstancesToSend[i] = selectedInstanceIDs[i];
+                instancesToSend[i] = selectedInstanceIDs[i];
             }
         }
 
         // at this point, we don't expect this to be empty...
-        if (mInstancesToSend.length == 0) {
+        if (instancesToSend.length == 0) {
             Timber.e("onCreate: No instances to upload!");
             // drop through --
             // everything will process through OK
         } else {
-            Timber.i("onCreate: Beginning upload of %d instances!", mInstancesToSend.length);
+            Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
         // Initialize credentials and service object.
-        mCredential = GoogleAccountCredential.usingOAuth2(
+        credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Collections.singleton(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff());
 
@@ -147,9 +147,9 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     }
 
     private void runTask() {
-        mUlTask = (GoogleSheetsInstanceUploaderTask) getLastNonConfigurationInstance();
-        if (mUlTask == null) {
-            mUlTask = new GoogleSheetsInstanceUploaderTask(mCredential);
+        uiTask = (GoogleSheetsInstanceUploaderTask) getLastNonConfigurationInstance();
+        if (uiTask == null) {
+            uiTask = new GoogleSheetsInstanceUploaderTask(credential);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -162,8 +162,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
             showDialog(PROGRESS_DIALOG);
 
-            mUlTask.setUploaderListener(this);
-            mUlTask.execute(mInstancesToSend);
+            uiTask.setUploaderListener(this);
+            uiTask.execute(instancesToSend);
         } else {
             // it's not null, so we have a task running
             // progress dialog is handled by the system
@@ -178,7 +178,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
      * appropriate.
      */
     private void getResultsFromApi() {
-        if (mCredential.getSelectedAccountName() == null) {
+        if (credential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
@@ -206,12 +206,12 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             String googleUsername = prefs.getString(
                     PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "");
             if (!googleUsername.equals("")) {
-                mCredential.setSelectedAccountName(googleUsername);
+                credential.setSelectedAccountName(googleUsername);
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
-                        mCredential.newChooseAccountIntent(),
+                        credential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
             }
         } else {
@@ -251,7 +251,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
                         editor.apply();
-                        mCredential.setSelectedAccountName(accountName);
+                        credential.setSelectedAccountName(accountName);
                         getResultsFromApi();
                     }
                 }
@@ -333,11 +333,11 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
     @Override
     protected void onResume() {
-        if (mUlTask != null) {
-            mUlTask.setUploaderListener(this);
+        if (uiTask != null) {
+            uiTask.setUploaderListener(this);
         }
-        if (mAlertShowing) {
-            createAlertDialog(mAlertMsg);
+        if (alertShowing) {
+            createAlertDialog(alertMsg);
         }
         super.onResume();
     }
@@ -345,20 +345,20 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(ALERT_MSG, mAlertMsg);
-        outState.putBoolean(ALERT_SHOWING, mAlertShowing);
+        outState.putString(ALERT_MSG, alertMsg);
+        outState.putBoolean(ALERT_SHOWING, alertShowing);
     }
 
     @Override
     public Object onRetainNonConfigurationInstance() {
-        return mUlTask;
+        return uiTask;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
     }
 
@@ -370,8 +370,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
     @Override
     protected void onDestroy() {
-        if (mUlTask != null) {
-            mUlTask.setUploaderListener(null);
+        if (uiTask != null) {
+            uiTask.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -389,16 +389,16 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             return;
         }
         Timber.i("uploadingComplete: Processing results ( %d ) from upload of %d instances!",
-                result.size(), mInstancesToSend.length);
+                result.size(), instancesToSend.length);
 
         StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();
         StringBuilder message = new StringBuilder();
 
         if (keys.size() == 0) {
-            if (mAuthFailed) {
+            if (authFailed) {
                 message.append(getString(R.string.google_auth_io_exception_msg));
-                mAuthFailed = false;
+                authFailed = false;
             } else {
                 message.append(getString(R.string.no_forms_uploaded));
             }
@@ -428,9 +428,9 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         message.append(name).append(" - ").append(result.get(id)).append("\n\n");
                     }
                 } else {
-                    if (mAuthFailed) {
+                    if (authFailed) {
                         message.append(getString(R.string.google_auth_io_exception_msg));
-                        mAuthFailed = false;
+                        authFailed = false;
                     } else {
                         message.append(getString(R.string.no_forms_uploaded));
                     }
@@ -446,8 +446,8 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
     @Override
     public void progressUpdate(int progress, int total) {
-        mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
-        mProgressDialog.setMessage(mAlertMsg);
+        alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
+        progressDialog.setMessage(alertMsg);
     }
 
     @Override
@@ -457,7 +457,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                mProgressDialog = new ProgressDialog(this);
+                progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -466,18 +466,18 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                                         .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
                                                 "cancel");
                                 dialog.dismiss();
-                                mUlTask.cancel(true);
-                                mUlTask.setUploaderListener(null);
+                                uiTask.cancel(true);
+                                uiTask.setUploaderListener(null);
                                 finish();
                             }
                         };
-                mProgressDialog.setTitle(getString(R.string.uploading_data));
-                mProgressDialog.setMessage(mAlertMsg);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return mProgressDialog;
+                progressDialog.setTitle(getString(R.string.uploading_data));
+                progressDialog.setMessage(alertMsg);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return progressDialog;
             case GOOGLE_USER_DIALOG:
                 AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
 
@@ -498,9 +498,9 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     private void createAlertDialog(String message) {
         Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.upload_results));
-        mAlertDialog.setMessage(message);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.upload_results));
+        alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -509,18 +509,18 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
                         Collect.getInstance().getActivityLogger()
                                 .logAction(this, "createAlertDialog", "OK");
                         // always exit this activity since it has no interface
-                        mAlertShowing = false;
+                        alertShowing = false;
                         finish();
                         break;
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertShowing = true;
-        mAlertMsg = message;
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertShowing = true;
+        alertMsg = message;
+        alertDialog.show();
     }
 
     @Override
@@ -534,11 +534,11 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
         GoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mSheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
+            sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
                     transport, jsonFactory, credential)
                     .setApplicationName("ODK-Collect")
                     .build();
-            mDriveService = new com.google.api.services.drive.Drive.Builder(
+            driveService = new com.google.api.services.drive.Drive.Builder(
                     transport, jsonFactory, credential)
                     .setApplicationName("ODK-Collect")
                     .build();
@@ -546,7 +546,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
 
         @Override
         protected HashMap<String, String> doInBackground(Long... values) {
-            mResults = new HashMap<>();
+            results = new HashMap<>();
 
             String selection = InstanceColumns._ID + "=?";
             String[] selectionArgs = new String[(values == null) ? 0 : values.length];
@@ -560,22 +560,22 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
             }
             String token;
             try {
-                token = mCredential.getToken();
+                token = credential.getToken();
                 //Immediately invalidate so we get a different one if we have to try again
                 GoogleAuthUtil.invalidateToken(GoogleSheetsUploaderActivity.this, token);
 
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
-                mResults = null;
+                results = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
                 Timber.e(e);
-                mAuthFailed = true;
+                authFailed = true;
             } catch (MultipleFoldersFoundException e) {
                 Timber.e(e);
             }
-            return mResults;
+            return results;
         }
 
     }

@@ -78,7 +78,7 @@ public class GridWidget extends QuestionWidget {
     private static final int IMAGE_PADDING = 8;
     private static final int SCROLL_WIDTH = 16;
 
-    List<SelectChoice> mItems;
+    List<SelectChoice> items;
 
     // The possible select choices
     String[] choices;
@@ -111,25 +111,25 @@ public class GridWidget extends QuestionWidget {
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
-        mPrompt = prompt;
+        formEntryPrompt = prompt;
         listener = (AdvanceToNextListener) context;
 
-        selected = new boolean[mItems.size()];
-        choices = new String[mItems.size()];
+        selected = new boolean[items.size()];
+        choices = new String[items.size()];
         gridview = new ExpandedHeightGridView(context);
-        imageViews = new View[mItems.size()];
-        audioHandlers = new AudioHandler[mItems.size()];
+        imageViews = new View[items.size()];
+        audioHandlers = new AudioHandler[items.size()];
         // The max width of an icon in a given column. Used to line
         // up the columns and automatically fit the columns in when
         // they are chosen automatically
         int maxColumnWidth = -1;
         int maxCellHeight = -1;
         this.numColumns = numColumns;
-        for (int i = 0; i < mItems.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {
             imageViews[i] = new ImageView(getContext());
         }
         this.quickAdvance = quickAdvance;
@@ -154,8 +154,8 @@ public class GridWidget extends QuestionWidget {
         }
 
         // Build view
-        for (int i = 0; i < mItems.size(); i++) {
-            SelectChoice sc = mItems.get(i);
+        for (int i = 0; i < items.size(); i++) {
+            SelectChoice sc = items.get(i);
 
             int curHeight = -1;
 
@@ -164,14 +164,14 @@ public class GridWidget extends QuestionWidget {
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
                 audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        mPlayer);
+                        player);
             } else {
                 audioHandlers[i] = null;
             }
             // Read the image sizes and set maxColumnWidth. This allows us to make sure all of our
             // columns are going to fit
             String imageURI;
-            if (mItems.get(i) instanceof ExternalSelectChoice) {
+            if (items.get(i) instanceof ExternalSelectChoice) {
                 imageURI = ((ExternalSelectChoice) sc).getImage();
             } else {
                 imageURI = prompt.getSpecialFormSelectChoiceText(sc,
@@ -234,7 +234,7 @@ public class GridWidget extends QuestionWidget {
                 choices[i] = prompt.getSelectChoiceText(sc);
 
                 TextView missingImage = new TextView(getContext());
-                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
@@ -313,7 +313,7 @@ public class GridWidget extends QuestionWidget {
                 selected[position] = true;
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "onItemClick.select",
-                        mItems.get(position).getValue(), mPrompt.getIndex());
+                        items.get(position).getValue(), formEntryPrompt.getIndex());
                 imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
                 if (quickAdvance) {
@@ -330,8 +330,8 @@ public class GridWidget extends QuestionWidget {
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        for (int i = 0; i < mItems.size(); ++i) {
-            String match = mItems.get(i).getValue();
+        for (int i = 0; i < items.size(); ++i) {
+            String match = items.get(i).getValue();
 
             selected[i] = match.equals(s);
             if (selected[i]) {
@@ -351,7 +351,7 @@ public class GridWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         for (int i = 0; i < choices.length; ++i) {
             if (selected[i]) {
-                SelectChoice sc = mItems.get(i);
+                SelectChoice sc = items.get(i);
                 return new SelectOneData(new Selection(sc));
             }
         }
@@ -361,7 +361,7 @@ public class GridWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        for (int i = 0; i < mItems.size(); ++i) {
+        for (int i = 0; i < items.size(); ++i) {
             selected[i] = false;
             imageViews[i].setBackgroundColor(0);
         }
