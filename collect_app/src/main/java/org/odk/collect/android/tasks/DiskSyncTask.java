@@ -54,16 +54,6 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     String statusMessage;
 
     private FormsDao formsDao;
-   
-    private static class UriFile {
-        public final Uri uri;
-        public final File file;
-
-        UriFile(Uri uri, File file) {
-            this.uri = uri;
-            this.file = file;
-        }
-    }
 
     @Override
     protected String doInBackground(Void... params) {
@@ -329,6 +319,16 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         super.onPostExecute(result);
         if (listener != null) {
             listener.syncComplete(result);
+        }
+    }
+
+    private static class UriFile {
+        public final Uri uri;
+        public final File file;
+
+        UriFile(Uri uri, File file) {
+            this.uri = uri;
+            this.file = file;
         }
     }
 }

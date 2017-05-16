@@ -434,8 +434,8 @@ public class DrawActivity extends Activity {
         private Path offscreenPath; // Adjusted for position of the bitmap in the view
         private Paint bitmapPaint;
         private File backgroundBitmapFile;
-        private float x1;
-        private float y1;
+        private float latestX;
+        private float latestY;
 
         public DrawView(final Context c) {
             super(c);
@@ -510,8 +510,8 @@ public class DrawActivity extends Activity {
             offscreenPath.reset();
             offscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
 
-            this.x1 = x;
-            this.y1 = y;
+            latestX = x;
+            latestY = y;
         }
 
         public void drawSignLine() {
@@ -520,19 +520,19 @@ public class DrawActivity extends Activity {
         }
 
         private void touch_move(float x, float y) {
-            currentPath.quadTo(this.x1, this.y1, (x + this.x1) / 2, (y + this.y1) / 2);
-            offscreenPath.quadTo(this.x1 - getBitmapLeft(), this.y1 - getBitmapTop(),
-                    (x + this.x1) / 2 - getBitmapLeft(), (y + this.y1) / 2 - getBitmapTop());
-            this.x1 = x;
-            this.y1 = y;
+            currentPath.quadTo(latestX, latestY, (x + latestX) / 2, (y + latestY) / 2);
+            offscreenPath.quadTo(latestX - getBitmapLeft(), latestY - getBitmapTop(),
+                    (x + latestX) / 2 - getBitmapLeft(), (y + latestY) / 2 - getBitmapTop());
+            latestX = x;
+            latestY = y;
         }
 
         private void touch_up() {
             if (currentPath.isEmpty()) {
-                canvas.drawPoint(x1, y1, pointPaint);
+                canvas.drawPoint(latestX, latestY, pointPaint);
             } else {
-                currentPath.lineTo(x1, y1);
-                offscreenPath.lineTo(x1 - getBitmapLeft(), y1 - getBitmapTop());
+                currentPath.lineTo(latestX, latestY);
+                offscreenPath.lineTo(latestX - getBitmapLeft(), latestY - getBitmapTop());
 
                 // commit the path to our offscreen
                 canvas.drawPath(offscreenPath, paint);

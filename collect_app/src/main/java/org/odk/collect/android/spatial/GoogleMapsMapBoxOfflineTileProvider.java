@@ -132,9 +132,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
             String[] projection = new String[]{"value"};
             String[] minArgs = new String[]{"minzoom"};
 
-            Cursor c;
-
-            c = this.database.query("metadata", projection, "name = ?", minArgs, null, null, null);
+            Cursor c = this.database.query("metadata", projection, "name = ?", minArgs, null, null, null);
 
             c.moveToFirst();
             if (!c.isAfterLast()) {
