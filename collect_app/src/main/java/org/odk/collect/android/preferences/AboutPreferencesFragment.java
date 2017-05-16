@@ -28,7 +28,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
     public static final String KEY_ODK_WEBSITE = "info";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
     private static final String ODK_WEBSITE = "https://opendatakit.org";
-    private CustomTabHelper mCustomTabHelper;
+    private CustomTabHelper customTabHelper;
     private Uri uri;
 
     @Override
@@ -40,14 +40,14 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         findPreference(KEY_OPEN_SOURCE_LICENSES).setOnPreferenceClickListener(this);
         findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);
         findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
-        mCustomTabHelper = new CustomTabHelper();
+        customTabHelper = new CustomTabHelper();
         uri = Uri.parse(ODK_WEBSITE);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mCustomTabHelper.bindCustomTabsService(this.getActivity(), uri);
+        customTabHelper.bindCustomTabsService(this.getActivity(), uri);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
 
         switch (preference.getKey()) {
             case KEY_ODK_WEBSITE:
-                if (mCustomTabHelper.getPackageName(getActivity()).size() != 0) {
+                if (customTabHelper.getPackageName(getActivity()).size() != 0) {
                     CustomTabsIntent customTabsIntent =
                             new CustomTabsIntent.Builder()
                                     .build();
-                    customTabsIntent.intent.setPackage(mCustomTabHelper.getPackageName(getActivity()).get(0));
+                    customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getActivity()).get(0));
                     customTabsIntent.launchUrl(getActivity(), uri);
                 } else {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE)));

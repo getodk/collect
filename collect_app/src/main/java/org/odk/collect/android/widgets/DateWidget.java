@@ -54,20 +54,20 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class DateWidget extends QuestionWidget {
-    private DatePickerDialog mDatePickerDialog;
+    private DatePickerDialog datePickerDialog;
 
-    private Button mDateButton;
-    private TextView mDateTextView;
+    private Button dateButton;
+    private TextView dateTextView;
 
-    private boolean mHideDay;
-    private boolean mHideMonth;
-    private boolean mShowCalendar;
+    private boolean hideDay;
+    private boolean hideMonth;
+    private boolean showCalendar;
 
-    private int mYear;
-    private int mMonth;
-    private int mDayOfMonth;
+    private int year;
+    private int month;
+    private int dayOfMonth;
 
-    private boolean mNullAnswer;
+    private boolean nullAnswer;
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -82,40 +82,40 @@ public class DateWidget extends QuestionWidget {
         addViews();
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
-            DateTimeUtils.fixCalendarViewIfJellyBean(mDatePickerDialog.getDatePicker().getCalendarView());
+            DateTimeUtils.fixCalendarViewIfJellyBean(datePickerDialog.getDatePicker().getCalendarView());
         }
     }
 
     private void readAppearance() {
-        String appearance = mPrompt.getQuestion().getAppearanceAttr();
+        String appearance = formEntryPrompt.getQuestion().getAppearanceAttr();
         if ("month-year".equals(appearance)) {
-            mHideDay = true;
+            hideDay = true;
         } else if ("year".equals(appearance)) {
-            mHideDay = true;
-            mHideMonth = true;
+            hideDay = true;
+            hideMonth = true;
         } else if (!"no-calendar".equals(appearance)) {
-            mHideDay = true;
-            mShowCalendar = true;
+            hideDay = true;
+            showCalendar = true;
         }
     }
 
     private void hideDayFieldIfNotInFormat() {
-        if (mShowCalendar) {
-            mDatePickerDialog.getDatePicker().setCalendarViewShown(true);
-            CalendarView cv = mDatePickerDialog.getDatePicker().getCalendarView();
+        if (showCalendar) {
+            datePickerDialog.getDatePicker().setCalendarViewShown(true);
+            CalendarView cv = datePickerDialog.getDatePicker().getCalendarView();
             cv.setShowWeekNumber(false);
-            mDatePickerDialog.getDatePicker().setSpinnersShown(true);
-        } else {
-            mDatePickerDialog.getDatePicker().setCalendarViewShown(false);
+            datePickerDialog.getDatePicker().setSpinnersShown(true);
+           } else {
+            datePickerDialog.getDatePicker().setCalendarViewShown(false);
         }
 
-        if (mHideDay) {
-            mDatePickerDialog.getDatePicker().findViewById(
+        if (hideDay) {
+            datePickerDialog.getDatePicker().findViewById(
                     Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
         }
-        if (mHideMonth) {
-            mDatePickerDialog.getDatePicker().findViewById(
+        if (hideMonth) {
+            datePickerDialog.getDatePicker().findViewById(
                     Resources.getSystem().getIdentifier("month", "id", "android"))
                     .setVisibility(View.GONE);
         }
@@ -123,26 +123,26 @@ public class DateWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        mNullAnswer = true;
-        mDateTextView.setText(R.string.no_date_selected);
+        nullAnswer = true;
+        dateTextView.setText(R.string.no_date_selected);
     }
 
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
 
-        if (mNullAnswer && !mShowCalendar) {
+        if (nullAnswer && !showCalendar) {
             return null;
         } else {
-            if (mShowCalendar) {
-                mYear = mDatePickerDialog.getDatePicker().getYear();
-                mMonth = mDatePickerDialog.getDatePicker().getMonth() + 1;
-                mDayOfMonth = mDatePickerDialog.getDatePicker().getDayOfMonth();
+            if (showCalendar) {
+                year = datePickerDialog.getDatePicker().getYear();
+                month = datePickerDialog.getDatePicker().getMonth() + 1;
+                dayOfMonth = datePickerDialog.getDatePicker().getDayOfMonth();
             }
             LocalDateTime ldt = new LocalDateTime()
-                    .withYear(mYear)
-                    .withMonthOfYear((!mShowCalendar && mHideMonth) ? 1 : mMonth)
-                    .withDayOfMonth((!mShowCalendar && (mHideMonth || mHideDay)) ? 1 : mDayOfMonth)
+                    .withYear(year)
+                    .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
+                    .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : dayOfMonth)
                     .withHourOfDay(0)
                     .withMinuteOfHour(0);
             return new DateData(ldt.toDate());
@@ -159,148 +159,148 @@ public class DateWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mDateButton.setOnLongClickListener(l);
-        mDateTextView.setOnLongClickListener(l);
+        dateButton.setOnLongClickListener(l);
+        dateTextView.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mDateButton.cancelLongPress();
-        mDateTextView.cancelLongPress();
+        dateButton.cancelLongPress();
+        dateTextView.cancelLongPress();
     }
 
     private void createDateButton() {
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
-        mDateButton = new Button(getContext());
-        mDateButton.setId(QuestionWidget.newUniqueId());
-        mDateButton.setText(R.string.select_date);
-        mDateButton.setPadding(20, 20, 20, 20);
-        mDateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mDateButton.setLayoutParams(params);
-        mDateButton.setEnabled(!mPrompt.isReadOnly());
+        dateButton = new Button(getContext());
+        dateButton.setId(QuestionWidget.newUniqueId());
+        dateButton.setText(R.string.select_date);
+        dateButton.setPadding(20, 20, 20, 20);
+        dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        dateButton.setLayoutParams(params);
+        dateButton.setEnabled(!formEntryPrompt.isReadOnly());
 
-        mDateButton.setOnClickListener(new View.OnClickListener() {
+        dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mNullAnswer) {
+                if (nullAnswer) {
                     setDateToCurrent();
                 } else {
-                    mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
+                    datePickerDialog.updateDate(year, month - 1, dayOfMonth);
                 }
-                mDatePickerDialog.show();
+                datePickerDialog.show();
             }
         });
     }
 
     private void createDateTextView() {
-        mDateTextView = new TextView(getContext());
-        mDateTextView.setId(QuestionWidget.newUniqueId());
-        mDateTextView.setPadding(20, 20, 20, 20);
-        mDateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        dateTextView = new TextView(getContext());
+        dateTextView.setId(QuestionWidget.newUniqueId());
+        dateTextView.setPadding(20, 20, 20, 20);
+        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
 
     private void addViews() {
-        if (mShowCalendar) {
+        if (showCalendar) {
             HorizontalScrollView scrollView = new HorizontalScrollView(getContext());
             LinearLayout ll = new LinearLayout(getContext());
-            ll.addView(mDatePickerDialog.getDatePicker());
+            ll.addView(datePickerDialog.getDatePicker());
             ll.setPadding(10, 10, 10, 10);
             scrollView.addView(ll);
             addAnswerView(scrollView);
         } else {
             LinearLayout linearLayout = new LinearLayout(getContext());
             linearLayout.setOrientation(LinearLayout.VERTICAL);
-            linearLayout.addView(mDateButton);
-            linearLayout.addView(mDateTextView);
+            linearLayout.addView(dateButton);
+            linearLayout.addView(dateTextView);
             addAnswerView(linearLayout);
         }
     }
 
     public void setDateLabel() {
-        mNullAnswer = false;
-        mDateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
-                (Date) getAnswer().getValue(), mPrompt.getQuestion().getAppearanceAttr(), false));
+        nullAnswer = false;
+        dateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
+                (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false));
     }
 
     private void createDatePickerDialog() {
-        mDatePickerDialog = new CustomDatePickerDialog(getContext(),
+        datePickerDialog = new CustomDatePickerDialog(getContext(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mYear = year;
-                        mMonth = monthOfYear + 1;
-                        mDayOfMonth = dayOfMonth;
+                        DateWidget.this.year = year;
+                        month = monthOfYear + 1;
+                        DateWidget.this.dayOfMonth = dayOfMonth;
                         setDateLabel();
                     }
                 }, 1971, 1, 1); // placeholder date that is valid
-        mDatePickerDialog.setCanceledOnTouchOutside(false);
+        datePickerDialog.setCanceledOnTouchOutside(false);
 
-        if (mPrompt.getAnswerValue() == null) {
-            if (mShowCalendar) {
+        if (formEntryPrompt.getAnswerValue() == null) {
+            if (showCalendar) {
                 setDateToCurrent();
             } else {
                 clearAnswer();
             }
         } else {
-            DateTime dt = new DateTime(((Date) mPrompt.getAnswerValue().getValue()).getTime());
-            mYear = dt.getYear();
-            mMonth = dt.getMonthOfYear();
-            mDayOfMonth = dt.getDayOfMonth();
+            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
+            year = dt.getYear();
+            month = dt.getMonthOfYear();
+            dayOfMonth = dt.getDayOfMonth();
             setDateLabel();
-            mDatePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
+            datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
         }
     }
 
     public boolean isDayHidden() {
-        return mHideDay;
+        return hideDay;
     }
 
     public boolean isMonthHidden() {
-        return mHideMonth;
+        return hideMonth;
     }
 
     public boolean isCalendarShown() {
-        return mShowCalendar;
+        return showCalendar;
     }
 
     public int getYear() {
-        return mDatePickerDialog.getDatePicker().getYear();
+        return datePickerDialog.getDatePicker().getYear();
     }
 
     public int getMonth() {
-        return mDatePickerDialog.getDatePicker().getMonth() + 1;
+        return datePickerDialog.getDatePicker().getMonth() + 1;
     }
 
     public int getDay() {
-        return mDatePickerDialog.getDatePicker().getDayOfMonth();
+        return datePickerDialog.getDatePicker().getDayOfMonth();
     }
 
     public boolean isNullAnswer() {
-        return mNullAnswer;
+        return nullAnswer;
     }
 
     public void setDateToCurrent() {
         DateTime dt = new DateTime();
-        mYear = dt.getYear();
-        mMonth = dt.getMonthOfYear();
-        mDayOfMonth = dt.getDayOfMonth();
-        mDatePickerDialog.updateDate(mYear, mMonth - 1, mDayOfMonth);
+        year = dt.getYear();
+        month = dt.getMonthOfYear();
+        dayOfMonth = dt.getDayOfMonth();
+        datePickerDialog.updateDate(year, month - 1, dayOfMonth);
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {
-        private String mDialogTitle = getContext().getString(R.string.select_date);
+        private String dialogTitle = getContext().getString(R.string.select_date);
 
         CustomDatePickerDialog(Context context, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, listener, year, month, dayOfMonth);
-            setTitle(mDialogTitle);
+            setTitle(dialogTitle);
             fixSpinner(context, year, month, dayOfMonth);
         }
 
         public void setTitle(CharSequence title) {
-            super.setTitle(mDialogTitle);
+            super.setTitle(dialogTitle);
         }
 
         /**

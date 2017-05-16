@@ -61,24 +61,24 @@ abstract class AppListActivity extends ListActivity {
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
-    private ListView mDrawerList;
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private LinearLayout mSearchBoxLayout;
-    private EditText mInputSearch;
+    private ListView drawerList;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private LinearLayout searchBoxLayout;
+    private EditText inputSearch;
 
-    protected SimpleCursorAdapter mListAdapter;
-    protected LinkedHashSet<Long> mSelectedInstances = new LinkedHashSet<>();
-    protected String[] mSortingOptions;
+    protected SimpleCursorAdapter listAdapter;
+    protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
+    protected String[] sortingOptions;
 
-    private boolean mIsSearchBoxShown;
+    private boolean isSearchBoxShown;
 
-    private Integer mSelectedSortingOrder;
+    private Integer selectedSortingOrder;
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSearchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
+        searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
         setupSearchBox();
         setupDrawer();
@@ -88,15 +88,15 @@ abstract class AppListActivity extends ListActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(SELECTED_INSTANCES, mSelectedInstances);
-        outState.putBoolean(IS_SEARCH_BOX_SHOWN, mSearchBoxLayout.getVisibility() == View.VISIBLE);
+        outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
+        outState.putBoolean(IS_SEARCH_BOX_SHOWN, searchBoxLayout.getVisibility() == View.VISIBLE);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        mSelectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
-        mIsSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
+        selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
+        isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
     }
 
     @Override
@@ -121,16 +121,16 @@ abstract class AppListActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_SORT:
-                if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-                    mDrawerLayout.closeDrawer(Gravity.END);
+                if (drawerLayout.isDrawerOpen(Gravity.END)) {
+                    drawerLayout.closeDrawer(Gravity.END);
                 } else {
-                    Collect.getInstance().hideKeyboard(mInputSearch);
-                    mDrawerLayout.openDrawer(Gravity.END);
+                    Collect.getInstance().hideKeyboard(inputSearch);
+                    drawerLayout.openDrawer(Gravity.END);
                 }
                 return true;
 
             case MENU_FILTER:
-                if (mSearchBoxLayout.getVisibility() == View.GONE) {
+                if (searchBoxLayout.getVisibility() == View.GONE) {
                     showSearchBox();
                 } else {
                     hideSearchBox();
@@ -144,22 +144,22 @@ abstract class AppListActivity extends ListActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (mDrawerToggle != null) {
-            mDrawerToggle.syncState();
+        if (drawerToggle != null) {
+            drawerToggle.syncState();
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (mDrawerToggle != null) {
-            mDrawerToggle.onConfigurationChanged(newConfig);
+        if (drawerToggle != null) {
+            drawerToggle.onConfigurationChanged(newConfig);
         }
     }
 
     private void setupSearchBox() {
-        mInputSearch = (EditText) findViewById(R.id.inputSearch);
-        mInputSearch.addTextChangedListener(new TextWatcher() {
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
+        inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -174,25 +174,25 @@ abstract class AppListActivity extends ListActivity {
             }
         });
 
-        if (mIsSearchBoxShown) {
+        if (isSearchBoxShown) {
             showSearchBox();
             updateAdapter();
         }
     }
 
     private void hideSearchBox() {
-        mInputSearch.setText("");
-        mSearchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(mInputSearch);
+        inputSearch.setText("");
+        searchBoxLayout.setVisibility(View.GONE);
+        Collect.getInstance().hideKeyboard(inputSearch);
     }
 
     private void showSearchBox() {
-        mSearchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(mInputSearch);
+        searchBoxLayout.setVisibility(View.VISIBLE);
+        Collect.getInstance().showKeyboard(inputSearch);
     }
 
     private void setupDrawerItems() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mSortingOptions) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sortingOptions) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
@@ -203,14 +203,14 @@ abstract class AppListActivity extends ListActivity {
                 return textView;
             }
         };
-        mDrawerList.setAdapter(adapter);
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        drawerList.setAdapter(adapter);
+        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                parent.getChildAt(mSelectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
+                parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
                 view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.light_blue));
                 performSelectedSearch(position);
-                mDrawerLayout.closeDrawer(Gravity.END);
+                drawerLayout.closeDrawer(Gravity.END);
             }
         });
     }
@@ -221,36 +221,36 @@ abstract class AppListActivity extends ListActivity {
     }
 
     private void setupDrawer() {
-        mDrawerList = (ListView) findViewById(R.id.sortingMenu);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.sorting_menu_open, R.string.sorting_menu_close) {
+        drawerList = (ListView) findViewById(R.id.sortingMenu);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.sorting_menu_open, R.string.sorting_menu_close) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 invalidateOptionsMenu();
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 invalidateOptionsMenu();
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
         };
 
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.addDrawerListener(drawerToggle);
     }
 
     protected void checkPreviouslyCheckedItems() {
         getListView().clearChoices();
         List<Integer> selectedPositions = new ArrayList<>();
         int listViewPosition = 0;
-        Cursor cursor = mListAdapter.getCursor();
+        Cursor cursor = listAdapter.getCursor();
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 long instanceId = cursor.getLong(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
-                if (mSelectedInstances.contains(instanceId)) {
+                if (selectedInstances.contains(instanceId)) {
                     selectedPositions.add(listViewPosition);
                 }
                 listViewPosition++;
@@ -334,15 +334,15 @@ abstract class AppListActivity extends ListActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-            mDrawerLayout.closeDrawer(Gravity.END);
+        if (drawerLayout.isDrawerOpen(Gravity.END)) {
+            drawerLayout.closeDrawer(Gravity.END);
         } else {
             super.onBackPressed();
         }
     }
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {
-        mSelectedSortingOrder = selectedStringOrder;
+        selectedSortingOrder = selectedStringOrder;
         PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
                 .edit()
                 .putInt(getSortingOrderKey(), selectedStringOrder)
@@ -350,19 +350,19 @@ abstract class AppListActivity extends ListActivity {
     }
 
     protected void restoreSelectedSortingOrder() {
-        mSelectedSortingOrder = PreferenceManager
+        selectedSortingOrder = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
     }
 
     protected int getSelectedSortingOrder() {
-        if (mSelectedSortingOrder == null) {
+        if (selectedSortingOrder == null) {
             restoreSelectedSortingOrder();
         }
-        return mSelectedSortingOrder;
+        return selectedSortingOrder;
     }
 
     protected CharSequence getFilterText() {
-        return mInputSearch != null ? mInputSearch.getText() : "";
+        return inputSearch != null ? inputSearch.getText() : "";
     }
 }

@@ -34,7 +34,7 @@ import java.util.Locale;
 public class IntegerWidget extends StringWidget {
 
     private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = mPrompt.getAnswerValue();
+        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
         Integer d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
@@ -52,20 +52,20 @@ public class IntegerWidget extends StringWidget {
     public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride, true);
 
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answer.setHorizontallyScrolling(false);
+        answer.setSingleLine(false);
 
         // only allows numbers and no periods
-        mAnswer.setKeyListener(new DigitsKeyListener(true, false));
+        answer.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
-        mAnswer.setFilters(fa);
+        answer.setFilters(fa);
 
         if (prompt.isReadOnly()) {
             setBackground(null);
@@ -76,7 +76,7 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(String.format(Locale.ENGLISH, "%d", i));
+            answer.setText(String.format(Locale.ENGLISH, "%d", i));
         }
 
         setupChangeListener();
@@ -86,7 +86,7 @@ public class IntegerWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

@@ -85,10 +85,10 @@ public class Collect extends Application {
     private CookieStore cookieStore = new BasicCookieStore();
     // retain credentials for 7 minutes...
     private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
-    private ActivityLogger mActivityLogger;
-    private FormController mFormController = null;
+    private ActivityLogger activityLogger;
+    private FormController formController = null;
     private ExternalDataManager externalDataManager;
-    private Tracker mTracker;
+    private Tracker tracker;
 
     public static String defaultSysLanguage;
 
@@ -158,15 +158,15 @@ public class Collect extends Application {
     }
 
     public ActivityLogger getActivityLogger() {
-        return mActivityLogger;
+        return activityLogger;
     }
 
     public FormController getFormController() {
-        return mFormController;
+        return formController;
     }
 
     public void setFormController(FormController controller) {
-        mFormController = controller;
+        formController = controller;
     }
 
     public ExternalDataManager getExternalDataManager() {
@@ -249,7 +249,7 @@ public class Collect extends Application {
 
         FormController.initializeJavaRosa(mgr);
 
-        mActivityLogger = new ActivityLogger(
+        activityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
@@ -278,11 +278,11 @@ public class Collect extends Application {
      * @return tracker
      */
     public synchronized Tracker getDefaultTracker() {
-        if (mTracker == null) {
+        if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
+            tracker = analytics.newTracker(R.xml.global_tracker);
         }
-        return mTracker;
+        return tracker;
     }
 
     private static class CrashReportingTree extends Timber.Tree {

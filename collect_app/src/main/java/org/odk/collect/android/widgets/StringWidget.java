@@ -42,8 +42,8 @@ import timber.log.Timber;
 public class StringWidget extends QuestionWidget {
     private static final String ROWS = "rows";
 
-    boolean mReadOnly = false;
-    protected EditText mAnswer;
+    boolean readOnly = false;
+    protected EditText answer;
 
     public StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         this(context, prompt, readOnlyOverride, true);
@@ -53,11 +53,11 @@ public class StringWidget extends QuestionWidget {
     protected StringWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
             boolean derived) {
         super(context, prompt);
-        mAnswer = new EditText(context);
-        mAnswer.setId(QuestionWidget.newUniqueId());
-        mReadOnly = prompt.isReadOnly() || readOnlyOverride;
+        answer = new EditText(context);
+        answer.setId(QuestionWidget.newUniqueId());
+        readOnly = prompt.isReadOnly() || readOnlyOverride;
 
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 
@@ -76,8 +76,8 @@ public class StringWidget extends QuestionWidget {
         if (height != null && height.length() != 0) {
             try {
                 int rows = Integer.valueOf(height);
-                mAnswer.setMinLines(rows);
-                mAnswer.setGravity(
+                answer.setMinLines(rows);
+                answer.setGravity(
                         Gravity.TOP); // to write test starting at the top of the edit area
             } catch (Exception e) {
                 Timber.e("Unable to process the rows setting for the answer field: %s", e.toString());
@@ -85,31 +85,31 @@ public class StringWidget extends QuestionWidget {
         }
 
         params.setMargins(7, 5, 7, 5);
-        mAnswer.setLayoutParams(params);
+        answer.setLayoutParams(params);
 
         // capitalize the first letter of the sentence
-        mAnswer.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
+        answer.setKeyListener(new TextKeyListener(Capitalize.SENTENCES, false));
 
         // needed to make long read only text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answer.setHorizontallyScrolling(false);
+        answer.setSingleLine(false);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mAnswer.setText(s);
+            answer.setText(s);
         }
 
-        if (mReadOnly) {
-            mAnswer.setBackground(null);
-            mAnswer.setFocusable(false);
-            mAnswer.setClickable(false);
+        if (readOnly) {
+            answer.setBackground(null);
+            answer.setFocusable(false);
+            answer.setClickable(false);
         }
 
-        addAnswerView(mAnswer);
+        addAnswerView(answer);
     }
 
     protected void setupChangeListener() {
-        mAnswer.addTextChangedListener(new TextWatcher() {
+        answer.addTextChangedListener(new TextWatcher() {
             private String oldText = "";
 
             @Override
@@ -136,14 +136,14 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        mAnswer.setText(null);
+        answer.setText(null);
     }
 
 
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -155,11 +155,11 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
-        mAnswer.requestFocus();
+        answer.requestFocus();
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (!mReadOnly) {
-            inputManager.showSoftInput(mAnswer, 0);
+        if (!readOnly) {
+            inputManager.showSoftInput(answer, 0);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -170,7 +170,7 @@ public class StringWidget extends QuestionWidget {
              * is focused before the dialog pops up, everything works fine. great.
              */
         } else {
-            inputManager.hideSoftInputFromWindow(mAnswer.getWindowToken(), 0);
+            inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
         }
     }
 
@@ -183,14 +183,14 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mAnswer.setOnLongClickListener(l);
+        answer.setOnLongClickListener(l);
     }
 
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mAnswer.cancelLongPress();
+        answer.cancelLongPress();
     }
 
 }

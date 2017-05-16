@@ -17,8 +17,8 @@ public class ItemsetDbAdapter {
 
     public static final String KEY_ID = "_id";
 
-    private DatabaseHelper mDbHelper;
-    private SQLiteDatabase mDb;
+    private DatabaseHelper dbHelper;
+    private SQLiteDatabase db;
 
     public static final String DATABASE_NAME = "itemsets.db";
     private static final String DATABASE_TABLE = "itemset_";
@@ -82,13 +82,13 @@ public class ItemsetDbAdapter {
      * @throws SQLException if the database could be neither opened or created
      */
     public ItemsetDbAdapter open() throws SQLException {
-        mDbHelper = new DatabaseHelper();
-        mDb = mDbHelper.getWritableDatabase();
+        dbHelper = new DatabaseHelper();
+        db = dbHelper.getWritableDatabase();
         return this;
     }
 
     public void close() {
-        mDbHelper.close();
+        dbHelper.close();
     }
 
     public boolean createTable(String formHash, String pathHash, String[] columns, String path) {
@@ -113,12 +113,12 @@ public class ItemsetDbAdapter {
 
         String tableCreate = sb.toString();
         Timber.i("create string: %s", tableCreate);
-        mDb.execSQL(tableCreate);
+        db.execSQL(tableCreate);
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
         cv.put(KEY_PATH, path);
-        mDb.insert(ITEMSET_TABLE, null, cv);
+        db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
     }
@@ -133,7 +133,7 @@ public class ItemsetDbAdapter {
                 cv.put("\"" + columns[i] + "\"", newRow[i]);
             }
         }
-        mDb.insert(DATABASE_TABLE + tableName, null, cv);
+        db.insert(DATABASE_TABLE + tableName, null, cv);
         return true;
     }
 
@@ -143,7 +143,7 @@ public class ItemsetDbAdapter {
         String[] selectionArgs = {
                 "table", DATABASE_TABLE + tableName
         };
-        Cursor c = mDb.query("sqlite_master", null, selection, selectionArgs,
+        Cursor c = db.query("sqlite_master", null, selection, selectionArgs,
                 null, null, null);
         boolean exists = false;
         if (c.getCount() == 1) {
@@ -155,28 +155,28 @@ public class ItemsetDbAdapter {
     }
 
     public void beginTransaction() {
-        mDb.execSQL("BEGIN");
+        db.execSQL("BEGIN");
     }
 
     public void commit() {
-        mDb.execSQL("COMMIT");
+        db.execSQL("COMMIT");
     }
 
     public Cursor query(String hash, String selection, String[] selectionArgs) throws SQLException {
-        return mDb.query(true, DATABASE_TABLE + hash, null, selection, selectionArgs,
+        return db.query(true, DATABASE_TABLE + hash, null, selection, selectionArgs,
                 null, null, null, null);
     }
 
     public void dropTable(String pathHash, String path) {
         // drop the table
-        mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
+        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
 
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
                 path
         };
-        mDb.delete(ITEMSET_TABLE, where, whereArgs);
+        db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
     public Cursor getItemsets(String path) {
@@ -184,7 +184,7 @@ public class ItemsetDbAdapter {
         String[] selectionArgs = {
                 path
         };
-        return mDb.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
+        return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
 
     public void delete(String path) {
@@ -193,7 +193,7 @@ public class ItemsetDbAdapter {
             if (c.getCount() == 1) {
                 c.moveToFirst();
                 String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
-                mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
+                db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
         }
@@ -202,7 +202,7 @@ public class ItemsetDbAdapter {
         String[] whereArgs = {
                 path
         };
-        mDb.delete(ITEMSET_TABLE, where, whereArgs);
+        db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
     public static String getMd5FromString(String toEncode) {

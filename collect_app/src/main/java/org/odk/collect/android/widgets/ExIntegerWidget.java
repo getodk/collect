@@ -43,7 +43,7 @@ import java.util.Locale;
 public class ExIntegerWidget extends ExStringWidget {
 
     private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = mPrompt.getAnswerValue();
+        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
         Integer d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
@@ -61,20 +61,20 @@ public class ExIntegerWidget extends ExStringWidget {
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // only allows numbers and no periods
-        mAnswer.setKeyListener(new DigitsKeyListener(true, false));
+        answer.setKeyListener(new DigitsKeyListener(true, false));
 
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
-        mAnswer.setFilters(fa);
+        answer.setFilters(fa);
 
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            mAnswer.setText(String.format(Locale.getDefault(), "%d", i.toString()));
+            answer.setText(String.format(Locale.getDefault(), "%d", i.toString()));
         }
     }
 
@@ -83,7 +83,7 @@ public class ExIntegerWidget extends ExStringWidget {
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getIntegerAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), mPrompt.getIndex());
+                i.getAction(), formEntryPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i,
                 FormEntryActivity.EX_INT_CAPTURE);
     }
@@ -91,7 +91,7 @@ public class ExIntegerWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -110,7 +110,7 @@ public class ExIntegerWidget extends ExStringWidget {
     @Override
     public void setBinaryData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
-        mAnswer.setText(integerData == null ? null : integerData.getValue().toString());
+        this.answer.setText(integerData == null ? null : integerData.getValue().toString());
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 

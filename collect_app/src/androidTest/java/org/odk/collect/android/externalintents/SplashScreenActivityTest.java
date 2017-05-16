@@ -16,7 +16,7 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class SplashScreenActivityTest {
 
     @Rule
-    public ActivityTestRule<SplashScreenActivity> mSplashScreenActivityRule =
+    public ActivityTestRule<SplashScreenActivity> splashScreenActivityRule =
             new ExportedActivityTestRule<>(SplashScreenActivity.class);
 
     @Test
