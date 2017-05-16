@@ -2231,10 +2231,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private void cancelSaveToDiskTask() {
         synchronized (saveDialogLock) {
-            saveToDiskTask.setFormSavedListener(null);
-            boolean cancelled = saveToDiskTask.cancel(true);
-            Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
-            saveToDiskTask = null;
+            if (saveToDiskTask != null) {
+                saveToDiskTask.setFormSavedListener(null);
+                boolean cancelled = saveToDiskTask.cancel(true);
+                Timber.w("Cancelled SaveToDiskTask! (%s)", cancelled);
+                saveToDiskTask = null;
+            }
         }
     }
 
