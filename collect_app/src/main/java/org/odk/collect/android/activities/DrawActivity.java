@@ -288,7 +288,7 @@ public class DrawActivity extends Activity {
 
     private void saveFile(File f) throws FileNotFoundException {
         if (drawView.getWidth() == 0 || drawView.getHeight() == 0) {
-            // apparently on 4.x1, the orientation change notification can occur
+            // apparently on 4.x, the orientation change notification can occur
             // sometime before the view is rendered. In that case, the view
             // dimensions will not be known.
             Timber.e("View has zero width or zero height");
