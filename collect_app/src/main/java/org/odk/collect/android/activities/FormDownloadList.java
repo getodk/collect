@@ -47,6 +47,7 @@ import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.WebHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -325,7 +326,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 mDownloadFormListTask = null;
             }
 
-            mDownloadFormListTask = new DownloadFormListTask();
+            mDownloadFormListTask = new DownloadFormListTask(
+                    Collect.getInstance().getApplicationContext().getString(R.string.default_odk_formlist),
+                    new WebHelper()
+            );
             mDownloadFormListTask.setDownloaderListener(this);
             mDownloadFormListTask.execute();
 
