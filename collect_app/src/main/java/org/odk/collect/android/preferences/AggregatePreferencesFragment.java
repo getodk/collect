@@ -36,23 +36,23 @@ import java.util.List;
 
 public class AggregatePreferencesFragment extends PreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
-    protected EditTextPreference mServerUrlPreference;
-    protected EditTextPreference mUsernamePreference;
-    protected EditTextPreference mPasswordPreference;
-    protected boolean mCredentialsHaveChanged = false;
+    protected EditTextPreference serverUrlPreference;
+    protected EditTextPreference usernamePreference;
+    protected EditTextPreference passwordPreference;
+    protected boolean credentialsHaveChanged = false;
 
-    private ListPopupWindow mListPopupWindow;
-    private List<String> mUrlList;
+    private ListPopupWindow listPopupWindow;
+    private List<String> urlList;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.aggregate_preferences);
 
-        mServerUrlPreference = (EditTextPreference) findPreference(
+        serverUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_SERVER_URL);
-        mUsernamePreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_USERNAME);
-        mPasswordPreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_PASSWORD);
+        usernamePreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_USERNAME);
+        passwordPreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_PASSWORD);
 
         PreferenceCategory aggregatePreferences = (PreferenceCategory) findPreference(
                 getString(R.string.aggregate_preferences));
@@ -60,39 +60,39 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String urlListString = prefs.getString(KNOWN_URL_LIST, "");
         if (urlListString.isEmpty()) {
-            mUrlList = new ArrayList<>();
+            urlList = new ArrayList<>();
         } else {
-            mUrlList =
+            urlList =
                     new Gson().fromJson(urlListString, new TypeToken<List<String>>() {
                     }.getType());
         }
-        if (mUrlList.size() == 0) {
+        if (urlList.size() == 0) {
             addUrlToPreferencesList(getString(R.string.default_server_url), prefs);
         }
 
         urlDropdownSetup();
 
-        mServerUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
-        mServerUrlPreference.getEditText().setOnTouchListener(this);
-        mServerUrlPreference.setOnPreferenceChangeListener(this);
-        mServerUrlPreference.setSummary(mServerUrlPreference.getText());
-        mServerUrlPreference.getEditText().setFilters(
+        serverUrlPreference.getEditText().setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+        serverUrlPreference.getEditText().setOnTouchListener(this);
+        serverUrlPreference.setOnPreferenceChangeListener(this);
+        serverUrlPreference.setSummary(serverUrlPreference.getText());
+        serverUrlPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
 
-        mUsernamePreference.setOnPreferenceChangeListener(this);
-        mUsernamePreference.setSummary(mUsernamePreference.getText());
-        mUsernamePreference.getEditText().setFilters(
+        usernamePreference.setOnPreferenceChangeListener(this);
+        usernamePreference.setSummary(usernamePreference.getText());
+        usernamePreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
 
-        mPasswordPreference.setOnPreferenceChangeListener(this);
-        maskPasswordSummary(mPasswordPreference.getText());
-        mPasswordPreference.getEditText().setFilters(
+        passwordPreference.setOnPreferenceChangeListener(this);
+        maskPasswordSummary(passwordPreference.getText());
+        passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
     }
 
     private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
-        mUrlList.add(0, url);
-        String urlListString = new Gson().toJson(mUrlList);
+        urlList.add(0, url);
+        String urlListString = new Gson().toJson(urlList);
         prefs
                 .edit()
                 .putString(KNOWN_URL_LIST, urlListString)
@@ -100,28 +100,28 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
     }
 
     private void urlDropdownSetup() {
-        mListPopupWindow = new ListPopupWindow(getActivity());
+        listPopupWindow = new ListPopupWindow(getActivity());
         setupUrlDropdownAdapter();
-        mListPopupWindow.setAnchorView(mServerUrlPreference.getEditText());
-        mListPopupWindow.setModal(true);
-        mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listPopupWindow.setAnchorView(serverUrlPreference.getEditText());
+        listPopupWindow.setModal(true);
+        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mServerUrlPreference.getEditText().setText(mUrlList.get(position));
-                mListPopupWindow.dismiss();
+                serverUrlPreference.getEditText().setText(urlList.get(position));
+                listPopupWindow.dismiss();
             }
         });
     }
 
     private void setupUrlDropdownAdapter() {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mUrlList);
-        mListPopupWindow.setAdapter(adapter);
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, urlList);
+        listPopupWindow.setAdapter(adapter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        if (mCredentialsHaveChanged) {
+        if (credentialsHaveChanged) {
             AuthDialogUtility.setWebCredentialsFromPreferences(getActivity().getBaseContext());
         }
     }
@@ -135,7 +135,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                mListPopupWindow.show();
+                listPopupWindow.show();
                 return true;
             }
         }
@@ -161,15 +161,15 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                             .getDefaultSharedPreferences(getActivity().getApplicationContext());
                     String urlListString = prefs.getString(KNOWN_URL_LIST, "");
 
-                    mUrlList =
+                    urlList =
                             new Gson().fromJson(urlListString,
                                     new TypeToken<List<String>>() {
                                     }.getType());
 
-                    if (!mUrlList.contains(url)) {
+                    if (!urlList.contains(url)) {
                         // We store a list with at most 5 elements
-                        if (mUrlList.size() == 5) {
-                            mUrlList.remove(4);
+                        if (urlList.size() == 5) {
+                            urlList.remove(4);
                         }
                         addUrlToPreferencesList(url, prefs);
                         setupUrlDropdownAdapter();
@@ -193,7 +193,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                 clearCachedCrendentials();
 
                 // To ensure we update current credentials in CredentialsProvider
-                mCredentialsHaveChanged = true;
+                credentialsHaveChanged = true;
 
                 return true;
 
@@ -210,14 +210,14 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                 clearCachedCrendentials();
 
                 // To ensure we update current credentials in CredentialsProvider
-                mCredentialsHaveChanged = true;
+                credentialsHaveChanged = true;
                 break;
         }
         return true;
     }
 
     private void maskPasswordSummary(String password) {
-        mPasswordPreference.setSummary(password != null && password.length() > 0
+        passwordPreference.setSummary(password != null && password.length() > 0
                 ? "********"
                 : "");
     }

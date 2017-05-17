@@ -49,11 +49,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
-    private AlertDialog mAlertDialog;
+    private AlertDialog alertDialog;
 
     private InstanceSyncTask instanceSyncTask;
 
-    private boolean mEditMode;
+    private boolean editMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,15 +72,15 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             mToolbar.setTitle(getString(R.string.review_data));
-            mEditMode = true;
-            mSortingOptions = new String[]{
+            editMode = true;
+            sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
                     getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
             };
         } else {
             mToolbar.setTitle(getString(R.string.view_sent_forms));
-            mSortingOptions = new String[]{
+            sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
             };
@@ -198,27 +198,27 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                 R.id.text1, R.id.text2, R.id.text4
         };
 
-        if (mEditMode) {
-            mListAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
+        if (editMode) {
+            listAdapter = new SimpleCursorAdapter(this, R.layout.two_item, getCursor(), data, view);
         } else {
-            mListAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
+            listAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
         }
-        setListAdapter(mListAdapter);
+        setListAdapter(listAdapter);
     }
 
     @Override
     protected String getSortingOrderKey() {
-        return mEditMode ? INSTANCE_LIST_ACTIVITY_SORTING_ORDER : VIEW_SENT_FORM_SORTING_ORDER;
+        return editMode ? INSTANCE_LIST_ACTIVITY_SORTING_ORDER : VIEW_SENT_FORM_SORTING_ORDER;
     }
 
     @Override
     protected void updateAdapter() {
-        mListAdapter.changeCursor(getCursor());
+        listAdapter.changeCursor(getCursor());
     }
 
     private Cursor getCursor() {
         Cursor cursor;
-        if (mEditMode) {
+        if (editMode) {
             cursor = new InstancesDao().getUnsentInstancesCursor(getFilterText(), getSortingOrder());
         } else {
             cursor = new InstancesDao().getSentInstancesCursor(getFilterText(), getSortingOrder());
@@ -230,9 +230,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertDialog.setMessage(errorMsg);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -248,9 +248,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.show();
     }
 
 

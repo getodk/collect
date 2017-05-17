@@ -55,40 +55,40 @@ import timber.log.Timber;
 public class DrawWidget extends QuestionWidget implements IBinaryWidget {
     private static final String t = "DrawWidget";
 
-    private Button mDrawButton;
-    private String mBinaryName;
-    private String mInstanceFolder;
-    private ImageView mImageView;
-    private TextView mErrorTextView;
+    private Button drawButton;
+    private String binaryName;
+    private String instanceFolder;
+    private ImageView imageView;
+    private TextView errorTextView;
 
     public DrawWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mErrorTextView = new TextView(context);
-        mErrorTextView.setId(QuestionWidget.newUniqueId());
-        mErrorTextView.setText(R.string.selected_invalid_image);
+        errorTextView = new TextView(context);
+        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setText(R.string.selected_invalid_image);
 
-        mInstanceFolder = Collect.getInstance().getFormController()
+        instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
         // setup Blank Image Button
-        mDrawButton = new Button(getContext());
-        mDrawButton.setId(QuestionWidget.newUniqueId());
-        mDrawButton.setText(getContext().getString(R.string.draw_image));
-        mDrawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mDrawButton.setPadding(20, 20, 20, 20);
-        mDrawButton.setEnabled(!prompt.isReadOnly());
-        mDrawButton.setLayoutParams(params);
+        drawButton = new Button(getContext());
+        drawButton.setId(QuestionWidget.newUniqueId());
+        drawButton.setText(getContext().getString(R.string.draw_image));
+        drawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        drawButton.setPadding(20, 20, 20, 20);
+        drawButton.setEnabled(!prompt.isReadOnly());
+        drawButton.setLayoutParams(params);
         // launch capture intent on click
-        mDrawButton.setOnClickListener(new View.OnClickListener() {
+        drawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "drawButton", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
                 launchDrawActivity();
             }
         });
@@ -96,64 +96,64 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mDrawButton);
-        answerLayout.addView(mErrorTextView);
+        answerLayout.addView(drawButton);
+        answerLayout.addView(errorTextView);
 
-        if (mPrompt.isReadOnly()) {
-            mDrawButton.setVisibility(View.GONE);
+        if (formEntryPrompt.isReadOnly()) {
+            drawButton.setVisibility(View.GONE);
         }
-        mErrorTextView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
 
         // retrieve answer from data model and update ui
-        mBinaryName = prompt.getAnswerText();
+        binaryName = prompt.getAnswerText();
 
         // Only add the imageView if the user has signed
-        if (mBinaryName != null) {
-            mImageView = new ImageView(getContext());
-            mImageView.setId(QuestionWidget.newUniqueId());
+        if (binaryName != null) {
+            imageView = new ImageView(getContext());
+            imageView.setId(QuestionWidget.newUniqueId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
-            File f = new File(mInstanceFolder + File.separator + mBinaryName);
+            File f = new File(instanceFolder + File.separator + binaryName);
 
             if (f.exists()) {
                 Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f,
                         screenHeight, screenWidth);
                 if (bmp == null) {
-                    mErrorTextView.setVisibility(View.VISIBLE);
+                    errorTextView.setVisibility(View.VISIBLE);
                 }
-                mImageView.setImageBitmap(bmp);
+                imageView.setImageBitmap(bmp);
             } else {
-                mImageView.setImageBitmap(null);
+                imageView.setImageBitmap(null);
             }
 
-            mImageView.setPadding(10, 10, 10, 10);
-            mImageView.setAdjustViewBounds(true);
-            mImageView.setOnClickListener(new View.OnClickListener() {
+            imageView.setPadding(10, 10, 10, 10);
+            imageView.setAdjustViewBounds(true);
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this, "viewImage", "click",
-                                    mPrompt.getIndex());
+                                    formEntryPrompt.getIndex());
                     launchDrawActivity();
                 }
             });
 
-            answerLayout.addView(mImageView);
+            answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
 
     }
 
     private void launchDrawActivity() {
-        mErrorTextView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
         Intent i = new Intent(getContext(), DrawActivity.class);
         i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_DRAW);
         // copy...
-        if (mBinaryName != null) {
-            File f = new File(mInstanceFolder + File.separator + mBinaryName);
+        if (binaryName != null) {
+            File f = new File(instanceFolder + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
         i.putExtra(DrawActivity.EXTRA_OUTPUT,
@@ -161,7 +161,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
         try {
             Collect.getInstance().getFormController()
-                    .setIndexWaitingForData(mPrompt.getIndex());
+                    .setIndexWaitingForData(formEntryPrompt.getIndex());
             ((Activity) getContext()).startActivityForResult(i,
                     FormEntryActivity.DRAW_IMAGE);
         } catch (ActivityNotFoundException e) {
@@ -176,11 +176,11 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
     private void deleteMedia() {
         // get the file path and delete the file
-        String name = mBinaryName;
+        String name = binaryName;
         // clean up variables
-        mBinaryName = null;
+        binaryName = null;
         // delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(mInstanceFolder
+        int del = MediaUtils.deleteImageFileFromMediaProvider(instanceFolder
                 + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
@@ -189,17 +189,17 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-        mImageView.setImageBitmap(null);
-        mErrorTextView.setVisibility(View.GONE);
+        imageView.setImageBitmap(null);
+        errorTextView.setVisibility(View.GONE);
 
         // reset buttons
-        mDrawButton.setText(getContext().getString(R.string.draw_image));
+        drawButton.setText(getContext().getString(R.string.draw_image));
     }
 
     @Override
     public IAnswerData getAnswer() {
-        if (mBinaryName != null) {
-            return new StringData(mBinaryName);
+        if (binaryName != null) {
+            return new StringData(binaryName);
         } else {
             return null;
         }
@@ -209,7 +209,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
     public void setBinaryData(Object answer) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
-        if (mBinaryName != null) {
+        if (binaryName != null) {
             deleteMedia();
         }
 
@@ -228,7 +228,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
                     Images.Media.EXTERNAL_CONTENT_URI, values);
             Timber.i("Inserting image returned uri = %s", imageURI.toString());
 
-            mBinaryName = newImage.getName();
+            binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
@@ -247,7 +247,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }
@@ -259,18 +259,18 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mDrawButton.setOnLongClickListener(l);
-        if (mImageView != null) {
-            mImageView.setOnLongClickListener(l);
+        drawButton.setOnLongClickListener(l);
+        if (imageView != null) {
+            imageView.setOnLongClickListener(l);
         }
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mDrawButton.cancelLongPress();
-        if (mImageView != null) {
-            mImageView.cancelLongPress();
+        drawButton.cancelLongPress();
+        if (imageView != null) {
+            imageView.cancelLongPress();
         }
     }
 

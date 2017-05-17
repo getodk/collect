@@ -35,7 +35,7 @@ import java.util.Locale;
 public class DecimalWidget extends StringWidget {
 
     private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = mPrompt.getAnswerValue();
+        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
         Double d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
@@ -54,20 +54,20 @@ public class DecimalWidget extends StringWidget {
         super(context, prompt, readOnlyOverride, true);
 
         // formatting
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // needed to make long readonly text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answer.setHorizontallyScrolling(false);
+        answer.setSingleLine(false);
 
         // only numbers are allowed
-        mAnswer.setKeyListener(new DigitsKeyListener(true, true));
+        answer.setKeyListener(new DigitsKeyListener(true, true));
 
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);
-        mAnswer.setFilters(fa);
+        answer.setFilters(fa);
 
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
         nf.setMaximumFractionDigits(15);
@@ -80,8 +80,8 @@ public class DecimalWidget extends StringWidget {
             // truncate to 15 digits max...
             String string = nf.format(d);
             d = Double.parseDouble(string.replace(',', '.'));
-            //mAnswer.setText(d.toString());
-            mAnswer.setText(String.format(Locale.ENGLISH, "%f", d));
+            //answer.setText(d.toString());
+            answer.setText(String.format(Locale.ENGLISH, "%f", d));
         }
 
         // disable if read only
@@ -98,7 +98,7 @@ public class DecimalWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

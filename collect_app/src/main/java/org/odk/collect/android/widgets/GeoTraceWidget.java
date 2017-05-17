@@ -56,7 +56,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
-    private final boolean mReadOnly;
+    private final boolean readOnly;
     public static final String TRACE_LOCATION = "gp";
     private Button createTraceButton;
     private Button viewShapeButton;
@@ -64,8 +64,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     public SharedPreferences sharedPreferences;
     public String mapSDK;
 
-    private TextView mStringAnswer;
-    private TextView mAnswerDisplay;
+    private TextView stringAnswer;
+    private TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -75,19 +75,19 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         params.setMargins(7, 5, 7, 5);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
-        mReadOnly = prompt.isReadOnly();
+        readOnly = prompt.isReadOnly();
 
-        mStringAnswer = new TextView(getContext());
-        mStringAnswer.setId(QuestionWidget.newUniqueId());
+        stringAnswer = new TextView(getContext());
+        stringAnswer.setId(QuestionWidget.newUniqueId());
 
-        mAnswerDisplay = new TextView(getContext());
-        mAnswerDisplay.setId(QuestionWidget.newUniqueId());
-        mAnswerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswerDisplay.setGravity(Gravity.CENTER);
+        answerDisplay = new TextView(getContext());
+        answerDisplay.setId(QuestionWidget.newUniqueId());
+        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerDisplay.setGravity(Gravity.CENTER);
         createTraceButton = new Button(getContext());
         createTraceButton.setId(QuestionWidget.newUniqueId());
         createTraceButton.setText(getContext().getString(R.string.get_trace));
-        createTraceButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+        createTraceButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         createTraceButton.setPadding(20, 20, 20, 20);
         createTraceButton.setLayoutParams(params);
 
@@ -95,7 +95,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
+                Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
                 startGeoTraceActivity();
 
             }
@@ -103,7 +103,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(createTraceButton);
-        answerLayout.addView(mAnswerDisplay);
+        answerLayout.addView(answerDisplay);
         addAnswerView(answerLayout);
 
         boolean dataAvailable = false;
@@ -128,7 +128,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
         }
-        String s = mStringAnswer.getText().toString();
+        String s = stringAnswer.getText().toString();
         if (s.length() != 0) {
             i.putExtra(TRACE_LOCATION, s);
         }
@@ -147,8 +147,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String s = answer.toString();
-        mStringAnswer.setText(s);
-        mAnswerDisplay.setText(s);
+        stringAnswer.setText(s);
+        answerDisplay.setText(s);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
@@ -161,10 +161,10 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public boolean isWaitingForBinaryData() {
         // TODO Auto-generated method stub
-        Boolean test = mPrompt.getIndex().equals(
+        Boolean test = formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
 
@@ -173,7 +173,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         ArrayList<double[]> list = new ArrayList<double[]>();
-        String s = mStringAnswer.getText().toString();
+        String s = stringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -199,8 +199,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         // TODO Auto-generated method stub
-        mStringAnswer.setText(null);
-        mAnswerDisplay.setText(null);
+        stringAnswer.setText(null);
+        answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
     }
 
@@ -216,8 +216,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         createTraceButton.setOnLongClickListener(l);
-        mStringAnswer.setOnLongClickListener(l);
-        mAnswerDisplay.setOnLongClickListener(l);
+        stringAnswer.setOnLongClickListener(l);
+        answerDisplay.setOnLongClickListener(l);
     }
 
 }

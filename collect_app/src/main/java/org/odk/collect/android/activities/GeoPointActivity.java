@@ -40,13 +40,13 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
     private static final String LOCATION_COUNT = "locationCount";
 
-    private ProgressDialog mLocationDialog;
-    private LocationManager mLocationManager;
-    private Location mLocation;
-    private boolean mGPSOn = false;
-    private boolean mNetworkOn = false;
-    private double mLocationAccuracy;
-    private int mLocationCount = 0;
+    private ProgressDialog locationDialog;
+    private LocationManager locationManager;
+    private Location location;
+    private boolean gpsOn = false;
+    private boolean networkOn = false;
+    private double locationAccuracy;
+    private int locationCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,40 +54,40 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (savedInstanceState != null) {
-            mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
+            locationCount = savedInstanceState.getInt(LOCATION_COUNT);
         }
 
         Intent intent = getIntent();
 
-        mLocationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
+        locationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
             if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
-                mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
+                locationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
                         GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
             }
         }
 
         setTitle(getString(R.string.get_location));
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // make sure we have a good location provider before continuing
-        List<String> providers = mLocationManager.getProviders(true);
+        List<String> providers = locationManager.getProviders(true);
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                mGPSOn = true;
+                gpsOn = true;
             }
             if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                mNetworkOn = true;
+                networkOn = true;
             }
         }
-        if (!mGPSOn && !mNetworkOn) {
+        if (!gpsOn && !networkOn) {
             ToastUtils.showShortToast(R.string.provider_disabled_error);
             Intent onGPSIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(onGPSIntent);
             finish();
         }
 
-        if (mGPSOn) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (gpsOn) {
+            Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc != null) {
                 InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
                         + " lastKnownLocation(GPS) lat: "
@@ -100,8 +100,8 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             }
         }
 
-        if (mNetworkOn) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (networkOn) {
+            Location loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (loc != null) {
                 InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
                         + " lastKnownLocation(Network) lat: "
@@ -121,7 +121,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(LOCATION_COUNT, mLocationCount);
+        outState.putInt(LOCATION_COUNT, locationCount);
     }
 
     @Override
@@ -129,14 +129,14 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         super.onPause();
 
         // stops the GPS. Note that this will turn off the GPS if the screen goes to sleep.
-        if (mLocationManager != null) {
-            mLocationManager.removeUpdates(this);
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
         }
 
         // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
         // leaking memory.
-        if (mLocationDialog != null && mLocationDialog.isShowing()) {
-            mLocationDialog.dismiss();
+        if (locationDialog != null && locationDialog.isShowing()) {
+            locationDialog.dismiss();
         }
     }
 
@@ -145,16 +145,16 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     protected void onResume() {
         super.onResume();
 
-        if (mLocationManager != null) {
-            if (mGPSOn) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        if (locationManager != null) {
+            if (gpsOn) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             }
-            if (mNetworkOn) {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            if (networkOn) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
         }
-        if (mLocationDialog != null) {
-            mLocationDialog.show();
+        if (locationDialog != null) {
+            locationDialog.show();
         }
     }
 
@@ -177,7 +177,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupLocationDialog",
                 "show");
         // dialog displayed while fetching gps location
-        mLocationDialog = new ProgressDialog(this);
+        locationDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -191,7 +191,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                             case DialogInterface.BUTTON_NEGATIVE:
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "cancelLocation", "cancel");
-                                mLocation = null;
+                                location = null;
                                 finish();
                                 break;
                         }
@@ -199,26 +199,26 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 };
 
         // back button doesn't cancel
-        mLocationDialog.setCancelable(false);
-        mLocationDialog.setIndeterminate(true);
-        mLocationDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mLocationDialog.setTitle(getString(R.string.getting_location));
-        mLocationDialog.setMessage(getString(R.string.please_wait_long));
-        mLocationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
+        locationDialog.setCancelable(false);
+        locationDialog.setIndeterminate(true);
+        locationDialog.setIcon(android.R.drawable.ic_dialog_info);
+        locationDialog.setTitle(getString(R.string.getting_location));
+        locationDialog.setMessage(getString(R.string.please_wait_long));
+        locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
                 geopointButtonListener);
-        mLocationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+        locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
                 geopointButtonListener);
     }
 
 
     private void returnLocation() {
-        if (mLocation != null) {
+        if (location != null) {
             Intent i = new Intent();
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
-                    mLocation.getLatitude() + " " + mLocation.getLongitude() + " "
-                            + mLocation.getAltitude() + " " + mLocation.getAccuracy());
+                    location.getLatitude() + " " + location.getLongitude() + " "
+                            + location.getAltitude() + " " + location.getAccuracy());
             setResult(RESULT_OK, i);
         }
         finish();
@@ -227,28 +227,28 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
     @Override
     public void onLocationChanged(Location location) {
-        mLocation = location;
-        if (mLocation != null) {
+        this.location = location;
+        if (this.location != null) {
             // Bug report: cached GeoPoint is being returned as the first value.
             // Wait for the 2nd value to be returned, which is hopefully not cached?
-            ++mLocationCount;
+            ++locationCount;
             InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
-                    + " onLocationChanged(" + mLocationCount + ") lat: "
-                    + mLocation.getLatitude() + " long: "
-                    + mLocation.getLongitude() + " acc: "
-                    + mLocation.getAccuracy());
+                    + " onLocationChanged(" + locationCount + ") lat: "
+                    + this.location.getLatitude() + " long: "
+                    + this.location.getLongitude() + " acc: "
+                    + this.location.getAccuracy());
 
-            if (mLocationCount > 1) {
-                mLocationDialog.setMessage(getString(R.string.location_provider_accuracy,
-                        mLocation.getProvider(), truncateDouble(mLocation.getAccuracy())));
+            if (locationCount > 1) {
+                locationDialog.setMessage(getString(R.string.location_provider_accuracy,
+                        this.location.getProvider(), truncateDouble(this.location.getAccuracy())));
 
-                if (mLocation.getAccuracy() <= mLocationAccuracy) {
+                if (this.location.getAccuracy() <= locationAccuracy) {
                     returnLocation();
                 }
             }
         } else {
             InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
-                    + " onLocationChanged(" + mLocationCount + ") null location");
+                    + " onLocationChanged(" + locationCount + ") null location");
         }
     }
 
@@ -274,9 +274,9 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
             case LocationProvider.AVAILABLE:
-                if (mLocation != null) {
-                    mLocationDialog.setMessage(getString(R.string.location_accuracy,
-                            mLocation.getAccuracy()));
+                if (location != null) {
+                    locationDialog.setMessage(getString(R.string.location_accuracy,
+                            location.getAccuracy()));
                 }
                 break;
             case LocationProvider.OUT_OF_SERVICE:

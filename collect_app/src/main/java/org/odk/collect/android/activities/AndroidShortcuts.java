@@ -38,8 +38,8 @@ import java.util.ArrayList;
  */
 public class AndroidShortcuts extends AppCompatActivity {
 
-    private Uri[] mCommands;
-    private String[] mNames;
+    private Uri[] commands;
+    private String[] names;
 
 
     @Override
@@ -87,12 +87,12 @@ public class AndroidShortcuts extends AppCompatActivity {
             }
         }
 
-        mNames = names.toArray(new String[0]);
-        mCommands = commands.toArray(new Uri[0]);
+        this.names = names.toArray(new String[0]);
+        this.commands = commands.toArray(new Uri[0]);
 
-        builder.setItems(this.mNames, new DialogInterface.OnClickListener() {
+        builder.setItems(this.names, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                returnShortcut(mNames[item], mCommands[item]);
+                returnShortcut(AndroidShortcuts.this.names[item], AndroidShortcuts.this.commands[item]);
             }
         });
 

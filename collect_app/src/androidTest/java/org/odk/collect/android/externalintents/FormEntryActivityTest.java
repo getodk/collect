@@ -19,7 +19,7 @@ import static org.odk.collect.android.externalintents.ExportedActivitiesUtils.te
 public class FormEntryActivityTest {
 
     @Rule
-    public ActivityTestRule<FormEntryActivity> mFormEntryActivityRule =
+    public ActivityTestRule<FormEntryActivity> formEntryActivityRule =
             new ExportedActivityTestRule<>(FormEntryActivity.class);
 
     @Test

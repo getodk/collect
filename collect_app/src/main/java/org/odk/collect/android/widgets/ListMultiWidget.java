@@ -69,11 +69,11 @@ public class ListMultiWidget extends QuestionWidget {
     // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
 
-    private boolean mCheckboxInit = true;
+    private boolean checkboxInit = true;
 
-    private List<SelectChoice> mItems; // may take a while to compute...
+    private List<SelectChoice> items; // may take a while to compute...
 
-    private ArrayList<CheckBox> mCheckboxes;
+    private ArrayList<CheckBox> checkBoxes;
     private View center;
 
 
@@ -85,12 +85,12 @@ public class ListMultiWidget extends QuestionWidget {
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
-        mCheckboxes = new ArrayList<CheckBox>();
-        mPrompt = prompt;
+        checkBoxes = new ArrayList<CheckBox>();
+        formEntryPrompt = prompt;
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -100,8 +100,8 @@ public class ListMultiWidget extends QuestionWidget {
             ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
 
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
                 CheckBox c = new CheckBox(getContext());
                 c.setTag(Integer.valueOf(i));
                 c.setId(QuestionWidget.newUniqueId());
@@ -109,41 +109,41 @@ public class ListMultiWidget extends QuestionWidget {
                 c.setEnabled(!prompt.isReadOnly());
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
-                    if (mItems.get(i).getValue().equals(ve.get(vi).getValue())) {
+                    if (items.get(i).getValue().equals(ve.get(vi).getValue())) {
                         c.setChecked(true);
                         break;
                     }
 
                 }
-                mCheckboxes.add(c);
+                checkBoxes.add(c);
 
                 // when clicked, check for readonly before toggling
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!mCheckboxInit && mPrompt.isReadOnly()) {
+                        if (!checkboxInit && formEntryPrompt.isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.deselect",
-                                        mItems.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
+                                        items.get((Integer) buttonView.getTag()).getValue(),
+                                        formEntryPrompt.getIndex());
                             } else {
                                 buttonView.setChecked(true);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.select",
-                                        mItems.get((Integer) buttonView.getTag()).getValue(),
-                                        mPrompt.getIndex());
+                                        items.get((Integer) buttonView.getTag()).getValue(),
+                                        formEntryPrompt.getIndex());
                             }
                         }
                     }
                 });
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
@@ -212,8 +212,8 @@ public class ListMultiWidget extends QuestionWidget {
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
-                label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                label.setText(prompt.getSelectChoiceText(items.get(i)));
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
@@ -276,8 +276,8 @@ public class ListMultiWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        for (int i = 0; i < mCheckboxes.size(); i++) {
-            CheckBox c = mCheckboxes.get(i);
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            CheckBox c = checkBoxes.get(i);
             if (c.isChecked()) {
                 c.setChecked(false);
             }
@@ -288,10 +288,10 @@ public class ListMultiWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         List<Selection> vc = new ArrayList<Selection>();
-        for (int i = 0; i < mCheckboxes.size(); i++) {
-            CheckBox c = mCheckboxes.get(i);
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            CheckBox c = checkBoxes.get(i);
             if (c.isChecked()) {
-                vc.add(new Selection(mItems.get(i)));
+                vc.add(new Selection(items.get(i)));
             }
         }
 
@@ -320,7 +320,7 @@ public class ListMultiWidget extends QuestionWidget {
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mQuestionFontsize);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setId(QuestionWidget.newUniqueId()); // assign random id
@@ -341,7 +341,7 @@ public class ListMultiWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             c.setOnLongClickListener(l);
         }
     }
@@ -350,7 +350,7 @@ public class ListMultiWidget extends QuestionWidget {
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        for (CheckBox c : mCheckboxes) {
+        for (CheckBox c : checkBoxes) {
             c.cancelLongPress();
         }
     }

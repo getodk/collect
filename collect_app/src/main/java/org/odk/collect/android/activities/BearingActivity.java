@@ -30,25 +30,25 @@ import org.odk.collect.android.application.Collect;
 import java.util.Locale;
 
 public class BearingActivity extends AppCompatActivity implements SensorEventListener {
-    private ProgressDialog mBearingDialog;
+    private ProgressDialog bearingDialog;
 
-    private SensorManager mSensorManager;
+    private SensorManager sensorManager;
     private Sensor accelerometer;
     private Sensor magnetometer;
 
     private static float[] mAccelerometer = null;
     private static float[] mGeomagnetic = null;
 
-    private String mBearingDecimal = null;
+    private String bearingDecimal = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.get_bearing));
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         setupBearingDialog();
     }
@@ -57,20 +57,20 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
     protected void onPause() {
         super.onPause();
 
-        mSensorManager.unregisterListener(this, accelerometer);
-        mSensorManager.unregisterListener(this, magnetometer);
+        sensorManager.unregisterListener(this, accelerometer);
+        sensorManager.unregisterListener(this, magnetometer);
 
-        if (mBearingDialog != null && mBearingDialog.isShowing()) {
-            mBearingDialog.dismiss();
+        if (bearingDialog != null && bearingDialog.isShowing()) {
+            bearingDialog.dismiss();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
-        mBearingDialog.show();
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+        bearingDialog.show();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "setupBearingDialog", "show");
         // dialog displayed while fetching bearing
-        mBearingDialog = new ProgressDialog(this);
+        bearingDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -107,7 +107,7 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
                             case DialogInterface.BUTTON_NEGATIVE:
                                 Collect.getInstance().getActivityLogger()
                                         .logInstanceAction(this, "cancelBearing", "cancel");
-                                mBearingDecimal = null;
+                                bearingDecimal = null;
                                 finish();
                                 break;
                         }
@@ -115,24 +115,24 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
                 };
 
         // back button doesn't cancel
-        mBearingDialog.setCancelable(false);
-        mBearingDialog.setIndeterminate(true);
-        mBearingDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mBearingDialog.setTitle(getString(R.string.getting_bearing));
-        mBearingDialog.setMessage(getString(R.string.please_wait_long));
-        mBearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+        bearingDialog.setCancelable(false);
+        bearingDialog.setIndeterminate(true);
+        bearingDialog.setIcon(android.R.drawable.ic_dialog_info);
+        bearingDialog.setTitle(getString(R.string.getting_bearing));
+        bearingDialog.setMessage(getString(R.string.please_wait_long));
+        bearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
                 getString(R.string.accept_bearing),
                 geopointButtonListener);
-        mBearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+        bearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
                 geopointButtonListener);
     }
 
     private void returnBearing() {
-        if (mBearingDecimal != null) {
+        if (bearingDecimal != null) {
             Intent i = new Intent();
             i.putExtra(
-                    FormEntryActivity.BEARING_RESULT, mBearingDecimal);
+                    FormEntryActivity.BEARING_RESULT, bearingDecimal);
             setResult(RESULT_OK, i);
         }
         finish();
@@ -171,7 +171,7 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
                 // double pitch = 180 * orientation[1] / Math.PI;
                 // double roll = 180 * orientation[2] / Math.PI;
                 double degrees = normalizeDegree(azimuth);
-                mBearingDecimal = String.format(Locale.US, "%.3f", degrees);
+                bearingDecimal = String.format(Locale.US, "%.3f", degrees);
                 String dir = "N";
                 if ((degrees > 0 && degrees <= 22.5) || degrees > 337.5) {
                     dir = "N";
@@ -190,7 +190,7 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                mBearingDialog.setMessage(getString(R.string.direction, dir)
+                bearingDialog.setMessage(getString(R.string.direction, dir)
                         + "\n" + getString(R.string.bearing, degrees));
 
             }

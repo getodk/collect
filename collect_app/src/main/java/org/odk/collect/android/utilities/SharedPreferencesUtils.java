@@ -220,8 +220,8 @@ public class SharedPreferencesUtils {
         Collection<String> allKeys = getAllKeys();
         for (String key : allKeys) {
 
-            if (key.equals(KEY_ADMIN_PW) && generalPrefsJson.has(key)) {
-                adminEditor.putString(key, generalPrefsJson.getString(key));
+            if (key.equals(KEY_ADMIN_PW) && adminPrefsJson.has(key)) {
+                adminEditor.putString(key, adminPrefsJson.getString(key));
                 adminEditor.apply();
 
                 // skip further checking

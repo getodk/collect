@@ -21,25 +21,25 @@ import java.util.List;
 
 public class CustomTabHelper {
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
-    private CustomTabsClient mCustomTabsClient;
-    public CustomTabsSession mCustomTabsSession;
+    private CustomTabsClient customTabsClient;
+    public CustomTabsSession customTabsSession;
 
     public void bindCustomTabsService(final Activity activity, final Uri url) {
-        if (mCustomTabsClient != null) {
+        if (customTabsClient != null) {
             return;
         }
         final CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
-                mCustomTabsClient = customTabsClient;
-                mCustomTabsClient.warmup(0L);
-                mCustomTabsSession = mCustomTabsClient.newSession(null);
-                mCustomTabsSession.mayLaunchUrl(url, null, null);
+                CustomTabHelper.this.customTabsClient = customTabsClient;
+                CustomTabHelper.this.customTabsClient.warmup(0L);
+                customTabsSession = CustomTabHelper.this.customTabsClient.newSession(null);
+                customTabsSession.mayLaunchUrl(url, null, null);
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                mCustomTabsClient = null;
+                customTabsClient = null;
             }
         };
         CustomTabsClient.bindCustomTabsService(activity, CUSTOM_TAB_PACKAGE_NAME, mConnection);

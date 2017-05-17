@@ -21,94 +21,94 @@ import org.javarosa.core.model.FormIndex;
 import java.util.ArrayList;
 
 public class HierarchyElement {
-    private String mPrimaryText = "";
-    private String mSecondaryText = "";
-    private Drawable mIcon;
-    private int mColor;
-    int mType;
-    FormIndex mFormIndex;
-    ArrayList<HierarchyElement> mChildren;
+    private String primaryText = "";
+    private String secondaryText = "";
+    private Drawable icon;
+    private int color;
+    int type;
+    FormIndex formIndex;
+    ArrayList<HierarchyElement> children;
 
 
     public HierarchyElement(String text1, String text2, Drawable bullet, int color, int type,
             FormIndex f) {
-        mIcon = bullet;
-        mPrimaryText = text1;
-        mSecondaryText = text2;
-        mColor = color;
-        mFormIndex = f;
-        mType = type;
-        mChildren = new ArrayList<HierarchyElement>();
+        icon = bullet;
+        primaryText = text1;
+        secondaryText = text2;
+        this.color = color;
+        formIndex = f;
+        this.type = type;
+        children = new ArrayList<HierarchyElement>();
     }
 
 
     public String getPrimaryText() {
-        return mPrimaryText;
+        return primaryText;
     }
 
 
     public String getSecondaryText() {
-        return mSecondaryText;
+        return secondaryText;
     }
 
 
     public void setPrimaryText(String text) {
-        mPrimaryText = text;
+        primaryText = text;
     }
 
 
     public void setSecondaryText(String text) {
-        mSecondaryText = text;
+        secondaryText = text;
     }
 
 
     public void setIcon(Drawable icon) {
-        mIcon = icon;
+        this.icon = icon;
     }
 
 
     public Drawable getIcon() {
-        return mIcon;
+        return icon;
     }
 
 
     public FormIndex getFormIndex() {
-        return mFormIndex;
+        return formIndex;
     }
 
 
     public int getType() {
-        return mType;
+        return type;
     }
 
 
     public void setType(int newType) {
-        mType = newType;
+        type = newType;
     }
 
 
     public ArrayList<HierarchyElement> getChildren() {
-        return mChildren;
+        return children;
     }
 
 
     public void addChild(HierarchyElement h) {
-        mChildren.add(h);
+        children.add(h);
     }
 
 
     public void setChildren(ArrayList<HierarchyElement> children) {
-        mChildren = children;
+        this.children = children;
     }
 
 
     public void setColor(int color) {
-        mColor = color;
+        this.color = color;
     }
 
 
     public int getColor() {
-        return mColor;
+        return color;
     }
 
 }

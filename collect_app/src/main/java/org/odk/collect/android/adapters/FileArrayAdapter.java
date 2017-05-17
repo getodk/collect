@@ -35,7 +35,7 @@ import java.util.Locale;
 
 public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
 
-    private Context c;
+    private Context context;
     private int id;
     private List<DriveListItem> items;
     private boolean enabled;
@@ -43,7 +43,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     public FileArrayAdapter(Context context, int textViewResourceId,
             List<DriveListItem> objects) {
         super(context, textViewResourceId, objects);
-        c = context;
+        this.context = context;
         id = textViewResourceId;
         items = objects;
         enabled = true;
@@ -57,7 +57,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater) c.getSystemService(
+            LayoutInflater vi = (LayoutInflater) context.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(id, null);
         }
@@ -79,16 +79,16 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
 
             if (o.getType() == 1) {
-                Drawable d = ContextCompat.getDrawable(c, R.drawable.ic_download);
+                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_download);
                 iv.setImageDrawable(d);
                 cb.setVisibility(View.VISIBLE);
             }
             if (o.getType() == 3) {
-                Drawable d = ContextCompat.getDrawable(c, R.drawable.ic_back);
+                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_back);
                 iv.setImageDrawable(d);
             }
             if (o.getType() == 2 || o.getType() == 4 || o.getType() == 5) {
-                Drawable d = ContextCompat.getDrawable(c, R.drawable.ic_folder);
+                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_folder);
                 iv.setImageDrawable(d);
             }
 
