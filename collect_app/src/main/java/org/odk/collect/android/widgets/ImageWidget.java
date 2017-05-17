@@ -38,6 +38,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
