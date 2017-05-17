@@ -179,6 +179,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         if (prompt.isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
+        } else if (selfie) {
+            chooseButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
 
