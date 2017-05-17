@@ -172,7 +172,7 @@ public class TimerLogger {
     }
 
     private static AsyncTask saveTask = null;
-    private ArrayList<Event> mEvents = null;
+    private ArrayList<Event> events = null;
     private String filename = null;
     private File timerlogFile = null;
     private long surveyOpenTime = 0;
@@ -199,7 +199,7 @@ public class TimerLogger {
                 File instanceFolder = instanceFile.getParentFile();
                 timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
             }
-            mEvents = new ArrayList<Event>();
+            events = new ArrayList<Event>();
         }
     }
 
@@ -243,8 +243,8 @@ public class TimerLogger {
              * The exception is hierarchy events since they interrupt an existing interval event
              */
             if (newEvent.isIntervalViewEvent()) {
-                for (int i = 0; i < mEvents.size(); i++) {
-                    if (mEvents.get(i).isIntervalViewEvent() && !mEvents.get(i).endTimeSet) {
+                for (int i = 0; i < events.size(); i++) {
+                    if (events.get(i).isIntervalViewEvent() && !events.get(i).endTimeSet) {
                         return;
                     }
                 }
@@ -264,12 +264,12 @@ public class TimerLogger {
              */
             if (newEvent.eventType == EventTypes.FORM_EXIT
                     || newEvent.eventType == EventTypes.HIERARCHY) {
-                for (int i = 0; i < mEvents.size(); i++) {
-                    mEvents.get(i).setEnd(start);
+                for (int i = 0; i < events.size(); i++) {
+                    events.get(i).setEnd(start);
                 }
             }
 
-            mEvents.add(newEvent);
+            events.add(newEvent);
 
             /*
              * Write the event unless it is an interval event in which case we need to wait for the end of that event
@@ -290,8 +290,8 @@ public class TimerLogger {
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
-            for (int i = 0; i < mEvents.size(); i++) {
-                mEvents.get(i).setEnd(end);
+            for (int i = 0; i < events.size(); i++) {
+                events.get(i).setEnd(end);
             }
 
             writeEvents();
@@ -302,9 +302,9 @@ public class TimerLogger {
 
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
-            Event[] eventArray = mEvents.toArray(new Event[mEvents.size()]);
+            Event[] eventArray = events.toArray(new Event[events.size()]);
             saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
-            mEvents = new ArrayList<Event>();
+            events = new ArrayList<Event>();
 
         } else {
             Timber.i("Queueing Timer Event");
