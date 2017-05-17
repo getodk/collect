@@ -524,4 +524,5 @@
 <string name="generate">Generate</string>
 <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="share_qrcode">Share QR code</string>
+    <string name="take_picture_instruction">Tap the screen to take a picture</string>
 </resources>
