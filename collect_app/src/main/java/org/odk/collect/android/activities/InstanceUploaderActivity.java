@@ -59,43 +59,43 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     private static final String ALERT_SHOWING = "alertshowing";
     private static final String TO_SEND = "tosend";
 
-    private ProgressDialog mProgressDialog;
-    private AlertDialog mAlertDialog;
+    private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
 
-    private String mAlertMsg;
-    private boolean mAlertShowing;
+    private String alertMsg;
+    private boolean alertShowing;
 
-    private InstanceUploaderTask mInstanceUploaderTask;
+    private InstanceUploaderTask instanceUploaderTask;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
-    private Long[] mInstancesToSend;
+    private Long[] instancesToSend;
 
     // maintain a list of what we've sent, in case we're interrupted by auth requests
-    private HashMap<String, String> mUploadedInstances;
-    private String mUrl;
+    private HashMap<String, String> uploadedInstances;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
-        mAlertMsg = getString(R.string.please_wait);
-        mAlertShowing = false;
+        alertMsg = getString(R.string.please_wait);
+        alertShowing = false;
 
-        mUploadedInstances = new HashMap<String, String>();
+        uploadedInstances = new HashMap<String, String>();
 
         setTitle(getString(R.string.send_data));
 
         // get any simple saved state...
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
-                mAlertMsg = savedInstanceState.getString(ALERT_MSG);
+                alertMsg = savedInstanceState.getString(ALERT_MSG);
             }
             if (savedInstanceState.containsKey(ALERT_SHOWING)) {
-                mAlertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
+                alertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
             }
 
-            mUrl = savedInstanceState.getString(AUTH_URI);
+            url = savedInstanceState.getString(AUTH_URI);
         }
 
         // and if we are resuming, use the TO_SEND list of not-yet-sent submissions
@@ -109,32 +109,32 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
 
-        mInstancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
+        instancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
         if (selectedInstanceIDs != null) {
             for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                mInstancesToSend[i] = selectedInstanceIDs[i];
+                instancesToSend[i] = selectedInstanceIDs[i];
             }
         }
 
         // at this point, we don't expect this to be empty...
-        if (mInstancesToSend.length == 0) {
+        if (instancesToSend.length == 0) {
             Timber.e("onCreate: No instances to upload!");
             // drop through -- everything will process through OK
         } else {
-            Timber.i("onCreate: Beginning upload of %d instances!", mInstancesToSend.length);
+            Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
-        mInstanceUploaderTask = (InstanceUploaderTask) getLastCustomNonConfigurationInstance();
-        if (mInstanceUploaderTask == null) {
+        instanceUploaderTask = (InstanceUploaderTask) getLastCustomNonConfigurationInstance();
+        if (instanceUploaderTask == null) {
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            mInstanceUploaderTask = new InstanceUploaderTask();
+            instanceUploaderTask = new InstanceUploaderTask();
 
             // register this activity with the new uploader task
-            mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
+            instanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
 
-            mInstanceUploaderTask.execute(mInstancesToSend);
+            instanceUploaderTask.execute(instancesToSend);
         }
     }
 
@@ -146,12 +146,12 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     protected void onResume() {
-        Timber.i("onResume: Resuming upload of %d instances!", mInstancesToSend.length);
-        if (mInstanceUploaderTask != null) {
-            mInstanceUploaderTask.setUploaderListener(this);
+        Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
+        if (instanceUploaderTask != null) {
+            instanceUploaderTask.setUploaderListener(this);
         }
-        if (mAlertShowing) {
-            createAlertDialog(mAlertMsg);
+        if (alertShowing) {
+            createAlertDialog(alertMsg);
         }
         super.onResume();
     }
@@ -160,13 +160,13 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(ALERT_MSG, mAlertMsg);
-        outState.putBoolean(ALERT_SHOWING, mAlertShowing);
-        outState.putString(AUTH_URI, mUrl);
+        outState.putString(ALERT_MSG, alertMsg);
+        outState.putBoolean(ALERT_SHOWING, alertShowing);
+        outState.putString(AUTH_URI, url);
 
-        long[] toSend = new long[mInstancesToSend.length];
-        for (int i = 0; i < mInstancesToSend.length; ++i) {
-            toSend[i] = mInstancesToSend[i];
+        long[] toSend = new long[instancesToSend.length];
+        for (int i = 0; i < instancesToSend.length; ++i) {
+            toSend[i] = instancesToSend[i];
         }
         outState.putLongArray(TO_SEND, toSend);
     }
@@ -174,15 +174,15 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return mInstanceUploaderTask;
+        return instanceUploaderTask;
     }
 
     @Override
     protected void onPause() {
-        Timber.i("onPause: Pausing upload of %d instances!", mInstancesToSend.length);
+        Timber.i("onPause: Pausing upload of %d instances!", instancesToSend.length);
         super.onPause();
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
     }
 
@@ -195,8 +195,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     protected void onDestroy() {
-        if (mInstanceUploaderTask != null) {
-            mInstanceUploaderTask.setUploaderListener(null);
+        if (instanceUploaderTask != null) {
+            instanceUploaderTask.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -204,7 +204,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
         Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
-                result.size(), mInstancesToSend.length);
+                result.size(), instancesToSend.length);
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -276,8 +276,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     public void progressUpdate(int progress, int total) {
-        mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
-        mProgressDialog.setMessage(mAlertMsg);
+        alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
+        progressDialog.setMessage(alertMsg);
     }
 
 
@@ -288,7 +288,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.PROGRESS_DIALOG", "show");
 
-                mProgressDialog = new ProgressDialog(this);
+                progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -296,21 +296,21 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
-                                mInstanceUploaderTask.cancel(true);
-                                mInstanceUploaderTask.setUploaderListener(null);
+                                instanceUploaderTask.cancel(true);
+                                instanceUploaderTask.setUploaderListener(null);
                                 finish();
                             }
                         };
-                mProgressDialog.setTitle(getString(R.string.uploading_data));
-                mProgressDialog.setMessage(mAlertMsg);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return mProgressDialog;
+                progressDialog.setTitle(getString(R.string.uploading_data));
+                progressDialog.setMessage(alertMsg);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                return progressDialog;
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
-                        mInstancesToSend.length);
+                        instancesToSend.length);
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
@@ -328,15 +328,15 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
-        if (mProgressDialog.isShowing()) {
+        if (progressDialog.isShowing()) {
             // should always be showing here
-            mProgressDialog.dismiss();
+            progressDialog.dismiss();
         }
 
         // add our list of completed uploads to "completed"
         // and remove them from our toSend list.
         ArrayList<Long> workingSet = new ArrayList<Long>();
-        Collections.addAll(workingSet, mInstancesToSend);
+        Collections.addAll(workingSet, instancesToSend);
         if (doneSoFar != null) {
             Set<String> uploadedInstances = doneSoFar.keySet();
             Iterator<String> itr = uploadedInstances.iterator();
@@ -349,7 +349,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                             removeMe);
                 }
             }
-            mUploadedInstances.putAll(doneSoFar);
+            this.uploadedInstances.putAll(doneSoFar);
         }
 
         // and reconstruct the pending set of instances to send
@@ -357,9 +357,9 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         for (int i = 0; i < workingSet.size(); ++i) {
             updatedToSend[i] = workingSet.get(i);
         }
-        mInstancesToSend = updatedToSend;
+        instancesToSend = updatedToSend;
 
-        mUrl = url.toString();
+        this.url = url.toString();
         showDialog(AUTH_DIALOG);
     }
 
@@ -367,9 +367,9 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     private void createAlertDialog(String message) {
         Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
 
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setTitle(getString(R.string.upload_results));
-        mAlertDialog.setMessage(message);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.upload_results));
+        alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -378,28 +378,28 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                         Collect.getInstance().getActivityLogger().logAction(this,
                                 "createAlertDialog", "OK");
                         // always exit this activity since it has no interface
-                        mAlertShowing = false;
+                        alertShowing = false;
                         finish();
                         break;
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), quitListener);
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertShowing = true;
-        mAlertMsg = message;
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), quitListener);
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertShowing = true;
+        alertMsg = message;
+        alertDialog.show();
     }
 
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        mInstanceUploaderTask = new InstanceUploaderTask();
+        instanceUploaderTask = new InstanceUploaderTask();
 
         // register this activity with the new uploader task
-        mInstanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
-        mInstanceUploaderTask.execute(mInstancesToSend);
+        instanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
+        instanceUploaderTask.execute(instancesToSend);
     }
 
     @Override

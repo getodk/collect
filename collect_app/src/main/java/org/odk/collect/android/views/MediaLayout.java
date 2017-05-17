@@ -56,55 +56,55 @@ import timber.log.Timber;
  */
 public class MediaLayout extends RelativeLayout implements OnClickListener {
 
-    private String mSelectionDesignator;
-    private FormIndex mIndex;
-    private TextView mView_Text;
-    private AudioButton mAudioButton;
-    private AppCompatImageButton mVideoButton;
-    private ImageView mImageView;
-    private TextView mMissingImage;
+    private String selectionDesignator;
+    private FormIndex index;
+    private TextView viewText;
+    private AudioButton audioButton;
+    private AppCompatImageButton videoButton;
+    private ImageView imageView;
+    private TextView missingImage;
 
-    private String mVideoURI = null;
-    private MediaPlayer mPlayer;
-    private AudioPlayListener mAudioPlayListener;
-    private int mPlayTextColor;
-    private int mPlayBackgroundTextColor;
+    private String videoURI = null;
+    private MediaPlayer player;
+    private AudioPlayListener audioPlayListener;
+    private int playTextColor;
+    private int playBackgroundTextColor;
     
-    private Context mContext;
+    private Context context;
 
-    private CharSequence mOriginalText;
+    private CharSequence originalText;
 
 
     public MediaLayout(Context c, MediaPlayer player) {
         super(c);
-        mContext = c;
-        mView_Text = null;
-        mAudioButton = null;
-        mImageView = null;
-        mMissingImage = null;
-        mVideoButton = null;
-        mIndex = null;
-        mPlayer = player;
-        mAudioPlayListener = null;
-        mPlayTextColor = Color.BLUE;
+        context = c;
+        viewText = null;
+        audioButton = null;
+        imageView = null;
+        missingImage = null;
+        videoButton = null;
+        index = null;
+        this.player = player;
+        audioPlayListener = null;
+        playTextColor = Color.BLUE;
     }
 
     public void playAudio() {
-        if (mAudioButton != null) {
+        if (audioButton != null) {
             // have to call toString() to remove the html formatting
             // (it's a spanned thing...)
-            mView_Text.setText(mView_Text.getText().toString());
-            mView_Text.setTextColor(mPlayTextColor);
-            mAudioButton.playAudio();
+            viewText.setText(viewText.getText().toString());
+            viewText.setTextColor(playTextColor);
+            audioButton.playAudio();
         }
     }
 
     public void setPlayTextColor(int textColor) {
-        mPlayTextColor = textColor;
+        playTextColor = textColor;
     }
 
     public void setPlayTextBackgroundColor(int textColor) {
-        mPlayBackgroundTextColor = textColor;
+        playBackgroundTextColor = textColor;
     }
 
     /*
@@ -113,17 +113,17 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void resetTextFormatting() {
         // first set it to defaults
-        mView_Text.setTextColor(Color.BLACK);
+        viewText.setTextColor(Color.BLACK);
         // then set the text to our original (brings back any html formatting)
-        mView_Text.setText(mOriginalText);
+        viewText.setText(originalText);
     }
 
     public void playVideo() {
-        if (mVideoURI != null) {
+        if (videoURI != null) {
             String videoFilename = "";
             try {
                 videoFilename =
-                        ReferenceManager._().DeriveReference(mVideoURI).getLocalURI();
+                        ReferenceManager._().DeriveReference(videoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
             }
@@ -151,12 +151,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
     public void setAVT(FormIndex index, String selectionDesignator, TextView text, String audioURI,
             String imageURI, String videoURI,
             final String bigImageURI) {
-        mSelectionDesignator = selectionDesignator;
-        mIndex = index;
-        mView_Text = text;
-        mOriginalText = text.getText();
-        mView_Text.setId(QuestionWidget.newUniqueId());
-        mVideoURI = videoURI;
+        this.selectionDesignator = selectionDesignator;
+        this.index = index;
+        viewText = text;
+        originalText = text.getText();
+        viewText.setId(QuestionWidget.newUniqueId());
+        this.videoURI = videoURI;
 
         // Layout configurations for our elements in the relative layout
         RelativeLayout.LayoutParams textParams =
@@ -175,12 +175,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // First set up the audio button
         if (audioURI != null) {
             // An audio file is specified
-            mAudioButton = new AudioButton(getContext(), mIndex, mSelectionDesignator, audioURI,
-                    mPlayer);
-            mAudioButton.setPadding(22, 12, 22, 12);
-            mAudioButton.setBackgroundColor(Color.LTGRAY);
-            mAudioButton.setOnClickListener(this);
-            mAudioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
+            audioButton = new AudioButton(getContext(), this.index, this.selectionDesignator, audioURI,
+                    player);
+            audioButton.setPadding(22, 12, 22, 12);
+            audioButton.setBackgroundColor(Color.LTGRAY);
+            audioButton.setOnClickListener(this);
+            audioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
             // relative layout.
         } else {
             // No audio file specified, so ignore.
@@ -189,24 +189,24 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         // Then set up the video button
         if (videoURI != null) {
             // An video file is specified
-            mVideoButton = new AppCompatImageButton(getContext());
+            videoButton = new AppCompatImageButton(getContext());
             Bitmap b =
                     BitmapFactory.decodeResource(getContext().getResources(),
                             android.R.drawable.ic_media_play);
-            mVideoButton.setImageBitmap(b);
-            mVideoButton.setPadding(22, 12, 22, 12);
-            mVideoButton.setBackgroundColor(Color.LTGRAY);
-            mVideoButton.setOnClickListener(new OnClickListener() {
+            videoButton.setImageBitmap(b);
+            videoButton.setPadding(22, 12, 22, 12);
+            videoButton.setBackgroundColor(Color.LTGRAY);
+            videoButton.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this, "onClick",
-                            "playVideoPrompt" + mSelectionDesignator, mIndex);
+                            "playVideoPrompt" + MediaLayout.this.selectionDesignator, MediaLayout.this.index);
                     MediaLayout.this.playVideo();
                 }
 
             });
-            mVideoButton.setId(QuestionWidget.newUniqueId());
+            videoButton.setId(QuestionWidget.newUniqueId());
         } else {
             // No video file specified, so ignore.
         }
@@ -219,19 +219,19 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
-                    DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+                    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                     int screenWidth = metrics.widthPixels;
                     int screenHeight = metrics.heightPixels;
                     Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
                             screenWidth);
                     if (b != null) {
-                        mImageView = new ImageView(getContext());
-                        mImageView.setPadding(2, 2, 2, 2);
-                        mImageView.setImageBitmap(b);
-                        mImageView.setId(imageId);
+                        imageView = new ImageView(getContext());
+                        imageView.setPadding(2, 2, 2, 2);
+                        imageView.setImageBitmap(b);
+                        imageView.setId(imageId);
 
                         if (bigImageURI != null) {
-                            mImageView.setOnClickListener(new OnClickListener() {
+                            imageView.setOnClickListener(new OnClickListener() {
                                 String bigImageFilename = ReferenceManager._()
                                         .DeriveReference(bigImageURI).getLocalURI();
                                 File bigImage = new File(bigImageFilename);
@@ -241,8 +241,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                 public void onClick(View v) {
                                     Collect.getInstance().getActivityLogger().logInstanceAction(
                                             this, "onClick",
-                                            "showImagePromptBigImage" + mSelectionDesignator,
-                                            mIndex);
+                                            "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
+                                            MediaLayout.this.index);
 
                                     Intent i = new Intent("android.intent.action.VIEW");
                                     i.setDataAndType(Uri.fromFile(bigImage), "image/*");
@@ -268,10 +268,10 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 if (errorMsg != null) {
                     // errorMsg is only set when an error has occurred
                     Timber.e(errorMsg);
-                    mMissingImage = new TextView(getContext());
-                    mMissingImage.setText(errorMsg);
-                    mMissingImage.setPadding(10, 10, 10, 10);
-                    mMissingImage.setId(imageId);
+                    missingImage = new TextView(getContext());
+                    missingImage.setText(errorMsg);
+                    missingImage.setPadding(10, 10, 10, 10);
+                    missingImage.setId(imageId);
                 }
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
@@ -286,7 +286,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
         // Determine the layout constraints...
         // Assumes LTR, TTB reading bias!
-        if (mView_Text.getText().length() == 0 && (mImageView != null || mMissingImage != null)) {
+        if (viewText.getText().length() == 0 && (imageView != null || missingImage != null)) {
             // No text; has image. The image is treated as question/choice icon.
             // The Text view may just have a radio button or checkbox. It
             // needs to remain in the layout even though it is blank.
@@ -295,8 +295,8 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // center itself. We want it to resize but left-align itself
             // in the resized area and we want a white background, as otherwise
             // it will show a grey bar to the right of the image icon.
-            if (mImageView != null) {
-                mImageView.setScaleType(ScaleType.FIT_START);
+            if (imageView != null) {
+                imageView.setScaleType(ScaleType.FIT_START);
             }
             //
             // In this case, we have:
@@ -307,28 +307,28 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             if (isNotAMultipleChoiceField) {
                 imageParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
             } else {
-                imageParams.addRule(RelativeLayout.RIGHT_OF, mView_Text.getId());
+                imageParams.addRule(RelativeLayout.RIGHT_OF, viewText.getId());
             }
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            if (mAudioButton != null && mVideoButton == null) {
+            if (audioButton != null && videoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 audioParams.setMargins(0, 0, 11, 0);
-                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-            } else if (mAudioButton == null && mVideoButton != null) {
+                imageParams.addRule(RelativeLayout.LEFT_OF, audioButton.getId());
+            } else if (audioButton == null && videoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.setMargins(0, 0, 11, 0);
-                imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
-            } else if (mAudioButton != null && mVideoButton != null) {
+                imageParams.addRule(RelativeLayout.LEFT_OF, videoButton.getId());
+            } else if (audioButton != null && videoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 audioParams.setMargins(0, 0, 11, 0);
-                imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                imageParams.addRule(RelativeLayout.LEFT_OF, audioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+                videoParams.addRule(RelativeLayout.BELOW, audioButton.getId());
                 videoParams.setMargins(0, 20, 11, 0);
-                imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
+                imageParams.addRule(RelativeLayout.LEFT_OF, videoButton.getId());
             } else {
                 // the image will implicitly scale down to fit within parent...
                 // no need to bound it by the width of the parent...
@@ -340,58 +340,58 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         } else {
             // We have a non-blank text label -- image is below the text.
             // In this case, we want the image to be centered...
-            if (mImageView != null) {
-                mImageView.setScaleType(ScaleType.FIT_START);
+            if (imageView != null) {
+                imageView.setScaleType(ScaleType.FIT_START);
             }
             //
             // Text upper left; audio upper right; video below audio on right.
             // image below text, audio and video buttons; left-aligned with text.
             textParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             textParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            if (mAudioButton != null && mVideoButton == null) {
+            if (audioButton != null && videoButton == null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 audioParams.setMargins(0, 0, 11, 0);
-                textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
-            } else if (mAudioButton == null && mVideoButton != null) {
+                textParams.addRule(RelativeLayout.LEFT_OF, audioButton.getId());
+            } else if (audioButton == null && videoButton != null) {
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.setMargins(0, 0, 11, 0);
-                textParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
-            } else if (mAudioButton != null && mVideoButton != null) {
+                textParams.addRule(RelativeLayout.LEFT_OF, videoButton.getId());
+            } else if (audioButton != null && videoButton != null) {
                 audioParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 audioParams.setMargins(0, 0, 11, 0);
-                textParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                textParams.addRule(RelativeLayout.LEFT_OF, audioButton.getId());
                 videoParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 videoParams.setMargins(0, 20, 11, 0);
-                videoParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
+                videoParams.addRule(RelativeLayout.BELOW, audioButton.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             }
 
-            if (mImageView != null || mMissingImage != null) {
+            if (imageView != null || missingImage != null) {
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                if (mVideoButton != null) {
-                    imageParams.addRule(RelativeLayout.LEFT_OF, mVideoButton.getId());
-                } else if (mAudioButton != null) {
-                    imageParams.addRule(RelativeLayout.LEFT_OF, mAudioButton.getId());
+                if (videoButton != null) {
+                    imageParams.addRule(RelativeLayout.LEFT_OF, videoButton.getId());
+                } else if (audioButton != null) {
+                    imageParams.addRule(RelativeLayout.LEFT_OF, audioButton.getId());
                 }
-                imageParams.addRule(RelativeLayout.BELOW, mView_Text.getId());
+                imageParams.addRule(RelativeLayout.BELOW, viewText.getId());
             } else {
                 textParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             }
         }
 
-        addView(mView_Text, textParams);
-        if (mAudioButton != null) {
-            addView(mAudioButton, audioParams);
+        addView(viewText, textParams);
+        if (audioButton != null) {
+            addView(audioButton, audioParams);
         }
-        if (mVideoButton != null) {
-            addView(mVideoButton, videoParams);
+        if (videoButton != null) {
+            addView(videoButton, videoParams);
         }
-        if (mImageView != null) {
-            addView(mImageView, imageParams);
-        } else if (mMissingImage != null) {
-            addView(mMissingImage, imageParams);
+        if (imageView != null) {
+            addView(imageView, imageParams);
+        } else if (missingImage != null) {
+            addView(missingImage, imageParams);
         }
     }
 
@@ -403,17 +403,17 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         RelativeLayout.LayoutParams dividerParams =
                 new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT);
-        if (mImageView != null) {
-            dividerParams.addRule(RelativeLayout.BELOW, mImageView.getId());
-        } else if (mMissingImage != null) {
-            dividerParams.addRule(RelativeLayout.BELOW, mMissingImage.getId());
-        } else if (mVideoButton != null) {
-            dividerParams.addRule(RelativeLayout.BELOW, mVideoButton.getId());
-        } else if (mAudioButton != null) {
-            dividerParams.addRule(RelativeLayout.BELOW, mAudioButton.getId());
-        } else if (mView_Text != null) {
+        if (imageView != null) {
+            dividerParams.addRule(RelativeLayout.BELOW, imageView.getId());
+        } else if (missingImage != null) {
+            dividerParams.addRule(RelativeLayout.BELOW, missingImage.getId());
+        } else if (videoButton != null) {
+            dividerParams.addRule(RelativeLayout.BELOW, videoButton.getId());
+        } else if (audioButton != null) {
+            dividerParams.addRule(RelativeLayout.BELOW, audioButton.getId());
+        } else if (viewText != null) {
             // No picture
-            dividerParams.addRule(RelativeLayout.BELOW, mView_Text.getId());
+            dividerParams.addRule(RelativeLayout.BELOW, viewText.getId());
         } else {
             Timber.e("Tried to add divider to uninitialized ATVWidget");
             return;
@@ -423,11 +423,11 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
 
     public void setTextcolor(int color) {
-        mView_Text.setTextColor(color);
+        viewText.setTextColor(color);
     }
 
     public TextView getView_Text() {
-        return mView_Text;
+        return viewText;
     }
 
     /**
@@ -435,24 +435,24 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        if (mAudioPlayListener != null) {
-            mAudioPlayListener.resetQuestionTextColor();
+        if (audioPlayListener != null) {
+            audioPlayListener.resetQuestionTextColor();
         }
-        if (mPlayer.isPlaying()) {
-            mPlayer.stop();
+        if (player.isPlaying()) {
+            player.stop();
             Bitmap b =
                     BitmapFactory.decodeResource(getContext().getResources(),
                             android.R.drawable.ic_lock_silent_mode_off);
-            mAudioButton.setImageBitmap(b);
+            audioButton.setImageBitmap(b);
 
         } else {
             playAudio();
             Bitmap b =
                     BitmapFactory.decodeResource(getContext().getResources(),
                             android.R.drawable.ic_media_pause);
-            mAudioButton.setImageBitmap(b);
+            audioButton.setImageBitmap(b);
         }
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+        player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetTextFormatting();
@@ -460,13 +460,13 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 Bitmap b =
                         BitmapFactory.decodeResource(getContext().getResources(),
                                 android.R.drawable.ic_lock_silent_mode_off);
-                mAudioButton.setImageBitmap(b);
+                audioButton.setImageBitmap(b);
             }
         });
     }
 
     public void setAudioListener(AudioPlayListener listener) {
-        mAudioPlayListener = listener;
+        audioPlayListener = listener;
     }
 
 }

@@ -48,22 +48,22 @@ public class AudioButton extends AppCompatImageButton {
     public static class AudioHandler {
         private FormIndex index;
         private String selectionDesignator;
-        private String URI;
-        private MediaPlayer mPlayer;
+        private String uri;
+        private MediaPlayer mediaPlayer;
 
         public AudioHandler(FormIndex index, String selectionDesignator, String uri,
                 MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
-            this.URI = uri;
-            mPlayer = player;
+            this.uri = uri;
+            mediaPlayer = player;
         }
 
 
         public void playAudio(Context c) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this,
                     "onClick.playAudioPrompt", selectionDesignator, index);
-            if (URI == null) {
+            if (uri == null) {
                 // No audio file specified
                 Timber.e("No audio file was specified");
                 ToastUtils.showLongToast(R.string.audio_file_error);
@@ -72,7 +72,7 @@ public class AudioButton extends AppCompatImageButton {
 
             String audioFilename = "";
             try {
-                audioFilename = ReferenceManager._().DeriveReference(URI).getLocalURI();
+                audioFilename = ReferenceManager._().DeriveReference(uri).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e);
             }
@@ -87,10 +87,10 @@ public class AudioButton extends AppCompatImageButton {
             }
 
             try {
-                mPlayer.reset();
-                mPlayer.setDataSource(audioFilename);
-                mPlayer.prepare();
-                mPlayer.start();
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(audioFilename);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
                 Timber.e(e, errorMsg);

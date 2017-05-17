@@ -56,10 +56,13 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private static final int QUESTION = 4;
 
     private static final String mIndent = "     ";
-    List<HierarchyElement> formList;
-    TextView mPath;
-    FormIndex mStartIndex;
+
     private Button jumpPreviousButton;
+
+    List<HierarchyElement> formList;
+    TextView path;
+
+    FormIndex startIndex;
     private FormIndex currentIndex;
     private ListView listView;
     private TextView emptyView;
@@ -84,11 +87,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         }
 
         // We use a static FormEntryController to make jumping faster.
-        mStartIndex = formController.getFormIndex();
+        startIndex = formController.getFormIndex();
 
         setTitle(formController.getFormTitle());
 
-        mPath = (TextView) findViewById(R.id.pathtext);
+        path = (TextView) findViewById(R.id.pathtext);
 
         jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
@@ -158,7 +161,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     int position = 0;
                     for (int i = 0; i < getListAdapter().getCount(); i++) {
                         HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                        if (mStartIndex.equals(he.getFormIndex())) {
+                        if (startIndex.equals(he.getFormIndex())) {
                             position = i;
                             break;
                         }
@@ -266,11 +269,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 contextGroupRef =
                         formController.getFormIndex().getReference().getParentRef().toString(true);
-                mPath.setVisibility(View.GONE);
+                path.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
             } else {
-                mPath.setVisibility(View.VISIBLE);
-                mPath.setText(getCurrentPath());
+                path.setVisibility(View.VISIBLE);
+                path.setText(getCurrentPath());
                 jumpPreviousButton.setEnabled(true);
             }
 
@@ -488,8 +491,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
-                        "KEYCODE_BACK.JUMP", mStartIndex);
-                Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+                        "KEYCODE_BACK.JUMP", startIndex);
+                Collect.getInstance().getFormController().jumpToIndex(startIndex);
         }
         return super.onKeyDown(keyCode, event);
     }

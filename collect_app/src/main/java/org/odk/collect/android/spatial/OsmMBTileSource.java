@@ -42,12 +42,14 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     public static final String COL_TILES_TILE_COLUMN = "tile_column";
     public static final String COL_TILES_TILE_ROW = "tile_row";
     public static final String COL_TILES_TILE_DATA = "tile_data";
+
+    protected SQLiteDatabase database;
+    protected File archive;
+
     // Reasonable defaults ..
     public static final int minZoom = 8;
     public static final int maxZoom = 15;
     public static final int tileSizePixels = 256;
-    protected SQLiteDatabase database;
-    protected File archive;
 
     /**
      * The reason this constructor is protected is because all parameters,
