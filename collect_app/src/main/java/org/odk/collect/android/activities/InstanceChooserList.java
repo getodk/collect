@@ -252,6 +252,27 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        return false;
+        showDuplicateFormDialog(position);
+        return true;
+    }
+
+    private void showDuplicateFormDialog(final int position) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.duplicate_form_dialog_title));
+        alertDialog.setMessage(getString(R.string.duplicate_form_dialog_message));
+        DialogInterface.OnClickListener dialogYesNoListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        switch (i) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                break;
+                        }
+                    }
+                };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.duplicate), dialogYesNoListener);
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), dialogYesNoListener);
+        alertDialog.show();
     }
 }
