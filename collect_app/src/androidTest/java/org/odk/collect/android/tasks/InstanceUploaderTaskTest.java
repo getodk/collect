@@ -47,9 +47,9 @@ public class InstanceUploaderTaskTest extends MockedServerTest {
         Outcome o = new InstanceUploaderTask().doInBackground(id);
 
         // then
-        assertNull(o.mAuthRequestingServer);
-        assertEquals(1, o.mResults.size());
-        assertEquals("success", o.mResults.get(id.toString()));
+        assertNull(o.authRequestingServer);
+        assertEquals(1, o.results.size());
+        assertEquals("success", o.results.get(id.toString()));
 
         // and
         HEAD: {

@@ -39,8 +39,8 @@ import org.odk.collect.android.application.Collect;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class UrlWidget extends QuestionWidget {
-    private Button mOpenUrlButton;
-    private TextView mStringAnswer;
+    private Button openUrlButton;
+    private TextView stringAnswer;
 
     public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -49,27 +49,27 @@ public class UrlWidget extends QuestionWidget {
         params.setMargins(7, 5, 7, 5);
 
         // set button formatting
-        mOpenUrlButton = new Button(getContext());
-        mOpenUrlButton.setId(QuestionWidget.newUniqueId());
-        mOpenUrlButton.setText(getContext().getString(R.string.open_url));
-        mOpenUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                mAnswerFontsize);
-        mOpenUrlButton.setPadding(20, 20, 20, 20);
-        mOpenUrlButton.setEnabled(!prompt.isReadOnly());
-        mOpenUrlButton.setLayoutParams(params);
+        openUrlButton = new Button(getContext());
+        openUrlButton.setId(QuestionWidget.newUniqueId());
+        openUrlButton.setText(getContext().getString(R.string.open_url));
+        openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+                answerFontsize);
+        openUrlButton.setPadding(20, 20, 20, 20);
+        openUrlButton.setEnabled(!prompt.isReadOnly());
+        openUrlButton.setLayoutParams(params);
 
-        mOpenUrlButton.setOnClickListener(new View.OnClickListener() {
+        openUrlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "openUrl", "click",
-                                mPrompt.getIndex());
+                                formEntryPrompt.getIndex());
 
-                if (mStringAnswer != null & mStringAnswer.getText() != null
-                        && !"".equalsIgnoreCase((String) mStringAnswer.getText())) {
+                if (stringAnswer != null & stringAnswer.getText() != null
+                        && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse((String) mStringAnswer.getText()));
+                    i.setData(Uri.parse((String) stringAnswer.getText()));
                     getContext().startActivity(i);
                 } else {
                     Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
@@ -78,20 +78,20 @@ public class UrlWidget extends QuestionWidget {
         });
 
         // set text formatting
-        mStringAnswer = new TextView(getContext());
-        mStringAnswer.setId(QuestionWidget.newUniqueId());
-        mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mStringAnswer.setGravity(Gravity.CENTER);
+        stringAnswer = new TextView(getContext());
+        stringAnswer.setId(QuestionWidget.newUniqueId());
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        stringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            mStringAnswer.setText(s);
+            stringAnswer.setText(s);
         }
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mOpenUrlButton);
-        answerLayout.addView(mStringAnswer);
+        answerLayout.addView(openUrlButton);
+        answerLayout.addView(stringAnswer);
         addAnswerView(answerLayout);
     }
 
@@ -102,7 +102,7 @@ public class UrlWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = mStringAnswer.getText().toString();
+        String s = stringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -125,8 +125,8 @@ public class UrlWidget extends QuestionWidget {
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mOpenUrlButton.cancelLongPress();
-        mStringAnswer.cancelLongPress();
+        openUrlButton.cancelLongPress();
+        stringAnswer.cancelLongPress();
     }
 
 }

@@ -70,9 +70,9 @@ public class DownloadFormsTask extends
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
-    private FormDownloaderListener mStateListener;
+    private FormDownloaderListener stateListener;
 
-    private FormsDao mFormsDao;
+    private FormsDao formsDao;
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
             "http://openrosa.org/xforms/xformsManifest";
@@ -86,7 +86,7 @@ public class DownloadFormsTask extends
     protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
         ArrayList<FormDetails> toDownload = values[0];
 
-        mFormsDao = new FormsDao();
+        formsDao = new FormsDao();
         int total = toDownload.size();
         int count = 1;
         Collect.getInstance().getActivityLogger().logAction(this, "downloadForms",
@@ -238,7 +238,7 @@ public class DownloadFormsTask extends
         FileUtils.checkMediaPath(new File(mediaPath));
 
         try {
-            cursor = mFormsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
+            cursor = formsDao.getFormsCursorForFormFilePath(formFile.getAbsolutePath());
 
             isNew = cursor.getCount() <= 0;
 
@@ -264,7 +264,7 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
                 v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
                         formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
-                uri = mFormsDao.saveForm(v);
+                uri = formsDao.saveForm(v);
                 Collect.getInstance().getActivityLogger().logAction(this, "insert",
                         formFile.getAbsolutePath());
 
@@ -314,7 +314,7 @@ public class DownloadFormsTask extends
         // make sure it's not the same as a file we already have
         Cursor c = null;
         try {
-            c = mFormsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
+            c = formsDao.getFormsCursorForMd5Hash(FileUtils.getMd5Hash(f));
             if (c.getCount() > 0) {
                 // Should be at most, 1
                 c.moveToFirst();
@@ -706,8 +706,8 @@ public class DownloadFormsTask extends
     @Override
     protected void onPostExecute(HashMap<FormDetails, String> value) {
         synchronized (this) {
-            if (mStateListener != null) {
-                mStateListener.formsDownloadingComplete(value);
+            if (stateListener != null) {
+                stateListener.formsDownloadingComplete(value);
             }
         }
     }
@@ -716,9 +716,9 @@ public class DownloadFormsTask extends
     @Override
     protected void onProgressUpdate(String... values) {
         synchronized (this) {
-            if (mStateListener != null) {
+            if (stateListener != null) {
                 // update progress and total
-                mStateListener.progressUpdate(values[0],
+                stateListener.progressUpdate(values[0],
                         Integer.valueOf(values[1]),
                         Integer.valueOf(values[2]));
             }
@@ -729,7 +729,7 @@ public class DownloadFormsTask extends
 
     public void setDownloaderListener(FormDownloaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 

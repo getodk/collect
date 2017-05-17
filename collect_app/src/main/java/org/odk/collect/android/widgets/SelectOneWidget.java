@@ -52,7 +52,7 @@ import java.util.List;
 public class SelectOneWidget extends QuestionWidget implements
         OnCheckedChangeListener, AudioPlayListener {
 
-    List<SelectChoice> mItems; // may take a while to compute
+    List<SelectChoice> items; // may take a while to compute
     ArrayList<RadioButton> buttons;
     ArrayList<MediaLayout> playList;
     private int playcounter = 0;
@@ -66,9 +66,9 @@ public class SelectOneWidget extends QuestionWidget implements
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
         buttons = new ArrayList<RadioButton>();
 
@@ -80,9 +80,9 @@ public class SelectOneWidget extends QuestionWidget implements
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                String choiceName = prompt.getSelectChoiceText(mItems.get(i));
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                String choiceName = prompt.getSelectChoiceText(items.get(i));
                 CharSequence choiceDisplayName;
                 if (choiceName != null) {
                     choiceDisplayName = TextUtils.textToHtml(choiceName);
@@ -90,7 +90,7 @@ public class SelectOneWidget extends QuestionWidget implements
                     choiceDisplayName = "";
                 }
                 RadioButton r = new RadioButton(getContext());
-                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 r.setText(choiceDisplayName);
                 r.setMovementMethod(LinkMovementMethod.getInstance());
                 r.setTag(Integer.valueOf(i));
@@ -100,42 +100,42 @@ public class SelectOneWidget extends QuestionWidget implements
 
                 buttons.add(r);
 
-                if (mItems.get(i).getValue().equals(s)) {
+                if (items.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                 }
 
                 r.setOnCheckedChangeListener(this);
 
                 String audioURI = null;
-                audioURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                audioURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                         FormEntryCaption.TEXT_FORM_AUDIO);
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
                 String videoURI = null;
-                videoURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                videoURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                         "video");
 
                 String bigImageURI = null;
                 bigImageURI = prompt.getSpecialFormSelectChoiceText(
-                        mItems.get(i), "big-image");
+                        items.get(i), "big-image");
 
-                MediaLayout mediaLayout = new MediaLayout(getContext(), mPlayer);
+                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
                 mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, audioURI,
                         imageURI,
                         videoURI, bigImageURI);
                 mediaLayout.setAudioListener(this);
-                mediaLayout.setPlayTextColor(mPlayColor);
-                mediaLayout.setPlayTextBackgroundColor(mPlayBackgroundColor);
+                mediaLayout.setPlayTextColor(playColor);
+                mediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
                 playList.add(mediaLayout);
 
-                if (i != mItems.size() - 1) {
+                if (i != items.size() - 1) {
                     // Last, add the dividing line (except for the last element)
                     ImageView divider = new ImageView(getContext());
                     divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
@@ -167,7 +167,7 @@ public class SelectOneWidget extends QuestionWidget implements
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -204,14 +204,14 @@ public class SelectOneWidget extends QuestionWidget implements
             }
         }
 
-        SelectChoice choice = mItems.get((Integer) buttonView.getTag());
+        SelectChoice choice = items.get((Integer) buttonView.getTag());
 
         if (choice != null) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    choice.getValue(), mPrompt.getIndex());
+                    choice.getValue(), formEntryPrompt.getIndex());
         } else {
             Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    "<no matching choice>", mPrompt.getIndex());
+                    "<no matching choice>", formEntryPrompt.getIndex());
         }
     }
 
@@ -237,7 +237,7 @@ public class SelectOneWidget extends QuestionWidget implements
         }
         // if there's more, set up to play the next item
         if (playcounter < playList.size()) {
-            mPlayer.setOnCompletionListener(new OnCompletionListener() {
+            player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     resetQuestionTextColor();
@@ -251,8 +251,8 @@ public class SelectOneWidget extends QuestionWidget implements
 
         } else {
             playcounter = 0;
-            mPlayer.setOnCompletionListener(null);
-            mPlayer.reset();
+            player.setOnCompletionListener(null);
+            player.reset();
         }
 
     }
@@ -262,7 +262,7 @@ public class SelectOneWidget extends QuestionWidget implements
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished
-        mPlayer.setOnCompletionListener(new OnCompletionListener() {
+        player.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetQuestionTextColor();

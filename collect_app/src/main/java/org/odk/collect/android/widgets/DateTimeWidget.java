@@ -35,33 +35,33 @@ import org.joda.time.LocalDateTime;
 
 public class DateTimeWidget extends QuestionWidget {
 
-    private DateWidget mDateWidget;
-    private TimeWidget mTimeWidget;
+    private DateWidget dateWidget;
+    private TimeWidget timeWidget;
 
     public DateTimeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         setGravity(Gravity.START);
 
-        mDateWidget = new DateWidget(context, prompt);
-        mTimeWidget = new TimeWidget(context, prompt);
+        dateWidget = new DateWidget(context, prompt);
+        timeWidget = new TimeWidget(context, prompt);
 
-        mDateWidget.mQuestionMediaLayout.getView_Text().setVisibility(GONE);
-        mDateWidget.getHelpTextView().setVisibility(GONE);
+        dateWidget.questionMediaLayout.getView_Text().setVisibility(GONE);
+        dateWidget.getHelpTextView().setVisibility(GONE);
 
-        mTimeWidget.mQuestionMediaLayout.getView_Text().setVisibility(GONE);
-        mTimeWidget.getHelpTextView().setVisibility(GONE);
+        timeWidget.questionMediaLayout.getView_Text().setVisibility(GONE);
+        timeWidget.getHelpTextView().setVisibility(GONE);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(mDateWidget);
-        if (mDateWidget.isCalendarShown() || !mDateWidget.isDayHidden()) {
-            linearLayout.addView(mTimeWidget);
+        linearLayout.addView(dateWidget);
+        if (dateWidget.isCalendarShown() || !dateWidget.isDayHidden()) {
+            linearLayout.addView(timeWidget);
         }
         addAnswerView(linearLayout);
-        if (mDateWidget.isCalendarShown() && mTimeWidget.getAnswer() == null) {
-            mTimeWidget.setTimeToCurrent();
-            mTimeWidget.setTimeLabel();
+        if (dateWidget.isCalendarShown() && timeWidget.getAnswer() == null) {
+            timeWidget.setTimeToCurrent();
+            timeWidget.setTimeLabel();
         }
     }
 
@@ -69,26 +69,26 @@ public class DateTimeWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
 
-        if (mDateWidget.isNullAnswer() && mTimeWidget.isNullAnswer()) {
+        if (dateWidget.isNullAnswer() && timeWidget.isNullAnswer()) {
             return null;
         } else {
-            if (mTimeWidget.isNullAnswer()) {
-                mTimeWidget.setTimeToCurrent();
-                mTimeWidget.setTimeLabel();
-            } else if (mDateWidget.isNullAnswer()) {
-                mDateWidget.setDateToCurrent();
-                mDateWidget.setDateLabel();
+            if (timeWidget.isNullAnswer()) {
+                timeWidget.setTimeToCurrent();
+                timeWidget.setTimeLabel();
+            } else if (dateWidget.isNullAnswer()) {
+                dateWidget.setDateToCurrent();
+                dateWidget.setDateLabel();
             }
             
-            boolean hideDay = mDateWidget.isDayHidden();
-            boolean hideMonth = mDateWidget.isMonthHidden();
-            boolean showCalendar = mDateWidget.isCalendarShown();
+            boolean hideDay = dateWidget.isDayHidden();
+            boolean hideMonth = dateWidget.isMonthHidden();
+            boolean showCalendar = dateWidget.isCalendarShown();
 
-            int year = mDateWidget.getYear();
-            int month = mDateWidget.getMonth();
-            int day = mDateWidget.getDay();
-            int hour = mTimeWidget.getHour();
-            int minute = mTimeWidget.getMinute();
+            int year = dateWidget.getYear();
+            int month = dateWidget.getMonth();
+            int day = dateWidget.getDay();
+            int hour = timeWidget.getHour();
+            int minute = timeWidget.getMinute();
 
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
@@ -105,9 +105,9 @@ public class DateTimeWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        if (!mDateWidget.isCalendarShown()) {
-            mDateWidget.clearAnswer();
-            mTimeWidget.clearAnswer();
+        if (!dateWidget.isCalendarShown()) {
+            dateWidget.clearAnswer();
+            timeWidget.clearAnswer();
         }
     }
 
@@ -121,15 +121,15 @@ public class DateTimeWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mDateWidget.setOnLongClickListener(l);
-        mTimeWidget.setOnLongClickListener(l);
+        dateWidget.setOnLongClickListener(l);
+        timeWidget.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mDateWidget.cancelLongPress();
-        mTimeWidget.cancelLongPress();
+        dateWidget.cancelLongPress();
+        timeWidget.cancelLongPress();
     }
 
     // Skip over a "daylight savings gap". This is needed on the day and time of a daylight savings

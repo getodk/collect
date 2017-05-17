@@ -36,7 +36,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 public class FormMetadataMigratorTest {
 
     private SharedPreferences sharedPreferences;
-    private final PrintStream o = System.out;
+    private final PrintStream printStream = System.out;
 
     /** The keys of preferences affected by the migration */
     private final List<String> affectedKeys = Arrays.asList(
@@ -82,11 +82,11 @@ public class FormMetadataMigratorTest {
     }
 
     private void displayAffectedPreferences(String message) {
-        o.println("\n" + message);
+        printStream.println("\n" + message);
         SortedMap<String, ?> allPrefs = new TreeMap<>(sharedPreferences.getAll());
         for (Map.Entry<String, ?> es : allPrefs.entrySet()) {
             if (affectedKeys.contains(es.getKey())) {
-                o.format("%-25s %s\n", es.getKey(), es.getValue());
+                printStream.format("%-25s %s\n", es.getKey(), es.getValue());
             }
         }
     }

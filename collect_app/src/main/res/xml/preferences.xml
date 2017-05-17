@@ -104,6 +104,7 @@
         <CheckBoxPreference
             android:id="@+id/show_splash"
             android:key="showSplash"
+            android:defaultValue="false"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
         <PreferenceScreen

@@ -27,24 +27,24 @@ import java.util.List;
 
 public class HierarchyListAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private List<HierarchyElement> mItems = new ArrayList<HierarchyElement>();
+    private Context context;
+    private List<HierarchyElement> items = new ArrayList<HierarchyElement>();
 
 
     public HierarchyListAdapter(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
 
     @Override
     public int getCount() {
-        return mItems.size();
+        return items.size();
     }
 
 
     @Override
     public Object getItem(int position) {
-        return mItems.get(position);
+        return items.get(position);
     }
 
 
@@ -58,17 +58,17 @@ public class HierarchyListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         HierarchyElementView hev;
         if (convertView == null) {
-            hev = new HierarchyElementView(mContext, mItems.get(position));
+            hev = new HierarchyElementView(context, items.get(position));
         } else {
             hev = (HierarchyElementView) convertView;
-            hev.setPrimaryText(mItems.get(position).getPrimaryText());
-            hev.setSecondaryText(mItems.get(position).getSecondaryText());
-            hev.setIcon(mItems.get(position).getIcon());
-            hev.setColor(mItems.get(position).getColor());
+            hev.setPrimaryText(items.get(position).getPrimaryText());
+            hev.setSecondaryText(items.get(position).getSecondaryText());
+            hev.setIcon(items.get(position).getIcon());
+            hev.setColor(items.get(position).getColor());
         }
 
-        if (mItems.get(position).getSecondaryText() == null
-                || mItems.get(position).getSecondaryText().equals("")) {
+        if (items.get(position).getSecondaryText() == null
+                || items.get(position).getSecondaryText().equals("")) {
             hev.showSecondary(false);
         } else {
             hev.showSecondary(true);
@@ -82,7 +82,7 @@ public class HierarchyListAdapter extends BaseAdapter {
      * Sets the list of items for this adapter to use.
      */
     public void setListItems(List<HierarchyElement> it) {
-        mItems = it;
+        items = it;
     }
 
 }

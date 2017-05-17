@@ -33,29 +33,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResetDialogPreference extends DialogPreference {
-    private CheckBox mPreferences;
-    private CheckBox mInstances;
-    private CheckBox mForms;
-    private CheckBox mLayers;
-    private CheckBox mCache;
-    private CheckBox mOsmDroid;
-    private Context mContext;
-    private ProgressDialog mProgressDialog;
+    private CheckBox preferences;
+    private CheckBox instances;
+    private CheckBox forms;
+    private CheckBox layers;
+    private CheckBox cache;
+    private CheckBox osmDroid;
+    private Context context;
+    private ProgressDialog progressDialog;
 
     public ResetDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.reset_dialog_layout);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public void onBindDialogView(View view) {
-        mPreferences = (CheckBox) view.findViewById(R.id.preferences);
-        mInstances = (CheckBox) view.findViewById(R.id.instances);
-        mForms = (CheckBox) view.findViewById(R.id.forms);
-        mLayers = (CheckBox) view.findViewById(R.id.layers);
-        mCache = (CheckBox) view.findViewById(R.id.cache);
-        mOsmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
+        preferences = (CheckBox) view.findViewById(R.id.preferences);
+        instances = (CheckBox) view.findViewById(R.id.instances);
+        forms = (CheckBox) view.findViewById(R.id.forms);
+        layers = (CheckBox) view.findViewById(R.id.layers);
+        cache = (CheckBox) view.findViewById(R.id.cache);
+        osmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
         super.onBindDialogView(view);
     }
 
@@ -69,22 +69,22 @@ public class ResetDialogPreference extends DialogPreference {
     private void resetSelected() {
         final List<Integer> resetActions = new ArrayList<>();
 
-        if (mPreferences.isChecked()) {
+        if (preferences.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_PREFERENCES);
         }
-        if (mInstances.isChecked()) {
+        if (instances.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_INSTANCES);
         }
-        if (mForms.isChecked()) {
+        if (forms.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_FORMS);
         }
-        if (mLayers.isChecked()) {
+        if (layers.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_LAYERS);
         }
-        if (mCache.isChecked()) {
+        if (cache.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_CACHE);
         }
-        if (mOsmDroid.isChecked()) {
+        if (osmDroid.isChecked()) {
             resetActions.add(ResetUtility.ResetAction.RESET_OSM_DROID);
         }
         if (!resetActions.isEmpty()) {
@@ -104,14 +104,14 @@ public class ResetDialogPreference extends DialogPreference {
     }
 
     private void showProgressDialog() {
-        mProgressDialog = ProgressDialog.show(getContext(),
-                mContext.getString(R.string.please_wait),
-                mContext.getString(R.string.reset_in_progress),
+        progressDialog = ProgressDialog.show(getContext(),
+                context.getString(R.string.please_wait),
+                context.getString(R.string.reset_in_progress),
                 true);
     }
 
     private void hideProgressDialog() {
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
     }
 
     private void handleResult(List<Integer> resetActions, List<Integer> failedResetActions) {
@@ -174,14 +174,14 @@ public class ResetDialogPreference extends DialogPreference {
                     break;
             }
             if (resetActions.indexOf(action) < resetActions.size() - 1) {
-                resultMessage.append("\n");
+                resultMessage.append("\n\n");
             }
         }
         showResultDialog(String.valueOf(resultMessage));
     }
 
     private void showResultDialog(final String resultMessage) {
-        ((AdminPreferencesActivity) mContext).runOnUiThread(new Runnable() {
+        ((AdminPreferencesActivity) context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 AlertDialog.Builder b = new AlertDialog.Builder(getContext());
@@ -193,7 +193,7 @@ public class ResetDialogPreference extends DialogPreference {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ((AdminPreferencesActivity) mContext).recreate();
+                        ((AdminPreferencesActivity) context).recreate();
                     }
                 });
                 AlertDialog alertDialog = b.create();

@@ -61,7 +61,7 @@ public class PropertyManager implements IPropertyManager {
     private static final String SCHEME_IMEI         = "imei";
     private static final String SCHEME_MAC          = "mac";
 
-    private final Map<String, String> mProperties = new HashMap<>();
+    private final Map<String, String> properties = new HashMap<>();
 
     public String getName() {
         return "Property Manager";
@@ -145,8 +145,8 @@ public class PropertyManager implements IPropertyManager {
 
     private void putProperty(String propName, String scheme, String value) {
         if (value != null) {
-            mProperties.put(propName, value);
-            mProperties.put(withUri(propName), scheme + ":" + value);
+            properties.put(propName, value);
+            properties.put(withUri(propName), scheme + ":" + value);
         }
     }
 
@@ -158,7 +158,7 @@ public class PropertyManager implements IPropertyManager {
     @Override
     public String getSingularProperty(String propertyName) {
         // for now, all property names are in english...
-        return mProperties.get(propertyName.toLowerCase(Locale.ENGLISH));
+        return properties.get(propertyName.toLowerCase(Locale.ENGLISH));
     }
 
     @Override

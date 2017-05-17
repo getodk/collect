@@ -22,28 +22,28 @@ import java.util.ArrayList;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final ArrayList<Fragment> mFragments;
-    private final CharSequence[] mTabTitles;
+    private final ArrayList<Fragment> fragments;
+    private final CharSequence[] tabTitles;
 
     public ViewPagerAdapter(FragmentManager fm, CharSequence[] titles,
                             ArrayList<Fragment> fragments) {
         super(fm);
-        mTabTitles = titles;
-        mFragments = fragments;
+        tabTitles = titles;
+        this.fragments = fragments;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return mFragments.get(position);
+        return fragments.get(position);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTabTitles[position];
+        return tabTitles[position];
     }
 
     @Override
     public int getCount() {
-        return mTabTitles.length;
+        return tabTitles.length;
     }
 }
