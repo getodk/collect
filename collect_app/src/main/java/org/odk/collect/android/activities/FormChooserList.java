@@ -68,7 +68,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 
-        mToolbar.setTitle(getString(R.string.enter_data));
+        toolbar.setTitle(getString(R.string.enter_data));
 
         setupAdapter();
 
@@ -176,7 +176,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
 
-        if (mListAdapter.isEmpty()) {
+        if (listAdapter.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
         } else {
             emptyView.setVisibility(View.GONE);
