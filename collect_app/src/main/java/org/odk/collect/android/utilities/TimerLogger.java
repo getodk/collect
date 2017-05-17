@@ -245,7 +245,6 @@ public class TimerLogger {
             if (newEvent.isIntervalViewEvent()) {
                 for (int i = 0; i < mEvents.size(); i++) {
                     if (mEvents.get(i).isIntervalViewEvent() && !mEvents.get(i).endTimeSet) {
-                        Timber.i("Log timer Event: Ignore refresh event: " + eventType + " : " + fecType + " : " + ref);
                         return;
                     }
                 }
@@ -256,7 +255,6 @@ public class TimerLogger {
              */
             if (newEvent.eventType == EventTypes.FEC
                     && newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                Timber.i("Log timer Event: Ignore beginning of form event: " + eventType + " : " + fecType + " : " + ref);
                 return;
             }
 
@@ -271,7 +269,6 @@ public class TimerLogger {
                 }
             }
 
-            Timber.i("Log timer Event: " + eventType + " : " + fecType + " : " + ref);
             mEvents.add(newEvent);
 
             /*

@@ -826,6 +826,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // repeat events, and indexes in field-lists that is not the containing
         // group.
 
+        if (mTimerLogger == null) {
+            setTimerLogger(formController);
+        }
+
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
     }
@@ -1178,8 +1182,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                 }
 
-                 // Create 'save' button
-                 endView.findViewById(R.id.save_exit_button)
+                // Create 'save' button
+                endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -2438,7 +2442,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == mInAnimation) ? "in"
-                : ((animation == mOutAnimation) ? "out" : "other")));
+                        : ((animation == mOutAnimation) ? "out" : "other")));
         if (mInAnimation == animation) {
             mAnimationCompletionSet |= 1;
         } else if (mOutAnimation == animation) {
@@ -2457,7 +2461,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == mInAnimation) ? "in"
-                : ((animation == mOutAnimation) ? "out" : "other")));
+                        : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
     @Override
@@ -2465,7 +2469,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == mInAnimation) ? "in"
-                : ((animation == mOutAnimation) ? "out" : "other")));
+                        : ((animation == mOutAnimation) ? "out" : "other")));
     }
 
     /**
@@ -2565,22 +2569,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             if (FileUtils.createFolder(path)) {
                 File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
                 formController.setInstancePath(instanceFile);
-
-                // Create the timer logger and then log the start event
-                mTimerLogger = new TimerLogger(instanceFile,
-                        PreferenceManager.getDefaultSharedPreferences(this),
-                        formController);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
-
             }
+
+            setTimerLogger(formController);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            // Create the timer logger and then log the resume event
-            mTimerLogger = new TimerLogger(formController.getInstancePath(),
-                    PreferenceManager.getDefaultSharedPreferences(this),
-                    formController);
+            setTimerLogger(formController);
             mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {
@@ -2691,6 +2688,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (mProgressDialog != null) {
             mProgressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }
+    }
+
+    /*
+     * Create the timer logger object
+     */
+    private void setTimerLogger(FormController formController) {
+
+        // Create the timer logger and then log the resume event
+        mTimerLogger = new TimerLogger(formController.getInstancePath(),
+                PreferenceManager.getDefaultSharedPreferences(this),
+                formController);
     }
 
     /**
