@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore.Images;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
@@ -65,7 +66,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private TextView errorTextView;
 
 
-    public ImageWidget(Context context, FormEntryPrompt prompt, final boolean selfie) {
+    public ImageWidget(Context context, final FormEntryPrompt prompt, final boolean selfie) {
         super(context, prompt);
 
         instanceFolder =
@@ -94,19 +95,28 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
                         "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
-                Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                // We give the camera an absolute filename/path where to put the
-                // picture because of bug:
-                // http://code.google.com/p/android/issues/detail?id=1480
-                // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-                // 2010, G1 phones only run 1.6. Without specifying the path the
-                // images returned by the camera in 1.6 (and earlier) are ~1/4
-                // the size. boo.
+                Intent i;
+                if (selfie) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        i = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
+                    } else {
+                        i = new Intent(getContext(), CaptureSelfieActivity.class);
+                    }
+                } else {
+                    i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    // We give the camera an absolute filename/path where to put the
+                    // picture because of bug:
+                    // http://code.google.com/p/android/issues/detail?id=1480
+                    // The bug appears to be fixed in Android 2.0+, but as of feb 2,
+                    // 2010, G1 phones only run 1.6. Without specifying the path the
+                    // images returned by the camera in 1.6 (and earlier) are ~1/4
+                    // the size. boo.
 
-                // if this gets modified, the onActivityResult in
-                // FormEntyActivity will also need to be updated.
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+                    // if this gets modified, the onActivityResult in
+                    // FormEntyActivity will also need to be updated.
+                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                            Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+                }
                 try {
                     Collect.getInstance().getFormController().setIndexWaitingForData(
                             formEntryPrompt.getIndex());
