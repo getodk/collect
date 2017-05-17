@@ -2887,21 +2887,21 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         if (formEntryPrompts != null) {
             for (FormEntryPrompt formEntryPrompt : formEntryPrompts) {
                 try {
-                    if (formEntryPrompt.getControlType() == Constants.CONTROL_IMAGE_CHOOSE ||
-                            formEntryPrompt.getControlType() == Constants.CONTROL_AUDIO_CAPTURE ||
-                            formEntryPrompt.getControlType() == Constants.CONTROL_VIDEO_CAPTURE ||
-                            formEntryPrompt.getControlType() == Constants.CONTROL_OSM_CAPTURE) {
+                    if (formEntryPrompt.getControlType() == Constants.CONTROL_IMAGE_CHOOSE
+                            || formEntryPrompt.getControlType() == Constants.CONTROL_AUDIO_CAPTURE
+                            || formEntryPrompt.getControlType() == Constants.CONTROL_VIDEO_CAPTURE
+                            || formEntryPrompt.getControlType() == Constants.CONTROL_OSM_CAPTURE) {
 
                         String originalAnswer = formEntryPrompt.getAnswerText();
                         if (originalAnswer != null) {
-                            String newAnswer = System.currentTimeMillis() +
-                                    originalAnswer.substring(originalAnswer.lastIndexOf("."));
+                            String newAnswer = System.currentTimeMillis()
+                                    + originalAnswer.substring(originalAnswer.lastIndexOf("."));
 
                             formController
                                     .saveAnswer(formEntryPrompt.getIndex(), new StringData(newAnswer));
 
-                            new File(formController.getInstancePath().getParent() +
-                                    "/" + originalAnswer)
+                            new File(formController.getInstancePath().getParent()
+                                    + "/" + originalAnswer)
                                     .renameTo(new File(formController.getInstancePath().getParent()
                                             + "/" + newAnswer));
                         }

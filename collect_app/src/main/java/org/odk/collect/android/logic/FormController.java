@@ -816,9 +816,9 @@ public class FormController {
         List<FormEntryPrompt> formEntryPrompts = new ArrayList<>();
         int event = stepToNextScreenEvent();
         while (event != FormEntryController.EVENT_END_OF_FORM) {
-            if (event == FormEntryController.EVENT_QUESTION ||
-                    event == FormEntryController.EVENT_GROUP ||
-                    event == FormEntryController.EVENT_REPEAT) {
+            if (event == FormEntryController.EVENT_QUESTION
+                    || event == FormEntryController.EVENT_GROUP
+                    || event == FormEntryController.EVENT_REPEAT) {
                 Collections.addAll(formEntryPrompts, getQuestionPrompts());
             }
             event = stepToNextScreenEvent();
