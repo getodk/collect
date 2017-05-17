@@ -191,7 +191,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private boolean autoSaved;
 
-    private TimerLogger mTimerLogger;
+    private TimerLogger timerLogger;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -826,7 +826,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         // repeat events, and indexes in field-lists that is not the containing
         // group.
 
-        if (mTimerLogger == null) {
+        if (timerLogger == null) {
             setTimerLogger(formController);
         }
 
@@ -931,7 +931,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -1086,7 +1086,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         setTitle(formController.getFormTitle());
 
 
-        mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
+        timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
@@ -1367,7 +1367,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 return;
             }
 
-            mTimerLogger.exitView();    // Close timer events waiting for an end time
+            timerLogger.exitView();    // Close timer events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1437,7 +1437,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                         nonblockingCreateSavePointData();
                     }
                 }
-                mTimerLogger.exitView();    // Close timer events
+                timerLogger.exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -1949,7 +1949,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                             .logInstanceAction(this,
                                                     "createQuitDialog",
                                                     "discardAndExit");
-                                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                     removeTempInstance();
                                     finishReturnInstance();
                                 }
@@ -1965,7 +1965,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 // close all open databases of external data.
                                 Collect.getInstance().getExternalDataManager().close();
 
-                                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                 removeTempInstance();
                                 finishReturnInstance();
                                 break;
@@ -2574,13 +2574,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             }
 
             setTimerLogger(formController);
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
+            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             setTimerLogger(formController);
-            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
@@ -2628,24 +2628,24 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 if (saveResult.getComplete()) {
-                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
-                    mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2655,14 +2655,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2698,7 +2698,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private void setTimerLogger(FormController formController) {
 
         // Create the timer logger and then log the resume event
-        mTimerLogger = new TimerLogger(formController.getInstancePath(),
+        timerLogger = new TimerLogger(formController.getInstancePath(),
                 PreferenceManager.getDefaultSharedPreferences(this),
                 formController);
     }
