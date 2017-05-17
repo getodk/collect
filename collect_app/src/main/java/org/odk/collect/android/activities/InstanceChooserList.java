@@ -234,7 +234,9 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        showDuplicateFormDialog(position);
+        if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+            showDuplicateFormDialog(position);
+        }
         return true;
     }
 
