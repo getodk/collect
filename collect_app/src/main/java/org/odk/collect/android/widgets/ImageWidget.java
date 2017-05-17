@@ -65,7 +65,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     private TextView errorTextView;
 
 
-    public ImageWidget(Context context, FormEntryPrompt prompt) {
+    public ImageWidget(Context context, FormEntryPrompt prompt, final boolean selfie) {
         super(context, prompt);
 
         instanceFolder =
