@@ -58,8 +58,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -2555,10 +2557,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             if (!showFirst) {
+                if (reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE).equals(ApplicationConstants.FormModes.DUPLICATED)) {
+                    renameMediaFiles(formController);
+                    getIntent().removeExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                }
                 // we've just loaded a saved form, so start in the hierarchy view
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                if (formMode == null
+                        || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)
+                        || ApplicationConstants.FormModes.DUPLICATED.equalsIgnoreCase(formMode)) {
                     i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                     startActivity(i);
                     return; // so we don't show the intro screen before jumping to the hierarchy
@@ -2866,6 +2874,42 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void onSavePointError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
+        }
+    }
+
+    private void renameMediaFiles(FormController formController) {
+        List<FormEntryPrompt> formEntryPrompts = null;
+        try {
+            formEntryPrompts = formController.getAllQuestionPrompts();
+        } catch (JavaRosaException e) {
+            Timber.e(e);
+        }
+        if (formEntryPrompts != null) {
+            for (FormEntryPrompt formEntryPrompt : formEntryPrompts) {
+                try {
+                    if (formEntryPrompt.getControlType() == Constants.CONTROL_IMAGE_CHOOSE ||
+                            formEntryPrompt.getControlType() == Constants.CONTROL_AUDIO_CAPTURE ||
+                            formEntryPrompt.getControlType() == Constants.CONTROL_VIDEO_CAPTURE ||
+                            formEntryPrompt.getControlType() == Constants.CONTROL_OSM_CAPTURE) {
+
+                        String originalAnswer = formEntryPrompt.getAnswerText();
+                        if (originalAnswer != null) {
+                            String newAnswer = System.currentTimeMillis() +
+                                    originalAnswer.substring(originalAnswer.lastIndexOf("."));
+
+                            formController
+                                    .saveAnswer(formEntryPrompt.getIndex(), new StringData(newAnswer));
+
+                            new File(formController.getInstancePath().getParent() +
+                                    "/" + originalAnswer)
+                                    .renameTo(new File(formController.getInstancePath().getParent()
+                                            + "/" + newAnswer));
+                        }
+                    }
+                } catch (JavaRosaException e) {
+                    Timber.e(e);
+                }
+            }
         }
     }
 

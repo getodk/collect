@@ -35,6 +35,7 @@ public class ApplicationConstants {
     public abstract static class FormModes {
         public static final String EDIT_SAVED = "editSaved";
         public static final String VIEW_SENT = "viewSent";
+        public static final String DUPLICATED = "duplicated";
     }
 
     public abstract static class SortingOrder {

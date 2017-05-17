@@ -25,17 +25,15 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.InstanceUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -213,7 +211,7 @@ public class InstanceProvider extends ContentProvider {
 
         if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
             Date today = new Date();
-            String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
+            String text = InstanceUtils.getDisplaySubtext(getContext(), InstanceProviderAPI.STATUS_INCOMPLETE, today);
             values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
         }
 
@@ -232,29 +230,6 @@ public class InstanceProvider extends ContentProvider {
         }
 
         throw new SQLException("Failed to insert row into " + uri);
-    }
-
-    private String getDisplaySubtext(String state, Date date) {
-        if (state == null) {
-            return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(
-                    getContext().getString(R.string.sending_failed_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else {
-            return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        }
     }
 
     private void deleteAllFilesInDirectory(File directory) {
@@ -388,7 +363,7 @@ public class InstanceProvider extends ContentProvider {
 
                     if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
                         Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
+                        String text = InstanceUtils.getDisplaySubtext(getContext(), status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
                     }
                 }
@@ -404,7 +379,7 @@ public class InstanceProvider extends ContentProvider {
 
                     if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
                         Date today = new Date();
-                        String text = getDisplaySubtext(status, today);
+                        String text = InstanceUtils.getDisplaySubtext(getContext(), status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
                     }
                 }
