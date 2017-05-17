@@ -71,7 +71,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-            mToolbar.setTitle(getString(R.string.review_data));
+            toolbar.setTitle(getString(R.string.review_data));
             editMode = true;
             sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
@@ -79,7 +79,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                     getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
             };
         } else {
-            mToolbar.setTitle(getString(R.string.view_sent_forms));
+            toolbar.setTitle(getString(R.string.view_sent_forms));
             sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
@@ -171,7 +171,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         TextView textView = (TextView) findViewById(R.id.status_text);
         textView.setText(result);
 
-        if (mListAdapter.isEmpty()) {
+        if (listAdapter.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
         } else {
             emptyView.setVisibility(View.GONE);

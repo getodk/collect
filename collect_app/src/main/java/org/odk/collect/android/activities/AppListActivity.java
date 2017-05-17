@@ -77,9 +77,8 @@ abstract class AppListActivity extends AppCompatActivity {
 
     private boolean isSearchBoxShown;
 
-
     protected Integer selectedSortingOrder;
-    protected Toolbar mToolbar;
+    protected Toolbar toolbar;
     protected ListView listView;
     protected TextView emptyView;
 
@@ -93,25 +92,25 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.inflateMenu(R.menu.menu);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu);
 
-        mToolbar.findViewById(R.id.menu_sort).setOnClickListener(new View.OnClickListener() {
+        toolbar.findViewById(R.id.menu_sort).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-                    mDrawerLayout.closeDrawer(Gravity.END);
+                if (drawerLayout.isDrawerOpen(Gravity.END)) {
+                    drawerLayout.closeDrawer(Gravity.END);
                 } else {
-                    Collect.getInstance().hideKeyboard(mInputSearch);
-                    mDrawerLayout.openDrawer(Gravity.END);
+                    Collect.getInstance().hideKeyboard(inputSearch);
+                    drawerLayout.openDrawer(Gravity.END);
                 }
             }
         });
 
-        mToolbar.findViewById(R.id.menu_filter).setOnClickListener(new View.OnClickListener() {
+        toolbar.findViewById(R.id.menu_filter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSearchBoxLayout.getVisibility() == View.GONE) {
+                if (searchBoxLayout.getVisibility() == View.GONE) {
                     showSearchBox();
                 } else {
                     hideSearchBox();
@@ -122,7 +121,7 @@ abstract class AppListActivity extends AppCompatActivity {
         boolean hasHardwareMenu =
                 ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
         if (!hasHardwareMenu) {
-            setSupportActionBar(mToolbar);
+            setSupportActionBar(toolbar);
         }
     }
 

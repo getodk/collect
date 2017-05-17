@@ -127,7 +127,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
 
-        mToolbar.setTitle(getString(R.string.get_forms));
+        toolbar.setTitle(getString(R.string.get_forms));
 
         alertMsg = getString(R.string.please_wait);
 
@@ -254,7 +254,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
 
-        if (!mFormList.isEmpty()) {
+        if (!formList.isEmpty()) {
             emptyView.setVisibility(View.GONE);
         }
     }
