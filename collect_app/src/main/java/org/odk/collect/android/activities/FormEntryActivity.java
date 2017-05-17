@@ -2443,12 +2443,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
-                ((animation == mInAnimation) ? "in"
-                        : ((animation == mOutAnimation) ? "out" : "other")));
-        if (mInAnimation == animation) {
-            mAnimationCompletionSet |= 1;
-        } else if (mOutAnimation == animation) {
-            mAnimationCompletionSet |= 2;
+                ((animation == inAnimation) ? "in"
+                : ((animation == outAnimation) ? "out" : "other")));
+        if (inAnimation == animation) {
+            animationCompletionSet |= 1;
+        } else if (outAnimation == animation) {
+            animationCompletionSet |= 2;
         } else {
             Timber.e("Unexpected animation");
         }
@@ -2462,17 +2462,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     public void onAnimationRepeat(Animation animation) {
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
-                ((animation == mInAnimation) ? "in"
-                        : ((animation == mOutAnimation) ? "out" : "other")));
+                ((animation == inAnimation) ? "in"
+                : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
     public void onAnimationStart(Animation animation) {
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
-                ((animation == mInAnimation) ? "in"
-                        : ((animation == mOutAnimation) ? "out" : "other")));
-
+                ((animation == inAnimation) ? "in"
+                : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
