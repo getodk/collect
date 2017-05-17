@@ -177,7 +177,7 @@ public class TimerLogger {
     private File timerlogFile = null;
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
-    private boolean mTimerEnabled = false;              // Set true of the timer logger is enabled
+    private boolean timerEnabled = false;              // Set true of the timer logger is enabled
 
 
     public TimerLogger(File instanceFile, SharedPreferences sharedPreferences, FormController formController) {
@@ -191,9 +191,9 @@ public class TimerLogger {
         boolean loggingEnabledInForm = formController.getSubmissionMetadata().audit;
         boolean loggingEnabledInPref = sharedPreferences.getBoolean(
                 AdminKeys.KEY_TIMER_LOG_ENABLED, false);
-        mTimerEnabled = loggingEnabledInForm && loggingEnabledInPref;
+        timerEnabled = loggingEnabledInForm && loggingEnabledInPref;
 
-        if (mTimerEnabled) {
+        if (timerEnabled) {
             filename = "audit.csv";
             if (instanceFile != null) {
                 File instanceFolder = instanceFile.getParentFile();
@@ -205,7 +205,7 @@ public class TimerLogger {
 
 
     public void setPath(String instancePath) {
-        if (mTimerEnabled) {
+        if (timerEnabled) {
             timerlogFile = new File(instancePath + File.separator + filename);
         }
     }
@@ -219,7 +219,7 @@ public class TimerLogger {
                               boolean advancingPage,
                               boolean writeImmediatelyToDisk) {
 
-        if (mTimerEnabled) {
+        if (timerEnabled) {
 
             // Calculate the time and add the event to the events array
             long start = getEventTime();
@@ -286,7 +286,7 @@ public class TimerLogger {
      */
     public void exitView() {
 
-        if (mTimerEnabled) {
+        if (timerEnabled) {
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
