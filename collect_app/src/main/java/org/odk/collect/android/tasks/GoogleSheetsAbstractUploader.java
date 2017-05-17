@@ -581,7 +581,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     }
                 }
             }
-            list.add(answer);
+            // https://github.com/opendatakit/collect/issues/931
+            list.add(answer.isEmpty() ? " " : answer);
         }
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
