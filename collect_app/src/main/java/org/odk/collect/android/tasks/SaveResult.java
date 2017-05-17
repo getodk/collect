@@ -26,14 +26,20 @@ package org.odk.collect.android.tasks;
 public class SaveResult {
 
     private int saveResult;
+    private boolean complete;
     private String saveErrorMessage;
 
     public int getSaveResult() {
         return saveResult;
     }
 
-    public void setSaveResult(int saveResult) {
+    public boolean getComplete() {
+        return complete;
+    }
+
+    public void setSaveResult(int saveResult, boolean complete) {
         this.saveResult = saveResult;
+        this.complete = complete;
     }
 
     public void setSaveErrorMessage(String saveErrorMessage) {

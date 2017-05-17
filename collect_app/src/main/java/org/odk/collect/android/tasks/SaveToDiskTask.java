@@ -88,7 +88,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             int validateStatus = formController.validateAnswers(markCompleted);
             if (validateStatus != FormEntryController.ANSWER_OK) {
                 // validation failed, pass specific failure
-                saveResult.setSaveResult(validateStatus);
+                saveResult.setSaveResult(validateStatus, markCompleted);
                 return saveResult;
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // that means that we have a bad design
             // save the exception to be used in the error dialog.
             saveResult.setSaveErrorMessage(e.getMessage());
-            saveResult.setSaveResult(SAVE_ERROR);
+            saveResult.setSaveResult(SAVE_ERROR, markCompleted);
             return saveResult;
         }
 
@@ -133,15 +133,15 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 FileUtils.deleteAndReport(shadowInstance);
             }
 
-            saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED);
+            saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED, markCompleted);
         } catch (EncryptionException e) {
             saveResult.setSaveErrorMessage(e.getMessage());
-            saveResult.setSaveResult(ENCRYPTION_ERROR);
+            saveResult.setSaveResult(ENCRYPTION_ERROR, markCompleted);
         } catch (Exception e) {
             Timber.e(e);
 
             saveResult.setSaveErrorMessage(e.getMessage());
-            saveResult.setSaveResult(SAVE_ERROR);
+            saveResult.setSaveResult(SAVE_ERROR, markCompleted);
         }
 
         return saveResult;
