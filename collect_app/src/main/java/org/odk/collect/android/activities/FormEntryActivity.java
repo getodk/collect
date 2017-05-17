@@ -2577,15 +2577,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
+            // Create the timer logger and then log the resume event
+            mTimerLogger = new TimerLogger(formController.getInstancePath(),
+                    PreferenceManager.getDefaultSharedPreferences(this),
+                    formController);
+            mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
-
-                // Create the timer logger and then log the resume event
-                mTimerLogger = new TimerLogger(formController.getInstancePath(),
-                        PreferenceManager.getDefaultSharedPreferences(this),
-                        formController);
-                mTimerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
-
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
