@@ -61,14 +61,14 @@ public class CaptureSelfieActivity extends Activity {
         this.preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                camera.takePicture(null, null, mPicture);
+                camera.takePicture(null, null, picture);
             }
         });
 
         ToastUtils.showLongToast(R.string.take_picture_instruction);
     }
 
-    private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+    private Camera.PictureCallback picture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             savePhoto(data);
