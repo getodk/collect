@@ -1803,7 +1803,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
                         formController.deleteRepeat();
-                        refreshCurrentView();
+                        showNextView();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE: // no
