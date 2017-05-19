@@ -16,8 +16,10 @@
 
 package org.odk.collect.android.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -28,9 +30,11 @@ import timber.log.Timber;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder holder;
     private Camera camera;
+    private Context context;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
+        this.context = context;
         this.camera = camera;
         holder = getHolder();
         holder.addCallback(this);
@@ -39,6 +43,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder holder) {
         try {
             camera.setPreviewDisplay(holder);
+            setCameraDisplayOrientation(camera);
             camera.startPreview();
         } catch (IOException e) {
             Timber.e(e);
@@ -68,5 +73,37 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    private void setCameraDisplayOrientation(android.hardware.Camera camera) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(1, info);
+        int rotation = ((Activity) context).getWindowManager().getDefaultDisplay()
+                .getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
     }
 }
