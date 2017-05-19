@@ -27,7 +27,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.Camera2Fragment;
 import org.odk.collect.android.utilities.ToastUtils;
 
-
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class CaptureSelfieActivityNewApi extends Activity {
 

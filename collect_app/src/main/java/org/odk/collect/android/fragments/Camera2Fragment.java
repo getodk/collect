@@ -465,7 +465,7 @@ public class Camera2Fragment extends Fragment
                 CameraCharacteristics characteristics
                         = manager.getCameraCharacteristics(cameraId);
 
-                // We use a front facing camera in this sample.
+                // We use a front facing camera.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
                 if (facing != null && facing != CameraCharacteristics.LENS_FACING_FRONT) {
                     continue;
