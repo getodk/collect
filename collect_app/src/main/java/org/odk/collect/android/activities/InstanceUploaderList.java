@@ -142,7 +142,12 @@ public class InstanceUploaderList extends InstanceListActivity
         uploadButton.setEnabled(false);
 
         // set title
-        toolbar.setTitle(getString(R.string.send_data));
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(getString(R.string.send_data));
+        } else {
+            setTitle(getString(R.string.send_data));
+        }
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);

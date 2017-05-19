@@ -137,9 +137,14 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.google_drive));
         boolean hasHardwareMenu =
                 ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(getString(R.string.google_drive));
+        } else {
+            setTitle(getString(R.string.google_drive));
+        }
         if (!hasHardwareMenu) {
             setSupportActionBar(toolbar);
         }

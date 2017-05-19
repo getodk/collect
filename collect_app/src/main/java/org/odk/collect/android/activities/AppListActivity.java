@@ -32,6 +32,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -155,7 +156,42 @@ abstract class AppListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
+
+        menu
+                .add(0, MENU_SORT, 0, R.string.sort_the_list)
+                .setIcon(R.drawable.ic_sort)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        menu
+                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
+                .setIcon(R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_SORT:
+                if (drawerLayout.isDrawerOpen(Gravity.END)) {
+                    drawerLayout.closeDrawer(Gravity.END);
+                } else {
+                    Collect.getInstance().hideKeyboard(inputSearch);
+                    drawerLayout.openDrawer(Gravity.END);
+                }
+                return true;
+
+            case MENU_FILTER:
+                if (searchBoxLayout.getVisibility() == View.GONE) {
+                    showSearchBox();
+                } else {
+                    hideSearchBox();
+                }
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
