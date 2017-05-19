@@ -265,8 +265,7 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.CaptureSelfieActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activities.CaptureSelfieActivityNewApi"
-            android:screenOrientation="portrait"/>
+            android:name=".activities.CaptureSelfieActivityNewApi" />
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true">
