@@ -82,12 +82,16 @@ abstract class AppListActivity extends AppCompatActivity {
     protected ListView listView;
     protected TextView emptyView;
 
+    protected boolean hasHardwareMenu;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
         emptyView = (TextView) findViewById(android.R.id.empty);
+        hasHardwareMenu = ViewConfigurationCompat
+                .hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
         initToolbar();
     }
 
@@ -118,8 +122,6 @@ abstract class AppListActivity extends AppCompatActivity {
             }
         });
 
-        boolean hasHardwareMenu =
-                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
         if (!hasHardwareMenu) {
             setSupportActionBar(toolbar);
         }
