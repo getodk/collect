@@ -71,7 +71,12 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-            toolbar.setTitle(getString(R.string.review_data));
+
+            if (hasHardwareMenu) {
+                toolbar.setTitle(getString(R.string.review_data));
+            } else {
+                setTitle(getString(R.string.review_data));
+            }
             editMode = true;
             sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
@@ -79,7 +84,12 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                     getString(R.string.sort_by_status_asc), getString(R.string.sort_by_status_desc)
             };
         } else {
-            toolbar.setTitle(getString(R.string.view_sent_forms));
+
+            if (hasHardwareMenu) {
+                toolbar.setTitle(getString(R.string.view_sent_forms));
+            } else {
+                setTitle(getString(R.string.view_sent_forms));
+            }
             sortingOptions = new String[]{
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
