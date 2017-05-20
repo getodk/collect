@@ -12,13 +12,13 @@
  * the License.
  */
 
-
 package org.odk.collect.android.activities;
 
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.javarosa.core.model.FormIndex;
@@ -32,11 +32,31 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class EditFormHierarchyActivity extends FormHierarchyActivity {
+
+public class ViewFormHierarchyActivity extends FormHierarchyActivity {
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Collect.getInstance().getFormController().stepToOuterScreenEvent();
+
+        Button exitButton = (Button) findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "exit",
+                        "click");
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+        exitButton.setVisibility(View.VISIBLE);
+
+        jumpBeginningButton.setVisibility(View.GONE);
+        jumpEndButton.setVisibility(View.GONE);
 
     }
 
@@ -87,7 +107,6 @@ public class EditFormHierarchyActivity extends FormHierarchyActivity {
                     }
                 }
                 setResult(RESULT_OK);
-                finish();
                 return;
             case CHILD:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
