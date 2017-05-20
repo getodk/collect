@@ -57,9 +57,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
 
         jumpBeginningButton.setVisibility(View.GONE);
         jumpEndButton.setVisibility(View.GONE);
-
     }
-
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {

@@ -37,9 +37,7 @@ public class EditFormHierarchyActivity extends FormHierarchyActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
