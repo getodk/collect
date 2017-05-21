@@ -58,6 +58,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeElement;
@@ -595,12 +598,23 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             return;
         }
 
-        switch (requestCode) {
-            case BARCODE_CAPTURE:
+        // For handling results returned by the Zxing Barcode scanning library
+        IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (barcodeScannerResult != null) {
+            if (barcodeScannerResult.getContents() == null) {
+                // request was canceled...
+                Timber.i("QR code scanning cancelled");
+            } else {
                 String sb = intent.getStringExtra("SCAN_RESULT");
                 ((ODKView) currentView).setBinaryData(sb);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                break;
+                return;
+            }
+        }
+
+
+        switch (requestCode) {
+
             case OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
                 ((ODKView) currentView).setBinaryData(osmFileName);
