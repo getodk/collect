@@ -48,12 +48,12 @@ import java.util.Locale;
 
 public class MapHelper {
     private static SharedPreferences sharedPreferences;
-    public static String[] offilineOverlays;
+    private static String[] offlineOverlays;
     private static String[] onlineOverlays;
     private static final String no_folder_key = "None";
 
-    public GoogleMap googleMap;
-    public MapView osmMap;
+    private GoogleMap googleMap;
+    private MapView osmMap;
 
     // GOOGLE MAPS BASEMAPS
     private static final String GOOGLE_MAP_STREETS = "streets";
@@ -84,7 +84,7 @@ public class MapHelper {
         this.googleMap = null;
         osmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        offilineOverlays = getOfflineLayerList();
+        offlineOverlays = getOfflineLayerList();
         onlineOverlays = getOnlineLayerList(context);
         this.googleMap = googleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
@@ -94,7 +94,7 @@ public class MapHelper {
         googleMap = null;
         this.osmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        offilineOverlays = getOfflineLayerList();
+        offlineOverlays = getOfflineLayerList();
         onlineOverlays = getOnlineLayerList(context);
         this.iregisterReceiver = iregisterReceiver;
         this.osmMap = osmMap;
@@ -133,7 +133,7 @@ public class MapHelper {
             //OSMMAP
             String basemap = getOsmBasemap();
 
-            ITileSource tileSource = null;
+            ITileSource tileSource;
 
             switch (basemap) {
                 case OPENMAP_USGS_TOPO:
@@ -169,9 +169,9 @@ public class MapHelper {
 
     }
 
-    public static String[] getOfflineLayerList() {
+    private static String[] getOfflineLayerList() {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
-        ArrayList<String> results = new ArrayList<String>();
+        ArrayList<String> results = new ArrayList<>();
         results.add(no_folder_key);
         for (File f : files) {
             if (f.isDirectory() && !f.isHidden()) {
@@ -193,10 +193,10 @@ public class MapHelper {
     }
 
     public void showLayersDialog(final Context context) {
-        AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
-        layerDialod.setTitle(context.getString(R.string.select_offline_layer));
-        String[] allAvailableLayers = ObjectArrays.concat(onlineOverlays, offilineOverlays, String.class);
-        AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(allAvailableLayers,
+        AlertDialog.Builder layerDialog = new AlertDialog.Builder(context);
+        layerDialog.setTitle(context.getString(R.string.select_offline_layer));
+        String[] allAvailableLayers = ObjectArrays.concat(onlineOverlays, offlineOverlays, String.class);
+        layerDialog.setSingleChoiceItems(allAvailableLayers,
                 selectedLayer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         switch (item) {
@@ -257,12 +257,11 @@ public class MapHelper {
                         dialog.dismiss();
                     }
                 });
-        layerDialod.show();
-
+        layerDialog.show();
     }
 
     private File[] getFileFromSelectedItem(int item) {
-        File directory = new File(Collect.OFFLINE_LAYERS + slash + offilineOverlays[item]);
+        File directory = new File(Collect.OFFLINE_LAYERS + slash + offlineOverlays[item]);
         return directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
@@ -270,6 +269,4 @@ public class MapHelper {
             }
         });
     }
-
-
 }
