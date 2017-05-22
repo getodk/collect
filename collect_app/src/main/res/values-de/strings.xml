@@ -340,7 +340,7 @@
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Map-SDK-Optionen anzeigen</string>
   <string name="openmap_streets">OSM Straßen</string>
-  <string name="openmap_usgs_topo">USGS Topografische Karte</string>
+  <string name="openmap_open_topo">Topografische Karte</string>
   <string name="openmap_usgs_sat">USGS Satelliten Karte</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>

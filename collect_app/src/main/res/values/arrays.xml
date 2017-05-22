@@ -84,7 +84,7 @@ the specific language governing permissions and limitations under the License. -
 
     <string-array name="map_osm_basemap_selector_entry_values" translatable="false">
         <item>openmap_streets</item>
-        <item>openmap_usgs_topo</item>
+        <item>openmap_open_topo</item>
         <item>openmap_usgs_sat</item>
         <item>openmap_stamen_terrain</item>
         <item>openmap_cartodb_positron</item>
@@ -92,7 +92,7 @@ the specific language governing permissions and limitations under the License. -
     </string-array>
     <string-array name="map_osm_basemap_selector_entries">
         <item>@string/openmap_streets</item>
-        <item>@string/openmap_usgs_topo</item>
+        <item>@string/openmap_open_topo</item>
         <item>@string/openmap_usgs_sat</item>
         <item>@string/openmap_stamen_terrain</item>
         <item>@string/openmap_cartodb_positron</item>

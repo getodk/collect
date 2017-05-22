@@ -338,7 +338,7 @@
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Mostrar Opciones del Mapa SDK</string>
   <string name="openmap_streets">Calles OSM</string>
-  <string name="openmap_usgs_topo">USGS Mapa Topo Nacional</string>
+  <string name="openmap_open_topo">Mapa Topo</string>
   <string name="openmap_usgs_sat">USGS Sat Mapa Nacional</string>
   <string name="openmap_stamen_terrain">Terreno Stamen</string>
   <string name="openmap_cartodb_positron">Positron CartoDB</string>

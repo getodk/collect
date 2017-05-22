@@ -61,7 +61,7 @@ public class MapHelper {
 
     //OSM MAP BASEMAPS
     private static final String OPENMAP_STREETS = "openmap_streets";
-    private static final String OPENMAP_USGS_TOPO = "openmap_usgs_topo";
+    private static final String OPENMAP_OPEN_TOPO = "openmap_open_topo";
     private static final String OPENMAP_USGS_SAT = "openmap_usgs_sat";
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
     private static final String OPENMAP_CARTODB_POSITRON = "openmap_cartodb_positron";
@@ -135,8 +135,8 @@ public class MapHelper {
             ITileSource tileSource;
 
             switch (basemap) {
-                case OPENMAP_USGS_TOPO:
-                    tileSource = tileFactory.getUSGSTopo();
+                case OPENMAP_OPEN_TOPO:
+                    tileSource = TileSourceFactory.OpenTopo;
                     break;
 
                 case OPENMAP_USGS_SAT:

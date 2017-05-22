@@ -340,7 +340,7 @@
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">マップ SDK オプションを表示</string>
   <string name="openmap_streets">OSM 道路</string>
-  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_open_topo">Open Topo Map</string>
   <string name="openmap_usgs_sat">USGS National Map Sat</string>
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB ポジトロン</string>

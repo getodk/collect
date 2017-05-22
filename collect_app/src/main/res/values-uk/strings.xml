@@ -340,7 +340,7 @@
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Відобразити налаштування Map SDK</string>
   <string name="openmap_streets">OSM Вулиці</string>
-  <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
+  <string name="openmap_open_topo">топографічна національна карта</string>
   <string name="openmap_usgs_sat">USGS супутникова національна карта</string>
   <string name="openmap_stamen_terrain">Stamen Ландшафт</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
