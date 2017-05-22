@@ -23,7 +23,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import timber.log.Timber;
@@ -121,10 +120,7 @@ public class SharedPreferencesUtils {
     }
 
     private Collection<String> getAllGeneralKeys() {
-        Collection<String> keys = new ArrayList<>();
-        for (String key : GENERAL_KEYS.keySet()) {
-            keys.add(key);
-        }
+        Collection<String> keys = GENERAL_KEYS.keySet();
         keys.add(KEY_PASSWORD);
         return keys;
     }
