@@ -14,7 +14,6 @@
   <string name="audio_file_error">Keine Audio-Datei angegeben.</string>
   <string name="audio_file_invalid">Datei: %s ist keine lesbare Audio-Datei.</string>
   <string name="backup">Zurück zur\nvorherigen\nEingabe</string>
-  <string name="barcode_scanner_error">Barcode-Scanner ist nicht installiert!</string>
   <string name="cancel">Abbrechen</string>
   <string name="cancel_loading_form">Abbrechen</string>
   <string name="cancel_location">Abbrechen</string>

@@ -13,7 +13,6 @@
   <string name="audio_file_error">Nessun file audio è stato specificato.</string>
   <string name="audio_file_invalid">File: %s non è un file di audio valido.</string>
   <string name="backup">indietro</string>
-  <string name="barcode_scanner_error">Spiacenti, Barcode Scanner non è installato!</string>
   <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
   <string name="cancel_location">Annulla</string>

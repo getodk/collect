@@ -14,7 +14,6 @@
   <string name="audio_file_error">គ្មានឯកសារអូឌីយ៉ូដែលបានបញ្ជាក់.</string>
   <string name="audio_file_invalid">ឯកសារ: %s មិនមែនជាឯកសារសម្លេងត្រឹមត្រូវ</string>
   <string name="backup">ថយក្រោយទៅ\nពីមុន\nprompt</string>
-  <string name="barcode_scanner_error">សុំ​អភ័យ​ទោស​ កម្មវិធី​ស្កែនបារកូដមិនទាន់ដំឡើង</string>
   <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
