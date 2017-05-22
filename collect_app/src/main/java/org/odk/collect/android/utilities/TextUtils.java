@@ -17,6 +17,7 @@ package org.odk.collect.android.utilities;
 import android.text.Html;
 
 import java.util.regex.MatchResult;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class TextUtils {
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
@@ -65,6 +66,8 @@ public class TextUtils {
     };
 
     private static String markdownToHtml(String text) {
+        https://stackoverflow.com/questions/1265282/recommended-method-for-escaping-html-in-java
+        text = StringEscapeUtils.escapeHtml4(text);
 
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
 
