@@ -105,6 +105,13 @@ public class CaptureSelfieActivity extends Activity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        camera = null;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -120,6 +127,12 @@ public class CaptureSelfieActivity extends Activity {
 
             this.preview = new CameraPreview(this, camera);
             preview.addView(this.preview);
+            preview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    camera.takePicture(null, null, picture);
+                }
+            });
         }
     }
 }
