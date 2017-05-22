@@ -24,7 +24,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -33,7 +32,6 @@ import com.google.common.collect.ObjectArrays;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -54,13 +52,13 @@ public class MapHelper {
     private MapView osmMap;
 
     // GOOGLE MAPS BASEMAPS
-    private static final String GOOGLE_MAP_STREETS = "streets";
+    public static final String GOOGLE_MAP_STREETS = "streets";
     private static final String GOOGLE_MAP_SATELLITE = "satellite";
     private static final String GOOGLE_MAP_TERRAIN = "terrain‎";
     private static final String GOOGLE_MAP_HYBRID = "hybrid";
 
     //OSM MAP BASEMAPS
-    private static final String OPENMAP_STREETS = "openmap_streets";
+    public static final String OPENMAP_STREETS = "openmap_streets";
     private static final String OPENMAP_OPEN_TOPO = "openmap_open_topo";
     private static final String OPENMAP_USGS_SAT = "openmap_usgs_sat";
     private static final String OPENMAP_STAMEN_TERRAIN = "openmap_stamen_terrain";
@@ -98,16 +96,8 @@ public class MapHelper {
         this.basemap = basemap;
     }
 
-    public static String getGoogleBasemap(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
-    }
-
-    public static String getOsmBasemap(Context context) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+    public String getBasemap() {
+        return basemap;
     }
 
     public void setBasemap() {

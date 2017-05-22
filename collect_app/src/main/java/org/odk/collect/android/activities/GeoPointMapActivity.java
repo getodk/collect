@@ -23,6 +23,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -43,6 +44,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -64,6 +66,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         OnMarkerDragListener, OnMapLongClickListener {
 
     private static final String LOCATION_COUNT = "locationCount";
+    private static final String BASEMAP = "basemap";
 
     private GoogleMap map;
     private MarkerOptions markerOptions;
@@ -108,6 +111,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private Boolean intentDraggable = false;
     private Boolean locationFromIntent = false;
 
+    private String basemap;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +120,11 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         if (savedInstanceState != null) {
             locationCount = savedInstanceState.getInt(LOCATION_COUNT);
+            basemap = savedInstanceState.getString(BASEMAP);
+        } else {
+            basemap = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getString(PreferenceKeys.KEY_MAP_BASEMAP, MapHelper.GOOGLE_MAP_STREETS);
         }
 
         try {
@@ -185,6 +195,12 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(BASEMAP, helper.getBasemap());
+    }
+
     private void setupMap(GoogleMap googleMap) {
         map = googleMap;
         if (map == null) {
@@ -192,14 +208,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             finish();
             return;
         }
-        helper = new MapHelper(GeoPointMapActivity.this, map, MapHelper.getGoogleBasemap(this));
+        helper = new MapHelper(GeoPointMapActivity.this, map, basemap);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
 
         markerOptions = new MarkerOptions();
-        helper = new MapHelper(this, map, MapHelper.getGoogleBasemap(this));
+        helper = new MapHelper(this, map, basemap);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationStatus = (TextView) findViewById(R.id.location_status);

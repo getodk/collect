@@ -24,6 +24,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoTraceWidget;
@@ -70,6 +72,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class GeoTraceGoogleMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
+
+    private static final String BASEMAP = "basemap";
+
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     private Button playButton;
@@ -117,12 +122,22 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private Boolean firstLocationFound = false;
     private Boolean modeActive = false;
 
+    private String basemap;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geotrace_google_layout);
+
+        if (savedInstanceState != null) {
+            basemap = savedInstanceState.getString(BASEMAP);
+        } else {
+            basemap = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getString(PreferenceKeys.KEY_MAP_BASEMAP, MapHelper.GOOGLE_MAP_STREETS);
+        }
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
@@ -133,6 +148,12 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(BASEMAP, helper.getBasemap());
+    }
+
     private void setupMap(GoogleMap googleMap) {
         map = googleMap;
         if (map == null) {
@@ -141,7 +162,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             return;
         }
 
-        helper = new MapHelper(GeoTraceGoogleMapActivity.this, map, MapHelper.getGoogleBasemap(this));
+        helper = new MapHelper(GeoTraceGoogleMapActivity.this, map, basemap);
         map.setMyLocationEnabled(true);
         map.setOnMapLongClickListener(GeoTraceGoogleMapActivity.this);
         map.setOnMarkerDragListener(GeoTraceGoogleMapActivity.this);

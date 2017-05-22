@@ -24,6 +24,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -57,6 +59,7 @@ import java.util.List;
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
     private static final String LOCATION_COUNT = "locationCount";
+    private static final String BASEMAP = "basemap";
 
     //private GoogleMap map;
     private MapView map;
@@ -112,8 +115,14 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        String basemap;
         if (savedInstanceState != null) {
             locationCount = savedInstanceState.getInt(LOCATION_COUNT);
+            basemap = savedInstanceState.getString(BASEMAP);
+        } else {
+            basemap = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getString(PreferenceKeys.KEY_MAP_BASEMAP, MapHelper.OPENMAP_STREETS);
         }
 
         try {
@@ -125,7 +134,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }
 
         map = (MapView) findViewById(R.id.omap);
-        helper = new MapHelper(this, map, GeoPointOsmMapActivity.this, MapHelper.getOsmBasemap(this));
+        helper = new MapHelper(this, map, GeoPointOsmMapActivity.this, basemap);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         marker = new Marker(map);
@@ -294,6 +303,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(LOCATION_COUNT, locationCount);
+        outState.putString(BASEMAP, helper.getBasemap());
     }
 
     @Override

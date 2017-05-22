@@ -28,6 +28,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -60,6 +62,8 @@ import java.util.concurrent.TimeUnit;
 
 public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceiver,
         LocationListener {
+    private static final String BASEMAP = "basemap";
+
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     public int zoomLevel = 3;
@@ -109,8 +113,17 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
 
+        String basemap;
+        if (savedInstanceState != null) {
+            basemap = savedInstanceState.getString(BASEMAP);
+        } else {
+            basemap = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getString(PreferenceKeys.KEY_MAP_BASEMAP, MapHelper.OPENMAP_STREETS);
+        }
+
         mapView = (MapView) findViewById(R.id.geotrace_mapview);
-        helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this, MapHelper.getOsmBasemap(this));
+        helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this, basemap);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(zoomLevel);
@@ -326,6 +339,12 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         if (networkOn) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(BASEMAP, helper.getBasemap());
     }
 
     @Override
