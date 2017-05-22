@@ -60,7 +60,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     FormIndex startIndex;
     private FormIndex currentIndex;
-    public Button jumpPreviousButton;
+    protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
     private ListView listView;
