@@ -115,18 +115,23 @@ public class MapHelper {
             switch (basemap) {
                 case GOOGLE_MAP_STREETS:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    selectedLayer = 0;
                     break;
                 case GOOGLE_MAP_SATELLITE:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    selectedLayer = 1;
                     break;
                 case GOOGLE_MAP_TERRAIN:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    selectedLayer = 2;
                     break;
                 case GOOGLE_MAP_HYBRID:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    selectedLayer = 3;
                     break;
                 default:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    selectedLayer = 0;
                     break;
             }
         } else {
@@ -135,29 +140,37 @@ public class MapHelper {
             ITileSource tileSource;
 
             switch (basemap) {
+                case OPENMAP_STREETS:
+                    tileSource = TileSourceFactory.MAPNIK;
+                    selectedLayer = 0;
+                    break;
                 case OPENMAP_OPEN_TOPO:
                     tileSource = TileSourceFactory.OpenTopo;
+                    selectedLayer = 1;
                     break;
 
                 case OPENMAP_USGS_SAT:
                     tileSource = tileFactory.getUsgsSat();
+                    selectedLayer = 2;
                     break;
 
                 case OPENMAP_STAMEN_TERRAIN:
                     tileSource = tileFactory.getStamenTerrain();
+                    selectedLayer = 3;
                     break;
 
                 case OPENMAP_CARTODB_POSITRON:
                     tileSource = tileFactory.getCartoDbPositron();
+                    selectedLayer = 5;
                     break;
 
                 case OPENMAP_CARTODB_DARKMATTER:
                     tileSource = tileFactory.getCartoDbDarkMatter();
+                    selectedLayer = 6;
                     break;
-
-                case OPENMAP_STREETS:
                 default:
                     tileSource = TileSourceFactory.MAPNIK;
+                    selectedLayer = 0;
                     break;
             }
 
