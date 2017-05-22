@@ -65,7 +65,7 @@ public final class PreferenceKeys {
            static final int    ARRAY_INDEX_GOOGLE_MAPS      = 0;
            static final String OSM_BASEMAP_KEY              = "osmdroid";
            static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
-           static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
+           static final String OSM_MAPS_BASEMAP_DEFAULT     = "openmap_streets";
 
     /**
      * General keys
