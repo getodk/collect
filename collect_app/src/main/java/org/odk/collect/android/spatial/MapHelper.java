@@ -30,6 +30,7 @@ import android.preference.PreferenceManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.common.collect.ObjectArrays;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -48,6 +49,7 @@ import java.util.Locale;
 public class MapHelper {
     private static SharedPreferences sharedPreferences;
     public static String[] offilineOverlays;
+    private static String[] onlineOverlays;
     private static final String no_folder_key = "None";
 
     public GoogleMap googleMap;
@@ -83,6 +85,7 @@ public class MapHelper {
         osmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
+        onlineOverlays = getOnlineLayerList(context);
         this.googleMap = googleMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
     }
@@ -92,6 +95,7 @@ public class MapHelper {
         this.osmMap = null;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         offilineOverlays = getOfflineLayerList();
+        onlineOverlays = getOnlineLayerList(context);
         this.iregisterReceiver = iregisterReceiver;
         this.osmMap = osmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
@@ -178,10 +182,21 @@ public class MapHelper {
         return results.toArray(new String[0]);
     }
 
+    private String[] getOnlineLayerList(Context context) {
+        if (googleMap != null) {
+            return context.getResources()
+                    .getStringArray(R.array.map_google_basemap_selector_entries);
+        } else {
+            return context.getResources()
+                    .getStringArray(R.array.map_osm_basemap_selector_entries);
+        }
+    }
+
     public void showLayersDialog(final Context context) {
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
-        AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
+        String[] allAvailableLayers = ObjectArrays.concat(onlineOverlays, offilineOverlays, String.class);
+        AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(allAvailableLayers,
                 selectedLayer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         switch (item) {
