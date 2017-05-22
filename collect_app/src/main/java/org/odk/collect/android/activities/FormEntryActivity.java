@@ -608,6 +608,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 String sb = intent.getStringExtra("SCAN_RESULT");
                 ((ODKView) currentView).setBinaryData(sb);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                refreshCurrentView();
                 return;
             }
         }
