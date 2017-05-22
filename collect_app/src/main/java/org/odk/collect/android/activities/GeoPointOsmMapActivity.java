@@ -125,7 +125,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }
 
         map = (MapView) findViewById(R.id.omap);
-        helper = new MapHelper(this, map, GeoPointOsmMapActivity.this);
+        helper = new MapHelper(this, map, GeoPointOsmMapActivity.this, MapHelper.getOsmBasemap(this));
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         marker = new Marker(map);

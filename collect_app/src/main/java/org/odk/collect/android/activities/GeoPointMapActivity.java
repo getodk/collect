@@ -192,14 +192,14 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             finish();
             return;
         }
-        helper = new MapHelper(GeoPointMapActivity.this, map);
+        helper = new MapHelper(GeoPointMapActivity.this, map, MapHelper.getGoogleBasemap(this));
         map.setMyLocationEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
 
         markerOptions = new MarkerOptions();
-        helper = new MapHelper(this, map);
+        helper = new MapHelper(this, map, MapHelper.getGoogleBasemap(this));
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationStatus = (TextView) findViewById(R.id.location_status);

@@ -23,7 +23,6 @@ package org.odk.collect.android.spatial;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 
@@ -46,10 +45,10 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class MapHelper {
-    private static SharedPreferences sharedPreferences;
-    private static String[] offlineOverlays;
-    private static String[] onlineOverlays;
+    private static String[] allAvailableOverlays;
 
     private GoogleMap googleMap;
     private MapView osmMap;
@@ -71,6 +70,7 @@ public class MapHelper {
 
     public static String[] geofileTypes = new String[]{".mbtiles", ".kml", ".kmz"};
     private static final String slash = File.separator;
+    private String basemap;
 
     private TilesOverlay osmTileOverlay;
     private TileOverlay googleTileOverlay;
@@ -79,38 +79,39 @@ public class MapHelper {
     private org.odk.collect.android.spatial.TileSourceFactory tileFactory;
 
 
-    public MapHelper(Context context, GoogleMap googleMap) {
+    public MapHelper(Context context, GoogleMap googleMap, String basemap) {
         this.googleMap = null;
         osmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        offlineOverlays = getOfflineLayerList();
-        onlineOverlays = getOnlineLayerList(context);
         this.googleMap = googleMap;
+        allAvailableOverlays = ObjectArrays.concat(getOnlineLayerList(context), getOfflineLayerList(), String.class);
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
+        this.basemap = basemap;
     }
 
-    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver) {
+    public MapHelper(Context context, MapView osmMap, IRegisterReceiver iregisterReceiver, String basemap) {
         googleMap = null;
         this.osmMap = null;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        offlineOverlays = getOfflineLayerList();
-        onlineOverlays = getOnlineLayerList(context);
+        allAvailableOverlays = ObjectArrays.concat(getOnlineLayerList(context), getOfflineLayerList(), String.class);
         this.iregisterReceiver = iregisterReceiver;
         this.osmMap = osmMap;
         tileFactory = new org.odk.collect.android.spatial.TileSourceFactory(context);
+        this.basemap = basemap;
     }
 
-    private static String getGoogleBasemap() {
-        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
+    public static String getGoogleBasemap(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(PreferenceKeys.KEY_MAP_BASEMAP, GOOGLE_MAP_STREETS);
     }
 
-    private static String getOsmBasemap() {
-        return sharedPreferences.getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
+    public static String getOsmBasemap(Context context) {
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(PreferenceKeys.KEY_MAP_BASEMAP, OPENMAP_STREETS);
     }
 
     public void setBasemap() {
         if (googleMap != null) {
-            String basemap = getGoogleBasemap();
             switch (basemap) {
                 case GOOGLE_MAP_STREETS:
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -130,7 +131,6 @@ public class MapHelper {
             }
         } else {
             //OSMMAP
-            String basemap = getOsmBasemap();
 
             ITileSource tileSource;
 
@@ -193,63 +193,60 @@ public class MapHelper {
     public void showLayersDialog(final Context context) {
         AlertDialog.Builder layerDialog = new AlertDialog.Builder(context);
         layerDialog.setTitle(context.getString(R.string.select_offline_layer));
-        String[] allAvailableLayers = ObjectArrays.concat(onlineOverlays, offlineOverlays, String.class);
-        layerDialog.setSingleChoiceItems(allAvailableLayers,
+        layerDialog.setSingleChoiceItems(allAvailableOverlays,
                 selectedLayer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
-                        switch (item) {
-                            case 0:
-                                if (googleMap != null) {
+                        if (isOfflineOptionSelected(item)) {
+                            File[] spFiles = getFileFromSelectedItem(item);
+                            File spfile = spFiles[0];
+
+                            if (googleMap != null) {
+                                try {
+                                    //googleMap.clear();
                                     if (googleTileOverlay != null) {
                                         googleTileOverlay.remove();
                                     }
-
-                                } else {
-                                    //OSM
-                                    if (osmTileOverlay != null) {
-                                        osmMap.getOverlays().remove(osmTileOverlay);
-                                        osmMap.invalidate();
-                                    }
+                                    TileOverlayOptions opts = new TileOverlayOptions();
+                                    GoogleMapsMapBoxOfflineTileProvider provider =
+                                            new GoogleMapsMapBoxOfflineTileProvider(spfile);
+                                    opts.tileProvider(provider);
+                                    googleTileOverlay = googleMap.addTileOverlay(opts);
+                                } catch (Exception e) {
+                                    Timber.e(e);
                                 }
-                                break;
-                            default:
-                                File[] spFiles = getFileFromSelectedItem(item);
-                                if (spFiles.length == 0) {
-                                    break;
-                                } else {
-                                    File spfile = spFiles[0];
-
-                                    if (googleMap != null) {
-                                        try {
-                                            //googleMap.clear();
-                                            if (googleTileOverlay != null) {
-                                                googleTileOverlay.remove();
-                                            }
-                                            TileOverlayOptions opts = new TileOverlayOptions();
-                                            GoogleMapsMapBoxOfflineTileProvider provider =
-                                                    new GoogleMapsMapBoxOfflineTileProvider(spfile);
-                                            opts.tileProvider(provider);
-                                            googleTileOverlay = googleMap.addTileOverlay(opts);
-                                        } catch (Exception e) {
-                                            break;
-                                        }
-                                    } else {
-                                        if (osmTileOverlay != null) {
-                                            osmMap.getOverlays().remove(osmTileOverlay);
-                                            osmMap.invalidate();
-                                        }
-                                        osmMap.invalidate();
-                                        OsmMBTileProvider mbprovider = new OsmMBTileProvider(
-                                                iregisterReceiver, spfile);
-                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
-                                        osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-                                        osmMap.getOverlays().add(0, osmTileOverlay);
-                                        osmMap.invalidate();
-
-                                    }
-                                    dialog.dismiss();
+                            } else {
+                                if (osmTileOverlay != null) {
+                                    osmMap.getOverlays().remove(osmTileOverlay);
+                                    osmMap.invalidate();
                                 }
-                                break;
+                                osmMap.invalidate();
+                                OsmMBTileProvider mbprovider = new OsmMBTileProvider(
+                                        iregisterReceiver, spfile);
+                                osmTileOverlay = new TilesOverlay(mbprovider, context);
+                                osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+                                osmMap.getOverlays().add(0, osmTileOverlay);
+                                osmMap.invalidate();
+                            }
+                        } else {
+                            if (googleMap != null) {
+                                if (googleTileOverlay != null) {
+                                    googleTileOverlay.remove();
+                                }
+                                basemap = context
+                                        .getResources()
+                                        .getStringArray(R.array.map_google_basemap_selector_entry_values)[item];
+
+                            } else {
+                                //OSM
+                                if (osmTileOverlay != null) {
+                                    osmMap.getOverlays().remove(osmTileOverlay);
+                                    osmMap.invalidate();
+                                }
+                                basemap = context
+                                        .getResources()
+                                        .getStringArray(R.array.map_osm_basemap_selector_entry_values)[item];
+                            }
+                            setBasemap();
                         }
                         selectedLayer = item;
                         dialog.dismiss();
@@ -258,13 +255,21 @@ public class MapHelper {
         layerDialog.show();
     }
 
+    private boolean isOfflineOptionSelected(int item) {
+        return getFileFromSelectedItem(item).length > 0;
+    }
+
     private File[] getFileFromSelectedItem(int item) {
-        File directory = new File(Collect.OFFLINE_LAYERS + slash + offlineOverlays[item]);
-        return directory.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return (filename.toLowerCase(Locale.US).endsWith(".mbtiles"));
-            }
-        });
+        File[] files = new File[0];
+        File directory = new File(Collect.OFFLINE_LAYERS + slash + allAvailableOverlays[item]);
+        if (directory.isDirectory()) {
+            files = directory.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return (filename.toLowerCase(Locale.US).endsWith(".mbtiles"));
+                }
+            });
+        }
+        return files;
     }
 }

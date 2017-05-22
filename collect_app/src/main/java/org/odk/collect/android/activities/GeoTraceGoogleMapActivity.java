@@ -141,7 +141,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             return;
         }
 
-        helper = new MapHelper(GeoTraceGoogleMapActivity.this, map);
+        helper = new MapHelper(GeoTraceGoogleMapActivity.this, map, MapHelper.getGoogleBasemap(this));
         map.setMyLocationEnabled(true);
         map.setOnMapLongClickListener(GeoTraceGoogleMapActivity.this);
         map.setOnMarkerDragListener(GeoTraceGoogleMapActivity.this);

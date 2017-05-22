@@ -118,7 +118,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             finish();
             return;
         }
-        helper = new MapHelper(GeoShapeGoogleMapActivity.this, map);
+        helper = new MapHelper(GeoShapeGoogleMapActivity.this, map, MapHelper.getGoogleBasemap(this));
         map.setMyLocationEnabled(true);
         map.setOnMapLongClickListener(GeoShapeGoogleMapActivity.this);
         map.setOnMarkerDragListener(GeoShapeGoogleMapActivity.this);

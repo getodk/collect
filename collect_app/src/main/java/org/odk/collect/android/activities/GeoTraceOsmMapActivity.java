@@ -110,7 +110,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
 
         mapView = (MapView) findViewById(R.id.geotrace_mapview);
-        helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+        helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this, MapHelper.getOsmBasemap(this));
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(zoomLevel);
