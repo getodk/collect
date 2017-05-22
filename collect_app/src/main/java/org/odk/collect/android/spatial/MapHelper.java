@@ -50,7 +50,6 @@ public class MapHelper {
     private static SharedPreferences sharedPreferences;
     private static String[] offlineOverlays;
     private static String[] onlineOverlays;
-    private static final String no_folder_key = "None";
 
     private GoogleMap googleMap;
     private MapView osmMap;
@@ -172,7 +171,6 @@ public class MapHelper {
     private static String[] getOfflineLayerList() {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> results = new ArrayList<>();
-        results.add(no_folder_key);
         for (File f : files) {
             if (f.isDirectory() && !f.isHidden()) {
                 results.add(f.getName());
