@@ -14,7 +14,6 @@
   <string name="audio_file_error">オーディオファイルが指定されていません。</string>
   <string name="audio_file_invalid">ファイル: %s は正しいオーディオファイルではありません。</string>
   <string name="backup">前の\nプロンプト\nに戻る</string>
-  <string name="barcode_scanner_error">申し訳ありません、バーコードスキャナーがインストールされていません!</string>
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>

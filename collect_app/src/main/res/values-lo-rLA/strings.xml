@@ -13,7 +13,6 @@
   <string name="audio_file_error">ຍັງບໍ່ໄດ້ເລືອກເອ​ກະ​ສານ​ປະ​ເພດ​ສຽງ</string>
   <string name="audio_file_invalid">ເອ​ກະ​ສານ: %s ບໍ່ແມ່ນປະ​ເພດສຽງ</string>
   <string name="backup">ກັບໄປ\nກ່ອນໜ້າ\nໄປຫາ</string>
-  <string name="barcode_scanner_error">​ເຄື່ອງອ່ານບາໂຄດຍັງບໍ່ທັນຕິດຕັ້ງ​ເທື່ອ</string>
   <string name="cancel">ຍົກເລິກ</string>
   <string name="cancel_loading_form">ຍົກເລີກ</string>
   <string name="cancel_location">ຍົກເລີກ</string>

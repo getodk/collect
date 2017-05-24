@@ -13,7 +13,6 @@
   <string name="audio_file_error">Uspesifisert lydfil</string>
   <string name="audio_file_invalid">Filen: %s er ikke en gyldig lydfil</string>
   <string name="backup">bakover til\nprevious\nprompt</string>
-  <string name="barcode_scanner_error">Beklager, strekkode skanner er ikke installert!</string>
   <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>

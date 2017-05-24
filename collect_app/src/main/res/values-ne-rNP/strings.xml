@@ -13,7 +13,6 @@
   <string name="audio_file_error">कुनै पनि अडियो फाइल उल्लेख छैन।</string>
   <string name="audio_file_invalid">फाइल: %s मान्य अडियो फाइल होइन |</string>
   <string name="backup">अघिल्लो \nप्रश्नमा\nजान</string>
-  <string name="barcode_scanner_error">माफ गर्नुहोला, बारकोड स्क्यानर जडान गरिएको छैन ! </string>
   <string name="cancel">फिर्ता जानुहोस्</string>
   <string name="cancel_loading_form">फिर्ता जानुहोस्</string>
   <string name="cancel_location">फिर्ता जानुहोस्</string>
