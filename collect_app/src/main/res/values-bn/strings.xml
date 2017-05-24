@@ -13,7 +13,6 @@
   <string name="audio_file_error">কোন অডিও ফাইল নির্দিষ্ট করা হয় নি। </string>
   <string name="audio_file_invalid">%s নামের ফাইলটি যুক্তিসিদ্ধ অডিও ফাইল নয়।</string>
   <string name="backup">পূর্ববর্তী পাতা</string>
-  <string name="barcode_scanner_error">দুঃখিত, বারকোড স্ক্যানার সংযুক্ত করা নেই!</string>
   <string name="cancel">বাতিল</string>
   <string name="cancel_loading_form">বাতিল</string>
   <string name="cancel_location">বাতিল</string>

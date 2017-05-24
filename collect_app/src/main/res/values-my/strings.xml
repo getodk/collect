@@ -11,7 +11,6 @@
   <string name="altitude">ေျမမ်က္ႏွာျပင္အျမင့္</string>
   <string name="audio_file_error">အသံသြင္းဖိုင္မဟုတ္ပါ</string>
   <string name="audio_file_invalid">ဖိုင္: %s အသံသြင္း၍မရပါ</string>
-  <string name="barcode_scanner_error">ဘားကုတ္(ဒ္)ပံုရိပ္ဖမ္းစနစ္ ထည့္သြင္းထားသြင္းထားျခင္း မရိွပါ</string>
   <string name="cancel">ပယ္ရန္</string>
   <string name="cancel_loading_form">ပယ္ရန္</string>
   <string name="cancel_location">ပယ္ရန္</string>

@@ -13,7 +13,6 @@
   <string name="audio_file_error">ยังไม่ได้เลือกไฟล์เสียง</string>
   <string name="audio_file_invalid">ไฟล์ %s ไม่ใช่ไฟล์เสียง</string>
   <string name="backup">ย้อนกลับไป\nที่คำถาม\nก่อนหน้านี้</string>
-  <string name="barcode_scanner_error">ขออภัย, โปรแกรมอ่านบาร์โคดยังไม่ได้ติดตั้ง!</string>
   <string name="cancel">ยกเลิก</string>
   <string name="cancel_loading_form">ยกเลิก</string>
   <string name="cancel_location">ยกเลิก</string>

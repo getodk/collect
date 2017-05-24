@@ -13,7 +13,6 @@
   <string name="audio_file_error">აუდიო-ფაილი არ იყო მითითებული.</string>
   <string name="audio_file_invalid">ფაილი: %s არ წარმოადგენს ვალიდურ აუდიო-ფაილს.</string>
   <string name="backup">უკან გადმოსვლა \nprevious\npromptზე</string>
-  <string name="barcode_scanner_error">უკაცრავად, ბარკოდის სკანერი არ არის დაყენებული!</string>
   <string name="cancel">გაუქმება</string>
   <string name="cancel_loading_form">გაუქმება</string>
   <string name="cancel_location">გაუქმება</string>

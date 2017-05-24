@@ -14,7 +14,6 @@
   <string name="audio_file_error">Не вказано жодного аудіофайлу</string>
   <string name="audio_file_invalid">Файл: %s не є аудіофайлом</string>
   <string name="backup">назад до\nпопереднього\nпитання</string>
-  <string name="barcode_scanner_error">Вибачте, сканер штрихкодів не встановлено!</string>
   <string name="cancel">Скасувати</string>
   <string name="cancel_loading_form">Скасувати</string>
   <string name="cancel_location">Скасувати</string>
