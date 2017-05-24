@@ -241,8 +241,8 @@
 <string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
 <string name="autosend_network">Auto send with network</string>
 <string name="autosend_network_summary">Auto send when network is available</string>
-<string name="logging">Logging</string>
-<string name="timer_log">Log time in questions</string>
+<string name="audit">Audit</string>
+<string name="timer_log">Record time in questions</string>
 <string name="timer_log_summary">Record time spent answering each question</string>
 <string name="found_in_main">Uncheck to hide from Main Menu</string>
 <string name="found_in_settings">Uncheck to hide from General Settings</string>

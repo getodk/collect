@@ -36,8 +36,8 @@
             android:title="@string/autosend_network" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:key="@string/logging"
-        android:title="@string/logging" >
+        android:key="@string/audit"
+        android:title="@string/audit" >
         <CheckBoxPreference
             android:id="@+id/timer_log"
             android:defaultValue="true"
