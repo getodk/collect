@@ -524,4 +524,7 @@
 <string name="generate">Generate</string>
 <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="share_qrcode">Share QR code</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="duplicate_form_dialog_title">Duplicate form</string>
+    <string name="duplicate_form_dialog_message">Do you want to duplicate this form?</string>
 </resources>

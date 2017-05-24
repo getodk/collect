@@ -16,6 +16,7 @@ package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -36,6 +38,14 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.InstanceUtils;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -43,7 +53,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener {
+public class InstanceChooserList extends InstanceListActivity implements DiskSyncListener, AdapterView.OnItemLongClickListener {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
@@ -86,6 +96,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
             };
         }
         setupAdapter();
+        getListView().setOnItemLongClickListener(this);
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -112,37 +123,10 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                 instanceUri.toString());
 
         if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
-            String action = getIntent().getAction();
-            if (Intent.ACTION_PICK.equals(action)) {
-                // caller is waiting on a picked form
-                setResult(RESULT_OK, new Intent().setData(instanceUri));
-            } else {
-                // the form can be edited if it is incomplete or if, when it was
-                // marked as complete, it was determined that it could be edited
-                // later.
-                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
-                String strCanEditWhenComplete =
-                        c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
-
-                boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
-                        || Boolean.parseBoolean(strCanEditWhenComplete);
-                if (!canEdit) {
-                    createErrorDialog(getString(R.string.cannot_edit_completed_form),
-                            DO_NOT_EXIT);
-                    return;
-                }
-                // caller wants to view/edit a form, so launch formentryactivity
-                Intent parentIntent = this.getIntent();
-                Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
-                String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                } else {
-                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                }
-                startActivity(intent);
-            }
-            finish();
+            String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+            String strCanEditWhenComplete =
+                    c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+            openForm(false, instanceUri, status, strCanEditWhenComplete);
         }
     }
 
@@ -248,4 +232,108 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     }
 
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
+            showDuplicateFormDialog(position);
+        }
+        return true;
+    }
+
+    private void showDuplicateFormDialog(final int position) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.duplicate_form_dialog_title));
+        alertDialog.setMessage(getString(R.string.duplicate_form_dialog_message));
+        DialogInterface.OnClickListener dialogYesNoListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        switch (i) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                duplicateForm(position);
+                                break;
+                        }
+                    }
+                };
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.duplicate), dialogYesNoListener);
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), dialogYesNoListener);
+        alertDialog.show();
+    }
+
+    private void duplicateForm(int position) {
+        Cursor cursor = (Cursor) getListAdapter().getItem(position);
+
+        ContentValues duplicatedValues = new ContentValues();
+        InstancesDao instancesDao = new InstancesDao();
+        ContentValues originalValues = instancesDao
+                .getValuesFromInstanceObject(instancesDao.getInstancesFromCursor(cursor).get(position));
+
+        duplicatedValues.put(InstanceColumns.DISPLAY_NAME, originalValues.getAsString(InstanceColumns.DISPLAY_NAME));
+        duplicatedValues.put(InstanceColumns.SUBMISSION_URI, originalValues.getAsString(InstanceColumns.SUBMISSION_URI));
+        duplicatedValues.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, originalValues.getAsString(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+        duplicatedValues.put(InstanceColumns.JR_FORM_ID, originalValues.getAsString(InstanceColumns.JR_FORM_ID));
+        duplicatedValues.put(InstanceColumns.JR_VERSION, originalValues.getAsString(InstanceColumns.JR_VERSION));
+        duplicatedValues.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+        duplicatedValues.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, System.currentTimeMillis());
+
+        String displaySubtext = InstanceUtils.getDisplaySubtext(InstanceChooserList.this, InstanceProviderAPI.STATUS_INCOMPLETE, new Date());
+        duplicatedValues.put(InstanceColumns.DISPLAY_SUBTEXT, displaySubtext);
+
+        String originalInstanceDirPath = originalValues.getAsString(InstanceColumns.INSTANCE_FILE_PATH).substring(0, originalValues.getAsString(InstanceColumns.INSTANCE_FILE_PATH).lastIndexOf("/"));
+        String originalInstanceFileName = originalValues.getAsString(InstanceColumns.INSTANCE_FILE_PATH).substring(originalValues.getAsString(InstanceColumns.INSTANCE_FILE_PATH).lastIndexOf("/") + 1);
+        String instanceName = originalInstanceFileName.substring(0, originalInstanceFileName.indexOf("_"));
+        String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US).format(Calendar.getInstance().getTime());
+        String duplicatedInstanceDirPath = Collect.INSTANCES_PATH + File.separator + instanceName + "_" + time;
+
+        FileUtils.createFolder(duplicatedInstanceDirPath);
+        copyMediaFiles(originalInstanceDirPath, duplicatedInstanceDirPath);
+
+        String duplicatedInstanceFilePath = duplicatedInstanceDirPath + File.separator + instanceName + "_" + time + ".xml";
+        duplicatedValues.put(InstanceColumns.INSTANCE_FILE_PATH, duplicatedInstanceFilePath);
+
+        Uri duplicatedFormUri = instancesDao.saveInstance(duplicatedValues);
+        FileUtils.copyFile(new File(originalValues.getAsString(InstanceColumns.INSTANCE_FILE_PATH)), new File(duplicatedInstanceFilePath));
+        openForm(true, duplicatedFormUri, duplicatedValues.getAsString(InstanceColumns.STATUS), duplicatedValues.getAsString(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));
+    }
+
+    private void copyMediaFiles(String originalDir, String duplicatedDir) {
+        File file = new File(originalDir);
+        for (final File mediaFile : file.listFiles()) {
+            if (!mediaFile.isDirectory() && !mediaFile.getName().endsWith(".xml")) {
+                FileUtils.copyFile(mediaFile, new File(duplicatedDir + File.separator + mediaFile.getName()));
+            }
+        }
+    }
+
+    private void openForm(boolean duplicated, Uri instanceUri, String status, String strCanEditWhenComplete) {
+        String action = getIntent().getAction();
+        if (Intent.ACTION_PICK.equals(action)) {
+            // caller is waiting on a picked form
+            setResult(RESULT_OK, new Intent().setData(instanceUri));
+        } else {
+            boolean canEdit = status.equals(InstanceProviderAPI.STATUS_INCOMPLETE)
+                    || Boolean.parseBoolean(strCanEditWhenComplete);
+            if (!canEdit) {
+                createErrorDialog(getString(R.string.cannot_edit_completed_form),
+                        DO_NOT_EXIT);
+                return;
+            }
+            // caller wants to view/edit a form, so launch formentryactivity
+            Intent parentIntent = this.getIntent();
+            Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+            String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+            if (duplicated) {
+                intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.DUPLICATED);
+            } else {
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                } else {
+                    intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                }
+            }
+            startActivity(intent);
+        }
+        finish();
+    }
 }

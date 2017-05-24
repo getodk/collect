@@ -277,9 +277,9 @@ public class InstancesDao {
 
     public List<Instance> getInstancesFromCursor(Cursor cursor) {
         List<Instance> instances = new ArrayList<>();
-        if (cursor != null) {
+        if (cursor != null && cursor.moveToFirst()) {
             try {
-                while (cursor.moveToNext()) {
+                do {
                     int displayNameColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME);
                     int submissionUriColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.SUBMISSION_URI);
                     int canEditWhenCompleteIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE);
@@ -305,7 +305,7 @@ public class InstancesDao {
                             .build();
 
                     instances.add(instance);
-                }
+                } while (cursor.moveToNext());
             } finally {
                 cursor.close();
             }
