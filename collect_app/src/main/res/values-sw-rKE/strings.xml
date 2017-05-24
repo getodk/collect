@@ -11,7 +11,6 @@
   <string name="altitude">Urefu</string>
   <string name="audio_file_error">hakuna faili ya sauti bayana</string>
   <string name="audio_file_invalid">faili: %s sio faili halali ya sauti</string>
-  <string name="barcode_scanner_error">Samahani, Barcode Scanner haipo</string>
   <string name="cancel">Tamatisha</string>
   <string name="cancel_loading_form">Tamatisha</string>
   <string name="cancel_location">Tamatisha</string>

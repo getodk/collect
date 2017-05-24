@@ -14,7 +14,6 @@
   <string name="audio_file_error">Aucun fichier audio spécifié.</string>
   <string name="audio_file_invalid">%s n\'est pas un fichier audio valide.</string>
   <string name="backup">Reculer à\nla question\nprécédente</string>
-  <string name="barcode_scanner_error">Désolé, Barcode Scanner n\'est pas installé.</string>
   <string name="cancel">Annuler</string>
   <string name="cancel_loading_form">Annuler</string>
   <string name="cancel_location">Annuler</string>

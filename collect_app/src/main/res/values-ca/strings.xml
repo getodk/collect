@@ -14,7 +14,6 @@
   <string name="audio_file_error">No s\'ha especificat cap arxiu de so.</string>
   <string name="audio_file_invalid">Arxiu: %s és un arxiu d\'audio invàlid.</string>
   <string name="backup">Recular a \nprevious\nprompt</string>
-  <string name="barcode_scanner_error">Ho sentim, lector de codi de barres no instal·lat!</string>
   <string name="cancel">Cancel·lar</string>
   <string name="cancel_loading_form">Cancel·lar</string>
   <string name="cancel_location">Cancel·lar</string>

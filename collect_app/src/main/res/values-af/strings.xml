@@ -13,7 +13,6 @@
   <string name="audio_file_error">Geen oudio leêr is gespesifiseer nie.</string>
   <string name="audio_file_invalid">Leêr: %s is nie \'n geldige oudio leêr nie.</string>
   <string name="backup">terug na\nvorige\nvraag</string>
-  <string name="barcode_scanner_error">Jammer, Barcode Skandeerder is nie geïnstalleer nie!</string>
   <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>

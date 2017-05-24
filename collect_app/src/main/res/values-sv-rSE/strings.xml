@@ -14,7 +14,6 @@
   <string name="audio_file_error">Ingen ljudfil har valts</string>
   <string name="audio_file_invalid">Filen: %s är inte en giltig ljudfil</string>
   <string name="backup">gå bakåt till\nföregående\ninmatningsrad</string>
-  <string name="barcode_scanner_error">Tyvärr, streckkodsläsare är inte installerad!</string>
   <string name="cancel">Avbryt</string>
   <string name="cancel_loading_form">Avbryt</string>
   <string name="cancel_location">Avbryt</string>
