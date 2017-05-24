@@ -238,7 +238,11 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            backgroundHandler.post(new ImageSaver(reader.acquireNextImage(), getActivity()));
+            try {
+                backgroundHandler.post(new ImageSaver(reader.acquireNextImage(), getActivity()));
+            } catch (IllegalStateException e) {
+                Timber.e(e);
+            }
         }
 
     };
