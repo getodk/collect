@@ -346,6 +346,7 @@ public class InstanceUploaderList extends InstanceListActivity
             }
         }
         getListView().invalidate();
+        mUploadButton.setEnabled(false);
     }
 
     private void showAll() {
@@ -360,6 +361,7 @@ public class InstanceUploaderList extends InstanceListActivity
             }
         }
         getListView().invalidate();
+        mUploadButton.setEnabled(false);
     }
 
     @Override
