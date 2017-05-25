@@ -24,6 +24,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import timber.log.Timber;
 
@@ -120,13 +121,13 @@ public class SharedPreferencesUtils {
     }
 
     private Collection<String> getAllGeneralKeys() {
-        Collection<String> keys = GENERAL_KEYS.keySet();
+        Collection<String> keys = new HashSet<>(GENERAL_KEYS.keySet());
         keys.add(KEY_PASSWORD);
         return keys;
     }
 
     private Collection<String> getAllAdminKeys() {
-        Collection<String> keys = ALL_KEYS;
+        Collection<String> keys = new HashSet<>(ALL_KEYS);
         keys.add(KEY_ADMIN_PW);
         return keys;
     }
