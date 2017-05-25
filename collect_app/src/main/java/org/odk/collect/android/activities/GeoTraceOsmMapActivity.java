@@ -69,7 +69,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     public MyLocationNewOverlay myLocationOverlay;
     private Button locationButton;
     private Button playButton;
-    private Button saveButton;
     public Button layersButton;
     public Button clearButton;
     private Button manualCaptureButton;
@@ -83,18 +82,14 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private View polygonPolylineView;
     private Polyline polyline;
     private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
-    private String finalReturnString;
     private Integer traceMode; // 0 manual, 1 is automatic
     private Spinner timeUnits;
     private Spinner timeDelay;
-    private Button polygonSaveButton;
-    private Button polylineSaveButton;
     private Boolean beenPaused;
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
     private View zoomDialogView;
-    private LocationManager locationManager;
     private Button zoomPointButton;
     private Button zoomLocationButton;
     private Boolean modeActive = false;
@@ -155,7 +150,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         });
 
-        saveButton = (Button) findViewById(R.id.geotrace_save);
+        Button saveButton = (Button) findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -253,7 +248,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         }
 
 
-        polygonSaveButton = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
+        Button polygonSaveButton = (Button) polygonPolylineView.findViewById(R.id.polygon_save);
         polygonSaveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -270,7 +265,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
             }
         });
-        polylineSaveButton = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
+        Button polylineSaveButton = (Button) polygonPolylineView.findViewById(R.id.polyline_save);
         polylineSaveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -308,7 +303,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 
         mapView.invalidate();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
         for (String provider : providers) {
             if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
@@ -698,7 +693,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void returnLocation() {
-        finalReturnString = generateReturnString();
+        String finalReturnString = generateReturnString();
         Intent i = new Intent();
         i.putExtra(
                 FormEntryActivity.GEOTRACE_RESULTS,
