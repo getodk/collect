@@ -75,7 +75,9 @@ public final class PreferenceKeys {
         hashMap.put(KEY_SPLASH_PATH, Collect.getInstance().getString(R.string.default_splash_path));
         hashMap.put(KEY_FONT_SIZE, "21");
         hashMap.put(KEY_DELETE_AFTER_SEND, false);
+        hashMap.put(KEY_ANALYTICS, true);
         hashMap.put(KEY_INSTANCE_SYNC, true);
+        hashMap.put(KEY_APP_LANGUAGE, "");
         hashMap.put(KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_odk_default));
         hashMap.put(KEY_SELECTED_GOOGLE_ACCOUNT, "");
         hashMap.put(KEY_USERNAME, "");
