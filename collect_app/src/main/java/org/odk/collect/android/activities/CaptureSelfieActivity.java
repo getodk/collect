@@ -96,7 +96,7 @@ public class CaptureSelfieActivity extends Activity {
             Camera.CameraInfo camInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(camNo, camInfo);
 
-            if (camInfo.facing == (Camera.CameraInfo.CAMERA_FACING_FRONT)) {
+            if (camInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 camera = Camera.open(camNo);
                 camera.setDisplayOrientation(90);
             }
