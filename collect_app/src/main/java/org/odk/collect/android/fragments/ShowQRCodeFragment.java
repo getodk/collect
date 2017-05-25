@@ -41,9 +41,11 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.utilities.CompressionUtils;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -237,6 +239,12 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         }
 
         getActivity().finish();
+        final LocaleHelper localeHelper = new LocaleHelper();
+        localeHelper.updateLocale(getActivity());
+        Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(0, 0);
+        getActivity().finishAffinity();
     }
 
     @Override
