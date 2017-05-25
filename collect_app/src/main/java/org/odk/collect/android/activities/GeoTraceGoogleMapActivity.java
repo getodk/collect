@@ -253,7 +253,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                     saveGeoTrace();
                 } else {
                     alertDialog.dismiss();
-                    showPolyonErrorDialog();
+                    showPolygonErrorDialog();
                 }
             }
         });
@@ -299,7 +299,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         zoomPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zoomtoBounds();
+                zoomToBounds();
                 zoomDialog.dismiss();
             }
         });
@@ -337,7 +337,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 locationButton.setEnabled(true);
                 String s = intent.getStringExtra(GeoTraceWidget.TRACE_LOCATION);
                 overlayIntentTrace(s);
-                zoomtoBounds();
+                zoomToBounds();
             }
         } else {
             if (curLocation != null) {
@@ -496,7 +496,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             @Override
             public void onClick(View v) {
 
-                zoomtoBounds();
+                zoomToBounds();
 
                 zoomDialog.dismiss();
             }
@@ -546,7 +546,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             timeUnitsValue = TimeUnit.SECONDS;
         }
 
-        setGeoTraceScheuler(timeDelay, timeUnitsValue);
+        setGeoTraceScheduler(timeDelay, timeUnitsValue);
         modeActive = true;
     }
 
@@ -580,10 +580,10 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     /*
-            This functions handels the delay and the Runable for
+            This functions handles the delay and the Runnable for
     */
 
-    public void setGeoTraceScheuler(long delay, TimeUnit units) {
+    public void setGeoTraceScheduler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -686,7 +686,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         update_polyline();
     }
 
-    private void showPolyonErrorDialog() {
+    private void showPolygonErrorDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.polygon_validator))
                 .setPositiveButton(getString(R.string.dialog_continue),
@@ -757,7 +757,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         alert.show();
     }
 
-    private void zoomtoBounds() {
+    private void zoomToBounds() {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {

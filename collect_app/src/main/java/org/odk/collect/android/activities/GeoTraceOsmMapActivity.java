@@ -234,7 +234,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        overlayMapLayerListner();
+        overlayMapLayerListener();
         buildDialogs();
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
@@ -245,7 +245,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                 overlayIntentTrace(s);
                 locationButton.setEnabled(true);
                 //zoomToCentroid();
-                zoomtoBounds();
+                zoomToBounds();
 
             }
         } else {
@@ -264,7 +264,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                     saveGeoTrace();
                 } else {
                     alertDialog.dismiss();
-                    showPolyonErrorDialog();
+                    showPolygonErrorDialog();
                 }
 
 
@@ -300,7 +300,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             @Override
             public void onClick(View v) {
                 //zoomToCentroid();
-                zoomtoBounds();
+                zoomToBounds();
                 mapView.invalidate();
                 zoomDialog.dismiss();
             }
@@ -368,7 +368,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
 
-    public void setGeoTraceScheuler(long delay, TimeUnit units) {
+    public void setGeoTraceScheduler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -402,9 +402,9 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             GeoPoint point = new GeoPoint(gp[0], gp[1]);
             point.setAltitude(alt.intValue());
             marker.setPosition(point);
-            marker.setOnMarkerClickListener(nullmarkerlistner);
+            marker.setOnMarkerClickListener(nullMarkerListener);
             marker.setDraggable(true);
-            marker.setOnMarkerDragListener(draglistner);
+            marker.setOnMarkerDragListener(dragListener);
             marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             mapMarkers.add(marker);
@@ -438,7 +438,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         }
     }
 
-    private void overlayMapLayerListner() {
+    private void overlayMapLayerListener() {
         polyline = new Polyline();
         polyline.setColor(Color.RED);
         Paint paint = polyline.getPaint();
@@ -642,24 +642,24 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             timeUnitsValue = TimeUnit.SECONDS;
         }
 
-        setGeoTraceScheuler(timeDelay, timeUnitsValue);
+        setGeoTraceScheduler(timeDelay, timeUnitsValue);
         modeActive = true;
     }
 
     private void addLocationMarker() {
         Marker marker = new Marker(mapView);
         marker.setPosition(myLocationOverlay.getMyLocation());
-        Float lastKnownAcuracy =
+        Float lastKnownAccuracy =
                 myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
-        marker.setSubDescription(Float.toString(lastKnownAcuracy));
+        marker.setSubDescription(Float.toString(lastKnownAccuracy));
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setDraggable(true);
-        marker.setOnMarkerDragListener(draglistner);
+        marker.setOnMarkerDragListener(dragListener);
         mapMarkers.add(marker);
 
-        marker.setOnMarkerClickListener(nullmarkerlistner);
+        marker.setOnMarkerClickListener(nullMarkerListener);
         mapView.getOverlays().add(marker);
         List<GeoPoint> points = polyline.getPoints();
         points.add(marker.getPosition());
@@ -672,7 +672,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         finish();
     }
 
-    private void showPolyonErrorDialog() {
+    private void showPolygonErrorDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.polygon_validator))
                 .setPositiveButton(getString(R.string.dialog_continue),
@@ -707,7 +707,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         finish();
     }
 
-    private Marker.OnMarkerClickListener nullmarkerlistner = new Marker.OnMarkerClickListener() {
+    private Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
 
         @Override
         public boolean onMarkerClick(Marker arg0, MapView arg1) {
@@ -733,7 +733,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
 
-    private Marker.OnMarkerDragListener draglistner = new Marker.OnMarkerDragListener() {
+    private Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
 
@@ -776,13 +776,13 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         mapView.getOverlays().clear();
         clearButton.setEnabled(false);
         overlayMyLocationLayers();
-        overlayMapLayerListner();
+        overlayMapLayerListener();
         mapView.invalidate();
         playButton.setEnabled(true);
         modeActive = false;
     }
 
-    private void zoomtoBounds() {
+    private void zoomToBounds() {
         mapView.getController().setZoom(4);
         mapView.invalidate();
         Handler handler = new Handler();
