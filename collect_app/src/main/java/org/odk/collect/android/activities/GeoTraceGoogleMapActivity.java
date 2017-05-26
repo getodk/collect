@@ -537,7 +537,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         Long timeDelay;
         TimeUnit timeUnitsValue;
         if (units == getString(R.string.minutes)) {
-            timeDelay = Long.parseLong(delay) * (60 * 60);
+            timeDelay = Long.parseLong(delay) * (60);
             timeUnitsValue = TimeUnit.SECONDS;
 
         } else {
