@@ -19,11 +19,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -130,23 +128,13 @@ public class GridMultiWidget extends QuestionWidget {
             imageViews[i] = new ImageView(getContext());
         }
 
-        Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
 
-        if (display.getOrientation() % 2 == 1) {
-            // rotated 90 degrees...
-            int temp = screenWidth;
-            screenWidth = screenHeight;
-            screenHeight = temp;
-        }
-
         if (numColumns > 0) {
             resizeWidth = ((screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
-                    - (IMAGE_PADDING + SPACING) * numColumns) / numColumns);
+                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
         }
 
         // Build view
