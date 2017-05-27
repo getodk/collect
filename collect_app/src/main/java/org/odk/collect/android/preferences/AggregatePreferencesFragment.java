@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.text.InputFilter;
@@ -53,9 +52,6 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                 PreferenceKeys.KEY_SERVER_URL);
         usernamePreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_USERNAME);
         passwordPreference = (EditTextPreference) findPreference(PreferenceKeys.KEY_PASSWORD);
-
-        PreferenceCategory aggregatePreferences = (PreferenceCategory) findPreference(
-                getString(R.string.aggregate_preferences));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String urlListString = prefs.getString(KNOWN_URL_LIST, "");

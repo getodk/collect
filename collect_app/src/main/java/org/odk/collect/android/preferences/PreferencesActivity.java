@@ -30,9 +30,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
 /**
  * Handles general preferences.
@@ -54,9 +54,7 @@ public class PreferencesActivity extends PreferenceActivity {
                 .beginTransaction()
                 .replace(android.R.id.content, fragment)
                 .commit();
-
         setTitle(getString(R.string.general_preferences));
-
     }
 
     @Override
