@@ -37,7 +37,6 @@ public class OtherPreferencesFragment extends AggregatePreferencesFragment imple
         submissionUrlPreference.setOnPreferenceChangeListener(this);
         submissionUrlPreference.setSummary(submissionUrlPreference.getText());
         submissionUrlPreference.getEditText().setFilters(filters);
-
     }
 
 
@@ -50,6 +49,4 @@ public class OtherPreferencesFragment extends AggregatePreferencesFragment imple
         preference.setSummary((CharSequence) newValue);
         return true;
     }
-
-
 }
