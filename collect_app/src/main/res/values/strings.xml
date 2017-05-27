@@ -526,4 +526,11 @@
 <string name="take_picture_instruction">Tap the screen to take a picture</string>
 <string name="request_permission">This application needs camera permission.</string>
 <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
+    <string name="form_entry_setting">Form Entry Settings</string>
+    <string name="form_entry_settings_summary">Tap to manage form entry items</string>
+    <string name="user_settings">User Settings</string>
+    <string name="user_setting_summary">Tap to manage general settings items</string>
+    <string name="main_menu_settings">Main Menu Settings</string>
+    <string name="main_menu_settings_summary">Tap to manage main menu items</string>
+    <string name="user_access_control">User Access Control</string>
 </resources>
