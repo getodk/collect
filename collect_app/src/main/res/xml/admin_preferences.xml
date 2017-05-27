@@ -33,9 +33,10 @@
         android:key="import_settings"
         android:title="@string/import_settings"/>
 
-    <PreferenceCategory android:title="User Access Control">
+    <PreferenceCategory android:title="@string/user_access_control">
 
-        <PreferenceScreen android:title="Main Menu Settings">
+        <PreferenceScreen android:title="@string/main_menu_settings"
+            android:summary="@string/main_menu_settings_summary">
             <CheckBoxPreference
                 android:id="@+id/edit_saved"
                 android:defaultValue="true"
@@ -68,7 +69,8 @@
                 android:title="@string/manage_files"/>
         </PreferenceScreen>
 
-        <PreferenceScreen android:title="User Settings">
+        <PreferenceScreen android:title="@string/user_settings"
+            android:summary="@string/user_setting_summary">
             <CheckBoxPreference
                 android:id="@+id/change_server"
                 android:defaultValue="true"
@@ -173,7 +175,8 @@
                 android:title="@string/analytics"/>
         </PreferenceScreen>
 
-        <PreferenceScreen android:title="Form Entry Settings">
+        <PreferenceScreen android:title="@string/form_entry_setting"
+            android:summary="@string/form_entry_settings_summary">
             <CheckBoxPreference
                 android:id="@+id/access_settings"
                 android:defaultValue="true"
