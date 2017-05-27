@@ -522,8 +522,8 @@
 <string name="include_password_dialog">Passwords Included in Code</string>
 <string name="generate">Generate</string>
 <string name="invalid_qrcode">QR code does not contain valid settings</string>
-    <string name="share_qrcode">Share QR code</string>
-    <string name="take_picture_instruction">Tap the screen to take a picture</string>
-    <string name="request_permission">This application needs camera permission.</string>
-    <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
+<string name="share_qrcode">Share QR code</string>
+<string name="take_picture_instruction">Tap the screen to take a picture</string>
+<string name="request_permission">This application needs camera permission.</string>
+<string name="camera_error">This device doesn\'t support the Camera2 API.</string>
 </resources>
