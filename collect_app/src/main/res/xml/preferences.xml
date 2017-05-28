@@ -20,6 +20,7 @@
             android:summary="@string/form_metadata_summary"
             android:title="@string/form_metadata"/>
     </PreferenceScreen>
+
     <PreferenceScreen
         android:key="@string/autosend"
         android:icon="@drawable/auto_button"
@@ -37,6 +38,7 @@
             android:summary="@string/autosend_network_summary"
             android:title="@string/autosend_network"/>
     </PreferenceScreen>
+
     <PreferenceScreen
         android:key="@string/client"
         android:icon="@drawable/user_interface"
