@@ -493,4 +493,24 @@
   <string name="no_date_selected">Aucune date choisie</string>
   <string name="no_time_selected">Aucune heure choisie</string>
   <string name="use_phone_language">Langue d\'affichage du téléphone</string>
+  <string name="import_settings">Importer/Exporter les paramètres</string>
+  <string name="qr_code">QR code</string>
+  <string name="scan_qrcode">Scanner un code depuis un autre appareil</string>
+  <string name="successfully_imported_settings">Paramètres importés avec succès</string>
+  <string name="encoding_max_limit">Limite maximale de caractères atteinte: le QR code ne peut pas être généré pour tous les paramètres</string>
+  <string name="share">Partager</string>
+  <string name="select_qrcode">Sélectionner un code depuis la carte SD</string>
+  <string name="turn_on_flashlight">Allumer la lampe torche</string>
+  <string name="turn_off_flashlight">Eteindre la lampe torche</string>
+  <string name="qrcode_with_both_passwords">Ce QR code inclut vos mots de passe administrateur et serveur. Veuillez le conserver en sécurité. \n (Appuyez pour supprimer les mots de passe)</string>
+  <string name="qrcode_without_passwords">Ce QR code ne contient pas vos mots de passe administrateur ou serveur. \n(appuyez pour ajouter les mots de passe)</string>
+  <string name="qrcode_with_admin_password">Ce QR code inclut votre mot de passe administrateur. Veuillez le conserver en sécurité. \n(Appuyez pour supprimer le mot de passe)</string>
+  <string name="qrcode_with_server_password">Ce QR code inclut votre mot de passe serveur. Veuillez le conserver en sécurité. \n(Appuyez pour supprimer le mot de passe)</string>
+  <string name="import_export_settings">Importer/Exporter les paramètres</string>
+  <string name="qrcode_scanner_prompt">Placer le QR code à l\'intérieur du rectangle</string>
+  <string name="server_password">Mot de passe serveur</string>
+  <string name="include_password_dialog">Mots de passe inclus dans le Code</string>
+  <string name="generate">Générer</string>
+  <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
+  <string name="share_qrcode">Partager le QR code</string>
 </resources>
