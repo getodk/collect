@@ -306,7 +306,7 @@
   <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
   <string name="invalid_oauth">Token OAuth 2 non valido</string>
   <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
-  <string name="media_upload_error">Impossibile fare l\\'upload di una foto inesistente: %1$s</string>
+  <string name="media_upload_error">Impossibile fare l\'upload di una foto inesistente: %1$s</string>
   <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
   <string name="odk_auto_note">Notifica ODK Autosend</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
@@ -329,7 +329,7 @@
   <string name="about_preferences">Informazioni</string>
   <string name="tell_your_friends">Dillo agli amici</string>
   <string name="tell_your_friends_title">Condividi ODK Collect con i tuoi amici</string>
-  <string name="tell_your_friends_msg">Scarica l\\'app di ODK Collect!</string>
+  <string name="tell_your_friends_msg">Scarica l\'app di ODK Collect!</string>
   <string name="leave_a_review">Scrivi una recensione</string>
   <string name="leave_a_review_summary">Scrivi la tua opinione su Google Play</string>
   <!--Geo string added in feature-geofeatures branch-->
@@ -434,9 +434,9 @@
   <string name="phone_does_not_support_rsa">Il telefono non supporta la crittografia RSA.</string>
   <string name="invalid_rsa_public_key">Chiave RSA pubblica non valida.</string>
   <string name="encryption_error_message">%s Il modulo non è stato ancora salvato come completato.</string>
-  <string name="analytics_preferences">Dati sull\\'utilizzo</string>
-  <string name="analytics">Raccolta di dati anonimi sull\\'utilizzo</string>
-  <string name="analytics_summary">La raccolta di dati anonimi sull\\'utilizzo aiuta il team di ODK a dare priorità a certe funzioni e fix</string>
+  <string name="analytics_preferences">Dati sull\'utilizzo</string>
+  <string name="analytics">Raccolta di dati anonimi sull\'utilizzo</string>
+  <string name="analytics_summary">La raccolta di dati anonimi sull\'utilizzo aiuta il team di ODK a dare priorità a certe funzioni e fix</string>
   <string name="select_all">Seleziona tutto</string>
   <string name="clear_all">Deseleziona tutto</string>
   <string name="reset_settings">Tutte le impostazioni (impostazioni di base, impostazioni salvate)</string>
@@ -446,13 +446,13 @@
   <string name="reset_cache">Cache di caricamento dei moduli (cartella .cache)</string>
   <string name="reset_osm_tiles">Cache dei tile OSM (cartella osmdroid)</string>
   <string name="reset_settings_dialog_title">Seleziona le opzioni da reimpostare</string>
-  <string name="reset_settings_dialog">Reimpostare l\\'applicazione</string>
+  <string name="reset_settings_dialog">Reimpostare l\'applicazione</string>
   <string name="reset_settings_button_reset">Reimposta</string>
   <string name="reset_dialog_nothing">Non hai selezionato alcun elemento da reimpostare.</string>
   <string name="reset_in_progress">Reimpostazione…</string>
   <string name="resetting_finished">Reimpostazione completata</string>
   <string name="reset_app_state_result">Reimposta risultati</string>
-  <string name="reset_app_state_warning">I dati selezionati verranno cancellati definitivamente. L\\'operazione non può essere annullata.</string>
+  <string name="reset_app_state_warning">I dati selezionati verranno cancellati definitivamente. L\'operazione non può essere annullata.</string>
   <string name="reset_settings_result">Tutte le impostazioni :: %s</string>
   <string name="reset_saved_forms_result">Moduli salvati :: %s</string>
   <string name="reset_blank_forms_result">Form vuoti :: %s</string>
@@ -475,7 +475,7 @@
   <string name="sorting_menu_open">Apri il menù di ordinamento</string>
   <string name="sorting_menu_close">Chiudi il menù di ordinamento</string>
   <string name="sort_the_list">Ordina la lista</string>
-  <string name="request_permissions_google_account">ODK Collect richiede l\\'accesso al tuo account Google per utilizzare i moduli vuoti ed inviare i moduli compilati.</string>
+  <string name="request_permissions_google_account">ODK Collect richiede l\'accesso al tuo account Google per utilizzare i moduli vuoti ed inviare i moduli compilati.</string>
   <string name="filter_the_list">Filtra la lista</string>
   <string name="language">Lingua</string>
   <string name="google_auth_io_exception_msg">Impossibile effettuare la chiamata API. Se stai eseguendo una build locale, per cortesia controllare il readme del progetto.</string>
@@ -484,10 +484,10 @@
   <string name="form_metadata_summary">Questi valori vengono precompilati nei moduli provvisti di nome utente, email e/o numero di telefono e servono ad identificare la persona che invia i dati.</string>
   <string name="phone_number">Numero di telefono</string>
   <string name="email">Indirizzo email</string>
-  <string name="user_defined">Definito dall\\'utente</string>
+  <string name="user_defined">Definito dall\'utente</string>
   <string name="device_defined">Definito dal dispositivo</string>
   <string name="device_id">ID Dispositivo</string>
-  <string name="subscriber_id">ID dell\\'iscritto</string>
+  <string name="subscriber_id">ID dell\'iscritto</string>
   <string name="sim_serial_id">Numero seriale della SIM</string>
   <string name="select_date">Seleziona una data</string>
   <string name="select_time">Seleziona un orario</string>
