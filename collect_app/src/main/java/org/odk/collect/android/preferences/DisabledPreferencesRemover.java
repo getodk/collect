@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.preferences;
 
-import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
@@ -31,8 +30,10 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 class DisabledPreferencesRemover {
 
-    /** A map used to find the parent category of any preference */ // ToDo: find a better way?
-    private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
+    /**
+     * A map used to find the parent category of any preference
+     */ // ToDo: find a better way?
+    private final Map<Preference, Object> preferencePreferenceCategoryMap;
 
     private PreferencesActivity pa;
     private PreferencesFragment pf;
@@ -43,13 +44,18 @@ class DisabledPreferencesRemover {
         preferencePreferenceCategoryMap = createPreferenceToPreferenceCategoryMap();
     }
 
-    private Map<Preference, PreferenceCategory> createPreferenceToPreferenceCategoryMap() {
-        final Map<Preference, PreferenceCategory> map = new HashMap<>();
+    private Map<Preference, Object> createPreferenceToPreferenceCategoryMap() {
+        final Map<Preference, Object> map = new HashMap<>();
         PreferenceScreen screen = pf.getPreferenceScreen();
         for (int i = 0; i < screen.getPreferenceCount(); i++) {
             Preference p = screen.getPreference(i);
             if (p instanceof PreferenceCategory) {
                 PreferenceCategory pc = (PreferenceCategory) p;
+                for (int j = 0; j < pc.getPreferenceCount(); ++j) {
+                    map.put(pc.getPreference(j), pc);
+                }
+            } else if (p instanceof PreferenceScreen) {
+                PreferenceScreen pc = (PreferenceScreen) p;
                 for (int j = 0; j < pc.getPreferenceCount(); ++j) {
                     map.put(pc.getPreference(j), pc);
                 }
@@ -66,31 +72,46 @@ class DisabledPreferencesRemover {
     void remove(AdminAndGeneralKeys... keyPairs) {
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
 
-        final SharedPreferences adminPreferences = pa.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            final boolean prefAllowed = adminPreferences.getBoolean(agKeys.adminKey, true);
+            boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
 
             if (!prefAllowed && !adminMode) {
                 Preference pref = pf.findPreference(agKeys.generalKey);
-                PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
-                if (preferenceCategory != null && pref != null) { // Neither should ever be null
-                    preferenceCategory.removePreference(pref);
-                    Timber.d("Removed %s", pref.toString());
+                Object pc = preferencePreferenceCategoryMap.get(pref);
+                if (pc != null && pref != null) { // Neither should ever be null
+                    if (pc instanceof PreferenceScreen) {
+                        ((PreferenceScreen) pc).removePreference(pref);
+                        Timber.d("Removed %s", pref.toString());
+                    } else if (pc instanceof PreferenceCategory) {
+                        ((PreferenceCategory) pc).removePreference(pref);
+                        Timber.d("Removed %s", pref.toString());
+                    }
                 }
             }
         }
     }
 
-    /** Deletes all empty PreferenceCategory items. */
+    /**
+     * Deletes all empty PreferenceCategory items.
+     */
     void removeEmptyCategories() {
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-        HashSet<PreferenceCategory> uniqueCategories = new
+        HashSet<Object> uniqueCategories = new
                 HashSet<>(preferencePreferenceCategoryMap.values());
-        for (PreferenceCategory pc : uniqueCategories) {
-            if (pc.getPreferenceCount() == 0 && !adminMode) {
-                pf.getPreferenceScreen().removePreference(pc);
+        if (adminMode) {
+            return;
+        }
+        for (Object pc : uniqueCategories) {
+            if (pc instanceof PreferenceCategory) {
+                PreferenceCategory preferenceCategory = (PreferenceCategory) pc;
+                if (preferenceCategory.getPreferenceCount() == 0) {
+                    pf.getPreferenceScreen().removePreference(preferenceCategory);
+                }
+            } else if (pc instanceof PreferenceScreen) {
+                PreferenceScreen preferenceScreen = (PreferenceScreen) pc;
+                if (preferenceScreen.getPreferenceCount() == 0) {
+                    pf.getPreferenceScreen().removePreference(preferenceScreen);
+                }
             }
         }
     }
