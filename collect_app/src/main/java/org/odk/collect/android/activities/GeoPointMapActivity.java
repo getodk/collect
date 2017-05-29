@@ -76,12 +76,10 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private LocationManager locationManager;
 
     private Location location;
-    private Button acceptLocation;
     private Button reloadLocation;
 
     private boolean isDragged = false;
     private Button showLocation;
-    private Button layers;
     private boolean gpsOn = false;
     private boolean networkOn = false;
 
@@ -95,8 +93,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
     private Button zoomPointButton;
     private Button zoomLocationButton;
-
-    private Button clearPointButton;
 
     private boolean setClear = false;
     private boolean captureLocation = false;
@@ -207,7 +203,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        acceptLocation = (Button) findViewById(R.id.accept_location);
+        Button acceptLocation = (Button) findViewById(R.id.accept_location);
 
         acceptLocation.setOnClickListener(new OnClickListener() {
             @Override
@@ -255,7 +251,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         });
 
         // Menu Layer Toggle
-        layers = ((Button) findViewById(R.id.layer_menu));
+        Button layers = ((Button) findViewById(R.id.layer_menu));
         layers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +277,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             }
         });
 
-        clearPointButton = (Button) findViewById(R.id.clear);
+        Button clearPointButton = (Button) findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

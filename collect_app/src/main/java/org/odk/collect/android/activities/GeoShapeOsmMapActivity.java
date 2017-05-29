@@ -68,8 +68,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private MapEventsOverlay overlayEvents;
     private boolean clearButtonTest = false;
     private Button clearButton;
-    private Button saveButton;
-    private Button layersButton;
     public Boolean gpsStatus = true;
     private Button locationButton;
     public MyLocationNewOverlay myLocationOverlay;
@@ -89,7 +87,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
-        saveButton = (Button) findViewById(R.id.save);
+        Button saveButton = (Button) findViewById(R.id.save);
         clearButton = (Button) findViewById(R.id.clear);
 
         map = (MapView) findViewById(R.id.geoshape_mapview);
@@ -112,7 +110,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 }
             }
         });
-        layersButton = (Button) findViewById(R.id.layers);
+        Button layersButton = (Button) findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -74,9 +74,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
     private Button gpsButton;
     private Button clearButton;
-    private Button returnButton;
-    private Button layersButton;
-    private String finalReturnString;
 
     private MapHelper helper;
     private AlertDialog zoomDialog;
@@ -168,7 +165,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        returnButton = (Button) findViewById(R.id.save);
+        Button returnButton = (Button) findViewById(R.id.save);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,7 +184,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        layersButton = (Button) findViewById(R.id.layers);
+        Button layersButton = (Button) findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,7 +266,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
 
     private void returnLocation() {
-        finalReturnString = generateReturnString();
+        String finalReturnString = generateReturnString();
         Intent i = new Intent();
         i.putExtra(
                 FormEntryActivity.GEOSHAPE_RESULTS,
