@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.utilities;
 
 import android.app.DatePickerDialog;
@@ -53,16 +54,16 @@ public class DaylightSavingTest {
     private static final String EAT_IME_ZONE = "Africa/Nairobi";
     private static final String CET_TIME_ZONE = "Europe/Warsaw";
 
-    private TimeZone mCurrentTimeZone;
+    private TimeZone currentTimeZone;
 
     @Before
     public void setUp() {
-        mCurrentTimeZone = TimeZone.getDefault();
+        currentTimeZone = TimeZone.getDefault();
     }
 
     @After
     public void tearDown() {
-        TimeZone.setDefault(mCurrentTimeZone);
+        TimeZone.setDefault(currentTimeZone);
     }
 
     @Test
@@ -71,7 +72,7 @@ public class DaylightSavingTest {
         TimeZone.setDefault(TimeZone.getTimeZone(CET_TIME_ZONE));
         DateTimeWidget dateTimeWidget = prepareDateTimeWidget(2017, 3, 26, 2, 30);
 
-        /**
+        /*
          * We would get crash in this place using old approach {@link org.joda.time.DateTime} instead of
          * {@link org.joda.time.LocalDateTime}
          */
@@ -84,7 +85,7 @@ public class DaylightSavingTest {
         TimeZone.setDefault(TimeZone.getTimeZone(EAT_IME_ZONE));
         DateWidget dateWidget = prepareDateWidget(1960, 0, 1);
 
-        /**
+        /*
          * We would get crash in this place using old approach {@link org.joda.time.DateTime} instead of
          * {@link org.joda.time.LocalDateTime}
          */
@@ -109,7 +110,7 @@ public class DaylightSavingTest {
         stub(datePickerDialog.getDatePicker().getDayOfMonth()).toReturn(day);
 
         DateWidget dateWidget = new DateWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        Whitebox.setInternalState(dateWidget, "mDatePickerDialog", datePickerDialog);
+        Whitebox.setInternalState(dateWidget, "datePickerDialog", datePickerDialog);
 
         return dateWidget;
     }
@@ -134,8 +135,8 @@ public class DaylightSavingTest {
         stub(timeWidget.getMinute()).toReturn(minute);
 
         DateTimeWidget dateTimeWidget = new DateTimeWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        Whitebox.setInternalState(dateTimeWidget, "mDateWidget", dateWidget);
-        Whitebox.setInternalState(dateTimeWidget, "mTimeWidget", timeWidget);
+        Whitebox.setInternalState(dateTimeWidget, "dateWidget", dateWidget);
+        Whitebox.setInternalState(dateTimeWidget, "timeWidget", timeWidget);
 
         return dateTimeWidget;
     }

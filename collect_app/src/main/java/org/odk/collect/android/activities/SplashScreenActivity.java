@@ -49,8 +49,8 @@ public class SplashScreenActivity extends Activity {
     private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;
 
-    private int mImageMaxWidth;
-    private AlertDialog mAlertDialog;
+    private int imageMaxWidth;
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -66,7 +66,7 @@ public class SplashScreenActivity extends Activity {
         }
 
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
-        mImageMaxWidth = displayMetrics.widthPixels;
+        imageMaxWidth = displayMetrics.widthPixels;
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
@@ -139,11 +139,11 @@ public class SplashScreenActivity extends Activity {
             }
 
             int scale = 1;
-            if (o.outHeight > mImageMaxWidth || o.outWidth > mImageMaxWidth) {
+            if (o.outHeight > imageMaxWidth || o.outWidth > imageMaxWidth) {
                 scale =
                         (int) Math.pow(
                                 2,
-                                (int) Math.round(Math.log(mImageMaxWidth
+                                (int) Math.round(Math.log(imageMaxWidth
                                         / (double) Math.max(o.outHeight, o.outWidth))
                                         / Math.log(0.5)));
             }
@@ -205,9 +205,9 @@ public class SplashScreenActivity extends Activity {
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertDialog.setMessage(errorMsg);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -222,9 +222,9 @@ public class SplashScreenActivity extends Activity {
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.show();
     }
 
     @Override

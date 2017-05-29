@@ -11,7 +11,6 @@
   <string name="altitude">ေျမမ်က္ႏွာျပင္အျမင့္</string>
   <string name="audio_file_error">အသံသြင္းဖိုင္မဟုတ္ပါ</string>
   <string name="audio_file_invalid">ဖိုင္: %s အသံသြင္း၍မရပါ</string>
-  <string name="barcode_scanner_error">ဘားကုတ္(ဒ္)ပံုရိပ္ဖမ္းစနစ္ ထည့္သြင္းထားသြင္းထားျခင္း မရိွပါ</string>
   <string name="cancel">ပယ္ရန္</string>
   <string name="cancel_loading_form">ပယ္ရန္</string>
   <string name="cancel_location">ပယ္ရန္</string>
@@ -151,7 +150,6 @@
   <string name="success">ေအာင္ျမင္ပါၿပီ</string>
   <string name="no_forms_uploaded">ပံုစံမရယူႏိုင္ေသးပါ</string>
   <string name="upload_results">ရယူမွုရလဒ္မ်ား</string>
-  <string name="xform_parse_error">X ပံုစံ မွားယြင္းမွု. %1$s လိုအပ္ေနပါသည္ %2$s</string>
   <string name="choose_sound">အသံေရြးခ်ယ္ရန္</string>
   <string name="choose_video">ဗြီဒီယို ေရြးခ်ယ္ရန္</string>
   <string name="choose_image">ပံုေရြးခ်ယ္ရန္</string>

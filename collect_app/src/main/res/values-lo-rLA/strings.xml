@@ -13,7 +13,6 @@
   <string name="audio_file_error">ຍັງບໍ່ໄດ້ເລືອກເອ​ກະ​ສານ​ປະ​ເພດ​ສຽງ</string>
   <string name="audio_file_invalid">ເອ​ກະ​ສານ: %s ບໍ່ແມ່ນປະ​ເພດສຽງ</string>
   <string name="backup">ກັບໄປ\nກ່ອນໜ້າ\nໄປຫາ</string>
-  <string name="barcode_scanner_error">​ເຄື່ອງອ່ານບາໂຄດຍັງບໍ່ທັນຕິດຕັ້ງ​ເທື່ອ</string>
   <string name="cancel">ຍົກເລິກ</string>
   <string name="cancel_loading_form">ຍົກເລີກ</string>
   <string name="cancel_location">ຍົກເລີກ</string>
@@ -22,7 +21,6 @@
   <string name="capture_video">ບັນທຶກວີດີໂອ</string>
   <string name="change_language">ເລືອກພາສາ</string>
   <string name="change_password">ລະຫັດຜ່ານ ODK</string>
-  <string name="change_protocol_settings_default">ການຕັ້ງຄ່າ Platform</string>
   <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
   <string name="clearanswer_confirm">ຕ້ອງການລຶບຄຳຕອບໄປທີ່ \"%s\" ບໍ່?</string>
   <string name="clear_answer">ລຶບຄຳຕອບ</string>
@@ -159,7 +157,6 @@
   <string name="success">ສຳເລັດແລ້ວ</string>
   <string name="no_forms_uploaded">ບໍ່ສາມາດ ອັບໂລດ ແບບຟອມໄດ້</string>
   <string name="upload_results">ຜົນໄດ້ຮັບ​ຂອງ​ການ​ ອັບໂລດ</string>
-  <string name="xform_parse_error">ມີ​ຄວາມຜິດພາດເກີດຂຶ້ນໃນການເປີດ XForm %1$s ຂໍ້ມູນສ່ວນ %2$s ບໍ່ຄົບຖ້ວນ</string>
   <string name="choose_sound">ເລືອກຮູບແບບສຽງ</string>
   <string name="choose_video">ເລືອກວີດີໂອ</string>
   <string name="choose_image">ເລືອກຮູບພາບ</string>

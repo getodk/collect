@@ -15,12 +15,13 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.Locale;
+
+import timber.log.Timber;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -36,7 +37,7 @@ public class WidgetFactory {
      * @param context          Android context
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
-    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
+    public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
             boolean readOnlyOverride) {
 
         // get appearance hint and clean it up so it is lower case and never null...
@@ -110,6 +111,9 @@ public class WidgetFactory {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }
                         break;
+                    case Constants.DATATYPE_BOOLEAN:
+                        questionWidget = new BooleanWidget(context, fep);
+                        break;
                     default:
                         questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
@@ -126,8 +130,10 @@ public class WidgetFactory {
                     questionWidget = new DrawWidget(context, fep);
                 } else if (appearance.startsWith("align:")) {
                     questionWidget = new AlignedImageWidget(context, fep);
+                } else if (appearance.equals("selfie")) {
+                    questionWidget = new ImageWidget(context, fep, true);
                 } else {
-                    questionWidget = new ImageWidget(context, fep);
+                    questionWidget = new ImageWidget(context, fep, false);
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
@@ -153,7 +159,7 @@ public class WidgetFactory {
                         }
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
-                        Log.e("WidgetFactory", "Exception parsing numColumns");
+                        Timber.e("Exception parsing numColumns");
                     }
 
                     if (appearance.startsWith("quick")) {
@@ -191,7 +197,7 @@ public class WidgetFactory {
                         }
                     } catch (Exception e) {
                         // Do nothing, leave numColumns as -1
-                        Log.e("WidgetFactory", "Exception parsing numColumns");
+                        Timber.e("Exception parsing numColumns");
                     }
 
                     questionWidget = new GridMultiWidget(context, fep, numColumns);

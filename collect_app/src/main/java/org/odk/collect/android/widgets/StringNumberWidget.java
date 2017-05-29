@@ -33,14 +33,14 @@ public class StringNumberWidget extends StringWidget {
     public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
         super(context, prompt, readOnlyOverride, true);
 
-        mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
-        mAnswer.setHorizontallyScrolling(false);
-        mAnswer.setSingleLine(false);
+        answer.setHorizontallyScrolling(false);
+        answer.setSingleLine(false);
 
-        mAnswer.setKeyListener(new DigitsKeyListener() {
+        answer.setKeyListener(new DigitsKeyListener() {
             @Override
             protected char[] getAcceptedChars() {
                 return new char[]{
@@ -61,7 +61,7 @@ public class StringNumberWidget extends StringWidget {
         }
 
         if (s != null) {
-            mAnswer.setText(s);
+            answer.setText(s);
         }
 
         setupChangeListener();
@@ -71,7 +71,7 @@ public class StringNumberWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = mAnswer.getText().toString();
+        String s = answer.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {

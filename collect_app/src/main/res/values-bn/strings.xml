@@ -13,7 +13,6 @@
   <string name="audio_file_error">কোন অডিও ফাইল নির্দিষ্ট করা হয় নি। </string>
   <string name="audio_file_invalid">%s নামের ফাইলটি যুক্তিসিদ্ধ অডিও ফাইল নয়।</string>
   <string name="backup">পূর্ববর্তী পাতা</string>
-  <string name="barcode_scanner_error">দুঃখিত, বারকোড স্ক্যানার সংযুক্ত করা নেই!</string>
   <string name="cancel">বাতিল</string>
   <string name="cancel_loading_form">বাতিল</string>
   <string name="cancel_location">বাতিল</string>
@@ -24,7 +23,6 @@
   <string name="capture_video">ভিডিও রেকর্ড</string>
   <string name="change_language">ভাষা পরিবর্তন </string>
   <string name="change_password">পাসওয়ার্ড পরিবর্তন </string>
-  <string name="change_protocol_settings_default">প্ল্যাটফরম সেটিংস</string>
   <string name="change_username">ব্যবহারকারীর নাম পরিবর্তন </string>
   <string name="clearanswer_confirm"> উত্তর মুছে \"%s\" ফেলতে চান?</string>
   <string name="clear_answer">উত্তর মুছে ফেলুন</string>

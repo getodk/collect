@@ -11,7 +11,6 @@
   <string name="altitude">海拔</string>
   <string name="audio_file_error">缺少音频文件.</string>
   <string name="audio_file_invalid">文件: %s 不是有效的音频文件.</string>
-  <string name="barcode_scanner_error">条码扫描器未安装!</string>
   <string name="cancel">取消</string>
   <string name="cancel_loading_form">取消</string>
   <string name="cancel_location">取消</string>
@@ -151,7 +150,6 @@
   <string name="success">成功</string>
   <string name="no_forms_uploaded">没有表格被上传.</string>
   <string name="upload_results">上传结果</string>
-  <string name="xform_parse_error">XForm 读取错误. %1$s 缺少元素 %2$s</string>
   <string name="choose_sound">选择音频</string>
   <string name="choose_video">选择视频</string>
   <string name="choose_image">选择图片</string>

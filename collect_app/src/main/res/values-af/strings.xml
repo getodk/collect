@@ -13,7 +13,6 @@
   <string name="audio_file_error">Geen oudio leêr is gespesifiseer nie.</string>
   <string name="audio_file_invalid">Leêr: %s is nie \'n geldige oudio leêr nie.</string>
   <string name="backup">terug na\nvorige\nvraag</string>
-  <string name="barcode_scanner_error">Jammer, Barcode Skandeerder is nie geïnstalleer nie!</string>
   <string name="cancel">Kanselleer</string>
   <string name="cancel_loading_form">Kanselleer</string>
   <string name="cancel_location">Kanselleer</string>
@@ -24,7 +23,6 @@
   <string name="capture_video">Neem video</string>
   <string name="change_language">Verander Taal</string>
   <string name="change_password">ODK Wagwoord</string>
-  <string name="change_protocol_settings_default">Platform Verstellings</string>
   <string name="change_username">ODK Gebruikersnaam</string>
   <string name="clearanswer_confirm">Verwyer die antwoord op \"%s\"?</string>
   <string name="clear_answer">Verwyder antwoord</string>
@@ -161,7 +159,6 @@
   <string name="success">Sukses</string>
   <string name="no_forms_uploaded">Jammer, geen vorm is opgelaai nie.</string>
   <string name="upload_results">Oplaai Resultate</string>
-  <string name="xform_parse_error">XForm verwerkingsfout. %1$s vermis element %2$s</string>
   <string name="choose_sound">Kies Klank</string>
   <string name="choose_video">Kies Video</string>
   <string name="choose_image">Kies Prentjie</string>

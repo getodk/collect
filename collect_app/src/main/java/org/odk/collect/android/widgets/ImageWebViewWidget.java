@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -47,6 +46,8 @@ import org.odk.collect.android.utilities.MediaUtils;
 import java.io.File;
 import java.util.Date;
 
+import timber.log.Timber;
+
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
@@ -55,20 +56,19 @@ import java.util.Date;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget {
-    private final static String t = "MediaWidget";
 
-    private Button mCaptureButton;
-    private Button mChooseButton;
-    private WebView mImageDisplay;
+    private Button captureButton;
+    private Button chooseButton;
+    private WebView imageDisplay;
 
-    private String mBinaryName;
+    private String binaryName;
 
-    private String mInstanceFolder;
+    private String instanceFolder;
 
-    private TextView mErrorTextView;
+    private TextView errorTextView;
 
     private String constructImageElement() {
-        File f = new File(mInstanceFolder + File.separator + mBinaryName);
+        File f = new File(instanceFolder + File.separator + binaryName);
 
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
@@ -87,13 +87,13 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2,
                                         float velocityX, float velocityY) {
-        if (mImageDisplay == null
-                || mImageDisplay.getVisibility() != View.VISIBLE) {
+        if (imageDisplay == null
+                || imageDisplay.getVisibility() != View.VISIBLE) {
             return false;
         }
 
         Rect rect = new Rect();
-        mImageDisplay.getHitRect(rect);
+        imageDisplay.getHitRect(rect);
 
         // Log.i(t, "hitRect: " + rect.left + "," + rect.top + " : " +
         // rect.right + "," + rect.bottom );
@@ -124,35 +124,35 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        mInstanceFolder = Collect.getInstance().getFormController()
+        instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
-        mErrorTextView = new TextView(context);
-        mErrorTextView.setId(QuestionWidget.newUniqueId());
-        mErrorTextView.setText(R.string.selected_invalid_image);
+        errorTextView = new TextView(context);
+        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setText(R.string.selected_invalid_image);
 
         // setup capture button
-        mCaptureButton = new Button(getContext());
-        mCaptureButton.setId(QuestionWidget.newUniqueId());
-        mCaptureButton.setText(getContext().getString(R.string.capture_image));
-        mCaptureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mCaptureButton.setPadding(20, 20, 20, 20);
-        mCaptureButton.setEnabled(!prompt.isReadOnly());
-        mCaptureButton.setLayoutParams(params);
+        captureButton = new Button(getContext());
+        captureButton.setId(QuestionWidget.newUniqueId());
+        captureButton.setText(getContext().getString(R.string.capture_image));
+        captureButton
+                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        captureButton.setPadding(20, 20, 20, 20);
+        captureButton.setEnabled(!prompt.isReadOnly());
+        captureButton.setLayoutParams(params);
 
         // launch capture intent on click
-        mCaptureButton.setOnClickListener(new View.OnClickListener() {
+        captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "captureButton", "click",
-                                mPrompt.getIndex());
-                mErrorTextView.setVisibility(View.GONE);
+                                formEntryPrompt.getIndex());
+                errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(
                         android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 // We give the camera an absolute filename/path where to put the
@@ -169,7 +169,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
                         Uri.fromFile(new File(Collect.TMPFILE_PATH)));
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
@@ -186,29 +186,29 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         });
 
         // setup chooser button
-        mChooseButton = new Button(getContext());
-        mChooseButton.setId(QuestionWidget.newUniqueId());
-        mChooseButton.setText(getContext().getString(R.string.choose_image));
-        mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mChooseButton.setPadding(20, 20, 20, 20);
-        mChooseButton.setEnabled(!prompt.isReadOnly());
-        mChooseButton.setLayoutParams(params);
+        chooseButton = new Button(getContext());
+        chooseButton.setId(QuestionWidget.newUniqueId());
+        chooseButton.setText(getContext().getString(R.string.choose_image));
+        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton.setEnabled(!prompt.isReadOnly());
+        chooseButton.setLayoutParams(params);
 
         // launch capture intent on click
-        mChooseButton.setOnClickListener(new View.OnClickListener() {
+        chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "chooseButton", "click",
-                                mPrompt.getIndex());
-                mErrorTextView.setVisibility(View.GONE);
+                                formEntryPrompt.getIndex());
+                errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
 
                 try {
                     Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(mPrompt.getIndex());
+                            .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
@@ -226,50 +226,50 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(mCaptureButton);
-        answerLayout.addView(mChooseButton);
-        answerLayout.addView(mErrorTextView);
+        answerLayout.addView(captureButton);
+        answerLayout.addView(chooseButton);
+        answerLayout.addView(errorTextView);
 
         // and hide the capture and choose button if read-only
         if (prompt.isReadOnly()) {
-            mCaptureButton.setVisibility(View.GONE);
-            mChooseButton.setVisibility(View.GONE);
+            captureButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
         }
-        mErrorTextView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
 
         // retrieve answer from data model and update ui
-        mBinaryName = prompt.getAnswerText();
+        binaryName = prompt.getAnswerText();
 
         // Only add the imageView if the user has taken a picture
-        if (mBinaryName != null) {
-            mImageDisplay = new WebView(getContext());
-            mImageDisplay.setId(QuestionWidget.newUniqueId());
-            mImageDisplay.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-            mImageDisplay.getSettings().setBuiltInZoomControls(true);
-            mImageDisplay.getSettings().setDefaultZoom(
+        if (binaryName != null) {
+            imageDisplay = new WebView(getContext());
+            imageDisplay.setId(QuestionWidget.newUniqueId());
+            imageDisplay.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            imageDisplay.getSettings().setBuiltInZoomControls(true);
+            imageDisplay.getSettings().setDefaultZoom(
                     WebSettings.ZoomDensity.FAR);
-            mImageDisplay.setVisibility(View.VISIBLE);
-            mImageDisplay.setLayoutParams(params);
+            imageDisplay.setVisibility(View.VISIBLE);
+            imageDisplay.setLayoutParams(params);
 
             // HTML is used to display the image.
             String html = "<body>" + constructImageElement() + "</body>";
 
-            mImageDisplay.loadDataWithBaseURL("file:///" + mInstanceFolder
+            imageDisplay.loadDataWithBaseURL("file:///" + instanceFolder
                     + File.separator, html, "text/html", "utf-8", "");
-            answerLayout.addView(mImageDisplay);
+            answerLayout.addView(imageDisplay);
         }
         addAnswerView(answerLayout);
     }
 
     private void deleteMedia() {
         // get the file path and delete the file
-        String name = mBinaryName;
+        String name = binaryName;
         // clean up variables
-        mBinaryName = null;
+        binaryName = null;
         // delete from media provider
         int del = MediaUtils.deleteImageFileFromMediaProvider(
-                mInstanceFolder + File.separator + name);
-        Log.i(t, "Deleted " + del + " rows from media content provider");
+                instanceFolder + File.separator + name);
+        Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
@@ -277,25 +277,25 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         // remove the file
         deleteMedia();
 
-        if (mImageDisplay != null) {
+        if (imageDisplay != null) {
             // update HTML to not hold image file reference.
             String html = "<body></body>";
-            mImageDisplay.loadDataWithBaseURL("file:///" + mInstanceFolder
+            imageDisplay.loadDataWithBaseURL("file:///" + instanceFolder
                     + File.separator, html, "text/html", "utf-8", "");
 
-            mImageDisplay.setVisibility(View.INVISIBLE);
+            imageDisplay.setVisibility(View.INVISIBLE);
         }
 
-        mErrorTextView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
 
         // reset buttons
-        mCaptureButton.setText(getContext().getString(R.string.capture_image));
+        captureButton.setText(getContext().getString(R.string.capture_image));
     }
 
     @Override
     public IAnswerData getAnswer() {
-        if (mBinaryName != null) {
-            return new StringData(mBinaryName);
+        if (binaryName != null) {
+            return new StringData(binaryName);
         } else {
             return null;
         }
@@ -306,7 +306,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     public void setBinaryData(Object newImageObj) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
-        if (mBinaryName != null) {
+        if (binaryName != null) {
             deleteMedia();
         }
 
@@ -323,12 +323,12 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Log.i(t, "Inserting image returned uri = " + imageURI.toString());
+            Timber.i("Inserting image returned uri = %s", imageURI.toString());
 
-            mBinaryName = newImage.getName();
-            Log.i(t, "Setting current answer to " + newImage.getName());
+            binaryName = newImage.getName();
+            Timber.i("Setting current answer to %s", newImage.getName());
         } else {
-            Log.e(t, "NO IMAGE EXISTS at: " + newImage.getAbsolutePath());
+            Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
@@ -344,7 +344,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
     }
@@ -356,15 +356,15 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mCaptureButton.setOnLongClickListener(l);
-        mChooseButton.setOnLongClickListener(l);
+        captureButton.setOnLongClickListener(l);
+        chooseButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mCaptureButton.cancelLongPress();
-        mChooseButton.cancelLongPress();
+        captureButton.cancelLongPress();
+        chooseButton.cancelLongPress();
     }
 
 }

@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <string name="accept_location">Tallenna sijainti</string>
+  <string name="show_password">Näytä salasana</string>
   <string name="accuracy">Tarkkuus</string>
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="add_another">Lisää ryhmä</string>
@@ -13,7 +14,6 @@
   <string name="audio_file_error">Äänitiedostoa ei määritelty.</string>
   <string name="audio_file_invalid">Tiedosto %s ei ole käypä äänitiedosto.</string>
   <string name="backup">taaksepäin\nedelliseen\nkysymykseen</string>
-  <string name="barcode_scanner_error">Pahoittelut, viivakoodiskanneria ei ole asennettu!</string>
   <string name="cancel">Peruuta</string>
   <string name="cancel_loading_form">Peruuta</string>
   <string name="cancel_location">Peruuta</string>
@@ -25,7 +25,6 @@
   <string name="capture_video">Tallenna video</string>
   <string name="change_language">Vaihda kieltä</string>
   <string name="change_password">ODK salasana</string>
-  <string name="change_protocol_settings_default">Alustan asetukset</string>
   <string name="change_username">ODK käyttäjätunnus</string>
   <string name="clearanswer_confirm">Poistetaanko vastaus kysymykseen \"%s\"?</string>
   <string name="clear_answer">Poista vastaus</string>
@@ -123,6 +122,7 @@
   <string name="send_selected_data">Lähetä valitut</string>
   <string name="view_sent_forms">Tarkastele lähetettyä lomaketta</string>
   <string name="view_sent_forms_button">Tarkastele lähetettyä lomaketta (%s)</string>
+  <string name="server_auth_credentials">Väärä käyttäjätunnus tai salasana palvelimelle: %s</string>
   <string name="server_requires_auth">Palvelin vaatii tunnistautumista</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Palvelinasetukset</string>
@@ -165,7 +165,6 @@
   <string name="success">Onnistui</string>
   <string name="no_forms_uploaded">Pahoittelut, lomaketta ei siirretty.</string>
   <string name="upload_results">Siirrä tulokset.</string>
-  <string name="xform_parse_error">XForm-tulkintavirhe. %1$s ilman elementtiä %2$s</string>
   <string name="choose_sound">Valitse ääni</string>
   <string name="choose_video">Valitse video</string>
   <string name="choose_image">Valitse kuva</string>
@@ -298,12 +297,13 @@
   <string name="aggregate_preferences">ODK Aggregate -asetukset</string>
   <string name="other_preferences">Muut alustan asetukset</string>
   <string name="google_preferences">Google Sheets -asetukset</string>
+  <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
   <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
   <string name="invalid_oauth">OAuth 2 token ei kelpaa</string>
   <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
-  <string name="media_upload_error">Olemattoman valokuvan %1$s lähettäminen epäonnistui.</string>
+  <string name="media_upload_error">Olematonta valokuvaa ei voitu lähettää: %1$s</string>
   <string name="odk_auth_auth_fail">ODK Autosend autentikointivirhe, varmista että asetukset ovat oikein</string>
   <string name="odk_auto_note">ODK Autosend -ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
@@ -312,11 +312,13 @@
   <string name="change_server_url">Palvelimen URL</string>
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="no_blank_search">Hakukenttä ei voi olla tyhjä.</string>
+  <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_google_account_needed">Palvelimesi on Google Sheets, valitse vastaava Google-tili Yleisasetuksissa ennen jatkamista</string>
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
+  <string name="google_sheets_access_denied">Pääsy estetty. Varmista että taulukon omistaja on myöntänyt muokkausoikeudet.</string>
   <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
@@ -378,6 +380,7 @@
   <string name="geopoint_instruction">Paina pitkään asettaaksesi merkin tai näpäytä merkkinäppäintä.</string>
   <string name="geopoint_no_draggable_instruction">Paina lisää merkki -näppäintä.</string>
   <string name="discard">Hylkää</string>
+  <string name="zoom_to_where">Zoomaa…</string>
   <string name="zoom_to_location">Zoomaa nykysijaintiin</string>
   <string name="zoom_to_feature">Zoomaa tallennettuun ominaisuuteen</string>
   <string name="points_captured">%s pistettä kerätty</string>
@@ -460,4 +463,15 @@
   <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
   <string name="instance_sync">Tuo tallennetut lomakkeet viimeisteltyinä</string>
   <string name="instance_sync_summary">Tuo tallennetut lomakkeet instances -kansiosta</string>
+  <string name="sort_by_name_asc">Nimen mukaan, A-Ö</string>
+  <string name="sort_by_name_desc">Nimen mukaan, Ö-A</string>
+  <string name="sort_by_date_asc">Päivämäärän mukaan, uusin ensin</string>
+  <string name="sort_by_date_desc">Päivämäärän mukaan, vanhin ensin</string>
+  <string name="sort_by_status_asc">Tilan mukaan, viimeistellyt ensin</string>
+  <string name="sort_by_status_desc">Tilan mukaan, viimeistelemättömät ensin</string>
+  <string name="sorting_menu_open">Avaa lajitteluvalikko</string>
+  <string name="sorting_menu_close">Sulje lajitteluvalikko</string>
+  <string name="sort_the_list">Lajittele lista</string>
+  <string name="request_permissions_google_account">ODK Collect tarvitsee pääsyn Google-tilillesi hakeakseen tyhjiä lomakkeita ja lähettääkseen täytettyjä lomakkeita.</string>
+  <string name="filter_the_list">Suodata listaa</string>
 </resources>

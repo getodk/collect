@@ -17,7 +17,6 @@ package org.odk.collect.android.tasks;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -33,6 +32,8 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task
  * a
@@ -43,13 +44,12 @@ import java.util.HashMap;
  * @author carlhartung
  */
 public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String, FormDetails>> {
-    private static final String t = "DownloadFormsTask";
 
     // used to store error message if one occurs
     public static final String DL_ERROR_MSG = "dlerrormessage";
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
-    private FormListDownloaderListener mStateListener;
+    private FormListDownloaderListener stateListener;
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
@@ -102,7 +102,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             Element xformsElement = result.doc.getRootElement();
             if (!xformsElement.getName().equals("xforms")) {
                 String error = "root element is not <xforms> : " + xformsElement.getName();
-                Log.e(t, "Parsing OpenRosa reply -- " + error);
+                Timber.e("Parsing OpenRosa reply -- %s", error);
                 formList.put(
                         DL_ERROR_MSG,
                         new FormDetails(Collect.getInstance().getString(
@@ -112,7 +112,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             String namespace = xformsElement.getNamespace();
             if (!isXformsListNamespacedElement(xformsElement)) {
                 String error = "root element namespace is incorrect:" + namespace;
-                Log.e(t, "Parsing OpenRosa reply -- " + error);
+                Timber.e("Parsing OpenRosa reply -- %s", error);
                 formList.put(
                         DL_ERROR_MSG,
                         new FormDetails(Collect.getInstance().getString(
@@ -206,7 +206,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                     String error =
                             "Forms list entry " + Integer.toString(i)
                                     + " is missing one or more tags: formId, name, or downloadUrl";
-                    Log.e(t, "Parsing OpenRosa reply -- " + error);
+                    Timber.e("Parsing OpenRosa reply -- %s", error);
                     formList.clear();
                     formList.put(
                             DL_ERROR_MSG,
@@ -250,7 +250,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         String error =
                                 "Forms list entry " + Integer.toString(i)
                                         + " is missing form name or url attribute";
-                        Log.e(t, "Parsing OpenRosa reply -- " + error);
+                        Timber.e("Parsing OpenRosa reply -- %s", error);
                         formList.clear();
                         formList.put(
                                 DL_ERROR_MSG,
@@ -272,8 +272,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     @Override
     protected void onPostExecute(HashMap<String, FormDetails> value) {
         synchronized (this) {
-            if (mStateListener != null) {
-                mStateListener.formListDownloadingComplete(value);
+            if (stateListener != null) {
+                stateListener.formListDownloadingComplete(value);
             }
         }
     }
@@ -281,7 +281,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     public void setDownloaderListener(FormListDownloaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 

@@ -13,7 +13,6 @@
   <string name="audio_file_error">Аудио-файл не был выбран.</string>
   <string name="audio_file_invalid">Файл: %s не является аудио-файлом.</string>
   <string name="backup">Вернуться \nк предыдущему\nвопросу</string>
-  <string name="barcode_scanner_error">Сканер штрих-кодов не установлен!</string>
   <string name="cancel">Отмена</string>
   <string name="cancel_loading_form">Отмена</string>
   <string name="cancel_location">Отмена</string>
@@ -22,7 +21,6 @@
   <string name="capture_video">Записать видео</string>
   <string name="change_language">Выбрать язык</string>
   <string name="change_password">Пароль ODK</string>
-  <string name="change_protocol_settings_default">Настройки сервера</string>
   <string name="change_username">Имя пользователя ODK</string>
   <string name="clearanswer_confirm">Удалить ответ к \"%s\"?</string>
   <string name="clear_answer">Удалить ответ</string>
@@ -159,7 +157,6 @@
   <string name="success">Успех</string>
   <string name="no_forms_uploaded">Форма не была загружена.</string>
   <string name="upload_results">Загрузить результаты</string>
-  <string name="xform_parse_error">Ошибка распознавания XForm. В %1$s отсутствует элемент %2$s</string>
   <string name="choose_sound">Выберите аудио</string>
   <string name="choose_video">Выберите видео</string>
   <string name="choose_image">Выберите изображение</string>

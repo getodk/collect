@@ -64,7 +64,6 @@
             android:title="@string/font_size" />
         <ListPreference
             android:id="@+id/app_language"
-            android:defaultValue="en"
             android:dialogTitle="@string/language"
             android:key="app_language"
             android:title="@string/language" />
@@ -95,6 +94,7 @@
         <CheckBoxPreference
             android:id="@+id/show_splash"
             android:key="showSplash"
+            android:defaultValue="false"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
         <PreferenceScreen

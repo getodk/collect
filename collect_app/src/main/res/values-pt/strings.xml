@@ -11,7 +11,6 @@
   <string name="altitude">Altitude</string>
   <string name="audio_file_error">Não foi especificado arquivo de áudio</string>
   <string name="audio_file_invalid">Arquivo de áudio %s inválido.</string>
-  <string name="barcode_scanner_error">Desculpe, scanner de código de barras não instalado</string>
   <string name="cancel">Cancelar</string>
   <string name="cancel_loading_form">Cancelar</string>
   <string name="cancel_location">Cancelar</string>
@@ -20,7 +19,6 @@
   <string name="capture_video">Gravar Vídeo</string>
   <string name="change_language">Alterar Idioma</string>
   <string name="change_password">Senha</string>
-  <string name="change_protocol_settings_default">Configurações da plataforma</string>
   <string name="change_username">Usuário ODK</string>
   <string name="clearanswer_confirm">Remover a resposta para \"%s\"?</string>
   <string name="clear_answer">Remover a resposta</string>
@@ -154,7 +152,6 @@
   <string name="success">Sucesso</string>
   <string name="no_forms_uploaded">Desculpe, nenhum formulário foi enviado.</string>
   <string name="upload_results">Enviar Resultados</string>
-  <string name="xform_parse_error">Erro de interpretação XForm. %1$s está faltando o elemento %2$s</string>
   <string name="choose_sound">Escolher Áudio</string>
   <string name="choose_video">Escolher Vídeo</string>
   <string name="choose_image">
@@ -273,8 +270,8 @@ Escolher Imagem</string>
   <string name="survey_saving_saving_message">Salvando no cartão de memória…</string>
   <string name="survey_saving_finalizing_message">Desconectando o cartão de memória…</string>
   <string name="survey_saving_encrypting_message">Criptografando dados…</string>
-  <string name="high_resolution_summary">Acionar gravação de videos em alta resolução</string>
-  <string name="high_resolution">Acionar video em alta resolução</string>
+  <string name="high_resolution_summary">Acionar gravação de vídeos em alta resolução</string>
+  <string name="high_resolution">Acionar vídeo em alta resolução</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>

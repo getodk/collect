@@ -20,7 +20,6 @@ package org.odk.collect.android.external;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -36,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import timber.log.Timber;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -81,8 +82,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             // this means that the function handler needed the database through calling
             // getReadableDatabase() --> getWritableDatabase(),
             // but this is not allowed, so just return;
-            Log.e(ExternalDataUtil.LOGGER_NAME,
-                    "The function handler triggered this external data population. This is not "
+            Timber.e("The function handler triggered this external data population. This is not "
                             + "good.");
             return;
         }
@@ -97,7 +97,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
     }
 
     private void onCreateNamed(SQLiteDatabase db, String tableName) throws Exception {
-        Log.w(ExternalDataUtil.LOGGER_NAME, "Reading data from '" + dataSetFile);
+        Timber.w("Reading data from '%s", dataSetFile.toString());
 
         onProgress(Collect.getInstance().getString(R.string.ext_import_progress_message,
                 dataSetFile.getName(), ""));
@@ -159,8 +159,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             sb.append(" );");
             String sql = sb.toString();
 
-            Log.w(ExternalDataUtil.LOGGER_NAME,
-                    "Creating database for " + dataSetFile + " with query: " + sql);
+            Timber.w("Creating database for %s with query: %s", dataSetFile, sql);
             db.execSQL(sql);
 
             // create the indexes.
@@ -172,8 +171,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
                     String indexSQL = "CREATE INDEX " + header + "_idx ON " + tableName + " ("
                             + ExternalDataUtil.toSafeColumnName(header, columnNamesCache) + ");";
                     createIndexesCommands.add(indexSQL);
-                    Log.w(ExternalDataUtil.LOGGER_NAME,
-                            "Will create an index on " + header + " later.");
+                    Timber.w("Will create an index on %s later.", header);
                 }
             }
 
@@ -229,8 +227,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             }
 
             if (formLoaderTask.isCancelled()) {
-                Log.w(ExternalDataUtil.LOGGER_NAME,
-                        "User canceled reading data from " + dataSetFile);
+                Timber.w("User canceled reading data from %s", dataSetFile.toString());
                 onProgress(Collect.getInstance().getString(R.string.ext_import_cancelled_message));
             } else {
 
@@ -238,11 +235,11 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
 
                 // now create the indexes
                 for (String createIndexCommand : createIndexesCommands) {
-                    Log.w(ExternalDataUtil.LOGGER_NAME, createIndexCommand);
+                    Timber.w(createIndexCommand);
                     db.execSQL(createIndexCommand);
                 }
 
-                Log.w(ExternalDataUtil.LOGGER_NAME, "Read all data from " + dataSetFile);
+                Timber.w("Read all data from %s", dataSetFile.toString());
                 onProgress(Collect.getInstance().getString(R.string.ext_import_completed_message));
             }
         } finally {
@@ -250,7 +247,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
+                    Timber.e(e);
                 }
             }
         }

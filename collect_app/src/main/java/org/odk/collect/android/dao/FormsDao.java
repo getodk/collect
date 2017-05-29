@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.dao;
 
 import android.content.ContentValues;
@@ -42,7 +43,7 @@ public class FormsDao {
             cursor = getFormsCursor(sortOrder);
         } else {
             String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " LIKE ?";
-            String selectionArgs[] = new String[]{"%" + charSequence + "%"};
+            String[] selectionArgs = new String[]{"%" + charSequence + "%"};
             cursor = getFormsCursor(null, selection, selectionArgs, sortOrder);
         }
         return cursor;
@@ -56,29 +57,29 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
+    }
+
     public Cursor getFormsCursorForFormId(String formId) {
         String selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=?";
-        String selectionArgs[] = {formId};
+        String[] selectionArgs = {formId};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
     public Cursor getFormsCursorForFormFilePath(String formFIlePath) {
         String selection = FormsProviderAPI.FormsColumns.FORM_FILE_PATH + "=?";
-        String selectionArgs[] = {formFIlePath};
+        String[] selectionArgs = {formFIlePath};
 
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
     public Cursor getFormsCursorForMd5Hash(String md5Hash) {
         String selection = FormsProviderAPI.FormsColumns.MD5_HASH + "=?";
-        String selectionArgs[] = {md5Hash};
+        String[] selectionArgs = {md5Hash};
 
         return getFormsCursor(null, selection, selectionArgs, null);
-    }
-
-    public Cursor getFormsCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return Collect.getInstance().getContentResolver().query(FormsProviderAPI.FormsColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
     public void deleteFormsDatabase() {

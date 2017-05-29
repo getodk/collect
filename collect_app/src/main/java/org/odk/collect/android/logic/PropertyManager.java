@@ -21,7 +21,6 @@ import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
@@ -30,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
@@ -42,14 +43,13 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
  */
 public class PropertyManager implements IPropertyManager {
 
-    private static final String TAG = "PropertyManager";
 
-    public final static String PROPMGR_DEVICE_ID        = "deviceid";
-    public final static String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
-    public final static String PROPMGR_SIM_SERIAL       = "simserial";
-    public final static String PROPMGR_PHONE_NUMBER     = "phonenumber";
-    public final static String PROPMGR_USERNAME         = "username";
-    public final static String PROPMGR_EMAIL            = "email";
+    public static final String PROPMGR_DEVICE_ID        = "deviceid";
+    public static final String PROPMGR_SUBSCRIBER_ID    = "subscriberid";
+    public static final String PROPMGR_SIM_SERIAL       = "simserial";
+    public static final String PROPMGR_PHONE_NUMBER     = "phonenumber";
+    public static final String PROPMGR_USERNAME         = "username";
+    public static final String PROPMGR_EMAIL            = "email";
 
     private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
 
@@ -61,7 +61,7 @@ public class PropertyManager implements IPropertyManager {
     private static final String SCHEME_IMEI         = "imei";
     private static final String SCHEME_MAC          = "mac";
 
-    private final Map<String, String> mProperties = new HashMap<>();
+    private final Map<String, String> properties = new HashMap<>();
 
     public String getName() {
         return "Property Manager";
@@ -78,7 +78,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager(Context context) {
-        Log.i(TAG, "calling constructor");
+        Timber.i("calling constructor");
 
         // Device-defined properties
         TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -112,7 +112,7 @@ public class PropertyManager implements IPropertyManager {
         if (deviceId == null) {
             // no SIM -- WiFi only
             // Retrieve WiFiManager
-            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
             // Get WiFi status
             WifiInfo info = wifi.getConnectionInfo();
@@ -145,8 +145,8 @@ public class PropertyManager implements IPropertyManager {
 
     private void putProperty(String propName, String scheme, String value) {
         if (value != null) {
-            mProperties.put(propName, value);
-            mProperties.put(withUri(propName), scheme + ":" + value);
+            properties.put(propName, value);
+            properties.put(withUri(propName), scheme + ":" + value);
         }
     }
 
@@ -158,7 +158,7 @@ public class PropertyManager implements IPropertyManager {
     @Override
     public String getSingularProperty(String propertyName) {
         // for now, all property names are in english...
-        return mProperties.get(propertyName.toLowerCase(Locale.ENGLISH));
+        return properties.get(propertyName.toLowerCase(Locale.ENGLISH));
     }
 
     @Override

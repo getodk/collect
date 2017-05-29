@@ -13,7 +13,6 @@
   <string name="audio_file_error">اّواز کے فائل کی تفصیل نہیں ہے</string>
   <string name="audio_file_invalid">فائل: ‎%s‏ قابل توثیق اّواز کی فائل نہیں ہے</string>
   <string name="backup">پیچھے کیلئے ؟  پچھلا ؟ پرامپٹ</string>
-  <string name="barcode_scanner_error">معافی, بار کوڈ سکینر نصب نہیں ہے</string>
   <string name="cancel">منسوخ</string>
   <string name="cancel_loading_form">منسوخ</string>
   <string name="cancel_location">منسوخ</string>
@@ -22,7 +21,6 @@
   <string name="capture_video">وڈیو ریکارڈ کریں</string>
   <string name="change_language">زبان تبدیل کریں</string>
   <string name="change_password">  ODK  کا شناختی لفظ (Password)</string>
-  <string name="change_protocol_settings_default">پلیٹ فارم ترتیبات</string>
   <string name="change_username">ODK استعمال کرنے والے کا نام</string>
   <string name="clearanswer_confirm">‎%s‏ کو دیا گیا جواب ہٹائیں</string>
   <string name="clear_answer">جواب مٹا دیں</string>
@@ -152,7 +150,6 @@
   <string name="success">کامیابی</string>
   <string name="no_forms_uploaded">معافی، کوئی فارم اپ لوڈ نہیں کیا گیا</string>
   <string name="upload_results">نتیجہ اپ لوڈ کریں</string>
-  <string name="xform_parse_error">X فارم غلطی کا تجزیہ، ‎%1$s‏ عنصر ‎%2$s‏  غائب ہے</string>
   <string name="choose_sound">اواز کا انتخاب کریں</string>
   <string name="choose_image">عکس کا انتخاب کریں</string>
   <string name="selected">منتخب شدہ</string>

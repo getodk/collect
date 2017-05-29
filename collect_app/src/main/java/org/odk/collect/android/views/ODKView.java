@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -59,6 +58,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * This class is
  *
@@ -67,16 +68,15 @@ import java.util.Set;
 public class ODKView extends ScrollView implements OnLongClickListener {
 
     // starter random number for view IDs
-    private final static int VIEW_ID = 12345;
+    private static final int VIEW_ID = 12345;
 
-    private final static String t = "ODKView";
 
-    private LinearLayout mView;
-    private LinearLayout.LayoutParams mLayout;
+    private LinearLayout view;
+    private LinearLayout.LayoutParams layout;
     private ArrayList<QuestionWidget> widgets;
-    private Handler h = null;
+    private Handler handler = null;
 
-    public final static String FIELD_LIST = "field-list";
+    public static final String FIELD_LIST = "field-list";
 
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
@@ -84,15 +84,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         widgets = new ArrayList<QuestionWidget>();
 
-        mView = new LinearLayout(getContext());
-        mView.setOrientation(LinearLayout.VERTICAL);
-        mView.setGravity(Gravity.TOP);
-        mView.setPadding(0, 7, 0, 0);
+        view = new LinearLayout(getContext());
+        view.setOrientation(LinearLayout.VERTICAL);
+        view.setGravity(Gravity.TOP);
+        view.setPadding(0, 7, 0, 0);
 
-        mLayout =
+        layout =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        mLayout.setMargins(10, 0, 10, 0);
+        layout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
 
@@ -162,11 +162,11 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                             ((Activity) getContext()).startActivityForResult(i,
                                     FormEntryActivity.EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
-                            Log.e("ExternalParamsException", e.getMessage(), e);
+                            Timber.e(e, "ExternalParamsException");
 
                             ToastUtils.showShortToast(e.getMessage());
                         } catch (ActivityNotFoundException e) {
-                            Log.e("ActivityNotFoundExcept", e.getMessage(), e);
+                            Timber.e(e, "ActivityNotFoundExcept");
 
                             ToastUtils.showShortToast(errorString);
                         }
@@ -176,9 +176,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 View divider = new View(getContext());
                 divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 divider.setMinimumHeight(3);
-                mView.addView(divider);
+                view.addView(divider);
 
-                mView.addView(launchIntentButton, mLayout);
+                view.addView(launchIntentButton, layout);
             }
         }
 
@@ -189,7 +189,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 View divider = new View(getContext());
                 divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 divider.setMinimumHeight(3);
-                mView.addView(divider);
+                view.addView(divider);
             } else {
                 first = false;
             }
@@ -202,12 +202,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.setId(VIEW_ID + id++);
 
             widgets.add(qw);
-            mView.addView(qw, mLayout);
+            view.addView(qw, layout);
 
 
         }
 
-        addView(mView);
+        addView(view);
 
         // see if there is an autoplay option. 
         // Only execute it during forward swipes through the form 
@@ -215,8 +215,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             final String playOption = widgets.get(
                     0).getPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
-                h = new Handler();
-                h.postDelayed(new Runnable() {
+                handler = new Handler();
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (playOption.equalsIgnoreCase("audio")) {
@@ -235,7 +235,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      */
     public void recycleDrawables() {
         this.destroyDrawingCache();
-        mView.destroyDrawingCache();
+        view.destroyDrawingCache();
         for (QuestionWidget q : widgets) {
             q.recycleDrawables();
         }
@@ -292,7 +292,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             int questionFontsize = Collect.getQuestionFontsize();
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
             tv.setPadding(0, 0, 0, 5);
-            mView.addView(tv, mLayout);
+            view.addView(tv, layout);
         }
     }
 
@@ -315,7 +315,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     try {
                         ((IBinaryWidget) q).setBinaryData(answer);
                     } catch (Exception e) {
-                        Log.e(t, e.getMessage(), e);
+                        Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
                                         e.getMessage()));
                     }
@@ -326,8 +326,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         if (!set) {
-            Log.w(t,
-                    "Attempting to return data to a widget or set of widgets not looking for data");
+            Timber.w("Attempting to return data to a widget or set of widgets not looking for data");
         }
     }
 
@@ -381,8 +380,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         if (count != 1) {
-            Log.w(t,
-                    "Attempting to cancel waiting for binary data to a widget or set of widgets "
+            Timber.w("Attempting to cancel waiting for binary data to a widget or set of widgets "
                             + "not looking for data");
         }
     }

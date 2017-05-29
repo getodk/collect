@@ -10,7 +10,6 @@
   <string name="audio_file_error">Akukho msindo otholakalayo</string>
   <string name="audio_file_invalid">Msindo: %s Ifayela ayiwona umsindo ozwakala kahle</string>
   <string name="backup">buyela\nemuva</string>
-  <string name="barcode_scanner_error">Uxolo ibhakhodi skena ayifakiwe</string>
   <string name="cancel">Khansela</string>
   <string name="cancel_loading_form">Khansela</string>
   <string name="cancel_location">Khansela</string>
@@ -21,7 +20,6 @@
   <string name="capture_video">Thwebula ividiyo</string>
   <string name="change_language">shintsha ulimi</string>
   <string name="change_password">Inombolomfihlo ye ODK</string>
-  <string name="change_protocol_settings_default">Ukuhlelwa kwenkundla</string>
   <string name="change_username">igamamfihlo le ODK</string>
   <string name="clearanswer_confirm">Susa impendulo yoku \"%s\"?</string>
   <string name="clear_answer">Susa Impendulo</string>
@@ -153,7 +151,6 @@
   <string name="success">Impumelelo</string>
   <string name="no_forms_uploaded">Siyaxolisa, akukho fomu alayishiwe .</string>
   <string name="upload_results">Layisha imiphumela</string>
-  <string name="xform_parse_error">XForm Ukuhlaziya Iphutha . %1$s entulekayo element %2$s</string>
   <string name="choose_sound">Khetha umsindo</string>
   <string name="choose_video">Khetha ummboniso</string>
   <string name="choose_image">Khetha isithombe</string>

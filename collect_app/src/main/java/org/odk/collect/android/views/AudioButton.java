@@ -19,7 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.support.v7.widget.AppCompatImageButton;
-import android.util.Log;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -38,7 +37,6 @@ import timber.log.Timber;
  * @author carlhartung
  */
 public class AudioButton extends AppCompatImageButton {
-    private final static String t = "AudioButton";
 
     /**
      * Useful class for handling the playing and stopping of audio prompts.
@@ -50,31 +48,31 @@ public class AudioButton extends AppCompatImageButton {
     public static class AudioHandler {
         private FormIndex index;
         private String selectionDesignator;
-        private String URI;
-        private MediaPlayer mPlayer;
+        private String uri;
+        private MediaPlayer mediaPlayer;
 
         public AudioHandler(FormIndex index, String selectionDesignator, String uri,
                 MediaPlayer player) {
             this.index = index;
             this.selectionDesignator = selectionDesignator;
-            this.URI = uri;
-            mPlayer = player;
+            this.uri = uri;
+            mediaPlayer = player;
         }
 
 
         public void playAudio(Context c) {
             Collect.getInstance().getActivityLogger().logInstanceAction(this,
                     "onClick.playAudioPrompt", selectionDesignator, index);
-            if (URI == null) {
+            if (uri == null) {
                 // No audio file specified
-                Log.e(t, "No audio file was specified");
+                Timber.e("No audio file was specified");
                 ToastUtils.showLongToast(R.string.audio_file_error);
                 return;
             }
 
             String audioFilename = "";
             try {
-                audioFilename = ReferenceManager._().DeriveReference(URI).getLocalURI();
+                audioFilename = ReferenceManager._().DeriveReference(uri).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e);
             }
@@ -83,16 +81,16 @@ public class AudioButton extends AppCompatImageButton {
             if (!audioFile.exists()) {
                 // We should have an audio clip, but the file doesn't exist.
                 String errorMsg = c.getString(R.string.file_missing, audioFile);
-                Log.e(t, errorMsg);
+                Timber.e(errorMsg);
                 ToastUtils.showLongToast(errorMsg);
                 return;
             }
 
             try {
-                mPlayer.reset();
-                mPlayer.setDataSource(audioFilename);
-                mPlayer.prepare();
-                mPlayer.start();
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(audioFilename);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
                 Timber.e(e, errorMsg);

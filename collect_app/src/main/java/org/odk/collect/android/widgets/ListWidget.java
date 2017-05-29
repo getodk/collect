@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -64,13 +63,12 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-    private static final String t = "ListWidget";
 
     // Holds the entire question and answers. It is a horizontally aligned linear layout
     // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
 
-    List<SelectChoice> mItems; // may take a while to compute
+    List<SelectChoice> items; // may take a while to compute
 
     ArrayList<RadioButton> buttons;
     View center;
@@ -82,9 +80,9 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
         if (xpathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
         buttons = new ArrayList<RadioButton>();
 
@@ -96,8 +94,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
 
                 r.setId(QuestionWidget.newUniqueId());
@@ -107,16 +105,16 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                 buttons.add(r);
 
-                if (mItems.get(i).getValue().equals(s)) {
+                if (items.get(i).getValue().equals(s)) {
                     r.setChecked(true);
                 }
                 r.setOnCheckedChangeListener(this);
 
                 String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
+                if (items.get(i) instanceof ExternalSelectChoice) {
+                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
                 } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
+                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
                             FormEntryCaption.TEXT_FORM_IMAGE);
                 }
 
@@ -168,7 +166,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
+                            Timber.e(errorMsg);
                             missingImage = new TextView(getContext());
                             missingImage.setText(errorMsg);
 
@@ -185,8 +183,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
-                label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+                label.setText(prompt.getSelectChoiceText(items.get(i)));
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
@@ -261,7 +259,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
@@ -300,7 +298,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
+                items.get((Integer) buttonView.getTag()).getValue(), formEntryPrompt.getIndex());
     }
 
 

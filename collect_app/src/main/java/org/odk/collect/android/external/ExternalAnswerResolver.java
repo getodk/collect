@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.external;
 
-import android.util.Log;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
@@ -37,6 +36,8 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Author: Meletis Margaritis
@@ -58,7 +59,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 xpathExpression = ExternalDataUtil.getSearchXPathExpression(
                         questionDef.getAppearanceAttr());
             } catch (Exception e) {
-                Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
+                Timber.e(e);
                 // there is a search expression, but has syntax errors
                 containsSearchExpression = true;
             }
@@ -91,6 +92,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                         return new SelectOneData(selection);
                                     }
                                 }
+                                break;
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
                                 // we should search in a potential comma-separated string of

@@ -82,24 +82,24 @@ public class MainMenuActivity extends Activity {
     private static final int MENU_ADMIN = Menu.FIRST + 2;
     private static final boolean EXIT = true;
     // buttons
-    private Button mEnterDataButton;
-    private Button mManageFilesButton;
-    private Button mSendDataButton;
-    private Button mViewSentFormsButton;
-    private Button mReviewDataButton;
-    private Button mGetFormsButton;
-    private View mReviewSpacer;
-    private View mGetFormsSpacer;
-    private AlertDialog mAlertDialog;
-    private SharedPreferences mAdminPreferences;
-    private int mCompletedCount;
-    private int mSavedCount;
-    private int mViewSentCount;
-    private Cursor mFinalizedCursor;
-    private Cursor mSavedCursor;
-    private Cursor mViewSentCursor;
-    private IncomingHandler mHandler = new IncomingHandler(this);
-    private MyContentObserver mContentObserver = new MyContentObserver();
+    private Button enterDataButton;
+    private Button manageFilesButton;
+    private Button sendDataButton;
+    private Button viewSentFormsButton;
+    private Button reviewDataButton;
+    private Button getFormsButton;
+    private View reviewSpacer;
+    private View getFormsSpacer;
+    private AlertDialog alertDialog;
+    private SharedPreferences adminPreferences;
+    private int completedCount;
+    private int savedCount;
+    private int viewSentCount;
+    private Cursor finalizedCursor;
+    private Cursor savedCursor;
+    private Cursor viewSentCursor;
+    private IncomingHandler handler = new IncomingHandler(this);
+    private MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -109,9 +109,9 @@ public class MainMenuActivity extends Activity {
         setContentView(R.layout.main_menu);
 
         // enter data button. expects a result.
-        mEnterDataButton = (Button) findViewById(R.id.enter_data);
-        mEnterDataButton.setText(getString(R.string.enter_data_button));
-        mEnterDataButton.setOnClickListener(new OnClickListener() {
+        enterDataButton = (Button) findViewById(R.id.enter_data);
+        enterDataButton.setText(getString(R.string.enter_data_button));
+        enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -123,9 +123,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // review data button. expects a result.
-        mReviewDataButton = (Button) findViewById(R.id.review_data);
-        mReviewDataButton.setText(getString(R.string.review_data_button));
-        mReviewDataButton.setOnClickListener(new OnClickListener() {
+        reviewDataButton = (Button) findViewById(R.id.review_data);
+        reviewDataButton.setText(getString(R.string.review_data_button));
+        reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -138,9 +138,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // send data button. expects a result.
-        mSendDataButton = (Button) findViewById(R.id.send_data);
-        mSendDataButton.setText(getString(R.string.send_data_button));
-        mSendDataButton.setOnClickListener(new OnClickListener() {
+        sendDataButton = (Button) findViewById(R.id.send_data);
+        sendDataButton.setText(getString(R.string.send_data_button));
+        sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -152,8 +152,8 @@ public class MainMenuActivity extends Activity {
         });
 
         //View sent forms
-        mViewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
-        mViewSentFormsButton.setOnClickListener(new OnClickListener() {
+        viewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this,
@@ -166,9 +166,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // manage forms button. no result expected.
-        mGetFormsButton = (Button) findViewById(R.id.get_forms);
-        mGetFormsButton.setText(getString(R.string.get_forms));
-        mGetFormsButton.setOnClickListener(new OnClickListener() {
+        getFormsButton = (Button) findViewById(R.id.get_forms);
+        getFormsButton.setText(getString(R.string.get_forms));
+        getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -196,9 +196,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // manage forms button. no result expected.
-        mManageFilesButton = (Button) findViewById(R.id.manage_forms);
-        mManageFilesButton.setText(getString(R.string.manage_files));
-        mManageFilesButton.setOnClickListener(new OnClickListener() {
+        manageFilesButton = (Button) findViewById(R.id.manage_forms);
+        manageFilesButton.setText(getString(R.string.manage_files));
+        manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -239,54 +239,54 @@ public class MainMenuActivity extends Activity {
             }
         }
 
-        mReviewSpacer = findViewById(R.id.review_spacer);
-        mGetFormsSpacer = findViewById(R.id.get_forms_spacer);
+        reviewSpacer = findViewById(R.id.review_spacer);
+        getFormsSpacer = findViewById(R.id.get_forms_spacer);
 
-        mAdminPreferences = this.getSharedPreferences(
+        adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         InstancesDao instancesDao = new InstancesDao();
 
         // count for finalized instances
         try {
-            mFinalizedCursor = instancesDao.getFinalizedInstancesCursor();
+            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
 
-        if (mFinalizedCursor != null) {
-            startManagingCursor(mFinalizedCursor);
+        if (finalizedCursor != null) {
+            startManagingCursor(finalizedCursor);
         }
-        mCompletedCount = mFinalizedCursor != null ? mFinalizedCursor.getCount() : 0;
+        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                mContentObserver);
-        // mFinalizedCursor.registerContentObserver(mContentObserver);
+                contentObserver);
+        // finalizedCursor.registerContentObserver(contentObserver);
 
         // count for saved instances
         try {
-            mSavedCursor = instancesDao.getUnsentInstancesCursor();
+            savedCursor = instancesDao.getUnsentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
 
-        if (mSavedCursor != null) {
-            startManagingCursor(mSavedCursor);
+        if (savedCursor != null) {
+            startManagingCursor(savedCursor);
         }
-        mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
+        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
 
         //count for view sent form
         try {
-            mViewSentCursor = instancesDao.getSentInstancesCursor();
+            viewSentCursor = instancesDao.getSentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
-        if (mViewSentCursor != null) {
-            startManagingCursor(mViewSentCursor);
+        if (viewSentCursor != null) {
+            startManagingCursor(viewSentCursor);
         }
-        mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
+        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
 
         updateButtons();
         setupGoogleAnalytics();
@@ -301,72 +301,72 @@ public class MainMenuActivity extends Activity {
         boolean edit = sharedPreferences.getBoolean(
                 AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
-            if (mReviewDataButton != null) {
-                mReviewDataButton.setVisibility(View.GONE);
+            if (reviewDataButton != null) {
+                reviewDataButton.setVisibility(View.GONE);
             }
-            if (mReviewSpacer != null) {
-                mReviewSpacer.setVisibility(View.GONE);
+            if (reviewSpacer != null) {
+                reviewSpacer.setVisibility(View.GONE);
             }
         } else {
-            if (mReviewDataButton != null) {
-                mReviewDataButton.setVisibility(View.VISIBLE);
+            if (reviewDataButton != null) {
+                reviewDataButton.setVisibility(View.VISIBLE);
             }
-            if (mReviewSpacer != null) {
-                mReviewSpacer.setVisibility(View.VISIBLE);
+            if (reviewSpacer != null) {
+                reviewSpacer.setVisibility(View.VISIBLE);
             }
         }
 
         boolean send = sharedPreferences.getBoolean(
                 AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
-            if (mSendDataButton != null) {
-                mSendDataButton.setVisibility(View.GONE);
+            if (sendDataButton != null) {
+                sendDataButton.setVisibility(View.GONE);
             }
         } else {
-            if (mSendDataButton != null) {
-                mSendDataButton.setVisibility(View.VISIBLE);
+            if (sendDataButton != null) {
+                sendDataButton.setVisibility(View.VISIBLE);
             }
         }
 
         boolean viewSent = sharedPreferences.getBoolean(
                 AdminKeys.KEY_VIEW_SENT, true);
         if (!viewSent) {
-            if (mViewSentFormsButton != null) {
-                mViewSentFormsButton.setVisibility(View.GONE);
+            if (viewSentFormsButton != null) {
+                viewSentFormsButton.setVisibility(View.GONE);
             }
         } else {
-            if (mViewSentFormsButton != null) {
-                mViewSentFormsButton.setVisibility(View.VISIBLE);
+            if (viewSentFormsButton != null) {
+                viewSentFormsButton.setVisibility(View.VISIBLE);
             }
         }
 
         boolean getBlank = sharedPreferences.getBoolean(
                 AdminKeys.KEY_GET_BLANK, true);
         if (!getBlank) {
-            if (mGetFormsButton != null) {
-                mGetFormsButton.setVisibility(View.GONE);
+            if (getFormsButton != null) {
+                getFormsButton.setVisibility(View.GONE);
             }
-            if (mGetFormsSpacer != null) {
-                mGetFormsSpacer.setVisibility(View.GONE);
+            if (getFormsSpacer != null) {
+                getFormsSpacer.setVisibility(View.GONE);
             }
         } else {
-            if (mGetFormsButton != null) {
-                mGetFormsButton.setVisibility(View.VISIBLE);
+            if (getFormsButton != null) {
+                getFormsButton.setVisibility(View.VISIBLE);
             }
-            if (mGetFormsSpacer != null) {
-                mGetFormsSpacer.setVisibility(View.VISIBLE);
+            if (getFormsSpacer != null) {
+                getFormsSpacer.setVisibility(View.VISIBLE);
             }
         }
 
         boolean deleteSaved = sharedPreferences.getBoolean(
                 AdminKeys.KEY_DELETE_SAVED, true);
         if (!deleteSaved) {
-            if (mManageFilesButton != null) {
-                mManageFilesButton.setVisibility(View.GONE);
+            if (manageFilesButton != null) {
+                manageFilesButton.setVisibility(View.GONE);
             }
         } else {
-            if (mManageFilesButton != null) {
-                mManageFilesButton.setVisibility(View.VISIBLE);
+            if (manageFilesButton != null) {
+                manageFilesButton.setVisibility(View.VISIBLE);
             }
         }
 
@@ -378,8 +378,8 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
     }
 
@@ -437,7 +437,7 @@ public class MainMenuActivity extends Activity {
             case MENU_ADMIN:
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-                String pw = mAdminPreferences.getString(
+                String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
                     Intent i = new Intent(getApplicationContext(),
@@ -456,9 +456,9 @@ public class MainMenuActivity extends Activity {
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "createErrorDialog", "show");
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertDialog.setMessage(errorMsg);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -475,9 +475,9 @@ public class MainMenuActivity extends Activity {
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.show();
     }
 
     @Override
@@ -509,7 +509,7 @@ public class MainMenuActivity extends Activity {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
                                 String value = input.getText().toString();
-                                String pw = mAdminPreferences.getString(
+                                String pw = adminPreferences.getString(
                                         AdminKeys.KEY_ADMIN_PW, "");
                                 if (pw.compareTo(value) == 0) {
                                     Intent i = new Intent(getApplicationContext(),
@@ -559,47 +559,47 @@ public class MainMenuActivity extends Activity {
     }
 
     private void updateButtons() {
-        if (mFinalizedCursor != null && !mFinalizedCursor.isClosed()) {
-            mFinalizedCursor.requery();
-            mCompletedCount = mFinalizedCursor.getCount();
-            if (mCompletedCount > 0) {
-                mSendDataButton.setText(
-                        getString(R.string.send_data_button, String.valueOf(mCompletedCount)));
+        if (finalizedCursor != null && !finalizedCursor.isClosed()) {
+            finalizedCursor.requery();
+            completedCount = finalizedCursor.getCount();
+            if (completedCount > 0) {
+                sendDataButton.setText(
+                        getString(R.string.send_data_button, String.valueOf(completedCount)));
             } else {
-                mSendDataButton.setText(getString(R.string.send_data));
+                sendDataButton.setText(getString(R.string.send_data));
             }
         } else {
-            mSendDataButton.setText(getString(R.string.send_data));
+            sendDataButton.setText(getString(R.string.send_data));
             Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
 
-        if (mSavedCursor != null && !mSavedCursor.isClosed()) {
-            mSavedCursor.requery();
-            mSavedCount = mSavedCursor.getCount();
-            if (mSavedCount > 0) {
-                mReviewDataButton.setText(getString(R.string.review_data_button,
-                        String.valueOf(mSavedCount)));
+        if (savedCursor != null && !savedCursor.isClosed()) {
+            savedCursor.requery();
+            savedCount = savedCursor.getCount();
+            if (savedCount > 0) {
+                reviewDataButton.setText(getString(R.string.review_data_button,
+                        String.valueOf(savedCount)));
             } else {
-                mReviewDataButton.setText(getString(R.string.review_data));
+                reviewDataButton.setText(getString(R.string.review_data));
             }
         } else {
-            mReviewDataButton.setText(getString(R.string.review_data));
+            reviewDataButton.setText(getString(R.string.review_data));
             Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
 
-        if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
-            mViewSentCursor.requery();
-            mViewSentCount = mViewSentCursor.getCount();
-            if (mViewSentCount > 0) {
-                mViewSentFormsButton.setText(
-                        getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
+        if (viewSentCursor != null && !viewSentCursor.isClosed()) {
+            viewSentCursor.requery();
+            viewSentCount = viewSentCursor.getCount();
+            if (viewSentCount > 0) {
+                viewSentFormsButton.setText(
+                        getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
             } else {
-                mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+                viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             }
         } else {
-            mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                             + "Perhaps the app is running in the background?");
         }
@@ -677,15 +677,15 @@ public class MainMenuActivity extends Activity {
      * Used to prevent memory leaks
      */
     static class IncomingHandler extends Handler {
-        private final WeakReference<MainMenuActivity> mTarget;
+        private final WeakReference<MainMenuActivity> target;
 
         IncomingHandler(MainMenuActivity target) {
-            mTarget = new WeakReference<MainMenuActivity>(target);
+            this.target = new WeakReference<MainMenuActivity>(target);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MainMenuActivity target = mTarget.get();
+            MainMenuActivity target = this.target.get();
             if (target != null) {
                 target.updateButtons();
             }
@@ -704,7 +704,7 @@ public class MainMenuActivity extends Activity {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            mHandler.sendEmptyMessage(0);
+            handler.sendEmptyMessage(0);
         }
     }
 

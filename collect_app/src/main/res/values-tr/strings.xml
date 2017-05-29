@@ -11,7 +11,6 @@
   <string name="altitude">Meridyen</string>
   <string name="audio_file_error">Ses dosyası belirlenmedi.</string>
   <string name="audio_file_invalid">%s dosyasi geçerli bir ses dosyasi degildir!</string>
-  <string name="barcode_scanner_error">Barkod okuyucu tanimlanamadi!</string>
   <string name="cancel">Vazgeç</string>
   <string name="cancel_loading_form">Vazgeç</string>
   <string name="cancel_location">Vazgeç</string>
@@ -126,7 +125,6 @@
   <string name="success">Başarılı</string>
   <string name="no_forms_uploaded">Herhangi bir form gönderilmedi.</string>
   <string name="upload_results">Gönderme Sonucu</string>
-  <string name="xform_parse_error">XForm parse hatasi. %1$s element kayip %2$s</string>
   <string name="choose_sound">Seskaydi Seçimi</string>
   <string name="choose_video">Video Seçimi</string>
   <string name="choose_image">Fotoğraf Seçimi</string>

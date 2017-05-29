@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,6 +17,7 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -36,11 +37,11 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -50,6 +51,7 @@ import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -83,10 +85,12 @@ public class Collect extends Application {
     private CookieStore cookieStore = new BasicCookieStore();
     // retain credentials for 7 minutes...
     private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
-    private ActivityLogger mActivityLogger;
-    private FormController mFormController = null;
+    private ActivityLogger activityLogger;
+    private FormController formController = null;
     private ExternalDataManager externalDataManager;
-    private Tracker mTracker;
+    private Tracker tracker;
+
+    public static String defaultSysLanguage;
 
     public static Collect getInstance() {
         return singleton;
@@ -154,15 +158,15 @@ public class Collect extends Application {
     }
 
     public ActivityLogger getActivityLogger() {
-        return mActivityLogger;
+        return activityLogger;
     }
 
     public FormController getFormController() {
-        return mFormController;
+        return formController;
     }
 
     public void setFormController(FormController controller) {
-        mFormController = controller;
+        formController = controller;
     }
 
     public ExternalDataManager getExternalDataManager() {
@@ -233,6 +237,7 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
+        defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
@@ -244,7 +249,7 @@ public class Collect extends Application {
 
         FormController.initializeJavaRosa(mgr);
 
-        mActivityLogger = new ActivityLogger(
+        activityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
@@ -255,17 +260,29 @@ public class Collect extends Application {
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        defaultSysLanguage = newConfig.locale.getLanguage();
+        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
+        if (!isUsingSysLanguage) {
+            new LocaleHelper().updateLocale(this);
+        }
+    }
+
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
      *
      * @return tracker
      */
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
+    public synchronized Tracker getDefaultTracker() {
+        if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
+            tracker = analytics.newTracker(R.xml.global_tracker);
         }
-        return mTracker;
+        return tracker;
     }
 
     private static class CrashReportingTree extends Timber.Tree {

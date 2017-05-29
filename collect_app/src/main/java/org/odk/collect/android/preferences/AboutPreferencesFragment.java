@@ -9,12 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.support.customtabs.CustomTabsIntent;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
+import org.odk.collect.android.utilities.CustomTabHelper;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
     public static final String KEY_ODK_WEBSITE = "info";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
     private static final String ODK_WEBSITE = "https://opendatakit.org";
-    private CustomTabHelper mCustomTabHelper;
+    private CustomTabHelper customTabHelper;
     private Uri uri;
 
     @Override
@@ -37,27 +36,18 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.about_preferences);
 
-        PreferenceScreen odkWebsitePreference = (PreferenceScreen) findPreference(
-                KEY_ODK_WEBSITE);
-        PreferenceScreen openSourceLicensesPreference = (PreferenceScreen) findPreference(
-                KEY_OPEN_SOURCE_LICENSES);
-        PreferenceScreen tellYourFriendsPreference = (PreferenceScreen) findPreference(
-                KEY_TELL_YOUR_FRIENDS);
-        PreferenceScreen leaveAReviewPreference = (PreferenceScreen) findPreference(
-                KEY_LEAVE_A_REVIEW);
-        mCustomTabHelper = new CustomTabHelper();
+        findPreference(KEY_ODK_WEBSITE).setOnPreferenceClickListener(this);
+        findPreference(KEY_OPEN_SOURCE_LICENSES).setOnPreferenceClickListener(this);
+        findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);
+        findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
+        customTabHelper = new CustomTabHelper();
         uri = Uri.parse(ODK_WEBSITE);
-        odkWebsitePreference.setOnPreferenceClickListener(this);
-        openSourceLicensesPreference.setOnPreferenceClickListener(this);
-        tellYourFriendsPreference.setOnPreferenceClickListener(this);
-        leaveAReviewPreference.setOnPreferenceClickListener(this);
     }
-
 
     @Override
     public void onStart() {
         super.onStart();
-        mCustomTabHelper.bindCustomTabsService(this.getActivity(), uri);
+        customTabHelper.bindCustomTabsService(this.getActivity(), uri);
     }
 
     @Override
@@ -66,11 +56,11 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
 
         switch (preference.getKey()) {
             case KEY_ODK_WEBSITE:
-                if (mCustomTabHelper.getPackageName(getActivity()).size() != 0) {
+                if (customTabHelper.getPackageName(getActivity()).size() != 0) {
                     CustomTabsIntent customTabsIntent =
                             new CustomTabsIntent.Builder()
                                     .build();
-                    customTabsIntent.intent.setPackage(mCustomTabHelper.getPackageName(getActivity()).get(0));
+                    customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getActivity()).get(0));
                     customTabsIntent.launchUrl(getActivity(), uri);
                 } else {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE)));
@@ -86,8 +76,8 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                 Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL +
-                                APP_PACKAGE_NAME);
+                        getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
+                                + APP_PACKAGE_NAME);
                 startActivity(Intent.createChooser(shareIntent,
                         getString(R.string.tell_your_friends_title)));
                 break;

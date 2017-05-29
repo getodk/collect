@@ -11,7 +11,6 @@
   <string name="altitude">Taas</string>
   <string name="audio_file_error">Walang talaksang-tunog na tinukoy.</string>
   <string name="audio_file_invalid">Talaksa: %s ay hindi wastong talaksang-tunog.</string>
-  <string name="barcode_scanner_error">Paumanhin, ang Barcode Scanner ay hindi naka-kanâ!</string>
   <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>
@@ -85,7 +84,7 @@
   <string name="no_connection">Wala koneksyon sa network</string>
   <string name="no_items_display">Walang maipakita.</string>
   <string name="ok">OK</string>
-  <string name="parse_error">Sorry, unable to parse form.Paumanhin, hindi ma-suri ang form</string>
+  <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
   <string name="parse_legacy_formlist_failed">Ang server ay walang maibigay na form na kaugma sa Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Ang server ay walang maibigay na dokumentong form na kaugma sa pamantayan ng OpenRosa version 1.0: %s</string>
   <string name="password">Kontrasenyas</string>
@@ -149,7 +148,6 @@
   <string name="success">Tagumpay</string>
   <string name="no_forms_uploaded">Sorry, no form was uploaded.</string>
   <string name="upload_results">Upload Results</string>
-  <string name="xform_parse_error">XForm parse error. %1$s is missing element %2$s</string>
   <string name="choose_sound">Pumili ng Tunog</string>
   <string name="choose_video">Pumili ng Bidyo</string>
   <string name="choose_image">Pumili ng Imahe</string>
@@ -193,12 +191,12 @@
   <string name="select_drawing_color">Piliian ang Kulay ng pang-guhit</string>
   <string name="user_access_main_menu">User can access Main Menu items:</string>
   <string name="user_access_preferences">User can access Change Settings items:</string>
-  <string name="change_server">Server Protocol and URL</string>
+  <string name="change_server">Server Platform</string>
   <string name="change_username_default">Username</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="save_mid">Mid-form saving</string>
+  <string name="save_mid">Impukin ang mga sagot sa Form</string>
   <string name="enter_new_password">Enter new password</string>
   <string name="verify_new_password">Re-enter new password</string>
   <string name="admin_password_changed">Admin password successfully changed</string>

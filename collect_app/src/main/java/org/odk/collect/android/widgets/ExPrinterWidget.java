@@ -117,7 +117,7 @@ import org.odk.collect.android.application.Collect;
  */
 public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
-    private Button mLaunchIntentButton;
+    private Button launchIntentButton;
 
     public ExPrinterWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -131,25 +131,25 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
                 ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
         final String buttonText;
         final String errorString;
-        String v = mPrompt.getSpecialFormQuestionText("buttonText");
+        String v = formEntryPrompt.getSpecialFormQuestionText("buttonText");
         buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
-        v = mPrompt.getSpecialFormQuestionText("noPrinterErrorString");
+        v = formEntryPrompt.getSpecialFormQuestionText("noPrinterErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_printer);
 
         // set button formatting
-        mLaunchIntentButton = new Button(getContext());
-        mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
-        mLaunchIntentButton.setText(buttonText);
-        mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-        mLaunchIntentButton.setPadding(20, 20, 20, 20);
-        mLaunchIntentButton.setLayoutParams(params);
+        launchIntentButton = new Button(getContext());
+        launchIntentButton.setId(QuestionWidget.newUniqueId());
+        launchIntentButton.setText(buttonText);
+        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton.setLayoutParams(params);
 
-        mLaunchIntentButton.setOnClickListener(new View.OnClickListener() {
+        launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     Collect.getInstance().getFormController().setIndexWaitingForData(
-                            mPrompt.getIndex());
+                            formEntryPrompt.getIndex());
                     firePrintingActivity(intentName);
                 } catch (ActivityNotFoundException e) {
                     Collect.getInstance().getFormController().setIndexWaitingForData(null);
@@ -163,16 +163,16 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
-        printLayout.addView(mLaunchIntentButton);
-        addAnswerView( printLayout);
+        printLayout.addView(launchIntentButton);
+        addAnswerView(printLayout);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
 
-        String s = mPrompt.getAnswerText();
+        String s = formEntryPrompt.getAnswerText();
 
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
-                intentName, mPrompt.getIndex());
+                intentName, formEntryPrompt.getIndex());
         Intent i = new Intent(intentName);
         getContext().startActivity(i);
 
@@ -222,7 +222,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return mPrompt.getAnswerValue();
+        return formEntryPrompt.getAnswerValue();
     }
 
 
@@ -237,13 +237,13 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setFocus(Context context) {
         // focus on launch button
-        mLaunchIntentButton.requestFocus();
+        launchIntentButton.requestFocus();
     }
 
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return mPrompt.getIndex().equals(
+        return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 
@@ -259,13 +259,13 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        mLaunchIntentButton.setOnLongClickListener(l);
+        launchIntentButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        mLaunchIntentButton.cancelLongPress();
+        launchIntentButton.cancelLongPress();
     }
 
 

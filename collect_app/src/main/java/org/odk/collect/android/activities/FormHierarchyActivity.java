@@ -38,6 +38,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +57,9 @@ public class FormHierarchyActivity extends ListActivity {
     private Button jumpPreviousButton;
 
     List<HierarchyElement> formList;
-    TextView mPath;
+    TextView path;
 
-    FormIndex mStartIndex;
+    FormIndex startIndex;
     private FormIndex currentIndex;
 
 
@@ -68,13 +69,18 @@ public class FormHierarchyActivity extends ListActivity {
         setContentView(R.layout.hierarchy_layout);
 
         FormController formController = Collect.getInstance().getFormController();
+        // https://github.com/opendatakit/collect/issues/998
+        if (formController == null) {
+            finish();
+            return;
+        }
 
         // We use a static FormEntryController to make jumping faster.
-        mStartIndex = formController.getFormIndex();
+        startIndex = formController.getFormIndex();
 
         setTitle(formController.getFormTitle());
 
-        mPath = (TextView) findViewById(R.id.pathtext);
+        path = (TextView) findViewById(R.id.pathtext);
 
         jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
@@ -143,7 +149,7 @@ public class FormHierarchyActivity extends ListActivity {
                     int position = 0;
                     for (int i = 0; i < getListAdapter().getCount(); i++) {
                         HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                        if (mStartIndex.equals(he.getFormIndex())) {
+                        if (startIndex.equals(he.getFormIndex())) {
                             position = i;
                             break;
                         }
@@ -247,11 +253,11 @@ public class FormHierarchyActivity extends ListActivity {
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 contextGroupRef =
                         formController.getFormIndex().getReference().getParentRef().toString(true);
-                mPath.setVisibility(View.GONE);
+                path.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
             } else {
-                mPath.setVisibility(View.VISIBLE);
-                mPath.setText(getCurrentPath());
+                path.setVisibility(View.VISIBLE);
+                path.setText(getCurrentPath());
                 jumpPreviousButton.setEnabled(true);
             }
 
@@ -307,9 +313,9 @@ public class FormHierarchyActivity extends ListActivity {
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
-                            String answerDisplay = fp.getAnswerText();
+                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
                             formList.add(
-                                    new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
+                                    new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));
                         }
                         break;
@@ -469,8 +475,8 @@ public class FormHierarchyActivity extends ListActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown",
-                        "KEYCODE_BACK.JUMP", mStartIndex);
-                Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+                        "KEYCODE_BACK.JUMP", startIndex);
+                Collect.getInstance().getFormController().jumpToIndex(startIndex);
         }
         return super.onKeyDown(keyCode, event);
     }

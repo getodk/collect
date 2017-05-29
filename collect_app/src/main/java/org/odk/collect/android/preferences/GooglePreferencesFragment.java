@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 
 public class GooglePreferencesFragment extends PreferenceFragment {
-    protected EditTextPreference mGoogleSheetsUrlPreference;
-    private ListPreference mSelectedGoogleAccountPreference;
+    protected EditTextPreference googleSheetsUrlPreference;
+    private ListPreference selectedGoogleAccountPreference;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -35,12 +35,12 @@ public class GooglePreferencesFragment extends PreferenceFragment {
         SharedPreferences adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        mSelectedGoogleAccountPreference = (ListPreference) findPreference(
+        selectedGoogleAccountPreference = (ListPreference) findPreference(
                 PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         PreferenceCategory googlePreferences = (PreferenceCategory) findPreference(
                 getString(R.string.google_preferences));
 
-        mSelectedGoogleAccountPreference
+        selectedGoogleAccountPreference
                 .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -52,11 +52,11 @@ public class GooglePreferencesFragment extends PreferenceFragment {
                         return true;
                     }
                 });
-        mSelectedGoogleAccountPreference.setSummary(mSelectedGoogleAccountPreference.getValue());
+        selectedGoogleAccountPreference.setSummary(selectedGoogleAccountPreference.getValue());
 
-        mGoogleSheetsUrlPreference = (EditTextPreference) findPreference(
+        googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
-        mGoogleSheetsUrlPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        googleSheetsUrlPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String url = newValue.toString();
@@ -79,13 +79,13 @@ public class GooglePreferencesFragment extends PreferenceFragment {
             }
         });
 
-        String currentGoogleSheetsURL = mGoogleSheetsUrlPreference.getText();
+        String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
         if (currentGoogleSheetsURL.length() > 0) {
-            mGoogleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n" +
-                    getString(R.string.google_sheets_url_hint));
+            googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
+                    + getString(R.string.google_sheets_url_hint));
         }
 
-        mGoogleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
+        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
                 new ControlCharacterFilter(), new WhitespaceFilter()
         });
     }
@@ -107,9 +107,9 @@ public class GooglePreferencesFragment extends PreferenceFragment {
         accountEntries.add(getString(R.string.no_account));
         accountValues.add("");
 
-        mSelectedGoogleAccountPreference.setEntries(accountEntries
+        selectedGoogleAccountPreference.setEntries(accountEntries
                 .toArray(new String[accountEntries.size()]));
-        mSelectedGoogleAccountPreference.setEntryValues(accountValues
+        selectedGoogleAccountPreference.setEntryValues(accountValues
                 .toArray(new String[accountValues.size()]));
     }
 }

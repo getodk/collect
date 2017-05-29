@@ -13,7 +13,6 @@
   <string name="audio_file_error">Nebyl vybrán žádný audio soubor</string>
   <string name="audio_file_invalid">Soubor: %s není platný audio soubor.</string>
   <string name="backup">zpět k\npředchozí\notázce</string>
-  <string name="barcode_scanner_error">Scanner čárových kódů není instalován!</string>
   <string name="cancel">Zrušit</string>
   <string name="cancel_loading_form">Zrušit</string>
   <string name="cancel_location">Zrušit</string>
@@ -22,7 +21,6 @@
   <string name="capture_video">Nahrát video</string>
   <string name="change_language">Změnit jazyk</string>
   <string name="change_password">Heslo do ODK</string>
-  <string name="change_protocol_settings_default">Nastavení platformy</string>
   <string name="change_username">Uživatelské jméno do ODK</string>
   <string name="clearanswer_confirm">Odstranit odpověď na \"%s\"?</string>
   <string name="clear_answer">Odstranit odpověď</string>
@@ -160,7 +158,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="success">Úspěch</string>
   <string name="no_forms_uploaded">Žádný dotazník nebyl nahrán.</string>
   <string name="upload_results">Výsledky nahrávání</string>
-  <string name="xform_parse_error">Chyba pársování XForm. %1$s chybí element %2$s</string>
   <string name="choose_sound">Vyberte zvuk</string>
   <string name="choose_video">Vyberte video</string>
   <string name="choose_image">Vyberte obrázek</string>

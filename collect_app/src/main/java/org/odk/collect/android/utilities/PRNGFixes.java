@@ -12,7 +12,6 @@ package org.odk.collect.android.utilities;
 
 import android.os.Build;
 import android.os.Process;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -28,6 +27,8 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.SecureRandomSpi;
 import java.security.Security;
+
+import timber.log.Timber;
 
 /**
  * Fixes for the output of the default PRNG having low entropy.
@@ -202,7 +203,7 @@ public final class PRNGFixes {
          * each instance needs to seed itself if the client does not explicitly
          * seed it.
          */
-        private boolean mSeeded;
+        private boolean seeded;
 
         @Override
         protected void engineSetSeed(byte[] bytes) {
@@ -216,16 +217,16 @@ public final class PRNGFixes {
             } catch (IOException e) {
                 // On a small fraction of devices /dev/urandom is not writable.
                 // Log and ignore.
-                Log.w(PRNGFixes.class.getSimpleName(),
-                        "Failed to mix seed into " + URANDOM_FILE);
+                Timber.w(PRNGFixes.class.getSimpleName(),
+                        "Failed to mix seed into %s", URANDOM_FILE.toString());
             } finally {
-                mSeeded = true;
+                seeded = true;
             }
         }
 
         @Override
         protected void engineNextBytes(byte[] bytes) {
-            if (!mSeeded) {
+            if (!seeded) {
                 // Mix in the device- and invocation-specific seed.
                 engineSetSeed(generateSeed());
             }

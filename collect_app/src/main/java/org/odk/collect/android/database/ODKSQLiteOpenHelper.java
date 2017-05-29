@@ -18,12 +18,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
+
+import timber.log.Timber;
 
 
 /**
@@ -45,15 +46,14 @@ import java.io.File;
  * </p>
  */
 public abstract class ODKSQLiteOpenHelper {
-    private static final String t = ODKSQLiteOpenHelper.class.getSimpleName();
 
-    private final String mPath;
-    private final String mName;
-    private final CursorFactory mFactory;
-    private final int mNewVersion;
+    private final String path;
+    private final String name;
+    private final CursorFactory factory;
+    private final int newVersion;
 
-    private SQLiteDatabase mDatabase = null;
-    private boolean mIsInitializing = false;
+    private SQLiteDatabase database = null;
+    private boolean isInitializing = false;
 
 
     /**
@@ -72,10 +72,10 @@ public abstract class ODKSQLiteOpenHelper {
             throw new IllegalArgumentException("Version must be >= 1, was " + version);
         }
 
-        mPath = path;
-        mName = name;
-        mFactory = factory;
-        mNewVersion = version;
+        this.path = path;
+        this.name = name;
+        this.factory = factory;
+        newVersion = version;
     }
 
 
@@ -92,11 +92,11 @@ public abstract class ODKSQLiteOpenHelper {
      * @return a read/write database object valid until {@link #close} is called
      */
     public synchronized SQLiteDatabase getWritableDatabase() {
-        if (mDatabase != null && mDatabase.isOpen() && !mDatabase.isReadOnly()) {
-            return mDatabase; // The database is already open for business
+        if (database != null && database.isOpen() && !database.isReadOnly()) {
+            return database; // The database is already open for business
         }
 
-        if (mIsInitializing) {
+        if (isInitializing) {
             throw new IllegalStateException("getWritableDatabase called recursively");
         }
 
@@ -108,26 +108,26 @@ public abstract class ODKSQLiteOpenHelper {
 
         boolean success = false;
         SQLiteDatabase db = null;
-        // if (mDatabase != null) mDatabase.lock();
+        // if (database != null) database.lock();
         try {
-            mIsInitializing = true;
-            if (mName == null) {
+            isInitializing = true;
+            if (name == null) {
                 db = SQLiteDatabase.create(null);
             } else {
-                db = SQLiteDatabase.openOrCreateDatabase(mPath + File.separator + mName, mFactory);
-                // db = mContext.openOrCreateDatabase(mName, 0, mFactory);
+                db = SQLiteDatabase.openOrCreateDatabase(path + File.separator + name, factory);
+                // db = mContext.openOrCreateDatabase(name, 0, factory);
             }
 
             int version = db.getVersion();
-            if (version != mNewVersion) {
+            if (version != newVersion) {
                 db.beginTransaction();
                 try {
                     if (version == 0) {
                         onCreate(db);
                     } else {
-                        onUpgrade(db, version, mNewVersion);
+                        onUpgrade(db, version, newVersion);
                     }
-                    db.setVersion(mNewVersion);
+                    db.setVersion(newVersion);
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
@@ -138,18 +138,19 @@ public abstract class ODKSQLiteOpenHelper {
             success = true;
             return db;
         } finally {
-            mIsInitializing = false;
+            isInitializing = false;
             if (success) {
-                if (mDatabase != null) {
+                if (database != null) {
                     try {
-                        mDatabase.close();
+                        database.close();
                     } catch (Exception e) {
+                        Timber.e(e);
                     }
-                    // mDatabase.unlock();
+                    // database.unlock();
                 }
-                mDatabase = db;
+                database = db;
             } else {
-                // if (mDatabase != null) mDatabase.unlock();
+                // if (database != null) database.unlock();
                 if (db != null) {
                     db.close();
                 }
@@ -171,32 +172,32 @@ public abstract class ODKSQLiteOpenHelper {
      *         called.
      */
     public synchronized SQLiteDatabase getReadableDatabase() {
-        if (mDatabase != null && mDatabase.isOpen()) {
-            return mDatabase; // The database is already open for business
+        if (database != null && database.isOpen()) {
+            return database; // The database is already open for business
         }
 
-        if (mIsInitializing) {
+        if (isInitializing) {
             throw new IllegalStateException("getReadableDatabase called recursively");
         }
 
         try {
             return getWritableDatabase();
         } catch (SQLiteException e) {
-            if (mName == null) {
+            if (name == null) {
                 throw e; // Can't open a temp database read-only!
             }
-            Log.e(t, "Couldn't open " + mName + " for writing (will try read-only):", e);
+            Timber.e(e, "Couldn't open %s for writing (will try read-only):", name);
         }
 
         SQLiteDatabase db = null;
         try {
-            mIsInitializing = true;
-            String path = mPath + File.separator + mName;
-            // mContext.getDatabasePath(mName).getPath();
+            isInitializing = true;
+            String path = this.path + File.separator + name;
+            // mContext.getDatabasePath(name).getPath();
             try {
-                db = SQLiteDatabase.openDatabase(path, mFactory, SQLiteDatabase.OPEN_READONLY);
+                db = SQLiteDatabase.openDatabase(path, factory, SQLiteDatabase.OPEN_READONLY);
             } catch (RuntimeException e) {
-                Log.e(t, e.getMessage(), e);
+                Timber.e(e);
                 String cardstatus = Environment.getExternalStorageState();
                 if (!cardstatus.equals(Environment.MEDIA_MOUNTED)) {
                     throw new RuntimeException(
@@ -206,18 +207,18 @@ public abstract class ODKSQLiteOpenHelper {
                 }
             }
 
-            if (db.getVersion() != mNewVersion) {
+            if (db.getVersion() != newVersion) {
                 throw new SQLiteException("Can't upgrade read-only database from version "
-                        + db.getVersion() + " to " + mNewVersion + ": " + path);
+                        + db.getVersion() + " to " + newVersion + ": " + path);
             }
 
             onOpen(db);
-            Log.w(t, "Opened " + mName + " in read-only mode");
-            mDatabase = db;
-            return mDatabase;
+            Timber.w("Opened %s in read-only mode", name);
+            database = db;
+            return database;
         } finally {
-            mIsInitializing = false;
-            if (db != null && db != mDatabase) {
+            isInitializing = false;
+            if (db != null && db != database) {
                 db.close();
             }
         }
@@ -228,13 +229,13 @@ public abstract class ODKSQLiteOpenHelper {
      * Close any open database object.
      */
     public synchronized void close() {
-        if (mIsInitializing) {
+        if (isInitializing) {
             throw new IllegalStateException("Closed during initialization");
         }
 
-        if (mDatabase != null && mDatabase.isOpen()) {
-            mDatabase.close();
-            mDatabase = null;
+        if (database != null && database.isOpen()) {
+            database.close();
+            database = null;
         }
     }
 

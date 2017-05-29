@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -38,12 +37,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  *
  */
 public class InstanceProvider extends ContentProvider {
 
-    private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
     private static final int DATABASE_VERSION = 4;
@@ -85,48 +85,53 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
+            final int initialVersion = oldVersion;
             if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " +
-                        InstanceColumns.STATUS + " IS NOT NULL AND " +
-                        InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
+                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
+                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                         + "'");
                 oldVersion = 2;
             }
             if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.JR_VERSION + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.JR_VERSION + " text;");
             }
             if (oldVersion == 3) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.DELETED_DATE + " date;");
+                Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
+                int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
+                cursor.close();
+
+                // Only add the column if it doesn't already exist
+                if (columnIndex == -1) {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                            + InstanceColumns.DELETED_DATE + " date;");
+                }
             }
-            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
-                    + newVersion
-                    + ", without destroying all the old data");
+            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
+                    initialVersion, newVersion);
         }
     }
 
-    private DatabaseHelper mDbHelper;
+    private DatabaseHelper databaseHelper;
 
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            mDbHelper = null;
+            databaseHelper = null;
             return null;
         }
 
-        if (mDbHelper != null) {
-            return mDbHelper;
+        if (databaseHelper != null) {
+            return databaseHelper;
         }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
-        return mDbHelper;
+        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        return databaseHelper;
     }
 
     @Override
@@ -264,9 +269,8 @@ public class InstanceProvider extends ContentProvider {
                 int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
                 int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
 
-                Log.i(t, "removed from content providers: " + images
-                        + " image files, " + audio + " audio files,"
-                        + " and " + video + " video files.");
+                Timber.i("removed from content providers: %d image files, %d audio files,"
+                        + " and %d video files.", images, audio, video);
 
                 // delete all the files in the directory
                 File[] files = directory.listFiles();
