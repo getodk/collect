@@ -65,7 +65,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public int zoomLevel = 3;
     public static final int stroke_width = 5;
     public String finalReturnString;
-    private MapEventsOverlay overlayEventos;
+    private MapEventsOverlay overlayEvents;
     private boolean clearButtonTest = false;
     private Button clearButton;
     private Button saveButton;
@@ -96,8 +96,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         helper = new MapHelper(this, map, GeoShapeOsmMapActivity.this);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
-        map.setMapListener(mapViewListner);
-        overlayPointPathListner();
+        map.setMapListener(mapViewListener);
+        overlayPointPathListener();
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +146,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
                 overlayIntentPolygon(s);
                 //zoomToCentroid();
                 locationButton.setEnabled(true);
-                zoomtoBounds();
+                zoomToBounds();
             }
         } else {
             myLocationOverlay.runOnFirstFix(centerAroundFix);
@@ -183,7 +183,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             @Override
             public void onClick(View v) {
                 //zoomToCentroid();
-                zoomtoBounds();
+                zoomToBounds();
                 map.invalidate();
                 zoomDialog.dismiss();
             }
@@ -239,15 +239,15 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setDraggable(true);
             marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setOnMarkerClickListener(nullmarkerlistner);
+            marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
             // pathOverlay.addPoint(marker.getPosition());
             marker.setDraggable(true);
-            marker.setOnMarkerDragListener(draglistner);
+            marker.setOnMarkerDragListener(dragListener);
             map.getOverlays().add(marker);
         }
         update_polygon();
-        map.getOverlays().remove(overlayEventos);
+        map.getOverlays().remove(overlayEvents);
     }
 
 
@@ -319,14 +319,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     }
 
 
-    private void overlayPointPathListner() {
-        overlayEventos = new MapEventsOverlay(receive);
+    private void overlayPointPathListener() {
+        overlayEvents = new MapEventsOverlay(receive);
         polyline = new Polyline();
         polyline.setColor(Color.RED);
         Paint paint = polyline.getPaint();
         paint.setStrokeWidth(stroke_width);
         map.getOverlays().add(polyline);
-        map.getOverlays().add(overlayEventos);
+        map.getOverlays().add(overlayEvents);
         map.invalidate();
     }
 
@@ -337,7 +337,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         map.getOverlays().clear();
         clearButton.setEnabled(false);
         //saveButton.setEnabled(false);
-        overlayPointPathListner();
+        overlayPointPathListener();
         overlayMyLocationLayers();
         map.invalidate();
 
@@ -425,10 +425,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
             marker.setDraggable(true);
             marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setOnMarkerClickListener(nullmarkerlistner);
+            marker.setOnMarkerClickListener(nullMarkerListener);
             mapMarkers.add(marker);
             marker.setDraggable(true);
-            marker.setOnMarkerDragListener(draglistner);
+            marker.setOnMarkerDragListener(dragListener);
             map.getOverlays().add(marker);
             List<GeoPoint> points = polyline.getPoints();
             points.add(marker.getPosition());
@@ -444,7 +444,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         }
     };
 
-    private MapListener mapViewListner = new MapListener() {
+    private MapListener mapViewListener = new MapListener() {
         @Override
         public boolean onZoom(ZoomEvent zoomLev) {
             zoomLevel = zoomLev.getZoomLevel();
@@ -458,7 +458,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     };
 
-    private Marker.OnMarkerDragListener draglistner = new Marker.OnMarkerDragListener() {
+    private Marker.OnMarkerDragListener dragListener = new Marker.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
 
@@ -478,7 +478,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     };
 
 
-    private Marker.OnMarkerClickListener nullmarkerlistner = new Marker.OnMarkerClickListener() {
+    private Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
 
         @Override
         public boolean onMarkerClick(Marker arg0, MapView arg1) {
@@ -490,7 +490,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         This functions should be added to the mapHelper Class
 
      */
-    private void zoomtoBounds() {
+    private void zoomToBounds() {
         map.getController().setZoom(4);
         map.invalidate();
         Handler handler = new Handler();

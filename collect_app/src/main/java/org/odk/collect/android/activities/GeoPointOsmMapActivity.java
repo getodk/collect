@@ -70,7 +70,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private TextView locationInfo;
 
     private LocationManager locationManager;
-    private MapEventsOverlay overlayEventos;
+    private MapEventsOverlay overlayEvents;
 
     private Location location;
     private Button saveLocationButton;
@@ -346,8 +346,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 marker.setOnMarkerDragListener(this);
                 marker.setDraggable(true);
             }
-            overlayEventos = new MapEventsOverlay(this);
-            map.getOverlays().add(overlayEventos);
+            overlayEvents = new MapEventsOverlay(this);
+            map.getOverlays().add(overlayEvents);
         }
 
         myLocationOverlay.setEnabled(true);

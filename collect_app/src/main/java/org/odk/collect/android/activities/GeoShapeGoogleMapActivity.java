@@ -213,7 +213,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             @Override
             public void onClick(View v) {
                 // zoomToCentroid();
-                zoomtoBounds();
+                zoomToBounds();
                 zoomDialog.dismiss();
             }
         });
@@ -386,7 +386,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         update_polygon();
     }
 
-    private void zoomtoBounds() {
+    private void zoomToBounds() {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
