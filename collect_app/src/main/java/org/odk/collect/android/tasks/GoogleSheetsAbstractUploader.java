@@ -943,7 +943,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         return Pattern
                 .compile(VALID_GOOGLE_SHEETS_ID).matcher(name).matches();
     }
-    public static boolean isValidLocation(String answer) {
+    private static boolean isValidLocation(String answer) {
         return Pattern
                 .compile(GPS_LOCATION).matcher(answer).matches();
     }

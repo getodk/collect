@@ -1,8 +1,6 @@
 package org.odk.collect.android.tasks;
 
-/**
- * Created by simran on 4/19/2017.
- */
+
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -13,7 +11,7 @@ public class GoogleSheetsAbstractUploaderTest extends TypeSafeMatcher<String> {
 
     private  String regex;
 
-    public GoogleSheetsAbstractUploaderTest(String regex) {
+    private GoogleSheetsAbstractUploaderTest(String regex) {
         this.regex = regex;
     }
 
