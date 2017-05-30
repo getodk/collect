@@ -12,7 +12,6 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import timber.log.Timber;
@@ -53,11 +52,6 @@ public class TimerLogger {
         long end;
         boolean endTimeSet;
 
-        private class EventDetails {
-            boolean hasIntervalTime;
-            String name;
-        }
-
         /*
          * Create a new event
          */
@@ -85,15 +79,12 @@ public class TimerLogger {
          *  Question
          *  Prompt for repeat
          */
-        public boolean isIntervalViewEvent() {
-            if (eventType == EventTypes.FEC
+        private boolean isIntervalViewEvent() {
+            return eventType == EventTypes.FEC
                     && (fecType == FormEntryController.EVENT_QUESTION
                     || fecType == FormEntryController.EVENT_GROUP
                     || fecType == FormEntryController.EVENT_END_OF_FORM
-                    || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT)) {
-                return true;
-            }
-            return false;
+                    || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT);
         }
 
         /*
@@ -112,7 +103,7 @@ public class TimerLogger {
          * convert the event into a record to write to the CSV file
          */
         public String toString() {
-            String textValue = null;
+            String textValue;
             switch (eventType) {
                 case FEC:
                     switch (fecType) {
@@ -200,7 +191,7 @@ public class TimerLogger {
                 File instanceFolder = instanceFile.getParentFile();
                 timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
             }
-            events = new ArrayList<Event>();
+            events = new ArrayList<>();
         }
     }
 
@@ -222,6 +213,7 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
+            Timber.i("Event recorded: " + eventType + " : " + fecType);
             // Calculate the time and add the event to the events array
             long start = getEventTime();
 
@@ -244,8 +236,8 @@ public class TimerLogger {
              * The exception is hierarchy events since they interrupt an existing interval event
              */
             if (newEvent.isIntervalViewEvent()) {
-                for (int i = 0; i < events.size(); i++) {
-                    if (events.get(i).isIntervalViewEvent() && !events.get(i).endTimeSet) {
+                for (Event ev : events) {
+                    if (ev.isIntervalViewEvent() && !ev.endTimeSet) {
                         return;
                     }
                 }
@@ -266,8 +258,8 @@ public class TimerLogger {
              */
             if (newEvent.eventType == EventTypes.FORM_EXIT
                     || newEvent.eventType == EventTypes.HIERARCHY) {
-                for (int i = 0; i < events.size(); i++) {
-                    events.get(i).setEnd(start);
+                for (Event ev : events) {
+                    ev.setEnd(start);
                 }
             }
 
@@ -292,8 +284,8 @@ public class TimerLogger {
 
             // Calculate the time and add the event to the events array
             long end = getEventTime();
-            for (int i = 0; i < events.size(); i++) {
-                events.get(i).setEnd(end);
+            for (Event ev : events) {
+                ev.setEnd(end);
             }
 
             writeEvents();
@@ -306,7 +298,7 @@ public class TimerLogger {
 
             Event[] eventArray = events.toArray(new Event[events.size()]);
             saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
-            events = new ArrayList<Event>();
+            events = new ArrayList<>();
 
         } else {
             Timber.i("Queueing Timer Event");
@@ -321,10 +313,6 @@ public class TimerLogger {
             surveyOpenTime = System.currentTimeMillis();
             surveyOpenElapsedTime = SystemClock.elapsedRealtime();
         }
-
-        // debug
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateTime = sdf.format(surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime));
 
         return surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime);
     }
