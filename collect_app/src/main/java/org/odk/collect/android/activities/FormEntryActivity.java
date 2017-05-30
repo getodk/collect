@@ -1100,7 +1100,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .getFormController();
         setTitle(formController.getFormTitle());
 
-
         timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);
 
@@ -1837,6 +1836,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
+                        timerLogger.logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;

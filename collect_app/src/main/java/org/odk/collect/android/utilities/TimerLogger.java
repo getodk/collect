@@ -38,7 +38,8 @@ public class TimerLogger {
         HIERARCHY,          // Jump to a question
         SAVE_ERROR,         // Error in save
         FINALIZE_ERROR,     // Error in finalize
-        CONSTRAINT_ERROR    // Contraint or missing answer error on save
+        CONSTRAINT_ERROR,   // Constraint or missing answer error on save
+        DELETE_REPEAT       // Delete a repeat group
     }
 
     public class Event {
@@ -124,9 +125,6 @@ public class TimerLogger {
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                             textValue = "add repeat";
                             break;
-                        case FormEntryController.EVENT_REPEAT:
-                            textValue = "delete repeat";
-                            break;
                         case FormEntryController.EVENT_END_OF_FORM:
                             textValue = "end screen";
                             break;
@@ -160,6 +158,9 @@ public class TimerLogger {
                     break;
                 case CONSTRAINT_ERROR:
                     textValue = "constraint error";
+                    break;
+                case DELETE_REPEAT:
+                    textValue = "delete repeat";
                     break;
                 default:
                     textValue = "Unknown Event Type: " + eventType;
@@ -251,10 +252,11 @@ public class TimerLogger {
             }
 
             /*
-             * Ignore beginning of form events
+             * Ignore beginning of form events and repeat events
              */
             if (newEvent.eventType == EventTypes.FEC
-                    && newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    && (newEvent.fecType == FormEntryController.EVENT_BEGINNING_OF_FORM
+                    || newEvent.fecType == FormEntryController.EVENT_REPEAT)) {
                 return;
             }
 
