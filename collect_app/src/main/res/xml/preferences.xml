@@ -1,8 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceScreen
-        android:key="@string/server_preferences"
         android:icon="@drawable/server"
+        android:key="@string/server_preferences"
         android:title="@string/server_preferences">
         <ListPreference
             android:id="@+id/protocol"
@@ -21,27 +21,19 @@
             android:title="@string/form_metadata"/>
     </PreferenceScreen>
 
-    <PreferenceScreen
-        android:key="@string/autosend"
+    <ListPreference
+        android:id="@+id/autosend"
+        android:defaultValue="off"
+        android:dialogTitle="@string/autosend_selector_title"
+        android:entries="@array/autosend_selector_entries"
+        android:entryValues="@array/autosend_selector_entries_values"
         android:icon="@drawable/auto_button"
-        android:title="@string/autosend">
-        <SwitchPreference
-            android:id="@+id/autosend_wifi"
-            android:defaultValue="false"
-            android:key="autosend_wifi"
-            android:summary="@string/autosend_wifi_summary"
-            android:title="@string/autosend_wifi"/>
-        <SwitchPreference
-            android:id="@+id/autosend_network"
-            android:defaultValue="false"
-            android:key="autosend_network"
-            android:summary="@string/autosend_network_summary"
-            android:title="@string/autosend_network"/>
-    </PreferenceScreen>
+        android:key="autosend"
+        android:title="@string/autosend"/>
 
     <PreferenceScreen
-        android:key="@string/client"
         android:icon="@drawable/user_interface"
+        android:key="@string/client"
         android:title="@string/client">
         <ListPreference
             android:id="@+id/constraint_behavior"
@@ -112,8 +104,8 @@
     </PreferenceScreen>
 
     <PreferenceScreen
-        android:key="@string/map_preferences"
         android:icon="@drawable/google_maps"
+        android:key="@string/map_preferences"
         android:title="@string/map_preferences">
 
         <ListPreference
@@ -136,8 +128,8 @@
     </PreferenceScreen>
 
     <PreferenceCategory
-        android:key="@string/analytics_preferences"
         android:icon="@drawable/cloud_sync"
+        android:key="@string/analytics_preferences"
         android:title="@string/analytics_preferences">
         <CheckBoxPreference
             android:id="@+id/analytics"

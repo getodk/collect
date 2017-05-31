@@ -27,6 +27,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOO
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
@@ -66,6 +67,26 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
+        initAutoSendPrefs();
+    }
+
+    private void initAutoSendPrefs() {
+        final ListPreference autosend = (ListPreference) findPreference(KEY_AUTOSEND);
+
+        if (autosend == null) {
+            return;
+        }
+
+        autosend.setSummary(autosend.getEntry());
+        autosend.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            }
+        });
     }
 
 
