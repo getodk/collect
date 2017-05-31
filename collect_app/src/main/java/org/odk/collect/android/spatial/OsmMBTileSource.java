@@ -55,11 +55,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
      * The reason this constructor is protected is because all parameters,
      * except file should be determined from the archive file. Therefore a
      * factory method is necessary.
-     *
-     * @param minZoom
-     * @param maxZoom
-     * @param tileSizePixels
-     * @param file
      */
     protected OsmMBTileSource(int minZoom,
                               int maxZoom,
@@ -78,9 +73,6 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
      * Parameters minZoom, maxZoom en tileSizePixels are obtained from the
      * database. If they cannot be obtained from the DB, the default values as
      * defined by this class are used.
-     *
-     * @param file
-     * @return
      */
     public static OsmMBTileSource createFromFile(File file) {
         int flags = SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READONLY;
