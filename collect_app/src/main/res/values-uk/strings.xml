@@ -352,7 +352,7 @@
   <string name="map_basemap_behavior">Обрати базову мапу</string>
   <string name="show_map_basemap">Показати параметри базової мапи</string>
   <string name="save_point">Зберегти ГеоТочку</string>
-  <string name="get_point">Почати ГеоТочку</string>
+  <string name="get_point">Записати ГеоТочку</string>
   <string name="geopoint_view_read_only">Переглянути ГеоТочку</string>
   <string name="get_shape">Почати ГеоФігуру</string>
   <string name="get_trace">Почати ГеоМаршрут</string>
@@ -493,4 +493,27 @@
   <string name="no_date_selected">Дата не обрана</string>
   <string name="no_time_selected">Час не обраний</string>
   <string name="use_phone_language">Використовувати мову телефону</string>
+  <string name="import_settings">Імпорт/Експорт налаштувань</string>
+  <string name="qr_code">QR код</string>
+  <string name="scan_qrcode">Сканувати з іншого пристрою</string>
+  <string name="successfully_imported_settings">Налаштування успішно імпортовані</string>
+  <string name="encoding_max_limit">Досягнуто максимальну кількість символів: QR код не може бути згенерований для всіх налаштувань</string>
+  <string name="share">Поділитись</string>
+  <string name="select_qrcode">Обрати код з SD картки</string>
+  <string name="turn_on_flashlight">Увімкнути ліхтарик</string>
+  <string name="turn_off_flashlight">Вимкнути ліхтарик</string>
+  <string name="qrcode_with_both_passwords">Цей QR код містить Ваші паролі адміністратора та сервера. Будь ласка, оберігайте його. \n(Натисніть для видалення паролів)</string>
+  <string name="qrcode_without_passwords">Цей QR код не містить Ваших паролів адміністратора чи сервера. \n(Натисніть щоб додати паролі)</string>
+  <string name="qrcode_with_admin_password">Цей QR код містить Ваш пароль адміністратора. Будь ласка, оберігайте його. \n(Натисніть для видалення паролю)</string>
+  <string name="qrcode_with_server_password">Цей QR код містить Ваш пароль сервера. \n(Натисніть для видалення паролю)</string>
+  <string name="import_export_settings">Імпорт/Експорт Налаштувань</string>
+  <string name="qrcode_scanner_prompt">Помістіть QR код в прямокутник</string>
+  <string name="server_password">Пароль Сервера</string>
+  <string name="include_password_dialog">Паролі Включені в Код</string>
+  <string name="generate">Згенерувати</string>
+  <string name="invalid_qrcode">QR код не містить коректних налаштувань</string>
+  <string name="share_qrcode">Поділитись QR кодом</string>
+  <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
+  <string name="request_permission">Програмі потрібен дозвіл на використання камери.</string>
+  <string name="camera_error">Цей пристрій не підтримує Camera2 API.</string>
 </resources>
