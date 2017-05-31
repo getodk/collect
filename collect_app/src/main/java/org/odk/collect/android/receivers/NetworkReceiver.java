@@ -93,10 +93,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         // make sure autosend is enabled on the given connected interface
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
-        boolean sendwifi = sharedPreferences.getBoolean(
-                PreferenceKeys.KEY_AUTOSEND_WIFI, false);
-        boolean sendnetwork = sharedPreferences.getBoolean(
-                PreferenceKeys.KEY_AUTOSEND_NETWORK, false);
+        String autosend = sharedPreferences.getString(PreferenceKeys.KEY_AUTOSEND, "off");
+        boolean sendwifi = autosend.equals("wifi_only");
+        boolean sendnetwork = autosend.equals("cellular_only");
+        if (autosend.equals("wifi_and_cellular")) {
+            sendwifi = true;
+            sendnetwork = true;
+        }
 
         return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE

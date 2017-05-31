@@ -53,8 +53,7 @@ public final class PreferenceKeys {
 
     public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
 
-    public static final String KEY_AUTOSEND_WIFI            = "autosend_wifi";
-    public static final String KEY_AUTOSEND_NETWORK         = "autosend_network";
+    public static final String KEY_AUTOSEND                 = "autosend";
 
     public static final String KEY_NAVIGATION               = "navigation";
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
@@ -93,8 +92,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_COMPLETED_DEFAULT, true);
         hashMap.put(KEY_MAP_SDK, "google_maps");
         hashMap.put(KEY_MAP_BASEMAP, "streets");
-        hashMap.put(KEY_AUTOSEND_WIFI, false);
-        hashMap.put(KEY_AUTOSEND_NETWORK, false);
+        hashMap.put(KEY_AUTOSEND, "off");
         return hashMap;
     }
 

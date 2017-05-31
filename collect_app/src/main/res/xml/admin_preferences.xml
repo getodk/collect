@@ -89,17 +89,11 @@
                 android:summary="@string/found_in_settings"
                 android:title="@string/form_metadata"/>
             <CheckBoxPreference
-                android:id="@+id/autosend_wifi"
+                android:id="@+id/autosend"
                 android:defaultValue="true"
-                android:key="autosend_wifi"
+                android:key="autosend"
                 android:summary="@string/found_in_settings"
-                android:title="@string/autosend_wifi"/>
-            <CheckBoxPreference
-                android:id="@+id/autosend_network"
-                android:defaultValue="true"
-                android:key="autosend_network"
-                android:summary="@string/found_in_settings"
-                android:title="@string/autosend_network"/>
+                android:title="@string/autosend"/>
             <CheckBoxPreference
                 android:id="@+id/navigation"
                 android:defaultValue="true"
