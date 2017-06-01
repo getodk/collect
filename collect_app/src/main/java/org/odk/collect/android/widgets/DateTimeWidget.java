@@ -23,7 +23,6 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -96,9 +95,9 @@ public class DateTimeWidget extends QuestionWidget {
                     .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
                     .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
                     .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
-                    .withSecondOfMinute(0);
+                    .withSecondOfMinute(0)
+                    .withMillisOfSecond(0);
 
-            ldt = skipDaylightSavingGapIfExists(ldt);
             return new DateTimeData(ldt.toDate());
         }
     }
@@ -130,18 +129,5 @@ public class DateTimeWidget extends QuestionWidget {
         super.cancelLongPress();
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
-    }
-
-    // Skip over a "daylight savings gap". This is needed on the day and time of a daylight savings
-    // transition because that date/time doesn't exist.
-    // Today clocks are almost always set one hour back or ahead.
-    // Throughout history there have been several variations, like half adjustments (30 minutes) or
-    // double adjustment (two hours). Adjustments of 20 and 40 minutes have also been used.
-    // https://www.timeanddate.com/time/dst/
-    private LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime ldt) {
-        while (DateTimeZone.getDefault().isLocalDateTimeGap(ldt)) {
-            ldt = ldt.plusMinutes(1);
-        }
-        return ldt;
     }
 }

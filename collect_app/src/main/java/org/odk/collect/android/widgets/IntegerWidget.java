@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 
@@ -77,6 +78,7 @@ public class IntegerWidget extends StringWidget {
 
         if (i != null) {
             answer.setText(String.format(Locale.ENGLISH, "%d", i));
+            Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 
         setupChangeListener();
