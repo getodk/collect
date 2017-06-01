@@ -344,7 +344,6 @@
   <string name="map_basemap_behavior">Vali aluskaart</string>
   <string name="show_map_basemap">Näita aluskaardi valikuid</string>
   <string name="save_point">Salvesta asukohapunkt</string>
-  <string name="get_point">Loo asukohapunkt</string>
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>
   <string name="get_shape">Loo polügoon</string>
   <string name="get_trace">Alusta rada</string>

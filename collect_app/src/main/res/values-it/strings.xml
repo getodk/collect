@@ -353,7 +353,6 @@
   <string name="map_basemap_behavior">Seleziona una mappa base</string>
   <string name="show_map_basemap">Mostra opzioni mappa base</string>
   <string name="save_point">Salva Geo-punto</string>
-  <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="get_shape">Inizia Geo-contorno</string>
   <string name="get_trace">Inizia Geo-tracciatura</string>

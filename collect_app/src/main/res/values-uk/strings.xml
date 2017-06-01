@@ -352,7 +352,6 @@
   <string name="map_basemap_behavior">Обрати базову мапу</string>
   <string name="show_map_basemap">Показати параметри базової мапи</string>
   <string name="save_point">Зберегти ГеоТочку</string>
-  <string name="get_point">Записати ГеоТочку</string>
   <string name="geopoint_view_read_only">Переглянути ГеоТочку</string>
   <string name="get_shape">Почати ГеоФігуру</string>
   <string name="get_trace">Почати ГеоМаршрут</string>

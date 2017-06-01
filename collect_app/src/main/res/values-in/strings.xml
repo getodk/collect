@@ -350,7 +350,6 @@
   <string name="map_basemap_behavior">Pilih peta dasar</string>
   <string name="show_map_basemap">Tampilkan opsi peta dasar</string>
   <string name="save_point">Simpan GeoPoint</string>
-  <string name="get_point">Mulai GeoPoint</string>
   <string name="geopoint_view_read_only">Tampilkan GeoPoint</string>
   <string name="get_shape">Mulai GeoShape</string>
   <string name="get_trace">Mulai GeoTrace</string>

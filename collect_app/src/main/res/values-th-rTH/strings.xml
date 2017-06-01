@@ -336,7 +336,6 @@
   <string name="map_basemap_behavior">เลือก Basemap</string>
   <string name="show_map_basemap">แสดงตัวเลือกของ Basemap</string>
   <string name="save_point">บันทึกจุดพิกัด</string>
-  <string name="get_point">เริ่มต้นจุดพิกัด</string>
   <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>
   <string name="get_shape">เริ่มต้น GeoShape</string>
   <string name="get_trace">เริ่มต้น GeoTrace</string>

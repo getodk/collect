@@ -361,7 +361,6 @@
     <string name="show_map_basemap">Show Basemap Options</string>
 
     <string name="save_point">Save GeoPoint</string>
-    <string name="get_point">Start GeoPoint</string>
     <string name="geopoint_view_read_only">View GeoPoint</string>
     <string name="get_shape">Start GeoShape</string>
     <string name="get_trace">Start GeoTrace</string>

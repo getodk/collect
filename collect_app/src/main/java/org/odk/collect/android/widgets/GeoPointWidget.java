@@ -119,7 +119,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // setup play button
         viewButton = new Button(getContext());
         viewButton.setId(QuestionWidget.newUniqueId());
-        viewButton.setText(getContext().getString(R.string.get_point));
+        viewButton.setText(getContext().getString(R.string.accept_location));
         viewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         viewButton.setPadding(20, 20, 20, 20);
         viewButton.setLayoutParams(params);
@@ -214,7 +214,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                     getLocationButton.setText(
                             getContext().getString(R.string.view_change_location));
                 } else {
-                    getLocationButton.setText(getContext().getString(R.string.get_point));
+                    getLocationButton.setText(getContext().getString(R.string.accept_location));
                 }
             }
         } else {
@@ -224,7 +224,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             } else {
                 getLocationButton.setVisibility(View.VISIBLE);
                 getLocationButton.setText(getContext().getString(
-                        dataAvailable ? R.string.get_point : R.string.get_point));
+                        dataAvailable ? R.string.accept_location : R.string.accept_location));
             }
 
             if (useMaps) {

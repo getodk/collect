@@ -353,7 +353,6 @@
   <string name="map_basemap_behavior">ជ្រើសរើស​មូលដ្ឋានផែនទី</string>
   <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
   <string name="save_point">រក្សា GeoPoint</string>
-  <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
   <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
   <string name="get_trace">ចាប់ផ្តើម GeoTrace</string>

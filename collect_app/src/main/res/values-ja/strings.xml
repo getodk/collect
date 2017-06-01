@@ -352,7 +352,6 @@
   <string name="map_basemap_behavior">基本地図を選択</string>
   <string name="show_map_basemap">基本地図オプションを表示</string>
   <string name="save_point">地理位置を保存</string>
-  <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
   <string name="get_shape">GeoShape を開始</string>
   <string name="get_trace">GeoTrace を開始</string>
