@@ -49,6 +49,7 @@ public class TextUtilsTest {
                 "<span>",
                 "<notarealtag>",
                 "<CAPSTAG",
+                "</closetag>"
         };
         for (String testCase: tests) {
             Assert.assertEquals(testCase, TextUtils.markdownToHtml(testCase));
