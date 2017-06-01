@@ -82,7 +82,7 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
 
         // Get the tile size
-        Cursor cursor = db.rawQuery("SELECT tile_data FROM images LIMIT 0,1",
+        Cursor cursor = db.rawQuery("SELECT tile_data FROM tiles LIMIT 0,1",
                 new String[]{});
 
         if (cursor.getCount() != 0) {
