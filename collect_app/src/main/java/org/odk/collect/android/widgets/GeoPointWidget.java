@@ -36,7 +36,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.activities.GeoPointGoogleMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -143,7 +143,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 if (useMapsV2 && useMaps) {
                     if (mapSDK.equals(GOOGLE_MAP_KEY)) {
                         if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-                            i = new Intent(getContext(), GeoPointMapActivity.class);
+                            i = new Intent(getContext(), GeoPointGoogleMapActivity.class);
                         } else {
                             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
                             return;

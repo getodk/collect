@@ -54,13 +54,13 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
+ * Version of the GeoPointGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
  *
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointGoogleMapActivity extends FragmentActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
 
     private static final String LOCATION_COUNT = "locationCount";
@@ -188,7 +188,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             finish();
             return;
         }
-        helper = new MapHelper(GeoPointMapActivity.this, map);
+        helper = new MapHelper(GeoPointGoogleMapActivity.this, map);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
@@ -255,7 +255,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         layers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoPointMapActivity.this);
+                helper.showLayersDialog(GeoPointGoogleMapActivity.this);
             }
         });
         zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
@@ -419,7 +419,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 }
             }
         } else {
-            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
+            InfoLogger.geolog("GeoPointGoogleMapActivity: " + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") null location");
         }
 

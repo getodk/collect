@@ -50,7 +50,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * Version of the GeoPointMapActivity that uses the new OSMDDroid
+ * Version of the GeoPointGoogleMapActivity that uses the new OSMDDroid
  *
  * @author jonnordling@gmail.com
  */
@@ -452,7 +452,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         //}
 
         } else {
-            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
+            InfoLogger.geolog("GeoPointGoogleMapActivity: " + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") null location");
         }
     }
