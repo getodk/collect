@@ -109,9 +109,13 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
             String[] headerRow = reader.readNext();
 
             if (!ExternalDataUtil.containsAnyData(headerRow)) {
+                /* start smap - So no data that can change no need to throw an exception
                 throw new ExternalDataException(
                         Collect.getInstance().getString(R.string.ext_file_no_data_error));
+                         */
+                return;     // smap just return and continue
             }
+
 
             List<String> conflictingColumns =
                     ExternalDataUtil.findMatchingColumnsAfterSafeningNames(headerRow);
