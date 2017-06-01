@@ -11,7 +11,6 @@
   <string name="altitude">Taas</string>
   <string name="audio_file_error">Walang talaksang-tunog na tinukoy.</string>
   <string name="audio_file_invalid">Talaksa: %s ay hindi wastong talaksang-tunog.</string>
-  <string name="barcode_scanner_error">Paumanhin, ang Barcode Scanner ay hindi naka-kanâ!</string>
   <string name="cancel">Urong</string>
   <string name="cancel_loading_form">Urong</string>
   <string name="cancel_location">Urong</string>

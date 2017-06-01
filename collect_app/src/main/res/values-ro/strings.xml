@@ -13,7 +13,6 @@
   <string name="audio_file_error">Fișierul audio nu a fost specificat.</string>
   <string name="audio_file_invalid">Fișierul: %s nu este un fișier audio valid.</string>
   <string name="backup">înapoi către \necranul \nanterior</string>
-  <string name="barcode_scanner_error">Ne pare rău, scanner-ul de coduri de bare nu este instalat!</string>
   <string name="cancel">Anulează</string>
   <string name="cancel_loading_form">Anulează</string>
   <string name="cancel_location">Anulează</string>

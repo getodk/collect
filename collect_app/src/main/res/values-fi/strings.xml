@@ -14,7 +14,6 @@
   <string name="audio_file_error">Äänitiedostoa ei määritelty.</string>
   <string name="audio_file_invalid">Tiedosto %s ei ole käypä äänitiedosto.</string>
   <string name="backup">taaksepäin\nedelliseen\nkysymykseen</string>
-  <string name="barcode_scanner_error">Pahoittelut, viivakoodiskanneria ei ole asennettu!</string>
   <string name="cancel">Peruuta</string>
   <string name="cancel_loading_form">Peruuta</string>
   <string name="cancel_location">Peruuta</string>

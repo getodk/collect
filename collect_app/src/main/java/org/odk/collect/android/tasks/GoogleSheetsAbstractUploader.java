@@ -100,11 +100,6 @@ public abstract class GoogleSheetsAbstractUploader extends
         }
     }
 
-    /**
-     * @param selection
-     * @param selectionArgs
-     * @param token
-     */
     protected void uploadInstances(String selection, String[] selectionArgs, String token) {
         Cursor c = null;
         try {
@@ -970,11 +965,6 @@ public abstract class GoogleSheetsAbstractUploader extends
      * eg. Sheet1!A1:G7
      * <p>
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
-     *
-     * @param spreadsheetId
-     * @param spreadsheetName
-     * @return
-     * @throws IOException
      */
     private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
             throws IOException {

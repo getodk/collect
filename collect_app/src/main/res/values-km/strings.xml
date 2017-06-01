@@ -14,7 +14,6 @@
   <string name="audio_file_error">គ្មានឯកសារអូឌីយ៉ូដែលបានបញ្ជាក់.</string>
   <string name="audio_file_invalid">ឯកសារ: %s មិនមែនជាឯកសារសម្លេងត្រឹមត្រូវ</string>
   <string name="backup">ថយក្រោយទៅ\nពីមុន\nprompt</string>
-  <string name="barcode_scanner_error">សុំ​អភ័យ​ទោស​ កម្មវិធី​ស្កែនបារកូដមិនទាន់ដំឡើង</string>
   <string name="cancel">បោះបង់</string>
   <string name="cancel_loading_form">បោះបង់</string>
   <string name="cancel_location">បោះបង់</string>
@@ -341,6 +340,11 @@
   <string name="openstreetmap_sdk">ផែនទី​ OpenStreetMap SDK</string>
   <string name="show_map_sdk">បង្ហាញ​ជម្រើស​ផែនទី​ SDK</string>
   <string name="openmap_streets">ផ្លូវ OSM</string>
+  <string name="openmap_usgs_topo">USGS National Map Topo</string>
+  <string name="openmap_usgs_sat">USGS National Map Sat</string>
+  <string name="openmap_stamen_terrain">Stamen Terrain</string>
+  <string name="openmap_cartodb_positron">CartoDB Positron</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="streets">ផ្លូវ</string>
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
@@ -383,6 +387,8 @@
   <string name="zoom_to_location">ពង្រីក/បង្រួមទៅកាន់ទីតាំងរបស់អ្នក</string>
   <string name="zoom_to_feature">ពង្រីក/បង្រួមទៅកាន់លក្ខណៈពិសេសដែលរក្សាទុក</string>
   <string name="points_captured">%s  ចំនុចចាប់យក</string>
+  <string name="google_sheets_invalid_column_form">\'n%1$s\' គឺ​ជា​ឈ្មោះ​ជួរ​ឈរ​មិន​ត្រឹម​ត្រូវ​នៅ​ក្នុង​សំណុំ​បែប​បទ​របស់​អ្នក។ សន្លឹក Google អនុញ្ញាត​ឱ្យ​តែ​តួ​អក្សរ​ ​ក្រម​លេខ​ និង​សហសញ្ញា​ក្នុង​ឈ្មោះ​ជួរ​ឈរ</string>
+  <string name="google_sheets_invalid_column_instance">\'n%1$s\' គឺ​ជា​ឈ្មោះ​ជួរ​ឈរ​មិន​ត្រឹម​ត្រូវ​នៅ​ក្នុងឯកសារដែលបានរក្សាទុក​របស់​អ្នក។ សន្លឹក Google អនុញ្ញាត​ឱ្យ​តែ​តួ​អក្សរ​ ​ក្រម​លេខ​ និង​សហសញ្ញា​ក្នុង​ឈ្មោះ​ជួរ​ឈរ</string>
   <string name="geoshape_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoShape</string>
   <string name="geotrace_view_change_location">មើល ឬផ្លាស់ប្តូរ GeoTrace</string>
   <string name="bearing">ទ្រង់ទ្រាយ៖ %.3f</string>
@@ -396,10 +402,16 @@
   <string name="settings_successfully_loaded_file_notification">ការកំណត់បានផ្ទុកពីឯកសារដោយជោគជ័យ</string>
   <string name="corrupt_settings_file_notification">សុំទោស, ឯកសារ​កំណត់​បាន​បំផ្លាញ​ និង​គួរ​តែ​លុប ឬ​ផ្លាស់​ប្តូរ​ចេញ​</string>
   <string name="selected_invalid_image">ឯកសារ​ដែល​បាន​រើស​មិន​មែន​លក្ខណះ​ជា​រូបភាព​ត្រឹម​ត្រូវ</string>
+  <string name="edited_osm_file">បានកែប្រែឯកសារ XML របស់ OSM:</string>
+  <string name="invalid_osm_data">មានកំហុសកើតឡើង, យើងមិនអាចទទួលយកទិន្នន័យ OSM ត្រឹមត្រូវ។</string>
   <string name="alert">ព្រមាន</string>
   <string name="install_openmapkit">សូមចុចដើម្បីដំឡើង OpenMapKit!</string>
   <string name="go_back">ត្រឡប់ក្រោយ</string>
   <string name="download_selected">ទាញយកនូវជំរើស</string>
+  <string name="detection_frequency">ប្រេកង់រកឃើញ</string>
+  <string name="record_geopoint">ថត GeoPoint</string>
+  <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
+  <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
   <string name="version_number">ជំនាន់: %s</string>
   <string name="general_settings_about">អំពី</string>
@@ -413,6 +425,9 @@
   <string name="south">ខាងត្បូង %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">ខាងជើង %1$s%2$s%3$s</string>
+  <string name="gdrive_connection_exception">រូបភាព​នេះ​ត្រូវ​បាន​រក្សា​ទុក​នៅ​លើ​ Google Drive និង​មិន​អាច​ត្រូវ​បាន​ចូល​ដំណើរ​ខណៈ​ពេល​ដែល​អ្នក​នៅ​ក្រៅ​បណ្ដាញ​។</string>
+  <string name="not_exactly_one_record_for_this_instance">ពុំមានទិន្នន័យណាមួយដែលត្រូវនឹង instance នេះ!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">មិន​មាន​សំណុំ​បែប​បទ​ទទេរពិតប្រាកដមួយដែលត្រូវគ្នានឹង jr_form_id នេះ។</string>
   <string name="no_form_id_specified">មិនបញ្ជាក់ពី ID របស់ទម្រង់???</string>
   <string name="phone_does_not_support_encryption">ទូរស័ព្ទមិនបានគាំទ្រការអ៊ីនគ្រីប</string>
   <string name="phone_does_not_have_base64_class">ទូរស័ព្ទពុំ​មាន class Base64 ប៉ុន្តែកម្រិត API គឺ %s.</string>
@@ -479,4 +494,7 @@
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
   <string name="use_phone_language">ប្រើប្រាស់ភាសារបស់ទូរស័ព្ទ</string>
+  <string name="share">ចែករំលែក</string>
+  <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
+  <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
 </resources>

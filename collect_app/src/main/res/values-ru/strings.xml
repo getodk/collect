@@ -13,7 +13,6 @@
   <string name="audio_file_error">Аудио-файл не был выбран.</string>
   <string name="audio_file_invalid">Файл: %s не является аудио-файлом.</string>
   <string name="backup">Вернуться \nк предыдущему\nвопросу</string>
-  <string name="barcode_scanner_error">Сканер штрих-кодов не установлен!</string>
   <string name="cancel">Отмена</string>
   <string name="cancel_loading_form">Отмена</string>
   <string name="cancel_location">Отмена</string>

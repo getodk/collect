@@ -13,7 +13,6 @@
   <string name="audio_file_error">Nie został wskazany plik audio.</string>
   <string name="audio_file_invalid">Plik: %s nie jest poprawnym plikiem audio.</string>
   <string name="backup">cofnij do\npoprzedniego\npytania</string>
-  <string name="barcode_scanner_error">Przepraszam, skaner kodu kreskowego nie jest zainstalowany!</string>
   <string name="cancel">Anuluj</string>
   <string name="cancel_loading_form">Anuluj</string>
   <string name="cancel_location">Anuluj</string>

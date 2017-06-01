@@ -14,7 +14,6 @@
   <string name="audio_file_error">Belum ada berkas audio yang dipilih.</string>
   <string name="audio_file_invalid">Berkas: %s bukan termasuk berkas audio.</string>
   <string name="backup">kembali ke\npertanyaan\nsebelumnya</string>
-  <string name="barcode_scanner_error">Maaf, pemindai Barcode belum terpasang!</string>
   <string name="cancel">Batal</string>
   <string name="cancel_loading_form">Batal</string>
   <string name="cancel_location">Batal</string>

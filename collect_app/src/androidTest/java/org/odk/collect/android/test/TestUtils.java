@@ -47,7 +47,7 @@ public final class TestUtils {
             }
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     public static File createTempFile(String content) throws Exception {
