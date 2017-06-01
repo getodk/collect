@@ -209,13 +209,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 getLocationButton.setText(
                         getContext().getString(R.string.geopoint_view_read_only));
             } else {
-                String s = stringAnswer.getText().toString();
-                if (s.length() != 0) {
-                    getLocationButton.setText(
-                            getContext().getString(R.string.view_change_location));
-                } else {
-                    getLocationButton.setText(getContext().getString(R.string.accept_location));
-                }
+                getLocationButton.setText(getContext().getString(
+                        dataAvailable ? R.string.view_change_location : R.string.accept_location));
             }
         } else {
             // if it is read-only, hide the get-location button...
@@ -224,7 +219,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             } else {
                 getLocationButton.setVisibility(View.VISIBLE);
                 getLocationButton.setText(getContext().getString(
-                        dataAvailable ? R.string.accept_location : R.string.accept_location));
+                        dataAvailable ? R.string.view_change_location : R.string.accept_location));
             }
 
             if (useMaps) {
