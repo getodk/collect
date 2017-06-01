@@ -344,7 +344,6 @@
   <string name="map_basemap_behavior">Wybierz mapę bazową</string>
   <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
   <string name="save_point">Zapisz GeoPoint</string>
-  <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
   <string name="get_shape">Zacznij GeoShape</string>
   <string name="get_trace">Zacznij GeoShape</string>
