@@ -24,13 +24,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -40,14 +38,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
-
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -60,49 +56,14 @@ import timber.log.Timber;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointGoogleMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements LocationListener,
         OnMarkerDragListener, OnMapLongClickListener {
-
-    private static final String LOCATION_COUNT = "locationCount";
 
     private GoogleMap map;
     private MarkerOptions markerOptions;
     private Marker marker;
     private LatLng latLng;
-
-    private TextView locationStatus;
     private TextView locationInfo;
-
-    private LocationManager locationManager;
-
-    private Location location;
-    private Button reloadLocation;
-
-    private boolean isDragged = false;
-    private Button showLocation;
-    private boolean gpsOn = false;
-    private boolean networkOn = false;
-
-    private int locationCount = 0;
-
-    private MapHelper helper;
-    //private KmlLayer kk;
-
-    private AlertDialog zoomDialog;
-    private View zoomDialogView;
-
-    private Button zoomPointButton;
-    private Button zoomLocationButton;
-
-    private boolean setClear = false;
-    private boolean captureLocation = false;
-    private Boolean foundFirstLocation = false;
-    private int locationCountNum = 0;
-    private int locationCountFoundLimit = 1;
-    private Boolean readOnly = false;
-    private Boolean draggable = false;
-    private Boolean intentDraggable = false;
-    private Boolean locationFromIntent = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,9 +175,9 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        reloadLocation = (Button) findViewById(R.id.reload_location);
-        reloadLocation.setEnabled(false);
-        reloadLocation.setOnClickListener(new View.OnClickListener() {
+        reloadLocationButton = (Button) findViewById(R.id.reload_location);
+        reloadLocationButton.setEnabled(false);
+        reloadLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (marker != null) {
@@ -240,10 +201,10 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
         });
 
         // Focuses on marked location
-        showLocation = ((Button) findViewById(R.id.show_location));
-        //showLocation.setClickable(false);
-        showLocation.setEnabled(false);
-        showLocation.setOnClickListener(new OnClickListener() {
+        showLocationButton = ((Button) findViewById(R.id.show_location));
+        //showLocationButton.setClickable(false);
+        showLocationButton.setEnabled(false);
+        showLocationButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 showZoomDialog();
@@ -285,10 +246,10 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
                     marker.remove();
                 }
                 if (location != null) {
-                    reloadLocation.setEnabled(true);
+                    reloadLocationButton.setEnabled(true);
                     // locationStatus.setVisibility(View.VISIBLE);
                 }
-                // reloadLocation.setEnabled(true);
+                // reloadLocationButton.setEnabled(true);
                 locationInfo.setVisibility(View.VISIBLE);
                 locationStatus.setVisibility(View.VISIBLE);
                 latLng = null;
@@ -325,7 +286,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
                 double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
                 latLng = new LatLng(location[0], location[1]);
                 captureLocation = true;
-                reloadLocation.setEnabled(false);
+                reloadLocationButton.setEnabled(false);
                 draggable = false; // If data loaded, must clear first
                 locationFromIntent = true;
 
@@ -335,7 +296,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
         if (latLng != null) {
             locationInfo.setVisibility(View.GONE);
             locationStatus.setVisibility(View.GONE);
-            showLocation.setEnabled(true);
+            showLocationButton.setEnabled(true);
             markerOptions.position(latLng);
             marker = map.addMarker(markerOptions);
             captureLocation = true;
@@ -368,7 +329,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
                         this);
             }
         }
-        //showLocation.setClickable(marker != null);
+        //showLocationButton.setClickable(marker != null);
         if (!gpsOn && !networkOn) {
             showGPSDisabledAlertToUser();
         } else {
@@ -391,18 +352,18 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
     public void onLocationChanged(Location location) {
         this.location = location;
         if (setClear) {
-            reloadLocation.setEnabled(true);
+            reloadLocationButton.setEnabled(true);
         }
         if (this.location != null) {
 
             if (locationCountNum >= locationCountFoundLimit) {
-                showLocation.setEnabled(true);
+                showLocationButton.setEnabled(true);
                 if (!captureLocation & !setClear) {
                     latLng = new LatLng(this.location.getLatitude(), this.location.getLongitude());
                     markerOptions.position(latLng);
                     marker = map.addMarker(markerOptions);
                     captureLocation = true;
-                    reloadLocation.setEnabled(true);
+                    reloadLocationButton.setEnabled(true);
                 }
                 if (!foundFirstLocation) {
                     //zoomToPoint();
@@ -470,7 +431,7 @@ public class GeoPointGoogleMapActivity extends FragmentActivity implements Locat
         } else {
             marker.setPosition(latLng);
         }
-        showLocation.setEnabled(true);
+        showLocationButton.setEnabled(true);
         marker.setDraggable(true);
         isDragged = true;
         setClear = false;

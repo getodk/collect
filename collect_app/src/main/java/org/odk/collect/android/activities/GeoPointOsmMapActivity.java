@@ -25,13 +25,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.spatial.MapHelper;
@@ -54,51 +52,16 @@ import java.util.List;
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
+public class GeoPointOsmMapActivity extends GeoPointMapActivity implements LocationListener,
         Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
-    private static final String LOCATION_COUNT = "locationCount";
 
-    //private GoogleMap map;
+
     private MapView map;
-
     private Handler handler = new Handler();
     private Marker marker;
-
     private GeoPoint latLng;
-
-    private TextView locationStatus;
-
-    private LocationManager locationManager;
-
-    private Location location;
-    private Button reloadLocationButton;
-
-    private boolean captureLocation = false;
-    private boolean setClear = false;
-    private boolean isDragged = false;
-    private Button showLocationButton;
-
-    private boolean gpsOn = false;
-    private boolean networkOn = false;
-
-    private int locationCount = 0;
-
-    private MapHelper helper;
-
-    private AlertDialog zoomDialog;
-    private View zoomDialogView;
-
-    private Button zoomPointButton;
-    private Button zoomLocationButton;
-
     public MyLocationNewOverlay myLocationOverlay;
 
-    private Boolean readOnly = false;
-    private Boolean draggable = false;
-    private Boolean intentDraggable = false;
-    private Boolean locationFromIntent = false;
-    private int locationCountNum = 0;
-    private Boolean foundFirstLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,7 +377,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             reloadLocationButton.setEnabled(true);
         }
         if (this.location != null) {
-            int locationCountFoundLimit = 1;
             if (locationCountNum >= locationCountFoundLimit) {
                 showLocationButton.setEnabled(true);
                 if (!captureLocation & !setClear) {
