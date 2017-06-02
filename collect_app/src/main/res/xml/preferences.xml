@@ -123,7 +123,7 @@
                 android:defaultValue="true"
                 android:key="high_resolution"
                 android:summary="@string/high_resolution_summary"
-                android:title="@string/high_resolution_preference_title" />
+                android:title="@string/high_resolution_title" />
         </PreferenceCategory>
 
         <PreferenceCategory
