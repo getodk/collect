@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -76,12 +77,10 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private LocationManager locationManager;
 
     private Location location;
-    private Button acceptLocation;
-    private Button reloadLocation;
+    private ImageButton reloadLocation;
 
     private boolean isDragged = false;
-    private Button showLocation;
-    private Button layers;
+    private ImageButton showLocation;
     private boolean gpsOn = false;
     private boolean networkOn = false;
 
@@ -95,8 +94,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
     private Button zoomPointButton;
     private Button zoomLocationButton;
-
-    private Button clearPointButton;
 
     private boolean setClear = false;
     private boolean captureLocation = false;
@@ -207,7 +204,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        acceptLocation = (Button) findViewById(R.id.accept_location);
+        ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
 
         acceptLocation.setOnClickListener(new OnClickListener() {
             @Override
@@ -218,7 +215,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             }
         });
 
-        reloadLocation = (Button) findViewById(R.id.reload_location);
+        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
         reloadLocation.setEnabled(false);
         reloadLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,7 +241,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         });
 
         // Focuses on marked location
-        showLocation = ((Button) findViewById(R.id.show_location));
+        showLocation = (ImageButton) findViewById(R.id.show_location);
         //showLocation.setClickable(false);
         showLocation.setEnabled(false);
         showLocation.setOnClickListener(new OnClickListener() {
@@ -255,7 +252,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         });
 
         // Menu Layer Toggle
-        layers = ((Button) findViewById(R.id.layer_menu));
+        ImageButton layers = (ImageButton) findViewById(R.id.layer_menu);
         layers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +278,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             }
         });
 
-        clearPointButton = (Button) findViewById(R.id.clear);
+        ImageButton clearPointButton = (ImageButton) findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
