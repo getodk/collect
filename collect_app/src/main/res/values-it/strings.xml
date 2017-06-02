@@ -493,5 +493,5 @@
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>
   <string name="no_time_selected">Nessun orario selezionato</string>
-  <string name="use_phone_language">Usa la lingua del telefono</string>
+  <string name="use_device_language">Usa la lingua del telefono</string>
 </resources>

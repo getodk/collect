@@ -502,7 +502,7 @@
 <string name="select_time">Select time</string>
 <string name="no_date_selected">No date selected</string>
 <string name="no_time_selected">No time selected</string>
-<string name="use_phone_language">Use phone language</string>
+<string name="use_device_language">Use device language</string>
 <string name="import_settings">Import/Export settings</string>
 <string name="qr_code">QR code</string>
 <string name="scan_qrcode">Scan code from other device</string>
@@ -542,7 +542,11 @@
 <string name="form_management_preferences">Form management</string>
 <string name="form_submission_category">Form submission</string>
 <string name="form_filling_category">Form filling</string>
-<string name="high_resolution_preference_title">Hi-res video</string>
+<string name="high_resolution_preference_title">High res video</string>
 <string name="form_import_category">Form import</string>
 <string name="user_and_device_identity_title">User and device identity</string>
+<string name="constraint_behavior_title">Constraint processing</string>
+<string name="show_splash_title">Splash screen</string>
+<string name="server_settings_title">Server</string>
+<string name="type">Type</string>
 </resources>
