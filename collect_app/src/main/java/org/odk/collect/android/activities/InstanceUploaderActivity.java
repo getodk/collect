@@ -31,15 +31,26 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 
+import org.odk.collect.android.utilities.ResponseMessageParser;
+import org.odk.collect.android.utilities.WebUtils;
+import org.opendatakit.httpclientandroidlib.HttpEntity;
+import org.opendatakit.httpclientandroidlib.HttpResponse;
+import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
+import org.opendatakit.httpclientandroidlib.impl.client.HttpClientBuilder;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -58,6 +69,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
     private static final String TO_SEND = "tosend";
+    private static final String URL_PATH_SEP = "/";
 
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
@@ -255,7 +267,30 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                                 results.getString(
                                         results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
+                        String defaultSysLanguage = Locale.getDefault().getLanguage();
+
+                        ResponseMessageParser messageParser = null;
+
+                        // prepare response
+                        HttpResponse response = null;
+                        String msg = "";
+
+                        try {
+                            HttpClient client = HttpClientBuilder.create().build();
+                            HttpGet request = new HttpGet(getServerSubmissionURL());
+                            response = client.execute(request);
+                            HttpEntity httpEntity = response.getEntity();
+                            messageParser = new ResponseMessageParser(httpEntity);
+                            msg = messageParser.getMessageResponse().toString();
+                        } catch (IOException e) {
+                            Timber.e(e);
+                        }
+
+                        if (msg.equals(result.get(id)) && !"en".equals(defaultSysLanguage)) {
+                            queryMessage.append(name + " - " + getString(R.string.success) +"\n\n");
+                        } else {
+                            queryMessage.append(name + " - " + result.get(id) + "\n\n");
+                        }
                     }
                 }
             } catch (SQLException e) {
@@ -273,6 +308,29 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         createAlertDialog(message.toString().trim());
     }
 
+    private String getServerSubmissionURL() {
+
+        Collect app = Collect.getInstance();
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
+                Collect.getInstance());
+        String serverBase = settings.getString(PreferenceKeys.KEY_SERVER_URL,
+                app.getString(R.string.default_server_url));
+
+        if (serverBase.endsWith(URL_PATH_SEP)) {
+            serverBase = serverBase.substring(0, serverBase.length() - 1);
+        }
+
+        // NOTE: /submission must not be translated! It is the well-known path on the server.
+        String submissionPath = settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
+                app.getString(R.string.default_odk_submission));
+
+        if (!submissionPath.startsWith(URL_PATH_SEP)) {
+            submissionPath = URL_PATH_SEP + submissionPath;
+        }
+
+        return serverBase + submissionPath;
+    }
 
     @Override
     public void progressUpdate(int progress, int total) {
