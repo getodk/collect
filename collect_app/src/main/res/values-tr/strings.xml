@@ -11,7 +11,6 @@
   <string name="altitude">Meridyen</string>
   <string name="audio_file_error">Ses dosyası belirlenmedi.</string>
   <string name="audio_file_invalid">%s dosyasi geçerli bir ses dosyasi degildir!</string>
-  <string name="barcode_scanner_error">Barkod okuyucu tanimlanamadi!</string>
   <string name="cancel">Vazgeç</string>
   <string name="cancel_loading_form">Vazgeç</string>
   <string name="cancel_location">Vazgeç</string>

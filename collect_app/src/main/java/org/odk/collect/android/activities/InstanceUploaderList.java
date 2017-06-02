@@ -113,7 +113,6 @@ public class InstanceUploaderList extends InstanceListActivity
                         // items selected
                         uploadSelectedFiles();
                         InstanceUploaderList.this.getListView().clearChoices();
-                        uploadButton.setEnabled(false);
                     } else {
                         // no items selected
                         ToastUtils.showLongToast(R.string.noselect_error);
@@ -139,7 +138,12 @@ public class InstanceUploaderList extends InstanceListActivity
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         getListView().setItemsCanFocus(false);
-        uploadButton.setEnabled(false);
+        getListView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                uploadButton.setEnabled(areCheckedItems());
+            }
+        });
 
         // set title
 
@@ -279,13 +283,6 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle bundle) {
-        Timber.d("onRestoreInstanceState");
-        super.onRestoreInstanceState(bundle);
-        uploadButton.setEnabled(areCheckedItems());
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(SHOW_ALL_MODE, showAllMode);
@@ -334,7 +331,6 @@ public class InstanceUploaderList extends InstanceListActivity
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
         checkPreviouslyCheckedItems();
-        uploadButton.setEnabled(areCheckedItems());
     }
 
     private Cursor getCursor() {
@@ -350,7 +346,6 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showUnsent() {
         showAllMode = false;
-        Cursor c = instancesDao.getFinalizedInstancesCursor(getSortingOrder());
         Cursor old = listAdapter.getCursor();
         try {
             listAdapter.changeCursor(getCursor());
@@ -365,7 +360,6 @@ public class InstanceUploaderList extends InstanceListActivity
 
     private void showAll() {
         showAllMode = true;
-        Cursor c = instancesDao.getAllCompletedUndeletedInstancesCursor(getSortingOrder());
         Cursor old = listAdapter.getCursor();
         try {
             listAdapter.changeCursor(getCursor());

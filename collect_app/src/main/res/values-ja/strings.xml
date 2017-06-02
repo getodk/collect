@@ -14,7 +14,6 @@
   <string name="audio_file_error">オーディオファイルが指定されていません。</string>
   <string name="audio_file_invalid">ファイル: %s は正しいオーディオファイルではありません。</string>
   <string name="backup">前の\nプロンプト\nに戻る</string>
-  <string name="barcode_scanner_error">申し訳ありません、バーコードスキャナーがインストールされていません!</string>
   <string name="cancel">キャンセル</string>
   <string name="cancel_loading_form">キャンセル</string>
   <string name="cancel_location">キャンセル</string>
@@ -494,4 +493,27 @@
   <string name="no_date_selected">日付が選択されていません</string>
   <string name="no_time_selected">時刻が選択されていません</string>
   <string name="use_phone_language">電話の言語を使用する</string>
+  <string name="import_settings">設定をインポート/エクスポート</string>
+  <string name="qr_code">QR コード</string>
+  <string name="scan_qrcode">他のデバイスからコードをスキャン</string>
+  <string name="successfully_imported_settings">設定を正常にインポートしました</string>
+  <string name="encoding_max_limit">最大文字数制限に達しました: すべての設定の QR コードを生成することができません</string>
+  <string name="share">共有</string>
+  <string name="select_qrcode">SD カードからコードを選択</string>
+  <string name="turn_on_flashlight">フラッシュライトをオンにする</string>
+  <string name="turn_off_flashlight">フラッシュライトをオフにする</string>
+  <string name="qrcode_with_both_passwords">この QR コードには、管理者パスワードとサーバーパスワードが含まれています。 慎重に扱ってください。 \n(タップするとパスワードを削除します)</string>
+  <string name="qrcode_without_passwords">この QR コードには、管理者パスワードまたはサーバーパスワードは含まれていません。 \n(タップするとパスワードを追加します)</string>
+  <string name="qrcode_with_admin_password">この QR コードには管理者パスワードが含まれています。 慎重に扱ってください。 \n(タップするとパスワードを削除します)</string>
+  <string name="qrcode_with_server_password">この QR コードにはサーバーのパスワードが含まれています。 \n(タップするとパスワードを削除します)</string>
+  <string name="import_export_settings">設定をインポート/エクスポート</string>
+  <string name="qrcode_scanner_prompt">四角の中に QR コードを入れてください</string>
+  <string name="server_password">サーバーパスワード</string>
+  <string name="include_password_dialog">パスワードがコードに含まれます</string>
+  <string name="generate">生成</string>
+  <string name="invalid_qrcode">QR コードに有効な設定が含まれていません</string>
+  <string name="share_qrcode">QR コードを共有</string>
+  <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
+  <string name="request_permission">このアプリケーションはカメラのアクセス許可が必要です。</string>
+  <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>
 </resources>

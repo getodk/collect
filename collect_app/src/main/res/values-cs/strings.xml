@@ -13,7 +13,6 @@
   <string name="audio_file_error">Nebyl vybrán žádný audio soubor</string>
   <string name="audio_file_invalid">Soubor: %s není platný audio soubor.</string>
   <string name="backup">zpět k\npředchozí\notázce</string>
-  <string name="barcode_scanner_error">Scanner čárových kódů není instalován!</string>
   <string name="cancel">Zrušit</string>
   <string name="cancel_loading_form">Zrušit</string>
   <string name="cancel_location">Zrušit</string>

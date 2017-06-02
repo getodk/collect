@@ -13,7 +13,6 @@
   <string name="audio_file_error">Audio file e specifikuar nuk gjendet</string>
   <string name="audio_file_invalid">File: %s nuk është një audio file funksionale</string>
   <string name="backup">Rikthehu tek \nprevious\nprompt</string>
-  <string name="barcode_scanner_error">Kujdes, skanuesi i barkodeve nuk është i instaluar</string>
   <string name="cancel">Anullo</string>
   <string name="cancel_loading_form">Anullo</string>
   <string name="cancel_location">Anullo</string>
