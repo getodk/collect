@@ -538,4 +538,10 @@
 <string name="wifi_autosend">Wifi only</string>
 <string name="cellular_autosend">Cellular only</string>
 <string name="wifi_cellular_autosend">Wifi or cellular</string>
+<string name="map_basemap_behavior_title">Basemap</string>
+<string name="form_management_preferences">Form management</string>
+<string name="form_submission_category">Form submission</string>
+<string name="form_filling_category">Form filling</string>
+<string name="high_resolution_preference_title">Hi-res video</string>
+<string name="form_import_category">Form import</string>
 </resources>
