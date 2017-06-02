@@ -20,10 +20,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -44,9 +42,6 @@ import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
-import java.text.DecimalFormat;
-import java.util.List;
-
 import timber.log.Timber;
 
 /**
@@ -56,8 +51,8 @@ import timber.log.Timber;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements LocationListener,
-        OnMarkerDragListener, OnMapLongClickListener {
+public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements OnMarkerDragListener,
+        OnMapLongClickListener {
 
     private GoogleMap map;
     private MarkerOptions markerOptions;
@@ -91,19 +86,6 @@ public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements Lo
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
-
     private void returnLocation() {
         Intent i = new Intent();
         if (setClear || (readOnly && latLng == null)) {
@@ -127,19 +109,6 @@ public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements Lo
             setResult(RESULT_OK, i);
         }
         finish();
-    }
-
-
-    private String truncateFloat(float f) {
-        return new DecimalFormat("#.##").format(f);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
     }
 
     private void setupMap(GoogleMap googleMap) {
@@ -308,36 +277,7 @@ public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements Lo
         upMyLocationOverlayLayers();
     }
 
-    private void upMyLocationOverlayLayers() {
-        // make sure we have a good location provider before continuing
-        locationCountNum = 0;
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                locationCountFoundLimit = 0;
-            } else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                // Only if GPS Provider is not available use network location. bug (well know
-                // android bug) http://stackoverflow
-                // .com/questions/6719207/locationmanager-returns-old-cached-wifi-location-with
-                // -current-timestamp
-                networkOn = true;
-                locationCountFoundLimit =
-                        1; // increase count due to network location bug (well know android bug)
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                        this);
-            }
-        }
-        //showLocationButton.setClickable(marker != null);
-        if (!gpsOn && !networkOn) {
-            showGPSDisabledAlertToUser();
-        } else {
-            overlayMyLocationLayers();
-        }
-    }
-
-    private void overlayMyLocationLayers() {
+    protected void overlayMyLocationLayers() {
         if (draggable & !readOnly) {
             map.setOnMarkerDragListener(this);
             map.setOnMapLongClickListener(this);
@@ -386,21 +326,6 @@ public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements Lo
 
     }
 
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
     @Override
     public void onMarkerDrag(Marker arg0) {
 
@@ -438,14 +363,14 @@ public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements Lo
         captureLocation = true;
     }
 
-    private void zoomToLocation() {
+    protected void zoomToLocation() {
         LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
         if (location != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(here, 16));
         }
     }
 
-    private void zoomToPoint() {
+    protected void zoomToPoint() {
         if (latLng != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 16));
         }
@@ -497,24 +422,5 @@ public class GeoPointGoogleMapActivity extends GeoPointMapActivity implements Lo
 
     }
 
-    private void showGPSDisabledAlertToUser() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.enable_gps),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                startActivityForResult(
-                                        new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
+
 }

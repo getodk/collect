@@ -20,11 +20,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
@@ -44,16 +42,13 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
 /**
  * Version of the GeoPointGoogleMapActivity that uses the new OSMDDroid
  *
  * @author jonnordling@gmail.com
  */
-public class GeoPointOsmMapActivity extends GeoPointMapActivity implements LocationListener,
-        Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
+public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Marker.OnMarkerDragListener,
+        MapEventsReceiver, IRegisterReceiver {
 
 
     private MapView map;
@@ -252,14 +247,6 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
         outState.putInt(LOCATION_COUNT, locationCount);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
-    }
-
 
     @Override
     protected void onResume() {
@@ -272,30 +259,7 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
         }
     }
 
-    private void upMyLocationOverlayLayers() {
-        // make sure we have a good location provider before continuing
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            } else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                networkOn = true;
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                        this);
-            }
-        }
-
-        showLocationButton.setClickable(marker != null);
-
-        if (!gpsOn && !networkOn) {
-            showGPSDisabledAlertToUser();
-        } else {
-            overlayMyLocationLayers();
-        }
-    }
-
-    private void overlayMyLocationLayers() {
+    protected void overlayMyLocationLayers() {
         map.getOverlays().add(myLocationOverlay);
         if (draggable & !readOnly) {
             if (marker != null) {
@@ -310,7 +274,7 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
         myLocationOverlay.enableMyLocation();
     }
 
-    private void zoomToPoint() {
+    protected void zoomToPoint() {
         if (latLng != null) {
             handler.postDelayed(new Runnable() {
                 public void run() {
@@ -323,22 +287,9 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
-
     private void returnLocation() {
         Intent i = new Intent();
         if (setClear || (readOnly && latLng == null)) {
@@ -363,11 +314,6 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
         }
         finish();
     }
-
-    private String truncateFloat(float f) {
-        return new DecimalFormat("#.##").format(f);
-    }
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -419,12 +365,6 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
         }
     }
 
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
     @Override
     public void onMarkerDrag(Marker arg0) {
 
@@ -444,18 +384,6 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
     public void onMarkerDragStart(Marker arg0) {
         //stopGeolocating();
     }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
@@ -524,7 +452,7 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
         zoomDialog.show();
     }
 
-    private void zoomToLocation() {
+    protected void zoomToLocation() {
         if (myLocationOverlay.getMyLocation() != null) {
             final GeoPoint location = new GeoPoint(this.location.getLatitude(),
                     this.location.getLongitude());
@@ -536,27 +464,6 @@ public class GeoPointOsmMapActivity extends GeoPointMapActivity implements Locat
                 }
             }, 200);
         }
-    }
-
-    private void showGPSDisabledAlertToUser() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.enable_gps),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                startActivityForResult(
-                                        new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
     }
 
     @Override
