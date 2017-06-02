@@ -544,4 +544,5 @@
 <string name="form_filling_category">Form filling</string>
 <string name="high_resolution_preference_title">Hi-res video</string>
 <string name="form_import_category">Form import</string>
+<string name="user_and_device_identity_title">User and device identity</string>
 </resources>
