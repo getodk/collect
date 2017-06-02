@@ -437,5 +437,5 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
-  <string name="use_phone_language">ใช้ภาษาเดียวกับค่าที่ตั้งในโทรศัพท์</string>
+  <string name="use_device_language">ใช้ภาษาเดียวกับค่าที่ตั้งในโทรศัพท์</string>
 </resources>

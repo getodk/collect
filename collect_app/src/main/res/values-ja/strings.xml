@@ -492,7 +492,7 @@
   <string name="select_time">時間を選択</string>
   <string name="no_date_selected">日付が選択されていません</string>
   <string name="no_time_selected">時刻が選択されていません</string>
-  <string name="use_phone_language">電話の言語を使用する</string>
+  <string name="use_device_language">電話の言語を使用する</string>
   <string name="import_settings">設定をインポート/エクスポート</string>
   <string name="qr_code">QR コード</string>
   <string name="scan_qrcode">他のデバイスからコードをスキャン</string>

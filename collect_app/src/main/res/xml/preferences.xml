@@ -3,7 +3,7 @@
     <PreferenceScreen
         android:icon="@drawable/server"
         android:key="@string/server_preferences"
-        android:title="@string/server_preferences">
+        android:title="@string/server_settings_title">
         <ListPreference
             android:id="@+id/protocol"
             android:defaultValue="odk_default"
@@ -11,7 +11,7 @@
             android:entries="@array/protocol_entries"
             android:entryValues="@array/protocol_entry_values"
             android:key="protocol"
-            android:title="@string/protocol" />
+            android:title="@string/type" />
         <PreferenceScreen
             android:key="protocol_settings"
             android:title="@string/change_protocol_settings_default" />
@@ -47,7 +47,7 @@
             android:defaultValue="false"
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
-            android:title="@string/show_splash" />
+            android:title="@string/show_splash_title" />
         <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"
@@ -117,7 +117,7 @@
                 android:entries="@array/constraint_behavior_entries"
                 android:entryValues="@array/constraint_behavior_entry_values"
                 android:key="constraint_behavior"
-                android:title="@string/constraint_behavior" />
+                android:title="@string/constraint_behavior_title" />
             <CheckBoxPreference
                 android:id="@+id/high_resolution"
                 android:defaultValue="true"

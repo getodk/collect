@@ -492,7 +492,7 @@
   <string name="select_time">Обрати час</string>
   <string name="no_date_selected">Дата не обрана</string>
   <string name="no_time_selected">Час не обраний</string>
-  <string name="use_phone_language">Використовувати мову телефону</string>
+  <string name="use_device_language">Використовувати мову телефону</string>
   <string name="import_settings">Імпорт/Експорт налаштувань</string>
   <string name="qr_code">QR код</string>
   <string name="scan_qrcode">Сканувати з іншого пристрою</string>
