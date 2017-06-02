@@ -67,15 +67,11 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private GeoPoint latLng;
 
     private TextView locationStatus;
-    private TextView locationInfo;
 
     private LocationManager locationManager;
-    private MapEventsOverlay overlayEventos;
 
     private Location location;
-    private Button saveLocationButton;
     private Button reloadLocationButton;
-    private Button layersButton;
 
     private boolean captureLocation = false;
     private boolean setClear = false;
@@ -95,8 +91,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private Button zoomPointButton;
     private Button zoomLocationButton;
 
-    private Button clearPointButton;
-
     public MyLocationNewOverlay myLocationOverlay;
 
     private Boolean readOnly = false;
@@ -104,7 +98,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private Boolean intentDraggable = false;
     private Boolean locationFromIntent = false;
     private int locationCountNum = 0;
-    private int locationCountFoundLimit = 1;
     private Boolean foundFirstLocation = false;
 
     @Override
@@ -141,12 +134,12 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }, 100);
 
         locationStatus = (TextView) findViewById(R.id.location_status);
-        locationInfo = (TextView) findViewById(R.id.location_info);
+        TextView locationInfo = (TextView) findViewById(R.id.location_info);
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        saveLocationButton = (Button) findViewById(R.id.accept_location);
+        Button saveLocationButton = (Button) findViewById(R.id.accept_location);
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -190,7 +183,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         showLocationButton.setClickable(false);
 
         // Menu Layer Toggle
-        layersButton = ((Button) findViewById(R.id.layer_menu));
+        Button layersButton = ((Button) findViewById(R.id.layer_menu));
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,7 +216,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
         });
 
-        clearPointButton = (Button) findViewById(R.id.clear);
+        Button clearPointButton = (Button) findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,8 +339,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 marker.setOnMarkerDragListener(this);
                 marker.setDraggable(true);
             }
-            overlayEventos = new MapEventsOverlay(this);
-            map.getOverlays().add(overlayEventos);
+            MapEventsOverlay overlayEvents = new MapEventsOverlay(this);
+            map.getOverlays().add(overlayEvents);
         }
 
         myLocationOverlay.setEnabled(true);
@@ -421,6 +414,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             reloadLocationButton.setEnabled(true);
         }
         if (this.location != null) {
+            int locationCountFoundLimit = 1;
             if (locationCountNum >= locationCountFoundLimit) {
                 showLocationButton.setEnabled(true);
                 if (!captureLocation & !setClear) {

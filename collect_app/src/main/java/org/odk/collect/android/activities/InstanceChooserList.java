@@ -94,6 +94,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
                     getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                     getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
             };
+            ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
         setupAdapter();
 

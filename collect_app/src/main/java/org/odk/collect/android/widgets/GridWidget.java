@@ -19,11 +19,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.TypedValue;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -93,9 +91,6 @@ public class GridWidget extends QuestionWidget {
     View[] imageViews;
     AudioHandler[] audioHandlers;
 
-    // The number of columns in the grid, can be user defined (<= 0 if unspecified)
-    int numColumns;
-
     // Whether to advance immediately after the image is clicked
     boolean quickAdvance;
 
@@ -128,29 +123,19 @@ public class GridWidget extends QuestionWidget {
         // they are chosen automatically
         int maxColumnWidth = -1;
         int maxCellHeight = -1;
-        this.numColumns = numColumns;
+
         for (int i = 0; i < items.size(); i++) {
             imageViews[i] = new ImageView(getContext());
         }
         this.quickAdvance = quickAdvance;
 
-        Display display =
-                ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE))
-                        .getDefaultDisplay();
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
 
-        if (display.getOrientation() % 2 == 1) {
-            // rotated 90 degrees...
-            int temp = screenWidth;
-            screenWidth = screenHeight;
-            screenHeight = temp;
-        }
-
         if (numColumns > 0) {
             resizeWidth = ((screenWidth - 2 * HORIZONTAL_PADDING - SCROLL_WIDTH
-                    - (IMAGE_PADDING + SPACING) * numColumns) / numColumns);
+                    - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
         }
 
         // Build view

@@ -15,9 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -26,13 +24,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 
 /**
@@ -68,21 +66,10 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBarcode", "click",
                                 formEntryPrompt.getIndex());
-                Intent i = new Intent("com.google.zxing.client.android.SCAN");
-                try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.BARCODE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(
-                                    R.string.barcode_scanner_error),
-                            Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
-                }
+
+                Collect.getInstance().getFormController()
+                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+                new IntentIntegrator((Activity) getContext()).initiateScan();
             }
         });
 

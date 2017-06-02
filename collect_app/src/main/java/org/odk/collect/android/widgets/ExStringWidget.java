@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
@@ -153,18 +154,19 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
-                try {
-                    ExternalAppsUtils.populateParameters(i, exParams,
-                            formEntryPrompt.getIndex().getReference());
+                if (isActivityAvailable(i)) {
+                    try {
+                        ExternalAppsUtils.populateParameters(i, exParams,
+                                formEntryPrompt.getIndex().getReference());
 
-                    Collect.getInstance().getFormController().setIndexWaitingForData(
-                            formEntryPrompt.getIndex());
-                    fireActivity(i);
-                } catch (ExternalParamsException e) {
-                    Timber.e(e);
-                    onException(e.getMessage());
-                } catch (ActivityNotFoundException e) {
-                    Timber.e(e);
+                        Collect.getInstance().getFormController().setIndexWaitingForData(
+                                formEntryPrompt.getIndex());
+                        fireActivity(i);
+                    } catch (ExternalParamsException e) {
+                        Timber.e(e);
+                        onException(e.getMessage());
+                    }
+                } else {
                     onException(errorString);
                 }
             }
@@ -184,6 +186,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                         toastText, Toast.LENGTH_SHORT)
                         .show();
                 ExStringWidget.this.answer.requestFocus();
+                Timber.e(toastText);
             }
         });
 
@@ -291,5 +294,10 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         launchIntentButton.cancelLongPress();
     }
 
-
+    private boolean isActivityAvailable(Intent intent) {
+        return getContext()
+                .getPackageManager()
+                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                .size() > 0;
+    }
 }

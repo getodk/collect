@@ -13,7 +13,6 @@
   <string name="audio_file_error">Không có file âm thanh nào được xác định.</string>
   <string name="audio_file_invalid">File: %s không phải là file âm thanh hợp lệ.</string>
   <string name="backup">quay về \nprevious\nprompt</string>
-  <string name="barcode_scanner_error">Xin lỗi, máy quét mã vạch không được cài dặt!</string>
   <string name="cancel">Huỷ</string>
   <string name="cancel_loading_form">Huỷ</string>
   <string name="cancel_location">Huỷ</string>

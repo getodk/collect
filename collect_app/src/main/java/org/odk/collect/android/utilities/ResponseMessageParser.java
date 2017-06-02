@@ -46,7 +46,6 @@ public class ResponseMessageParser {
         return this.messageResponse;
     }
 
-
     public String parseXMLMessage() {
         String message = null;
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -54,8 +53,10 @@ public class ResponseMessageParser {
         try {
             builder = dbFactory.newDocumentBuilder();
             Document doc = null;
-            try {
-                String httpEntityString = EntityUtils.toString(httpEntity);
+
+            String httpEntityString = EntityUtils.toString(httpEntity);
+
+            if (httpEntityString.contains("OpenRosaResponse")) {
                 doc = builder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
                 doc.getDocumentElement().normalize();
 
@@ -64,15 +65,13 @@ public class ResponseMessageParser {
                 } else {
                     isValid = false;
                 }
-                return message;
-
-            } catch (SAXException | IOException e) {
-                Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
-                isValid = false;
             }
 
             return message;
 
+        } catch (SAXException | IOException e) {
+            Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
+            isValid = false;
         } catch (ParserConfigurationException e) {
             Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
             isValid = false;
@@ -80,4 +79,6 @@ public class ResponseMessageParser {
 
         return message;
     }
+
+
 }

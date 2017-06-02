@@ -178,7 +178,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 "show");
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
-        DialogInterface.OnClickListener geopointButtonListener =
+        DialogInterface.OnClickListener geoPointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -205,10 +205,10 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         locationDialog.setTitle(getString(R.string.getting_location));
         locationDialog.setMessage(getString(R.string.please_wait_long));
         locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
-                geopointButtonListener);
+                geoPointButtonListener);
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
-                geopointButtonListener);
+                geoPointButtonListener);
     }
 
 
