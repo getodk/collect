@@ -154,12 +154,12 @@ public abstract class GeoPointMapActivity extends FragmentActivity implements Lo
         alert.show();
     }
 
-    abstract public void onLocationChanged(Location location);
+    public abstract void onLocationChanged(Location location);
 
-    abstract protected void zoomToLocation();
+    protected abstract void zoomToLocation();
 
-    abstract protected void zoomToPoint();
+    protected abstract void zoomToPoint();
 
-    abstract public void showZoomDialog();
+    public abstract void showZoomDialog();
 
 }
