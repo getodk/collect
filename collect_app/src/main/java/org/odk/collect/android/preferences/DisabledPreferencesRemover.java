@@ -59,6 +59,8 @@ class DisabledPreferencesRemover {
                 for (int j = 0; j < pc.getPreferenceCount(); ++j) {
                     map.put(pc.getPreference(j), pc);
                 }
+            } else {
+                map.put(p, screen);
             }
         }
         return map;
