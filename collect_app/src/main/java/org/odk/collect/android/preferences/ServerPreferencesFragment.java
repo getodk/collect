@@ -1,10 +1,12 @@
 package org.odk.collect.android.preferences;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -32,20 +34,23 @@ import org.odk.collect.android.utilities.WebUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 
-public class AggregatePreferencesFragment extends PreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
+
+public class ServerPreferencesFragment extends PreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
     protected EditTextPreference passwordPreference;
     protected boolean credentialsHaveChanged = false;
-
+    protected EditTextPreference submissionUrlPreference;
+    protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;
     private List<String> urlList;
+    private ListPreference selectedGoogleAccountPreference;
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void addAggregatePreferences() {
         addPreferencesFromResource(R.xml.aggregate_preferences);
 
         serverUrlPreference = (EditTextPreference) findPreference(
@@ -85,6 +90,73 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
         passwordPreference.getEditText().setFilters(
                 new InputFilter[]{new ControlCharacterFilter()});
     }
+
+    public void addGooglePreferences() {
+        addPreferencesFromResource(R.xml.google_preferences);
+
+        selectedGoogleAccountPreference = (ListPreference) findPreference(
+                PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        selectedGoogleAccountPreference.setOnPreferenceChangeListener(this);
+        selectedGoogleAccountPreference.setSummary(selectedGoogleAccountPreference.getValue());
+
+        EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
+                PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
+        googleSheetsUrlPreference.setOnPreferenceChangeListener(this);
+
+        String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
+        if (currentGoogleSheetsURL.length() > 0) {
+            googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
+                    + getString(R.string.google_sheets_url_hint));
+        }
+
+        googleSheetsUrlPreference.getEditText().setFilters(new InputFilter[]{
+                new ControlCharacterFilter(), new WhitespaceFilter()
+        });
+        initAccountPreferences();
+    }
+
+    public void addOtherPreferences() {
+        addAggregatePreferences();
+        addPreferencesFromResource(R.xml.other_preferences);
+
+        formListUrlPreference = (EditTextPreference) findPreference(
+                PreferenceKeys.KEY_FORMLIST_URL);
+        submissionUrlPreference = (EditTextPreference) findPreference(
+                PreferenceKeys.KEY_SUBMISSION_URL);
+
+        InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
+
+        serverUrlPreference.getEditText().setFilters(filters);
+
+        formListUrlPreference.setOnPreferenceChangeListener(this);
+        formListUrlPreference.setSummary(formListUrlPreference.getText());
+        formListUrlPreference.getEditText().setFilters(filters);
+
+        submissionUrlPreference.setOnPreferenceChangeListener(this);
+        submissionUrlPreference.setSummary(submissionUrlPreference.getText());
+        submissionUrlPreference.getEditText().setFilters(filters);
+    }
+
+    public void initAccountPreferences() {
+        // get list of google accounts
+        final Account[] accounts = AccountManager.get(getActivity().getApplicationContext())
+                .getAccountsByType("com.google");
+        ArrayList<String> accountEntries = new ArrayList<String>();
+        ArrayList<String> accountValues = new ArrayList<String>();
+
+        for (Account account : accounts) {
+            accountEntries.add(account.name);
+            accountValues.add(account.name);
+        }
+        accountEntries.add(getString(R.string.no_account));
+        accountValues.add("");
+
+        selectedGoogleAccountPreference.setEntries(accountEntries
+                .toArray(new String[accountEntries.size()]));
+        selectedGoogleAccountPreference.setEntryValues(accountValues
+                .toArray(new String[accountValues.size()]));
+    }
+
 
     private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
         urlList.add(0, url);
@@ -140,6 +212,7 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+
         switch (preference.getKey()) {
 
             case PreferenceKeys.KEY_SERVER_URL:
@@ -208,6 +281,32 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
                 // To ensure we update current credentials in CredentialsProvider
                 credentialsHaveChanged = true;
                 break;
+
+            case PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT:
+                int index = ((ListPreference) preference).findIndexOfValue(newValue
+                        .toString());
+                String value =
+                        (String) ((ListPreference) preference).getEntryValues()[index];
+                preference.setSummary(value);
+                break;
+
+            case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
+                url = newValue.toString();
+
+                // remove all trailing "/"s
+                while (url.endsWith("/")) {
+                    url = url.substring(0, url.length() - 1);
+                }
+
+                if (UrlUtils.isValidUrl(url)) {
+                    preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+                } else if (url.length() == 0) {
+                    preference.setSummary(getString(R.string.google_sheets_url_hint));
+                } else {
+                    ToastUtils.showShortToast(R.string.url_error);
+                    return false;
+                }
+                break;
         }
         return true;
     }
@@ -219,12 +318,16 @@ public class AggregatePreferencesFragment extends PreferenceFragment implements 
     }
 
     private void clearCachedCrendentials() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                getActivity().getBaseContext());
-        String server = settings.getString(PreferenceKeys.KEY_SERVER_URL,
-                getString(R.string.default_server_url));
+        String server = (String) GeneralSharedPreferences
+                .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
         WebUtils.clearHostCredentials(u.getHost());
         Collect.getInstance().getCookieStore().clear();
+    }
+
+    protected void setDefaultAggregatePaths() {
+        GeneralSharedPreferences sharedPreferences = GeneralSharedPreferences.getInstance();
+        sharedPreferences.reset(KEY_FORMLIST_URL);
+        sharedPreferences.reset(KEY_SUBMISSION_URL);
     }
 }

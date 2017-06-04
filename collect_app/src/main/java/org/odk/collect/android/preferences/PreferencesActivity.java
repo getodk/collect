@@ -44,6 +44,7 @@ public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
     private PreferencesFragment fragment;
+    static final Class<?>[] INNER_CLASSES = PreferencesActivity.class.getDeclaredClasses();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,11 @@ public class PreferencesActivity extends PreferenceActivity {
                 .replace(android.R.id.content, fragment)
                 .commit();
         setTitle(getString(R.string.general_preferences));
+    }
+
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
     }
 
     @Override

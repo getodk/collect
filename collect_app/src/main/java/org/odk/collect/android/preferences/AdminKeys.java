@@ -35,7 +35,6 @@ public final class AdminKeys {
     static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     static final String KEY_IMPORT_SETTINGS                     = "import_settings";
     private static final String KEY_CHANGE_SERVER               = "change_server";
-    private static final String KEY_CHANGE_PROTOCOL_SETTINGS    = "change_protocol_settings";
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
@@ -65,7 +64,6 @@ public final class AdminKeys {
     static AdminAndGeneralKeys[] adminToGeneral = new AdminAndGeneralKeys[] {
 
             ag(KEY_CHANGE_SERVER,              PreferenceKeys.KEY_PROTOCOL),
-            ag(KEY_CHANGE_PROTOCOL_SETTINGS,   PreferenceKeys.KEY_PROTOCOL_SETTINGS),
             ag(KEY_CHANGE_FORM_METADATA,       PreferenceKeys.KEY_FORM_METADATA),
 
             ag(KEY_CHANGE_FONT_SIZE,           PreferenceKeys.KEY_FONT_SIZE),
