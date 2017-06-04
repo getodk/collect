@@ -137,7 +137,6 @@
 
 
     <PreferenceCategory
-        android:icon="@drawable/cloud_sync"
         android:key="@string/analytics_preferences"
         android:title="@string/analytics_preferences">
         <CheckBoxPreference
