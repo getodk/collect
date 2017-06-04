@@ -10,8 +10,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.text.InputFilter;
-import android.text.Spanned;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -101,7 +99,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         });
     }
 
-
     @Override
     public void onResume() {
         Timber.d("onResume");
@@ -135,7 +132,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             }
         }
     }
-
 
     private void removeAllDisabledPrefs() {
         DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
@@ -323,7 +319,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
     }
 
-
     private void initFormMetadata() {
         final Preference pref = findPreference(KEY_FORM_METADATA);
 
@@ -332,25 +327,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             pref.setIntent(intent);
         }
     }
-
-
-    /**
-     * Disallows carriage returns from user entry
-     */
-    protected InputFilter getReturnFilter() {
-        return new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
-                                       int dstart, int dend) {
-                for (int i = start; i < end; i++) {
-                    if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-                        return "";
-                    }
-                }
-                return null;
-            }
-        };
-    }
-
 
     /**
      * Generic listener that sets the summary to the newly selected/entered value
