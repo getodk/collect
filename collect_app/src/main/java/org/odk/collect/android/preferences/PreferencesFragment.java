@@ -36,6 +36,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
@@ -44,7 +45,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMA
 
 
 public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
-    public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -66,7 +66,13 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
     }
 
     private void initPlatformSettings() {
-        findPreference("server_preferences").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        final Preference protocol = findPreference(KEY_PROTOCOL);
+
+        if (protocol == null) {
+            return;
+        }
+
+        protocol.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), ServerPreferencesActivity.class);
@@ -104,25 +110,25 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         // has to go in onResume because it may get updated by
         // a sub-preference screen
         // this just keeps the widgets in sync
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        GeneralSharedPreferences sp = GeneralSharedPreferences.getInstance();
 
         ListPreference googleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
         if (googleAccountPreference != null) {
-            String account = sp.getString(KEY_SELECTED_GOOGLE_ACCOUNT, "");
+            String account = (String) sp.get(KEY_SELECTED_GOOGLE_ACCOUNT);
             googleAccountPreference.setSummary(account);
             googleAccountPreference.setValue(account);
         }
 
         final EditTextPreference usernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
         if (usernamePreference != null) {
-            String user = sp.getString(KEY_USERNAME, "");
+            String user = (String) sp.get(KEY_USERNAME);
             usernamePreference.setSummary(user);
             usernamePreference.setText(user);
         }
 
         final EditTextPreference passwordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
         if (passwordPreference != null) {
-            String pw = sp.getString(KEY_PASSWORD, "");
+            String pw = (String) sp.get(KEY_PASSWORD);
             if (pw.length() > 0) {
                 passwordPreference.setSummary("********");
                 passwordPreference.setText(pw);

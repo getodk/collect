@@ -1,10 +1,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceScreen
+    <Preference
         android:icon="@drawable/server"
-        android:key="server_preferences"
+        android:key="protocol"
         android:title="@string/server_settings_title">
-    </PreferenceScreen>
+    </Preference>
 
     <PreferenceScreen
         android:icon="@drawable/user_interface"
