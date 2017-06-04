@@ -21,6 +21,7 @@ import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
@@ -30,17 +31,13 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAG
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORM_METADATA;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL_SETTINGS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
@@ -54,11 +51,9 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        final boolean adminMode = getActivity().getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
         removeAllDisabledPrefs();
 
-        initProtocolPrefs(adminMode);
+        initPlatformSettings();
         initFormMetadata();
         initNavigationPrefs();
         initConstraintBehaviorPref();
@@ -68,6 +63,17 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initSplashPrefs();
         initMapPrefs();
         initAutoSendPrefs();
+    }
+
+    private void initPlatformSettings() {
+        findPreference("server_preferences").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), ServerPreferencesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     private void initAutoSendPrefs() {
@@ -311,37 +317,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
     }
 
-    private void initProtocolPrefs(final boolean adminMode) {
-        final ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
-        final Preference settingsPref = findPreference(KEY_PROTOCOL_SETTINGS);
-
-        if (protocolPref == null || settingsPref == null) {
-            return;
-        }
-
-        protocolPref.setSummary(protocolPref.getEntry());
-        setProtocolIntent(adminMode, protocolPref.getValue(), settingsPref);
-
-        protocolPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                ListPreference lpref = (ListPreference) preference;
-                String oldValue = lpref.getValue();
-                int index = lpref.findIndexOfValue(newValue.toString());
-                preference.setSummary(lpref.getEntries()[index]);
-
-                Intent prefIntent = setProtocolIntent(adminMode,
-                        lpref.getEntryValues()[index], settingsPref);
-
-                if (!newValue.equals(oldValue)) {
-                    startActivity(prefIntent);
-                }
-
-                return true;
-            }
-        });
-    }
 
     private void initFormMetadata() {
         final Preference pref = findPreference(KEY_FORM_METADATA);
@@ -350,32 +325,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             final Intent intent = new Intent(getActivity(), FormMetadataActivity.class);
             pref.setIntent(intent);
         }
-    }
-
-    private Intent setProtocolIntent(boolean adminMode, CharSequence value,
-                                     Preference protocolSettings) {
-        final Intent prefIntent;
-
-        if (value.equals(getString(R.string.protocol_odk_default))) {
-            setDefaultAggregatePaths();
-            prefIntent = new Intent(getActivity(), AggregatePreferencesActivity.class);
-        } else if (value.equals(getString(R.string.protocol_google_sheets))) {
-            prefIntent = new Intent(getActivity(), GooglePreferencesActivity.class);
-        } else {
-            // other
-            prefIntent = new Intent(getActivity(), OtherPreferencesActivity.class);
-        }
-        prefIntent.putExtra(INTENT_KEY_ADMIN_MODE, adminMode);
-        protocolSettings.setIntent(prefIntent);
-        return prefIntent;
-    }
-
-    private void setDefaultAggregatePaths() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(KEY_FORMLIST_URL, getString(R.string.default_odk_formlist));
-        editor.putString(KEY_SUBMISSION_URL, getString(R.string.default_odk_submission));
-        editor.apply();
     }
 
 

@@ -70,29 +70,30 @@ public final class PreferenceKeys {
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put(KEY_SHOW_SPLASH, false);
-        hashMap.put(KEY_SPLASH_PATH, Collect.getInstance().getString(R.string.default_splash_path));
-        hashMap.put(KEY_FONT_SIZE, "21");
-        hashMap.put(KEY_DELETE_AFTER_SEND, false);
-        hashMap.put(KEY_ANALYTICS, true);
-        hashMap.put(KEY_INSTANCE_SYNC, true);
-        hashMap.put(KEY_APP_LANGUAGE, "");
-        hashMap.put(KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_odk_default));
-        hashMap.put(KEY_SELECTED_GOOGLE_ACCOUNT, "");
-        hashMap.put(KEY_USERNAME, "");
-        hashMap.put(KEY_METADATA_USERNAME, "");
-        hashMap.put(KEY_METADATA_PHONENUMBER, "");
-        hashMap.put(KEY_METADATA_EMAIL, "");
-        hashMap.put(KEY_SERVER_URL, Collect.getInstance().getString(R.string.default_server_url));
-        hashMap.put(KEY_GOOGLE_SHEETS_URL, "");
-        hashMap.put(KEY_FORMLIST_URL, Collect.getInstance().getString(R.string.default_odk_formlist));
-        hashMap.put(KEY_SUBMISSION_URL, Collect.getInstance().getString(R.string.default_odk_submission));
-        hashMap.put(KEY_NAVIGATION, "swipe");
-        hashMap.put(KEY_CONSTRAINT_BEHAVIOR, "on_swipe");
-        hashMap.put(KEY_COMPLETED_DEFAULT, true);
-        hashMap.put(KEY_MAP_SDK, "google_maps");
-        hashMap.put(KEY_MAP_BASEMAP, "streets");
-        hashMap.put(KEY_AUTOSEND, "off");
+
+        hashMap.put(KEY_SHOW_SPLASH,                false);
+        hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
+        hashMap.put(KEY_FONT_SIZE,                  "21");
+        hashMap.put(KEY_DELETE_AFTER_SEND,          false);
+        hashMap.put(KEY_ANALYTICS,                  true);
+        hashMap.put(KEY_INSTANCE_SYNC,              true);
+        hashMap.put(KEY_APP_LANGUAGE,               "");
+        hashMap.put(KEY_PROTOCOL,                   Collect.getInstance().getString(R.string.protocol_odk_default));
+        hashMap.put(KEY_SELECTED_GOOGLE_ACCOUNT,    "");
+        hashMap.put(KEY_USERNAME,                   "");
+        hashMap.put(KEY_METADATA_USERNAME,          "");
+        hashMap.put(KEY_METADATA_PHONENUMBER,       "");
+        hashMap.put(KEY_METADATA_EMAIL,             "");
+        hashMap.put(KEY_SERVER_URL,                 Collect.getInstance().getString(R.string.default_server_url));
+        hashMap.put(KEY_GOOGLE_SHEETS_URL,          "");
+        hashMap.put(KEY_FORMLIST_URL,               Collect.getInstance().getString(R.string.default_odk_formlist));
+        hashMap.put(KEY_SUBMISSION_URL,             Collect.getInstance().getString(R.string.default_odk_submission));
+        hashMap.put(KEY_NAVIGATION,                 "swipe");
+        hashMap.put(KEY_CONSTRAINT_BEHAVIOR,        "on_swipe");
+        hashMap.put(KEY_COMPLETED_DEFAULT,          true);
+        hashMap.put(KEY_MAP_SDK,                    "google_maps");
+        hashMap.put(KEY_MAP_BASEMAP,                "streets");
+        hashMap.put(KEY_AUTOSEND,                   "off");
         return hashMap;
     }
 

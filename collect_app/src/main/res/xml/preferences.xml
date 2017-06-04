@@ -2,19 +2,8 @@
 
     <PreferenceScreen
         android:icon="@drawable/server"
-        android:key="@string/server_preferences"
+        android:key="server_preferences"
         android:title="@string/server_settings_title">
-        <ListPreference
-            android:id="@+id/protocol"
-            android:defaultValue="odk_default"
-            android:dialogTitle="@string/change_protocol"
-            android:entries="@array/protocol_entries"
-            android:entryValues="@array/protocol_entry_values"
-            android:key="protocol"
-            android:title="@string/type" />
-        <PreferenceScreen
-            android:key="protocol_settings"
-            android:title="@string/change_protocol_settings_default" />
     </PreferenceScreen>
 
     <PreferenceScreen
