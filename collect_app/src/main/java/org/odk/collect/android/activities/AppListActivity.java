@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewConfigurationCompat;
@@ -41,7 +42,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -246,8 +246,9 @@ abstract class AppListActivity extends AppCompatActivity {
 
     private void setupDrawerItems() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sortingOptions) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (position == getSelectedSortingOrder()) {
                     textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
@@ -296,7 +297,7 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     protected void checkPreviouslyCheckedItems() {
-        getListView().clearChoices();
+        listView.clearChoices();
         List<Integer> selectedPositions = new ArrayList<>();
         int listViewPosition = 0;
         Cursor cursor = listAdapter.getCursor();
@@ -311,7 +312,7 @@ abstract class AppListActivity extends AppCompatActivity {
         }
 
         for (int position : selectedPositions) {
-            getListView().setItemChecked(position, true);
+            listView.setItemChecked(position, true);
         }
     }
 
@@ -323,27 +324,8 @@ abstract class AppListActivity extends AppCompatActivity {
         return getCheckedCount() > 0;
     }
 
-    /**
-     * Returns the IDs of the checked items, using the ListView provided
-     */
-    protected long[] getCheckedIds(ListView lv) {
-        // This method could be simplified by using getCheckedItemIds, if one ensured that
-        // IDs were “stable” (see the getCheckedItemIds doc).
-        int itemCount = lv.getCount();
-        int checkedItemCount = lv.getCheckedItemCount();
-        long[] checkedIds = new long[checkedItemCount];
-        int resultIndex = 0;
-        for (int posIdx = 0; posIdx < itemCount; posIdx++) {
-            if (lv.isItemChecked(posIdx)) {
-                checkedIds[resultIndex] = lv.getItemIdAtPosition(posIdx);
-                resultIndex++;
-            }
-        }
-        return checkedIds;
-    }
-
     protected int getCheckedCount() {
-        return getListView().getCheckedItemCount();
+        return listView.getCheckedItemCount();
     }
 
     // toggles to all checked or all unchecked
@@ -419,15 +401,11 @@ abstract class AppListActivity extends AppCompatActivity {
         return inputSearch != null ? inputSearch.getText() : "";
     }
 
-    protected ListView getListView() {
-        return listView;
-    }
-
-    protected ListAdapter getListAdapter() {
-        return listView.getAdapter();
-    }
-
-    protected void setListAdapter(ListAdapter adapter) {
-        listView.setAdapter(adapter);
+    protected void updateEmptyView() {
+        if (listAdapter.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
     }
 }

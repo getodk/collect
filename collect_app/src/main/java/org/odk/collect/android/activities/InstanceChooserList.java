@@ -49,7 +49,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
-    private AlertDialog alertDialog;
 
     private InstanceSyncTask instanceSyncTask;
 
@@ -113,7 +112,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Cursor c = (Cursor) getListAdapter().getItem(position);
+        Cursor c = (Cursor) listView.getAdapter().getItem(position);
         startManagingCursor(c);
         Uri instanceUri =
                 ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
@@ -181,12 +180,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     public void syncComplete(String result) {
         TextView textView = (TextView) findViewById(R.id.status_text);
         textView.setText(result);
-
-        if (listAdapter.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-        }
+        updateEmptyView();
     }
 
     @Override
@@ -214,7 +208,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         } else {
             listAdapter = new ViewSentListAdapter(this, R.layout.two_item, getCursor(), data, view);
         }
-        setListAdapter(listAdapter);
+        listView.setAdapter(listAdapter);
     }
 
     @Override
@@ -225,6 +219,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     @Override
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
+        updateEmptyView();
     }
 
     private Cursor getCursor() {
@@ -241,7 +236,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
 
-        alertDialog = new AlertDialog.Builder(this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
