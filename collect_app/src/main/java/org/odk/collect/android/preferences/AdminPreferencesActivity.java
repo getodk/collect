@@ -17,10 +17,13 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -40,9 +43,9 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends PreferenceActivity {
-    public static final String ADMIN_PREFERENCES = "admin_prefs";
+public class AdminPreferencesActivity extends AppCompatActivity {
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
+    public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
@@ -77,12 +80,19 @@ public class AdminPreferencesActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.admin_preferences));
+        setContentView(R.layout.preference_layout);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.admin_preferences));
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
+        }
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, new AdminPreferencesFragment())
+                    .replace(R.id.content_frame, new AdminPreferencesFragment())
                     .commit();
         }
     }

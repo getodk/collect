@@ -1,6 +1,7 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -60,7 +61,8 @@ public class MainActivityTest {
      */
     @Test
     public void titleTest() throws Exception {
-        assertEquals(mainMenuActivity.getTitle(), mainMenuActivity.getString(R.string.main_menu));
+        Toolbar toolbar = (Toolbar) mainMenuActivity.findViewById(R.id.toolbar);
+        assertEquals(mainMenuActivity.getString(R.string.main_menu), toolbar.getTitle());
     }
 
     /**
