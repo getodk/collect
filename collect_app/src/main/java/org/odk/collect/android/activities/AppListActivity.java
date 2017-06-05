@@ -402,6 +402,10 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     protected void updateEmptyView() {
+        if (listAdapter == null) {
+            return;
+        }
+
         if (listAdapter.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
         } else {
