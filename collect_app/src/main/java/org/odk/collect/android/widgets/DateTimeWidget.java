@@ -58,10 +58,6 @@ public class DateTimeWidget extends QuestionWidget {
             linearLayout.addView(timeWidget);
         }
         addAnswerView(linearLayout);
-        if (timeWidget.getAnswer() == null) {
-            timeWidget.setTimeToCurrent();
-            timeWidget.setTimeLabel();
-        }
     }
 
     @Override
