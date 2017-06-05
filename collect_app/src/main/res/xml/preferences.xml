@@ -1,13 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:icon="@drawable/ic_cloud_black"
+        android:icon="@drawable/ic_cloud"
         android:key="protocol"
         android:title="@string/server_settings_title">
     </Preference>
 
     <PreferenceScreen
-        android:icon="@drawable/ic_phonelink_setup_black"
+        android:icon="@drawable/ic_phonelink_setup"
         android:key="@string/client"
         android:title="@string/client">
         <ListPreference
@@ -68,7 +68,7 @@
     </PreferenceScreen>
 
     <PreferenceScreen
-        android:icon="@drawable/ic_assignment_black"
+        android:icon="@drawable/ic_assignment"
         android:key="form_management"
         android:title="@string/form_management_preferences">
         <PreferenceCategory
@@ -128,7 +128,7 @@
     </PreferenceScreen>
 
     <PreferenceScreen
-        android:icon="@drawable/ic_face_black"
+        android:icon="@drawable/ic_face"
         android:key="user_and_device_identity"
         android:title="@string/user_and_device_identity_title">
         <PreferenceScreen
