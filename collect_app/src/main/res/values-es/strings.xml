@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">Registrar localización</string>
   <string name="show_password">Mostrar contraseña</string>
   <string name="accuracy">Precisión</string>
@@ -475,5 +475,5 @@
   <string name="sim_serial_id">Numero de serie SIM</string>
   <string name="select_date">Seleccione la fecha</string>
   <string name="select_time">Seleccione la hora</string>
-  <string name="use_device_language">Usar el idioma del teléfono</string>
+  <string name="use_phone_language">Usar el idioma del teléfono</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">Standort erfassen</string>
   <string name="show_password">Passwort anzeigen</string>
   <string name="accuracy">Genauigkeit</string>
@@ -492,7 +492,7 @@
   <string name="select_time">Uhrzeit auswählen</string>
   <string name="no_date_selected">Kein Datum ausgewählt</string>
   <string name="no_time_selected">Keine Uhrzeit ausgewählt</string>
-  <string name="use_device_language">Telefonsprache benutzen</string>
+  <string name="use_phone_language">Telefonsprache benutzen</string>
   <string name="import_settings">Import/Export Einstellungen</string>
   <string name="qr_code">QR-Code</string>
   <string name="scan_qrcode">Code von anderem Gerät scannen</string>
