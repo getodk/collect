@@ -1,18 +1,11 @@
 package org.odk.collect.android.utilities;
 
 import android.os.Build;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CalendarView;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 public class DateTimeUtils {
 
