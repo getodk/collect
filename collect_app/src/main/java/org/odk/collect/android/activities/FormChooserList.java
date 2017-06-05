@@ -23,7 +23,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
@@ -44,7 +44,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends FormListActivity implements DiskSyncListener {
+public class FormChooserList extends FormListActivity implements DiskSyncListener, AdapterView.OnItemClickListener {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
     private static final boolean EXIT = true;
@@ -56,7 +56,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // must be at the beginning of any activity that can be called from an external intent
         try {
@@ -67,7 +66,14 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         }
 
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.enter_data));
+        super.onCreate(savedInstanceState);
+
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(getString(R.string.enter_data));
+        } else {
+            setTitle(getString(R.string.enter_data));
+        }
 
         setupAdapter();
 
@@ -78,7 +84,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
         // that is, put here by dragging and dropping onto the SDCard
-        diskSyncTask = (DiskSyncTask) getLastNonConfigurationInstance();
+        diskSyncTask = (DiskSyncTask) getLastCustomNonConfigurationInstance();
         if (diskSyncTask == null) {
             Timber.i("Starting new disk sync task");
             diskSyncTask = new DiskSyncTask();
@@ -93,7 +99,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         // pass the thread on restart
         return diskSyncTask;
     }
@@ -111,9 +117,9 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
      * Stores the path of selected form and finishes.
      */
     @Override
-    protected void onListItemClick(ListView listView, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // get uri to form
-        long idFormsTable = getListAdapter().getItemId(position);
+        long idFormsTable = listView.getAdapter().getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
@@ -174,6 +180,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         Timber.i("Disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
+        updateEmptyView();
     }
 
     private void setupAdapter() {
@@ -187,7 +194,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         listAdapter =
                 new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
 
-        setListAdapter(listAdapter);
+        listView.setAdapter(listAdapter);
     }
 
     @Override
@@ -198,6 +205,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
+        updateEmptyView();
     }
 
     private Cursor getCursor() {
@@ -234,5 +242,4 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         alertDialog.setButton(getString(R.string.ok), errorListener);
         alertDialog.show();
     }
-
 }

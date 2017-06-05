@@ -15,19 +15,31 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import org.odk.collect.android.R;
 
 /**
  * Handles Google specific preferences.
  *
  * @author Carl Hartung (chartung@nafundi.com)
  */
-public class GooglePreferencesActivity extends PreferenceActivity {
+public class GooglePreferencesActivity extends AppCompatActivity {
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new GooglePreferencesFragment()).commit();
+        setContentView(R.layout.preference_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.admin_preferences));
+        setSupportActionBar(toolbar);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, new GooglePreferencesFragment())
+                .commit();
     }
 }

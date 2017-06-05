@@ -22,7 +22,6 @@ package org.odk.collect.android.activities;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -37,6 +36,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -75,7 +75,7 @@ import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST
 import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 
-public class GoogleSheetsUploaderActivity extends Activity implements InstanceUploaderListener,
+public class GoogleSheetsUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
         EasyPermissions.PermissionCallbacks {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
@@ -147,7 +147,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     }
 
     private void runTask() {
-        uiTask = (GoogleSheetsInstanceUploaderTask) getLastNonConfigurationInstance();
+        uiTask = (GoogleSheetsInstanceUploaderTask) getLastCustomNonConfigurationInstance();
         if (uiTask == null) {
             uiTask = new GoogleSheetsInstanceUploaderTask(credential);
 
@@ -350,7 +350,7 @@ public class GoogleSheetsUploaderActivity extends Activity implements InstanceUp
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         return uiTask;
     }
 
