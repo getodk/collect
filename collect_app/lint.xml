@@ -22,4 +22,5 @@
     <issue id="MergeRootFrame" severity="error" />
     <issue id="LogNotTimber" severity="error" />
     <issue id="StringFormatInTimber" severity="error" />
+    <issue id="ApplySharedPref" severity="error" />
 </lint>
