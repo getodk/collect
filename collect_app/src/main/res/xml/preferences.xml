@@ -1,13 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:icon="@drawable/server"
+        android:icon="@drawable/ic_cloud_black"
         android:key="protocol"
         android:title="@string/server_settings_title">
     </Preference>
 
     <PreferenceScreen
-        android:icon="@drawable/user_interface"
+        android:icon="@drawable/ic_phonelink_setup_black"
         android:key="@string/client"
         android:title="@string/client">
         <ListPreference
@@ -68,6 +68,7 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_assignment_black"
         android:key="form_management"
         android:title="@string/form_management_preferences">
         <PreferenceCategory
@@ -79,7 +80,6 @@
                 android:dialogTitle="@string/autosend_selector_title"
                 android:entries="@array/autosend_selector_entries"
                 android:entryValues="@array/autosend_selector_entries_values"
-                android:icon="@drawable/auto_button"
                 android:key="autosend"
                 android:title="@string/autosend" />
             <CheckBoxPreference
@@ -128,6 +128,7 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        android:icon="@drawable/ic_face_black"
         android:key="user_and_device_identity"
         android:title="@string/user_and_device_identity_title">
         <PreferenceScreen

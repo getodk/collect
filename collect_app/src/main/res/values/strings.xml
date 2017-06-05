@@ -146,7 +146,7 @@
 <string name="view_hierarchy">Go To Prompt</string>
 <string name="general_preferences">General Settings</string>
 <string name="click_to_web">Tap to visit http://opendatakit.org</string>
-<string name="client">User Interface</string>
+<string name="client">User interface</string>
 <string name="show_splash">Show splash screen</string>
 <string name="show_splash_summary">Shows when application starts</string>
 <string name="splash_path">Selected splash image</string>
