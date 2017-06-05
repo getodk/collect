@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -30,9 +30,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
 /**
  * Handles general preferences.
@@ -54,9 +54,7 @@ public class PreferencesActivity extends PreferenceActivity {
                 .beginTransaction()
                 .replace(android.R.id.content, fragment)
                 .commit();
-
         setTitle(getString(R.string.general_preferences));
-
     }
 
     @Override
@@ -64,7 +62,6 @@ public class PreferencesActivity extends PreferenceActivity {
         Timber.d("onStart");
         super.onStart();
     }
-
 
     @Override
     protected void onPause() {

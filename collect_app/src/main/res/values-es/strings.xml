@@ -475,5 +475,5 @@
   <string name="sim_serial_id">Numero de serie SIM</string>
   <string name="select_date">Seleccione la fecha</string>
   <string name="select_time">Seleccione la hora</string>
-  <string name="use_phone_language">Usar el idioma del teléfono</string>
+  <string name="use_device_language">Usar el idioma del teléfono</string>
 </resources>

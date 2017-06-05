@@ -19,6 +19,8 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 
 public class GeneralSharedPreferences {
@@ -39,8 +41,15 @@ public class GeneralSharedPreferences {
     }
 
     public Object get(String key) {
-        Object defaultValue = GENERAL_KEYS.get(key);
+        Object defaultValue = null;
         Object value = null;
+
+        try {
+            defaultValue = GENERAL_KEYS.get(key);
+        } catch (Exception e) {
+            Timber.e("Default for %s not found", key);
+        }
+
         if (defaultValue == null || defaultValue == "" || defaultValue instanceof String) {
             value = sharedPreferences.getString(key, (String) defaultValue);
         } else if (defaultValue instanceof Boolean) {

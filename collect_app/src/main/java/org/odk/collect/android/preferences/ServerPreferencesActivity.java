@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Marcos Lopez Gonzalez (asturcon1234@gmail.com)
+ * Copyright 2017 Shobhit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,21 @@
 
 package org.odk.collect.android.preferences;
 
+
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 import org.odk.collect.android.R;
 
-public class AboutPreferencesActivity extends PreferenceActivity {
+public class ServerPreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, new AboutPreferencesFragment())
+                .replace(android.R.id.content, new ServerPreferences())
                 .commit();
-        setTitle(getString(R.string.about_preferences));
+        setTitle(getString(R.string.server_preferences));
     }
 }

@@ -1,59 +1,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:key="@string/server_preferences"
-        android:title="@string/server_preferences">
-        <ListPreference
-            android:id="@+id/protocol"
-            android:defaultValue="odk_default"
-            android:dialogTitle="@string/change_protocol"
-            android:entries="@array/protocol_entries"
-            android:entryValues="@array/protocol_entry_values"
-            android:key="protocol"
-            android:title="@string/protocol" />
-        <PreferenceScreen
-            android:key="protocol_settings"
-            android:title="@string/change_protocol_settings_default" />
-        <PreferenceScreen
-            android:key="form_metadata"
-            android:summary="@string/form_metadata_summary"
-            android:title="@string/form_metadata" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:key="@string/autosend"
-        android:title="@string/autosend">
-        <CheckBoxPreference
-            android:id="@+id/autosend_wifi"
-            android:defaultValue="false"
-            android:key="autosend_wifi"
-            android:summary="@string/autosend_wifi_summary"
-            android:title="@string/autosend_wifi" />
-        <CheckBoxPreference
-            android:id="@+id/autosend_network"
-            android:defaultValue="false"
-            android:key="autosend_network"
-            android:summary="@string/autosend_network_summary"
-            android:title="@string/autosend_network" />
-    </PreferenceCategory>
-    <PreferenceCategory
+    <Preference
+        android:icon="@drawable/ic_cloud"
+        android:key="protocol"
+        android:title="@string/server_settings_title">
+    </Preference>
+
+    <PreferenceScreen
+        android:icon="@drawable/ic_phonelink_setup"
         android:key="@string/client"
         android:title="@string/client">
         <ListPreference
-            android:id="@+id/constraint_behavior"
-            android:defaultValue="on_swipe"
-            android:dialogTitle="@string/constraint_behavior"
-            android:entries="@array/constraint_behavior_entries"
-            android:entryValues="@array/constraint_behavior_entry_values"
-            android:key="constraint_behavior"
-            android:title="@string/constraint_behavior" />
-        <ListPreference
-            android:id="@+id/navigation"
-            android:defaultValue="swipe"
-            android:dialogTitle="@string/navigation"
-            android:entries="@array/navigation_entries"
-            android:entryValues="@array/navigation_entry_values"
-            android:key="navigation"
-            android:title="@string/navigation" />
+            android:id="@+id/app_language"
+            android:dialogTitle="@string/language"
+            android:key="app_language"
+            android:title="@string/language" />
         <ListPreference
             android:id="@+id/font_size"
             android:defaultValue="21"
@@ -63,40 +24,19 @@
             android:key="font_size"
             android:title="@string/font_size" />
         <ListPreference
-            android:id="@+id/app_language"
-            android:dialogTitle="@string/language"
-            android:key="app_language"
-            android:title="@string/language" />
-        <CheckBoxPreference
-            android:id="@+id/instance_sync"
-            android:defaultValue="true"
-            android:key="instance_sync"
-            android:summary="@string/instance_sync_summary"
-            android:title="@string/instance_sync" />
-        <CheckBoxPreference
-            android:id="@+id/default_completed"
-            android:defaultValue="true"
-            android:key="default_completed"
-            android:summary="@string/default_completed_summary"
-            android:title="@string/default_completed" />
-        <CheckBoxPreference
-            android:id="@+id/delete_after_send"
-            android:defaultValue="false"
-            android:key="delete_send"
-            android:summary="@string/delete_after_send_summary"
-            android:title="@string/delete_after_send" />
-        <CheckBoxPreference
-            android:id="@+id/high_resolution"
-            android:defaultValue="true"
-            android:key="high_resolution"
-            android:summary="@string/high_resolution_summary"
-            android:title="@string/high_resolution" />
+            android:id="@+id/navigation"
+            android:defaultValue="swipe"
+            android:dialogTitle="@string/navigation"
+            android:entries="@array/navigation_entries"
+            android:entryValues="@array/navigation_entry_values"
+            android:key="navigation"
+            android:title="@string/navigation" />
         <CheckBoxPreference
             android:id="@+id/show_splash"
-            android:key="showSplash"
             android:defaultValue="false"
+            android:key="showSplash"
             android:summary="@string/show_splash_summary"
-            android:title="@string/show_splash" />
+            android:title="@string/show_splash_title" />
         <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"
@@ -104,35 +44,102 @@
             android:key="splashPath"
             android:layout="?android:attr/preferenceLayoutChild"
             android:title="@string/splash_path" />
-    </PreferenceCategory>
 
-    <PreferenceCategory
-        android:key="@string/map_preferences"
-        android:title="@string/map_preferences">
+        <PreferenceCategory
+            android:key="@string/map_preferences"
+            android:title="@string/map_preferences">
+            <ListPreference
+                android:id="@+id/map_sdk_behavior"
+                android:defaultValue="google_maps"
+                android:dialogTitle="@string/map_sdk_selector_title"
+                android:entries="@array/map_sdk_selector_entries"
+                android:entryValues="@array/map_sdk_selector_entry_values"
+                android:key="map_sdk_behavior"
+                android:title="@string/map_sdk_behavior" />
+            <ListPreference
+                android:id="@+id/map_basemap_behavior"
+                android:defaultValue="streets"
+                android:dialogTitle="@string/map_basemap_selector_title"
+                android:entries="@array/map_google_basemap_selector_entries"
+                android:entryValues="@array/map_google_basemap_selector_entry_values"
+                android:key="map_basemap_behavior"
+                android:title="@string/map_basemap_behavior_title" />
+        </PreferenceCategory>
+    </PreferenceScreen>
 
-        <ListPreference
-            android:id="@+id/map_sdk_behavior"
-            android:defaultValue="google_maps"
-            android:dialogTitle="@string/map_sdk_selector_title"
-            android:entries="@array/map_sdk_selector_entries"
-            android:entryValues="@array/map_sdk_selector_entry_values"
-            android:key="map_sdk_behavior"
-            android:title="@string/map_sdk_behavior" />
+    <PreferenceScreen
+        android:icon="@drawable/ic_assignment"
+        android:key="form_management"
+        android:title="@string/form_management_preferences">
+        <PreferenceCategory
+            android:key="form_submission"
+            android:title="@string/form_submission_category">
+            <ListPreference
+                android:id="@+id/autosend"
+                android:defaultValue="off"
+                android:dialogTitle="@string/autosend_selector_title"
+                android:entries="@array/autosend_selector_entries"
+                android:entryValues="@array/autosend_selector_entries_values"
+                android:key="autosend"
+                android:title="@string/autosend" />
+            <CheckBoxPreference
+                android:id="@+id/delete_after_send"
+                android:defaultValue="false"
+                android:key="delete_send"
+                android:summary="@string/delete_after_send_summary"
+                android:title="@string/delete_after_send" />
+        </PreferenceCategory>
 
-        <ListPreference
-            android:id="@+id/map_basemap_behavior"
-            android:defaultValue="streets"
-            android:dialogTitle="@string/map_basemap_selector_title"
-            android:entries="@array/map_google_basemap_selector_entries"
-            android:entryValues="@array/map_google_basemap_selector_entry_values"
-            android:key="map_basemap_behavior"
-            android:title="@string/map_basemap_behavior" />
-    </PreferenceCategory>
+        <PreferenceCategory
+            android:key="form_filling"
+            android:title="@string/form_filling_category">
+            <CheckBoxPreference
+                android:id="@+id/default_completed"
+                android:defaultValue="true"
+                android:key="default_completed"
+                android:summary="@string/default_completed_summary"
+                android:title="@string/default_completed" />
+            <ListPreference
+                android:id="@+id/constraint_behavior"
+                android:defaultValue="on_swipe"
+                android:dialogTitle="@string/constraint_behavior"
+                android:entries="@array/constraint_behavior_entries"
+                android:entryValues="@array/constraint_behavior_entry_values"
+                android:key="constraint_behavior"
+                android:title="@string/constraint_behavior_title" />
+            <CheckBoxPreference
+                android:id="@+id/high_resolution"
+                android:defaultValue="true"
+                android:key="high_resolution"
+                android:summary="@string/high_resolution_summary"
+                android:title="@string/high_resolution_title" />
+        </PreferenceCategory>
+
+        <PreferenceCategory
+            android:key="form_import"
+            android:title="@string/form_import_category">
+            <CheckBoxPreference
+                android:id="@+id/instance_sync"
+                android:defaultValue="true"
+                android:key="instance_sync"
+                android:summary="@string/instance_sync_summary"
+                android:title="@string/instance_sync" />
+        </PreferenceCategory>
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:icon="@drawable/ic_face"
+        android:key="user_and_device_identity"
+        android:title="@string/user_and_device_identity_title">
+        <PreferenceScreen
+            android:key="form_metadata"
+            android:summary="@string/form_metadata_summary"
+            android:title="@string/form_metadata" />
+
 
     <PreferenceCategory
         android:key="@string/analytics_preferences"
         android:title="@string/analytics_preferences">
-
         <CheckBoxPreference
             android:id="@+id/analytics"
             android:defaultValue="true"
@@ -140,4 +147,5 @@
             android:summary="@string/analytics_summary"
             android:title="@string/analytics" />
     </PreferenceCategory>
+    </PreferenceScreen>
 </PreferenceScreen>

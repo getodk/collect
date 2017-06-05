@@ -109,4 +109,16 @@ the specific language governing permissions and limitations under the License. -
         <item>Seconds</item>
         <item>Minutes</item>
     </string-array>
+    <string-array name="autosend_selector_entries">
+        <item>@string/off</item>
+        <item>@string/wifi_autosend</item>
+        <item>@string/cellular_autosend</item>
+        <item>@string/wifi_cellular_autosend</item>
+    </string-array>
+    <string-array name="autosend_selector_entries_values" translatable="false">
+        <item>off</item>
+        <item>wifi_only</item>
+        <item>cellular_only</item>
+        <item>wifi_and_cellular</item>
+    </string-array>
 </resources>

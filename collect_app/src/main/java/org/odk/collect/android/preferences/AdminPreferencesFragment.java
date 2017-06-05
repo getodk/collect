@@ -61,10 +61,8 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        Preference changeAdminPwPreference = findPreference(KEY_CHANGE_ADMIN_PASSWORD);
-        changeAdminPwPreference.setOnPreferenceClickListener(this);
-        Preference syncSettings = findPreference(KEY_IMPORT_SETTINGS);
-        syncSettings.setOnPreferenceClickListener(this);
+        findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
+        findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
     }
 
     @Override
