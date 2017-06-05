@@ -256,7 +256,7 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.AndroidShortcuts"
             android:label="ODK Form"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 

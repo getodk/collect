@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,6 +25,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -49,7 +49,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener,
+public class InstanceUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
@@ -125,7 +125,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
-        instanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
+        instanceUploaderTask = (InstanceUploaderTask) getLastCustomNonConfigurationInstance();
         if (instanceUploaderTask == null) {
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
@@ -173,7 +173,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         return instanceUploaderTask;
     }
 

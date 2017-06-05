@@ -18,64 +18,83 @@ the License.
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/search_box_layout"/>
+        <!-- Toolbar -->
+        <include layout="@layout/toolbar"/>
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/no_items_display"
-            android:textSize="21sp" />
-
-        <LinearLayout
-            android:id="@+id/buttonholder"
+        <include
+            layout="@layout/toolbar_action_bar_shadow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_below="@id/toolbar"/>
 
-            <Button
-                android:id="@+id/toggle_button"
-                android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:orientation="vertical">
+
+            <include layout="@layout/search_box_layout"/>
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@android:id/empty"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:text="@string/select_all"
-                android:textSize="16sp" />
+                android:gravity="center"
+                android:text="@string/no_items_display"
+                android:textSize="21sp"/>
 
-            <Button
-                android:id="@+id/refresh_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:text="@string/refresh"
-                android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/buttonholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
-            <Button
-                android:id="@+id/add_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:text="@string/download"
-                android:textSize="16sp" />
+                <Button
+                    android:id="@+id/toggle_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="12dp"
+                    android:text="@string/select_all"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"/>
 
+                <Button
+                    android:id="@+id/refresh_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="12dp"
+                    android:text="@string/refresh"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"/>
+
+                <Button
+                    android:id="@+id/add_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="12dp"
+                    android:text="@string/download"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"/>
+            </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- Side navigation drawer UI -->
     <ListView
