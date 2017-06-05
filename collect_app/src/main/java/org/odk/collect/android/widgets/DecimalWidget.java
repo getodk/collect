@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 
@@ -82,6 +83,7 @@ public class DecimalWidget extends StringWidget {
             d = Double.parseDouble(string.replace(',', '.'));
             //answer.setText(d.toString());
             answer.setText(String.format(Locale.ENGLISH, "%f", d));
+            Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 
         // disable if read only

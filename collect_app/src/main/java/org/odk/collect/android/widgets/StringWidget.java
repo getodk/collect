@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
@@ -97,6 +98,7 @@ public class StringWidget extends QuestionWidget {
         String s = prompt.getAnswerText();
         if (s != null) {
             answer.setText(s);
+            Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 
         if (readOnly) {
