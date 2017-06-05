@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Version of the GeoPointMapActivity that uses the new Maps v2 API and Fragments to enable
+ * Version of the GeoPointGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
  * specifying a location via placing a tracker on a map.
  *
  * @author jonnordling@gmail.com
