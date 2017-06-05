@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -29,6 +28,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -44,6 +46,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -116,10 +119,9 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class FormEntryActivity extends Activity implements AnimationListener,
+public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener {
-    private static final String t = "FormEntryActivity";
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -224,6 +226,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private ImageButton backButton;
 
     private String stepMessage = "";
+    private Toolbar toolbar;
+    private boolean hasHardwareMenu;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -234,7 +238,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
     private FormsDao formsDao;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,7 +255,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         setContentView(R.layout.form_entry);
-        setTitle(getString(R.string.loading_form));
 
         formsDao = new FormsDao();
 
@@ -263,9 +268,14 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         gestureDetector = new GestureDetector(this, this);
         questionHolder = (LinearLayout) findViewById(R.id.questionholder);
 
+        hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+
         // get admin preference settings
         adminPreferences = getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+        initToolbar();
 
         nextButton = (ImageButton) findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(new OnClickListener() {
@@ -325,7 +335,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         // Check to see if this is a screen flip or a new form load.
-        Object data = getLastNonConfigurationInstance();
+        Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             formLoaderTask = (FormLoaderTask) data;
         } else if (data instanceof SaveToDiskTask) {
@@ -352,7 +362,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
             // Not a restart from a screen orientation change (or other).
             Collect.getInstance().setFormController(null);
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -531,6 +541,49 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // show dialog before we execute...
                 formLoaderTask.execute(formPath);
             }
+        }
+    }
+
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(getString(R.string.loading_form));
+        } else {
+            setTitle(getString(R.string.loading_form));
+        }
+        toolbar.inflateMenu(R.menu.form_menu);
+        toolbar.findViewById(R.id.menu_save).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "onOptionsItemSelected",
+                                "MENU_SAVE");
+                // don't exit
+                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
+            }
+        });
+
+        toolbar.findViewById(R.id.menu_goto).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FormController formController = Collect.getInstance()
+                        .getFormController();
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "onOptionsItemSelected",
+                                "MENU_HIERARCHY_VIEW");
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
+                Intent i = new Intent(FormEntryActivity.this, FormHierarchyActivity.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                startActivityForResult(i, HIERARCHY_ACTIVITY);
+            }
+        });
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
         }
     }
 
@@ -846,15 +899,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        menu
-                .add(0, MENU_SAVE, 0, R.string.save_all_answers)
-                .setIcon(android.R.drawable.ic_menu_save)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        if (!hasHardwareMenu) {
+            menu
+                    .add(0, MENU_SAVE, 0, R.string.save_all_answers)
+                    .setIcon(android.R.drawable.ic_menu_save)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        menu
-                .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
-                .setIcon(R.drawable.ic_menu_goto)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu
+                    .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
+                    .setIcon(R.drawable.ic_menu_goto)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
 
         menu
                 .add(0, MENU_LANGUAGES, 0, R.string.change_language)
@@ -877,16 +932,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         }
 
         boolean useability;
-        useability = adminPreferences.getBoolean(
-                AdminKeys.KEY_SAVE_MID, true);
 
-        menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
+        if (!hasHardwareMenu) {
+            useability = adminPreferences.getBoolean(
+                    AdminKeys.KEY_SAVE_MID, true);
 
-        useability = adminPreferences.getBoolean(
-                AdminKeys.KEY_JUMP_TO, true);
+            menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
 
-        menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
-                .setEnabled(useability);
+            useability = adminPreferences.getBoolean(
+                    AdminKeys.KEY_JUMP_TO, true);
+
+            menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
+                    .setEnabled(useability);
+        }
 
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -1055,7 +1113,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
      * If we're loading, then we pass the loading thread to our next instance.
      */
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         FormController formController = Collect.getInstance()
                 .getFormController();
         // if a form is loading, pass the loader task
@@ -1086,7 +1144,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     private View createView(int event, boolean advancingPage) {
         FormController formController = Collect.getInstance()
                 .getFormController();
-        setTitle(formController.getFormTitle());
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(formController.getFormTitle());
+        } else {
+            setTitle(formController.getFormTitle());
+        }
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1181,8 +1244,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                     sa.setVisibility(View.GONE);
                 }
 
-                 // Create 'save' button
-                 endView.findViewById(R.id.save_exit_button)
+                // Create 'save' button
+                endView.findViewById(R.id.save_exit_button)
                         .setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -2488,7 +2551,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
-        invalidateOptionsMenu();
+        supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 

@@ -13,11 +13,12 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true">
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/buttonholder"
@@ -34,6 +35,7 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/go_back"
+            android:textAllCaps="false"
             android:textSize="16sp" />
 
         <Button
@@ -44,6 +46,7 @@ the License.
             android:enabled="false"
             android:padding="12dp"
             android:text="@string/download_selected"
+            android:textAllCaps="false"
             android:textSize="16sp" />
 
         <Button
@@ -53,6 +56,7 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/go_shared"
+            android:textAllCaps="false"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -62,6 +66,7 @@ the License.
         android:id="@+id/searchholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:layout_gravity="center_vertical"
         android:background="#ECECEC"
         android:orientation="horizontal">
@@ -74,13 +79,13 @@ the License.
             android:ellipsize="end"
             android:imeOptions="actionSearch"
             android:inputType="textShortMessage"
+            android:maxLines="1"
             android:minHeight="50dp"
             android:paddingBottom="0dip"
             android:paddingEnd="8dip"
             android:paddingLeft="8dip"
             android:paddingRight="8dip"
-            android:paddingStart="8dip"
-            android:maxLines="1"/>
+            android:paddingStart="8dip" />
 
         <ImageButton
             android:id="@+id/search_button"
@@ -90,6 +95,12 @@ the License.
             android:src="@drawable/ic_action_action_search" />
 
     </LinearLayout>
+
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar" />
 
     <ListView
         android:id="@android:id/list"
@@ -102,9 +113,9 @@ the License.
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/buttonholder"
+        android:layout_below="@+id/searchholder"
         android:gravity="center"
-        android:text="@string/no_items_display"
+        android:text="@string/google_search_browse"
         android:textSize="21sp" />
-
-
 </RelativeLayout>

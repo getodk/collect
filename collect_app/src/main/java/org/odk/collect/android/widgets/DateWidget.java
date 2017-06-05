@@ -18,6 +18,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -25,9 +27,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -80,10 +80,6 @@ public class DateWidget extends QuestionWidget {
         createDatePickerDialog();
         hideDayFieldIfNotInFormat();
         addViews();
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) {
-            DateTimeUtils.fixCalendarViewIfJellyBean(datePickerDialog.getDatePicker().getCalendarView());
-        }
     }
 
     private void readAppearance() {
@@ -94,21 +90,11 @@ public class DateWidget extends QuestionWidget {
             hideDay = true;
             hideMonth = true;
         } else if (!"no-calendar".equals(appearance)) {
-            hideDay = true;
             showCalendar = true;
         }
     }
 
     private void hideDayFieldIfNotInFormat() {
-        if (showCalendar) {
-            datePickerDialog.getDatePicker().setCalendarViewShown(true);
-            CalendarView cv = datePickerDialog.getDatePicker().getCalendarView();
-            cv.setShowWeekNumber(false);
-            datePickerDialog.getDatePicker().setSpinnersShown(true);
-           } else {
-            datePickerDialog.getDatePicker().setCalendarViewShown(false);
-        }
-
         if (hideDay) {
             datePickerDialog.getDatePicker().findViewById(
                     Resources.getSystem().getIdentifier("day", "id", "android"))
@@ -131,18 +117,13 @@ public class DateWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
 
-        if (nullAnswer && !showCalendar) {
+        if (nullAnswer) {
             return null;
         } else {
-            if (showCalendar) {
-                year = datePickerDialog.getDatePicker().getYear();
-                month = datePickerDialog.getDatePicker().getMonth() + 1;
-                dayOfMonth = datePickerDialog.getDatePicker().getDayOfMonth();
-            }
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
-                    .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
-                    .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : dayOfMonth)
+                    .withMonthOfYear(hideMonth ? 1 : month)
+                    .withDayOfMonth((hideMonth || hideDay) ? 1 : dayOfMonth)
                     .withHourOfDay(0)
                     .withMinuteOfHour(0);
             return new DateData(ldt.toDate());
@@ -203,20 +184,11 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void addViews() {
-        if (showCalendar) {
-            HorizontalScrollView scrollView = new HorizontalScrollView(getContext());
-            LinearLayout ll = new LinearLayout(getContext());
-            ll.addView(datePickerDialog.getDatePicker());
-            ll.setPadding(10, 10, 10, 10);
-            scrollView.addView(ll);
-            addAnswerView(scrollView);
-        } else {
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-            linearLayout.addView(dateButton);
-            linearLayout.addView(dateTextView);
-            addAnswerView(linearLayout);
-        }
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(dateButton);
+        linearLayout.addView(dateTextView);
+        addAnswerView(linearLayout);
     }
 
     public void setDateLabel() {
@@ -225,8 +197,17 @@ public class DateWidget extends QuestionWidget {
                 (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false));
     }
 
+    private int getTheme() {
+        int theme = 0;
+        if (!showCalendar) {
+            theme = android.R.style.Theme_Holo_Light_Dialog;
+        }
+
+        return theme;
+    }
+
     private void createDatePickerDialog() {
-        datePickerDialog = new CustomDatePickerDialog(getContext(),
+        datePickerDialog = new CustomDatePickerDialog(getContext(), getTheme(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -239,11 +220,7 @@ public class DateWidget extends QuestionWidget {
         datePickerDialog.setCanceledOnTouchOutside(false);
 
         if (formEntryPrompt.getAnswerValue() == null) {
-            if (showCalendar) {
-                setDateToCurrent();
-            } else {
-                clearAnswer();
-            }
+            clearAnswer();
         } else {
             DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
             year = dt.getYear();
@@ -260,10 +237,6 @@ public class DateWidget extends QuestionWidget {
 
     public boolean isMonthHidden() {
         return hideMonth;
-    }
-
-    public boolean isCalendarShown() {
-        return showCalendar;
     }
 
     public int getYear() {
@@ -291,16 +264,24 @@ public class DateWidget extends QuestionWidget {
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {
+        int theme;
         private String dialogTitle = getContext().getString(R.string.select_date);
 
-        CustomDatePickerDialog(Context context, OnDateSetListener listener, int year, int month, int dayOfMonth) {
-            super(context, listener, year, month, dayOfMonth);
-            setTitle(dialogTitle);
+        CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
+            super(context, theme, listener, year, month, dayOfMonth);
+            this.theme = theme;
             fixSpinner(context, year, month, dayOfMonth);
+            if (theme == 0) {
+                setTitle(dialogTitle);
+            } else {
+                getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
         }
 
         public void setTitle(CharSequence title) {
-            super.setTitle(dialogTitle);
+            if (theme != 0) {
+                super.setTitle(dialogTitle);
+            }
         }
 
         /**
