@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">ចាប់​យក​ទីតាំង</string>
   <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
   <string name="accuracy">ភាព​ត្រឹមត្រូវ</string>
@@ -493,7 +493,7 @@
   <string name="select_time">ជ្រើសរើសម៉ោង</string>
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
-  <string name="use_device_language">ប្រើប្រាស់ភាសារបស់ទូរស័ព្ទ</string>
+  <string name="use_phone_language">ប្រើប្រាស់ភាសារបស់ទូរស័ព្ទ</string>
   <string name="share">ចែករំលែក</string>
   <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>

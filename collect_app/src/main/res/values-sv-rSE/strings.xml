@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="accept_location">Spara position</string>
   <string name="show_password">Visa lösenord</string>
   <string name="accuracy">Noggrannhet</string>
@@ -492,7 +492,7 @@
   <string name="select_time">Välj tid</string>
   <string name="no_date_selected">Inget datum valt</string>
   <string name="no_time_selected">Ingen tidpunkt vald</string>
-  <string name="use_device_language">Använd telefonens språk</string>
+  <string name="use_phone_language">Använd telefonens språk</string>
   <string name="import_settings">Import/export inställningar</string>
   <string name="qr_code">QR-kod</string>
   <string name="scan_qrcode">Skanna koden från den andra enheten</string>
