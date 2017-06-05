@@ -119,7 +119,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // get uri to form
-        long idFormsTable = getListAdapter().getItemId(position);
+        long idFormsTable = listView.getAdapter().getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
@@ -180,12 +180,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         Timber.i("Disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
-
-        if (listAdapter.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-        }
+        updateEmptyView();
     }
 
     private void setupAdapter() {
@@ -199,7 +194,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         listAdapter =
                 new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
 
-        setListAdapter(listAdapter);
+        listView.setAdapter(listAdapter);
     }
 
     @Override
@@ -210,6 +205,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
+        updateEmptyView();
     }
 
     private Cursor getCursor() {
