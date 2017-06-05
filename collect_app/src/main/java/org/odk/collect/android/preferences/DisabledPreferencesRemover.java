@@ -17,12 +17,8 @@
 package org.odk.collect.android.preferences;
 
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceScreen;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 
 import timber.log.Timber;
 
@@ -30,40 +26,12 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 
 class DisabledPreferencesRemover {
 
-    /**
-     * A map used to find the parent category of any preference
-     */ // ToDo: find a better way?
-    private final Map<Preference, Object> preferencePreferenceCategoryMap;
-
     private PreferencesActivity pa;
-    private PreferencesFragment pf;
+    private PreferenceFragment pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa, PreferencesFragment pf) {
+    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragment pf) {
         this.pa = pa;
         this.pf = pf;
-        preferencePreferenceCategoryMap = createPreferenceToPreferenceCategoryMap();
-    }
-
-    private Map<Preference, Object> createPreferenceToPreferenceCategoryMap() {
-        final Map<Preference, Object> map = new HashMap<>();
-        PreferenceScreen screen = pf.getPreferenceScreen();
-        for (int i = 0; i < screen.getPreferenceCount(); i++) {
-            Preference p = screen.getPreference(i);
-            if (p instanceof PreferenceCategory) {
-                PreferenceCategory pc = (PreferenceCategory) p;
-                for (int j = 0; j < pc.getPreferenceCount(); ++j) {
-                    map.put(pc.getPreference(j), pc);
-                }
-            } else if (p instanceof PreferenceScreen) {
-                PreferenceScreen pc = (PreferenceScreen) p;
-                for (int j = 0; j < pc.getPreferenceCount(); ++j) {
-                    map.put(pc.getPreference(j), pc);
-                }
-            } else {
-                map.put(p, screen);
-            }
-        }
-        return map;
     }
 
     /**
@@ -78,41 +46,62 @@ class DisabledPreferencesRemover {
             boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
 
             if (!prefAllowed && !adminMode) {
-                Preference pref = pf.findPreference(agKeys.generalKey);
-                Object pc = preferencePreferenceCategoryMap.get(pref);
-                if (pc != null && pref != null) { // Neither should ever be null
-                    if (pc instanceof PreferenceScreen) {
-                        ((PreferenceScreen) pc).removePreference(pref);
-                        Timber.d("Removed %s", pref.toString());
-                    } else if (pc instanceof PreferenceCategory) {
-                        ((PreferenceCategory) pc).removePreference(pref);
-                        Timber.d("Removed %s", pref.toString());
-                    }
+
+                Preference preference = pf.findPreference(agKeys.generalKey);
+
+                PreferenceGroup parent = getParent(pf.getPreferenceScreen(), preference);
+                if (parent == null) {
+                    throw new RuntimeException("Couldn't find preference");
+                }
+
+                parent.removePreference(preference);
+                Timber.d("Removed %s", preference.toString());
+            }
+        }
+    }
+
+    private PreferenceGroup getParent(PreferenceGroup groupToSearchIn, Preference preference) {
+        for (int i = 0; i < groupToSearchIn.getPreferenceCount(); ++i) {
+            Preference child = groupToSearchIn.getPreference(i);
+
+            if (child == preference) {
+                return groupToSearchIn;
+            }
+
+            if (child instanceof PreferenceGroup) {
+                PreferenceGroup childGroup = (PreferenceGroup) child;
+                PreferenceGroup result = getParent(childGroup, preference);
+                if (result != null) {
+                    return result;
                 }
             }
         }
+
+        return null;
     }
 
     /**
      * Deletes all empty PreferenceCategory items.
      */
     void removeEmptyCategories() {
+        removeEmptyCategories(pf.getPreferenceScreen());
+    }
+
+    private void removeEmptyCategories(PreferenceGroup pc) {
+
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-        HashSet<Object> uniqueCategories = new
-                HashSet<>(preferencePreferenceCategoryMap.values());
         if (adminMode) {
             return;
         }
-        for (Object pc : uniqueCategories) {
-            if (pc instanceof PreferenceCategory) {
-                PreferenceCategory preferenceCategory = (PreferenceCategory) pc;
-                if (preferenceCategory.getPreferenceCount() == 0) {
-                    pf.getPreferenceScreen().removePreference(preferenceCategory);
-                }
-            } else if (pc instanceof PreferenceScreen) {
-                PreferenceScreen preferenceScreen = (PreferenceScreen) pc;
-                if (preferenceScreen.getPreferenceCount() == 0) {
-                    pf.getPreferenceScreen().removePreference(preferenceScreen);
+
+        for (int i = 0; i < pc.getPreferenceCount(); i++) {
+            Preference preference = pc.getPreference(i);
+
+            if (preference instanceof PreferenceGroup) {
+                if (((PreferenceGroup) preference).getPreferenceCount() == 0) {
+                    pc.removePreference(preference);
+                } else {
+                    removeEmptyCategories((PreferenceGroup) preference);
                 }
             }
         }
