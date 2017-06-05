@@ -54,11 +54,11 @@ public class DateTimeWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(dateWidget);
-        if (dateWidget.isCalendarShown() || !dateWidget.isDayHidden()) {
+        if (!dateWidget.isDayHidden()) {
             linearLayout.addView(timeWidget);
         }
         addAnswerView(linearLayout);
-        if (dateWidget.isCalendarShown() && timeWidget.getAnswer() == null) {
+        if (timeWidget.getAnswer() == null) {
             timeWidget.setTimeToCurrent();
             timeWidget.setTimeLabel();
         }
@@ -81,7 +81,6 @@ public class DateTimeWidget extends QuestionWidget {
             
             boolean hideDay = dateWidget.isDayHidden();
             boolean hideMonth = dateWidget.isMonthHidden();
-            boolean showCalendar = dateWidget.isCalendarShown();
 
             int year = dateWidget.getYear();
             int month = dateWidget.getMonth();
@@ -91,10 +90,10 @@ public class DateTimeWidget extends QuestionWidget {
 
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
-                    .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
-                    .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
-                    .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
-                    .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
+                    .withMonthOfYear(hideMonth ? 1 : month)
+                    .withDayOfMonth((hideMonth || hideDay) ? 1 : day)
+                    .withHourOfDay((hideMonth || hideDay) ? 0 : hour)
+                    .withMinuteOfHour((hideMonth || hideDay) ? 0 : minute)
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
 
@@ -104,10 +103,8 @@ public class DateTimeWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        if (!dateWidget.isCalendarShown()) {
-            dateWidget.clearAnswer();
-            timeWidget.clearAnswer();
-        }
+        dateWidget.clearAnswer();
+        timeWidget.clearAnswer();
     }
 
     @Override
