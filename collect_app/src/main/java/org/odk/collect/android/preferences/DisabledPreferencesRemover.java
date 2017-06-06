@@ -98,12 +98,30 @@ class DisabledPreferencesRemover {
             Preference preference = pc.getPreference(i);
 
             if (preference instanceof PreferenceGroup) {
-                if (((PreferenceGroup) preference).getPreferenceCount() == 0) {
+                if (((PreferenceGroup) preference).getPreferenceCount() == 0
+                        && !hasChildPrefs(preference.getKey())) {
                     pc.removePreference(preference);
                 } else {
                     removeEmptyCategories((PreferenceGroup) preference);
                 }
             }
         }
+    }
+
+    /**
+     * Checks whether the preferenceGroup actually has any child preferences defined
+     */
+    private boolean hasChildPrefs(String preferenceKey) {
+        String[] preferenceScreensWithNoChildren = {
+                PreferenceKeys.KEY_SPLASH_PATH,
+                PreferenceKeys.KEY_FORM_METADATA
+        };
+
+        for (String pref : preferenceScreensWithNoChildren) {
+            if (pref.equals(preferenceKey)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
