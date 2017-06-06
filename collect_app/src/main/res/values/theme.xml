@@ -10,4 +10,8 @@
         <item name="colorAccent">@color/light_blue</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
     </style>
+
+    <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/light_blue</item>
+    </style>
 </resources>

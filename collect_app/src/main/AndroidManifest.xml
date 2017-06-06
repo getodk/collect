@@ -190,10 +190,8 @@ the specific language governing permissions and limitations under the License.
             android:name=".preferences.AboutPreferencesActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".preferences.ServerPreferencesActivity"
-            android:label="@string/app_name" />
-        <activity
             android:name=".preferences.PreferencesActivity"
+            android:theme="@style/AppTheme.SettingsTheme"
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.FormMetadataActivity"

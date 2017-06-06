@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -41,14 +40,14 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PAS
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 
 
-public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
     public static final String ADMIN_PREFERENCES = "admin_prefs";
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(getString(R.string.admin_preferences));
+        toolbar.setTitle(getString(R.string.admin_preferences));
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
@@ -42,7 +41,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
 
-public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class PreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -73,8 +72,13 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         protocol.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), ServerPreferencesActivity.class);
-                startActivity(intent);
+
+                getFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .replace(android.R.id.content, new ServerPreferences())
+                        .commit();
+
                 return true;
             }
         });
