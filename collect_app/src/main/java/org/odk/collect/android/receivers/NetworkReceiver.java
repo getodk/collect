@@ -28,10 +28,12 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
@@ -69,27 +71,20 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                if (interfaceIsEnabled(context, currentNetworkInfo)) {
-                    uploadForms(context);
-                }
+                uploadForms(context, interfaceIsEnabled(context, currentNetworkInfo));
             }
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (ni == null || !ni.isConnected()) {
-                // not connected, do nothing
-            } else {
-                if (interfaceIsEnabled(context, ni)) {
-                    uploadForms(context);
-                }
+            if (ni != null && ni.isConnected()) {
+                uploadForms(context, interfaceIsEnabled(context, ni));
             }
         }
     }
 
-    private boolean interfaceIsEnabled(Context context,
-                                       NetworkInfo currentNetworkInfo) {
+    private boolean interfaceIsEnabled(Context context, NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -103,8 +98,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
-
-    private void uploadForms(Context context) {
+    private void uploadForms(Context context, boolean autoSendSettings) {
         if (!running) {
             running = true;
 
@@ -115,8 +109,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
                     while (c.moveToNext()) {
-                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(l);
+                        if (submitInstance(c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID)), autoSendSettings)) {
+                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                            toUpload.add(l);
+                        }
                     }
                 }
             } finally {
@@ -178,6 +174,22 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 instanceUploaderTask.execute(toSendArray);
             }
         }
+    }
+
+    private boolean submitInstance(String jrFormId, boolean autoSendSettings) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+
+        String autoSubmit = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SUBMIT);
+                autoSubmit = cursor.getString(autoSubmitColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return autoSubmit == null ? autoSendSettings : Boolean.valueOf(autoSubmit);
     }
 
     @Override
