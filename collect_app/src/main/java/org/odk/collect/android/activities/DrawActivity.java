@@ -17,31 +17,22 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -108,7 +99,6 @@ public class DrawActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.draw_layout);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -129,23 +119,23 @@ public class DrawActivity extends AppCompatActivity {
                     fabActions.animate().rotation(45).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    AnimateUtils.ScaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
                 } else {
                     status = 0;
                     fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    AnimateUtils.ScaleOutAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleOutAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleOutAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleOutAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleOutAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.ScaleOutAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleOutAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleOutAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleOutAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleOutAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleOutAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleOutAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
                 }
                 view.setTag(status);
             }
@@ -250,8 +240,8 @@ public class DrawActivity extends AppCompatActivity {
                     getString(R.string.draw_image));
         }
 
-        drawView = new DrawView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);
-    }
+        drawView = (DrawView) findViewById(R.id.drawView);
+        drawView.setupView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);    }
 
     private int getInverseColor(int color) {
         int red = Color.red(color);

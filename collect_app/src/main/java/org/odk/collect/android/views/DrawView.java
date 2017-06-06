@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Nafundi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.odk.collect.android.views;
 
 import android.content.Context;
@@ -5,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,9 +50,14 @@ public class DrawView extends View {
 
     private int currentColor = 0xFF000000;
 
-    public DrawView(final Context c) {
-        super(c);
-        isSignature = false;
+    public DrawView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public void setupView(Context c, boolean isSignature, File f) {
+        this.isSignature = isSignature;
+        mBackgroundBitmapFile = f;
+
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         mCurrentPath = new Path();
         mOffscreenPath = new Path();
@@ -55,12 +77,6 @@ public class DrawView extends View {
         pointPaint.setColor(currentColor);
         pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         pointPaint.setStrokeWidth(10);
-    }
-
-    public DrawView(Context c, boolean isSignature, File f) {
-        this(c);
-        this.isSignature = isSignature;
-        mBackgroundBitmapFile = f;
     }
 
     public void reset() {
@@ -195,6 +211,8 @@ public class DrawView extends View {
 
     public void setColor(int color) {
         currentColor = color;
+        paint.setColor(color);
+        pointPaint.setColor(color);
     }
 
     public int getColor() {

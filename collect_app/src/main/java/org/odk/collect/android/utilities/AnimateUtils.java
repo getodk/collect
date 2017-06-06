@@ -9,7 +9,7 @@ import android.view.animation.ScaleAnimation;
  * Created by Ing. Oscar G. Medina Cruz on 18/06/2016.
  */
 public class AnimateUtils {
-    public static void ScaleInAnimation(final View view, int startOffset, int duration,
+    public static void scaleInAnimation(final View view, int startOffset, int duration,
                                         Interpolator interpolator, final boolean isInvisible) {
         ScaleAnimation scaleInAnimation = new ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF,
                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -35,7 +35,7 @@ public class AnimateUtils {
         view.startAnimation(scaleInAnimation);
     }
 
-    public static void ScaleOutAnimation(final View view, int startOffset, int duration,
+    public static void scaleOutAnimation(final View view, int startOffset, int duration,
                                          Interpolator interpolator, final boolean invisibleAtEnd) {
         ScaleAnimation scaleInAnimation = new ScaleAnimation(1f, 0f, 1f, 0f, Animation.RELATIVE_TO_SELF,
                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
