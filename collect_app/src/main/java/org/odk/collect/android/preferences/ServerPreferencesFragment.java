@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.text.InputFilter;
 import android.view.MotionEvent;
@@ -54,7 +53,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_UR
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 
 
-public class ServerPreferencesFragment extends PreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;

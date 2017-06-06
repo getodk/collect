@@ -14,22 +14,16 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.support.annotation.Nullable;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
@@ -47,25 +41,18 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com;
  *         constraint behavior option)
  */
-public class PreferencesActivity extends AppCompatActivity {
+public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
     protected static final int IMAGE_CHOOSER = 0;
     private PreferencesFragment fragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Timber.d("onCreate");
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.preference_layout);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.general_preferences));
-        setSupportActionBar(toolbar);
-
         fragment = new PreferencesFragment();
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(android.R.id.content, fragment)
                 .commit();
     }
 
