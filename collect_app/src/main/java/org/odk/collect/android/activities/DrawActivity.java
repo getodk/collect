@@ -48,6 +48,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.views.DrawView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,9 +86,6 @@ public class DrawActivity extends AppCompatActivity {
     private File output = null;
     private File savepointImage = null;
 
-    private Paint paint;
-    private Paint pointPaint;
-    private int currentColor = 0xFF000000;
     private DrawView drawView;
     private String alertTitleString;
     private AlertDialog alertDialog;
@@ -108,6 +106,7 @@ public class DrawActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.draw_layout);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -161,11 +160,9 @@ public class DrawActivity extends AppCompatActivity {
                             DrawActivity.this,
                             new ColorPickerDialog.OnColorChangedListener() {
                                 public void colorChanged(String key, int color) {
-                                    currentColor = color;
-                                    paint.setColor(color);
-                                    pointPaint.setColor(color);
+                                    drawView.setColor(color);
                                 }
-                            }, "key", currentColor, currentColor,
+                            }, "key", drawView.getColor(), drawView.getColor(),
                             getString(R.string.select_drawing_color));
                     cpd.show();
                 }
@@ -253,35 +250,7 @@ public class DrawActivity extends AppCompatActivity {
                     getString(R.string.draw_image));
         }
 
-        setTitle(getString(R.string.draw_image));
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout v = (RelativeLayout) inflater.inflate(
-                R.layout.draw_layout, null);
-        LinearLayout ll = (LinearLayout) v.findViewById(R.id.drawView);
-
-        drawView = new DrawView(this, OPTION_SIGNATURE.equals(loadOption),
-                savepointImage);
-
-        ll.addView(drawView);
-
-        setContentView(v);
-
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        paint.setColor(currentColor);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeWidth(10);
-
-        pointPaint = new Paint();
-        pointPaint.setAntiAlias(true);
-        pointPaint.setDither(true);
-        pointPaint.setColor(currentColor);
-        pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        pointPaint.setStrokeWidth(10);
+        drawView = new DrawView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);
     }
 
     private int getInverseColor(int color) {
@@ -441,161 +410,4 @@ public class DrawActivity extends AppCompatActivity {
                 }).create();
         alertDialog.show();
     }
-
-    public class DrawView extends View {
-        private boolean isSignature;
-        private Bitmap bitmap;
-        private Canvas canvas;
-        private Path currentPath;
-        private Path offscreenPath; // Adjusted for position of the bitmap in the view
-        private Paint bitmapPaint;
-        private File backgroundBitmapFile;
-        private float latestX;
-        private float latestY;
-
-        public DrawView(final Context c) {
-            super(c);
-            isSignature = false;
-            bitmapPaint = new Paint(Paint.DITHER_FLAG);
-            currentPath = new Path();
-            offscreenPath = new Path();
-            backgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
-        }
-
-        public DrawView(Context c, boolean isSignature, File f) {
-            this(c);
-            this.isSignature = isSignature;
-            backgroundBitmapFile = f;
-        }
-
-        public void reset() {
-            DisplayMetrics metrics = getBaseContext().getResources().getDisplayMetrics();
-            int screenWidth = metrics.widthPixels;
-            int screenHeight = metrics.heightPixels;
-            resetImage(screenWidth, screenHeight);
-        }
-
-        public void resetImage(int w, int h) {
-            if (backgroundBitmapFile.exists()) {
-                // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
-                // is called upon with flipped w/h (before orientation changes have been applied)
-                if (w > h) {
-                    int temp = w;
-                    w = h;
-                    h = temp;
-                }
-
-                bitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
-                        backgroundBitmapFile, w, h).copy(
-                        Bitmap.Config.ARGB_8888, true);
-                // bitmap =
-                // Bitmap.createScaledBitmap(BitmapFactory.decodeFile(backgroundBitmapFile.getPath()),
-                // w, h, true);
-                canvas = new Canvas(bitmap);
-            } else {
-                bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                canvas = new Canvas(bitmap);
-                canvas.drawColor(0xFFFFFFFF);
-                if (isSignature) {
-                    drawSignLine();
-                }
-            }
-        }
-
-        @Override
-        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            super.onSizeChanged(w, h, oldw, oldh);
-            resetImage(w, h);
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            drawOnCanvas(canvas, getBitmapLeft(), getBitmapTop());
-        }
-
-        public void drawOnCanvas(Canvas canvas, float left, float top) {
-            canvas.drawColor(0xFFAAAAAA);
-            canvas.drawBitmap(bitmap, left, top, bitmapPaint);
-            canvas.drawPath(currentPath, paint);
-        }
-
-        private void touch_start(float x, float y) {
-            currentPath.reset();
-            currentPath.moveTo(x, y);
-
-            offscreenPath.reset();
-            offscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
-
-            latestX = x;
-            latestY = y;
-        }
-
-        public void drawSignLine() {
-            canvas.drawLine(0, (int) (canvas.getHeight() * .7),
-                    canvas.getWidth(), (int) (canvas.getHeight() * .7), paint);
-        }
-
-        private void touch_move(float x, float y) {
-            currentPath.quadTo(latestX, latestY, (x + latestX) / 2, (y + latestY) / 2);
-            offscreenPath.quadTo(latestX - getBitmapLeft(), latestY - getBitmapTop(),
-                    (x + latestX) / 2 - getBitmapLeft(), (y + latestY) / 2 - getBitmapTop());
-            latestX = x;
-            latestY = y;
-        }
-
-        private void touch_up() {
-            if (currentPath.isEmpty()) {
-                canvas.drawPoint(latestX, latestY, pointPaint);
-            } else {
-                currentPath.lineTo(latestX, latestY);
-                offscreenPath.lineTo(latestX - getBitmapLeft(), latestY - getBitmapTop());
-
-                // commit the path to our offscreen
-                canvas.drawPath(offscreenPath, paint);
-            }
-            // kill this so we don't double draw
-            currentPath.reset();
-        }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            float x = event.getX();
-            float y = event.getY();
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    touch_start(x, y);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    touch_move(x, y);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    touch_up();
-                    invalidate();
-                    break;
-            }
-            return true;
-        }
-
-        public int getBitmapHeight() {
-            return bitmap.getHeight();
-        }
-
-        public int getBitmapWidth() {
-            return bitmap.getWidth();
-        }
-
-        private int getBitmapLeft() {
-            // Centered horizontally
-            return (getWidth() - bitmap.getWidth()) / 2;
-        }
-
-        private int getBitmapTop() {
-            // Centered vertically
-            return (getHeight() - bitmap.getHeight()) / 2;
-        }
-    }
-
 }
