@@ -18,8 +18,8 @@ package org.odk.collect.android.activities;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.R;
@@ -59,9 +59,10 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
         jumpEndButton.setVisibility(View.GONE);
     }
 
+
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        HierarchyElement h = (HierarchyElement) l.getItemAtPosition(position);
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
         FormIndex index = h.getFormIndex();
         if (index == null) {
             goUpLevel();
@@ -118,7 +119,7 @@ public class ViewFormHierarchyActivity extends FormHierarchyActivity {
         // Should only get here if we've expanded or collapsed a group
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         itla.setListItems(formList);
-        setListAdapter(itla);
-        getListView().setSelection(position);
+        listView.setAdapter(itla);
+        listView.setSelection(position);
     }
 }

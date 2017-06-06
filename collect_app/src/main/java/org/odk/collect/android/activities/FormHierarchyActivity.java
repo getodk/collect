@@ -46,7 +46,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public abstract class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     protected static final int CHILD = 1;
     protected static final int EXPANDED = 2;
@@ -63,8 +63,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     protected Button jumpPreviousButton;
     protected Button jumpBeginningButton;
     protected Button jumpEndButton;
-    private ListView listView;
-    private TextView emptyView;
+    protected ListView listView;
 
 
     @Override
@@ -74,7 +73,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
+        TextView emptyView = (TextView) findViewById(android.R.id.empty);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
