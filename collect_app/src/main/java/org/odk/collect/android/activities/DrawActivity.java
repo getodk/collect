@@ -26,10 +26,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,12 +38,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -67,6 +70,14 @@ public class DrawActivity extends AppCompatActivity {
     public static final String EXTRA_OUTPUT = android.provider.MediaStore.EXTRA_OUTPUT;
     public static final String SAVEPOINT_IMAGE = "savepointImage"; // during
     // restore
+
+    private FloatingActionButton fabActions;
+    private FloatingActionButton fabSetColor;
+    private CardView cardViewSetColor;
+    private FloatingActionButton fabSaveAndClose;
+    private CardView cardViewSaveAndClose;
+    private FloatingActionButton fabClear;
+    private CardView cardViewClear;
 
     // incoming options...
     private String loadOption = null;
@@ -101,6 +112,85 @@ public class DrawActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        fabActions = (FloatingActionButton) findViewById(R.id.fab_actions);
+        fabSetColor = (FloatingActionButton) findViewById(R.id.fab_set_color);
+        cardViewSetColor = (CardView) findViewById(R.id.cv_set_color);
+        fabSaveAndClose = (FloatingActionButton) findViewById(R.id.fab_save_and_close);
+        cardViewSaveAndClose = (CardView) findViewById(R.id.cv_save_and_close);
+        fabClear = (FloatingActionButton) findViewById(R.id.fab_clear);
+        cardViewClear = (CardView) findViewById(R.id.cv_clear);
+
+        fabActions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int status = Integer.parseInt(view.getTag().toString());
+                if (status == 0) {
+                    status = 1;
+                    fabActions.animate().rotation(45).setInterpolator(new AccelerateDecelerateInterpolator())
+                            .setDuration(100).start();
+
+                    AnimateUtils.ScaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                } else {
+                    status = 0;
+                    fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
+                            .setDuration(100).start();
+
+                    AnimateUtils.ScaleOutAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleOutAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleOutAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleOutAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleOutAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.ScaleOutAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                }
+                view.setTag(status);
+            }
+        });
+
+        fabSetColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getVisibility() == View.VISIBLE) {
+                    fabActions.performClick();
+                    ColorPickerDialog cpd = new ColorPickerDialog(
+                            DrawActivity.this,
+                            new ColorPickerDialog.OnColorChangedListener() {
+                                public void colorChanged(String key, int color) {
+                                    currentColor = color;
+                                    paint.setColor(color);
+                                    pointPaint.setColor(color);
+                                }
+                            }, "key", currentColor, currentColor,
+                            getString(R.string.select_drawing_color));
+                    cpd.show();
+                }
+            }
+        });
+
+        fabSaveAndClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getVisibility() == View.VISIBLE) {
+                    fabActions.performClick();
+                    saveAndClose();
+                }
+            }
+        });
+
+        fabClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getVisibility() == View.VISIBLE) {
+                    fabActions.performClick();
+                    reset();
+                }
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
 
@@ -169,7 +259,7 @@ public class DrawActivity extends AppCompatActivity {
                 Context.LAYOUT_INFLATER_SERVICE);
         RelativeLayout v = (RelativeLayout) inflater.inflate(
                 R.layout.draw_layout, null);
-        LinearLayout ll = (LinearLayout) v.findViewById(R.id.drawViewLayout);
+        LinearLayout ll = (LinearLayout) v.findViewById(R.id.drawView);
 
         drawView = new DrawView(this, OPTION_SIGNATURE.equals(loadOption),
                 savepointImage);
