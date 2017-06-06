@@ -241,7 +241,8 @@ public class DrawActivity extends AppCompatActivity {
         }
 
         drawView = (DrawView) findViewById(R.id.drawView);
-        drawView.setupView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);    }
+        drawView.setupView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);
+    }
 
     private int getInverseColor(int color) {
         int red = Color.red(color);

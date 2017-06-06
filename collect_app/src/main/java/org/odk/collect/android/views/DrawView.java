@@ -33,20 +33,20 @@ import java.io.File;
 
 public class DrawView extends View {
     private boolean isSignature;
-    private Bitmap mBitmap;
-    private Canvas mCanvas;
+    private Bitmap bitmap;
+    private Canvas canvas;
 
-    private Path mCurrentPath;
-    private Path mOffscreenPath; // Adjusted for position of the bitmap in the view
+    private Path currentPath;
+    private Path offscreenPath; // Adjusted for position of the bitmap in the view
 
-    private Paint mBitmapPaint;
+    private Paint bitmapPaint;
     private Paint paint;
     private Paint pointPaint;
 
-    private File mBackgroundBitmapFile;
+    private File backgroundBitmapFile;
 
-    private float mX;
-    private float mY;
+    private float valueX;
+    private float valueY;
 
     private int currentColor = 0xFF000000;
 
@@ -56,12 +56,12 @@ public class DrawView extends View {
 
     public void setupView(Context c, boolean isSignature, File f) {
         this.isSignature = isSignature;
-        mBackgroundBitmapFile = f;
+        backgroundBitmapFile = f;
 
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        mCurrentPath = new Path();
-        mOffscreenPath = new Path();
-        mBackgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
+        bitmapPaint = new Paint(Paint.DITHER_FLAG);
+        currentPath = new Path();
+        offscreenPath = new Path();
+        backgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
 
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -96,18 +96,18 @@ public class DrawView extends View {
             h = temp;
         }
 
-        if (mBackgroundBitmapFile.exists()) {
-            mBitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
-                    mBackgroundBitmapFile, w, h).copy(
+        if (backgroundBitmapFile.exists()) {
+            bitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
+                    backgroundBitmapFile, w, h).copy(
                     Bitmap.Config.ARGB_8888, true);
-            // mBitmap =
-            // Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mBackgroundBitmapFile.getPath()),
+            // bitmap =
+            // Bitmap.createScaledBitmap(BitmapFactory.decodeFile(backgroundBitmapFile.getPath()),
             // w, h, true);
-            mCanvas = new Canvas(mBitmap);
+            canvas = new Canvas(bitmap);
         } else {
-            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            mCanvas = new Canvas(mBitmap);
-            mCanvas.drawColor(0xFFFFFFFF);
+            bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            canvas = new Canvas(bitmap);
+            canvas.drawColor(0xFFFFFFFF);
             if (isSignature) {
                 drawSignLine();
             }
@@ -127,46 +127,46 @@ public class DrawView extends View {
 
     public void drawOnCanvas(Canvas canvas, float left, float top) {
         canvas.drawColor(0xFFAAAAAA);
-        canvas.drawBitmap(mBitmap, left, top, mBitmapPaint);
-        canvas.drawPath(mCurrentPath, paint);
+        canvas.drawBitmap(bitmap, left, top, bitmapPaint);
+        canvas.drawPath(currentPath, paint);
     }
 
     private void touch_start(float x, float y) {
-        mCurrentPath.reset();
-        mCurrentPath.moveTo(x, y);
+        currentPath.reset();
+        currentPath.moveTo(x, y);
 
-        mOffscreenPath.reset();
-        mOffscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
+        offscreenPath.reset();
+        offscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
 
-        mX = x;
-        mY = y;
+        valueX = x;
+        valueY = y;
     }
 
     public void drawSignLine() {
-        mCanvas.drawLine(0, (int) (mCanvas.getHeight() * .7),
-                mCanvas.getWidth(), (int) (mCanvas.getHeight() * .7), paint);
+        canvas.drawLine(0, (int) (canvas.getHeight() * .7),
+                canvas.getWidth(), (int) (canvas.getHeight() * .7), paint);
     }
 
     private void touch_move(float x, float y) {
-        mCurrentPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
-        mOffscreenPath.quadTo(mX - getBitmapLeft(), mY - getBitmapTop(),
-                (x + mX) / 2 - getBitmapLeft(), (y + mY) / 2 - getBitmapTop());
-        mX = x;
-        mY = y;
+        currentPath.quadTo(valueX, valueY, (x + valueX) / 2, (y + valueY) / 2);
+        offscreenPath.quadTo(valueX - getBitmapLeft(), valueY - getBitmapTop(),
+                (x + valueX) / 2 - getBitmapLeft(), (y + valueY) / 2 - getBitmapTop());
+        valueX = x;
+        valueY = y;
     }
 
     private void touch_up() {
-        if (mCurrentPath.isEmpty()) {
-            mCanvas.drawPoint(mX, mY, pointPaint);
+        if (currentPath.isEmpty()) {
+            canvas.drawPoint(valueX, valueY, pointPaint);
         } else {
-            mCurrentPath.lineTo(mX, mY);
-            mOffscreenPath.lineTo(mX - getBitmapLeft(), mY - getBitmapTop());
+            currentPath.lineTo(valueX, valueY);
+            offscreenPath.lineTo(valueX - getBitmapLeft(), valueY - getBitmapTop());
 
             // commit the path to our offscreen
-            mCanvas.drawPath(mOffscreenPath, paint);
+            canvas.drawPath(offscreenPath, paint);
         }
         // kill this so we don't double draw
-        mCurrentPath.reset();
+        currentPath.reset();
     }
 
     @Override
@@ -192,21 +192,21 @@ public class DrawView extends View {
     }
 
     public int getBitmapHeight() {
-        return mBitmap.getHeight();
+        return bitmap.getHeight();
     }
 
     public int getBitmapWidth() {
-        return mBitmap.getWidth();
+        return bitmap.getWidth();
     }
 
     private int getBitmapLeft() {
         // Centered horizontally
-        return (getWidth() - mBitmap.getWidth()) / 2;
+        return (getWidth() - bitmap.getWidth()) / 2;
     }
 
     private int getBitmapTop() {
         // Centered vertically
-        return (getHeight() - mBitmap.getHeight()) / 2;
+        return (getHeight() - bitmap.getHeight()) / 2;
     }
 
     public void setColor(int color) {
