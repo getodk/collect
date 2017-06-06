@@ -74,10 +74,6 @@ public class DrawActivity extends AppCompatActivity {
     private File output = null;
     private File savepointImage = null;
 
-    private Button btnDrawColor;
-    private Button btnFinished;
-    private Button btnReset;
-    private Button btnCancel;
     private Paint paint;
     private Paint pointPaint;
     private int currentColor = 0xFF000000;
@@ -196,77 +192,6 @@ public class DrawActivity extends AppCompatActivity {
         pointPaint.setColor(currentColor);
         pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         pointPaint.setStrokeWidth(10);
-
-        btnDrawColor = (Button) findViewById(R.id.btnSelectColor);
-        btnDrawColor.setTextColor(getInverseColor(currentColor));
-        btnDrawColor.getBackground().setColorFilter(currentColor,
-                PorterDuff.Mode.SRC_ATOP);
-        btnDrawColor.setText(getString(R.string.set_color));
-        btnDrawColor.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "setColorButton",
-                                "click");
-                ColorPickerDialog cpd = new ColorPickerDialog(
-                        DrawActivity.this,
-                        new ColorPickerDialog.OnColorChangedListener() {
-                            public void colorChanged(String key, int color) {
-                                btnDrawColor
-                                        .setTextColor(getInverseColor(color));
-                                btnDrawColor.getBackground().setColorFilter(
-                                        color, PorterDuff.Mode.SRC_ATOP);
-                                currentColor = color;
-                                paint.setColor(color);
-                                pointPaint.setColor(color);
-                            }
-                        }, "key", currentColor, currentColor,
-                        getString(R.string.select_drawing_color));
-                cpd.show();
-            }
-        });
-        btnFinished = (Button) findViewById(R.id.btnFinishDraw);
-        btnFinished.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "saveAndCloseButton",
-                                "click");
-                saveAndClose();
-            }
-        });
-        btnReset = (Button) findViewById(R.id.btnResetDraw);
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "resetButton",
-                                "click");
-                reset();
-            }
-        });
-        btnCancel = (Button) findViewById(R.id.btnCancelDraw);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "cancelAndCloseButton",
-                                "click");
-                cancelAndClose();
-            }
-        });
-
     }
 
     private int getInverseColor(int color) {
