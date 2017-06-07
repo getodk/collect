@@ -462,6 +462,7 @@ public class DrawActivity extends Activity {
 
         public void resetImage(int w, int h) {
 
+            if (mBackgroundBitmapFile.exists()) {
             // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
             // is called upon with flipped w/h (before orientation changes have been applied)
             if (w > h) {
@@ -470,7 +471,6 @@ public class DrawActivity extends Activity {
                 h = temp;
             }
 
-            if (mBackgroundBitmapFile.exists()) {
                 mBitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
                         mBackgroundBitmapFile, w, h).copy(
                         Bitmap.Config.ARGB_8888, true);
