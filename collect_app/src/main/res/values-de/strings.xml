@@ -352,7 +352,6 @@
   <string name="map_basemap_behavior">Basiskarte auswählen</string>
   <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
   <string name="save_point">Standort speichern</string>
-  <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="get_shape">GeoShape starten</string>
   <string name="get_trace">GeoTrace starten</string>

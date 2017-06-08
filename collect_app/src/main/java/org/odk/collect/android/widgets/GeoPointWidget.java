@@ -119,7 +119,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         // setup play button
         viewButton = new Button(getContext());
         viewButton.setId(QuestionWidget.newUniqueId());
-        viewButton.setText(getContext().getString(R.string.get_point));
+        viewButton.setText(getContext().getString(R.string.accept_location));
         viewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         viewButton.setPadding(20, 20, 20, 20);
         viewButton.setLayoutParams(params);
@@ -209,13 +209,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 getLocationButton.setText(
                         getContext().getString(R.string.geopoint_view_read_only));
             } else {
-                String s = stringAnswer.getText().toString();
-                if (s.length() != 0) {
-                    getLocationButton.setText(
-                            getContext().getString(R.string.view_change_location));
-                } else {
-                    getLocationButton.setText(getContext().getString(R.string.get_point));
-                }
+                getLocationButton.setText(getContext().getString(
+                        dataAvailable ? R.string.view_change_location : R.string.accept_location));
             }
         } else {
             // if it is read-only, hide the get-location button...
@@ -224,7 +219,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             } else {
                 getLocationButton.setVisibility(View.VISIBLE);
                 getLocationButton.setText(getContext().getString(
-                        dataAvailable ? R.string.get_point : R.string.get_point));
+                        dataAvailable ? R.string.view_change_location : R.string.accept_location));
             }
 
             if (useMaps) {

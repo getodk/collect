@@ -352,7 +352,6 @@
   <string name="map_basemap_behavior">Välj en grundkarta</string>
   <string name="show_map_basemap">Visa alternativ för grundkarta</string>
   <string name="save_point">Spara GeoPoint</string>
-  <string name="get_point">Starta GeoPoint</string>
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
   <string name="get_shape">Starta GeoShape</string>
   <string name="get_trace">Starta GeoTrace</string>

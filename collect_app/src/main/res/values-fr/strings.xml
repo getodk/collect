@@ -352,7 +352,6 @@
   <string name="map_basemap_behavior">Sélectionner un fond de carte</string>
   <string name="show_map_basemap">Voir les options du fond de carte</string>
   <string name="save_point">Enregistrer le PointGéo</string>
-  <string name="get_point">Démarrer le PointGéo</string>
   <string name="geopoint_view_read_only">Voir le PointGéo</string>
   <string name="get_shape">Démarrer la FormeGéo</string>
   <string name="get_trace">Démarrer le TracéGéo</string>

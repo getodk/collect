@@ -350,7 +350,6 @@
   <string name="map_basemap_behavior">Seleccione un mapa base</string>
   <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
   <string name="save_point">Guardar PuntoGeo</string>
-  <string name="get_point">Iniciar PuntoGeo</string>
   <string name="geopoint_view_read_only">Ver PuntoGeo</string>
   <string name="get_shape">Iniciar FormaGeo</string>
   <string name="get_trace">Iniciar RastroGeo</string>

@@ -330,7 +330,6 @@
   <string name="map_basemap_behavior">Selectați o hartă de bază</string>
   <string name="show_map_basemap">Afișați opțiunile hărții de bază</string>
   <string name="save_point">Salvați GeoPoint</string>
-  <string name="get_point">Start GeoPoint</string>
   <string name="get_shape">Start GeoShape</string>
   <string name="get_trace">Start GeoTrace</string>
   <string name="geoshape_title">GeoShape</string>

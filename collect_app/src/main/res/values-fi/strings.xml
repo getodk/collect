@@ -350,7 +350,6 @@
   <string name="map_basemap_behavior">Valitse peruskartta</string>
   <string name="show_map_basemap">Näytä peruskarttavalikko</string>
   <string name="save_point">Tallenna GeoPoint</string>
-  <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <string name="get_shape">Aloita GeoShape</string>
   <string name="get_trace">Aloita GeoTrace</string>
