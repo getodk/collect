@@ -63,7 +63,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
@@ -81,6 +80,9 @@ public abstract class GoogleSheetsAbstractUploader extends
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+    public static final String VALID_GOOGLE_SHEETS_ID = "^[a-zA-Z0-9\\-]+$";
+    public static final String GPS_LOCATION = "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+            + ".[0-9]+\\s[0-9]+\\.[0-9]+$";
 
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
@@ -562,12 +564,8 @@ public abstract class GoogleSheetsAbstractUploader extends
                     // try to match a fairly specific pattern to determine
                     // if it's a location
                     // [-]#.# [-]#.# #.# #.#
-                    Pattern p = Pattern
-                            .compile(
-                                    "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                                            + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
-                    Matcher m = p.matcher(answer);
-                    if (m.matches()) {
+
+                    if (isValidLocation(answer)) {
                         // get rid of everything after the second space
                         int firstSpace = answer.indexOf(" ");
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
@@ -947,11 +945,15 @@ public abstract class GoogleSheetsAbstractUploader extends
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
+
     private boolean isValidGoogleSheetsString(String name) {
-        Pattern p = Pattern
-                .compile("^[a-zA-Z0-9\\-]+$");
-        Matcher m = p.matcher(name);
-        return m.matches();
+        return Pattern
+                .compile(VALID_GOOGLE_SHEETS_ID).matcher(name).matches();
+    }
+
+    private static boolean isValidLocation(String answer) {
+        return Pattern
+                .compile(GPS_LOCATION).matcher(answer).matches();
     }
 
     /**
@@ -975,3 +977,5 @@ public abstract class GoogleSheetsAbstractUploader extends
         return response.getValues();
     }
 }
+
+

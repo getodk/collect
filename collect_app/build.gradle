@@ -179,6 +179,7 @@ dependencies {
     androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
     androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
+    compile 'org.hamcrest:hamcrest-core:1.3'
 }
 
 // Must be at bottom to prevent dependency collisions
