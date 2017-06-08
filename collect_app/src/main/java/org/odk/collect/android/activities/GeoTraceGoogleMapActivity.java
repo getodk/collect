@@ -603,6 +603,10 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     }
 
     private void addLocationMarker() {
+        if (curLocation == null) {
+            // avoid app crash
+            return;
+        }
         LatLng latLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).draggable(true);
         Marker marker = map.addMarker(markerOptions);

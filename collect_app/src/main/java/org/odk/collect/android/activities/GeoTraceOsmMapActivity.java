@@ -642,8 +642,14 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void addLocationMarker() {
+        GeoPoint myLocation = myLocationOverlay.getMyLocation();
+        if (myLocation == null) {
+            // avoid app crash
+            return;
+        }
+
         Marker marker = new Marker(mapView);
-        marker.setPosition(myLocationOverlay.getMyLocation());
+        marker.setPosition(myLocation);
         Float lastKnownAccuracy =
                 myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
         myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
