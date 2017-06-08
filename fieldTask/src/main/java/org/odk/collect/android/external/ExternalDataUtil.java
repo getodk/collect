@@ -140,9 +140,10 @@ public final class ExternalDataUtil {
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
             XPathFuncExpr xPathFuncExpr) {
+        ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();        // smap
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
-            ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
+            //ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();  // smap
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {
@@ -188,7 +189,8 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
-            throw new ExternalDataException(e.getMessage(), e);
+            return returnedChoices;  // smap
+            //throw new ExternalDataException(e.getMessage(), e);  smap
         }
     }
 
