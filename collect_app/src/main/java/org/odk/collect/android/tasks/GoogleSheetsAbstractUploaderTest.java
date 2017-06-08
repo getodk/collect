@@ -1,18 +1,19 @@
 package org.odk.collect.android.tasks;
 
 
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 
-
 public class GoogleSheetsAbstractUploaderTest extends TypeSafeMatcher<String> {
-    private  String regex;
+    private String regex;
+
     private GoogleSheetsAbstractUploaderTest(String regex) {
         this.regex = regex;
     }
+
     @Override
+
     public void describeTo(final Description description) {
         description.appendText("matches regex=" + regex + "");
     }
