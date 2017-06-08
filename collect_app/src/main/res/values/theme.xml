@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Collect" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
         <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
@@ -13,6 +14,6 @@
 
     <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/light_blue</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>
