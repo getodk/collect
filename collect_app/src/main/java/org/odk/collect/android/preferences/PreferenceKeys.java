@@ -53,6 +53,8 @@ public final class PreferenceKeys {
     public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
 
     public static final String KEY_AUTOSEND                 = "autosend";
+    public static final String KEY_AUTOSEND_WIFI            = "autosend_wifi";
+    public static final String KEY_AUTOSEND_NETWORK         = "autosend_network";
 
     public static final String KEY_NAVIGATION               = "navigation";
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
