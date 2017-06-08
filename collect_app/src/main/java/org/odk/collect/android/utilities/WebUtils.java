@@ -277,24 +277,29 @@ public final class WebUtils {
     /**
      * Utility to ensure that the entity stream of a response is drained of
      * bytes.
+     * Apparently some servers require that we manually read all data from the
+     * stream to allow its re-use.  Please add more details or bug ID here if
+     * you know them.
      */
     public static final void discardEntityBytes(HttpResponse response) {
-        // may be a server that does not handle
         HttpEntity entity = response.getEntity();
         if (entity != null) {
+            InputStream is = null;
             try {
-                // have to read the stream in order to reuse the connection
-                InputStream is = response.getEntity().getContent();
-                // read to end of stream...
-                final long count = 1024L;
-                while (is.skip(count) == count) {
-                    // skipping to the end of the http entity
+                is = response.getEntity().getContent();
+                while (is.read() != -1) {
+                    // loop until all bytes read
                 }
-                is.close();
-            } catch (IOException e) {
-                Timber.e(e, "Unable read the stream");
             } catch (Exception e) {
                 Timber.e(e);
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        Timber.d(e);
+                    }
+                }
             }
         }
     }

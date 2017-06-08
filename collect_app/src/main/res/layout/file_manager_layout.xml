@@ -12,7 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,16 +23,31 @@ limitations under the License.
     android:layout_marginTop="0dp"
     android:orientation="vertical"
     android:padding="0dp">
+    <!-- Toolbar -->
+    <include layout="@layout/toolbar"/>
 
-    <org.odk.collect.android.views.SlidingTabLayout
-        android:id="@+id/tabs"
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:textSize="14sp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical">
+
+        <org.odk.collect.android.views.SlidingTabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textSize="14sp"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</RelativeLayout>

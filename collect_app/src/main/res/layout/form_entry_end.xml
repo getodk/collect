@@ -70,6 +70,7 @@ the specific language governing permissions and limitations under the License.
             android:layout_gravity="center_horizontal"
             android:padding="20dp"
             android:text="@string/quit_entry"
+            android:textAllCaps="false"
             android:textSize="21sp" />
 
         <View
