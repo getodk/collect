@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -74,7 +75,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormDownloadList extends FormListActivity implements FormListDownloaderListener,
-        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener {
+        FormDownloaderListener, AuthDialogUtility.AuthDialogUtilityResultListener, AdapterView.OnItemClickListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     private static final int PROGRESS_DIALOG = 1;
@@ -123,17 +124,23 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.remote_file_manage_list);
-        setTitle(getString(R.string.get_forms));
+        super.onCreate(savedInstanceState);
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(getString(R.string.get_forms));
+        } else {
+            setTitle(getString(R.string.get_forms));
+        }
+
         alertMsg = getString(R.string.please_wait);
 
         downloadButton = (Button) findViewById(R.id.add_button);
-        downloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
+        downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // this is callled in downloadSelectedFiles():
+                // this is called in downloadSelectedFiles():
                 //    Collect.getInstance().getActivityLogger().logAction(this,
                 // "downloadSelectedFiles", ...);
                 downloadSelectedFiles();
@@ -144,10 +151,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadButton.setEnabled(toggleChecked(getListView()));
-                toggleButtonLabel(toggleButton, getListView());
+                downloadButton.setEnabled(toggleChecked(listView));
+                toggleButtonLabel(toggleButton, listView);
                 selectedForms.clear();
-                if (getListView().getCheckedItemCount() == getListView().getCount()) {
+                if (listView.getCheckedItemCount() == listView.getCount()) {
                     for (HashMap<String, String> map : formList) {
                         selectedForms.add(map.get(FORMDETAIL_KEY));
                     }
@@ -243,15 +250,18 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         formListAdapter =
                 new SimpleAdapter(this, filteredFormList, R.layout.two_item_multiple_choice, data, view);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getListView().setItemsCanFocus(false);
-        setListAdapter(formListAdapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setItemsCanFocus(false);
+        listView.setAdapter(formListAdapter);
 
         sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
-    }
 
+        if (!formList.isEmpty()) {
+            emptyView.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -266,18 +276,17 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     private void clearChoices() {
-        FormDownloadList.this.getListView().clearChoices();
+        FormDownloadList.this.listView.clearChoices();
         downloadButton.setEnabled(false);
     }
 
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        toggleButtonLabel(toggleButton, getListView());
-        downloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toggleButtonLabel(toggleButton, listView);
+        downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
 
-        Object o = getListAdapter().getItem(position);
+        Object o = listView.getAdapter().getItem(position);
         @SuppressWarnings("unchecked")
         HashMap<String, String> item = (HashMap<String, String>) o;
         FormDetails detail = formNamesAndURLs.get(item.get(FORMDETAIL_KEY));
@@ -290,10 +299,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     "<missing form detail>");
         }
 
-        if (getListView().isItemChecked(position)) {
-            selectedForms.add(((HashMap<String, String>) getListAdapter().getItem(position)).get(FORMDETAIL_KEY));
+        if (listView.isItemChecked(position)) {
+            selectedForms.add(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         } else {
-            selectedForms.remove(((HashMap<String, String>) getListAdapter().getItem(position)).get(FORMDETAIL_KEY));
+            selectedForms.remove(((HashMap<String, String>) listView.getAdapter().getItem(position)).get(FORMDETAIL_KEY));
         }
     }
 
@@ -336,14 +345,14 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        toggleButtonLabel(toggleButton, getListView());
+        toggleButtonLabel(toggleButton, listView);
         updateAdapter();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(BUNDLE_SELECTED_COUNT, getListView().getCheckedItemCount());
+        outState.putInt(BUNDLE_SELECTED_COUNT, listView.getCheckedItemCount());
         outState.putSerializable(BUNDLE_FORM_MAP, formNamesAndURLs);
         outState.putString(DIALOG_TITLE, alertTitle);
         outState.putString(DIALOG_MSG, alertMsg);
@@ -367,7 +376,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_PREFERENCES:
                 Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected",
@@ -376,7 +385,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 startActivity(i);
                 return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -446,17 +455,19 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         }
         sortList();
         formListAdapter.notifyDataSetChanged();
+
         checkPreviouslyCheckedItems();
+        updateEmptyView();
     }
 
     @Override
     protected void checkPreviouslyCheckedItems() {
-        getListView().clearChoices();
-        for (int i = 0; i < getListView().getCount(); i++) {
+        listView.clearChoices();
+        for (int i = 0; i < listView.getCount(); i++) {
             HashMap<String, String> item =
-                    (HashMap<String, String>) getListAdapter().getItem(i);
+                    (HashMap<String, String>) listView.getAdapter().getItem(i);
             if (selectedForms.contains(item.get(FORMDETAIL_KEY))) {
-                getListView().setItemChecked(i, true);
+                listView.setItemChecked(i, true);
             }
         }
     }
@@ -482,11 +493,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         int totalCount = 0;
         ArrayList<FormDetails> filesToDownload = new ArrayList<FormDetails>();
 
-        SparseBooleanArray sba = getListView().getCheckedItemPositions();
-        for (int i = 0; i < getListView().getCount(); i++) {
+        SparseBooleanArray sba = listView.getCheckedItemPositions();
+        for (int i = 0; i < listView.getCount(); i++) {
             if (sba.get(i, false)) {
                 HashMap<String, String> item =
-                        (HashMap<String, String>) getListAdapter().getItem(i);
+                        (HashMap<String, String>) listView.getAdapter().getItem(i);
                 filesToDownload.add(formNamesAndURLs.get(item.get(FORMDETAIL_KEY)));
             }
         }
@@ -509,7 +520,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         if (downloadFormsTask != null) {
             return downloadFormsTask;
         } else {
@@ -612,7 +623,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      */
     private void selectSupersededForms() {
 
-        ListView ls = getListView();
+        ListView ls = listView;
         for (int idx = 0; idx < filteredFormList.size(); idx++) {
             HashMap<String, String> item = filteredFormList.get(idx);
             if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
@@ -671,7 +682,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // Insert the new form in alphabetical order.
                 if (formList.size() == 0) {
                     formList.add(item);
+                    emptyView.setVisibility(View.VISIBLE);
                 } else {
+                    emptyView.setVisibility(View.GONE);
                     int j;
                     for (j = 0; j < formList.size(); j++) {
                         HashMap<String, String> compareMe = formList.get(j);
@@ -687,8 +700,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             updateAdapter();
             selectSupersededForms();
             formListAdapter.notifyDataSetChanged();
-            downloadButton.setEnabled(getListView().getCheckedItemCount() > 0);
-            toggleButtonLabel(toggleButton, getListView());
+            downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
+            toggleButtonLabel(toggleButton, listView);
         }
     }
 
@@ -753,8 +766,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         for (FormDetails k : keys) {
             b.append(k.formName + " ("
                     + ((k.formVersion != null)
-                            ? (this.getString(R.string.version) + ": " + k.formVersion + " ")
-                            : "") + "ID: " + k.formID + ") - " + result.get(k));
+                    ? (this.getString(R.string.version) + ": " + k.formVersion + " ")
+                    : "") + "ID: " + k.formID + ") - " + result.get(k));
             b.append("\n\n");
         }
 

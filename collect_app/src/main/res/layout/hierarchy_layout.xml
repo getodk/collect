@@ -12,15 +12,19 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"/>
 
     <TextView
         android:id="@+id/pathtext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" />
+        android:layout_below="@id/toolbar"
+        android:layout_margin="4dp"/>
     <!-- would prefer not to use an extra LinearLayout here, but weights don't
         seem to work properly in RelativeLayout -->
     <LinearLayout
@@ -37,7 +41,8 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/jump_to_previous"
-            android:textSize="16sp" />
+            android:textAllCaps="false"
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/jumpBeginningButton"
@@ -46,7 +51,8 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/jump_to_beginning"
-            android:textSize="16sp" />
+            android:textAllCaps="false"
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/jumpEndButton"
@@ -55,7 +61,8 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/jump_to_end"
-            android:textSize="16sp" />
+            android:textAllCaps="false"
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/exitButton"
@@ -64,8 +71,9 @@ the License.
             android:layout_weight="1"
             android:padding="12dp"
             android:text="@string/exit"
+            android:textAllCaps="false"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </LinearLayout>
 
     <ListView
@@ -73,7 +81,7 @@ the License.
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/buttonholder"
-        android:layout_below="@id/pathtext" />
+        android:layout_below="@id/pathtext"/>
 
     <TextView
         android:id="@android:id/empty"
@@ -82,5 +90,11 @@ the License.
         android:gravity="center"
         android:padding="20dp"
         android:text="@string/no_items_display"
-        android:textSize="21sp" />
+        android:textSize="21sp"/>
+
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"/>
 </RelativeLayout>

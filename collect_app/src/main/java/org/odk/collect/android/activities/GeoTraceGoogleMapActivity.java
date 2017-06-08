@@ -378,6 +378,14 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         disableMyLocation();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
+            schedulerHandler.cancel(true);
+        }
+    }
 
     private void returnLocation() {
 

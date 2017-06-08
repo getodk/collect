@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +24,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
 import org.odk.collect.android.R;
@@ -36,7 +36,7 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class GeoPointActivity extends Activity implements LocationListener {
+public class GeoPointActivity extends AppCompatActivity implements LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
 

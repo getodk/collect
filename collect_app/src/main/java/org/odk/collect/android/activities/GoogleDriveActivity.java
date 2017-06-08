@@ -20,11 +20,9 @@ package org.odk.collect.android.activities;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,18 +35,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.view.Gravity;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -96,9 +96,9 @@ import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST
 import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_AUTHORIZATION;
 import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
-public class GoogleDriveActivity extends ListActivity implements
+public class GoogleDriveActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
-        TaskListener, GoogleDriveFormDownloadListener, EasyPermissions.PermissionCallbacks {
+        TaskListener, GoogleDriveFormDownloadListener, EasyPermissions.PermissionCallbacks, AdapterView.OnItemClickListener {
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
@@ -132,16 +132,37 @@ public class GoogleDriveActivity extends ListActivity implements
     private String parentId;
     private ArrayList<DriveListItem> toDownload;
     private Drive driveService;
+    private ListView listView;
+    private TextView emptyView;
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+
+        if (hasHardwareMenu) {
+            toolbar.setTitle(getString(R.string.google_drive));
+        } else {
+            setTitle(getString(R.string.google_drive));
+        }
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.google_drive));
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setProgressBarVisibility(true);
         setContentView(R.layout.drive_layout);
+        listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnItemClickListener(this);
+        emptyView = (TextView) findViewById(android.R.id.empty);
+
+        initToolbar();
 
         parentId = null;
         alertShowing = false;
@@ -153,9 +174,6 @@ public class GoogleDriveActivity extends ListActivity implements
             String[] patharray = savedInstanceState.getStringArray(PATH_KEY);
             currentPath = buildPath(patharray);
 
-            TextView empty = (TextView) findViewById(android.R.id.empty);
-            getListView().setEmptyView(empty);
-
             parentId = savedInstanceState.getString(PARENT_KEY);
             alertMsg = savedInstanceState.getString(ALERT_MSG_KEY);
             alertShowing = savedInstanceState.getBoolean(ALERT_SHOWING_KEY);
@@ -163,21 +181,10 @@ public class GoogleDriveActivity extends ListActivity implements
             ArrayList<DriveListItem> dl = savedInstanceState
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
             adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image, dl);
-            setListAdapter(adapter);
+            listView.setAdapter(adapter);
             adapter.setEnabled(true);
         } else {
             // new
-            TextView emptyView = new TextView(this);
-            emptyView.setText(getString(R.string.google_search_browse));
-            emptyView.setGravity(Gravity.CENTER);
-            emptyView.setTextSize(21);
-
-            getListView().getEmptyView().setVisibility(View.INVISIBLE);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT);
-            ((ViewGroup) getListView().getParent()).addView(emptyView, lp);
-            getListView().setEmptyView(emptyView);
-
             myDrive = false;
 
             if (!isDeviceOnline()) {
@@ -186,7 +193,7 @@ public class GoogleDriveActivity extends ListActivity implements
         }
 
         // restore any task state
-        if (getLastNonConfigurationInstance() instanceof RetrieveDriveFileContentsAsyncTask) {
+        if (getLastCustomNonConfigurationInstance() instanceof RetrieveDriveFileContentsAsyncTask) {
             retrieveDriveFileContentsAsyncTask =
                     (RetrieveDriveFileContentsAsyncTask) getLastNonConfigurationInstance();
             setProgressBarIndeterminateVisibility(true);
@@ -405,8 +412,8 @@ public class GoogleDriveActivity extends ListActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(MY_DRIVE_KEY, myDrive);
         ArrayList<DriveListItem> dl = new ArrayList<DriveListItem>();
-        for (int i = 0; i < getListView().getCount(); i++) {
-            dl.add((DriveListItem) getListView().getItemAtPosition(i));
+        for (int i = 0; i < listView.getCount(); i++) {
+            dl.add((DriveListItem) listView.getItemAtPosition(i));
         }
         outState.putParcelableArrayList(DRIVE_ITEMS_KEY, dl);
         outState.putStringArray(PATH_KEY, currentPath.toArray(new String[currentPath.size()]));
@@ -417,13 +424,7 @@ public class GoogleDriveActivity extends ListActivity implements
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        getListView().getEmptyView().setVisibility(View.INVISIBLE);
-        TextView empty = (TextView) findViewById(android.R.id.empty);
-        empty.setVisibility(View.VISIBLE);
-        getListView().setEmptyView(empty);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         adapter.setEnabled(false);
         DriveListItem o = adapter.getItem(position);
         if (o != null && o.getType() == DriveListItem.DIR) {
@@ -440,7 +441,7 @@ public class GoogleDriveActivity extends ListActivity implements
         } else {
             adapter.setEnabled(true);
             // file clicked, download the file, mark checkbox.
-            CheckBox cb = (CheckBox) v.findViewById(R.id.checkbox);
+            CheckBox cb = (CheckBox) view.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
 
             if (toDownload.contains(o) && !cb.isChecked()) {
@@ -598,7 +599,7 @@ public class GoogleDriveActivity extends ListActivity implements
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
+    public Object onRetainCustomNonConfigurationInstance() {
         if (retrieveDriveFileContentsAsyncTask != null
                 && retrieveDriveFileContentsAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             return retrieveDriveFileContentsAsyncTask;
@@ -739,10 +740,6 @@ public class GoogleDriveActivity extends ListActivity implements
                 rootButton.setEnabled(false);
                 downloadButton.setEnabled(false);
                 toDownload.clear();
-                getListView().getEmptyView().setVisibility(View.INVISIBLE);
-                TextView empty = (TextView) findViewById(android.R.id.empty);
-                empty.setVisibility(View.VISIBLE);
-                getListView().setEmptyView(empty);
                 if (isDeviceOnline()) {
                     if (folderIdStack.empty()) {
                         parentId = ROOT_KEY;
@@ -907,10 +904,16 @@ public class GoogleDriveActivity extends ListActivity implements
             Collections.sort(forms);
             dirs.addAll(forms);
 
+            if (dirs.size() == 0) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.INVISIBLE);
+            }
+
             if (adapter == null) {
                 adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image,
                         dirs);
-                GoogleDriveActivity.this.setListAdapter(adapter);
+                listView.setAdapter(adapter);
             } else {
                 for (DriveListItem d : dirs) {
                     adapter.add(d);

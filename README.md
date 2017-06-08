@@ -10,8 +10,7 @@ ODK Collect renders forms that are compliant with the [ODK XForms standard](http
 
 * ODK website: [https://opendatakit.org](https://opendatakit.org)
 * ODK Collect usage instructions: [https://opendatakit.org/use/collect](https://opendatakit.org/use/collect/)
-* ODK community mailing list: [http://groups.google.com/group/opendatakit](http://groups.google.com/group/opendatakit)
-* ODK developer mailing list: [http://groups.google.com/group/opendatakit-developers](http://groups.google.com/group/opendatakit-developers)
+* ODK forum: [https://forum.opendatakit.org](https://forum.opendatakit.org)
 * ODK developer Slack chat: [http://slack.opendatakit.org](http://slack.opendatakit.org) 
 * ODK developer Slack archive: [http://opendatakit.slackarchive.io](http://opendatakit.slackarchive.io) 
 * ODK developer wiki: [https://github.com/opendatakit/opendatakit/wiki](https://github.com/opendatakit/opendatakit/wiki)

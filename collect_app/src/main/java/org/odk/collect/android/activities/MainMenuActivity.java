@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -27,12 +26,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,10 +49,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
@@ -72,7 +75,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends Activity {
+public class MainMenuActivity extends AppCompatActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -107,6 +110,7 @@ public class MainMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        initToolbar();
 
         // enter data button. expects a result.
         enterDataButton = (Button) findViewById(R.id.enter_data);
@@ -209,8 +213,6 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        setTitle(getString(R.string.main_menu));
-
         // must be at the beginning of any activity that can be called from an
         // external intent
         Timber.i("Starting up, creating directories");
@@ -290,6 +292,16 @@ public class MainMenuActivity extends Activity {
 
         updateButtons();
         setupGoogleAnalytics();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.main_menu));
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
+        }
     }
 
     @Override
@@ -571,7 +583,7 @@ public class MainMenuActivity extends Activity {
         } else {
             sendDataButton.setText(getString(R.string.send_data));
             Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+                    + "Perhaps the app is running in the background?");
         }
 
         if (savedCursor != null && !savedCursor.isClosed()) {
@@ -586,7 +598,7 @@ public class MainMenuActivity extends Activity {
         } else {
             reviewDataButton.setText(getString(R.string.review_data));
             Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+                    + "Perhaps the app is running in the background?");
         }
 
         if (viewSentCursor != null && !viewSentCursor.isClosed()) {
@@ -601,7 +613,7 @@ public class MainMenuActivity extends Activity {
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+                    + "Perhaps the app is running in the background?");
         }
     }
 

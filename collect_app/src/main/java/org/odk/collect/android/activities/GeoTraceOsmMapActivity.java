@@ -360,8 +360,11 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
 
+        if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
+            schedulerHandler.cancel(true);
+        }
+    }
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
         schedulerHandler = scheduler.scheduleAtFixedRate(new Runnable() {
@@ -642,30 +645,26 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void addLocationMarker() {
-        GeoPoint myLocation = myLocationOverlay.getMyLocation();
-        if (myLocation == null) {
-            // avoid app crash
-            return;
+        if (myLocationOverlay.getMyLocation() != null) {
+            Marker marker = new Marker(mapView);
+            marker.setPosition(myLocationOverlay.getMyLocation());
+            Float lastKnownAccuracy =
+                    myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
+            myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
+            marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
+            marker.setSubDescription(Float.toString(lastKnownAccuracy));
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marker.setDraggable(true);
+            marker.setOnMarkerDragListener(dragListener);
+            mapMarkers.add(marker);
+
+            marker.setOnMarkerClickListener(nullMarkerListener);
+            mapView.getOverlays().add(marker);
+            List<GeoPoint> points = polyline.getPoints();
+            points.add(marker.getPosition());
+            polyline.setPoints(points);
+            mapView.invalidate();
         }
-
-        Marker marker = new Marker(mapView);
-        marker.setPosition(myLocation);
-        Float lastKnownAccuracy =
-                myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-        myLocationOverlay.getMyLocationProvider().getLastKnownLocation().getAccuracy();
-        marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
-        marker.setSubDescription(Float.toString(lastKnownAccuracy));
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marker.setDraggable(true);
-        marker.setOnMarkerDragListener(dragListener);
-        mapMarkers.add(marker);
-
-        marker.setOnMarkerClickListener(nullMarkerListener);
-        mapView.getOverlays().add(marker);
-        List<GeoPoint> points = polyline.getPoints();
-        points.add(marker.getPosition());
-        polyline.setPoints(points);
-        mapView.invalidate();
     }
 
     private void saveGeoTrace() {
@@ -705,7 +704,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                 FormEntryActivity.GEOTRACE_RESULTS,
                 finalReturnString);
         setResult(RESULT_OK, i);
-        finish();
     }
 
     private Marker.OnMarkerClickListener nullMarkerListener = new Marker.OnMarkerClickListener() {
