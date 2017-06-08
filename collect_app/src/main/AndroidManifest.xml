@@ -188,6 +188,7 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.AboutPreferencesActivity"
+            android:theme="@style/AppTheme.SettingsTheme"
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.PreferencesActivity"
@@ -195,6 +196,7 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.FormMetadataActivity"
+            android:theme="@style/AppTheme.SettingsTheme"
             android:label="@string/form_metadata_title" />
         <activity
             android:name=".preferences.AdminPreferencesActivity"
