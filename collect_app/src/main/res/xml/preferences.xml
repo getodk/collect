@@ -3,8 +3,7 @@
     <Preference
         android:icon="@drawable/ic_cloud"
         android:key="protocol"
-        android:title="@string/server_settings_title">
-    </Preference>
+        android:title="@string/server_settings_title"></Preference>
 
     <PreferenceScreen
         android:icon="@drawable/ic_phonelink_setup"
@@ -136,14 +135,14 @@
             android:summary="@string/form_metadata_summary"
             android:title="@string/form_metadata" />
         <PreferenceCategory
-        android:key="@string/analytics_preferences"
-        android:title="@string/analytics_preferences">
-        <CheckBoxPreference
-            android:id="@+id/analytics"
-            android:defaultValue="true"
-            android:key="analytics"
-            android:summary="@string/analytics_summary"
-            android:title="@string/analytics" />
-    </PreferenceCategory>
+            android:key="@string/analytics_preferences"
+            android:title="@string/analytics_preferences">
+            <CheckBoxPreference
+                android:id="@+id/analytics"
+                android:defaultValue="true"
+                android:key="analytics"
+                android:summary="@string/analytics_summary"
+                android:title="@string/analytics" />
+        </PreferenceCategory>
     </PreferenceScreen>
 </PreferenceScreen>

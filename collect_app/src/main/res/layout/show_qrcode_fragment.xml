@@ -12,9 +12,9 @@
      the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -22,9 +22,10 @@
 
     <FrameLayout
         android:id="@+id/frame"
-        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttons"
+        android:layout_below="@id/toolbar">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -44,13 +45,13 @@
         layout="@layout/toolbar_action_bar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar" />
 
     <LinearLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frame"
+        android:layout_above="@+id/status"
         android:layout_margin="5dp"
         android:orientation="vertical">
 
@@ -73,7 +74,7 @@
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttons"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/darker_gray"
         android:gravity="center"
         android:orientation="horizontal">
