@@ -57,8 +57,14 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -231,7 +237,22 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
+        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            boolean success = loadSharedPreferencesFromJSON(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
@@ -615,6 +636,42 @@ public class MainMenuActivity extends AppCompatActivity {
             Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }
+    }
+
+    private boolean loadSharedPreferencesFromJSON(File src) {
+        boolean res = false;
+        BufferedReader br = null;
+
+        try {
+            String line = null;
+            StringBuilder builder = new StringBuilder();
+            br = new BufferedReader(new FileReader(src));
+
+            while ((line = br.readLine()) != null) {
+                builder.append(line);
+            }
+
+            JSONObject jo = new JSONObject(builder.toString());
+
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            sharedPrefs.savePreferencesFromJSON(jo);
+
+            res = true;
+        } catch (IOException e) {
+            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
+        } catch (JSONException e) {
+            Timber.e(e, "Exception while converting file to JSON object due to : %s ", e.getMessage());
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException ex) {
+                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
+            }
+        }
+
+        return res;
     }
 
     private boolean loadSharedPreferencesFromFile(File src) {
