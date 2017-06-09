@@ -1,14 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Kayit Yeri</string>
-  <string name="accuracy">Doğruluk</string>
   <string name="activity_not_found">%s işleme alacak activite bulunamadı.</string>
   <string name="add_another">Grup Ekle</string>
   <string name="add_another_repeat">Başka bir \"%s\" grup eklensin mi?</string>
-  <string name="add_more">Fazla Ekle</string>
   <string name="add_repeat">Yeni bir\"%s\" grup eklensin mi?</string>
   <string name="add_repeat_no">Ekleme Yapma</string>
-  <string name="altitude">Meridyen</string>
   <string name="audio_file_error">Ses dosyası belirlenmedi.</string>
   <string name="audio_file_invalid">%s dosyasi geçerli bir ses dosyasi degildir!</string>
   <string name="cancel">Vazgeç</string>
@@ -24,7 +20,6 @@
   <string name="clear_answer">Yanıtları kaldır</string>
   <string name="clear_answer_ask">Bu yanıt kaldırılsın mı ?</string>
   <string name="clear_answer_no">Vazgeç</string>
-  <string name="completed_data">Tamamlanan (%s)</string>
   <string name="data">Saklanan Formlar</string>
   <string name="data_saved_error">Form kaydedilirken hata oluştu</string>
   <string name="data_saved_ok">From başarılı bir şekilde saklandi</string>
@@ -80,10 +75,8 @@
   <string name="quit_entry">Formu sakla ve Çık</string>
   <string name="refresh">Yenile</string>
   <string name="replace_barcode">Barkod Değiştir</string>
-  <string name="replace_location">Konum Değiştir</string>
   <string name="review_data">Saklanan Formu Güncelle</string>
   <string name="review_data_button">Saklanan Formu Güncelle (%s)</string>
-  <string name="saved_data">Tamamlanmayan (%s)</string>
   <string name="save_all_answers">Formu Sakla</string>
   <string name="saving_form">Form Saklaniyor</string>
   <string name="sending_items">%1$s ile %2$s form(s) gönderiliyor</string>
@@ -104,10 +97,8 @@
   <string name="select_another_image">Başka bir görüntü seçin</string>
   <string name="use_odk_default">Geçerli görüntüyü kullan</string>
   <string name="change_splash_path">Görüntüyü Değiştir</string>
-  <string name="show_location">Lokasyonu Göster</string>
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
-  <string name="go_to_location">Lokasyona Git</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
   <string name="protocol">Platform</string>
   <string name="change_protocol">Platform</string>
@@ -152,15 +143,12 @@
   <string name="select_one">Bir cevap seçin</string>
   <string name="save_and_close">Sakla ve Kapat</string>
   <string name="change_server">Platform</string>
-  <string name="change_username_default">Kullanıcı  Adı</string>
   <string name="admin_preferences">Yönetici Ayarlari</string>
   <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>
   <string name="save_mid">Formu Sakla</string>
   <string name="enter_new_password">Yeni Şifreyi Giriniz</string>
-  <string name="verify_new_password">Yeni şifreyi tekrar giriniz</string>
   <string name="admin_password_changed">Yönetici Şifresi Başarili şekilde Değiştirildi</string>
   <string name="admin_password_disabled">Yönetici Şifresi Kapatılmış</string>
-  <string name="admin_password_mismatch">Girilen şifreler uyuşmadi!</string>
   <string name="admin_password_incorrect">Yanliş Şifre</string>
   <string name="enter_admin_password">Yönetici Şifresi Giriniz</string>
   <string name="autosend">Otomatik Gönder</string>
