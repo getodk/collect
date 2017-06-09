@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -9,6 +9,9 @@
         style="@style/WidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_mic_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_mic_black_24dp"
         android:text="@string/capture_audio" />
 
     <Button
@@ -16,13 +19,33 @@
         style="@style/WidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_add_black_24dp"
         android:text="@string/choose_sound" />
 
-    <Button
-        android:id="@+id/playBtn"
-        style="@style/WidgetStyle"
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/audioPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/play_audio" />
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </LinearLayout>

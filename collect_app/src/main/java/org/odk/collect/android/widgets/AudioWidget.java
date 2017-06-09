@@ -19,14 +19,19 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -39,6 +44,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 import timber.log.Timber;
 
@@ -50,14 +56,24 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class AudioWidget extends QuestionWidget implements IBinaryWidget {
+public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
+    Handler seekHandler = new Handler();
     private Button captureButton;
-    private Button playButton;
+    private ImageButton playButton;
     private Button chooseButton;
-
     private String binaryName;
     private String instanceFolder;
+    private MediaPlayer mediaPlayer;
+    private LinearLayout mediaPlayerLayout;
+    private SeekBar seekBar;
+
+    Runnable run = new Runnable() {
+        @Override
+        public void run() {
+            seekUpdation();
+        }
+    };
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -66,6 +82,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 .getInstancePath().getParent();
 
         View answerLayout = inflate(context, R.layout.audio_widget_layout, null);
+
+        mediaPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.audioPlayer);
+        seekBar = (SeekBar) answerLayout.findViewById(R.id.seekbar);
 
         // setup capture button
         captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
@@ -137,8 +156,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup play button
-        playButton = (Button) answerLayout.findViewById(R.id.playBtn);
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        playButton = (ImageButton) answerLayout.findViewById(R.id.play);
+        playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+        playButton.setEnabled(false);
 
         // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -148,30 +168,28 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "playButton", "click",
                                 formEntryPrompt.getIndex());
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(instanceFolder + File.separator
-                        + binaryName);
-                i.setDataAndType(Uri.fromFile(f), "audio/*");
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "play audio"), Toast.LENGTH_SHORT).show();
-                }
 
+                if (mediaPlayer.isPlaying()) {
+                    pauseAudio();
+                } else {
+                    resumeAudio();
+                }
             }
         });
+
+        TextView textView = (TextView) answerLayout.findViewById(R.id.name);
+
+        initMediaPlayer();
+        seekUpdation();
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
-            playButton.setEnabled(true);
-            playButton.setTextColor(Color.BLACK);
+            mediaPlayerLayout.setVisibility(VISIBLE);
+            textView.setText(binaryName);
+            addMediaToPlayer();
         } else {
-            playButton.setEnabled(false);
-            playButton.setTextColor(Color.GRAY);
+            mediaPlayerLayout.setVisibility(GONE);
         }
 
         // finish complex layout
@@ -184,6 +202,35 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
+    private void resumeAudio() {
+        playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
+        mediaPlayer.start();
+    }
+
+    private void pauseAudio() {
+        playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+        mediaPlayer.pause();
+    }
+
+    private void addMediaToPlayer() {
+        File f = new File(instanceFolder + File.separator
+                + binaryName);
+        try {
+            mediaPlayer.setDataSource(getContext(), Uri.fromFile(f));
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+
+        mediaPlayer.prepareAsync();
+    }
+
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(this);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnSeekCompleteListener(this);
+        mediaPlayer.setOnErrorListener(this);
+    }
 
     private void deleteMedia() {
         // get the file path and delete the file
@@ -202,8 +249,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         deleteMedia();
 
         // reset buttons
-        playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);
+        mediaPlayerLayout.setVisibility(GONE);
     }
 
     @Override
@@ -245,6 +291,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 deleteMedia();
             }
             binaryName = newAudio.getName();
+            playButton.setEnabled(false);
+            addMediaToPlayer();
             Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
             Timber.e("Inserting Audio file FAILED");
@@ -277,7 +325,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         captureButton.setOnLongClickListener(l);
         chooseButton.setOnLongClickListener(l);
-        playButton.setOnLongClickListener(l);
     }
 
     @Override
@@ -285,7 +332,26 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
-        playButton.cancelLongPress();
     }
 
+    public void seekUpdation() {
+        seekBar.setProgress(player.getCurrentPosition());
+        seekHandler.postDelayed(run, 1000);
+    }
+
+    @Override
+    public void onSeekComplete(MediaPlayer mp) {
+        pauseAudio();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        seekBar.setMax(mediaPlayer.getDuration());
+        playButton.setEnabled(true);
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        return false;
+    }
 }
