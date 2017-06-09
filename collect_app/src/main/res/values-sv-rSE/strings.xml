@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Spara position</string>
+  <string name="accept_location">Visa position</string>
   <string name="show_password">Visa lösenord</string>
   <string name="accuracy">Noggrannhet</string>
   <string name="activity_not_found">Ingen aktivitet finns för att hantera: %s</string>
@@ -513,4 +513,7 @@
   <string name="generate">Generera</string>
   <string name="invalid_qrcode">QR-koden innehåller inga giltiga inställningar</string>
   <string name="share_qrcode">Dela QR-koden</string>
+  <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
+  <string name="request_permission">Programmet behöver behörighet till kameran.</string>
+  <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>
 </resources>

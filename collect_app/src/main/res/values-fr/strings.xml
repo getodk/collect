@@ -483,8 +483,8 @@
   <string name="form_metadata_summary">Ces valeurs seront ajoutées aux formulaires qui ont des champs pré-chargés d\'utilisateur, de courrier électronique et / ou de téléphone pour identifier la personne qui soumet des données.</string>
   <string name="phone_number">Numéro de téléphone</string>
   <string name="email">Adresse mail</string>
-  <string name="user_defined">Utilisateur défini</string>
-  <string name="device_defined">Périphérique défini</string>
+  <string name="user_defined">Défini par l\'utilisateur</string>
+  <string name="device_defined">Défini par l\'appareil</string>
   <string name="device_id">ID du périphérique</string>
   <string name="subscriber_id">ID de l\'abonné</string>
   <string name="sim_serial_id">Numéro de série SIM</string>
@@ -513,4 +513,7 @@
   <string name="generate">Générer</string>
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
   <string name="share_qrcode">Partager le QR code</string>
+  <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
+  <string name="request_permission">Cette application nécessite les droits d\'utilisation de votre appareil photo.</string>
+  <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
 </resources>

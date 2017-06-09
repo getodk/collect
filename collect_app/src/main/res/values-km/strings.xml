@@ -494,7 +494,27 @@
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
   <string name="use_phone_language">ប្រើប្រាស់ភាសារបស់ទូរស័ព្ទ</string>
+  <string name="import_settings">ការ​កំណត់​ នាំចូល/នាំចេញ</string>
+  <string name="qr_code">QR Code</string>
+  <string name="scan_qrcode">ស្កេន​កូដ​ចេញ​ឧបករណ៍​ផ្សេង​ទៀត​</string>
+  <string name="successfully_imported_settings">បាន​នាំ​ចូល​ការ​កំណត់​ដោយ​ជោគ​ជ័យ</string>
+  <string name="encoding_max_limit">តួអក្សរ​ដល់​ដែន​កំណត់​អតិបរមា​: លេខកូដ​ QR ​មិន​អាច​បង្កើត​តាម​ការកំណត់​ទាំងអស់​</string>
   <string name="share">ចែករំលែក</string>
+  <string name="select_qrcode">ជ្រើសរើស​កូដ​ពីកាត SD</string>
+  <string name="turn_on_flashlight">បើក​ភ្លើងពិល</string>
+  <string name="turn_off_flashlight">បិទភ្លើងពិល</string>
+  <string name="qrcode_with_both_passwords">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​អ្នក​គ្រប់គ្រង​ និង​ម៉ាស៊ីនមេ​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
+  <string name="qrcode_without_passwords">លេខ​កូដ​ QR នេះ​ពុំ​មាន​ពាក្យ​សម្ងាត់​អ្នក​គ្រប់គ្រង និង​ម៉ាស៊ីនមេ​របស់​អ្នក​។ \n (ប៉ះ​ដើម្បី​ដាក់​ពាក្យ​សម្ងាត់​)</string>
+  <string name="qrcode_with_admin_password">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​អ្នក​គ្រប់គ្រង​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
+  <string name="qrcode_with_server_password">លេខកូដ QR នេះ​រួម​បញ្ចូល​ទាំង​ពាក្យសម្ងាត់​​ម៉ាស៊ីនមេ​របស់​អ្នក​។ សូម​ប្រើប្រាស់​វា​ដោយ​ប្រុងប្រយ័ត្ន​។ \n (ប៉ះ​ដើម្បី​យក​ចេញ​ពាក្យ​សម្ងាត់)</string>
+  <string name="import_export_settings">ការកំណត់ ការនាំចូល/នាំចេញ</string>
+  <string name="qrcode_scanner_prompt">ដាក់​លេខ​កូដ QR នៅ​ក្នុង​ប្រអប់​ចតុកោណ</string>
+  <string name="server_password">ពាក្យសម្ងាត់​ម៉ាស៊ីន​មេ</string>
+  <string name="include_password_dialog">ពាក្យ​សម្ងាត់​មានភ្ជាប់នៅក្នុង​កូដ</string>
+  <string name="generate">បង្កើត</string>
+  <string name="invalid_qrcode">លេខកូដ QR មិនមានការកំណត់ត្រឹមត្រូវ</string>
   <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
+  <string name="request_permission">កម្មវិធី​នេះ​ត្រូវ​ការ​សិទ្ធិ​ក្នុង​ការប្រើ​ប្រាស់​កាម៉េរ៉ាលើឧបករណ៍</string>
+  <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>
 </resources>
