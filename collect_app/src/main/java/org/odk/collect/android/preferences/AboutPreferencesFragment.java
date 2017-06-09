@@ -34,8 +34,8 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
     private CustomTabHelper websiteTabHelper;
     private CustomTabHelper forumTabHelper;
 
-    private Uri website_uri;
-    private Uri forum_uri;
+    private Uri websiteUri;
+    private Uri forumUri;
 
 
     @Override
@@ -50,16 +50,16 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
         websiteTabHelper = new CustomTabHelper();
         forumTabHelper = new CustomTabHelper();
-        website_uri = Uri.parse(ODK_WEBSITE);
-        forum_uri = Uri.parse(ODK_FORUM);
+        websiteUri = Uri.parse(ODK_WEBSITE);
+        forumUri = Uri.parse(ODK_FORUM);
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        websiteTabHelper.bindCustomTabsService(this.getActivity(), website_uri);
-        forumTabHelper.bindCustomTabsService(this.getActivity(), forum_uri);
+        websiteTabHelper.bindCustomTabsService(this.getActivity(), websiteUri);
+        forumTabHelper.bindCustomTabsService(this.getActivity(), forumUri);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                             new CustomTabsIntent.Builder()
                                     .build();
                     customTabsIntent.intent.setPackage(websiteTabHelper.getPackageName(getActivity()).get(0));
-                    customTabsIntent.launchUrl(getActivity(), website_uri);
+                    customTabsIntent.launchUrl(getActivity(), websiteUri);
                 } else {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE)));
                 }
@@ -85,7 +85,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                             new CustomTabsIntent.Builder()
                                     .build();
                     customTabsIntent.intent.setPackage(forumTabHelper.getPackageName(getActivity()).get(0));
-                    customTabsIntent.launchUrl(getActivity(), forum_uri);
+                    customTabsIntent.launchUrl(getActivity(), forumUri);
                 } else {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_FORUM)));
                 }
