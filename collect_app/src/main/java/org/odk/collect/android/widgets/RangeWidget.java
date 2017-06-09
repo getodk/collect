@@ -45,9 +45,9 @@ public class RangeWidget extends QuestionWidget {
     public RangeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        setupWidgetParameters();
+        setUpWidgetParameters();
         View view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_layout, null);
-        setupLayoutElements(view);
+        setUpLayoutElements(view);
 
         if (prompt.isReadOnly()) {
             seekBar.setEnabled(false);
@@ -64,7 +64,7 @@ public class RangeWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         if (seekBar.isEnabled()) {
-            setupDefaultValues();
+            setUpDefaultValues();
             seekBar.setProgress(progress);
             currentValue.setText(String.valueOf(actualValue));
         }
@@ -78,7 +78,7 @@ public class RangeWidget extends QuestionWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    private void setupLayoutElements(View view) {
+    private void setUpLayoutElements(View view) {
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 
         TextView minValue = (TextView) view.findViewById(R.id.minValue);
@@ -92,17 +92,17 @@ public class RangeWidget extends QuestionWidget {
                 actualValue = (int) getPrompt().getAnswerValue().getValue();
                 progress = Math.abs(actualValue - rangeStart) / rangeStep;
             } else {
-                setupDefaultValues();
+                setUpDefaultValues();
             }
 
             currentValue = (TextView) view.findViewById(R.id.currentValue);
             currentValue.setText(String.valueOf(actualValue));
 
-            setupSeekBar();
+            setUpSeekBar();
         }
     }
 
-    private void setupDefaultValues() {
+    private void setUpDefaultValues() {
         progress = Math.abs(rangeEnd - rangeStart) / (rangeStep * 2);
         if (rangeStart < rangeEnd) {
             actualValue = rangeStart + progress * rangeStep;
@@ -111,7 +111,7 @@ public class RangeWidget extends QuestionWidget {
         }
     }
 
-    private void setupWidgetParameters() {
+    private void setUpWidgetParameters() {
         RangeQuestion rangeQuestion = (RangeQuestion) getPrompt().getQuestion();
 
         rangeStart = rangeQuestion.getRangeStart().intValue();
@@ -119,7 +119,7 @@ public class RangeWidget extends QuestionWidget {
         rangeStep = Math.abs(rangeQuestion.getRangeStep().intValue());
     }
 
-    private void setupSeekBar() {
+    private void setUpSeekBar() {
         int seekBarMax;
         seekBarMax = Math.abs(rangeEnd - rangeStart) / rangeStep;
 
