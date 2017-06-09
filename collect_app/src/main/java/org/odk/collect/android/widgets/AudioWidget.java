@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -66,18 +65,12 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+        View answerLayout = inflate(context, R.layout.audio_widget_layout, null);
 
         // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_audio));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
+        captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
 
         // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
@@ -112,13 +105,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup capture button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_sound));
+        chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
         chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
 
         // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
@@ -148,12 +137,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup play button
-        playButton = new Button(getContext());
-        playButton.setId(QuestionWidget.newUniqueId());
-        playButton.setText(getContext().getString(R.string.play_audio));
+        playButton = (Button) answerLayout.findViewById(R.id.playBtn);
         playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        playButton.setPadding(20, 20, 20, 20);
-        playButton.setLayoutParams(params);
 
         // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -190,11 +175,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(captureButton);
-        answerLayout.addView(chooseButton);
-        answerLayout.addView(playButton);
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only

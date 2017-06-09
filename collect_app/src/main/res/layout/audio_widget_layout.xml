@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/recordBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/capture_audio" />
+
+    <Button
+        android:id="@+id/chooseBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_sound" />
+
+    <Button
+        android:id="@+id/playBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/play_audio" />
+
+</LinearLayout>
