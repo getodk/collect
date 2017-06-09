@@ -27,6 +27,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ToastUtils;
 
 public class RangeWidget extends QuestionWidget {
@@ -127,10 +128,12 @@ public class RangeWidget extends QuestionWidget {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                ((FormEntryActivity) getContext()).allowSwiping(true);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                ((FormEntryActivity) getContext()).allowSwiping(false);
             }
 
             @Override
