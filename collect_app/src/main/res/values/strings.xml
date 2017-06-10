@@ -397,8 +397,14 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
-    <string name="odk_website">Open Data Kit website</string>
+    <string name="general_settings_about">About</string>
+    <string name="odk_website">Visit the ODK website</string>
+    <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments. Learn about the project and the ODK tools on the website!</string>
+    <string name="odk_forum">Join the ODK forum</string>
+    <string name="odk_forum_summary">Join the forum to get support, request features, contribute code (or documentation or translations), share successes stories, post ODK-related jobs, and just connect with the global ODK community!</string>
     <string name="all_open_source_licenses">Open source licenses</string>
+    <string name="all_open_source_licenses_summary">Licenses from the software we build on</string>
+
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8" -->
