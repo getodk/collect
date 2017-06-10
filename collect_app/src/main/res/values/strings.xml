@@ -397,7 +397,6 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
-    <string name="general_settings_about">About</string>
     <string name="odk_website">Visit the ODK website</string>
     <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments. Learn about the project and the ODK tools on the website!</string>
     <string name="odk_forum">Join the ODK forum</string>
