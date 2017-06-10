@@ -31,7 +31,6 @@
     <string name="capture_video">Record Video</string>
     <string name="change_language">Change Language</string>
     <string name="change_password">ODK Password</string>
-    <string name="change_protocol_settings_default">Platform settings</string>
     <string name="change_username">ODK Username</string>
     <string name="clearanswer_confirm">Remove the response to \"%s\"?</string>
     <string name="clear_answer">Remove response</string>
@@ -135,7 +134,6 @@
     <string name="view_hierarchy">Go To Prompt</string>
     <string name="general_preferences">General Settings</string>
     <string name="client">User interface</string>
-    <string name="show_splash">Show splash screen</string>
     <string name="show_splash_summary">Shows when application starts</string>
     <string name="splash_path">Selected splash image</string>
     <string name="default_splash_path">ODK Default</string>
@@ -145,7 +143,6 @@
     <string name="app_url">http://opendatakit.org</string>
     <string name="keep_changes">Save Changes</string>
     <string name="change_formlist_url">Form list path (appended to URL)</string>
-    <string name="protocol">Platform</string>
     <string name="change_protocol">Platform</string>
     <string name="change_submission_url">Submission path (appended to URL)</string>
     <string name="formlist_url">Form list path</string>
@@ -203,12 +200,8 @@
     <string name="reset_image">Reset</string>
     <string name="set_color">Set Color</string>
     <string name="select_drawing_color">Select Drawing Color</string>
-    <string name="user_access_main_menu">User can access Main Menu items:</string>
-    <string name="user_access_preferences">User can access Change Settings items:</string>
-    <string name="change_server">Platform</string>
     <string name="admin_preferences">Admin Settings</string>
     <string name="admin_access_settings">Tap for admin access to settings</string>
-    <string name="user_access_form_entry">User can access Form Entry items:</string>
     <string name="save_mid">Save Form</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="admin_password">Admin Password</string>
@@ -217,15 +210,9 @@
     <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
     <string name="enter_admin_password">Enter Admin Password</string>
     <string name="change_admin_password">Change Admin Password</string>
-    <string name="found_in_menu">Uncheck to hide from menu in Form Entry</string>
     <string name="autosend">Auto Send</string>
-    <string name="autosend_wifi">Auto send with Wi-Fi</string>
-    <string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
-    <string name="autosend_network">Auto send with network</string>
-    <string name="autosend_network_summary">Auto send when network is available</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
-    <string name="found_at_end">Uncheck to hide from end of Form Entry</string>
     <string name="no_account">No account</string>
     <string name="save_preferences">Save Settings to Disk</string>
     <string name="form_forward">Next</string>
@@ -276,7 +263,6 @@
     <string name="survey_saving_finalizing_message">Finalizing to SD card…</string>
     <string name="survey_saving_encrypting_message">Encrypting data…</string>
     <string name="high_resolution_summary">Enable high-resolution video recordings</string>
-    <string name="high_resolution">Enable hi-res video</string>
     <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
     <string name="google_drive">Google Drive</string>
     <string name="go_drive">My Drive</string>
@@ -335,7 +321,6 @@
     <string name="hybrid">Hybrid</string>
     <string name="satellite">Satellite</string>
     <string name="map_basemap_selector_title">Basemaps</string>
-    <string name="map_basemap_behavior">Select a basemap</string>
     <string name="show_map_basemap">Show Basemap Options</string>
 
     <string name="save_point">Save GeoPoint</string>
@@ -397,7 +382,6 @@
     <string name="parser_exception">XPathParser Exception: \"%s\"</string>
     <string name="selected_answer">Selected: %s</string>
     <string name="version_number">Version: %s</string>
-    <string name="general_settings_about">About</string>
     <string name="odk_website">Visit the ODK website</string>
     <string name="odk_website_summary">Open Data Kit (ODK) is used to collect data for social good in challenging environments. Learn about the project and the ODK tools on the website!</string>
     <string name="odk_forum">Join the ODK forum</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">အေကာင္အထည္ေဖာ္ေဆာင္ရြက္ရန္မရိွပါ: %s</string>
   <string name="add_another">အုပ္စုထည့္ရန္</string>
   <string name="add_another_repeat"> အျခားအုပ္စုထည့္ရန္\"%s\" အုပ္စု?</string>
@@ -109,8 +109,7 @@
   <string name="view_hierarchy">ခ်က္ျခင္းသြားရန္</string>
   <string name="general_preferences">မူလပံုစံအားေျပာင္းရန္</string>
   <string name="client">ကြန္ယက္ခ်ိတ္ယက္ခ်ိတ္ဆက္ထားသူမ်ား</string>
-  <string name="show_splash">Splash Screen အားျပရန္</string>
-  <string name="show_splash_summary">အသံုးျပဳမွုစတင္ခ်ိန္တြင္ျပရန္</string>
+    <string name="show_splash_summary">အသံုးျပဳမွုစတင္ခ်ိန္တြင္ျပရန္</string>
   <string name="splash_path">Splash Image ေရြးခ်ယ္ထားသည္</string>
   <string name="default_splash_path">အျခားပံုကိုေရြးခ်ယ္ရန္</string>
   <string name="select_another_image">အျခားပံုကိုေရြးခ်ယ္ရန္</string>
@@ -119,8 +118,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ေျပာင္းလဲမွုမ်ားကို သိမ္းဆည္းရန္</string>
   <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-  <string name="protocol">ဆာဗာ ပလက္္ေဖာင္း</string>
-  <string name="change_protocol">ဆာဗာ ပလက္္ေဖာင္း</string>
+    <string name="change_protocol">ဆာဗာ ပလက္္ေဖာင္း</string>
   <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
   <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
   <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
@@ -179,28 +177,18 @@
   <string name="reset_image">မူလအတုိင္းျပန္ထားရန္</string>
   <string name="set_color">အေရာင္ေရြးရန္</string>
   <string name="select_drawing_color">ေရးဆြဲမည့္ အေရာင္ေရြးရန္</string>
-  <string name="user_access_main_menu">အသံုးၿပဳသူသည္ အဓိကစာရင္းစဥ္တြင္ပါရိွေသာ အခ်က္အလက္မ်ားအား လုပ္ေဆာင္ႏိုင္ပါသည္ </string>
-  <string name="user_access_preferences">အသံုးၿပဳသူသည္ ေျပာင္းလဲထားေသာ သတ္မွတ္ပံုစံ အခ်က္အလက္မ်ား အားလုပ္ေဆာင္ႏိုင္ပါသည္ </string>
-  <string name="change_server"> ဆာဗာ ပရိုတိုေကာလ္ ႏွင့္ ယူအာရ္အယ္လ္</string>
-  <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
+    <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
   <string name="admin_access_settings">စီမံခန့္ခြဲမွုပံုစံအား ေဆာင္ရြက္ႏိုင္ရန္ ႏွိပ္ပါ</string>
-  <string name="user_access_form_entry">အသံုးၿပဳသူသည္ ပံုစံျဖည့္သြင္းျခင္းမ်ားအား လုပ္ေဆာင္ႏိုင္ပါသည္</string>
-  <string name="save_mid">ပံုစံသိမ္းဆည္းျခင္း</string>
+    <string name="save_mid">ပံုစံသိမ္းဆည္းျခင္း</string>
   <string name="enter_new_password">လ်ိဳ့၀ွက္နံပါတ္ အသစ္ထည့္သြင္းရန္</string>
   <string name="admin_password_changed">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) အား ေျပာင္းလဲၿပီးပါၿပီ</string>
   <string name="admin_password_disabled">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) မေဆာင္ရြက္ႏိုင္ပါ</string>
   <string name="admin_password_incorrect">လ်ိဳ့၀ွက္နံပါတ္ မမွန္ကန္ပါ!</string>
   <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
-  <string name="found_in_menu">ထည့္သြင္းပံုစံမွ စာရင္းစဥ္(Menu)အား ရွာေဖြရန္</string>
-  <string name="autosend">Auto Send</string>
-  <string name="autosend_wifi">Auto send with Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
-  <string name="autosend_network">Auto send with network</string>
-  <string name="autosend_network_summary">Auto send when network is available</string>
-  <string name="found_in_main">Uncheck to hide from Main Menu</string>
+    <string name="autosend">Auto Send</string>
+    <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="found_at_end">Uncheck to hide from end of Form Entry</string>
-  <string name="no_account">No account</string>
+    <string name="no_account">No account</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
   <string name="form_backward">Prev</string>

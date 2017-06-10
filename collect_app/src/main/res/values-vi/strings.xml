@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Không có hành động phù hợp với: %s</string>
   <string name="add_another">Thêm nhóm</string>
   <string name="add_another_repeat">Thêm 1 \"%s\" khác?</string>
@@ -113,8 +113,7 @@
   <string name="view_hierarchy">Di chuyển đến</string>
   <string name="general_preferences">Thay đổi thiết lập</string>
   <string name="client">Giao diện người sử dụng</string>
-  <string name="show_splash">Hiển thị màn hình chào</string>
-  <string name="show_splash_summary">Hiển thị khi chương trình khởi động</string>
+    <string name="show_splash_summary">Hiển thị khi chương trình khởi động</string>
   <string name="splash_path">Chọn ảnh màn hình chào</string>
   <string name="default_splash_path">Mặc định ODK</string>
   <string name="select_another_image">Chọn ảnh khác</string>
@@ -123,8 +122,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
-  <string name="protocol">Nền tảng máy chủ</string>
-  <string name="change_protocol">Nền tảng máy chủ</string>
+    <string name="change_protocol">Nền tảng máy chủ</string>
   <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="submission_url">Đường dẫn gửi dữ liệu</string>
@@ -183,28 +181,18 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Chọn màu</string>
   <string name="select_drawing_color">Select Drawing Color</string>
-  <string name="user_access_main_menu">User can access Main Menu items:</string>
-  <string name="user_access_preferences">User can access Change Settings items:</string>
-  <string name="change_server">Server Protocol and URL</string>
-  <string name="admin_preferences">Admin Settings</string>
+    <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
-  <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="save_mid">Mid-form saving</string>
+    <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Enter new password</string>
   <string name="admin_password_changed">Admin password successfully changed</string>
   <string name="admin_password_disabled">Admin password disabled</string>
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
-  <string name="found_in_menu">Found using Menu button in Form Entry</string>
-  <string name="autosend">Auto Send</string>
-  <string name="autosend_wifi">Auto send with Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
-  <string name="autosend_network">Auto send with network</string>
-  <string name="autosend_network_summary">Auto send when network is available</string>
-  <string name="found_in_main">Uncheck to hide from Main Menu</string>
+    <string name="autosend">Auto Send</string>
+    <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="found_at_end">Uncheck to hide from end of Form Entry</string>
-  <string name="no_account">No account</string>
+    <string name="no_account">No account</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
   <string name="form_backward">Prev</string>

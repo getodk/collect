@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">パスワードを表示</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="add_another">グループを追加</string>
@@ -19,8 +19,7 @@
   <string name="capture_video">ビデオを録画</string>
   <string name="change_language">言語を変更</string>
   <string name="change_password">ODK パスワード</string>
-  <string name="change_protocol_settings_default">プラットフォーム設定</string>
-  <string name="change_username">ODK ユーザー名</string>
+    <string name="change_username">ODK ユーザー名</string>
   <string name="clearanswer_confirm">\"%s\" への回答を削除しますか?</string>
   <string name="clear_answer">回答を削除</string>
   <string name="clear_answer_ask">回答を削除しますか?</string>
@@ -123,8 +122,7 @@
   <string name="view_hierarchy">プロンプトへ移動</string>
   <string name="general_preferences">全般設定</string>
   <string name="client">ユーザー インターフェイス</string>
-  <string name="show_splash">スプラッシュスクリーンを表示</string>
-  <string name="show_splash_summary">アプリケーションの起動時に表示します</string>
+    <string name="show_splash_summary">アプリケーションの起動時に表示します</string>
   <string name="splash_path">選択したスプラッシュ画像</string>
   <string name="default_splash_path">ODK デフォルト</string>
   <string name="select_another_image">別の画像を選択</string>
@@ -133,8 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
-  <string name="protocol">プラットフォーム</string>
-  <string name="change_protocol">プラットフォーム</string>
+    <string name="change_protocol">プラットフォーム</string>
   <string name="change_submission_url">提出パス (URLに追加されます)</string>
   <string name="formlist_url">フォーム一覧のパス</string>
   <string name="submission_url">提出パス</string>
@@ -196,13 +193,9 @@
   <string name="reset_image">リセット</string>
   <string name="set_color">色を設定</string>
   <string name="select_drawing_color">描画色を選択します</string>
-  <string name="user_access_main_menu">ユーザーがアクセスできるメインメニュー項目:</string>
-  <string name="user_access_preferences">ユーザーがアクセスできる変更設定項目:</string>
-  <string name="change_server">プラットフォーム</string>
-  <string name="admin_preferences">管理者設定</string>
+    <string name="admin_preferences">管理者設定</string>
   <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
-  <string name="user_access_form_entry">ユーザーがアクセスできるフォーム入力項目:</string>
-  <string name="save_mid">フォームを保存する</string>
+    <string name="save_mid">フォームを保存する</string>
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="admin_password">管理者パスワード</string>
   <string name="admin_password_changed">管理者パスワードが変更されました</string>
@@ -210,16 +203,10 @@
   <string name="admin_password_incorrect">申し訳ありません、パスワードが正しくありません!</string>
   <string name="enter_admin_password">管理者パスワードを入力してください</string>
   <string name="change_admin_password">管理者パスワードを変更</string>
-  <string name="found_in_menu">チェックを外すとメニューからフォームエントリーを非表示にします</string>
-  <string name="autosend">自動送信</string>
-  <string name="autosend_wifi">Wi-Fi で自動送信</string>
-  <string name="autosend_wifi_summary">Wi-Fi が利用可能な時に自動送信します</string>
-  <string name="autosend_network">ネットワークで自動送信</string>
-  <string name="autosend_network_summary">ネットワークが利用可能な時に自動送信します</string>
-  <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
+    <string name="autosend">自動送信</string>
+    <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
-  <string name="found_at_end">チェックを外すとフォームエントリーの最後から非表示にします</string>
-  <string name="no_account">アカウントがありません</string>
+    <string name="no_account">アカウントがありません</string>
   <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
   <string name="form_backward">前へ</string>
@@ -269,8 +256,7 @@
   <string name="survey_saving_finalizing_message">SD カードに確定中…</string>
   <string name="survey_saving_encrypting_message">データを暗号化中…</string>
   <string name="high_resolution_summary">高解像度のビデオ録画を有効にします</string>
-  <string name="high_resolution">高解像度ビデオを有効</string>
-  <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
+    <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
   <string name="google_drive">Google ドライブ</string>
   <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
@@ -327,8 +313,7 @@
   <string name="hybrid">ハイブリッド</string>
   <string name="satellite">衛星</string>
   <string name="map_basemap_selector_title">基本地図</string>
-  <string name="map_basemap_behavior">基本地図を選択</string>
-  <string name="show_map_basemap">基本地図オプションを表示</string>
+    <string name="show_map_basemap">基本地図オプションを表示</string>
   <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>

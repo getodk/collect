@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">%s işleme alacak activite bulunamadı.</string>
   <string name="add_another">Grup Ekle</string>
   <string name="add_another_repeat">Başka bir \"%s\" grup eklensin mi?</string>
@@ -100,8 +100,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
-  <string name="protocol">Platform</string>
-  <string name="change_protocol">Platform</string>
+    <string name="change_protocol">Platform</string>
   <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
   <string name="formlist_url">Form listesi yolu</string>
   <string name="submission_url">Gönderim yolu</string>
@@ -142,8 +141,7 @@
   <string name="launch_app">Başla</string>
   <string name="select_one">Bir cevap seçin</string>
   <string name="save_and_close">Sakla ve Kapat</string>
-  <string name="change_server">Platform</string>
-  <string name="admin_preferences">Yönetici Ayarlari</string>
+    <string name="admin_preferences">Yönetici Ayarlari</string>
   <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>
   <string name="save_mid">Formu Sakla</string>
   <string name="enter_new_password">Yeni Şifreyi Giriniz</string>
@@ -152,11 +150,7 @@
   <string name="admin_password_incorrect">Yanliş Şifre</string>
   <string name="enter_admin_password">Yönetici Şifresi Giriniz</string>
   <string name="autosend">Otomatik Gönder</string>
-  <string name="autosend_wifi">Wi-Fi ile Otomatik Gönder</string>
-  <string name="autosend_wifi_summary">Wi-Fi bağlanınca otomatik olarak gönder</string>
-  <string name="autosend_network">Network ile Otomatik Gönder</string>
-  <string name="autosend_network_summary">Bağlanti olunca otomatik olarak gönder</string>
-  <string name="no_account">Hesabınız Yok</string>
+    <string name="no_account">Hesabınız Yok</string>
   <string name="save_preferences">Değişiklikleri Diske Kaydet</string>
   <string name="form_forward">İleri</string>
   <string name="form_backward">Geri</string>

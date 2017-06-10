@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
   <string name="add_another">Lisa grupp</string>
   <string name="add_another_repeat">Lisa veel üks \"%s\" grupp?</string>
@@ -119,8 +119,7 @@
   <string name="view_hierarchy">Liigu küsimusele</string>
   <string name="general_preferences">Üldseaded</string>
   <string name="client">Kasutajaliides</string>
-  <string name="show_splash">Avamisel näita käivitusekraani</string>
-  <string name="show_splash_summary">Ilmub rakenduse avamisel</string>
+    <string name="show_splash_summary">Ilmub rakenduse avamisel</string>
   <string name="splash_path">Valitud käivitusekraani pilt</string>
   <string name="default_splash_path">ODK vaikmisi</string>
   <string name="select_another_image">Vali teine pilt</string>
@@ -129,8 +128,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
-  <string name="protocol">Platvorm</string>
-  <string name="change_protocol">Platvorm</string>
+    <string name="change_protocol">Platvorm</string>
   <string name="change_submission_url">Vormide sisestuste asukoht (lisatud veebiaadressile)</string>
   <string name="formlist_url">Vormi nimekirja asukoht</string>
   <string name="submission_url">Vormi sisestuse asukoht</string>
@@ -191,13 +189,9 @@
   <string name="reset_image">Lähtesta</string>
   <string name="set_color">Värvi määramine</string>
   <string name="select_drawing_color">Vali värv joonistamiseks </string>
-  <string name="user_access_main_menu">Kasutajal on juurdepääs peamenüüle: </string>
-  <string name="user_access_preferences">Kasutajal on juurdepääs muutmaks seaded:</string>
-  <string name="change_server">Platvorm</string>
-  <string name="admin_preferences">Administraatori seaded</string>
+    <string name="admin_preferences">Administraatori seaded</string>
   <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
-  <string name="user_access_form_entry">Kasutajal on ligipääs kirjetele:</string>
-  <string name="save_mid">Salvesta vorm</string>
+    <string name="save_mid">Salvesta vorm</string>
   <string name="enter_new_password">Sisesta uus salasõna</string>
   <string name="admin_password">Administraatori salasõna</string>
   <string name="admin_password_changed">Administraatori salasõna muutmine õnnestus</string>
@@ -205,16 +199,10 @@
   <string name="admin_password_incorrect">Vabandust, salasõna on vale!</string>
   <string name="enter_admin_password">Sisestage administraatori salasõna</string>
   <string name="change_admin_password">Muuda administraatori salasõna</string>
-  <string name="found_in_menu">Vormi siestusmmenüüst eemaldamiseks puhasta väli</string>
-  <string name="autosend">Automaatne saatmine</string>
-  <string name="autosend_wifi">Automaatne saatmine, kui wifi ühendus</string>
-  <string name="autosend_wifi_summary">Automaatne saatmine, kui wifi on saadaval</string>
-  <string name="autosend_network">Automaatne saatmine, kui mobiilne internet</string>
-  <string name="autosend_network_summary">Automaatne saatmine, kui mobiilne internet saadaval</string>
-  <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
+    <string name="autosend">Automaatne saatmine</string>
+    <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
-  <string name="found_at_end">Vormi lõpust peitmiseks puhasta väli</string>
-  <string name="no_account">Konto puudub</string>
+    <string name="no_account">Konto puudub</string>
   <string name="save_preferences">Salvesta seaded mäluseadmele</string>
   <string name="form_forward">Järgmine</string>
   <string name="form_backward">Eelmine</string>
@@ -264,8 +252,7 @@
   <string name="survey_saving_finalizing_message">SD kaardi tegevuste lõpetamine…</string>
   <string name="survey_saving_encrypting_message">Andmete krüpteerimine</string>
   <string name="high_resolution_summary">Kõrge resolutiooniga videosalvestuse võimaldamine</string>
-  <string name="high_resolution">Kõrge resolutsooniga video võimaldamine</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Minu Drive</string>
   <string name="go_shared">Minuga jagatud</string>
@@ -318,8 +305,7 @@
   <string name="hybrid">Hübriid</string>
   <string name="satellite">Satelliit</string>
   <string name="map_basemap_selector_title">Aluskaardid</string>
-  <string name="map_basemap_behavior">Vali aluskaart</string>
-  <string name="show_map_basemap">Näita aluskaardi valikuid</string>
+    <string name="show_map_basemap">Näita aluskaardi valikuid</string>
   <string name="save_point">Salvesta asukohapunkt</string>
   <string name="get_point">Loo asukohapunkt</string>
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>

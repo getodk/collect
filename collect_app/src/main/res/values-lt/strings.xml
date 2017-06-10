@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nerasta, kas galėtų valdyti: %s</string>
   <string name="add_another">Sukurti grupę</string>
   <string name="add_another_repeat">Sukurti kitą \"%s\" grupę?</string>
@@ -109,8 +109,7 @@
   <string name="view_hierarchy">Atsakymų sąrašas</string>
   <string name="general_preferences">Keisti nuostatas</string>
   <string name="client">Klientas</string>
-  <string name="show_splash">Rodyti užsklandą</string>
-  <string name="show_splash_summary">Rodyti užsklandą paleidžiant programą</string>
+    <string name="show_splash_summary">Rodyti užsklandą paleidžiant programą</string>
   <string name="splash_path">Parinkta užsklanda</string>
   <string name="default_splash_path">ODK numatytoji</string>
   <string name="select_another_image">Parinkti kitą paveikslėlį</string>
@@ -119,8 +118,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-  <string name="protocol">Protokolas</string>
-  <string name="change_protocol">Protokolas</string>
+    <string name="change_protocol">Protokolas</string>
   <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
   <string name="formlist_url">Formų sąrašo kelias</string>
   <string name="submission_url">Pateikimo kelias</string>
@@ -179,28 +177,18 @@
   <string name="reset_image">Atstatyti</string>
   <string name="set_color">Nustatyti spalvą</string>
   <string name="select_drawing_color">Parinkite braižymo spalvą</string>
-  <string name="user_access_main_menu">Naudotojas gali pasiekti pagrindinio meniu elementus:</string>
-  <string name="user_access_preferences">Naudotojas gali pasiekti nuostatų keitimo elementus:</string>
-  <string name="change_server">Serverio protokolas ir URL</string>
-  <string name="admin_preferences">Administratoriaus nuostatos</string>
+    <string name="admin_preferences">Administratoriaus nuostatos</string>
   <string name="admin_access_settings">Spustelėkite norėdami keisti administratoriaus nuostatas</string>
-  <string name="user_access_form_entry">Naudotojas gali pasiekti formos pildymo elementus:</string>
-  <string name="save_mid">Nebaigtos formos išsaugojimas</string>
+    <string name="save_mid">Nebaigtos formos išsaugojimas</string>
   <string name="enter_new_password">Įveskite naują slaptažodį</string>
   <string name="admin_password_changed">Administratoriaus slaptažodis sėkmingai pakeistas</string>
   <string name="admin_password_disabled">Administratoriaus slaptažodis išjungtas</string>
   <string name="admin_password_incorrect">Neteisingas slaptažodis!</string>
   <string name="enter_admin_password">Įveskite administratoriaus slaptažodį</string>
-  <string name="found_in_menu">Rasta formos elemente naudojant meniu mygtuką</string>
-  <string name="autosend">Auto Send</string>
-  <string name="autosend_wifi">Auto send with Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto send when Wi-Fi is available</string>
-  <string name="autosend_network">Auto send with network</string>
-  <string name="autosend_network_summary">Auto send when network is available</string>
-  <string name="found_in_main">Uncheck to hide from Main Menu</string>
+    <string name="autosend">Auto Send</string>
+    <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="found_at_end">Uncheck to hide from end of Form Entry</string>
-  <string name="no_account">No account</string>
+    <string name="no_account">No account</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
   <string name="form_backward">Prev</string>
