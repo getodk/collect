@@ -230,7 +230,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     .getVersionedAppName());
         }
 
-        File f = new File(Collect.SETTINGS + "/collect.settings");
+        File f = new File(Collect.ODK_ROOT + "/collect.settings");
         if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
