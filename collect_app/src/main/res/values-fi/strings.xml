@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Näytä salasana</string>
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="add_another">Lisää ryhmä</string>
@@ -122,7 +122,6 @@
   <string name="view_hierarchy">Siirry kysymykseen</string>
   <string name="general_preferences">Yleiset asetukset</string>
   <string name="client">Käyttöliittymä</string>
-  <string name="show_splash">Näytä aloitusruutu</string>
   <string name="show_splash_summary">Näytä sovelluksen käynnistyessä</string>
   <string name="splash_path">Valittu aloitusruutu</string>
   <string name="default_splash_path">ODK oletus</string>
@@ -132,7 +131,6 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="change_formlist_url">Lomakkeiden listan polku (lisätään URL:ään)</string>
-  <string name="protocol">Alusta (platform)</string>
   <string name="change_protocol">Alusta (platform)</string>
   <string name="change_submission_url">Lähetettävien lomakkeiden polku (lisätään URL:ään)</string>
   <string name="formlist_url">Lomakelistauksen polku</string>
@@ -194,13 +192,9 @@
   <string name="reset_image">Nollaus (Reset)</string>
   <string name="set_color">Aseta väri</string>
   <string name="select_drawing_color">Aseta piirrustusväri</string>
-  <string name="user_access_main_menu">Käyttäjällä pääsy seuraaviin päävalikon kohtiin:</string>
-  <string name="user_access_preferences">Käyttäjällä pääsy seuraaviin asetusten kohtiin:</string>
-  <string name="change_server">Alusta (platform)</string>
-  <string name="admin_preferences">Pääkäyttäjän asetukset</string>
+    <string name="admin_preferences">Pääkäyttäjän asetukset</string>
   <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
-  <string name="user_access_form_entry">Käyttäjällä pääsy seuraaviin lomakesyöttökohtiin:</string>
-  <string name="save_mid">Tallenna lomake</string>
+    <string name="save_mid">Tallenna lomake</string>
   <string name="enter_new_password">Syötä uusi salasana</string>
   <string name="admin_password">Pääkäyttäjän salasana</string>
   <string name="admin_password_changed">Pääkäyttäjän salasana vaihdettu</string>
@@ -208,16 +202,10 @@
   <string name="admin_password_incorrect">Pahoittelen, väärä salasana!</string>
   <string name="enter_admin_password">Syötä pääkäyttäjätunnus</string>
   <string name="change_admin_password">Vaihda pääkäyttäjän salasana</string>
-  <string name="found_in_menu">Poista rasti piilottaaksesi valikosta lomakkeen täyttämisen aikana</string>
-  <string name="autosend">Automaattinen lähetys</string>
-  <string name="autosend_wifi">Automaattinen lähetys Wi-Fi:n välityksellä</string>
-  <string name="autosend_wifi_summary">Automaattinen lähetys kun Wi-Fi saatavilla</string>
-  <string name="autosend_network">Automaattinen lähetys verkkoyhteyden kautta</string>
-  <string name="autosend_network_summary">Automaattinen lähetys kun verkkoyhteys on käytettävissä</string>
-  <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
+    <string name="autosend">Automaattinen lähetys</string>
+    <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
-  <string name="found_at_end">Poista rasti piilottaaksesi lomakkeen syöttämisen lopusta</string>
-  <string name="no_account">Ei tiliä</string>
+    <string name="no_account">Ei tiliä</string>
   <string name="save_preferences">Tallenna asetukset</string>
   <string name="form_forward">Seuraava</string>
   <string name="form_backward">Edellinen</string>
@@ -267,8 +255,7 @@
   <string name="survey_saving_finalizing_message">Viimeistellään SD-kortille…</string>
   <string name="survey_saving_encrypting_message">Salataan dataa…</string>
   <string name="high_resolution_summary">Aktivoi korkean resoluution videotallennukset</string>
-  <string name="high_resolution">Aktivoi hi-res video</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Oma Drive</string>
   <string name="go_shared">Minun kanssani jaetut</string>
@@ -325,8 +312,7 @@
   <string name="hybrid">Hybridi</string>
   <string name="satellite">Satelliitti</string>
   <string name="map_basemap_selector_title">Basemaps</string>
-  <string name="map_basemap_behavior">Valitse peruskartta</string>
-  <string name="show_map_basemap">Näytä peruskarttavalikko</string>
+    <string name="show_map_basemap">Näytä peruskarttavalikko</string>
   <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>

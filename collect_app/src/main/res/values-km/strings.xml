@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="add_another">បន្ថែម​ក្រុម</string>
@@ -19,8 +19,7 @@
   <string name="capture_video">ថត​វីដេអូ</string>
   <string name="change_language">ប្ដូរ​ភាសា</string>
   <string name="change_password">ពាក្យ​សម្ងាត់ ODK</string>
-  <string name="change_protocol_settings_default">ការកំណត់ Platform</string>
-  <string name="change_username">ឈ្មោះ​អ្នកប្រើ ODK</string>
+    <string name="change_username">ឈ្មោះ​អ្នកប្រើ ODK</string>
   <string name="clearanswer_confirm">បោះបង់ចម្លើយ​ដើម្បី \"%s\"?</string>
   <string name="clear_answer">បោះបង់ចម្លើយ</string>
   <string name="clear_answer_ask">បោះ​បង់ការឆ្លើយនេះ</string>
@@ -123,8 +122,7 @@
   <string name="view_hierarchy">ទៅ Prompt</string>
   <string name="general_preferences">ការកំណត់ទូទៅ</string>
   <string name="client">ចំណុចប្រទាក់អ្នកប្រើប្រាស់</string>
-  <string name="show_splash">បង្ហាញអេក្រង់ស្វាគមន៍</string>
-  <string name="show_splash_summary">បង្ហាញពេលកម្មវិធីចាប់ផ្តើម</string>
+    <string name="show_splash_summary">បង្ហាញពេលកម្មវិធីចាប់ផ្តើម</string>
   <string name="splash_path">ជ្រើសរើសរូបស្វាគមន៍</string>
   <string name="default_splash_path">ODK លំនាំដើម</string>
   <string name="select_another_image">ជ្រើសរើសរូបផ្សេងទៀត</string>
@@ -133,8 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
   <string name="change_formlist_url">ផ្លូវរបស់បញ្ជីសំណុំ​បែប​បទ​(បានបន្ថែមលើ URL)</string>
-  <string name="protocol">Platform</string>
-  <string name="change_protocol">Platform</string>
+    <string name="change_protocol">Platform</string>
   <string name="change_submission_url">ផ្លូវដាក់ចូល (បន្ថែមលើ URL)</string>
   <string name="formlist_url">ទីតាំងបញ្ជីសំណុំ​បែប​បទ</string>
   <string name="submission_url">ផ្លូវដាក់ចូល</string>
@@ -196,13 +193,9 @@
   <string name="reset_image">ធ្វើសារឡើងវិញ</string>
   <string name="set_color">កំណត់ពណ៌</string>
   <string name="select_drawing_color">ជ្រើសរើសពណ៌សម្រាប់គូរ</string>
-  <string name="user_access_main_menu">អ្នកប្រើប្រាស់អាចចូលប្រើធាតុពីម៊ីនុយមេ</string>
-  <string name="user_access_preferences">អ្នកប្រើប្រាស់អាចចូលធាតុផ្លាស់ប្តូររបស់ការកំណត់</string>
-  <string name="change_server">Platform</string>
-  <string name="admin_preferences">ការកំណត់របស់ Admin</string>
+    <string name="admin_preferences">ការកំណត់របស់ Admin</string>
   <string name="admin_access_settings">ប៉ះសម្រាប់កំណត់ដំណើរការរបស់ Admin</string>
-  <string name="user_access_form_entry">អ្នកប្រើប្រាស់អាចចូលធាតុរបស់សំណុំ​បែប​បទបញ្ចូលទិន្នន័យ</string>
-  <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
+    <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
   <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
   <string name="admin_password">ពាក្យសម្ងាត់ Admin</string>
   <string name="admin_password_changed">ពាក្យសម្ងាត់របស់ Admin បានផ្លាស់ប្តូរដោយជោគជ័យ</string>
@@ -210,16 +203,10 @@
   <string name="admin_password_incorrect">សោកស្តាយផង, ពាក្យសម្ងាត់នេះមិនត្រឹមត្រូវ!</string>
   <string name="enter_admin_password">បញ្ចូលពាក្យសម្ងាត់របស់ Admin</string>
   <string name="change_admin_password">ផ្លាស់​ប្តូរ​ពាក្យ​សម្ងាត់​ Admin</string>
-  <string name="found_in_menu">ដោះ​ធីក​ដើម្បី​លាក់​ពី​ម៊ឺនុយ​នៅ​ក្នុង​សំណុំ​បែប​បទ​បញ្ចូល​ទិន្នន័យ</string>
-  <string name="autosend">បញ្ជូនចេញដោយស្វ័យប្រវត្តិ</string>
-  <string name="autosend_wifi">បញ្ជូនចេញដោយស្វ័យប្រវត្តិជាមួយ Wi-Fi</string>
-  <string name="autosend_wifi_summary">បញ្ជូនចេញដោយស្វ័យប្រវត្តិពេលដែល Wi-Fi ដំណើរការបាន</string>
-  <string name="autosend_network">បញ្ជូនចេញដោយស្វ័យប្រវត្តិជាមួយបណ្តាញ</string>
-  <string name="autosend_network_summary">បញ្ជូនចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ​ពេល​បណ្តាញមាន</string>
-  <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
+    <string name="autosend">បញ្ជូនចេញដោយស្វ័យប្រវត្តិ</string>
+    <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
-  <string name="found_at_end">ដោះធីកដើម្បីលាក់ចេញពីសំណុំ​បែប​បទបញ្ចូលទិន្នន័យ</string>
-  <string name="no_account">គ្មាន​គណនី</string>
+    <string name="no_account">គ្មាន​គណនី</string>
   <string name="save_preferences">រក្សាទុកការកំណត់ទៅកាន់ថាស</string>
   <string name="form_forward">បន្ទាប់</string>
   <string name="form_backward">មុន</string>
@@ -269,8 +256,7 @@
   <string name="survey_saving_finalizing_message">កំពុងបញ្ចប់ទៅកាន់ថាស SD</string>
   <string name="survey_saving_encrypting_message">កំពុងបម្លែង​ជារហស្សលិខទិន្នន័យ</string>
   <string name="high_resolution_summary">បើកការថតវីដេអូគុណភាពច្បាស់</string>
-  <string name="high_resolution">បើកវីដេអូគុណភាពច្បាស់</string>
-  <string name="server_platform_google_sheets">ថាស Google, សន្លឹក Google</string>
+    <string name="server_platform_google_sheets">ថាស Google, សន្លឹក Google</string>
   <string name="google_drive">ថាស Google</string>
   <string name="go_drive">ថាសរបស់ខ្ញុំ</string>
   <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
@@ -327,8 +313,7 @@
   <string name="hybrid">ផែនទីកូនកាត់</string>
   <string name="satellite">ផ្កាយរណប</string>
   <string name="map_basemap_selector_title">មូលដ្ឋានផែនទី</string>
-  <string name="map_basemap_behavior">ជ្រើសរើស​មូលដ្ឋានផែនទី</string>
-  <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
+    <string name="show_map_basemap">បង្ហាញជម្រើសផែនទីមូលដ្ឋាន</string>
   <string name="save_point">រក្សា GeoPoint</string>
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>

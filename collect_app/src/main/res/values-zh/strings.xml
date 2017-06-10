@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="add_another">添加</string>
   <string name="add_another_repeat">继续添加 \"%s\"?</string>
@@ -109,8 +109,7 @@
   <string name="view_hierarchy">跳到提示</string>
   <string name="general_preferences">设置</string>
   <string name="client">用户界面</string>
-  <string name="show_splash">显示开始界面</string>
-  <string name="show_splash_summary">当应用开始时显示</string>
+    <string name="show_splash_summary">当应用开始时显示</string>
   <string name="splash_path">选定的开始图片</string>
   <string name="default_splash_path">ODK默认图片</string>
   <string name="select_another_image">选择其他图片</string>
@@ -119,8 +118,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">保存修改</string>
   <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
-  <string name="protocol">服务器平台</string>
-  <string name="change_protocol">服务器平台</string>
+    <string name="change_protocol">服务器平台</string>
   <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
   <string name="formlist_url">表格列表路径</string>
   <string name="submission_url">提交路径</string>
@@ -179,28 +177,18 @@
   <string name="reset_image">重置</string>
   <string name="set_color">选择颜色</string>
   <string name="select_drawing_color">选择绘画颜色</string>
-  <string name="user_access_main_menu">用户可以使用主菜单条目:</string>
-  <string name="user_access_preferences">用户可以使用修改设定条目:</string>
-  <string name="change_server">服务器协议和URL</string>
-  <string name="admin_preferences">管理员设置</string>
+    <string name="admin_preferences">管理员设置</string>
   <string name="admin_access_settings">点击进入管理员设置</string>
-  <string name="user_access_form_entry">用户可以存取表格条目:</string>
-  <string name="save_mid">保存表格</string>
+    <string name="save_mid">保存表格</string>
   <string name="enter_new_password">输入新密码</string>
   <string name="admin_password_changed">管理员密码已成功修改</string>
   <string name="admin_password_disabled">管理员密码已禁用</string>
   <string name="admin_password_incorrect">对不起, 密码不正确!</string>
   <string name="enter_admin_password">输入管理员密码</string>
-  <string name="found_in_menu">不选中以从表格条目中隐藏菜单</string>
-  <string name="autosend">自动发送</string>
-  <string name="autosend_wifi">Wi-Fi下自动发送</string>
-  <string name="autosend_wifi_summary">当Wi-Fi可用时自动发送</string>
-  <string name="autosend_network">有网络时自动发送</string>
-  <string name="autosend_network_summary">当网络可用时自动发送</string>
-  <string name="found_in_main">不选中以从主菜单中隐藏</string>
+    <string name="autosend">自动发送</string>
+    <string name="found_in_main">不选中以从主菜单中隐藏</string>
   <string name="found_in_settings">不选中以从设置中隐藏</string>
-  <string name="found_at_end">不选中以从表格条目末尾隐藏</string>
-  <string name="no_account">没有账户</string>
+    <string name="no_account">没有账户</string>
   <string name="save_preferences">保存设置到磁盘</string>
   <string name="form_forward">下一个</string>
   <string name="form_backward">上一个</string>

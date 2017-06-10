@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
   <string name="add_another">Adicionar Grupo</string>
   <string name="add_another_repeat">Adicionar outro \"%s\" grupo?</string>
@@ -111,8 +111,7 @@
   <string name="view_hierarchy">Ir para atual</string>
   <string name="general_preferences">Alterar configuração</string>
   <string name="client">Cliente</string>
-  <string name="show_splash">Mostrar Splash Screen</string>
-  <string name="show_splash_summary">Mostrar quando a aplicação iniciar</string>
+    <string name="show_splash_summary">Mostrar quando a aplicação iniciar</string>
   <string name="splash_path">Selecionada imagem Splash</string>
   <string name="default_splash_path">ODK Default</string>
   <string name="select_another_image">Selecionar Outra Imagem</string>
@@ -121,8 +120,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salvar Alterações</string>
   <string name="change_formlist_url">Listagem do caminho do formulário (adicionado do URL do Servidor)</string>
-  <string name="protocol">Protocolo</string>
-  <string name="change_protocol">Protocolo</string>
+    <string name="change_protocol">Protocolo</string>
   <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
   <string name="formlist_url">Lista de Caminho do Formulário</string>
   <string name="submission_url">Caminho para submeter</string>
@@ -181,28 +179,18 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Cor</string>
   <string name="select_drawing_color">Definir cor para desenhar</string>
-  <string name="user_access_main_menu">Usuário pode acessar itens do Menu Principal:</string>
-  <string name="user_access_preferences">Usuário pode acessar itens para modificar configurações:</string>
-  <string name="change_server">Server Protocol and URL</string>
-  <string name="admin_preferences">Configurações Administrativas</string>
+    <string name="admin_preferences">Configurações Administrativas</string>
   <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
-  <string name="user_access_form_entry">Usuário pode acessar itens de formulário:</string>
-  <string name="save_mid">Mid-form saving</string>
+    <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Digite a nova senha</string>
   <string name="admin_password_changed">Senha administrativa alterada com sucesso</string>
   <string name="admin_password_disabled">Senha administrativa desabilitada</string>
   <string name="admin_password_incorrect">Lamento, senha incorreta!</string>
   <string name="enter_admin_password">Digite a senha administrativa</string>
-  <string name="found_in_menu">Desmarque para esconder no menu durante a inserção de um formulário</string>
-  <string name="autosend">Enviar automaticamente</string>
-  <string name="autosend_wifi">Enviar automaticamente utilizando Wi-Fi</string>
-  <string name="autosend_wifi_summary">Enviar automaticamente quando Wi-Fi estiver disponível</string>
-  <string name="autosend_network">Enviar automaticamente com rede de dados</string>
-  <string name="autosend_network_summary">Enviar automaticamente quando a rede de dados estiver disponível</string>
-  <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
+    <string name="autosend">Enviar automaticamente</string>
+    <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
   <string name="found_in_settings">Desmarque para não exibir nas Configurações Gerais  </string>
-  <string name="found_at_end">Desmarque para não exibir no final de um formulário</string>
-  <string name="no_account">Sem conta</string>
+    <string name="no_account">Sem conta</string>
   <string name="save_preferences">Salvar configurações no disco</string>
   <string name="form_forward">Próximo</string>
   <string name="form_backward">Anterior</string>
@@ -252,8 +240,7 @@
   <string name="survey_saving_finalizing_message">Desconectando o cartão de memória…</string>
   <string name="survey_saving_encrypting_message">Criptografando dados…</string>
   <string name="high_resolution_summary">Acionar gravação de vídeos em alta resolução</string>
-  <string name="high_resolution">Acionar vídeo em alta resolução</string>
-  <string name="google_drive">Google Drive</string>
+    <string name="google_drive">Google Drive</string>
   <string name="go_drive">Meu Disco</string>
   <string name="go_shared">Compartilhado comigo</string>
   <string name="modified_on_date_at_time">\'Modificado em\' EEE, MMM dd, yyyy \'às\' HH:mm</string>

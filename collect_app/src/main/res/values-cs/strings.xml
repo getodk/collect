@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nenalezena žádná aktivita k řešení: %s</string>
   <string name="add_another">Přidat skupinu</string>
   <string name="add_another_repeat">Přidat další \"%s\" skupinu?</string>
@@ -114,8 +114,7 @@
   <string name="view_hierarchy">Přejít k otázce</string>
   <string name="general_preferences">Obecná nastavení</string>
   <string name="client">Uživatelské rozhraní</string>
-  <string name="show_splash">Zobrazit úvodní obrazovku</string>
-  <string name="show_splash_summary">Zobrazit při startu aplikace</string>
+    <string name="show_splash_summary">Zobrazit při startu aplikace</string>
   <string name="splash_path">Vyberte úvodní obrázek</string>
   <string name="default_splash_path">Výchozí obrazovka ODK</string>
   <string name="select_another_image">Vybrat další obrázek</string>
@@ -124,8 +123,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Uložit změny</string>
   <string name="change_formlist_url">Cesta k seznamu dotazníků (přidat k URL)</string>
-  <string name="protocol">Platforma</string>
-  <string name="change_protocol">Platforma</string>
+    <string name="change_protocol">Platforma</string>
   <string name="change_submission_url">Cesta pro odeslání (přidat k URL)</string>
   <string name="formlist_url">Cesta k seznamu dotazníků</string>
   <string name="submission_url">Cesta pro odeslání</string>
@@ -185,28 +183,18 @@
   <string name="reset_image">Resetovat</string>
   <string name="set_color">Nastavit barvu</string>
   <string name="select_drawing_color">Vybrat barvu čáry</string>
-  <string name="user_access_main_menu">Dostupné v hlavní nabídce:</string>
-  <string name="user_access_preferences">V nastavení lze měnit:</string>
-  <string name="change_server">Platforma</string>
-  <string name="admin_preferences">Administrátorská nastavení</string>
+    <string name="admin_preferences">Administrátorská nastavení</string>
   <string name="admin_access_settings">Klepněte pro administrátorský přístup do Nastavení</string>
-  <string name="user_access_form_entry">Dostupné při vyplňování dotazníku:</string>
-  <string name="save_mid">Uložit dotazník</string>
+    <string name="save_mid">Uložit dotazník</string>
   <string name="enter_new_password">Zadejte nové heslo</string>
   <string name="admin_password_changed">Administrátorské heslo úspěšně změněno</string>
   <string name="admin_password_disabled">Administrátorské heslo vypnuto</string>
   <string name="admin_password_incorrect">Heslo není správné!</string>
   <string name="enter_admin_password">Zadejte administrátorské heslo</string>
-  <string name="found_in_menu">Zobrazit v menu při vyplňování dotazníku</string>
-  <string name="autosend">Odeslat automaticky</string>
-  <string name="autosend_wifi">…přes Wi-Fi</string>
-  <string name="autosend_wifi_summary">Odeslat automaticky jakmile bude Wi-Fi k dispozici</string>
-  <string name="autosend_network">…přes datové připojení</string>
-  <string name="autosend_network_summary">Odeslat automaticky jakmile bude datové připojení k dispozici</string>
-  <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
+    <string name="autosend">Odeslat automaticky</string>
+    <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
-  <string name="found_at_end">Zobrazit na konci vyplňování dotazníku</string>
-  <string name="no_account">Žádný účet</string>
+    <string name="no_account">Žádný účet</string>
   <string name="save_preferences">Uložit nastavení na Disk</string>
   <string name="form_forward">Další</string>
   <string name="form_backward">Předchozí</string>
@@ -256,8 +244,7 @@
   <string name="survey_saving_finalizing_message">Dokončuji ukládání na SD kartu…</string>
   <string name="survey_saving_encrypting_message">Šifruji data…</string>
   <string name="high_resolution_summary">Povolit vysoké rozlišení videonahrávek</string>
-  <string name="high_resolution">Vysoké rozlišení videa</string>
-  <string name="google_drive">Google Drive</string>
+    <string name="google_drive">Google Drive</string>
   <string name="go_drive">Můj disk</string>
   <string name="go_shared">Sdíleno se mnou</string>
   <string name="modified_on_date_at_time">\'Upraveno v \' EEE, dd MMM, yyyy \'v\' HH:mm</string>

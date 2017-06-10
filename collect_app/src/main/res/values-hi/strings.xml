@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="add_another"> समूह जोड़ें</string>
   <string name="add_another_repeat">“%s” समूह जोड़ें</string>
   <string name="add_repeat">समूह में नया \"%s\" जोड़ें</string>
@@ -13,8 +13,7 @@
   <string name="capture_video">विडियो रिकार्ड करे</string>
   <string name="change_language">भाषा बदलें</string>
   <string name="change_password">ओडीके पासवर्ड</string>
-  <string name="change_protocol_settings_default">प्लेटफ़ॉर्म सेटिंग</string>
-  <string name="change_username">ओडीके उपयोगकर्ता नाम</string>
+    <string name="change_username">ओडीके उपयोगकर्ता नाम</string>
   <string name="clear_answer">उत्तर मिटाएं</string>
   <string name="clear_answer_ask">उत्तर मिटाएं ?</string>
   <string name="clear_answer_no">मिटाएं</string>
