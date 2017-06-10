@@ -1,14 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Rekodi Eneo/Mahali</string>
-  <string name="accuracy">Usahihi</string>
   <string name="activity_not_found">Hakuna shughuli iliyopatikana kushughulikia: %s</string>
   <string name="add_another">Ongeza Kikundi</string>
   <string name="add_another_repeat">Ongeza Kikundi \"%s\" kingine </string>
-  <string name="add_more">Ongeza zingine</string>
   <string name="add_repeat">Ongeza kikundi \"%s\" kipya?</string>
   <string name="add_repeat_no">Usiongeze</string>
-  <string name="altitude">Urefu</string>
   <string name="audio_file_error">hakuna faili ya sauti bayana</string>
   <string name="audio_file_invalid">faili: %s sio faili halali ya sauti</string>
   <string name="cancel">Tamatisha</string>
@@ -25,7 +21,6 @@
   <string name="clear_answer">Ondoa jibu</string>
   <string name="clear_answer_ask">Ondoa jibu hili?</string>
   <string name="clear_answer_no">Tamatisha</string>
-  <string name="completed_data">Asilimia Kamili (%s)</string>
   <string name="data">Fomu zilizo hifadhiwa</string>
   <string name="data_saved_error">Samahani, fomu haikuhifadhiwa!</string>
   <string name="data_saved_ok">Fomu imehifadhiwa!</string>
@@ -69,7 +64,6 @@
   <string name="jump_to_beginning">Enda Mwanzo</string>
   <string name="jump_to_end">Enda Mwisho</string>
   <string name="jump_to_previous">Enda Juu</string>
-  <string name="latitude">Latitudo</string>
   <string name="leave_repeat_yes">Usiongeze</string>
   <string name="leaving_repeat_ask">Ongeza kundi lingine moja!</string>
   <string name="list_failed_with_error">Uanishaji wa fomu haukufaulu. %s.</string>
@@ -77,7 +71,6 @@
   <string name="load_remote_form_error">Tatizo katika kuchukua fomu!</string>
   <string name="location_provider_accuracy">Ukitumia %1$s. Usahihi ni %2$s m.</string>
   <string name="location_accuracy">Usahihi ni %1$s m</string>
-  <string name="longitude">Longitude</string>
   <string name="main_menu">Menu kuu</string>
   <string name="main_menu_details">Ukusanyaji wa data umefanywa rahisi….</string>
   <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>
@@ -98,11 +91,9 @@
   <string name="quit_entry">Hifadhi fomu na Kutoka</string>
   <string name="refresh">Upya</string>
   <string name="replace_barcode">Badilisha Barcode</string>
-  <string name="replace_location">Badilisha Eneo/Mahali</string>
   <string name="required_answer_error">Samahani, jibu hili linahitajika!</string>
   <string name="review_data">Hariri fomu iliyo hifadhiwa</string>
   <string name="review_data_button">Hariri fomu (%s) iliyo hifadhiwa</string>
-  <string name="saved_data">Haijakamilika (%s)</string>
   <string name="save_all_answers">Hifadhi Fomu</string>
   <string name="save_enter_data_description">Umefika mwisho wa %s.</string>
   <string name="saving_form">Hifadhi ya fomu</string>
@@ -119,7 +110,6 @@
   <string name="username">Jina la mtumiaji</string>
   <string name="view_hierarchy">Enda</string>
   <string name="general_preferences">Mazingira ya Jumla</string>
-  <string name="click_to_web">Gusa ili kuelekea http://opendatakit.org</string>
   <string name="client">Sura ya kutumika</string>
   <string name="show_splash">Onyesha kioo</string>
   <string name="show_splash_summary">Huonyesha ala linapoanza</string>
@@ -128,10 +118,8 @@
   <string name="select_another_image">Chagua Picha nyingine</string>
   <string name="use_odk_default">Tumia picha ya kawaida</string>
   <string name="change_splash_path">Badilisha picha</string>
-  <string name="show_location">Onyesha Eneo/Mahali</string>
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
-  <string name="go_to_location">Enda kwa Eneo/Mahali</string>
   <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>
   <string name="protocol">jukwaa</string>
   <string name="change_protocol">Jukwaa</string>
@@ -196,16 +184,13 @@
   <string name="user_access_main_menu">Mtumiaji anaweza kupata vitu kwenye Menu Kuu:</string>
   <string name="user_access_preferences">Mtumiaji anaweza kupata Change Settings</string>
   <string name="change_server">Jukwaa</string>
-  <string name="change_username_default">Jina la mtumiaji</string>
   <string name="admin_preferences">Settings za admin</string>
   <string name="admin_access_settings">bonyeza ili upenye kama admin</string>
   <string name="user_access_form_entry">Mtumiaji anaweza kupata vitu vya kujaza fomu:</string>
   <string name="save_mid">Hifadhi Fomu</string>
   <string name="enter_new_password">Weka password mpya</string>
-  <string name="verify_new_password">Rudia password mpya</string>
   <string name="admin_password_changed">Password ya msimamizi imebadilishwa vyema</string>
   <string name="admin_password_disabled">Password ya msimamizi imefungwa</string>
-  <string name="admin_password_mismatch">Samahani, password si sambamba</string>
   <string name="admin_password_incorrect">Samahani, password si sawa</string>
   <string name="enter_admin_password">Weka password ya msimamizi</string>
   <string name="autosend">Tuma moja kwa moja</string>
