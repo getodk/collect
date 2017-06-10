@@ -1,18 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Ghi lại vị trí</string>
-  <string name="accuracy">Độ chính xác</string>
   <string name="activity_not_found">Không có hành động phù hợp với: %s</string>
   <string name="add_another">Thêm nhóm</string>
   <string name="add_another_repeat">Thêm 1 \"%s\" khác?</string>
-  <string name="add_more">Thêm</string>
   <string name="add_repeat">Thêm 1 \"%s\" mới?</string>
   <string name="add_repeat_no">Không được thêm</string>
-  <string name="advance">di tới \nnext\nprompt</string>
-  <string name="altitude">Độ cao</string>
   <string name="audio_file_error">Không có file âm thanh nào được xác định.</string>
   <string name="audio_file_invalid">File: %s không phải là file âm thanh hợp lệ.</string>
-  <string name="backup">quay về \nprevious\nprompt</string>
   <string name="cancel">Huỷ</string>
   <string name="cancel_loading_form">Huỷ</string>
   <string name="cancel_location">Huỷ</string>
@@ -28,7 +22,6 @@
   <string name="clear_answer">Xoá câu trả lời</string>
   <string name="clear_answer_ask">Muốn xoá câu trả lời này?</string>
   <string name="clear_answer_no">Huỷ</string>
-  <string name="completed_data">Hoàn thành (%s)</string>
   <string name="data">Lưu biểu mẫu</string>
   <string name="data_saved_error">Xin lỗi, biểu mẫu không lưu được!</string>
   <string name="data_saved_ok">Biểu mẫu đã được lưu!</string>
@@ -74,7 +67,6 @@
   <string name="jump_to_beginning">Về đầu tiên</string>
   <string name="jump_to_end">Đến cuối cùng</string>
   <string name="jump_to_previous">Về trước</string>
-  <string name="latitude">Toạ độ</string>
   <string name="leave_repeat_yes">Không thêm</string>
   <string name="leaving_repeat_ask">Thêm một nhóm nữa?</string>
   <string name="list_failed_with_error">Lỗi hiển thị biểu mẫu. %s.</string>
@@ -82,7 +74,6 @@
   <string name="load_remote_form_error">Lỗi hiển thị danh sách</string>
   <string name="location_provider_accuracy">Sử dụng %1$s. Độ chính xác là %2$s m.</string>
   <string name="location_accuracy">Độ chính xác là %1$s m</string>
-  <string name="longitude">Kinh độ</string>
   <string name="main_menu">Thực đơn</string>
   <string name="main_menu_details">Thu thập số liệu dễ dàng và thuận tiện hơn…</string>
   <string name="manage_files">Xoá biểu mẫu cũ</string>
@@ -103,11 +94,9 @@
   <string name="quit_entry">Lưu biểu mẫu và thoát</string>
   <string name="refresh">Làm mới</string>
   <string name="replace_barcode">Thay mã vạch</string>
-  <string name="replace_location">Thay vị trí</string>
   <string name="required_answer_error">Xin lỗi, câu trả lời được yêu cầu điền!</string>
   <string name="review_data">Sửa biểu mẫu lưu</string>
   <string name="review_data_button">Sửa biểu mẫu lưu (%s)</string>
-  <string name="saved_data">Chưa hoàn thành (%s)</string>
   <string name="save_all_answers">Lưu biểu mẫu</string>
   <string name="save_enter_data_description">Bạn đang ở phần kết thúc của \"%s\".</string>
   <string name="saving_form">Đang lưu biểu mẫu</string>
@@ -123,7 +112,6 @@
   <string name="username">Tên truy cập</string>
   <string name="view_hierarchy">Di chuyển đến</string>
   <string name="general_preferences">Thay đổi thiết lập</string>
-  <string name="click_to_web">Nhấn đề xem http://opendatakit.org</string>
   <string name="client">Giao diện người sử dụng</string>
   <string name="show_splash">Hiển thị màn hình chào</string>
   <string name="show_splash_summary">Hiển thị khi chương trình khởi động</string>
@@ -132,10 +120,8 @@
   <string name="select_another_image">Chọn ảnh khác</string>
   <string name="use_odk_default">Chọn ảnh mặc định</string>
   <string name="change_splash_path">Đổi ảnh</string>
-  <string name="show_location">Hiển thị vị trí</string>
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Lưu thay đổi</string>
-  <string name="go_to_location">Đến vị trí</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="protocol">Nền tảng máy chủ</string>
   <string name="change_protocol">Nền tảng máy chủ</string>
@@ -200,16 +186,13 @@
   <string name="user_access_main_menu">User can access Main Menu items:</string>
   <string name="user_access_preferences">User can access Change Settings items:</string>
   <string name="change_server">Server Protocol and URL</string>
-  <string name="change_username_default">Tên truy cập</string>
   <string name="admin_preferences">Admin Settings</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="user_access_form_entry">User can access Form Entry items:</string>
   <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Enter new password</string>
-  <string name="verify_new_password">Re-enter new password</string>
   <string name="admin_password_changed">Admin password successfully changed</string>
   <string name="admin_password_disabled">Admin password disabled</string>
-  <string name="admin_password_mismatch">Sorry, passwords do not match!</string>
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
   <string name="found_in_menu">Found using Menu button in Form Entry</string>
@@ -229,9 +212,6 @@
   <string name="swipe_navigation">Use horizontal swipes</string>
   <string name="buttons_navigation">Use forward/backward buttons</string>
   <string name="swipe_buttons_navigation">Use swipes and buttons</string>
-  <string name="swipe_instructions">You are at the start of %s. Swipe the screen as shown below to go backward and forward.</string>
-  <string name="buttons_instructions">You are at the start of %s. Tap the arrow buttons below to go backward and forward.</string>
-  <string name="swipe_buttons_instructions">You are at the start of %s. Swipe the screen as shown below or tap the arrow buttons to go backward and forward.</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Địa chỉ máy chủ</string>

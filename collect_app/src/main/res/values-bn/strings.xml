@@ -1,18 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">জিপিএস স্থান র্নির্ধারণ করুন </string>
-  <string name="accuracy">যথাযথতা</string>
   <string name="activity_not_found">পরিচালনা করার মত কোন কর্মকাণ্ড পাওয়া যায় নিঃ %s</string>
   <string name="add_another">সংযুক্ত করণ</string>
   <string name="add_another_repeat">অন্যান্য বিষয় \"%s\" সংযুক্ত করণ</string>
-  <string name="add_more">আরো সংযুক্ত করণ:</string>
   <string name="add_repeat">নতুন \"%s\" গ্রুপ সংযুক্ত করন</string>
   <string name="add_repeat_no">আর সংযুক্ত করা যাবে না</string>
-  <string name="advance">পরবর্তী পাতা</string>
-  <string name="altitude">উচ্চতা</string>
   <string name="audio_file_error">কোন অডিও ফাইল নির্দিষ্ট করা হয় নি। </string>
   <string name="audio_file_invalid">%s নামের ফাইলটি যুক্তিসিদ্ধ অডিও ফাইল নয়।</string>
-  <string name="backup">পূর্ববর্তী পাতা</string>
   <string name="cancel">বাতিল</string>
   <string name="cancel_loading_form">বাতিল</string>
   <string name="cancel_location">বাতিল</string>
@@ -28,7 +22,6 @@
   <string name="clear_answer">উত্তর মুছে ফেলুন</string>
   <string name="clear_answer_ask">উত্তর মুছে ফেলতে চান?</string>
   <string name="clear_answer_no">বাতিল</string>
-  <string name="completed_data">শেষ (%s)</string>
   <string name="data">ডাটা</string>
   <string name="data_saved_error">দু:খিত, ফরম সংরক্ষিত হয়নি</string>
   <string name="data_saved_ok">ফরম সংরক্ষিত হয়েছে</string>
@@ -74,7 +67,6 @@
   <string name="jump_to_beginning">ফরম শুরুর স্থানে যান</string>
   <string name="jump_to_end">ফরম শেষের স্থানে যান</string>
   <string name="jump_to_previous">আগের প্রশ্নে যান</string>
-  <string name="latitude">অক্ষাংশ</string>
   <string name="leave_repeat_yes">আর সংযুক্ত করা যাবে না</string>
   <string name="leaving_repeat_ask">আরো একটি গ্রুপ যোগ করতে চান?</string>
   <string name="list_failed_with_error">ফরম সাজানো ব্যর্থ হয়েছে। %s.</string>
@@ -82,7 +74,6 @@
   <string name="load_remote_form_error">ফরম এর তালিকা পেতে ত্রুটি পাওয়া গেছে।</string>
   <string name="location_provider_accuracy">এখানে ব্যবহৃত %1$s. যার যথাযথতা হল %2$s m.</string>
   <string name="location_accuracy">যথাযথতা মান %1$s m.</string>
-  <string name="longitude">দ্রাঘিমাংশ</string>
   <string name="main_menu">প্রধান মেনু</string>
   <string name="main_menu_details">প্রধান মেনু বিস্তারিত</string>
   <string name="manage_files">সংরক্ষিত ফরম মুছে দিন </string>
@@ -105,7 +96,6 @@
   <string name="quit_entry">ফরম সংরক্ষন করুন  এবং প্রস্থান করুন </string>
   <string name="refresh">সতেজ করা</string>
   <string name="replace_barcode">বারকোড প্রতিস্থাপন করুন</string>
-  <string name="replace_location">অবসইথান পুনর্নির্ধারণ করুন</string>
   <string name="required_answer_error">দুঃখিত, এই উত্তরটি অপরিহার্য ।</string>
   <string name="review_data">সংরক্ষিত ফরম পুনরায় সম্পাদনা করুন</string>
   <string name="review_data_button">সংরক্ষিত ফরম %s সম্পাদনা করুন </string>
@@ -125,7 +115,6 @@
   <string name="username">ব্যবহারকারীর নাম।</string>
   <string name="view_hierarchy">অনুক্রম  অনুসারে দেখা</string>
   <string name="general_preferences">সাধারন সেটীংস।</string>
-  <string name="click_to_web">http://opendatakit.org ক্লিক করুন </string>
   <string name="client">ক্লেয়েন্ট </string>
   <string name="show_splash">স্প্ল্যাশ দেখান </string>
   <string name="show_splash_summary">স্প্ল্যাশ summary দেখান</string>
@@ -134,7 +123,6 @@
   <string name="select_another_image">অন্য ভাষা নির্বাচন করুন।</string>
   <string name="use_odk_default">odk ডিফল্ট ব্যবহার</string>
   <string name="change_splash_path">ছবি পরিবর্তন করুন</string>
-  <string name="show_location">অবস্থান দেখান</string>
   <string name="app_url">এপ্লিকেশন url</string>
   <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
   <string name="change_formlist_url">ফর্ম তালিকা URL পরিবর্তন</string>
@@ -189,16 +177,13 @@
   <string name="user_access_main_menu">ব্যবহারকারীর প্রধান মেনু্তে প্রবেশ</string>
   <string name="user_access_preferences">Settings পরিবর্তন </string>
   <string name="change_server">প্লাটফর্ম</string>
-  <string name="change_username_default">ব্যবহারকারীর নাম</string>
   <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
   <string name="admin_access_settings">অ্যাডমিনের settings</string>
   <string name="user_access_form_entry">ব্যবহারকারীর ফর্ম এ প্রবেশ</string>
   <string name="save_mid">সংরক্ষণ করুন ফরম </string>
   <string name="enter_new_password">পাসওয়ার্ড দিন।</string>
-  <string name="verify_new_password">পুনরায় পাসওয়ার্ড দিন।</string>
   <string name="admin_password_changed">অ্যাডমিনের পাসওয়ার্ড পরিবর্তন</string>
   <string name="admin_password_disabled">অ্যাডমিনের পাসওয়ার্ড disabled</string>
-  <string name="admin_password_mismatch">অ্যাডমিনের পাসওয়ার্ড মিলে নাই </string>
   <string name="admin_password_incorrect">পাসওয়ার্ড সঠিক হয়নি।</string>
   <string name="enter_admin_password">এডমিন পাসওয়ার্ড দিন।</string>
   <string name="found_in_menu">মেনু্তে পাওয়া গিয়েছিল</string>
@@ -214,7 +199,6 @@
   <string name="swipe_navigation">swipe নেভিগেশান</string>
   <string name="buttons_navigation">buttons নেভিগেশান</string>
   <string name="swipe_buttons_navigation">swipe buttons নেভিগেশান</string>
-  <string name="swipe_instructions">আপনি %s টি শুরুতে বিষয় ঠিক করতে পরদার নীচের দিকে উপর নীচ করে নিরধারণ করুন</string>
   <string name="launch_printer">প্রিন্টার চালু</string>
   <string name="no_printer">প্রিন্টার নেই</string>
   <string name="constraint_behavior">constraint_behavior</string>
@@ -230,7 +214,6 @@
   <string name="gps_enable_message">জিপিএস বার্তা সক্রিয় করা</string>
   <string name="minutes">মিনিট</string>
   <string name="clear">মুছে ফেলুন।</string>
-  <string name="points_captured">পয়েন্ট নির্ধারন করা</string>
   <string name="direction">অভিমুখ: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

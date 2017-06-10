@@ -25,11 +25,18 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
     public static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
     public static final String KEY_TELL_YOUR_FRIENDS = "tell_your_friends";
     public static final String KEY_LEAVE_A_REVIEW = "leave_a_review";
-    public static final String KEY_ODK_WEBSITE = "info";
+    public static final String KEY_ODK_WEBSITE = "odk_website";
+    public static final String KEY_ODK_FORUM = "odk_forum";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
     private static final String ODK_WEBSITE = "https://opendatakit.org";
-    private CustomTabHelper customTabHelper;
-    private Uri uri;
+    private static final String ODK_FORUM = "https://forum.opendatakit.org";
+
+    private CustomTabHelper websiteTabHelper;
+    private CustomTabHelper forumTabHelper;
+
+    private Uri websiteUri;
+    private Uri forumUri;
+
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -37,17 +44,22 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         addPreferencesFromResource(R.xml.about_preferences);
 
         findPreference(KEY_ODK_WEBSITE).setOnPreferenceClickListener(this);
+        findPreference(KEY_ODK_FORUM).setOnPreferenceClickListener(this);
         findPreference(KEY_OPEN_SOURCE_LICENSES).setOnPreferenceClickListener(this);
         findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);
         findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
-        customTabHelper = new CustomTabHelper();
-        uri = Uri.parse(ODK_WEBSITE);
+        websiteTabHelper = new CustomTabHelper();
+        forumTabHelper = new CustomTabHelper();
+        websiteUri = Uri.parse(ODK_WEBSITE);
+        forumUri = Uri.parse(ODK_FORUM);
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        customTabHelper.bindCustomTabsService(this.getActivity(), uri);
+        websiteTabHelper.bindCustomTabsService(this.getActivity(), websiteUri);
+        forumTabHelper.bindCustomTabsService(this.getActivity(), forumUri);
     }
 
     @Override
@@ -56,14 +68,26 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
 
         switch (preference.getKey()) {
             case KEY_ODK_WEBSITE:
-                if (customTabHelper.getPackageName(getActivity()).size() != 0) {
+                if (websiteTabHelper.getPackageName(getActivity()).size() != 0) {
                     CustomTabsIntent customTabsIntent =
                             new CustomTabsIntent.Builder()
                                     .build();
-                    customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getActivity()).get(0));
-                    customTabsIntent.launchUrl(getActivity(), uri);
+                    customTabsIntent.intent.setPackage(websiteTabHelper.getPackageName(getActivity()).get(0));
+                    customTabsIntent.launchUrl(getActivity(), websiteUri);
                 } else {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE)));
+                }
+                break;
+
+            case KEY_ODK_FORUM:
+                if (forumTabHelper.getPackageName(getActivity()).size() != 0) {
+                    CustomTabsIntent customTabsIntent =
+                            new CustomTabsIntent.Builder()
+                                    .build();
+                    customTabsIntent.intent.setPackage(forumTabHelper.getPackageName(getActivity()).get(0));
+                    customTabsIntent.launchUrl(getActivity(), forumUri);
+                } else {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_FORUM)));
                 }
                 break;
 

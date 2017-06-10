@@ -1,18 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">تسجيل احداثيات الموقع </string>
-  <string name="accuracy">الدقة</string>
   <string name="activity_not_found">لا يوجد مهمات للمعالجة: %s</string>
   <string name="add_another">إضافة مجموعة</string>
   <string name="add_another_repeat">إضافة \"%s\" مجموعة أخرى؟</string>
-  <string name="add_more">إضافة المزيد</string>
   <string name="add_repeat">إضافة \"%s\" مجموعة جديدة؟</string>
   <string name="add_repeat_no">عدم الإضافة</string>
-  <string name="advance">اعادة ارسال الى/التالي/موجه</string>
-  <string name="altitude">ارتفاع</string>
   <string name="audio_file_error">لم يتم تحديد ملف الصوت</string>
   <string name="audio_file_invalid">الملف: %s ملف صوتي غير صالح</string>
-  <string name="backup">الى الخلف/السابق/موجه</string>
   <string name="cancel">إلغاء</string>
   <string name="cancel_loading_form">إلغاء</string>
   <string name="cancel_location">إلغاء</string>
@@ -28,7 +22,6 @@
   <string name="clear_answer">حذف الإجابة</string>
   <string name="clear_answer_ask">حذف هذه الإجابة؟</string>
   <string name="clear_answer_no">إلغاء</string>
-  <string name="completed_data">كاملة (%s)</string>
   <string name="data">الاستمارات المحفوظة</string>
   <string name="data_saved_error">عذرًا، لم يتمّ حفظ الاستمارة!</string>
   <string name="data_saved_ok">تمّ حفظ الاستمارة بنجاح!</string>
@@ -74,7 +67,6 @@
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <string name="jump_to_end">الذهاب إلى النهاية</string>
   <string name="jump_to_previous">الذهاب صعودًا</string>
-  <string name="latitude">خط العرض</string>
   <string name="leave_repeat_yes">عدم الإضافة</string>
   <string name="leaving_repeat_ask">إضافة مجموعة واحدة أخرى؟</string>
   <string name="list_failed_with_error">فشلت لائحة عرض النماذج. %s</string>
@@ -82,7 +74,6 @@
   <string name="load_remote_form_error">خطأ في جلب لائحة النماذج.</string>
   <string name="location_provider_accuracy">استخدام %1$s. الدقة هي %2$s متر.</string>
   <string name="location_accuracy">الدقة هي is %1$s متر</string>
-  <string name="longitude">خط الطول</string>
   <string name="main_menu">القائمة الأساسية</string>
   <string name="main_menu_details">جمع البيانات أصبح أسهل…</string>
   <string name="manage_files">حذف الاستمارة المحفوظة</string>
@@ -105,11 +96,9 @@
   <string name="quit_entry">حفظ الاستمارة والخروج</string>
   <string name="refresh">تحديث</string>
   <string name="replace_barcode">استبدال الباركود</string>
-  <string name="replace_location">استبدال الموقع</string>
   <string name="required_answer_error">عذرًا، يجب الإجابة على هذا السؤال!</string>
   <string name="review_data">تعديل الاستمارة المحفوظة</string>
   <string name="review_data_button">تعديل الاستمارة المحفوظة (%s)</string>
-  <string name="saved_data">غير كاملة (%s)</string>
   <string name="save_all_answers">حفظ الاستمارة</string>
   <string name="save_enter_data_description">إنّك في نهاية الـ%s.</string>
   <string name="saving_form">جاري حفظ الاستمارة</string>
@@ -126,7 +115,6 @@
   <string name="username">إسم المستخدم</string>
   <string name="view_hierarchy">الذهاب الى الموجه</string>
   <string name="general_preferences">الإعدادات العامة</string>
-  <string name="click_to_web">انقر لزيارة http://opendatakit.org</string>
   <string name="client">واجهة المستخدم</string>
   <string name="show_splash">عرض شاشة البداية</string>
   <string name="show_splash_summary">اظهار عند بدء التطبيق</string>
@@ -135,10 +123,8 @@
   <string name="select_another_image">حدد صورة أخرى</string>
   <string name="use_odk_default">استخدام الصورة الإفتراضية</string>
   <string name="change_splash_path">تغيير الصورة</string>
-  <string name="show_location">إظهار الموقع</string>
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">حفظ التعديلات</string>
-  <string name="go_to_location">الذهاب إلى الموقع</string>
   <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>
   <string name="protocol">البرنامج</string>
   <string name="change_protocol">البرنامج</string>
@@ -204,16 +190,13 @@
   <string name="user_access_main_menu">يمكن للمستخدم الوصول الى عناصر القائمة الرئيسية</string>
   <string name="user_access_preferences">يمكن للمستخدم الوصول الى عناصر تغيير الاعدادات</string>
   <string name="change_server">البرنامج</string>
-  <string name="change_username_default">إسم المستخدم</string>
   <string name="admin_preferences">إعدادات المدير</string>
   <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="user_access_form_entry">يمكن للمستخدم الوصول الى عناصر تعبئة الاستمارة:</string>
   <string name="save_mid">حفظ الاستمارة</string>
   <string name="enter_new_password">أدخل كلمة مرور جديدة</string>
-  <string name="verify_new_password">أعد إدخال كلمة المرور الجديدة</string>
   <string name="admin_password_changed">تمّ تغيير كلمة مرور المدير بنجاح</string>
   <string name="admin_password_disabled">تعطيل كلمة السر للمدير</string>
-  <string name="admin_password_mismatch">عذرًا، كلمات المرور غير متطابقة!</string>
   <string name="admin_password_incorrect">عذرًا، كلمة المرور غير صحيحة!</string>
   <string name="enter_admin_password">أدخل كلمة مرور المدير</string>
   <string name="found_in_menu">الغاء القفل لاخفاء القائمة من استمارة الادخال</string>
@@ -233,9 +216,6 @@
   <string name="swipe_navigation">استخدم السحب الافقي</string>
   <string name="buttons_navigation">استخدم ازرار التنقل للأمام و الخلف</string>
   <string name="swipe_buttons_navigation">استخدم السحب والازرار</string>
-  <string name="swipe_instructions">انت في بداية %s. اسحب الشاشىة كما مبين في الاسفل للذهاب الى الخلف او للأمام.</string>
-  <string name="buttons_instructions">انت في بداية %s. اضغط على ازرار السهم للذهاب للخلف او للأمام.</string>
-  <string name="swipe_buttons_instructions">كنت في بداية %s. اسحب الشاشة كما هو مبين في الاسفل او اضغط ازرار السهم للذهاب للخلف او للأمام.</string>
   <string name="launch_printer">البدء بالطباعة</string>
   <string name="no_printer">لم يتم تثبيت الطابعة المختارة. يرجى تثبيتها اولا.</string>
   <string name="constraint_behavior">معالجة القيود جارية</string>
@@ -284,7 +264,6 @@
   <string name="go_drive">المحرك الخاص بي</string>
   <string name="go_shared">مشاركة معي</string>
   <string name="modified_on_date_at_time">\'تم التعديل ب \' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
-  <string name="protocol_settings">تهيئة اعدادات البرنامج</string>
   <string name="aggregate_preferences">اعدادات  ODK Aggregate</string>
   <string name="other_preferences">اعدادات البرنامج الاخرى</string>
   <string name="google_preferences">اعدادات صفحات الجوجل</string>
@@ -303,7 +282,6 @@
   <string name="no_blank_search">حقل البحث لا يمكن ان يكون فارغا.</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
-  <string name="sheets_google_account_needed">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="sheets_max_columns">الحد الأقصى لعدد الأعمدة هو 255، استماراتك تحتوي على %s. غير قادر على تحميل الجدول.</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
   <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>

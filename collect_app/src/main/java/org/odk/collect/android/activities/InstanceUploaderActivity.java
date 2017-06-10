@@ -255,7 +255,12 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                                 results.getString(
                                         results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
+                        String text = localizeDefaultAggregateSuccessfulText(result.get(id));
+                        queryMessage
+                                .append(name)
+                                .append(" - ")
+                                .append(text)
+                                .append("\n\n");
                     }
                 }
             } catch (SQLException e) {
@@ -273,6 +278,12 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         createAlertDialog(message.toString().trim());
     }
 
+    private String localizeDefaultAggregateSuccessfulText(String text) {
+        if (text.equals("full submission upload was successful!")) {
+            text = getString(R.string.success);
+        }
+        return text;
+    }
 
     @Override
     public void progressUpdate(int progress, int total) {

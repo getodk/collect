@@ -1,19 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="accept_location">Registra Posizione</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostra password</string>
-  <string name="accuracy">Precisione</string>
   <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
   <string name="add_another">Aggiungi gruppo</string>
   <string name="add_another_repeat">Aggiungere un altro \"%s\" gruppo?</string>
-  <string name="add_more">Aggiungi un altro</string>
   <string name="add_repeat">Aggiungere un nuovo \"%s\" gruppo ?</string>
   <string name="add_repeat_no">Non aggiungere</string>
-  <string name="advance">avanti</string>
-  <string name="altitude">Altitudine</string>
   <string name="audio_file_error">Nessun file audio è stato specificato.</string>
   <string name="audio_file_invalid">File: %s non è un file di audio valido.</string>
-  <string name="backup">indietro</string>
   <string name="cancel">Annulla</string>
   <string name="cancel_loading_form">Annulla</string>
   <string name="cancel_location">Annulla</string>
@@ -31,7 +25,6 @@
   <string name="clear_answer">Rimuovere la risposta</string>
   <string name="clear_answer_ask">Rimuovere questa risposta?</string>
   <string name="clear_answer_no">Annulla</string>
-  <string name="completed_data">Completato (%s)</string>
   <string name="data">Moduli Salvati</string>
   <string name="data_saved_error">Spiacenti, salvataggio modulo fallito!</string>
   <string name="data_saved_ok">Modulo salvato correttamente!</string>
@@ -77,7 +70,6 @@
   <string name="jump_to_beginning">Vai all\'inizio</string>
   <string name="jump_to_end">Vai alla fine</string>
   <string name="jump_to_previous">Vai sopra</string>
-  <string name="latitude">Latitudine</string>
   <string name="leave_repeat_yes">Non aggiungere</string>
   <string name="leaving_repeat_ask">Aggiungere un altro gruppo?</string>
   <string name="list_failed_with_error">Elenco dei moduli fallito. %s.</string>
@@ -85,7 +77,6 @@
   <string name="load_remote_form_error">Errore nel recupero Elenco Moduli.</string>
   <string name="location_provider_accuracy">Utilizzando %1$s. Precisione%2$s m.</string>
   <string name="location_accuracy">Precisione è %1$s m</string>
-  <string name="longitude">Longitudine</string>
   <string name="main_menu">Menu principale</string>
   <string name="main_menu_details">La raccolta dei dati resa più facile…</string>
   <string name="manage_files">Elimina Modulo Salvato</string>
@@ -99,8 +90,7 @@
   <string name="ok">OK</string>
   <string name="parse_error">Spiacenti, non sono in grado di analizzare il modulo.</string>
   <string name="parse_legacy_formlist_failed">Il server non ha fornito un modulo compatibile con Aggregate 0.9.x. : %s </string>
-  <string name="parse_openrosa_formlist_failed">Il server non ha fornito un modulo compatibile con OpenRosa version 1.0 standard: %s
-</string>
+  <string name="parse_openrosa_formlist_failed">Il server non ha fornito un modulo compatibile con OpenRosa version 1.0 standard: %s</string>
   <string name="password">Password</string>
   <string name="play_audio">Riproduci Suono</string>
   <string name="play_video">Riproduci Video</string>
@@ -110,11 +100,9 @@
   <string name="quit_entry">Salva modulo ed esci</string>
   <string name="refresh">Aggiorna</string>
   <string name="replace_barcode">Sostituire il codice a barre</string>
-  <string name="replace_location">Sostituire Posizione</string>
   <string name="required_answer_error">Spiacenti, questa risposta è richiesta!</string>
   <string name="review_data">Modifica Modulo Salvato</string>
   <string name="review_data_button">Modifica Modulo Salvato (%s)</string>
-  <string name="saved_data">Incompleto (%s)</string>
   <string name="save_all_answers">Salva Modulo</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
   <string name="saving_form">Salvataggio Modulo</string>
@@ -134,7 +122,6 @@
   <string name="username">Nome Utente</string>
   <string name="view_hierarchy">Apri visione gerarchica</string>
   <string name="general_preferences">Impostazioni Generali</string>
-  <string name="click_to_web">Toccare per visitare http://opendatakit.org</string>
   <string name="client">Interfaccia utente</string>
   <string name="show_splash">Mostra schermata di avvio</string>
   <string name="show_splash_summary">Indica quando l\'applicazione si avvia</string>
@@ -143,10 +130,8 @@
   <string name="select_another_image">Selezionare un\'altra immagine</string>
   <string name="use_odk_default">Usa immagine di default</string>
   <string name="change_splash_path">Cambiare immagine</string>
-  <string name="show_location">Mostra Posizione</string>
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salva le modifiche</string>
-  <string name="go_to_location">Vai al punto di</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
   <string name="protocol">Piattaforma server</string>
   <string name="change_protocol">Piattaforma server</string>
@@ -214,17 +199,14 @@
   <string name="user_access_main_menu">L\'Utente può accedere nel Menu Principale a:</string>
   <string name="user_access_preferences">L\'Utente può modificare le seguenti Impostazioni:</string>
   <string name="change_server">Piattaforma</string>
-  <string name="change_username_default">Username</string>
   <string name="admin_preferences">Impostazioni Amministratore</string>
   <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
   <string name="user_access_form_entry">L\'Utente può accedere alle seguenti Impostazioni del Modulo d\'Ingresso:</string>
   <string name="save_mid">Salva Modulo</string>
   <string name="enter_new_password">Inserire nuova password</string>
-  <string name="verify_new_password">Re-inserire nuova password</string>
   <string name="admin_password">Password di amministratore</string>
   <string name="admin_password_changed">Password dell\'Amministratore cambiata con successo</string>
   <string name="admin_password_disabled">Password dell\'Amministratore disabilitata</string>
-  <string name="admin_password_mismatch">Attenzione, le password non corrispondono!</string>
   <string name="admin_password_incorrect">Attenzione, la password è sbagliata!</string>
   <string name="enter_admin_password">Inserire Password Amministratore</string>
   <string name="change_admin_password">Cambia la password di amministratore</string>
@@ -245,9 +227,6 @@
   <string name="swipe_navigation">Scorri il dito orizzontalmente</string>
   <string name="buttons_navigation">Usa pulsanti avanti/indietro</string>
   <string name="swipe_buttons_navigation">Scorri il dito e usa pulsanti</string>
-  <string name="swipe_instructions">Benvenuto in %s. Scorri il dito sullo schermo come indicato per andare avanti o indietro.</string>
-  <string name="buttons_instructions">Sei all\'inizio di %s. Utilizza le frecce qui in basso per andare avanti o indietro.</string>
-  <string name="swipe_buttons_instructions">Sei all\'inizio di %s. Scorri il dito sullo schermo come indicato o utilizza le frecce qui in basso per andare avanti o indietro.</string>
   <string name="launch_printer">Inizio Stampa</string>
   <string name="no_printer">La stampante richiesta non è installata. Per piacere installa la stampante.</string>
   <string name="constraint_behavior">Comportamento sui vincoli</string>
@@ -296,7 +275,6 @@
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
   <string name="modified_on_date_at_time">\'Modificato il\' EEE, dd MMM yyyy \'alle\' HH:mm</string>
-  <string name="protocol_settings">Configura le impostazioni della piattaforma</string>
   <string name="aggregate_preferences">Impostazioni ODK Aggregate</string>
   <string name="other_preferences">Altre impostazioni piattaforma</string>
   <string name="google_preferences">Impostazioni di Google Sheets</string>
@@ -318,7 +296,6 @@
   <string name="google_sheets_url">URL di destinazione predefinito</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
-  <string name="sheets_google_account_needed">Hai selezionato Google Sheets come tuo server, perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
   <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="google_sheets_access_denied">Accesso negato. Per favore, verifica che il proprietario del documento ti abbia dato i permessi di modifica.</string>
@@ -358,7 +335,6 @@
   <string name="get_shape">Inizia Geo-contorno</string>
   <string name="get_trace">Inizia Geo-tracciatura</string>
   <string name="geoshape_title">Geo-contorno </string>
-  <string name="mbtiles_not_found">File .mbtiles non trovati  nella directory \'%s\'.</string>
   <string name="select_geotrace_mode">Seleziona Modalità Geo-tracciatura</string>
   <string name="start">Inizia</string>
   <string name="enable_gps">Abilita GPS</string>
@@ -386,7 +362,6 @@
   <string name="zoom_to_where">Ingrandisci su…</string>
   <string name="zoom_to_location">Ingrandisci la posizione corrente</string>
   <string name="zoom_to_feature">Ingrandisci l\'elemento salvato</string>
-  <string name="points_captured">%s punti catturati</string>
   <string name="google_sheets_invalid_column_form">\'n%1$s\' è un nome di colonna non valido nella tua form. Google Sheets permette solamente caratteri alfanumerici e trattini nei nomi delle colonne</string>
   <string name="google_sheets_invalid_column_instance">\'n%1$s\' è un nome di colonna non valido nella tua form salvata. Google Sheets permette solamente caratteri alfanumerici e trattini nei nomi delle colonne</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
@@ -398,7 +373,6 @@
   <string name="unrecognized_uri">URI non riconosciuto : %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;nessun form caricato&gt;</string>
-  <string name="multiple_media_folders_detected_notification">Più di un cartella media rilevata, si prega di rimuovere una e riprovare</string>
   <string name="settings_successfully_loaded_file_notification">Impostazioni caricate con successo da file</string>
   <string name="corrupt_settings_file_notification">Spiacente, il file di impostazioni è danneggiato e deve essere cancellato o sostituito</string>
   <string name="selected_invalid_image">Il file selezionato non è una valida immagine</string>
@@ -408,13 +382,11 @@
   <string name="install_openmapkit">Per favore installare OpenMapKit!</string>
   <string name="go_back">Torna indietro</string>
   <string name="download_selected">Selezionato il download</string>
-  <string name="detection_frequency">rilevazione frequenza</string>
   <string name="record_geopoint">Registrare Coordinate</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="parser_exception">Eccezione XPathParser: \"%s\"</string>
   <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
-  <string name="general_settings_about">A proposito</string>
   <string name="odk_website">Sito web di Open Data Kit</string>
   <string name="all_open_source_licenses">Licenze open source </string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -429,7 +401,6 @@
   <string name="not_exactly_one_record_for_this_instance">Neanche un risultato per questa ricerca!</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">Nessuno dei moduli vuoti corrisponde a questo jr_form_id.</string>
   <string name="no_form_id_specified">Nessun FormId specificato???</string>
-  <string name="phone_does_not_support_encryption">Il telefono non supporta la cifratura.</string>
   <string name="phone_does_not_have_base64_class">Il telefono non supporta la classe Base64, ma la versione API è %s.</string>
   <string name="phone_does_not_support_rsa">Il telefono non supporta la crittografia RSA.</string>
   <string name="invalid_rsa_public_key">Chiave RSA pubblica non valida.</string>
@@ -450,7 +421,6 @@
   <string name="reset_settings_button_reset">Reimposta</string>
   <string name="reset_dialog_nothing">Non hai selezionato alcun elemento da reimpostare.</string>
   <string name="reset_in_progress">Reimpostazione…</string>
-  <string name="resetting_finished">Reimpostazione completata</string>
   <string name="reset_app_state_result">Reimposta risultati</string>
   <string name="reset_app_state_warning">I dati selezionati verranno cancellati definitivamente. L\'operazione non può essere annullata.</string>
   <string name="reset_settings_result">Tutte le impostazioni :: %s</string>
