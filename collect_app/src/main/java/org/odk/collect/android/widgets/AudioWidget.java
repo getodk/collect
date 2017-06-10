@@ -41,7 +41,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaPlayerUtilities;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +58,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBar.OnSeekBarChangeListener {
 
     Handler seekHandler = new Handler();
     private Button captureButton;
@@ -68,10 +70,26 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaP
     private LinearLayout mediaPlayerLayout;
     private SeekBar seekBar;
 
-    Runnable run = new Runnable() {
-        @Override
+    private TextView songTotalDurationLabel;
+    private TextView songCurrentDurationLabel;
+    /**
+     * Background Runnable thread
+     */
+    private Runnable updateTimeTask = new Runnable() {
         public void run() {
-            seekUpdation();
+            long totalDuration = mediaPlayer.getDuration();
+            long currentDuration = mediaPlayer.getCurrentPosition();
+
+            // Displaying Total Duration time
+            songTotalDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(totalDuration)));
+            // Displaying time completed playing
+            songCurrentDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(currentDuration)));
+
+            // Updating progress bar
+            seekBar.setProgress((int) currentDuration);
+
+            // Running this thread after 100 milliseconds
+            seekHandler.postDelayed(this, 100);
         }
     };
 
@@ -84,7 +102,12 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaP
         View answerLayout = inflate(context, R.layout.audio_widget_layout, null);
 
         mediaPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.audioPlayer);
+
+        songCurrentDurationLabel = (TextView) answerLayout.findViewById(R.id.songCurrentDurationLabel);
+        songTotalDurationLabel = (TextView) answerLayout.findViewById(R.id.songTotalDurationLabel);
+
         seekBar = (SeekBar) answerLayout.findViewById(R.id.seekbar);
+        seekBar.setOnSeekBarChangeListener(this);
 
         // setup capture button
         captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
@@ -170,9 +193,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaP
                                 formEntryPrompt.getIndex());
 
                 if (mediaPlayer.isPlaying()) {
-                    pauseAudio();
+                    pause();
                 } else {
-                    resumeAudio();
+                    play();
                 }
             }
         });
@@ -180,7 +203,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaP
         TextView textView = (TextView) answerLayout.findViewById(R.id.name);
 
         initMediaPlayer();
-        seekUpdation();
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
@@ -202,34 +224,19 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaP
         }
     }
 
-    private void resumeAudio() {
+    private void play() {
+        ToastUtils.showShortToast("play");
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
         mediaPlayer.start();
+        seekBar.setProgress(0);
+        seekBar.setMax(mediaPlayer.getDuration());
+        updateProgressBar();
     }
 
-    private void pauseAudio() {
+    private void pause() {
+        ToastUtils.showShortToast("pause");
         playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
         mediaPlayer.pause();
-    }
-
-    private void addMediaToPlayer() {
-        File f = new File(instanceFolder + File.separator
-                + binaryName);
-        try {
-            mediaPlayer.setDataSource(getContext(), Uri.fromFile(f));
-        } catch (IOException e) {
-            Timber.e(e);
-        }
-
-        mediaPlayer.prepareAsync();
-    }
-
-    private void initMediaPlayer() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnPreparedListener(this);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnSeekCompleteListener(this);
-        mediaPlayer.setOnErrorListener(this);
     }
 
     private void deleteMedia() {
@@ -334,24 +341,83 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, MediaP
         chooseButton.cancelLongPress();
     }
 
-    public void seekUpdation() {
-        seekBar.setProgress(player.getCurrentPosition());
-        seekHandler.postDelayed(run, 1000);
+    private void stop() {
+        ToastUtils.showShortToast("stop");
+        playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+        //mediaPlayer.reset();
+    }
+
+    private void addMediaToPlayer() {
+        File f = new File(instanceFolder + File.separator
+                + binaryName);
+        try {
+            mediaPlayer.setDataSource(getContext(), Uri.fromFile(f));
+
+            mediaPlayer.prepareAsync();
+            ToastUtils.showShortToast("preparing");
+
+            seekBar.setMax(mediaPlayer.getDuration());
+
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+    }
+
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                ToastUtils.showShortToast("prepared");
+                playButton.setEnabled(true);
+            }
+        });
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                ToastUtils.showShortToast("completed");
+                stop();
+            }
+        });
+    }
+
+    /**
+     * Update timer on seekbar
+     */
+    public void updateProgressBar() {
+        seekHandler.postDelayed(updateTimeTask, 100);
     }
 
     @Override
-    public void onSeekComplete(MediaPlayer mp) {
-        pauseAudio();
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (mediaPlayer != null && fromUser) {
+            mediaPlayer.seekTo(progress);
+        }
     }
 
+    /**
+     * When user starts moving the progress handler
+     */
     @Override
-    public void onPrepared(MediaPlayer mp) {
-        seekBar.setMax(mediaPlayer.getDuration());
-        playButton.setEnabled(true);
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        // remove message Handler from updating progress bar
+        seekHandler.removeCallbacks(updateTimeTask);
     }
 
+    /**
+     * When user stops moving the progress handler
+     */
     @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        return false;
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        seekHandler.removeCallbacks(updateTimeTask);
+        int totalDuration = mediaPlayer.getDuration();
+        int currentPosition = MediaPlayerUtilities.progressToTimer(seekBar.getProgress(), totalDuration);
+
+        // forward or backward to certain seconds
+        mediaPlayer.seekTo(currentPosition);
+
+        // update timer progress again
+        updateProgressBar();
     }
 }

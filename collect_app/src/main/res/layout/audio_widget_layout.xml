@@ -33,19 +33,53 @@
         android:id="@+id/audioPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <!-- Timer Display -->
+        <LinearLayout
+            android:id="@+id/timerDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
-        <SeekBar
-            android:id="@+id/seekbar"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
+            <TextView
+                android:id="@+id/songCurrentDurationLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/songTotalDurationLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp" />
+        </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>
