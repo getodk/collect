@@ -85,6 +85,7 @@ class DisabledPreferencesRemover {
      */
     void removeEmptyCategories() {
         removeEmptyCategories(pf.getPreferenceScreen());
+        removeEmptyCategories(pf.getPreferenceScreen());
     }
 
     private void removeEmptyCategories(PreferenceGroup pc) {
@@ -98,14 +99,25 @@ class DisabledPreferencesRemover {
             Preference preference = pc.getPreference(i);
 
             if (preference instanceof PreferenceGroup) {
-                if (((PreferenceGroup) preference).getPreferenceCount() == 0
-                        && hasChildPrefs(preference.getKey())) {
-                    pc.removePreference(preference);
-                } else {
+
+                if (!removeEmptyPreference(pc, preference)) {
                     removeEmptyCategories((PreferenceGroup) preference);
+
+                    // try to remove preference group if it is empty now
+                    removeEmptyPreference(pc, preference);
                 }
             }
         }
+    }
+
+    private boolean removeEmptyPreference(PreferenceGroup pc, Preference preference) {
+        if (((PreferenceGroup) preference).getPreferenceCount() == 0
+                && hasChildPrefs(preference.getKey())) {
+            pc.removePreference(preference);
+            Timber.d("Removed %s", preference.toString());
+            return true;
+        }
+        return false;
     }
 
     /**
