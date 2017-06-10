@@ -186,7 +186,6 @@ public class InstanceUploaderList extends InstanceListActivity
     public void syncComplete(String result) {
         TextView textView = (TextView) findViewById(R.id.status_text);
         textView.setText(result);
-        updateEmptyView();
     }
 
     @Override
@@ -324,7 +323,6 @@ public class InstanceUploaderList extends InstanceListActivity
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
         checkPreviouslyCheckedItems();
-        updateEmptyView();
     }
 
     private Cursor getCursor() {

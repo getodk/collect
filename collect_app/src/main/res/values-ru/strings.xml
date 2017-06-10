@@ -1,18 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Записать местоположение</string>
-  <string name="accuracy">Точность</string>
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="add_another">Добавить группу</string>
   <string name="add_another_repeat">Добавить другую группу \"%s\"?</string>
-  <string name="add_more">Добавить ещё</string>
   <string name="add_repeat">Добавить новую группу \"%s\"?</string>
   <string name="add_repeat_no">Не добавлять</string>
-  <string name="advance">Перейти\nк следующему\nвопросу</string>
-  <string name="altitude">Высота над уровнем моря</string>
   <string name="audio_file_error">Аудио-файл не был выбран.</string>
   <string name="audio_file_invalid">Файл: %s не является аудио-файлом.</string>
-  <string name="backup">Вернуться \nк предыдущему\nвопросу</string>
   <string name="cancel">Отмена</string>
   <string name="cancel_loading_form">Отмена</string>
   <string name="cancel_location">Отмена</string>
@@ -26,7 +20,6 @@
   <string name="clear_answer">Удалить ответ</string>
   <string name="clear_answer_ask">Удалить этот ответ?</string>
   <string name="clear_answer_no">Отмена</string>
-  <string name="completed_data">Завершить (%s)</string>
   <string name="data">Сохранённые формы</string>
   <string name="data_saved_error">Не удалось сохранить форму!</string>
   <string name="data_saved_ok">Форма успешно сохранена!</string>
@@ -72,7 +65,6 @@
   <string name="jump_to_beginning">В начало</string>
   <string name="jump_to_end">В конец</string>
   <string name="jump_to_previous">Назад</string>
-  <string name="latitude">Широта</string>
   <string name="leave_repeat_yes">Не добавлять</string>
   <string name="leaving_repeat_ask">Добавить ещё одну группу?</string>
   <string name="list_failed_with_error">Не удалось вывести список форм. %s.</string>
@@ -80,7 +72,6 @@
   <string name="load_remote_form_error">Не удалось получить список форм</string>
   <string name="location_provider_accuracy">Использую %1$s. Точность %2$s м.</string>
   <string name="location_accuracy">Точность %1$s м.</string>
-  <string name="longitude">Долгота</string>
   <string name="main_menu">Главное меню</string>
   <string name="main_menu_details">Сбор данных становится легче…</string>
   <string name="manage_files">Удалить сохранённую форму</string>
@@ -103,11 +94,9 @@
   <string name="quit_entry">Сохранить форму и выйти</string>
   <string name="refresh">Обновить</string>
   <string name="replace_barcode">Заменить штрих-код</string>
-  <string name="replace_location">Заменить местоположение</string>
   <string name="required_answer_error">Ответ на этот вопрос обязателен!</string>
   <string name="review_data">Изменить сохранённую форму</string>
   <string name="review_data_button">Изменить сохранённые формы (%s)</string>
-  <string name="saved_data">Не завершено (%s)</string>
   <string name="save_all_answers">Сохранть форму</string>
   <string name="save_enter_data_description">Вы в конце %s.</string>
   <string name="saving_form">Выполняется сохранение …</string>
@@ -124,7 +113,6 @@
   <string name="username">Имя пользователя</string>
   <string name="view_hierarchy">Показать иерархию</string>
   <string name="general_preferences">Общие настройки</string>
-  <string name="click_to_web">Нажмите, чтобы посетить сайт</string>
   <string name="client">Пользовательский интерфейс</string>
   <string name="show_splash">Показывать логотип</string>
   <string name="show_splash_summary">Показывается при запуске приложения</string>
@@ -133,10 +121,8 @@
   <string name="select_another_image">Выбрать другое изображение</string>
   <string name="use_odk_default">Использовать изображение по умолчанию</string>
   <string name="change_splash_path">Изменить изображение</string>
-  <string name="show_location">Показать местоположение</string>
   <string name="app_url">http://kyrgyz-roads.info</string>
   <string name="keep_changes">Сохранить изменения</string>
-  <string name="go_to_location">Перейти к локации</string>
   <string name="change_formlist_url">Путь к списку форм (добавляется к URL)</string>
   <string name="protocol">Platform</string>
   <string name="change_protocol">Platform</string>
@@ -202,16 +188,13 @@
   <string name="user_access_main_menu">Пользователь имеет доступ к пунктам главного меню:</string>
   <string name="user_access_preferences">Пользователь имеет доступ к настройкам:</string>
   <string name="change_server">Платформа</string>
-  <string name="change_username_default">Имя пользователя</string>
   <string name="admin_preferences">Администрирование</string>
   <string name="admin_access_settings">Нажмите для админского доступа к настройкам</string>
   <string name="user_access_form_entry">Пользователь имеет доступ в формах к:</string>
   <string name="save_mid">Сохранить форму</string>
   <string name="enter_new_password">Укажите новый пароль</string>
-  <string name="verify_new_password">Повтор нового пароля</string>
   <string name="admin_password_changed">Пароль администратора успешно изменён</string>
   <string name="admin_password_disabled">Пароль администратора отключен</string>
-  <string name="admin_password_mismatch">Пароли не совпадают!</string>
   <string name="admin_password_incorrect">Пароль неверный!</string>
   <string name="enter_admin_password">Введите пароль администратора</string>
   <string name="found_in_menu">Снимите галочку, чтобы убрать пункт из меню</string>
@@ -231,9 +214,6 @@
   <string name="swipe_navigation">Использовать горизонтальную прокрутку</string>
   <string name="buttons_navigation">Использовать кнопки вперёд/назад</string>
   <string name="swipe_buttons_navigation">Использовать прокрутку и кнопки</string>
-  <string name="swipe_instructions">Вы находитесь в начале %s. Прокручивайте экран, как показано ниже, чтобы двигаться вперёд и назад.</string>
-  <string name="buttons_instructions">Вы находитесь в начале %s. Нажимайте кнопки со стрелками, чтобы двигаться вперёд и назад.</string>
-  <string name="swipe_buttons_instructions">Вы находитесь в начале %s. Прокручивайте экран, как показано ниже, или нажимайте кнопки со стрелками, чтобы двигаться вперёд и назад.</string>
   <string name="launch_printer">Распечатать</string>
   <string name="no_printer">Принтер не установлен или не подключен.</string>
   <string name="constraint_behavior">Способ проверки ограничений</string>
@@ -281,7 +261,6 @@
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
-  <string name="protocol_settings">Изменить настройки сервера</string>
   <string name="aggregate_preferences">Настройки ODK Aggregate</string>
   <string name="other_preferences">Настройки других платформ</string>
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>

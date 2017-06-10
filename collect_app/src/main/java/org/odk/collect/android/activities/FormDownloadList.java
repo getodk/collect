@@ -257,10 +257,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
         };
-
-        if (!formList.isEmpty()) {
-            emptyView.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -457,7 +453,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         formListAdapter.notifyDataSetChanged();
 
         checkPreviouslyCheckedItems();
-        updateEmptyView();
     }
 
     @Override
@@ -682,9 +677,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 // Insert the new form in alphabetical order.
                 if (formList.size() == 0) {
                     formList.add(item);
-                    emptyView.setVisibility(View.VISIBLE);
                 } else {
-                    emptyView.setVisibility(View.GONE);
                     int j;
                     for (j = 0; j < formList.size(); j++) {
                         HashMap<String, String> compareMe = formList.get(j);
