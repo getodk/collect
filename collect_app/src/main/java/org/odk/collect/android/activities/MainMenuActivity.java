@@ -230,7 +230,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     .getVersionedAppName());
         }
 
-        File f = new File(Collect.ODK_ROOT + "/collect.settings");
+        File f = new File(Collect.SETTINGS + "/collect.settings");
         if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
@@ -697,27 +697,29 @@ public class MainMenuActivity extends AppCompatActivity {
         boolean autosendNetwork = false;
         String autosend = "";
 
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND)) {
-            autosend = (String) entries.get(PreferenceKeys.KEY_AUTOSEND);
-        } else {
-            if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
-                autosendWifi = Boolean.parseBoolean((String) entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI));
+        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
+            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
+            if (value instanceof Boolean) {
+                autosendWifi = (boolean) value;
                 entries.remove(PreferenceKeys.KEY_AUTOSEND_WIFI);
             }
-            if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
-                autosendNetwork = Boolean.parseBoolean((String) entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK));
+        }
+        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
+            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+            if (value instanceof Boolean) {
+                autosendNetwork = (boolean) value;
                 entries.remove(PreferenceKeys.KEY_AUTOSEND_NETWORK);
             }
+        }
 
-            if (autosendWifi && autosendNetwork) {
-                autosend = "wifi_and_cellular";
-            } else if (autosendWifi) {
-                autosend = "wifi_only";
-            } else if (autosendNetwork) {
-                autosend = "cellular_only";
-            } else {
-                autosend = "off";
-            }
+        if (autosendWifi && autosendNetwork) {
+            autosend = "wifi_and_cellular";
+        } else if (autosendWifi) {
+            autosend = "wifi_only";
+        } else if (autosendNetwork) {
+            autosend = "cellular_only";
+        } else {
+            autosend = "off";
         }
 
         prefEdit.putString(PreferenceKeys.KEY_AUTOSEND, autosend);
