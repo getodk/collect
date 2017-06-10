@@ -3,7 +3,7 @@
     <Preference
         android:icon="@drawable/ic_cloud"
         android:key="protocol"
-        android:title="@string/server_settings_title"></Preference>
+        android:title="@string/server_settings_title" />
 
     <PreferenceScreen
         android:icon="@drawable/ic_phonelink_setup"
