@@ -629,7 +629,7 @@ public class MainMenuActivity extends AppCompatActivity {
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
-            checkForBackwardCompatility(entries, prefEdit);
+            migrateAutosendPrefKeys(entries, prefEdit);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
@@ -692,7 +692,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * This method is to provide backward compatibility with v1.7.0 and below
      * Autosend was originally set into separate wifi and cellular autosend settings
      */
-    private void checkForBackwardCompatility(Map<String, ?> entries, Editor prefEdit) {
+    private void migrateAutosendPrefKeys(Map<String, ?> entries, Editor prefEdit) {
         boolean autosendWifi = false;
         boolean autosendNetwork = false;
         String autosend = "";

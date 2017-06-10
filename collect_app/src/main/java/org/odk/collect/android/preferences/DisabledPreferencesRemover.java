@@ -99,7 +99,7 @@ class DisabledPreferencesRemover {
 
             if (preference instanceof PreferenceGroup) {
                 if (((PreferenceGroup) preference).getPreferenceCount() == 0
-                        && !hasChildPrefs(preference.getKey())) {
+                        && hasChildPrefs(preference.getKey())) {
                     pc.removePreference(preference);
                 } else {
                     removeEmptyCategories((PreferenceGroup) preference);
@@ -119,9 +119,9 @@ class DisabledPreferencesRemover {
 
         for (String pref : preferenceScreensWithNoChildren) {
             if (pref.equals(preferenceKey)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
