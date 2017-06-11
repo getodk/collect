@@ -70,23 +70,19 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
     private LinearLayout mediaPlayerLayout;
     private SeekBar seekBar;
 
-    private TextView songTotalDurationLabel;
-    private TextView songCurrentDurationLabel;
+    private TextView totalDurationLabel;
+    private TextView currentDurationLabel;
+
     /**
      * Background Runnable thread
      */
     private Runnable updateTimeTask = new Runnable() {
         public void run() {
-            long totalDuration = mediaPlayer.getDuration();
-            long currentDuration = mediaPlayer.getCurrentPosition();
 
-            // Displaying Total Duration time
-            songTotalDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(totalDuration)));
-            // Displaying time completed playing
-            songCurrentDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(currentDuration)));
+            updateTimer();
 
             // Updating progress bar
-            seekBar.setProgress((int) currentDuration);
+            seekBar.setProgress(mediaPlayer.getCurrentPosition());
 
             // Running this thread after 100 milliseconds
             seekHandler.postDelayed(this, 100);
@@ -103,8 +99,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
 
         mediaPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.audioPlayer);
 
-        songCurrentDurationLabel = (TextView) answerLayout.findViewById(R.id.songCurrentDurationLabel);
-        songTotalDurationLabel = (TextView) answerLayout.findViewById(R.id.songTotalDurationLabel);
+        currentDurationLabel = (TextView) answerLayout.findViewById(R.id.currentDuration);
+        totalDurationLabel = (TextView) answerLayout.findViewById(R.id.totalDuration);
 
         seekBar = (SeekBar) answerLayout.findViewById(R.id.seekbar);
         seekBar.setOnSeekBarChangeListener(this);
@@ -224,6 +220,16 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         }
     }
 
+    private void updateTimer() {
+        long totalDuration = mediaPlayer.getDuration();
+        long currentDuration = mediaPlayer.getCurrentPosition();
+
+        // Displaying Total Duration time
+        totalDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(totalDuration)));
+        // Displaying time completed playing
+        currentDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(currentDuration)));
+    }
+
     private void play() {
         ToastUtils.showShortToast("play");
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
@@ -283,7 +289,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         FileUtils.copyFile(source, newAudio);
 
         if (newAudio.exists()) {
-            // Add the copy to the content provier
+            // Add the copy to the content provider
             ContentValues values = new ContentValues(6);
             values.put(Audio.Media.TITLE, newAudio.getName());
             values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
@@ -371,6 +377,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
             public void onPrepared(MediaPlayer mp) {
                 ToastUtils.showShortToast("prepared");
                 playButton.setEnabled(true);
+                updateTimer();
             }
         });
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -391,9 +398,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (mediaPlayer != null && fromUser) {
+        /*if (mediaPlayer != null && fromUser) {
             mediaPlayer.seekTo(progress);
-        }
+        }*/
     }
 
     /**
@@ -411,11 +418,11 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         seekHandler.removeCallbacks(updateTimeTask);
-        int totalDuration = mediaPlayer.getDuration();
-        int currentPosition = MediaPlayerUtilities.progressToTimer(seekBar.getProgress(), totalDuration);
+        //int totalDuration = mediaPlayer.getDuration();
+        //int currentPosition = MediaPlayerUtilities.progressToTimer(seekBar.getProgress(), totalDuration);
 
         // forward or backward to certain seconds
-        mediaPlayer.seekTo(currentPosition);
+        mediaPlayer.seekTo(seekBar.getProgress());
 
         // update timer progress again
         updateProgressBar();
