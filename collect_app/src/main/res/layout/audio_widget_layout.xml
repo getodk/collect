@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -24,18 +25,43 @@
         android:drawableStart="@drawable/ic_add_black_24dp"
         android:text="@string/choose_sound" />
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
         android:id="@+id/audioPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Timer Display -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/fastRewindBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:src="@drawable/ic_fast_rewind_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/playBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:src="@drawable/ic_play_arrow_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/fastForwardBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                tools:src="@drawable/ic_fast_forward_black_24dp" />
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/timerDisplay"
             android:layout_width="match_parent"
@@ -43,11 +69,12 @@
 
             <TextView
                 android:id="@+id/currentDuration"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="00:00" />
 
             <TextView
                 android:id="@+id/totalDuration"
@@ -55,28 +82,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="00:00" />
         </LinearLayout>
 
-        <LinearLayout
+        <SeekBar
+            android:id="@+id/seekbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <SeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

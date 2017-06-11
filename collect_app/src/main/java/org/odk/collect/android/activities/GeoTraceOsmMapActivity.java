@@ -174,7 +174,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
         pauseButton = (Button) findViewById(R.id.pause);
-        playButton = (Button) findViewById(R.id.play);
+        playButton = (Button) findViewById(R.id.playBtn);
         playButton.setEnabled(false);
         beenPaused = false;
         traceMode = 1;

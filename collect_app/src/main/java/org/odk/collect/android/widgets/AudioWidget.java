@@ -43,7 +43,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaPlayerUtilities;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +57,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBar.OnSeekBarChangeListener {
+public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     Handler seekHandler = new Handler();
     private Button captureButton;
@@ -70,6 +69,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
     private LinearLayout mediaPlayerLayout;
     private SeekBar seekBar;
 
+    private int seekForwardTime = 5000; // 5000 milliseconds
+    private int seekBackwardTime = 5000; // 5000 milliseconds
+
     private TextView totalDurationLabel;
     private TextView currentDurationLabel;
 
@@ -78,16 +80,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
      */
     private Runnable updateTimeTask = new Runnable() {
         public void run() {
-
             updateTimer();
-
-            // Updating progress bar
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
-
-            // Running this thread after 100 milliseconds
             seekHandler.postDelayed(this, 100);
         }
     };
+    private ImageButton fastRewindButton;
+    private ImageButton fastForwardButton;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -95,18 +94,10 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        View answerLayout = inflate(context, R.layout.audio_widget_layout, null);
-
-        mediaPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.audioPlayer);
-
-        currentDurationLabel = (TextView) answerLayout.findViewById(R.id.currentDuration);
-        totalDurationLabel = (TextView) answerLayout.findViewById(R.id.totalDuration);
-
-        seekBar = (SeekBar) answerLayout.findViewById(R.id.seekbar);
-        seekBar.setOnSeekBarChangeListener(this);
+        initLayout(context);
+        initMediaPlayer();
 
         // setup capture button
-        captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
         captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         captureButton.setEnabled(!prompt.isReadOnly());
 
@@ -143,7 +134,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         });
 
         // setup capture button
-        chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
         chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         chooseButton.setEnabled(!prompt.isReadOnly());
 
@@ -175,11 +165,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         });
 
         // setup play button
-        playButton = (ImageButton) answerLayout.findViewById(R.id.play);
         playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
-        playButton.setEnabled(false);
-
-        // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,22 +182,78 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
             }
         });
 
-        TextView textView = (TextView) answerLayout.findViewById(R.id.name);
+        // setup fast backward button
+        fastRewindButton.setBackgroundResource(R.drawable.ic_fast_rewind_black_24dp);
+        fastRewindButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "fastRewindButton", "click",
+                                formEntryPrompt.getIndex());
 
-        initMediaPlayer();
+                int currentPosition = mediaPlayer.getCurrentPosition();
+                if (currentPosition - seekBackwardTime >= 0) {
+                    mediaPlayer.seekTo(currentPosition - seekBackwardTime);
+                } else {
+                    mediaPlayer.seekTo(0);
+                }
+            }
+        });
+
+        // setup play button
+        fastForwardButton.setBackgroundResource(R.drawable.ic_fast_forward_black_24dp);
+        fastForwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "playButton", "click",
+                                formEntryPrompt.getIndex());
+
+                int currentPosition = mediaPlayer.getCurrentPosition();
+                if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
+                    mediaPlayer.seekTo(currentPosition + seekForwardTime);
+                } else {
+                    mediaPlayer.seekTo(mediaPlayer.getDuration());
+                }
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            /**
+             * When user starts moving the progress handler
+             */
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // remove message Handler from updating progress bar
+                seekHandler.removeCallbacks(updateTimeTask);
+            }
+
+            /**
+             * When user stops moving the progress handler
+             */
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekHandler.removeCallbacks(updateTimeTask);
+                mediaPlayer.seekTo(seekBar.getProgress());
+                updateProgressBar();
+            }
+        });
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
             mediaPlayerLayout.setVisibility(VISIBLE);
-            textView.setText(binaryName);
             addMediaToPlayer();
         } else {
             mediaPlayerLayout.setVisibility(GONE);
         }
-
-        // finish complex layout
-        addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
         if (formEntryPrompt.isReadOnly()) {
@@ -220,27 +262,42 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         }
     }
 
+    private void initLayout(Context context) {
+        View answerLayout = inflate(context, R.layout.audio_widget_layout, null);
+
+        mediaPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.audioPlayer);
+        currentDurationLabel = (TextView) answerLayout.findViewById(R.id.currentDuration);
+        totalDurationLabel = (TextView) answerLayout.findViewById(R.id.totalDuration);
+        seekBar = (SeekBar) answerLayout.findViewById(R.id.seekbar);
+        captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
+        chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
+        playButton = (ImageButton) answerLayout.findViewById(R.id.playBtn);
+        fastForwardButton = (ImageButton) answerLayout.findViewById(R.id.fastForwardBtn);
+        fastRewindButton = (ImageButton) answerLayout.findViewById(R.id.fastRewindBtn);
+
+        // finish complex layout
+        addAnswerView(answerLayout);
+    }
+
     private void updateTimer() {
         long totalDuration = mediaPlayer.getDuration();
         long currentDuration = mediaPlayer.getCurrentPosition();
 
-        // Displaying Total Duration time
         totalDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(totalDuration)));
-        // Displaying time completed playing
         currentDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(currentDuration)));
     }
 
     private void play() {
-        ToastUtils.showShortToast("play");
+        Timber.i("Playing");
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
+
         mediaPlayer.start();
-        seekBar.setProgress(0);
         seekBar.setMax(mediaPlayer.getDuration());
         updateProgressBar();
     }
 
     private void pause() {
-        ToastUtils.showShortToast("pause");
+        Timber.i("Paused");
         playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
         mediaPlayer.pause();
     }
@@ -304,7 +361,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
                 deleteMedia();
             }
             binaryName = newAudio.getName();
-            playButton.setEnabled(false);
             addMediaToPlayer();
             Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
@@ -347,23 +403,14 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         chooseButton.cancelLongPress();
     }
 
-    private void stop() {
-        ToastUtils.showShortToast("stop");
-        playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
-        //mediaPlayer.reset();
-    }
-
     private void addMediaToPlayer() {
         File f = new File(instanceFolder + File.separator
                 + binaryName);
         try {
             mediaPlayer.setDataSource(getContext(), Uri.fromFile(f));
-
             mediaPlayer.prepareAsync();
-            ToastUtils.showShortToast("preparing");
-
             seekBar.setMax(mediaPlayer.getDuration());
-
+            Timber.i("Preparing");
         } catch (IOException e) {
             Timber.e(e);
         }
@@ -374,17 +421,16 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onPrepared(MediaPlayer mp) {
-                ToastUtils.showShortToast("prepared");
-                playButton.setEnabled(true);
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                Timber.i("Media Prepared");
                 updateTimer();
             }
         });
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onCompletion(MediaPlayer mp) {
-                ToastUtils.showShortToast("completed");
-                stop();
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                Timber.i("Completed");
+                playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
             }
         });
     }
@@ -394,37 +440,5 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget, SeekBa
      */
     public void updateProgressBar() {
         seekHandler.postDelayed(updateTimeTask, 100);
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        /*if (mediaPlayer != null && fromUser) {
-            mediaPlayer.seekTo(progress);
-        }*/
-    }
-
-    /**
-     * When user starts moving the progress handler
-     */
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        // remove message Handler from updating progress bar
-        seekHandler.removeCallbacks(updateTimeTask);
-    }
-
-    /**
-     * When user stops moving the progress handler
-     */
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        seekHandler.removeCallbacks(updateTimeTask);
-        //int totalDuration = mediaPlayer.getDuration();
-        //int currentPosition = MediaPlayerUtilities.progressToTimer(seekBar.getProgress(), totalDuration);
-
-        // forward or backward to certain seconds
-        mediaPlayer.seekTo(seekBar.getProgress());
-
-        // update timer progress again
-        updateProgressBar();
     }
 }
