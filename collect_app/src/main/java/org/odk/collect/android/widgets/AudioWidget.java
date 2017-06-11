@@ -65,7 +65,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private Button chooseButton;
     private String binaryName;
     private String instanceFolder;
-    private MediaPlayer mediaPlayer;
     private LinearLayout mediaPlayerLayout;
     private SeekBar seekBar;
 
@@ -81,7 +80,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     private Runnable updateTimeTask = new Runnable() {
         public void run() {
             updateTimer();
-            seekBar.setProgress(mediaPlayer.getCurrentPosition());
+            seekBar.setProgress(player.getCurrentPosition());
             seekHandler.postDelayed(this, 100);
         }
     };
@@ -174,7 +173,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         .logInstanceAction(this, "playButton", "click",
                                 formEntryPrompt.getIndex());
 
-                if (mediaPlayer.isPlaying()) {
+                if (player.isPlaying()) {
                     pause();
                 } else {
                     play();
@@ -192,11 +191,11 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         .logInstanceAction(this, "fastRewindButton", "click",
                                 formEntryPrompt.getIndex());
 
-                int currentPosition = mediaPlayer.getCurrentPosition();
+                int currentPosition = player.getCurrentPosition();
                 if (currentPosition - seekBackwardTime >= 0) {
-                    mediaPlayer.seekTo(currentPosition - seekBackwardTime);
+                    player.seekTo(currentPosition - seekBackwardTime);
                 } else {
-                    mediaPlayer.seekTo(0);
+                    player.seekTo(0);
                 }
             }
         });
@@ -211,11 +210,11 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         .logInstanceAction(this, "playButton", "click",
                                 formEntryPrompt.getIndex());
 
-                int currentPosition = mediaPlayer.getCurrentPosition();
-                if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
-                    mediaPlayer.seekTo(currentPosition + seekForwardTime);
+                int currentPosition = player.getCurrentPosition();
+                if (currentPosition + seekForwardTime <= player.getDuration()) {
+                    player.seekTo(currentPosition + seekForwardTime);
                 } else {
-                    mediaPlayer.seekTo(mediaPlayer.getDuration());
+                    player.seekTo(player.getDuration());
                 }
             }
         });
@@ -241,7 +240,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekHandler.removeCallbacks(updateTimeTask);
-                mediaPlayer.seekTo(seekBar.getProgress());
+                player.seekTo(seekBar.getProgress());
                 updateProgressBar();
             }
         });
@@ -280,8 +279,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     private void updateTimer() {
-        long totalDuration = mediaPlayer.getDuration();
-        long currentDuration = mediaPlayer.getCurrentPosition();
+        long totalDuration = player.getDuration();
+        long currentDuration = player.getCurrentPosition();
 
         totalDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(totalDuration)));
         currentDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(currentDuration)));
@@ -291,15 +290,15 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         Timber.i("Playing");
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
 
-        mediaPlayer.start();
-        seekBar.setMax(mediaPlayer.getDuration());
+        player.start();
+        seekBar.setMax(player.getDuration());
         updateProgressBar();
     }
 
     private void pause() {
         Timber.i("Paused");
         playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
-        mediaPlayer.pause();
+        player.pause();
     }
 
     private void deleteMedia() {
@@ -407,9 +406,9 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         File f = new File(instanceFolder + File.separator
                 + binaryName);
         try {
-            mediaPlayer.setDataSource(getContext(), Uri.fromFile(f));
-            mediaPlayer.prepareAsync();
-            seekBar.setMax(mediaPlayer.getDuration());
+            player.setDataSource(getContext(), Uri.fromFile(f));
+            player.prepareAsync();
+            seekBar.setMax(player.getDuration());
             Timber.i("Preparing");
         } catch (IOException e) {
             Timber.e(e);
@@ -417,18 +416,17 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     private void initMediaPlayer() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
+            public void onPrepared(MediaPlayer player) {
                 Timber.i("Media Prepared");
                 updateTimer();
             }
         });
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
+            public void onCompletion(MediaPlayer player) {
                 Timber.i("Completed");
                 playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
             }
