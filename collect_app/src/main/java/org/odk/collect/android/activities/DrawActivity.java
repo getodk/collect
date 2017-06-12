@@ -141,44 +141,6 @@ public class DrawActivity extends AppCompatActivity {
             }
         });
 
-        fabSetColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.getVisibility() == View.VISIBLE) {
-                    fabActions.performClick();
-                    ColorPickerDialog cpd = new ColorPickerDialog(
-                            DrawActivity.this,
-                            new ColorPickerDialog.OnColorChangedListener() {
-                                public void colorChanged(String key, int color) {
-                                    drawView.setColor(color);
-                                }
-                            }, "key", drawView.getColor(), drawView.getColor(),
-                            getString(R.string.select_drawing_color));
-                    cpd.show();
-                }
-            }
-        });
-
-        fabSaveAndClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.getVisibility() == View.VISIBLE) {
-                    fabActions.performClick();
-                    saveAndClose();
-                }
-            }
-        });
-
-        fabClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.getVisibility() == View.VISIBLE) {
-                    fabActions.performClick();
-                    reset();
-                }
-            }
-        });
-
         Bundle extras = getIntent().getExtras();
 
         if (extras == null) {
@@ -400,5 +362,34 @@ public class DrawActivity extends AppCompatActivity {
                     }
                 }).create();
         alertDialog.show();
+    }
+
+    public void clear(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+            reset();
+        }
+    }
+
+    public void saveAndClose(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+            saveAndClose();
+        }
+    }
+
+    public void setColor(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+            ColorPickerDialog cpd = new ColorPickerDialog(
+                    DrawActivity.this,
+                    new ColorPickerDialog.OnColorChangedListener() {
+                        public void colorChanged(String key, int color) {
+                            drawView.setColor(color);
+                        }
+                    }, "key", drawView.getColor(), drawView.getColor(),
+                    getString(R.string.select_drawing_color));
+            cpd.show();
+        }
     }
 }

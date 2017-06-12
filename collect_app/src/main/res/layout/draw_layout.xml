@@ -27,7 +27,8 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:onClick="clear">
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,7 +53,8 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_clear_white" />
+        app:srcCompat="@drawable/ic_clear_white"
+        android:onClick="clear"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_save_and_close"
@@ -68,7 +70,8 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:onClick="saveAndClose">
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +96,8 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_save_white" />
+        app:srcCompat="@drawable/ic_save_white"
+        android:onClick="saveAndClose"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_set_color"
@@ -109,7 +113,8 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:onClick="setColor">
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,7 +139,8 @@
         app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_color_lens_white" />
+        app:srcCompat="@drawable/ic_color_lens_white"
+        android:onClick="setColor"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_actions"
