@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/recordBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_videocam_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_videocam_black_24dp"
+        android:text="@string/capture_video" />
+
+    <Button
+        android:id="@+id/chooseBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_add_black_24dp"
+        android:text="@string/choose_video" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#eee"
+        android:id="@+id/videoPlayer"
+        android:orientation="vertical">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include
+            layout="@layout/media_player_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
