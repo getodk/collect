@@ -20,17 +20,24 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -60,7 +67,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button captureButton;
     private Button chooseButton;
-
+    private Button playButton;
     private String binaryName;
 
     private String instanceFolder;
@@ -72,7 +79,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     private Uri nexus7Uri;
-    private LinearLayout videoPlayerLayout;
+    private VideoView videoView;
+    //private LinearLayout videoPlayerLayout;
+
+    private DisplayMetrics metrics;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -81,6 +91,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 .getInstancePath().getParent();
 
         initLayout(context);
+
+        metrics = context.getResources().getDisplayMetrics();
 
         // setup capture button
         captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
@@ -174,13 +186,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        /*// setup play button
-        playButton = new Button(getContext());
-        playButton.setId(QuestionWidget.newUniqueId());
-        playButton.setText(getContext().getString(R.string.play_video));
+        // setup play button
         playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        playButton.setPadding(20, 20, 20, 20);
-        playButton.setLayoutParams(params);
 
         // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -190,20 +197,24 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "playButton",
                                 "click", formEntryPrompt.getIndex());
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(instanceFolder + File.separator
-                        + binaryName);
-                i.setDataAndType(Uri.fromFile(f), "video*//*");
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "video video"), Toast.LENGTH_SHORT).show();
-                }
+
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(instanceFolder + File.separator + binaryName);
+                Bitmap frame = retriever.getFrameAtTime();
+                int width = frame.getWidth();
+                int height = frame.getHeight();
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((width * (metrics.heightPixels * 4) / 10) / height, (metrics.heightPixels * 4) / 10);
+                layoutParams.gravity = Gravity.CENTER;
+                layoutParams.topMargin = 20;
+
+                File f = new File(instanceFolder + File.separator + binaryName);
+                videoView.setLayoutParams(layoutParams);
+                videoView.setVisibility(View.VISIBLE);
+                videoView.setVideoURI(Uri.fromFile(f));
+                videoView.requestFocus();
+                videoView.seekTo(1);
             }
-        });*/
+        });
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
@@ -223,18 +234,52 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     }
 
-    private void initLayout(Context context) {
-        View answerLayout = inflate(context, R.layout.video_widget_layout, null);
+    /*
+     * Create a file Uri for saving an image or video
+     * For Nexus 7 fix ...
+     * See http://developer.android.com/guide/topics/media/camera.html for more info
+     */
+    private static Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
 
-        videoPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.videoPlayer);
-        captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
-        chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
+    /*
+     *  Create a File for saving an image or video
+     *  For Nexus 7 fix ...
+     *  See http://developer.android.com/guide/topics/media/camera.html for more info
+     */
+    private static File getOutputMediaFile(int type) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
 
-        /*//initialize media player controls
-        mediaController.initLayout(answerLayout);*/
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(),
+                DIRECTORY_PICTURES);
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
 
-        // finish complex layout
-        addAnswerView(answerLayout);
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Timber.d("failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(
+                new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 
     private void deleteMedia() {
@@ -246,16 +291,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         int del = MediaUtils.deleteVideoFileFromMediaProvider(
                 instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
-    }
-
-    @Override
-    public void clearAnswer() {
-        // remove the file
-        deleteMedia();
-
-        /*// reset buttons
-        playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);*/
     }
 
     @Override
@@ -342,6 +377,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     @Override
+    public void clearAnswer() {
+        // remove the file
+        deleteMedia();
+
+        // reset buttons
+        playButton.setEnabled(false);
+        playButton.setTextColor(Color.GRAY);
+    }
+
+    @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         captureButton.cancelLongPress();
@@ -349,52 +394,23 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         /*playButton.cancelLongPress();*/
     }
 
-    /*
-     * Create a file Uri for saving an image or video
-     * For Nexus 7 fix ...
-     * See http://developer.android.com/guide/topics/media/camera.html for more info
-     */
-    private static Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
+    private void initLayout(Context context) {
+        View answerLayout = inflate(context, R.layout.video_widget_layout, null);
 
-    /*
-     *  Create a File for saving an image or video
-     *  For Nexus 7 fix ...
-     *  See http://developer.android.com/guide/topics/media/camera.html for more info
-     */
-    private static File getOutputMediaFile(int type) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
+        //videoPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.videoPlayer);
+        captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
+        chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
+        playButton = (Button) answerLayout.findViewById(R.id.playBtn);
+        videoView = (VideoView) answerLayout.findViewById(R.id.videoView);
 
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(),
-                DIRECTORY_PICTURES);
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
+        MediaController mediaController = new MediaController(context);
+        mediaController.setAnchorView(videoView);
+        videoView.setMediaController(mediaController);
+        /*//initialize media player controls
+        mediaController.initLayout(answerLayout);*/
 
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Timber.d("failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(
-                new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
+        // finish complex layout
+        addAnswerView(answerLayout);
     }
 
 }

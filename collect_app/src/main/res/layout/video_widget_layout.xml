@@ -19,27 +19,24 @@
         style="@style/WidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:drawableLeft="@drawable/ic_attach_file_black_24dp"
         android:drawablePadding="6dp"
-        android:drawableStart="@drawable/ic_add_black_24dp"
+        android:drawableStart="@drawable/ic_attach_file_black_24dp"
         android:text="@string/choose_video" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/playBtn"
+        style="@style/WidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eee"
-        android:id="@+id/videoPlayer"
-        android:orientation="vertical">
+        android:drawableLeft="@drawable/ic_add_white"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_add_white"
+        android:text="@string/play_video" />
 
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        <include
-            layout="@layout/media_player_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 </LinearLayout>
