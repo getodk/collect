@@ -32,18 +32,4 @@ public class MediaPlayerUtilities {
         // return timer string
         return finalTimerString;
     }
-
-    /**
-     * Function to change progress to timer
-     *
-     * @param progress      -
-     * @param totalDuration returns current duration in milliseconds
-     */
-    public static int progressToTimer(int progress, int totalDuration) {
-        int currentDuration;
-        currentDuration = (int) ((((double) progress) / 100) * totalDuration);
-
-        // return current duration in milliseconds
-        return currentDuration;
-    }
 }

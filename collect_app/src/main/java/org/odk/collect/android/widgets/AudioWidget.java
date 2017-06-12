@@ -268,6 +268,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     private void addMediaToPlayer() {
         File f = new File(instanceFolder + File.separator + binaryName);
-        mediaController.setMedia(f);
+        if (f.isFile()) {
+            mediaController.setMedia(f);
+        }
     }
 }

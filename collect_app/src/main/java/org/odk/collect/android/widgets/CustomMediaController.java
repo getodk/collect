@@ -56,8 +56,9 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
      */
     private Runnable updateTimeTask = new Runnable() {
         public void run() {
-            updateTimer();
-            seekBar.setProgress(mediaPlayer.getCurrentPosition());
+            if (mediaPlayer.isPlaying()) {
+                updateTimer();
+            }
             seekHandler.postDelayed(this, 100);
         }
     };
@@ -71,11 +72,14 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
     }
 
     private void updateTimer() {
-        long totalDuration = mediaPlayer.getDuration();
-        long currentDuration = mediaPlayer.getCurrentPosition();
+        String totalDuration = MediaPlayerUtilities.milliSecondsToTimer(mediaPlayer.getDuration());
+        String currentDuration = MediaPlayerUtilities.milliSecondsToTimer(mediaPlayer.getCurrentPosition());
 
-        totalDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(totalDuration)));
-        currentDurationLabel.setText(String.valueOf(MediaPlayerUtilities.milliSecondsToTimer(currentDuration)));
+        totalDurationLabel.setText(totalDuration);
+        currentDurationLabel.setText(currentDuration);
+
+        seekBar.setMax(mediaPlayer.getDuration());
+        seekBar.setProgress(mediaPlayer.getCurrentPosition());
     }
 
     void initLayout(View view) {
@@ -199,9 +203,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
     private void play() {
         Timber.i("Playing");
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
-
         mediaPlayer.start();
-        seekBar.setMax(mediaPlayer.getDuration());
         updateProgressBar();
     }
 
@@ -213,9 +215,9 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
 
     public void setMedia(File file) {
         try {
+            mediaPlayer.reset();
             mediaPlayer.setDataSource(context, Uri.fromFile(file));
             mediaPlayer.prepareAsync();
-            seekBar.setMax(mediaPlayer.getDuration());
             Timber.i("Preparing");
         } catch (IOException e) {
             Timber.e(e);
