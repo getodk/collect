@@ -17,34 +17,29 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.views.DrawView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,19 +63,14 @@ public class DrawActivity extends AppCompatActivity {
     public static final String SAVEPOINT_IMAGE = "savepointImage"; // during
     // restore
 
+    private FloatingActionButton fabActions;
+
     // incoming options...
     private String loadOption = null;
     private File refImage = null;
     private File output = null;
     private File savepointImage = null;
 
-    private Button btnDrawColor;
-    private Button btnFinished;
-    private Button btnReset;
-    private Button btnCancel;
-    private Paint paint;
-    private Paint pointPaint;
-    private int currentColor = 0xFF000000;
     private DrawView drawView;
     private String alertTitleString;
     private AlertDialog alertDialog;
@@ -101,10 +91,49 @@ public class DrawActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.draw_layout);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        fabActions = (FloatingActionButton) findViewById(R.id.fab_actions);
+        final FloatingActionButton fabSetColor = (FloatingActionButton) findViewById(R.id.fab_set_color);
+        final CardView cardViewSetColor = (CardView) findViewById(R.id.cv_set_color);
+        final FloatingActionButton fabSaveAndClose = (FloatingActionButton) findViewById(R.id.fab_save_and_close);
+        final CardView cardViewSaveAndClose = (CardView) findViewById(R.id.cv_save_and_close);
+        final FloatingActionButton fabClear = (FloatingActionButton) findViewById(R.id.fab_clear);
+        final CardView cardViewClear = (CardView) findViewById(R.id.cv_clear);
+
+        fabActions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int status = Integer.parseInt(view.getTag().toString());
+                if (status == 0) {
+                    status = 1;
+                    fabActions.animate().rotation(45).setInterpolator(new AccelerateDecelerateInterpolator())
+                            .setDuration(100).start();
+
+                    AnimateUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    AnimateUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                } else {
+                    status = 0;
+                    fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
+                            .setDuration(100).start();
+
+                    fabSetColor.setVisibility(View.INVISIBLE);
+                    cardViewSetColor.setVisibility(View.INVISIBLE);
+                    fabSaveAndClose.setVisibility(View.INVISIBLE);
+                    cardViewSaveAndClose.setVisibility(View.INVISIBLE);
+                    fabClear.setVisibility(View.INVISIBLE);
+                    cardViewClear.setVisibility(View.INVISIBLE);
+                }
+                view.setTag(status);
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
 
@@ -167,106 +196,8 @@ public class DrawActivity extends AppCompatActivity {
                     getString(R.string.draw_image));
         }
 
-        setTitle(getString(R.string.draw_image));
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout v = (RelativeLayout) inflater.inflate(
-                R.layout.draw_layout, null);
-        LinearLayout ll = (LinearLayout) v.findViewById(R.id.drawViewLayout);
-
-        drawView = new DrawView(this, OPTION_SIGNATURE.equals(loadOption),
-                savepointImage);
-
-        ll.addView(drawView);
-
-        setContentView(v);
-
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setDither(true);
-        paint.setColor(currentColor);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeWidth(10);
-
-        pointPaint = new Paint();
-        pointPaint.setAntiAlias(true);
-        pointPaint.setDither(true);
-        pointPaint.setColor(currentColor);
-        pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        pointPaint.setStrokeWidth(10);
-
-        btnDrawColor = (Button) findViewById(R.id.btnSelectColor);
-        btnDrawColor.setTextColor(getInverseColor(currentColor));
-        btnDrawColor.getBackground().setColorFilter(currentColor,
-                PorterDuff.Mode.SRC_ATOP);
-        btnDrawColor.setText(getString(R.string.set_color));
-        btnDrawColor.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "setColorButton",
-                                "click");
-                ColorPickerDialog cpd = new ColorPickerDialog(
-                        DrawActivity.this,
-                        new ColorPickerDialog.OnColorChangedListener() {
-                            public void colorChanged(String key, int color) {
-                                btnDrawColor
-                                        .setTextColor(getInverseColor(color));
-                                btnDrawColor.getBackground().setColorFilter(
-                                        color, PorterDuff.Mode.SRC_ATOP);
-                                currentColor = color;
-                                paint.setColor(color);
-                                pointPaint.setColor(color);
-                            }
-                        }, "key", currentColor, currentColor,
-                        getString(R.string.select_drawing_color));
-                cpd.show();
-            }
-        });
-        btnFinished = (Button) findViewById(R.id.btnFinishDraw);
-        btnFinished.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "saveAndCloseButton",
-                                "click");
-                saveAndClose();
-            }
-        });
-        btnReset = (Button) findViewById(R.id.btnResetDraw);
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "resetButton",
-                                "click");
-                reset();
-            }
-        });
-        btnCancel = (Button) findViewById(R.id.btnCancelDraw);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(
-                                DrawActivity.this,
-                                "cancelAndCloseButton",
-                                "click");
-                cancelAndClose();
-            }
-        });
-
+        drawView = (DrawView) findViewById(R.id.drawView);
+        drawView.setupView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);
     }
 
     private int getInverseColor(int color) {
@@ -427,160 +358,32 @@ public class DrawActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public class DrawView extends View {
-        private boolean isSignature;
-        private Bitmap bitmap;
-        private Canvas canvas;
-        private Path currentPath;
-        private Path offscreenPath; // Adjusted for position of the bitmap in the view
-        private Paint bitmapPaint;
-        private File backgroundBitmapFile;
-        private float latestX;
-        private float latestY;
-
-        public DrawView(final Context c) {
-            super(c);
-            isSignature = false;
-            bitmapPaint = new Paint(Paint.DITHER_FLAG);
-            currentPath = new Path();
-            offscreenPath = new Path();
-            backgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
-        }
-
-        public DrawView(Context c, boolean isSignature, File f) {
-            this(c);
-            this.isSignature = isSignature;
-            backgroundBitmapFile = f;
-        }
-
-        public void reset() {
-            DisplayMetrics metrics = getBaseContext().getResources().getDisplayMetrics();
-            int screenWidth = metrics.widthPixels;
-            int screenHeight = metrics.heightPixels;
-            resetImage(screenWidth, screenHeight);
-        }
-
-        public void resetImage(int w, int h) {
-            if (backgroundBitmapFile.exists()) {
-                // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
-                // is called upon with flipped w/h (before orientation changes have been applied)
-                if (w > h) {
-                    int temp = w;
-                    w = h;
-                    h = temp;
-                }
-
-                bitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
-                        backgroundBitmapFile, w, h).copy(
-                        Bitmap.Config.ARGB_8888, true);
-                // bitmap =
-                // Bitmap.createScaledBitmap(BitmapFactory.decodeFile(backgroundBitmapFile.getPath()),
-                // w, h, true);
-                canvas = new Canvas(bitmap);
-            } else {
-                bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                canvas = new Canvas(bitmap);
-                canvas.drawColor(0xFFFFFFFF);
-                if (isSignature) {
-                    drawSignLine();
-                }
-            }
-        }
-
-        @Override
-        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            super.onSizeChanged(w, h, oldw, oldh);
-            resetImage(w, h);
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            drawOnCanvas(canvas, getBitmapLeft(), getBitmapTop());
-        }
-
-        public void drawOnCanvas(Canvas canvas, float left, float top) {
-            canvas.drawColor(0xFFAAAAAA);
-            canvas.drawBitmap(bitmap, left, top, bitmapPaint);
-            canvas.drawPath(currentPath, paint);
-        }
-
-        private void touch_start(float x, float y) {
-            currentPath.reset();
-            currentPath.moveTo(x, y);
-
-            offscreenPath.reset();
-            offscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
-
-            latestX = x;
-            latestY = y;
-        }
-
-        public void drawSignLine() {
-            canvas.drawLine(0, (int) (canvas.getHeight() * .7),
-                    canvas.getWidth(), (int) (canvas.getHeight() * .7), paint);
-        }
-
-        private void touch_move(float x, float y) {
-            currentPath.quadTo(latestX, latestY, (x + latestX) / 2, (y + latestY) / 2);
-            offscreenPath.quadTo(latestX - getBitmapLeft(), latestY - getBitmapTop(),
-                    (x + latestX) / 2 - getBitmapLeft(), (y + latestY) / 2 - getBitmapTop());
-            latestX = x;
-            latestY = y;
-        }
-
-        private void touch_up() {
-            if (currentPath.isEmpty()) {
-                canvas.drawPoint(latestX, latestY, pointPaint);
-            } else {
-                currentPath.lineTo(latestX, latestY);
-                offscreenPath.lineTo(latestX - getBitmapLeft(), latestY - getBitmapTop());
-
-                // commit the path to our offscreen
-                canvas.drawPath(offscreenPath, paint);
-            }
-            // kill this so we don't double draw
-            currentPath.reset();
-        }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            float x = event.getX();
-            float y = event.getY();
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    touch_start(x, y);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    touch_move(x, y);
-                    invalidate();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    touch_up();
-                    invalidate();
-                    break;
-            }
-            return true;
-        }
-
-        public int getBitmapHeight() {
-            return bitmap.getHeight();
-        }
-
-        public int getBitmapWidth() {
-            return bitmap.getWidth();
-        }
-
-        private int getBitmapLeft() {
-            // Centered horizontally
-            return (getWidth() - bitmap.getWidth()) / 2;
-        }
-
-        private int getBitmapTop() {
-            // Centered vertically
-            return (getHeight() - bitmap.getHeight()) / 2;
+    public void clear(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+            reset();
         }
     }
 
+    public void close(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+            saveAndClose();
+        }
+    }
+
+    public void setColor(View view) {
+        if (view.getVisibility() == View.VISIBLE) {
+            fabActions.performClick();
+            ColorPickerDialog cpd = new ColorPickerDialog(
+                    DrawActivity.this,
+                    new ColorPickerDialog.OnColorChangedListener() {
+                        public void colorChanged(String key, int color) {
+                            drawView.setColor(color);
+                        }
+                    }, "key", drawView.getColor(), drawView.getColor(),
+                    getString(R.string.select_drawing_color));
+            cpd.show();
+        }
+    }
 }
