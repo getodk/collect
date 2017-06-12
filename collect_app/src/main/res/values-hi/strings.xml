@@ -1,13 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">जगह  रिकार्ड करे </string>
-  <string name="accuracy"> परिशुद्धता</string>
+<resources>
   <string name="add_another"> समूह जोड़ें</string>
   <string name="add_another_repeat">“%s” समूह जोड़ें</string>
-  <string name="add_more">और जोड़ें</string>
   <string name="add_repeat">समूह में नया \"%s\" जोड़ें</string>
   <string name="add_repeat_no">न जोड़ें</string>
-  <string name="altitude">ऊंचाई</string>
   <string name="audio_file_error">कोई ऑडियो फाइल निर्दिष्ट नहीं की गई थी।</string>
   <string name="cancel">मिटाएं</string>
   <string name="cancel_loading_form">मिटाएं</string>
@@ -17,12 +13,10 @@
   <string name="capture_video">विडियो रिकार्ड करे</string>
   <string name="change_language">भाषा बदलें</string>
   <string name="change_password">ओडीके पासवर्ड</string>
-  <string name="change_protocol_settings_default">प्लेटफ़ॉर्म सेटिंग</string>
-  <string name="change_username">ओडीके उपयोगकर्ता नाम</string>
+    <string name="change_username">ओडीके उपयोगकर्ता नाम</string>
   <string name="clear_answer">उत्तर मिटाएं</string>
   <string name="clear_answer_ask">उत्तर मिटाएं ?</string>
   <string name="clear_answer_no">मिटाएं</string>
-  <string name="completed_data">(%s) समाप्त </string>
   <string name="data">जमा फारम</string>
   <string name="data_saved_error">असफल</string>
   <string name="data_saved_ok">सफल</string>
@@ -77,11 +71,9 @@
   <string name="quit_entry">फारम बचाएं और बंद करें</string>
   <string name="refresh">रीलोड</string>
   <string name="replace_barcode">बारकोड बदलें</string>
-  <string name="replace_location">स्थान बदलें</string>
   <string name="required_answer_error">क्षमा करें , यह चुनाव अनिवार्य है</string>
   <string name="review_data">बचाया फारम बदलें</string>
   <string name="review_data_button">बचाया फारम (%s) बदलें</string>
-  <string name="saved_data">(%s) अधूरा</string>
   <string name="save_all_answers">फारम बचाएं</string>
   <string name="save_enter_data_description">आप फारम %s के समापन पर हैं</string>
   <string name="saving_form">फारम बचाया जा राहा हे</string>
@@ -106,7 +98,6 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="save_and_close">बचाएं और बंद करें</string>
   <string name="save_mid">फारम बचाएं</string>
-  <string name="swipe_instructions">आप %s के शुरुआत पर हैं । आगे और पीछे जाने के लिए स्वाईप करें ।</string>
   <string name="change_server_url">सर्भर URL</string>
   <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
