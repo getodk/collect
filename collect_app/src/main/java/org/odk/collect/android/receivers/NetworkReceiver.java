@@ -5,14 +5,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -31,6 +29,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
@@ -91,12 +90,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     private boolean interfaceIsEnabled(Context context,
                                        NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        boolean sendwifi = sharedPreferences.getBoolean(
-                PreferenceKeys.KEY_AUTOSEND_WIFI, false);
-        boolean sendnetwork = sharedPreferences.getBoolean(
-                PreferenceKeys.KEY_AUTOSEND_NETWORK, false);
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        boolean sendwifi = autosend.equals("wifi_only");
+        boolean sendnetwork = autosend.equals("cellular_only");
+        if (autosend.equals("wifi_and_cellular")) {
+            sendwifi = true;
+            sendnetwork = true;
+        }
 
         return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
                 && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
@@ -140,15 +140,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
                     .setBackOff(new ExponentialBackOff());
 
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
 
-            String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
-                    context.getString(R.string.protocol_odk_default));
+            String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
                 googleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, accountCredential);
-                String googleUsername = settings.getString(
-                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, null);
+                String googleUsername = (String) settings.get(
+                        PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
                     // just quit if there's no username
                     running = false;
@@ -161,13 +160,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             } else {
                 // get the username, password, and server from preferences
 
-                String storedUsername = settings.getString(PreferenceKeys.KEY_USERNAME, null);
-                String storedPassword = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
-                String server = settings.getString(PreferenceKeys.KEY_SERVER_URL,
-                        context.getString(R.string.default_server_url));
-                String url = server
-                        + settings.getString(PreferenceKeys.KEY_FORMLIST_URL,
-                        context.getString(R.string.default_odk_formlist));
+                String storedUsername = (String) settings.get(PreferenceKeys.KEY_USERNAME);
+                String storedPassword = (String) settings.get(PreferenceKeys.KEY_PASSWORD);
+                String server = (String) settings.get(PreferenceKeys.KEY_SERVER_URL);
+                String url = server + settings.get(PreferenceKeys.KEY_FORMLIST_URL);
 
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());

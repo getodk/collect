@@ -12,18 +12,20 @@
      the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
 
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/buttons"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/toolbar">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -38,6 +40,12 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/qr_code" />
     </FrameLayout>
+
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar" />
 
     <LinearLayout
         android:id="@+id/buttons"

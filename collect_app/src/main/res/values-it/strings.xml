@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra password</string>
   <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
   <string name="add_another">Aggiungi gruppo</string>
@@ -19,8 +19,7 @@
   <string name="capture_video">Registra Video</string>
   <string name="change_language">Cambia Lingua</string>
   <string name="change_password">Password ODK</string>
-  <string name="change_protocol_settings_default">Impostazioni di piattaforma</string>
-  <string name="change_username">Nome utente ODK</string>
+    <string name="change_username">Nome utente ODK</string>
   <string name="clearanswer_confirm">Rimuovere la risposta a \"%s\"?</string>
   <string name="clear_answer">Rimuovere la risposta</string>
   <string name="clear_answer_ask">Rimuovere questa risposta?</string>
@@ -123,8 +122,7 @@
   <string name="view_hierarchy">Apri visione gerarchica</string>
   <string name="general_preferences">Impostazioni Generali</string>
   <string name="client">Interfaccia utente</string>
-  <string name="show_splash">Mostra schermata di avvio</string>
-  <string name="show_splash_summary">Indica quando l\'applicazione si avvia</string>
+    <string name="show_splash_summary">Indica quando l\'applicazione si avvia</string>
   <string name="splash_path">Immagine di avvio selezionata</string>
   <string name="default_splash_path">ODK Default</string>
   <string name="select_another_image">Selezionare un\'altra immagine</string>
@@ -133,8 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
-  <string name="protocol">Piattaforma server</string>
-  <string name="change_protocol">Piattaforma server</string>
+    <string name="change_protocol">Piattaforma server</string>
   <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
   <string name="formlist_url">Percorso Elenco Moduli</string>
   <string name="submission_url">Luogo di consegna</string>
@@ -196,13 +193,9 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Imposta Colore</string>
   <string name="select_drawing_color">Seleziona Colore per disegnare</string>
-  <string name="user_access_main_menu">L\'Utente può accedere nel Menu Principale a:</string>
-  <string name="user_access_preferences">L\'Utente può modificare le seguenti Impostazioni:</string>
-  <string name="change_server">Piattaforma</string>
-  <string name="admin_preferences">Impostazioni Amministratore</string>
+    <string name="admin_preferences">Impostazioni Amministratore</string>
   <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
-  <string name="user_access_form_entry">L\'Utente può accedere alle seguenti Impostazioni del Modulo d\'Ingresso:</string>
-  <string name="save_mid">Salva Modulo</string>
+    <string name="save_mid">Salva Modulo</string>
   <string name="enter_new_password">Inserire nuova password</string>
   <string name="admin_password">Password di amministratore</string>
   <string name="admin_password_changed">Password dell\'Amministratore cambiata con successo</string>
@@ -210,16 +203,10 @@
   <string name="admin_password_incorrect">Attenzione, la password è sbagliata!</string>
   <string name="enter_admin_password">Inserire Password Amministratore</string>
   <string name="change_admin_password">Cambia la password di amministratore</string>
-  <string name="found_in_menu">Deseleziona per nascondere dal menu del Modulo d\'Ingresso</string>
-  <string name="autosend">Invio automatico</string>
-  <string name="autosend_wifi">Auto invio tramite rete Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto invio quando rete Wi-Fi è disponibile</string>
-  <string name="autosend_network">Auto invio tramite network</string>
-  <string name="autosend_network_summary">Auto invio quando network è disponibile</string>
-  <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
+    <string name="autosend">Invio automatico</string>
+    <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
-  <string name="found_at_end">Deseleziona per nascondere dalla fine del Modulo d\'Ingresso</string>
-  <string name="no_account">Nessun account</string>
+    <string name="no_account">Nessun account</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
   <string name="form_forward">Prossimo</string>
   <string name="form_backward">Precedente</string>
@@ -269,8 +256,7 @@
   <string name="survey_saving_finalizing_message">Completamento nella scheda SD…</string>
   <string name="survey_saving_encrypting_message">Crittografia dati…</string>
   <string name="high_resolution_summary">Permetti la registrazione di video ad alta risoluzione</string>
-  <string name="high_resolution">Abilita video HD</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
@@ -327,8 +313,7 @@
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
   <string name="map_basemap_selector_title">Mappe base</string>
-  <string name="map_basemap_behavior">Seleziona una mappa base</string>
-  <string name="show_map_basemap">Mostra opzioni mappa base</string>
+    <string name="show_map_basemap">Mostra opzioni mappa base</string>
   <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>

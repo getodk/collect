@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Passwort anzeigen</string>
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="add_another">Gruppe hinzufügen</string>
@@ -19,8 +19,7 @@
   <string name="capture_video">Video aufnehmen</string>
   <string name="change_language">Sprache ändern</string>
   <string name="change_password">ODK Passwort</string>
-  <string name="change_protocol_settings_default">Plattform-Einstellungen</string>
-  <string name="change_username">ODK Benutzername</string>
+    <string name="change_username">ODK Benutzername</string>
   <string name="clearanswer_confirm">Antwort zu \"%s\" entfernen?</string>
   <string name="clear_answer">Antwort entfernen</string>
   <string name="clear_answer_ask">Diese Antwort entfernen?</string>
@@ -123,8 +122,7 @@
   <string name="view_hierarchy">Zur Eingabe</string>
   <string name="general_preferences">Allgemeine Einstellungen</string>
   <string name="client">Bedienung</string>
-  <string name="show_splash">Startbild anzeigen</string>
-  <string name="show_splash_summary">Wird angezeigt, während die App startet</string>
+    <string name="show_splash_summary">Wird angezeigt, während die App startet</string>
   <string name="splash_path">Ausgewähltes Startbild</string>
   <string name="default_splash_path">ODK Standard</string>
   <string name="select_another_image">Anderes Bild auswählen</string>
@@ -133,8 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>
-  <string name="protocol">Server-Plattform</string>
-  <string name="change_protocol">Server-Plattform</string>
+    <string name="change_protocol">Server-Plattform</string>
   <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
   <string name="formlist_url">Formularlisten-Pfad</string>
   <string name="submission_url">Submissionspfad</string>
@@ -196,13 +193,9 @@
   <string name="reset_image">Zurücksetzen</string>
   <string name="set_color">Farbe wählen</string>
   <string name="select_drawing_color">Zeichenfarbe wählen</string>
-  <string name="user_access_main_menu">Für Benutzer verfügbare Haupt-Menüpunkte:</string>
-  <string name="user_access_preferences">Für Benutzer verfügbare Einstellungen:</string>
-  <string name="change_server">Plattform</string>
-  <string name="admin_preferences">Admineinstellungen</string>
+    <string name="admin_preferences">Admineinstellungen</string>
   <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
-  <string name="user_access_form_entry">Verfügbare Formulareingabe-Menüpunkte:</string>
-  <string name="save_mid">Formular speichern</string>
+    <string name="save_mid">Formular speichern</string>
   <string name="enter_new_password">Neues Passwort eingeben</string>
   <string name="admin_password">Admin-Passwort</string>
   <string name="admin_password_changed">Admin-Passwort erfolgreich geändert</string>
@@ -210,16 +203,10 @@
   <string name="admin_password_incorrect">Passwort ist falsch!</string>
   <string name="enter_admin_password">Admin-Passwort eingeben</string>
   <string name="change_admin_password">Admin-Passwort ändern</string>
-  <string name="found_in_menu">Deaktivieren, um aus dem Formular-Menü auszublenden</string>
-  <string name="autosend">Auto-Send</string>
-  <string name="autosend_wifi">Auto-Send via WLAN</string>
-  <string name="autosend_wifi_summary">Auto-Send, wenn WLAN verfügbar ist</string>
-  <string name="autosend_network">Auto-Send via Netzwerk</string>
-  <string name="autosend_network_summary">Auto-Send, wenn Netzwerk verfügbar ist</string>
-  <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
+    <string name="autosend">Auto-Send</string>
+    <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
-  <string name="found_at_end">Deaktivieren, um am Ende der Formulareingabe auszublenden</string>
-  <string name="no_account">Kein Benutzerkonto</string>
+    <string name="no_account">Kein Benutzerkonto</string>
   <string name="save_preferences">Einstellungen auf Speicherkarte speichern</string>
   <string name="form_forward">Weiter</string>
   <string name="form_backward">Zurück</string>
@@ -269,8 +256,7 @@
   <string name="survey_saving_finalizing_message">Abschließen auf SD-Karte…</string>
   <string name="survey_saving_encrypting_message">Daten werden verschlüsselt…</string>
   <string name="high_resolution_summary">HD-Videoaufnahmen aktivieren</string>
-  <string name="high_resolution">HD-Video aktivieren</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Shared with Me</string>
@@ -327,8 +313,7 @@
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellit</string>
   <string name="map_basemap_selector_title">Basiskarten</string>
-  <string name="map_basemap_behavior">Basiskarte auswählen</string>
-  <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
+    <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
   <string name="save_point">Standort speichern</string>
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>

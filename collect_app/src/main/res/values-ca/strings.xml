@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra clau d\'accés</string>
   <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="add_another">Afegir grup</string>
@@ -121,8 +121,7 @@
   <string name="view_hierarchy">Ves a entrada de dades</string>
   <string name="general_preferences">Configuració general</string>
   <string name="client">Interfície d\'usuari</string>
-  <string name="show_splash">Mostrar pantalla de benvinguda</string>
-  <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
+    <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
   <string name="splash_path">Imatge de benvinguda seleccionada</string>
   <string name="default_splash_path">ODK per defecte</string>
   <string name="select_another_image">Seleccionar una altre imatge</string>
@@ -131,8 +130,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Desar els canvis</string>
   <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
-  <string name="protocol">Plataforma de servidor</string>
-  <string name="change_protocol">Plataforma de servidor</string>
+    <string name="change_protocol">Plataforma de servidor</string>
   <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
   <string name="formlist_url">Carpeta de formularis</string>
   <string name="submission_url">Carpeta de presentacions</string>
@@ -193,13 +191,9 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Color</string>
   <string name="select_drawing_color">Selecciona color</string>
-  <string name="user_access_main_menu">Opcions d\'Usuari al Menu Principal:</string>
-  <string name="user_access_preferences">Opcions d\'Usuari a la Configuració:</string>
-  <string name="change_server">Server Protocol i URL</string>
-  <string name="admin_preferences">Opcions d\'Administrador</string>
+    <string name="admin_preferences">Opcions d\'Administrador</string>
   <string name="admin_access_settings">Polsa per entrar a Configuració</string>
-  <string name="user_access_form_entry">Opcions d\'Usuari a gestió de Formularis:</string>
-  <string name="save_mid">Desar mig formulari</string>
+    <string name="save_mid">Desar mig formulari</string>
   <string name="enter_new_password">Entrar nova clau d\'accés</string>
   <string name="admin_password">Clau d\'administrador</string>
   <string name="admin_password_changed">Clau d\'accés d\'Administrador canviat</string>
@@ -207,16 +201,10 @@
   <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
   <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
   <string name="change_admin_password">Canviar clau d\'administrador</string>
-  <string name="found_in_menu">S\'ha usat el botó Menu en l\'entrada de dades</string>
-  <string name="autosend">Auto-enviament</string>
-  <string name="autosend_wifi">Auto-enviament per Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto-enviament quan Wi-Fi disponible</string>
-  <string name="autosend_network">Auto-enviament per xarxa</string>
-  <string name="autosend_network_summary">Auto-enviament quan xarxa disponible</string>
-  <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
+    <string name="autosend">Auto-enviament</string>
+    <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
-  <string name="found_at_end">Desmarcar per amagar en final de\'entrada de formulari</string>
-  <string name="no_account">Sense compte</string>
+    <string name="no_account">Sense compte</string>
   <string name="save_preferences">Salve Configuració a disc</string>
   <string name="form_forward">Següent</string>
   <string name="form_backward">Previ</string>
@@ -266,8 +254,7 @@
   <string name="survey_saving_finalizing_message">Acabant a tarja SD…</string>
   <string name="survey_saving_encrypting_message">Encriptant dades…</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
-  <string name="high_resolution">Activar vídeo HD</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
@@ -314,8 +301,7 @@
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
   <string name="map_basemap_selector_title">Mapes base</string>
-  <string name="map_basemap_behavior">Selecciona un mapa base</string>
-  <string name="show_map_basemap">Veure opcions de mapa base</string>
+    <string name="show_map_basemap">Veure opcions de mapa base</string>
   <string name="save_point">Desar GeoPunt</string>
   <string name="get_point">Comença GeoPunt</string>
   <string name="geopoint_view_read_only">Veure GeoPunt</string>

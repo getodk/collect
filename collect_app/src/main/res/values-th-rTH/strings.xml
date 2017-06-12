@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
   <string name="add_another">เพิ่มกลุ่ม</string>
@@ -118,8 +118,7 @@
   <string name="view_hierarchy">ข้ามไปที่</string>
   <string name="general_preferences">ตั้งค่าทั่วไป</string>
   <string name="client">ส่วนติดต่อผู้ใช้งาน</string>
-  <string name="show_splash">แสดงภาพเริ่มต้น</string>
-  <string name="show_splash_summary">แสดงเมื่อเริ่มการทำงาน</string>
+    <string name="show_splash_summary">แสดงเมื่อเริ่มการทำงาน</string>
   <string name="splash_path">เลือกภาพเริ่มต้น</string>
   <string name="default_splash_path">ค่าเริ่มต้น ODK</string>
   <string name="select_another_image">เลือกภาพอื่น</string>
@@ -128,8 +127,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
   <string name="change_formlist_url">Form list path (appended to URL)</string>
-  <string name="protocol">Platform</string>
-  <string name="change_protocol">Platform</string>
+    <string name="change_protocol">Platform</string>
   <string name="change_submission_url">Submission path (appended to URL)</string>
   <string name="formlist_url">Form list path</string>
   <string name="submission_url">Submission path</string>
@@ -190,13 +188,9 @@
   <string name="reset_image">ตั้งค่าใหม่</string>
   <string name="set_color">เลือกสี</string>
   <string name="select_drawing_color">เลือกสีสำหรับวาด</string>
-  <string name="user_access_main_menu">ผู้ใช้งานสามารถเข้าถึงเมนูหลักได้</string>
-  <string name="user_access_preferences">ผู้ใช้งานสามารถแก้ไขการตั้งค่าได้</string>
-  <string name="change_server">Platform</string>
-  <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
+    <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
   <string name="admin_access_settings">Tap for admin access to settings</string>
-  <string name="user_access_form_entry">User can access Form Entry items:</string>
-  <string name="save_mid">บันทึกแบบสำรวจ</string>
+    <string name="save_mid">บันทึกแบบสำรวจ</string>
   <string name="enter_new_password">ใส่รหัสผ่านใหม่</string>
   <string name="admin_password">รหัสผ่านของผู้ดูแลระบบ</string>
   <string name="admin_password_changed">เปลี่ยนรหัสผ่านของผู้ควบคุมระบบเรียบร้อยแล้ว</string>
@@ -204,16 +198,10 @@
   <string name="admin_password_incorrect">ขออภัย รหัสผ่านไม่ถูกต้อง</string>
   <string name="enter_admin_password">ใส่รหัสผ่านสำหรับผู้ควบคุมระบบ</string>
   <string name="change_admin_password">เปลี่ยนรหัสผ่านของผู้ดูแลระบบ</string>
-  <string name="found_in_menu">ปล่อยว่างเพื่อซ่อนจากเมนูการนำเข้าแบบสำรวจ</string>
-  <string name="autosend">ส่งอัตโนมัติ</string>
-  <string name="autosend_wifi">ส่งอัตโนมัติเมื่อเชื่อมต่อกับ Wi-Fi</string>
-  <string name="autosend_wifi_summary">ส่งอัตโนมัติเมื่อมีสัญญาณ Wi-Fi</string>
-  <string name="autosend_network">ส่งอัตโนมัติเมื่อเชื่อมต่อกับเครือข่าย</string>
-  <string name="autosend_network_summary">ส่งอัตโนมัติเมื่อเชื่อมต่อกับเครือข่าย</string>
-  <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
+    <string name="autosend">ส่งอัตโนมัติ</string>
+    <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
-  <string name="found_at_end">ปล่อยว่างเพื่อซ่อนจากหน้าสุดท้ายของแบบสำรวจ</string>
-  <string name="no_account">ไม่มีบัญชีผู้ใช้</string>
+    <string name="no_account">ไม่มีบัญชีผู้ใช้</string>
   <string name="save_preferences">บันทึกการตั้งค่า</string>
   <string name="form_forward">ต่อไป</string>
   <string name="form_backward">ย้อนกลับ</string>
@@ -256,8 +244,7 @@
   <string name="survey_saving_saving_message">กำลังบันทึกลงใน SD card</string>
   <string name="survey_saving_encrypting_message">กำลังเข้ารหัสข้อมูล</string>
   <string name="high_resolution_summary">เปิดใช้งานการบันทึกวีดีโอความละเอียดสูง</string>
-  <string name="high_resolution">เปิดใช้งานวีดีโอความละเอียดสูง</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">แบ่งปันกับฉัน</string>
@@ -310,8 +297,7 @@
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
   <string name="map_basemap_selector_title">Basemaps</string>
-  <string name="map_basemap_behavior">เลือก Basemap</string>
-  <string name="show_map_basemap">แสดงตัวเลือกของ Basemap</string>
+    <string name="show_map_basemap">แสดงตัวเลือกของ Basemap</string>
   <string name="save_point">บันทึกจุดพิกัด</string>
   <string name="get_point">เริ่มต้นจุดพิกัด</string>
   <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>

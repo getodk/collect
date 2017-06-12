@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">प्रयोग गर्न कुनै पनि क्रियाकलाप भेटिएन: %s </string>
   <string name="add_another">समूह थप्नुहोस् </string>
   <string name="add_another_repeat">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
@@ -114,8 +114,7 @@
   <string name="view_hierarchy">प्रम्टमा जानुहोस् </string>
   <string name="general_preferences">जनरल सेटिङ्स </string>
   <string name="client">प्रयोगकर्ताको अन्तरक्रिया गर्ने ठाउँ </string>
-  <string name="show_splash">पहिलो पर्दाको दृश्य देखाउनुहोस् |</string>
-  <string name="show_splash_summary">एप्लिकेशन सुरु हुँदा देखाइन्छ |</string>
+    <string name="show_splash_summary">एप्लिकेशन सुरु हुँदा देखाइन्छ |</string>
   <string name="splash_path">पहिलो पर्दा दृश्यको लागि तस्बिर छानियो |</string>
   <string name="default_splash_path">ODK डिफल्ट </string>
   <string name="select_another_image">अर्को तस्विर छान्नुहोला</string>
@@ -124,8 +123,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">परिवर्तनहरु संचित गर्नुहोस् </string>
   <string name="change_formlist_url">फारम सूचीको मार्ग (URL मा जोडिसकिएको छ )</string>
-  <string name="protocol">मंच </string>
-  <string name="change_protocol">मंच </string>
+    <string name="change_protocol">मंच </string>
   <string name="change_submission_url">बुझाईएको वस्तुको मार्ग (URL मा जोडिसकिएको छ )</string>
   <string name="formlist_url">फारम सूचीको मार्ग </string>
   <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
@@ -185,28 +183,18 @@
   <string name="reset_image">पहिलाकै ठाउँमा ल्याउनुहोस् </string>
   <string name="set_color">रंग छान्नुहोस् </string>
   <string name="select_drawing_color">चित्र बनाउनको लागि रंग छान्नुहोस् </string>
-  <string name="user_access_main_menu">प्रयोगकर्ताले मूल मेनुका विषयहरुमा प्रवेश पाउन सक्नुहुनेछ: </string>
-  <string name="user_access_preferences">प्रयोगकर्ताले सेटिंग परिवर्तनका विषयहरुमा प्रवेश पाउन सक्नुहुनेछ: </string>
-  <string name="change_server">मंच</string>
-  <string name="admin_preferences">एडमिन सेटिङ्स</string>
+    <string name="admin_preferences">एडमिन सेटिङ्स</string>
   <string name="admin_access_settings">सेटिंग मा प्रशासक प्रवेशको लागि थिच्नुहोस्</string>
-  <string name="user_access_form_entry">प्रयोगकर्ताले फारम भर्ने विषयहरुमा प्रवेश पाउन सक्नुहुनेछ: </string>
-  <string name="save_mid">फारम संचित गर्नुहोस् </string>
+    <string name="save_mid">फारम संचित गर्नुहोस् </string>
   <string name="enter_new_password">नयाँ पासवर्ड हाल्नुहोस्</string>
   <string name="admin_password_changed">प्रशासक पासवर्ड सफलतापूर्वक परिवर्तन भयो</string>
   <string name="admin_password_disabled">प्रशासक पासवर्ड निष्क्रिय गरिएको छ </string>
   <string name="admin_password_incorrect">माफ गर्नुहोला, पासवर्ड गलत छ !</string>
   <string name="enter_admin_password">प्रशासक पासवर्ड हाल्नुहोस् </string>
-  <string name="found_in_menu">फारम भर्ने को मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
-  <string name="autosend">स्वत: प्रेषण</string>
-  <string name="autosend_wifi">वाइ फाइ बाट स्वत: प्रेषण</string>
-  <string name="autosend_wifi_summary">वाइ फाइ उपलब्ध हुँदा स्वत: प्रेषण  </string>
-  <string name="autosend_network">नेटवर्क ईन्टरनेटबाट स्वत: प्रेषण</string>
-  <string name="autosend_network_summary">नेटवर्क ईन्टरनेट उपलब्ध हुँदा स्वत: प्रेषण</string>
-  <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
+    <string name="autosend">स्वत: प्रेषण</string>
+    <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
   <string name="found_in_settings">जेनेरल सेटिंग मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
-  <string name="found_at_end">फारम भर्ने को अन्तिम मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
-  <string name="no_account">खाता छैन </string>
+    <string name="no_account">खाता छैन </string>
   <string name="save_preferences">सेटिङ्सलाई डिस्कमा सेभ गर्नुहोस्</string>
   <string name="form_forward">अघि</string>
   <string name="form_backward">पछि</string>
@@ -256,8 +244,7 @@
   <string name="survey_saving_finalizing_message">मेमोरी कार्डमा अन्तिम रुप दिइदैछ…</string>
   <string name="survey_saving_encrypting_message">तथ्यांक गुप्तिकृत गरिदैछ…</string>
   <string name="high_resolution_summary">उच्च स्तरीय भिडियो रेकर्ड गर्ने क्षमता सक्रिय गर्नुस् </string>
-  <string name="high_resolution">उच्च स्तरीय भिडियो सक्रिय गर्नुस् </string>
-  <string name="google_drive">गुगल ड्राइभ</string>
+    <string name="google_drive">गुगल ड्राइभ</string>
   <string name="go_drive">मेरो ड्राइभ</string>
   <string name="go_shared">म संग साझा गरिएको </string>
   <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'को\' HH:mm \'मा परिवर्तन गरिएको\'</string>
