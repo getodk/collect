@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Hakuna shughuli iliyopatikana kushughulikia: %s</string>
   <string name="add_another">Ongeza Kikundi</string>
   <string name="add_another_repeat">Ongeza Kikundi \"%s\" kingine </string>
@@ -111,8 +111,7 @@
   <string name="view_hierarchy">Enda</string>
   <string name="general_preferences">Mazingira ya Jumla</string>
   <string name="client">Sura ya kutumika</string>
-  <string name="show_splash">Onyesha kioo</string>
-  <string name="show_splash_summary">Huonyesha ala linapoanza</string>
+    <string name="show_splash_summary">Huonyesha ala linapoanza</string>
   <string name="splash_path">Picha iliyochaguliwa</string>
   <string name="default_splash_path">Chaguo-msingi ya ODK</string>
   <string name="select_another_image">Chagua Picha nyingine</string>
@@ -121,8 +120,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>
-  <string name="protocol">jukwaa</string>
-  <string name="change_protocol">Jukwaa</string>
+    <string name="change_protocol">Jukwaa</string>
   <string name="change_submission_url">Njia ya Kuwasilisha (imeelekezwa URL)</string>
   <string name="formlist_url">Njia ya orodha ya fomu</string>
   <string name="submission_url">Njia ya kuwasilisha</string>
@@ -181,24 +179,16 @@
   <string name="reset_image">fanya upya</string>
   <string name="set_color">weka rangi</string>
   <string name="select_drawing_color">Chagua rangi ya kuchora</string>
-  <string name="user_access_main_menu">Mtumiaji anaweza kupata vitu kwenye Menu Kuu:</string>
-  <string name="user_access_preferences">Mtumiaji anaweza kupata Change Settings</string>
-  <string name="change_server">Jukwaa</string>
-  <string name="admin_preferences">Settings za admin</string>
+    <string name="admin_preferences">Settings za admin</string>
   <string name="admin_access_settings">bonyeza ili upenye kama admin</string>
-  <string name="user_access_form_entry">Mtumiaji anaweza kupata vitu vya kujaza fomu:</string>
-  <string name="save_mid">Hifadhi Fomu</string>
+    <string name="save_mid">Hifadhi Fomu</string>
   <string name="enter_new_password">Weka password mpya</string>
   <string name="admin_password_changed">Password ya msimamizi imebadilishwa vyema</string>
   <string name="admin_password_disabled">Password ya msimamizi imefungwa</string>
   <string name="admin_password_incorrect">Samahani, password si sawa</string>
   <string name="enter_admin_password">Weka password ya msimamizi</string>
   <string name="autosend">Tuma moja kwa moja</string>
-  <string name="autosend_wifi">Tuma moja kwa moja ukitumia Wi-Fi</string>
-  <string name="autosend_wifi_summary">Kutuma moja kwa moja ukitumia Wi-Fi ipo</string>
-  <string name="autosend_network">Tuma moja kwa moja na mtandao</string>
-  <string name="autosend_network_summary">Kutuma moja kwa moja na mtandao ipo</string>
-  <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
+    <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
   <string name="no_account">Hakuna akaunti</string>
   <string name="save_preferences">Hifadhi mazingira kwa diski</string>
   <string name="form_forward">Ijayo</string>
@@ -238,8 +228,7 @@
   <string name="survey_saving_finalizing_message">Tamatisho la takwimu kwa kadi ya SD…</string>
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
-  <string name="high_resolution">Ezesha video za mwonekano wa hali ya juu…</string>
-  <string name="default_google_sheets_url"></string>
+    <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

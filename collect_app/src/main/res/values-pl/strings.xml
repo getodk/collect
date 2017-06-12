@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nie znaleziono aktywności do obsługi: %s</string>
   <string name="add_another">Dodaj Grupę</string>
   <string name="add_another_repeat">Czy dodać kolejną grupę \"%s\"?</string>
@@ -120,8 +120,7 @@
   <string name="view_hierarchy">Idź Do Pytania</string>
   <string name="general_preferences">Ustawienia Ogólne</string>
   <string name="client">Interfejs Użytkownika</string>
-  <string name="show_splash">Pokaż ekran powitalny</string>
-  <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
+    <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
   <string name="splash_path">Wybrany obraz ekranu powitalnego</string>
   <string name="default_splash_path">Domyślne ODK</string>
   <string name="select_another_image">Wybierz inny obraz</string>
@@ -130,8 +129,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>
-  <string name="protocol">Platforma</string>
-  <string name="change_protocol">Platforma</string>
+    <string name="change_protocol">Platforma</string>
   <string name="change_submission_url">Ścieżka zgłoszeń (dołączana do URL)</string>
   <string name="formlist_url">Ścieżka do listy formularzy</string>
   <string name="submission_url">Ścieżka zgłoszeń</string>
@@ -192,13 +190,9 @@
   <string name="reset_image">Resetuj</string>
   <string name="set_color">Ustaw Kolor</string>
   <string name="select_drawing_color">Wybierz Kolor do Rysowania</string>
-  <string name="user_access_main_menu">Użytkownik może korzystać z pozycji Menu Głównego:</string>
-  <string name="user_access_preferences">Użytkownik może korzystać z pozycji Zmiany Ustawień:</string>
-  <string name="change_server">Platforma:</string>
-  <string name="admin_preferences">Ustawienia Administratora</string>
+    <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
-  <string name="user_access_form_entry">Użytkownik może korzystać z pozycji Wypełniania Formularza:</string>
-  <string name="save_mid">Zapisz Formularz</string>
+    <string name="save_mid">Zapisz Formularz</string>
   <string name="enter_new_password">Wprowadź nowe hasło</string>
   <string name="admin_password">Hasło Administratora</string>
   <string name="admin_password_changed">Hasło administratora zostało zmienione</string>
@@ -206,16 +200,10 @@
   <string name="admin_password_incorrect">Przykro mi, hasło jest niepoprawne!</string>
   <string name="enter_admin_password">Wprowadź Hasło Administratora</string>
   <string name="change_admin_password">Zmień Hasło Administratora</string>
-  <string name="found_in_menu">Odznacz aby ukryć z menu Wypełniania Formularza</string>
-  <string name="autosend">Wyślij Automatycznie</string>
-  <string name="autosend_wifi">Wyślij automatycznie przez Wi-Fi</string>
-  <string name="autosend_wifi_summary">Automatycznie wyślij gdy Wi-Fi jest dostępne</string>
-  <string name="autosend_network">Wyślij automatycznie przez sieć</string>
-  <string name="autosend_network_summary">Wyślij automatycznie gdy sieć jest dostępna</string>
-  <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
+    <string name="autosend">Wyślij Automatycznie</string>
+    <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
-  <string name="found_at_end">Odznacz aby ukryć na końcu Wypełniania Formularza</string>
-  <string name="no_account">Brak konta</string>
+    <string name="no_account">Brak konta</string>
   <string name="save_preferences">Zapisz Ustawienia na Dysk</string>
   <string name="form_forward">Następny</string>
   <string name="form_backward">Poprzedni</string>
@@ -265,8 +253,7 @@
   <string name="survey_saving_finalizing_message">Zakańczam na kartę SD…</string>
   <string name="survey_saving_encrypting_message">Szyfruję dane…</string>
   <string name="high_resolution_summary">Włącz nagrywanie wideo wysokiej rozdzielczości</string>
-  <string name="high_resolution">Włącz wideo wysokiej rozdzielczości</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
@@ -319,8 +306,7 @@
   <string name="hybrid">Hybryda</string>
   <string name="satellite">Satelita</string>
   <string name="map_basemap_selector_title">Mapy bazowe</string>
-  <string name="map_basemap_behavior">Wybierz mapę bazową</string>
-  <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
+    <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
   <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>

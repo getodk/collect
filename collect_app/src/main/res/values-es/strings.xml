@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
@@ -19,8 +19,7 @@
   <string name="capture_video">Grabar el Video</string>
   <string name="change_language">Cambiar el Idioma</string>
   <string name="change_password">Contraseña</string>
-  <string name="change_protocol_settings_default">Configuración de Plataforma.</string>
-  <string name="change_username">Nombre de Usuario ODK</string>
+    <string name="change_username">Nombre de Usuario ODK</string>
   <string name="clearanswer_confirm">¿Borrar la respuesta a \"%s\"?</string>
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
@@ -123,8 +122,7 @@
   <string name="view_hierarchy">Ir a la Pregunta</string>
   <string name="general_preferences">Cambiar la configuración</string>
   <string name="client">Interfaz de usuario</string>
-  <string name="show_splash">Mostar la pantalla inicial</string>
-  <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
+    <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
   <string name="splash_path">Seleccione la Imagen para la pantalla inicial</string>
   <string name="default_splash_path">Predeterminado por ODK</string>
   <string name="select_another_image">Seleccione otra imagen</string>
@@ -133,8 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
-  <string name="protocol">Protocolo</string>
-  <string name="change_protocol">Protocolo</string>
+    <string name="change_protocol">Protocolo</string>
   <string name="change_submission_url">Ubicación a donde enviar (se añade a la URL del Servidor)</string>
   <string name="formlist_url">La ubicación de la lista de formularios</string>
   <string name="submission_url">Ubicación de Envio</string>
@@ -195,13 +192,9 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Seleccionar Color</string>
   <string name="select_drawing_color">Seleccionar Color</string>
-  <string name="user_access_main_menu">Opciones de Usuario en Menú Principal:</string>
-  <string name="user_access_preferences">Opciones de Usuario en Configuración:</string>
-  <string name="change_server">Server Protocol y URL</string>
-  <string name="admin_preferences">Opciones de administrador</string>
+    <string name="admin_preferences">Opciones de administrador</string>
   <string name="admin_access_settings">Pulsa para entrar en Configuración</string>
-  <string name="user_access_form_entry">Opciones de usuario en gestión de Formularios:</string>
-  <string name="save_mid">Guardar sin completar el formulario</string>
+    <string name="save_mid">Guardar sin completar el formulario</string>
   <string name="enter_new_password">Entrar nueva contraseña</string>
   <string name="admin_password">Contraseña de Administrador</string>
   <string name="admin_password_changed">Contraseña Administrador cambiada correctamente</string>
@@ -209,16 +202,10 @@
   <string name="admin_password_incorrect">¡Contraseña incorrecta!</string>
   <string name="enter_admin_password">Entrar contraseña de Administrador</string>
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
-  <string name="found_in_menu">Desmarque para ocultar del Menú en la Entrada de datos</string>
-  <string name="autosend">Auto Envío</string>
-  <string name="autosend_wifi">Auto envío con Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto envío cuando Wi-Fi está disponible</string>
-  <string name="autosend_network">Auto envío con red</string>
-  <string name="autosend_network_summary">Auto envío cuando la red está disponible</string>
-  <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
+    <string name="autosend">Auto Envío</string>
+    <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
-  <string name="found_at_end">Desmarque para esconder al final del formulario</string>
-  <string name="no_account">Sin cuenta</string>
+    <string name="no_account">Sin cuenta</string>
   <string name="save_preferences">Guardar configuración en disco</string>
   <string name="form_forward">Sig.</string>
   <string name="form_backward">Ant.</string>
@@ -268,8 +255,7 @@
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
   <string name="survey_saving_encrypting_message">Encriptando datos…</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
-  <string name="high_resolution">Activa vídeo HD</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mi Drive</string>
   <string name="go_shared">Compartido conmigo</string>
@@ -323,8 +309,7 @@
   <string name="hybrid">Híbrido</string>
   <string name="satellite">Satélite</string>
   <string name="map_basemap_selector_title">Mapa Base</string>
-  <string name="map_basemap_behavior">Seleccione un mapa base</string>
-  <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
+    <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
   <string name="save_point">Guardar PuntoGeo</string>
   <string name="get_point">Iniciar PuntoGeo</string>
   <string name="geopoint_view_read_only">Ver PuntoGeo</string>

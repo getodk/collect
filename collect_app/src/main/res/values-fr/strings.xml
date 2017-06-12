@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Afficher le mot de passe</string>
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="add_another">Ajouter un groupe</string>
@@ -19,8 +19,7 @@
   <string name="capture_video">Enregistrer une vidéo</string>
   <string name="change_language">Changer la langue</string>
   <string name="change_password">Mot de passe ODK</string>
-  <string name="change_protocol_settings_default">Paramètres de la plate-forme</string>
-  <string name="change_username">Nom d\'utilisateur ODK</string>
+    <string name="change_username">Nom d\'utilisateur ODK</string>
   <string name="clearanswer_confirm">Enlever la réponse à \"%s\" ?</string>
   <string name="clear_answer">Enlever la réponse</string>
   <string name="clear_answer_ask">Enlever cette réponse ?</string>
@@ -123,8 +122,7 @@
   <string name="view_hierarchy">Aller à la ligne de saisie</string>
   <string name="general_preferences">Modifier les Paramètres</string>
   <string name="client">Client</string>
-  <string name="show_splash">Afficher l\'écran de Bienvenue</string>
-  <string name="show_splash_summary">Montrer lors du démarrage</string>
+    <string name="show_splash_summary">Montrer lors du démarrage</string>
   <string name="splash_path">Image sélectionnée</string>
   <string name="default_splash_path">Défaut d\'ODK</string>
   <string name="select_another_image">Sélectionner une autre Image</string>
@@ -133,8 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Sauvegarder les Modifications</string>
   <string name="change_formlist_url">Chemin de la liste de formulaires (ajouté à l\'URL du serveur)</string>
-  <string name="protocol">Protocole</string>
-  <string name="change_protocol">Protocole</string>
+    <string name="change_protocol">Protocole</string>
   <string name="change_submission_url">Chemin d\'enregistrement (ajouté à l\'URL du serveur)</string>
   <string name="formlist_url">Chemin de la liste de formulaires</string>
   <string name="submission_url">Chemin d\'enregistrement</string>
@@ -196,13 +193,9 @@
   <string name="reset_image">Remise à zéro</string>
   <string name="set_color">Sélectionner la couleur</string>
   <string name="select_drawing_color">Sélectionner la couleur d\'écriture</string>
-  <string name="user_access_main_menu">L\'utilisateur peut accéder aux éléments du menu principal :</string>
-  <string name="user_access_preferences">L\'utilisateur peut accéder aux items de la modification de paramètres :</string>
-  <string name="change_server">Protocole du serveur et URL</string>
-  <string name="admin_preferences">Paramètres administrateur</string>
+    <string name="admin_preferences">Paramètres administrateur</string>
   <string name="admin_access_settings">Touchez pour obtenir l\'accès administrateur aux paramètres</string>
-  <string name="user_access_form_entry">L\'utilisateur peut accéder aux éléments du formulaire :</string>
-  <string name="save_mid">Sauvegarder le formulaire</string>
+    <string name="save_mid">Sauvegarder le formulaire</string>
   <string name="enter_new_password">Saisissez un nouveau mot de passe</string>
   <string name="admin_password">Mot de passe de l\'administrateur</string>
   <string name="admin_password_changed">Mot de passe administrateur modifié avec succès</string>
@@ -210,16 +203,10 @@
   <string name="admin_password_incorrect">Désolé, le mot de passe n\'est pas correct !</string>
   <string name="enter_admin_password">Saisissez le mot de passe administrateur</string>
   <string name="change_admin_password">Modifier le mot de passe de l\'administrateur</string>
-  <string name="found_in_menu">Décocher afin de le cacher du menu du formulaire</string>
-  <string name="autosend">Envoi Automatique</string>
-  <string name="autosend_wifi">Envoi automatique par Wi-Fi</string>
-  <string name="autosend_wifi_summary">Envoie automatique lorsque le Wi-Fi est disponible</string>
-  <string name="autosend_network">Envoi automatique par réseau</string>
-  <string name="autosend_network_summary">Envoi automatique lorsque le réseau est disponible</string>
-  <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
+    <string name="autosend">Envoi Automatique</string>
+    <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
-  <string name="found_at_end">Décochez pour le cacher à la fin du formulaire</string>
-  <string name="no_account">Pas de compte</string>
+    <string name="no_account">Pas de compte</string>
   <string name="save_preferences">Enregistrer les paramètres sur le disque</string>
   <string name="form_forward">Suiv.</string>
   <string name="form_backward">Préc.</string>
@@ -269,8 +256,7 @@
   <string name="survey_saving_finalizing_message">Finalisation de la carte SD…</string>
   <string name="survey_saving_encrypting_message">Chiffrement des données…</string>
   <string name="high_resolution_summary">Activer l\'option vidéos en haute résolution</string>
-  <string name="high_resolution">Activer l\'option vidéo HD</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mon Drive</string>
   <string name="go_shared">Partagé avec moi</string>
@@ -327,8 +313,7 @@
   <string name="hybrid">Hybride</string>
   <string name="satellite">Satellite</string>
   <string name="map_basemap_selector_title">Fonds de carte</string>
-  <string name="map_basemap_behavior">Sélectionner un fond de carte</string>
-  <string name="show_map_basemap">Voir les options du fond de carte</string>
+    <string name="show_map_basemap">Voir les options du fond de carte</string>
   <string name="save_point">Enregistrer le PointGéo</string>
   <string name="get_point">Démarrer le PointGéo</string>
   <string name="geopoint_view_read_only">Voir le PointGéo</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>
   <string name="add_another">Adăugați grup</string>
   <string name="add_another_repeat">Adăugați încă un grup \"%s\"?</string>
@@ -116,8 +116,7 @@
   <string name="view_hierarchy">Mergeți către promt</string>
   <string name="general_preferences">Modificați setările</string>
   <string name="client">Interfață utilizator</string>
-  <string name="show_splash">Afișați ecranul de început</string>
-  <string name="show_splash_summary">Afișat la startul aplicației</string>
+    <string name="show_splash_summary">Afișat la startul aplicației</string>
   <string name="splash_path">Pagină de start selectată</string>
   <string name="default_splash_path">ODK Implicit</string>
   <string name="select_another_image">Selectați altă imagine</string>
@@ -126,8 +125,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salvați modificările</string>
   <string name="change_formlist_url">Calea către lista formularelor (adăugată adresei URL a serverului)</string>
-  <string name="protocol">Platformă</string>
-  <string name="change_protocol">Platformă server</string>
+    <string name="change_protocol">Platformă server</string>
   <string name="change_submission_url">Calea transmiterii (adăugată adresei URL a serverului)</string>
   <string name="formlist_url">Calea către lista formularelor</string>
   <string name="submission_url">Calea către transmitere</string>
@@ -187,13 +185,9 @@
   <string name="reset_image">Resetați</string>
   <string name="set_color">Setați culoarea</string>
   <string name="select_drawing_color">Selectați culoarea pentru desen</string>
-  <string name="user_access_main_menu">Utilizatorul poate accesa itemii Meniului principal:</string>
-  <string name="user_access_preferences">Utilizatorul poate accesa itemii din Modificarea setărilor:</string>
-  <string name="change_server">Protocolul serverului și adresa URL</string>
-  <string name="admin_preferences">Setări administrator</string>
+    <string name="admin_preferences">Setări administrator</string>
   <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
-  <string name="user_access_form_entry">Utilizatorul poate accesa itemii din formular:</string>
-  <string name="save_mid">Salvați formularul</string>
+    <string name="save_mid">Salvați formularul</string>
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="admin_password">Parola administratorului</string>
   <string name="admin_password_changed">Parola de administrator a fost schimbată cu succes</string>
@@ -201,16 +195,10 @@
   <string name="admin_password_incorrect">Ne pare rău, parola este incorectă!</string>
   <string name="enter_admin_password">Introduceți parola de administrator</string>
   <string name="change_admin_password">Schimbați parola administratorului</string>
-  <string name="found_in_menu">Deselectați pentru a ascunde din meniu în completarea formularului</string>
-  <string name="autosend">Auto-trimitere</string>
-  <string name="autosend_wifi">Auto-trimitere prin Wi-Fi</string>
-  <string name="autosend_wifi_summary">Auto-trimitere când o rețea Wi-Fi este disponibilă</string>
-  <string name="autosend_network">Auto-trimitere cu rețea de date mobilă</string>
-  <string name="autosend_network_summary">Auto-trimitere când o rețea de date mobilă este disponibilă</string>
-  <string name="found_in_main">Deselectați pentru a ascunde din Meniul principal</string>
+    <string name="autosend">Auto-trimitere</string>
+    <string name="found_in_main">Deselectați pentru a ascunde din Meniul principal</string>
   <string name="found_in_settings">Deselectați pentru a ascunde din Setări generale</string>
-  <string name="found_at_end">Deselectați pentru a ascunde din finalul formularului</string>
-  <string name="no_account">Niciun cont</string>
+    <string name="no_account">Niciun cont</string>
   <string name="save_preferences">Salvați setările pe disk</string>
   <string name="form_forward">Următor</string>
   <string name="form_backward">Anterior</string>
@@ -260,8 +248,7 @@
   <string name="survey_saving_finalizing_message">Fizalizez pe SD card…</string>
   <string name="survey_saving_encrypting_message">Criptez datele…</string>
   <string name="high_resolution_summary">Activați înregistrările video high-resolution</string>
-  <string name="high_resolution">Activați video hi-res</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Discul meu</string>
   <string name="go_shared">Partajate cu mine</string>
@@ -305,8 +292,7 @@
   <string name="hybrid">Hibrid</string>
   <string name="satellite">Satelit</string>
   <string name="map_basemap_selector_title">Hărți de bază</string>
-  <string name="map_basemap_behavior">Selectați o hartă de bază</string>
-  <string name="show_map_basemap">Afișați opțiunile hărții de bază</string>
+    <string name="show_map_basemap">Afișați opțiunile hărții de bază</string>
   <string name="save_point">Salvați GeoPoint</string>
   <string name="get_point">Start GeoPoint</string>
   <string name="get_shape">Start GeoShape</string>

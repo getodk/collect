@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">არ არსებობს განსახილველი ფუნქცია: %s</string>
   <string name="add_another">ჯგუფის დამატება</string>
   <string name="add_another_repeat">დავამატოთ \"%s\"-ის ახალი ჯგუფი?</string>
@@ -116,8 +116,7 @@
   <string name="view_hierarchy">მოთხოვნაზე გადასვლა</string>
   <string name="general_preferences">შეცვლა</string>
   <string name="client">მომხმარებლის გრაფიკული ინტერფეისი</string>
-  <string name="show_splash">სპლეშ-ეკრანის ჩვენება</string>
-  <string name="show_splash_summary">აჩვენებს, როდესაც ირთვება აპლიკაცია</string>
+    <string name="show_splash_summary">აჩვენებს, როდესაც ირთვება აპლიკაცია</string>
   <string name="splash_path">არჩეული სპლეშ-სურათი</string>
   <string name="default_splash_path">ODK დეფოლტი</string>
   <string name="select_another_image">სხვა სურათების არჩევა</string>
@@ -126,8 +125,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ცვლილებების შენახვა</string>
   <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>
-  <string name="protocol">სერვერის პლატფორმა</string>
-  <string name="change_protocol">სერვერის პლატფორმა</string>
+    <string name="change_protocol">სერვერის პლატფორმა</string>
   <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
   <string name="formlist_url">ბმული ფორმების ჩამონათვალზე</string>
   <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
@@ -187,13 +185,9 @@
   <string name="reset_image">გადატვირთვა</string>
   <string name="set_color">ფერის დაყენება</string>
   <string name="select_drawing_color">სახატავი ფერის არჩევა</string>
-  <string name="user_access_main_menu">მომხმარებლისთვის ხელმისაწვდომია მთავარი მენიუს შემდეგი ელემენტები:</string>
-  <string name="user_access_preferences">მომხმარებლისთვის ხელმისაწვდომია პარამეტრების ცვლილების შემდეგი ელემენტები:</string>
-  <string name="change_server">სერვერის პროტოკოლი და ბმული</string>
-  <string name="admin_preferences">ადმინისტრატორის პაროლი</string>
+    <string name="admin_preferences">ადმინისტრატორის პაროლი</string>
   <string name="admin_access_settings">დააჭირეთ პარამეტრებისადმი ადმინისტრატორის სახელით შესვლისთვის</string>
-  <string name="user_access_form_entry">მომხმარებლისთვის ხელმისაწვდომია ფორმის შემდეგი ელემენტები:</string>
-  <string name="save_mid">ნაწილობრივ შენახვა</string>
+    <string name="save_mid">ნაწილობრივ შენახვა</string>
   <string name="enter_new_password">შეიყვანეთ ახალი პაროლი</string>
   <string name="admin_password">ადმინისტრატორის პაროლი</string>
   <string name="admin_password_changed">ადმინისტრატორის პაროლი წარმატებით შეიცვალა</string>
@@ -201,16 +195,10 @@
   <string name="admin_password_incorrect">უკაცრავად, პაროლი არასწორია!</string>
   <string name="enter_admin_password">შეიყვანეთ ადმინისტრატორის პაროლი</string>
   <string name="change_admin_password">ადმინისტრატორის პაროლის შეცვლა</string>
-  <string name="found_in_menu">ნაპოვნია ფორმაში მენიუს ღილაკის გამოყენებით</string>
-  <string name="autosend">ავტომატური გაგზავნა</string>
-  <string name="autosend_wifi">ავტომატური გაგზავნა Wi-Fi-ს მეშვეობით</string>
-  <string name="autosend_wifi_summary">გაიგზავნოს ავტომატურად მაშინ, როდესაც Wi-Fi ხელმისაწვდომია</string>
-  <string name="autosend_network">ავტომატური გაგზავნა ქსელის მეშვეობით</string>
-  <string name="autosend_network_summary">გაიგზავნოს ავტომატურად მაშინ, როდესაც ქსელი ხელმისაწვდომია</string>
-  <string name="found_in_main">გამორთეთ მთავარი მენიუდან დასამალად</string>
+    <string name="autosend">ავტომატური გაგზავნა</string>
+    <string name="found_in_main">გამორთეთ მთავარი მენიუდან დასამალად</string>
   <string name="found_in_settings">გამორთეთ ძირითადი პარამეტრებიდან დასამალად</string>
-  <string name="found_at_end">გამორთეთ ფორმის დასასრულიდან დასამალად</string>
-  <string name="no_account">ექაუნთი არ არსებობს</string>
+    <string name="no_account">ექაუნთი არ არსებობს</string>
   <string name="save_preferences">პარამეტრების დისკზე შენახვა</string>
   <string name="form_forward">შემდეგი</string>
   <string name="form_backward">წინა</string>
@@ -233,8 +221,7 @@
   <string name="survey_saving_validating_message">მიმდინარეობს პასუხების შემოწმება</string>
   <string name="survey_saving_collecting_message">მიმდინარეობს მონაცემთა შეგროვება</string>
   <string name="survey_saving_saving_message">მიმდინარეობს SD-ბარათზე შენახვა</string>
-  <string name="high_resolution">მაღალი რეზოლუციის ვიდეოს დაშვება</string>
-  <string name="google_drive">Google Drive</string>
+    <string name="google_drive">Google Drive</string>
   <string name="go_drive">ჩემი Drive</string>
   <string name="aggregate_preferences">ODK Aggregate-ის პარამეტრები</string>
   <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
