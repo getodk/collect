@@ -64,12 +64,6 @@ public class DrawActivity extends AppCompatActivity {
     // restore
 
     private FloatingActionButton fabActions;
-    private FloatingActionButton fabSetColor;
-    private CardView cardViewSetColor;
-    private FloatingActionButton fabSaveAndClose;
-    private CardView cardViewSaveAndClose;
-    private FloatingActionButton fabClear;
-    private CardView cardViewClear;
 
     // incoming options...
     private String loadOption = null;
@@ -103,12 +97,12 @@ public class DrawActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         fabActions = (FloatingActionButton) findViewById(R.id.fab_actions);
-        fabSetColor = (FloatingActionButton) findViewById(R.id.fab_set_color);
-        cardViewSetColor = (CardView) findViewById(R.id.cv_set_color);
-        fabSaveAndClose = (FloatingActionButton) findViewById(R.id.fab_save_and_close);
-        cardViewSaveAndClose = (CardView) findViewById(R.id.cv_save_and_close);
-        fabClear = (FloatingActionButton) findViewById(R.id.fab_clear);
-        cardViewClear = (CardView) findViewById(R.id.cv_clear);
+        final FloatingActionButton fabSetColor = (FloatingActionButton) findViewById(R.id.fab_set_color);
+        final CardView cardViewSetColor = (CardView) findViewById(R.id.cv_set_color);
+        final FloatingActionButton fabSaveAndClose = (FloatingActionButton) findViewById(R.id.fab_save_and_close);
+        final CardView cardViewSaveAndClose = (CardView) findViewById(R.id.cv_save_and_close);
+        final FloatingActionButton fabClear = (FloatingActionButton) findViewById(R.id.fab_clear);
+        final CardView cardViewClear = (CardView) findViewById(R.id.cv_clear);
 
         fabActions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,12 +124,12 @@ public class DrawActivity extends AppCompatActivity {
                     fabActions.animate().rotation(0).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    AnimateUtils.scaleOutAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleOutAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleOutAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleOutAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleOutAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
-                    AnimateUtils.scaleOutAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                    fabSetColor.setVisibility(View.INVISIBLE);
+                    cardViewSetColor.setVisibility(View.INVISIBLE);
+                    fabSaveAndClose.setVisibility(View.INVISIBLE);
+                    cardViewSaveAndClose.setVisibility(View.INVISIBLE);
+                    fabClear.setVisibility(View.INVISIBLE);
+                    cardViewClear.setVisibility(View.INVISIBLE);
                 }
                 view.setTag(status);
             }
@@ -371,7 +365,7 @@ public class DrawActivity extends AppCompatActivity {
         }
     }
 
-    public void saveAndClose(View view) {
+    public void close(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
             saveAndClose();

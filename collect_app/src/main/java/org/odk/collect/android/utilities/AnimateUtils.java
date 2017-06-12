@@ -34,30 +34,4 @@ public class AnimateUtils {
         });
         view.startAnimation(scaleInAnimation);
     }
-
-    public static void scaleOutAnimation(final View view, int startOffset, int duration,
-                                         Interpolator interpolator, final boolean invisibleAtEnd) {
-        ScaleAnimation scaleInAnimation = new ScaleAnimation(1f, 0f, 1f, 0f, Animation.RELATIVE_TO_SELF,
-                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleInAnimation.setInterpolator(interpolator);
-        scaleInAnimation.setDuration(duration);
-        scaleInAnimation.setStartOffset(startOffset);
-        scaleInAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (invisibleAtEnd) {
-                    view.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        view.startAnimation(scaleInAnimation);
-    }
 }
