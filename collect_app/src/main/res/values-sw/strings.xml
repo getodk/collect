@@ -84,8 +84,7 @@
   <string name="parse_legacy_formlist_failed">Seva haijatoa fomu inapatikana-hati sambamba na Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Seva haijatoa fomu inapatikana-hati sambamba na OpenRosa version 1.0 standard: %s</string>
   <string name="password">Neno siri</string>
-  <string name="play_audio">Toa Sauti</string>
-  <string name="play_video">Onyesha Video</string>
+    <string name="play_video">Onyesha Video</string>
   <string name="please_wait">Tafadhali ngoja kudogo.</string>
   <string name="please_wait_long">Tafadhali ngoja. Hii itachukua dakika chache.</string>
   <string name="quit_application">Ondoka %s</string>
