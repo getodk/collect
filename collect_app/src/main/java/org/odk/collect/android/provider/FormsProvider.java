@@ -48,7 +48,7 @@ public class FormsProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -94,7 +94,9 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.LANGUAGE + " text, "
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                    + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null, "
+                    + FormsColumns.AUTO_DELETE + " text, "
+                    + FormsColumns.AUTO_SUBMIT + " text);");
         }
 
         @Override
@@ -105,7 +107,7 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
                 onCreate(db);
                 return;
-            } else {
+            } else if (oldVersion < 4) {
                 // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
                 // integer MODEL_VERSION to text VERSION
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
@@ -226,6 +228,12 @@ public class FormsProvider extends ContentProvider {
 
                 Timber.w("Successfully upgraded database from version %d to %d"
                         + ", without destroying all the old data", oldVersion, newVersion);
+            } else {
+                db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
+                        + FormsColumns.AUTO_DELETE + " text;");
+
+                db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
+                        + FormsColumns.AUTO_SUBMIT + " text;");
             }
         }
     }
@@ -720,6 +728,8 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH,
                 FormsColumns.JRCACHE_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_SUBMIT, FormsColumns.AUTO_SUBMIT);
     }
 
 }
