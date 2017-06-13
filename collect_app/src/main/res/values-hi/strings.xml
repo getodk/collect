@@ -91,8 +91,7 @@
   <string name="parse_legacy_formlist_failed">वह सर्वर कुल मिलाकर संगत एक उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं करता है 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">सर्वर ने ओपेन रोसा संस्करण 1.0 मानक के साथ संगत एक उपलब्ध-फ़ॉर्म दस्तावेज़ प्रदान नहीं किया है: %s</string>
   <string name="password">पासवर्ड</string>
-  <string name="play_audio">ध्वनि बजाएँ </string>
-  <string name="play_video">वीडियो चलाएं</string>
+    <string name="play_video">वीडियो चलाएं</string>
   <string name="please_wait">कृपया कुछ क्षण प्रतीक्षा करें</string>
   <string name="please_wait_long">कृपया प्रतीक्षा करें। इसमें कुछ मिनट लग सकते हैं।</string>
   <string name="quit_application">निकास %s</string>
