@@ -87,8 +87,7 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="parse_legacy_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní s Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní se standartem OpenRosa 1.0: %s</string>
   <string name="password">Heslo</string>
-  <string name="play_audio">Přehrát zvuk</string>
-  <string name="play_video">Přehrát video</string>
+    <string name="play_video">Přehrát video</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
   <string name="please_wait_long">Prosím čekejte. Může to trvat několik minut.</string>
   <string name="quit_application">Konec %s</string>
