@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/recordBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_mic_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_mic_black_24dp"
+        android:text="@string/capture_audio" />
+
+    <Button
+        android:id="@+id/chooseBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_attach_file_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_attach_file_black_24dp"
+        android:text="@string/choose_sound" />
+
+    <include
+        layout="@layout/media_player_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
