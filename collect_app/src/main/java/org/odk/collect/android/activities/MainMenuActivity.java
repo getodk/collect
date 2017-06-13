@@ -51,6 +51,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -630,7 +631,10 @@ public class MainMenuActivity extends AppCompatActivity {
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
-            migrateAutosendPrefKeys(entries, prefEdit);
+            if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)
+                    || entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
+                AutoSendPreferenceMigrator.migrate(entries);
+            }
 
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
@@ -688,43 +692,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         }
         return res;
-    }
-
-    /**
-     * This method is to provide backward compatibility with v1.7.0 and below
-     * Autosend was originally set into separate wifi and cellular autosend settings
-     */
-    private void migrateAutosendPrefKeys(Map<String, ?> entries, Editor prefEdit) {
-        boolean autosendWifi = false;
-        boolean autosendNetwork = false;
-        String autosend = "";
-
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
-            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
-            if (value instanceof Boolean) {
-                autosendWifi = (boolean) value;
-                entries.remove(PreferenceKeys.KEY_AUTOSEND_WIFI);
-            }
-        }
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
-            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
-            if (value instanceof Boolean) {
-                autosendNetwork = (boolean) value;
-                entries.remove(PreferenceKeys.KEY_AUTOSEND_NETWORK);
-            }
-        }
-
-        if (autosendWifi && autosendNetwork) {
-            autosend = "wifi_and_cellular";
-        } else if (autosendWifi) {
-            autosend = "wifi_only";
-        } else if (autosendNetwork) {
-            autosend = "cellular_only";
-        } else {
-            autosend = "off";
-        }
-
-        prefEdit.putString(PreferenceKeys.KEY_AUTOSEND, autosend);
     }
 
     /*
