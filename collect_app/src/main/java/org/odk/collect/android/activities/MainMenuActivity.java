@@ -631,10 +631,7 @@ public class MainMenuActivity extends AppCompatActivity {
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
-            if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)
-                    || entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
-                AutoSendPreferenceMigrator.migrate(entries);
-            }
+            AutoSendPreferenceMigrator.migrate(entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();

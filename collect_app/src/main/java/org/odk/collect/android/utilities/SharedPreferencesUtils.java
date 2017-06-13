@@ -32,8 +32,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_NETWORK;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WIFI;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 
 
@@ -119,8 +117,8 @@ public class SharedPreferencesUtils {
             }
         }
 
-        checkQRCodeForRemovedSettings(generalPrefsJson);
         AuthDialogUtility.setWebCredentialsFromPreferences(context);
+        AutoSendPreferenceMigrator.migrate(generalPrefsJson);
 
         //settings import confirmation toast
         ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
