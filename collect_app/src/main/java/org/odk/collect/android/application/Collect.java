@@ -37,6 +37,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AutosendPreferenceMigrator;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -243,6 +244,7 @@ public class Collect extends Application {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
+        AutosendPreferenceMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         super.onCreate();
 
         PropertyManager mgr = new PropertyManager(this);

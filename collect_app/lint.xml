@@ -23,4 +23,8 @@
     <issue id="LogNotTimber" severity="error" />
     <issue id="StringFormatInTimber" severity="error" />
     <issue id="ApplySharedPref" severity="error" />
+    <issue id="UnusedResources" severity="error">
+        <ignore path="res/xml/analytics_tracker.xml" />
+        <ignore regexp="ga_trackingId|google_crash_reporting_api_key" />
+    </issue>
 </lint>

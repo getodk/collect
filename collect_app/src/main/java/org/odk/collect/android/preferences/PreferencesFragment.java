@@ -7,11 +7,8 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.text.InputFilter;
-import android.text.Spanned;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 
@@ -21,43 +18,39 @@ import org.odk.collect.android.utilities.LocaleHelper;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORM_METADATA;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL_SETTINGS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
 
-public class PreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
-    public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
+public class PreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        final boolean adminMode = getActivity().getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
         removeAllDisabledPrefs();
 
-        initProtocolPrefs(adminMode);
+        initPlatformSettings();
         initFormMetadata();
         initNavigationPrefs();
         initConstraintBehaviorPref();
@@ -66,8 +59,49 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
+        initAutoSendPrefs();
     }
 
+    private void initPlatformSettings() {
+        final Preference protocol = findPreference(KEY_PROTOCOL);
+
+        if (protocol == null) {
+            return;
+        }
+
+        protocol.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                getFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .replace(android.R.id.content, new ServerPreferences())
+                        .commit();
+
+                return true;
+            }
+        });
+    }
+
+    private void initAutoSendPrefs() {
+        final ListPreference autosend = (ListPreference) findPreference(KEY_AUTOSEND);
+
+        if (autosend == null) {
+            return;
+        }
+
+        autosend.setSummary(autosend.getEntry());
+        autosend.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            }
+        });
+    }
 
     @Override
     public void onResume() {
@@ -77,32 +111,31 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         // has to go in onResume because it may get updated by
         // a sub-preference screen
         // this just keeps the widgets in sync
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        GeneralSharedPreferences sp = GeneralSharedPreferences.getInstance();
 
         ListPreference googleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
         if (googleAccountPreference != null) {
-            String account = sp.getString(KEY_SELECTED_GOOGLE_ACCOUNT, "");
+            String account = (String) sp.get(KEY_SELECTED_GOOGLE_ACCOUNT);
             googleAccountPreference.setSummary(account);
             googleAccountPreference.setValue(account);
         }
 
         final EditTextPreference usernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
         if (usernamePreference != null) {
-            String user = sp.getString(KEY_USERNAME, "");
+            String user = (String) sp.get(KEY_USERNAME);
             usernamePreference.setSummary(user);
             usernamePreference.setText(user);
         }
 
         final EditTextPreference passwordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
         if (passwordPreference != null) {
-            String pw = sp.getString(KEY_PASSWORD, "");
+            String pw = (String) sp.get(KEY_PASSWORD);
             if (pw.length() > 0) {
                 passwordPreference.setSummary("********");
                 passwordPreference.setText(pw);
             }
         }
     }
-
 
     private void removeAllDisabledPrefs() {
         DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
@@ -290,38 +323,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
         }
     }
 
-    private void initProtocolPrefs(final boolean adminMode) {
-        final ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
-        final Preference settingsPref = findPreference(KEY_PROTOCOL_SETTINGS);
-
-        if (protocolPref == null || settingsPref == null) {
-            return;
-        }
-
-        protocolPref.setSummary(protocolPref.getEntry());
-        setProtocolIntent(adminMode, protocolPref.getValue(), settingsPref);
-
-        protocolPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                ListPreference lpref = (ListPreference) preference;
-                String oldValue = lpref.getValue();
-                int index = lpref.findIndexOfValue(newValue.toString());
-                preference.setSummary(lpref.getEntries()[index]);
-
-                Intent prefIntent = setProtocolIntent(adminMode,
-                        lpref.getEntryValues()[index], settingsPref);
-
-                if (!newValue.equals(oldValue)) {
-                    startActivity(prefIntent);
-                }
-
-                return true;
-            }
-        });
-    }
-
     private void initFormMetadata() {
         final Preference pref = findPreference(KEY_FORM_METADATA);
 
@@ -330,51 +331,6 @@ public class PreferencesFragment extends PreferenceFragment implements Preferenc
             pref.setIntent(intent);
         }
     }
-
-    private Intent setProtocolIntent(boolean adminMode, CharSequence value,
-                                     Preference protocolSettings) {
-        final Intent prefIntent;
-
-        if (value.equals(getString(R.string.protocol_odk_default))) {
-            setDefaultAggregatePaths();
-            prefIntent = new Intent(getActivity(), AggregatePreferencesActivity.class);
-        } else if (value.equals(getString(R.string.protocol_google_sheets))) {
-            prefIntent = new Intent(getActivity(), GooglePreferencesActivity.class);
-        } else {
-            // other
-            prefIntent = new Intent(getActivity(), OtherPreferencesActivity.class);
-        }
-        prefIntent.putExtra(INTENT_KEY_ADMIN_MODE, adminMode);
-        protocolSettings.setIntent(prefIntent);
-        return prefIntent;
-    }
-
-    private void setDefaultAggregatePaths() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(KEY_FORMLIST_URL, getString(R.string.default_odk_formlist));
-        editor.putString(KEY_SUBMISSION_URL, getString(R.string.default_odk_submission));
-        editor.apply();
-    }
-
-
-    /**
-     * Disallows carriage returns from user entry
-     */
-    protected InputFilter getReturnFilter() {
-        return new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
-                                       int dstart, int dend) {
-                for (int i = start; i < end; i++) {
-                    if (Character.getType((source.charAt(i))) == Character.CONTROL) {
-                        return "";
-                    }
-                }
-                return null;
-            }
-        };
-    }
-
 
     /**
      * Generic listener that sets the summary to the newly selected/entered value

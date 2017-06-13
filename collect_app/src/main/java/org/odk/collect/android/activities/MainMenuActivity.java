@@ -685,18 +685,21 @@ public class MainMenuActivity extends AppCompatActivity {
             prefEdit.clear();
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
+
+            migrateAutosendPrefKeys(entries, prefEdit);
+
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    prefEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, ((Float) v).floatValue());
+                    prefEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, ((Integer) v).intValue());
+                    prefEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    prefEdit.putLong(key, ((Long) v).longValue());
+                    prefEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     prefEdit.putString(key, ((String) v));
                 }
@@ -714,13 +717,13 @@ public class MainMenuActivity extends AppCompatActivity {
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    adminEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, ((Float) v).floatValue());
+                    adminEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, ((Integer) v).intValue());
+                    adminEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    adminEdit.putLong(key, ((Long) v).longValue());
+                    adminEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     adminEdit.putString(key, ((String) v));
                 }
@@ -740,6 +743,43 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         }
         return res;
+    }
+
+    /**
+     * This method is to provide backward compatibility with v1.7.0 and below
+     * Autosend was originally set into separate wifi and cellular autosend settings
+     */
+    private void migrateAutosendPrefKeys(Map<String, ?> entries, Editor prefEdit) {
+        boolean autosendWifi = false;
+        boolean autosendNetwork = false;
+        String autosend = "";
+
+        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
+            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
+            if (value instanceof Boolean) {
+                autosendWifi = (boolean) value;
+                entries.remove(PreferenceKeys.KEY_AUTOSEND_WIFI);
+            }
+        }
+        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
+            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+            if (value instanceof Boolean) {
+                autosendNetwork = (boolean) value;
+                entries.remove(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+            }
+        }
+
+        if (autosendWifi && autosendNetwork) {
+            autosend = "wifi_and_cellular";
+        } else if (autosendWifi) {
+            autosend = "wifi_only";
+        } else if (autosendNetwork) {
+            autosend = "cellular_only";
+        } else {
+            autosend = "off";
+        }
+
+        prefEdit.putString(PreferenceKeys.KEY_AUTOSEND, autosend);
     }
 
     /*

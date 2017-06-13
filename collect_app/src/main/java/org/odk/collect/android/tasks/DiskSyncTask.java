@@ -46,26 +46,21 @@ import timber.log.Timber;
 public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
     private static int counter = 0;
-
-    int instance;
-
-    DiskSyncListener listener;
-
-    String statusMessage;
-
+    private DiskSyncListener listener;
+    private String statusMessage;
     private FormsDao formsDao;
 
     @Override
     protected String doInBackground(Void... params) {
         formsDao = new FormsDao();
-        instance = ++counter; // roughly track the scan # we're on... logging use only
+        int instance = ++counter;
         Timber.i("[%d] doInBackground begins!", instance);
 
         List<String> idsToDelete = new ArrayList<>();
 
         try {
             // Process everything then report what didn't work.
-            StringBuffer errors = new StringBuffer();
+            StringBuilder errors = new StringBuilder();
 
             File formDir = new File(Collect.FORMS_PATH);
             if (formDir.exists() && formDir.isDirectory()) {
@@ -252,7 +247,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
      * @return key-value list to update or insert into the content provider
      * @throws IllegalArgumentException if the file failed to parse or was missing fields
      */
-    public ContentValues buildContentValues(File formDefFile) throws IllegalArgumentException {
+    private ContentValues buildContentValues(File formDefFile) throws IllegalArgumentException {
         // Probably someone overwrite the file on the sdcard
         // So re-parse it and update it's information
         ContentValues updateValues = new ContentValues();
@@ -265,7 +260,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
         }
 
         // update date
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
         updateValues.put(FormsColumns.DATE, now);
 
         String title = fields.get(FileUtils.TITLE);
