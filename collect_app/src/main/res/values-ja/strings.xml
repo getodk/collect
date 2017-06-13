@@ -91,8 +91,7 @@
   <string name="parse_legacy_formlist_failed">サーバが Aggregate 0.9.x と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="parse_openrosa_formlist_failed">サーバが OpenRosa バージョン 1.0 規格と互換性のある利用可能なフォームの文書を提供していません : %s</string>
   <string name="password">パスワード</string>
-  <string name="play_audio">サウンドを再生</string>
-  <string name="play_video">ビデオを再生</string>
+    <string name="play_video">ビデオを再生</string>
   <string name="please_wait">しばらくお待ちください。</string>
   <string name="please_wait_long">しばらくお待ちください。数分間かかることがあります。</string>
   <string name="quit_application">%s を終了</string>

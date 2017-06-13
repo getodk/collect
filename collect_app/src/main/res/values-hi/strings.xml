@@ -63,8 +63,7 @@
   <string name="no_items_display_sent_forms">प्रदर्शित करने के लिए कुछ भी उपलब्ध नहीं है। \n\nदेखने से पहले अंतिम फ़ॉर्म भेजने का प्रयास करें।</string>
   <string name="ok">ठीक</string>
   <string name="password">पासवर्ड</string>
-  <string name="play_audio">ध्वनि बजाएँ </string>
-  <string name="play_video">वीडियो चलाएं</string>
+    <string name="play_video">वीडियो चलाएं</string>
   <string name="please_wait">कृपया कुछ क्षण प्रतीक्षा करें</string>
   <string name="please_wait_long">कृपया प्रतीक्षा करें। इसमें कुछ मिनट लग सकते हैं।</string>
   <string name="quit_application">निकास %s</string>
