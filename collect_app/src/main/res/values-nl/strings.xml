@@ -85,8 +85,7 @@
   <string name="parse_legacy_formlist_failed">The server has not provided an available-forms document compatible with Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">The server has not provided an available-forms document compatible with the OpenRosa version 1.0 standard: %s</string>
   <string name="password">Wachtwoord</string>
-  <string name="play_audio">Bekijk audio</string>
-  <string name="play_video">Bekijk video</string>
+    <string name="play_video">Bekijk video</string>
   <string name="please_wait">Een moment geduld alstublieft.</string>
   <string name="please_wait_long">Geduld, dit kan enkele minuten duren.</string>
   <string name="quit_application">Sluit %s af</string>

@@ -89,8 +89,7 @@
   <string name="parse_legacy_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: Aggregate 0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Serveril puudub informatsioon vormide kohta, mis ühilduks versiooniga: OpenRosa version 1.0 standard: %s</string>
   <string name="password">Salasõna</string>
-  <string name="play_audio">Mängi heli</string>
-  <string name="play_video">Mängi videot</string>
+    <string name="play_video">Mängi videot</string>
   <string name="please_wait">Palun oodake.</string>
   <string name="please_wait_long">Palun oodake. See võib võtta mõne minuti.</string>
   <string name="quit_application">Välju %s</string>
