@@ -19,15 +19,13 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -53,12 +51,12 @@ import timber.log.Timber;
 
 public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
+    AudioController mediaController;
     private Button captureButton;
-    private Button playButton;
     private Button chooseButton;
-
     private String binaryName;
     private String instanceFolder;
+    private RelativeLayout mediaPlayerLayout;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -66,18 +64,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+        mediaController = new AudioController(context, player);
+
+        initLayout(context);
 
         // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_audio));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
 
         // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
@@ -112,13 +105,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup capture button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_sound));
         chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
 
         // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
@@ -147,55 +135,14 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup play button
-        playButton = new Button(getContext());
-        playButton.setId(QuestionWidget.newUniqueId());
-        playButton.setText(getContext().getString(R.string.play_audio));
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        playButton.setPadding(20, 20, 20, 20);
-        playButton.setLayoutParams(params);
-
-        // on play, launch the appropriate viewer
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "playButton", "click",
-                                formEntryPrompt.getIndex());
-                Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(instanceFolder + File.separator
-                        + binaryName);
-                i.setDataAndType(Uri.fromFile(f), "audio/*");
-                try {
-                    getContext().startActivity(i);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "play audio"), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
-            playButton.setEnabled(true);
-            playButton.setTextColor(Color.BLACK);
+            mediaPlayerLayout.setVisibility(VISIBLE);
+            addMediaToPlayer();
         } else {
-            playButton.setEnabled(false);
-            playButton.setTextColor(Color.GRAY);
+            mediaPlayerLayout.setVisibility(GONE);
         }
-
-        // finish complex layout
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(captureButton);
-        answerLayout.addView(chooseButton);
-        answerLayout.addView(playButton);
-        addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
         if (formEntryPrompt.isReadOnly()) {
@@ -204,6 +151,19 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
+    private void initLayout(Context context) {
+        View answerLayout = inflate(context, R.layout.audio_widget_layout, null);
+
+        mediaPlayerLayout = (RelativeLayout) answerLayout.findViewById(R.id.mediaPlayer);
+        captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
+        chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
+
+        //initialize media player controls
+        mediaController.initLayout(answerLayout);
+
+        // finish complex layout
+        addAnswerView(answerLayout);
+    }
 
     private void deleteMedia() {
         // get the file path and delete the file
@@ -222,8 +182,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         deleteMedia();
 
         // reset buttons
-        playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);
+        mediaPlayerLayout.setVisibility(GONE);
     }
 
     @Override
@@ -250,7 +209,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         FileUtils.copyFile(source, newAudio);
 
         if (newAudio.exists()) {
-            // Add the copy to the content provier
+            // Add the copy to the content provider
             ContentValues values = new ContentValues(6);
             values.put(Audio.Media.TITLE, newAudio.getName());
             values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
@@ -265,6 +224,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 deleteMedia();
             }
             binaryName = newAudio.getName();
+            addMediaToPlayer();
             Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
             Timber.e("Inserting Audio file FAILED");
@@ -297,7 +257,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         captureButton.setOnLongClickListener(l);
         chooseButton.setOnLongClickListener(l);
-        playButton.setOnLongClickListener(l);
     }
 
     @Override
@@ -305,7 +264,12 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
-        playButton.cancelLongPress();
     }
 
+    private void addMediaToPlayer() {
+        File f = new File(instanceFolder + File.separator + binaryName);
+        if (f.isFile()) {
+            mediaController.setMedia(f);
+        }
+    }
 }
