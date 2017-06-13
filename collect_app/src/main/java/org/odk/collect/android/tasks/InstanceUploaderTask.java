@@ -622,7 +622,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         count -= selectionArgs.length - 1;
                         selection.append(")");
                         selection.append(" and status=?");
-                        selectionArgs[i] = InstanceProviderAPI.STATUS_COMPLETE;
+                        selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
                         Cursor results = null;
                         try {
