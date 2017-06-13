@@ -194,7 +194,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
-    private boolean doSwipe;
+    private boolean doSwipe = true;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
