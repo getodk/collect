@@ -88,8 +88,7 @@
   <string name="parse_legacy_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع Aggregate الأصدار 0.9: %s</string>
   <string name="parse_openrosa_formlist_failed">الخادم لو يوفر النماذج المتطابقة مع مقاييس OpenRosa الأصدار الأول: %s</string>
   <string name="password">كلمة المرور</string>
-  <string name="play_audio">تشغيل التسجيل الصوتي</string>
-  <string name="play_video">تشغيل تسجيل الفيديو</string>
+    <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
   <string name="please_wait_long">الرجاء الانتظار. قد يتطلّب ذلك بضع دقائق.</string>
   <string name="quit_application">خروج %s</string>

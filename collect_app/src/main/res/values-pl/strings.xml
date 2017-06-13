@@ -90,8 +90,7 @@
   <string name="parse_legacy_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego z Aggregate 0.9.x: %s</string>
   <string name="parse_openrosa_formlist_failed">Serwer nie dostarczył dokumentu z dostępnymi formularzami zgodnego ze standardem OpenRosa wersja 1.0: %s</string>
   <string name="password">Hasło</string>
-  <string name="play_audio">Odtwórz Dźwięk</string>
-  <string name="play_video">Odtwórz Wideo</string>
+    <string name="play_video">Odtwórz Wideo</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>
   <string name="quit_application">Zakończ %s</string>
