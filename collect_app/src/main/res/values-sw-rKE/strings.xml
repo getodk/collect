@@ -83,8 +83,7 @@
   <string name="parse_legacy_formlist_failed">server haijatoa aina ya fomu sambamba na Aggregate 0.9.x.:%s</string>
   <string name="parse_openrosa_formlist_failed">server haijatoa aina ya fomu sambamba na OpenRosa toleo la 1.0 ya kawaida: %s</string>
   <string name="password">Thibitisho</string>
-  <string name="play_audio">Cheza sauti</string>
-  <string name="play_video">Cheza video</string>
+    <string name="play_video">Cheza video</string>
   <string name="please_wait">Tafadhali subiri dakika chache.</string>
   <string name="please_wait_long">Tafadhali subiri. Hii inaweza kuchukua dakika chache.</string>
   <string name="quit_application">Kutoka %s</string>
