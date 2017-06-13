@@ -60,6 +60,7 @@ class AudioController implements View.OnClickListener, SeekBar.OnSeekBarChangeLi
             seekHandler.postDelayed(this, 100);
         }
     };
+    private State state;
 
     AudioController(Context context, MediaPlayer mediaPlayer) {
         this.context = context;
@@ -118,6 +119,7 @@ class AudioController implements View.OnClickListener, SeekBar.OnSeekBarChangeLi
                 playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
             }
         });
+        state = State.IDLE;
     }
 
     /**
@@ -181,7 +183,10 @@ class AudioController implements View.OnClickListener, SeekBar.OnSeekBarChangeLi
 
         // remove message Handler from updating progress bar
         seekHandler.removeCallbacks(updateTimeTask);
-        pause();
+        if (state == State.PLAYING) {
+            pause();
+            state = State.PLAYING;
+        }
     }
 
     /**
@@ -194,17 +199,21 @@ class AudioController implements View.OnClickListener, SeekBar.OnSeekBarChangeLi
         seekHandler.removeCallbacks(updateTimeTask);
         mediaPlayer.seekTo(seekBar.getProgress());
         updateProgressBar();
-        play();
+        if (state == State.PLAYING) {
+            play();
+        }
     }
 
     private void play() {
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
+        state = State.PLAYING;
         mediaPlayer.start();
         updateProgressBar();
     }
 
     private void pause() {
         playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+        state = State.PAUSED;
         mediaPlayer.pause();
     }
 
@@ -213,8 +222,13 @@ class AudioController implements View.OnClickListener, SeekBar.OnSeekBarChangeLi
             mediaPlayer.reset();
             mediaPlayer.setDataSource(context, Uri.fromFile(file));
             mediaPlayer.prepareAsync();
+            state = State.IDLE;
         } catch (IOException e) {
             Timber.e(e);
         }
+    }
+
+    private enum State {
+        PAUSED, PLAYING, IDLE;
     }
 }

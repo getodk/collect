@@ -32,7 +32,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:padding="18dp"
+            android:padding="16dp"
             tools:background="@drawable/ic_fast_rewind_black_24dp" />
 
         <ImageButton
@@ -41,7 +41,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:padding="18dp"
+            android:padding="16dp"
             tools:background="@drawable/ic_play_arrow_black_24dp" />
 
         <ImageButton
@@ -50,7 +50,7 @@ limitations under the License.
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:padding="18dp"
+            android:padding="16dp"
             tools:background="@drawable/ic_fast_forward_black_24dp" />
     </LinearLayout>
 
