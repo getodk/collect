@@ -91,8 +91,7 @@
   <string name="parse_legacy_formlist_failed">Сервер не предоставил список доступных форм в формате, совместимом с Aggregate v0.9.x. : %s</string>
   <string name="parse_openrosa_formlist_failed">Сервер не предоставил список доступных форм в формате, совместимом со стандартом OpenRosa v1.0: %s</string>
   <string name="password">Пароль</string>
-  <string name="play_audio">Проиграть аудио</string>
-  <string name="play_video">Проиграть видео</string>
+    <string name="play_video">Проиграть видео</string>
   <string name="please_wait">Подождите несколько секунд.</string>
   <string name="please_wait_long">Пожалуйста, подождите. Это может занять несколько минут.</string>
   <string name="quit_application">Выход %s</string>

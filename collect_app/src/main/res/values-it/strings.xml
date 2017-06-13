@@ -92,8 +92,7 @@
   <string name="parse_openrosa_formlist_failed">Il server non ha fornito un modulo compatibile con OpenRosa version 1.0 standard: %s
 </string>
   <string name="password">Password</string>
-  <string name="play_audio">Riproduci Suono</string>
-  <string name="play_video">Riproduci Video</string>
+    <string name="play_video">Riproduci Video</string>
   <string name="please_wait">Si prega di attendere qualche istante.</string>
   <string name="please_wait_long">Si prega di attendere. Questo potrebbe richiedere alcuni minuti.</string>
   <string name="quit_application">Uscita %s</string>
