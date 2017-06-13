@@ -24,9 +24,51 @@
         android:drawableStart="@drawable/ic_attach_file_black_24dp"
         android:text="@string/choose_video" />
 
-    <VideoView
-        android:id="@+id/videoView"
+    <FrameLayout
+        android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/popupView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.3"
+                android:background="#000000" />
+
+            <Button
+                android:id="@+id/play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/open"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_play_circle_outline_white_24dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_play_circle_outline_white_24dp"
+                android:text="@string/play_video"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_open_in_browser_white_24dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_open_in_browser_white_24dp"
+                android:text="@string/open"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </FrameLayout>
 </LinearLayout>
