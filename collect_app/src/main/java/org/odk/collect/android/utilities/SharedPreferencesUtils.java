@@ -118,6 +118,7 @@ public class SharedPreferencesUtils {
         }
 
         checkQRCodeForRemovedSettings(generalPrefsJson);
+        AuthDialogUtility.setWebCredentialsFromPreferences(context);
 
         //settings import confirmation toast
         ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
