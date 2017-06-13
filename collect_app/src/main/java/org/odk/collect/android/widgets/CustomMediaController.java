@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaPlayerUtilities;
 
@@ -86,7 +87,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
         currentDurationLabel = (TextView) view.findViewById(R.id.currentDuration);
         totalDurationLabel = (TextView) view.findViewById(R.id.totalDuration);
 
-        seekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(this);
 
         // setup play button
@@ -186,6 +187,8 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
      */
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        ((FormEntryActivity) context).allowSwiping(false);
+
         // remove message Handler from updating progress bar
         seekHandler.removeCallbacks(updateTimeTask);
     }
@@ -195,6 +198,8 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        ((FormEntryActivity) context).allowSwiping(true);
+
         seekHandler.removeCallbacks(updateTimeTask);
         mediaPlayer.seekTo(seekBar.getProgress());
         updateProgressBar();

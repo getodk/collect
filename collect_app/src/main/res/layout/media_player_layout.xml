@@ -17,8 +17,8 @@ limitations under the License.
     android:id="@+id/mediaPlayer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:background="#eee">
+    android:background="#eee"
+    android:padding="5dp">
 
     <LinearLayout
         android:id="@+id/controls"
@@ -77,7 +77,7 @@ limitations under the License.
         tools:text="00:00" />
 
     <SeekBar
-        android:id="@+id/seekbar"
+        android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/currentDuration" />
