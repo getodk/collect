@@ -94,7 +94,9 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.LANGUAGE + " text, "
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                    + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null,"
+                    + FormsColumns.AUTO_DELETE + " text, "
+                    + FormsColumns.AUTO_SUBMIT + " text );");
         }
 
         @Override
@@ -720,6 +722,8 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH,
                 FormsColumns.JRCACHE_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
+        sFormsProjectionMap.put(FormsColumns.AUTO_SUBMIT, FormsColumns.AUTO_SUBMIT);
     }
 
 }

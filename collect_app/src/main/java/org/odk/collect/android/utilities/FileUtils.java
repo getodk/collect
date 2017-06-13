@@ -56,6 +56,8 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
+    public static final String AUTO_DELETE = "autoDelete";
+    public static final String AUTO_SUBMIT = "autoSubmit";
 
     public static String getMimeType(String fileUrl)
             throws java.io.IOException {
@@ -374,7 +376,12 @@ public class FileUtils {
             try {
                 Element submission = model.getElement(xforms, "submission");
                 String submissionUri = submission.getAttributeValue(null, "action");
-                fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
+                String autoDelete = submission.getAttributeValue(null, "auto-delete");
+                String autoSubmit = submission.getAttributeValue(null, "auto-submit");
+                fields.put(SUBMISSIONURI, submissionUri);
+                fields.put(AUTO_DELETE, autoDelete);
+                fields.put(AUTO_SUBMIT, autoSubmit);
+
                 String base64RsaPublicKey = submission.getAttributeValue(null,
                         "base64RsaPublicKey");
                 fields.put(BASE64_RSA_PUBLIC_KEY,

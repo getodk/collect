@@ -25,10 +25,12 @@ import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -596,7 +598,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Iterator<String> it = keys.iterator();
                     int count = keys.size();
                     while (count > 0) {
-                        String[] selectionArgs = null;
+                        String[] selectionArgs;
                         if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
                             selectionArgs = new String[
                                     ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
@@ -635,21 +637,18 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
                                 int cnt = 0;
                                 while (results.moveToNext()) {
-                                    toDelete[cnt] = results.getLong(results
-                                            .getColumnIndex(InstanceColumns._ID));
+                                    if (deleteInstance(results.getString(results
+                                            .getColumnIndex(InstanceColumns.JR_FORM_ID)))) {
+                                        toDelete[cnt] = results.getLong(results
+                                                .getColumnIndex(InstanceColumns._ID));
+                                    }
                                     cnt++;
                                 }
 
-                                boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
-                                        Collect.getInstance().getApplicationContext()).getBoolean(
-                                        PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
-                                if (deleteFlag) {
-                                    DeleteInstancesTask dit = new DeleteInstancesTask();
-                                    dit.setContentResolver(
-                                            Collect.getInstance().getContentResolver());
-                                    dit.execute(toDelete);
-                                }
-
+                                DeleteInstancesTask dit = new DeleteInstancesTask();
+                                dit.setContentResolver(
+                                        Collect.getInstance().getContentResolver());
+                                dit.execute(toDelete);
                             }
                         } catch (SQLException e) {
                             Timber.e(e);
@@ -664,6 +663,25 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
     }
 
+    private boolean deleteInstance(String jrFormId) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+
+        String autoDelete = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoDeleteColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_DELETE);
+                autoDelete = cursor.getString(autoDeleteColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+
+        boolean autoDeleteSettings = PreferenceManager.getDefaultSharedPreferences(
+                Collect.getInstance().getApplicationContext()).getBoolean(
+                PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
+
+        return autoDelete == null ? autoDeleteSettings : Boolean.valueOf(autoDelete);
+    }
 
     @Override
     protected void onProgressUpdate(Integer... values) {

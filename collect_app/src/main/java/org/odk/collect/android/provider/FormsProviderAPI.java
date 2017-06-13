@@ -58,6 +58,9 @@ public final class FormsProviderAPI {
         public static final String JRCACHE_FILE_PATH = "jrcacheFilePath";
         public static final String FORM_MEDIA_PATH = "formMediaPath";
 
+        public static final String AUTO_DELETE = "autoDelete";
+        public static final String AUTO_SUBMIT = "autoSubmit";
+
 
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
