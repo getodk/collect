@@ -19,9 +19,9 @@
         style="@style/WidgetStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:drawableLeft="@drawable/ic_attach_file_black_24dp"
         android:drawablePadding="6dp"
-        android:drawableStart="@drawable/ic_add_black_24dp"
+        android:drawableStart="@drawable/ic_attach_file_black_24dp"
         android:text="@string/choose_sound" />
 
     <include
