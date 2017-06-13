@@ -24,16 +24,6 @@
         android:drawableStart="@drawable/ic_attach_file_black_24dp"
         android:text="@string/choose_video" />
 
-    <Button
-        android:id="@+id/playBtn"
-        style="@style/WidgetStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_add_white"
-        android:drawablePadding="6dp"
-        android:drawableStart="@drawable/ic_add_white"
-        android:text="@string/play_video" />
-
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"

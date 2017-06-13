@@ -21,8 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -48,6 +48,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -67,7 +68,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button captureButton;
     private Button chooseButton;
-    private Button playButton;
     private String binaryName;
 
     private String instanceFolder;
@@ -80,9 +80,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public static final int MEDIA_TYPE_VIDEO = 2;
     private Uri nexus7Uri;
     private VideoView videoView;
-    //private LinearLayout videoPlayerLayout;
-
-    private DisplayMetrics metrics;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -91,8 +88,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 .getInstancePath().getParent();
 
         initLayout(context);
-
-        metrics = context.getResources().getDisplayMetrics();
 
         // setup capture button
         captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
@@ -147,7 +142,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(null);
                 }
-
             }
         });
 
@@ -165,20 +159,14 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                                 "click", formEntryPrompt.getIndex());
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("video/*");
-                // Intent i =
-                // new Intent(Intent.ACTION_PICK,
-                // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.VIDEO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "choose video "), Toast.LENGTH_SHORT)
-                            .show();
+                    ToastUtils.showShortToast(
+                            getContext().getString(R.string.activity_not_found, "choose video "));
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(null);
                 }
@@ -186,44 +174,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup play button
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-
-        // on play, launch the appropriate viewer
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(VideoWidget.this, "playButton",
-                                "click", formEntryPrompt.getIndex());
-
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.setDataSource(instanceFolder + File.separator + binaryName);
-                Bitmap frame = retriever.getFrameAtTime();
-                int width = frame.getWidth();
-                int height = frame.getHeight();
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((width * (metrics.heightPixels * 4) / 10) / height, (metrics.heightPixels * 4) / 10);
-                layoutParams.gravity = Gravity.CENTER;
-                layoutParams.topMargin = 20;
-
-                File f = new File(instanceFolder + File.separator + binaryName);
-                videoView.setLayoutParams(layoutParams);
-                videoView.setVisibility(View.VISIBLE);
-                videoView.setVideoURI(Uri.fromFile(f));
-                videoView.requestFocus();
-                videoView.seekTo(1);
-            }
-        });
-
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
-            /*playButton.setEnabled(true);
-            playButton.setTextColor(Color.BLACK);*/
+            videoView.setVisibility(VISIBLE);
+            addMediaToLayout();
         } else {
-            /*playButton.setEnabled(false);
-            playButton.setTextColor(Color.GRAY);*/
+            videoView.setVisibility(GONE);
         }
 
         // and hide the capture and choose button if read-only
@@ -347,6 +304,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             int delCount = fileToDelete.delete() ? 1 : 0;
             Timber.i("Deleting original capture of file: %s count: %d", mediaUri.toString(), delCount);
         }
+
+        addMediaToLayout();
     }
 
     @Override
@@ -373,17 +332,12 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         captureButton.setOnLongClickListener(l);
         chooseButton.setOnLongClickListener(l);
-        /*playButton.setOnLongClickListener(l);*/
     }
 
     @Override
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-
-        // reset buttons
-        playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);
     }
 
     @Override
@@ -391,26 +345,70 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         super.cancelLongPress();
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
-        /*playButton.cancelLongPress();*/
     }
 
     private void initLayout(Context context) {
         View answerLayout = inflate(context, R.layout.video_widget_layout, null);
 
-        //videoPlayerLayout = (LinearLayout) answerLayout.findViewById(R.id.videoPlayer);
         captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
         chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
-        playButton = (Button) answerLayout.findViewById(R.id.playBtn);
         videoView = (VideoView) answerLayout.findViewById(R.id.videoView);
 
         MediaController mediaController = new MediaController(context);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
-        /*//initialize media player controls
-        mediaController.initLayout(answerLayout);*/
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.seekTo(1);
+            }
+        });
 
         // finish complex layout
         addAnswerView(answerLayout);
     }
 
+    private void launchExternalIntent() {
+        Intent i = new Intent("android.intent.action.VIEW");
+        File f = new File(instanceFolder + File.separator
+                + binaryName);
+        i.setDataAndType(Uri.fromFile(f), "video*//*");
+        try {
+            getContext().startActivity(i);
+        } catch (ActivityNotFoundException e) {
+            ToastUtils.showShortToast(
+                    getContext().getString(R.string.activity_not_found, "video video"));
+        }
+    }
+
+    private void addMediaToLayout() {
+        try {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(instanceFolder + File.separator + binaryName);
+            Bitmap frame = retriever.getFrameAtTime();
+            int width = frame.getWidth();
+            int height = frame.getHeight();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity) getContext())
+                    .getWindowManager()
+                    .getDefaultDisplay()
+                    .getMetrics(displayMetrics);
+
+            int windowWidth = displayMetrics.widthPixels;
+
+            LinearLayout.LayoutParams layoutParams =
+                    new LinearLayout.LayoutParams(windowWidth, windowWidth * height / width);
+            layoutParams.gravity = Gravity.CENTER;
+            layoutParams.topMargin = 20;
+
+            File f = new File(instanceFolder + File.separator + binaryName);
+            videoView.setLayoutParams(layoutParams);
+            videoView.setVisibility(View.VISIBLE);
+            videoView.setVideoURI(Uri.fromFile(f));
+            videoView.requestFocus();
+            videoView.seekTo(1);
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+        }
+    }
 }
