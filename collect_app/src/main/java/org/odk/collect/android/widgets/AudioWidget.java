@@ -51,7 +51,7 @@ import timber.log.Timber;
 
 public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
-    CustomMediaController mediaController;
+    AudioController mediaController;
     private Button captureButton;
     private Button chooseButton;
     private String binaryName;
@@ -64,7 +64,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        mediaController = new CustomMediaController(context, player);
+        mediaController = new AudioController(context, player);
 
         initLayout(context);
 

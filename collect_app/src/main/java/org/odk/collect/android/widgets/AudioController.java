@@ -33,7 +33,7 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+class AudioController implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private final Context context;
     private final MediaPlayer mediaPlayer;
 
@@ -61,7 +61,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
         }
     };
 
-    CustomMediaController(Context context, MediaPlayer mediaPlayer) {
+    AudioController(Context context, MediaPlayer mediaPlayer) {
         this.context = context;
         this.mediaPlayer = mediaPlayer;
 
