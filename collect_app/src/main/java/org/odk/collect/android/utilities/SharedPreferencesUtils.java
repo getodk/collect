@@ -24,6 +24,10 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -121,6 +125,41 @@ public class SharedPreferencesUtils {
 
         //settings import confirmation toast
         ToastUtils.showLongToast(context.getString(R.string.successfully_imported_settings));
+    }
+
+    public boolean loadSharedPreferencesFromJSONFile(File src) {
+        boolean res = false;
+        BufferedReader br = null;
+
+        try {
+            String line = null;
+            StringBuilder builder = new StringBuilder();
+            br = new BufferedReader(new FileReader(src));
+
+            while ((line = br.readLine()) != null) {
+                builder.append(line);
+            }
+
+            JSONObject jo = new JSONObject(builder.toString());
+
+            this.savePreferencesFromJSON(jo);
+
+            res = true;
+        } catch (IOException e) {
+            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
+        } catch (JSONException e) {
+            Timber.e(e, "Exception while converting file to JSON object due to : %s ", e.getMessage());
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException ex) {
+                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
+            }
+        }
+
+        return res;
     }
 
     /**

@@ -240,7 +240,8 @@ public class MainMenuActivity extends AppCompatActivity {
         File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
         // Give JSON file preference
         if (j.exists()) {
-            boolean success = loadSharedPreferencesFromJSON(j);
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
                 j.delete();
@@ -636,42 +637,6 @@ public class MainMenuActivity extends AppCompatActivity {
             Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }
-    }
-
-    private boolean loadSharedPreferencesFromJSON(File src) {
-        boolean res = false;
-        BufferedReader br = null;
-
-        try {
-            String line = null;
-            StringBuilder builder = new StringBuilder();
-            br = new BufferedReader(new FileReader(src));
-
-            while ((line = br.readLine()) != null) {
-                builder.append(line);
-            }
-
-            JSONObject jo = new JSONObject(builder.toString());
-
-            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
-            sharedPrefs.savePreferencesFromJSON(jo);
-
-            res = true;
-        } catch (IOException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
-        } catch (JSONException e) {
-            Timber.e(e, "Exception while converting file to JSON object due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
-        }
-
-        return res;
     }
 
     private boolean loadSharedPreferencesFromFile(File src) {
