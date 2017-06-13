@@ -64,7 +64,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        mediaController = new CustomMediaController(context, player, formEntryPrompt);
+        mediaController = new CustomMediaController(context, player);
 
         initLayout(context);
 

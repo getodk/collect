@@ -24,10 +24,8 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaPlayerUtilities;
 
 import java.io.File;
@@ -36,7 +34,6 @@ import java.io.IOException;
 import timber.log.Timber;
 
 class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    private final FormEntryPrompt formEntryPrompt;
     private final Context context;
     private final MediaPlayer mediaPlayer;
 
@@ -64,10 +61,9 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
         }
     };
 
-    CustomMediaController(Context context, MediaPlayer mediaPlayer, FormEntryPrompt formEntryPrompt) {
+    CustomMediaController(Context context, MediaPlayer mediaPlayer) {
         this.context = context;
         this.mediaPlayer = mediaPlayer;
-        this.formEntryPrompt = formEntryPrompt;
 
         initMediaPlayer();
     }
@@ -152,6 +148,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
                 } else {
                     mediaPlayer.seekTo(0);
                 }
+                updateTimer();
                 break;
 
             case R.id.fastForwardBtn:
@@ -161,6 +158,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
                 } else {
                     mediaPlayer.seekTo(mediaPlayer.getDuration());
                 }
+                updateTimer();
                 break;
         }
 
@@ -200,14 +198,12 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
     }
 
     private void play() {
-        Timber.i("Playing");
         playButton.setBackgroundResource(R.drawable.ic_pause_black_24dp);
         mediaPlayer.start();
         updateProgressBar();
     }
 
     private void pause() {
-        Timber.i("Paused");
         playButton.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
         mediaPlayer.pause();
     }
@@ -217,7 +213,6 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
             mediaPlayer.reset();
             mediaPlayer.setDataSource(context, Uri.fromFile(file));
             mediaPlayer.prepareAsync();
-            Timber.i("Preparing");
         } catch (IOException e) {
             Timber.e(e);
         }
