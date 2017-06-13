@@ -196,7 +196,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        playButton = (ImageButton) findViewById(R.id.play);
+        playButton = (ImageButton) findViewById(R.id.playBtn);
         playButton.setEnabled(false);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override

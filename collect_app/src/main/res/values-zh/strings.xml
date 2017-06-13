@@ -81,8 +81,7 @@
   <string name="parse_legacy_formlist_failed">服务器没有提供与 Aggregate 0.9.x.兼容的表格 : %s</string>
   <string name="parse_openrosa_formlist_failed">服务器没有提供与OpenRosa version 1.0标准兼容的表格: %s</string>
   <string name="password">密码</string>
-  <string name="play_audio">播放音频</string>
-  <string name="play_video">播放视频</string>
+    <string name="play_video">播放视频</string>
   <string name="please_wait">请稍候.</string>
   <string name="please_wait_long">请稍候. 这可能需要几分钟.</string>
   <string name="quit_application">退出 %s</string>
