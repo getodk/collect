@@ -244,7 +244,7 @@ public class Collect extends Application {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
-        AutoSendPreferenceMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
+        AutoSendPreferenceMigrator.migrate();
         super.onCreate();
 
         PropertyManager mgr = new PropertyManager(this);

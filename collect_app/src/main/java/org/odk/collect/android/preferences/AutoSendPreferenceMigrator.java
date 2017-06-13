@@ -1,8 +1,5 @@
 package org.odk.collect.android.preferences;
 
-import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,35 +14,32 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND_WI
  */
 public class AutoSendPreferenceMigrator {
 
-    private static boolean autoSendWifi = false;
-    private static boolean autoSendNetwork = false;
-    private static String autoSend = "off";
+    public static void migrate() {
 
-    @SuppressLint("ApplySharedPref")
-    public static void migrate(SharedPreferences sharedPreferences) {
+        boolean autoSendWifi = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_WIFI, false);
+        boolean autoSendNetwork = GeneralSharedPreferences.getInstance().getBoolean(KEY_AUTOSEND_NETWORK, false);
 
-        autoSendWifi = sharedPreferences.getBoolean(KEY_AUTOSEND_WIFI, false);
-        autoSendNetwork = sharedPreferences.getBoolean(KEY_AUTOSEND_NETWORK, false);
-        autoSend = sharedPreferences.getString(KEY_AUTOSEND, "off");
-
-        migrate(autoSendWifi, autoSendNetwork, autoSend);
+        migrate(autoSendWifi, autoSendNetwork);
     }
 
     public static void migrate(JSONObject generalPrefsJson) throws JSONException {
 
+        boolean autoSendWifi = false;
         if (generalPrefsJson.has(KEY_AUTOSEND_WIFI)) {
             autoSendWifi = true;
         }
 
+        boolean autoSendNetwork = false;
         if (generalPrefsJson.has(KEY_AUTOSEND_NETWORK)) {
             autoSendNetwork = true;
         }
 
-        migrate(autoSendWifi, autoSendNetwork, autoSend);
+        migrate(autoSendWifi, autoSendNetwork);
     }
 
     public static void migrate(Map<String, ?> entries) {
 
+        boolean autoSendWifi = false;
         if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
             Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
             if (value instanceof Boolean) {
@@ -54,6 +48,7 @@ public class AutoSendPreferenceMigrator {
             }
         }
 
+        boolean autoSendNetwork = false;
         if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
             Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
             if (value instanceof Boolean) {
@@ -62,19 +57,18 @@ public class AutoSendPreferenceMigrator {
             }
         }
 
-        migrate(autoSendWifi, autoSendNetwork, autoSend);
+        migrate(autoSendWifi, autoSendNetwork);
     }
 
-    private static void migrate(boolean autoSendWifi, boolean autoSendNetwork, String autoSend) {
+    private static void migrate(boolean autoSendWifi, boolean autoSendNetwork) {
+        String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
 
-        if (autoSend.equals("off")) {
-            if (autoSendNetwork && autoSendWifi) {
-                autoSend = "wifi_and_cellular";
-            } else if (autoSendWifi) {
-                autoSend = "wifi_only";
-            } else if (autoSendNetwork) {
-                autoSend = "cellular_only";
-            }
+        if (autoSendNetwork && autoSendWifi) {
+            autoSend = "wifi_and_cellular";
+        } else if (autoSendWifi) {
+            autoSend = "wifi_only";
+        } else if (autoSendNetwork) {
+            autoSend = "cellular_only";
         }
 
         //save to shared preferences
