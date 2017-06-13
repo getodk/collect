@@ -137,10 +137,6 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
 
         switch (v.getId()) {
             case R.id.playBtn:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "playButton", "click",
-                                formEntryPrompt.getIndex());
 
                 if (mediaPlayer.isPlaying()) {
                     pause();
@@ -150,10 +146,6 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
                 break;
 
             case R.id.fastRewindBtn:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "fastRewindButton", "click",
-                                formEntryPrompt.getIndex());
 
                 if (currentPosition - seekBackwardTime >= 0) {
                     mediaPlayer.seekTo(currentPosition - seekBackwardTime);
@@ -163,10 +155,6 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
                 break;
 
             case R.id.fastForwardBtn:
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "playButton", "click",
-                                formEntryPrompt.getIndex());
 
                 if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
                     mediaPlayer.seekTo(currentPosition + seekForwardTime);
@@ -180,6 +168,10 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser) {
+            mediaPlayer.seekTo(progress);
+            updateTimer();
+        }
     }
 
     /**
@@ -191,6 +183,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
 
         // remove message Handler from updating progress bar
         seekHandler.removeCallbacks(updateTimeTask);
+        pause();
     }
 
     /**
@@ -203,6 +196,7 @@ class CustomMediaController implements View.OnClickListener, SeekBar.OnSeekBarCh
         seekHandler.removeCallbacks(updateTimeTask);
         mediaPlayer.seekTo(seekBar.getProgress());
         updateProgressBar();
+        play();
     }
 
     private void play() {
