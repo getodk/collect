@@ -63,7 +63,7 @@ Issues tagged as [quick win](https://github.com/opendatakit/collect/labels/quick
 If you're ready to contribute code, see [the contribution guide](CONTRIBUTING.md).
 
 ## Contributing translations
-If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/odk-collect/).
+If you know a language other than English, consider contributing translations through [Transifex](https://www.transifex.com/opendatakit/collect/).
 
 ## Contributing testing
 All releases are verified on the following devices (ordered by Android version):
