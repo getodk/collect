@@ -39,23 +39,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.7"
-            android:gravity="center"
-            android:background="#000000">
+            android:background="#000000"
+            android:gravity="center">
 
             <Button
                 android:id="@+id/play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/open"
+                android:layout_alignLeft="@+id/open"
+                android:layout_alignStart="@+id/open"
                 android:layout_centerHorizontal="true"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/ic_play_circle_outline_white_24dp"
-                android:layout_alignLeft="@+id/open"
-                android:layout_alignStart="@+id/open"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/ic_play_circle_outline_white_24dp"
                 android:text="@string/play_video"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/medium_text_size" />
 
             <Button
                 android:id="@+id/open"
@@ -66,8 +67,9 @@
                 android:drawableLeft="@drawable/ic_open_in_browser_white_24dp"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/ic_open_in_browser_white_24dp"
-                android:text="@string/open"
-                android:textColor="@color/white" />
+                android:text="@string/open_external_video"
+                android:textColor="@color/white"
+                android:textSize="@dimen/medium_text_size" />
         </RelativeLayout>
     </FrameLayout>
 </LinearLayout>
