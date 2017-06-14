@@ -16,7 +16,7 @@ import timber.log.Timber;
  */
 public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
     private static File file;
-    private static final String TIMING_CSV_HEADER = "event, node, start, end, dirn";
+    private static final String TIMING_CSV_HEADER = "event, node, start, end";
 
     public TimerSaveTask(File file) {
         this.file = file;

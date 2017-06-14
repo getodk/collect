@@ -47,7 +47,6 @@ public class TimerLogger {
         EventTypes eventType;
         int fecType;
         String node;
-        String dirn;
 
         long end;
         boolean endTimeSet;
@@ -60,14 +59,6 @@ public class TimerLogger {
             this.eventType = eventType;
             this.fecType = fecType;
             this.node = node;
-
-            if (eventType == EventTypes.FEC
-                    && (fecType == FormEntryController.EVENT_QUESTION
-                    || fecType == FormEntryController.EVENT_GROUP)) {
-                this.dirn = advancingPage ? "fwd" : "back";
-            } else {
-                this.dirn = "";
-            }
 
             end = 0;
             endTimeSet = false;
@@ -158,8 +149,7 @@ public class TimerLogger {
                     break;
             }
             return textValue + "," + node + "," + String.valueOf(start) + ","
-                    + (end != 0 ? String.valueOf(end) : "") + ","
-                    + dirn;
+                    + (end != 0 ? String.valueOf(end) : "");
         }
     }
 
