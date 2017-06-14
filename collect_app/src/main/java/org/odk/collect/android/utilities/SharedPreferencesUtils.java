@@ -23,6 +23,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
 import java.io.FileReader;
