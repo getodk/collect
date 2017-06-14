@@ -24,6 +24,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -31,6 +32,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 import org.osmdroid.events.MapEventsReceiver;
@@ -59,6 +61,8 @@ import java.util.List;
 
 
 public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceiver {
+    private static final String BASEMAP = "basemap";
+
     private MapView map;
     private ArrayList<Marker> mapMarkers = new ArrayList<Marker>();
     private Polyline polyline;
@@ -81,17 +85,28 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private Button zoomPointButton;
     private Button zoomLocationButton;
 
+    String basemap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.geoshape_osm_layout);
         setTitle(getString(R.string.geoshape_title)); // Setting title of the action
+
+        if (savedInstanceState != null) {
+            basemap = savedInstanceState.getString(BASEMAP);
+        } else {
+            basemap = PreferenceManager
+                    .getDefaultSharedPreferences(this)
+                    .getString(PreferenceKeys.KEY_MAP_BASEMAP, MapHelper.OPENMAP_STREETS);
+        }
+
         Button saveButton = (Button) findViewById(R.id.save);
         clearButton = (Button) findViewById(R.id.clear);
 
         map = (MapView) findViewById(R.id.geoshape_mapview);
-        helper = new MapHelper(this, map, GeoShapeOsmMapActivity.this);
+        helper = new MapHelper(this, map, GeoShapeOsmMapActivity.this, basemap);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMapListener(mapViewListener);
@@ -211,6 +226,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     protected void onPause() {
         super.onPause();
         disableMyLocation();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(BASEMAP, helper.getBasemap());
     }
 
     @Override
