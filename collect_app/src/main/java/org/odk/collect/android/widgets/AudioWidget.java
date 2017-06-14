@@ -19,7 +19,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
