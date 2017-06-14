@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -84,8 +85,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private VideoView videoView;
     private FrameLayout videoPlayer;
     private RelativeLayout popupView;
-    private Button play;
-    private Button open;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -420,27 +419,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     private void addMediaToLayout() {
         try {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(instanceFolder + File.separator + binaryName);
-            Bitmap frame = retriever.getFrameAtTime();
-            int width = frame.getWidth();
-            int height = frame.getHeight();
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            ((Activity) getContext())
-                    .getWindowManager()
-                    .getDefaultDisplay()
-                    .getMetrics(displayMetrics);
-
-            int windowWidth = displayMetrics.widthPixels;
-
-            FrameLayout.LayoutParams layoutParams =
-                    new FrameLayout.LayoutParams(windowWidth, windowWidth * height / width);
-            layoutParams.gravity = Gravity.CENTER;
-            layoutParams.topMargin = 20;
-
-            File f = new File(instanceFolder + File.separator + binaryName);
-            videoView.setLayoutParams(layoutParams);
-            popupView.setLayoutParams(layoutParams);
+            adjustVideoPlayerParams();
+            File f = new File(getFilePath());
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoURI(Uri.fromFile(f));
             videoView.requestFocus();
@@ -448,5 +428,31 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         } catch (IllegalArgumentException e) {
             Timber.e(e);
         }
+    }
+
+    @NonNull
+    private String getFilePath() {
+        return instanceFolder + File.separator + binaryName;
+    }
+
+    private void adjustVideoPlayerParams() {
+        Bitmap frame = getVideoFrameInfo();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int windowWidth = displayMetrics.widthPixels;
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(windowWidth,
+                windowWidth * frame.getHeight() / frame.getWidth());
+        layoutParams.gravity = Gravity.CENTER;
+        layoutParams.topMargin = 20;
+
+        videoView.setLayoutParams(layoutParams);
+        popupView.setLayoutParams(layoutParams);
+    }
+
+    private Bitmap getVideoFrameInfo() {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(getFilePath());
+        return retriever.getFrameAtTime();
     }
 }
