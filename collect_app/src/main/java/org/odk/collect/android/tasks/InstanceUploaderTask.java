@@ -637,20 +637,18 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                     new InstancesDao().getInstancesCursor(selection.toString(),
                                             selectionArgs);
                             if (results.getCount() > 0) {
-                                Long[] toDelete = new Long[results.getCount()];
+                                List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
 
-                                int cnt = 0;
                                 while (results.moveToNext()) {
                                     if (deleteInstance(results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID)))) {
-                                        toDelete[cnt] = results.getLong(results.getColumnIndex(InstanceColumns._ID));
+                                        toDelete.add(results.getLong(results.getColumnIndex(InstanceColumns._ID)));
                                     }
-                                    cnt++;
                                 }
 
                                 DeleteInstancesTask dit = new DeleteInstancesTask();
                                 dit.setContentResolver(Collect.getInstance().getContentResolver());
-                                dit.execute(toDelete);
+                                dit.execute(toDelete.toArray(new Long[toDelete.size()]));
                             }
                         } catch (SQLException e) {
                             Timber.e(e);
