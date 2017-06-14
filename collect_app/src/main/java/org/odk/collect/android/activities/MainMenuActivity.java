@@ -59,6 +59,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -233,7 +234,23 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
+        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
