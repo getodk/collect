@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -72,8 +73,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private PolygonOptions polygonOptions;
     private Polygon polygon;
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
-    private Button gpsButton;
-    private Button clearButton;
+    private ImageButton gpsButton;
+    private ImageButton clearButton;
 
     private MapHelper helper;
     private AlertDialog zoomDialog;
@@ -144,7 +145,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             showGPSDisabledAlertToUser();
         }
 
-        gpsButton = (Button) findViewById(R.id.gps);
+        gpsButton = (ImageButton) findViewById(R.id.gps);
         gpsButton.setEnabled(false);
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +157,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        clearButton = (Button) findViewById(R.id.clear);
+        clearButton = (ImageButton) findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +166,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        Button returnButton = (Button) findViewById(R.id.save);
+        ImageButton returnButton = (ImageButton) findViewById(R.id.save);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,7 +185,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        Button layersButton = (Button) findViewById(R.id.layers);
+        ImageButton layersButton = (ImageButton) findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
