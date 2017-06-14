@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -95,6 +96,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
         }
 
         selectionText.setText(context.getString(R.string.selected));
+        selectionText.setTextColor(Color.BLACK);
         selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         selectionText.setVisibility(View.GONE);
 
