@@ -23,11 +23,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -162,31 +161,6 @@ public class SharedPreferencesUtils {
         }
 
         return res;
-    }
-
-    /**
-     * This method is to provide backward compatibility with v1.7.0 and below
-     * Autosend was originally set into separate wifi and cellular autosend settings
-     */
-    private void checkQRCodeForRemovedSettings(JSONObject generalPrefsJson) {
-
-        String[] preferences = {
-                PreferenceKeys.KEY_AUTOSEND_WIFI,
-                PreferenceKeys.KEY_AUTOSEND_NETWORK
-        };
-
-        String autosend = "";
-        if (generalPrefsJson.has(preferences[0]) && generalPrefsJson.has(preferences[1])) {
-            autosend = "wifi_and_cellular";
-        } else if (generalPrefsJson.has(preferences[0])) {
-            autosend = "wifi_only";
-        } else if (generalPrefsJson.has(preferences[1])) {
-            autosend = "cellular_only";
-        }
-
-        if (!autosend.equals("")) {
-            GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_AUTOSEND, autosend);
-        }
     }
 
     private Collection<String> getAllGeneralKeys() {
