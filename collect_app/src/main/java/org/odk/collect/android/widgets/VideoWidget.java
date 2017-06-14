@@ -31,11 +31,13 @@ import android.provider.MediaStore.Video;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -80,6 +82,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public static final int MEDIA_TYPE_VIDEO = 2;
     private Uri nexus7Uri;
     private VideoView videoView;
+    private FrameLayout videoPlayer;
+    private RelativeLayout popupView;
+    private Button play;
+    private Button open;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -177,10 +183,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
-            videoView.setVisibility(VISIBLE);
+            videoPlayer.setVisibility(VISIBLE);
             addMediaToLayout();
         } else {
-            videoView.setVisibility(GONE);
+            videoPlayer.setVisibility(GONE);
         }
 
         // and hide the capture and choose button if read-only
@@ -338,6 +344,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
+
+        videoPlayer.setVisibility(GONE);
     }
 
     @Override
@@ -347,20 +355,44 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         chooseButton.cancelLongPress();
     }
 
-    private void initLayout(Context context) {
+    private void initLayout(final Context context) {
         View answerLayout = inflate(context, R.layout.video_widget_layout, null);
 
         captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
         chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
+
+        videoPlayer = (FrameLayout) answerLayout.findViewById(R.id.videoPlayer);
         videoView = (VideoView) answerLayout.findViewById(R.id.videoView);
+        popupView = (RelativeLayout) answerLayout.findViewById(R.id.popupView);
+
+        answerLayout.findViewById(R.id.play).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                play();
+            }
+        });
+
+        answerLayout.findViewById(R.id.open).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchExternalIntent(context);
+            }
+        });
 
         MediaController mediaController = new MediaController(context);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
+        videoView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return popupView.getVisibility() == VISIBLE;
+            }
+        });
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 videoView.seekTo(1);
+                popupView.setVisibility(VISIBLE);
             }
         });
 
@@ -368,13 +400,18 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         addAnswerView(answerLayout);
     }
 
-    private void launchExternalIntent() {
+    private void play() {
+        popupView.setVisibility(GONE);
+        videoView.start();
+    }
+
+    private void launchExternalIntent(Context context) {
         Intent i = new Intent("android.intent.action.VIEW");
         File f = new File(instanceFolder + File.separator
                 + binaryName);
-        i.setDataAndType(Uri.fromFile(f), "video*//*");
+        i.setDataAndType(Uri.fromFile(f), "video/*");
         try {
-            getContext().startActivity(i);
+            context.startActivity(i);
         } catch (ActivityNotFoundException e) {
             ToastUtils.showShortToast(
                     getContext().getString(R.string.activity_not_found, "video video"));
@@ -396,13 +433,14 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
             int windowWidth = displayMetrics.widthPixels;
 
-            LinearLayout.LayoutParams layoutParams =
-                    new LinearLayout.LayoutParams(windowWidth, windowWidth * height / width);
+            FrameLayout.LayoutParams layoutParams =
+                    new FrameLayout.LayoutParams(windowWidth, windowWidth * height / width);
             layoutParams.gravity = Gravity.CENTER;
             layoutParams.topMargin = 20;
 
             File f = new File(instanceFolder + File.separator + binaryName);
             videoView.setLayoutParams(layoutParams);
+            popupView.setLayoutParams(layoutParams);
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoURI(Uri.fromFile(f));
             videoView.requestFocus();

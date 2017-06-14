@@ -37,13 +37,10 @@
         <RelativeLayout
             android:id="@+id/popupView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.3"
-                android:background="#000000" />
+            android:layout_height="match_parent"
+            android:alpha="0.7"
+            android:gravity="center"
+            android:background="#000000">
 
             <Button
                 android:id="@+id/play"
