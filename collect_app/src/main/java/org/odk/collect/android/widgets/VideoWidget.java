@@ -222,10 +222,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
             playButton.setEnabled(true);
-            playButton.setTextColor(Color.BLACK);
         } else {
             playButton.setEnabled(false);
-            playButton.setTextColor(Color.GRAY);
         }
 
         // finish complex layout
@@ -262,7 +260,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
         // reset buttons
         playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);
     }
 
     @Override
