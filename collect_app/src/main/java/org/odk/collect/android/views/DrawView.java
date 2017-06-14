@@ -87,16 +87,15 @@ public class DrawView extends View {
     }
 
     public void resetImage(int w, int h) {
-
-        // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
-        // is called upon with flipped w/h (before orientation changes have been applied)
-        if (w > h) {
-            int temp = w;
-            w = h;
-            h = temp;
-        }
-
         if (backgroundBitmapFile.exists()) {
+            // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
+            // is called upon with flipped w/h (before orientation changes have been applied)
+            if (w > h) {
+                int temp = w;
+                w = h;
+                h = temp;
+            }
+            
             bitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
                     backgroundBitmapFile, w, h).copy(
                     Bitmap.Config.ARGB_8888, true);
