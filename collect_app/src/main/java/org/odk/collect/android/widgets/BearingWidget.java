@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -68,8 +69,8 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
         answerDisplay = new TextView(getContext());
         answerDisplay.setId(QuestionWidget.newUniqueId());
-        answerDisplay
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerDisplay.setTextColor(Color.BLACK);
         answerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
