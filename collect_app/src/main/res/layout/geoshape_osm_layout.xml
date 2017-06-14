@@ -42,41 +42,37 @@
         android:layout_height="wrap_content"
         android:paddingTop="6dip">
 
-        <Button
+        <ImageButton
             android:id="@+id/gps"
             android:padding="15dp"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:drawableRight="@drawable/ic_my_location_black_36dp"
-            android:drawableEnd="@drawable/ic_my_location_black_36dp"
+            android:src="@drawable/ic_my_location_black_36dp"
             android:layout_weight="1" />
-        <Button
+        <ImageButton
             android:id="@+id/layers"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/ic_layers_black_36dp"
-            android:drawableEnd="@drawable/ic_layers_black_36dp"
+            android:src="@drawable/ic_layers_black_36dp"
             android:layout_weight="1" />
-        <Button
+        <ImageButton
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/ic_delete_black_36dp"
-            android:drawableEnd="@drawable/ic_delete_black_36dp"
+            android:src="@drawable/ic_delete_black_36dp"
             android:layout_weight="1" />
-        <Button
+        <ImageButton
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="15dp"
             android:layout_margin="5dp"
-            android:drawableRight="@drawable/ic_save_black_36dp"
-            android:drawableEnd="@drawable/ic_save_black_36dp"
+            android:src="@drawable/ic_save_black_36dp"
             android:layout_weight="1" />
     </LinearLayout>
     </ScrollView>
