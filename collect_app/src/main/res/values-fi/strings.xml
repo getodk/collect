@@ -290,11 +290,9 @@
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
   <string name="about_preferences">Lisätietoja</string>
   <string name="tell_your_friends">Kerro ystävillesi</string>
-  <string name="tell_your_friends_title">Jaa ODK Collect ystäviesi kanssa</string>
   <string name="tell_your_friends_msg">Lataa ODK Collect -sovellus!</string>
   <string name="leave_a_review">Tee arvio</string>
-  <string name="leave_a_review_summary">Tee Google Play -arvio</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kartoitus</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
   <string name="map_sdk_behavior">Mapping SDK</string>

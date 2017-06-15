@@ -291,11 +291,9 @@
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
   <string name="about_preferences">アプリについて</string>
   <string name="tell_your_friends">友達に教える</string>
-  <string name="tell_your_friends_title">ODK Collect を友達と共有</string>
   <string name="tell_your_friends_msg">ODK Collect アプリをダウンロードしてください!</string>
   <string name="leave_a_review">レビューを残す</string>
-  <string name="leave_a_review_summary">Google Play でレビューを残してください</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">マッピング</string>
   <string name="map_sdk_selector_title">マッピング SDK</string>
   <string name="map_sdk_behavior">マッピング SDK</string>
