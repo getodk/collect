@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -60,20 +59,16 @@ import timber.log.Timber;
  */
 public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
+    public static final boolean DEFAULT_HIGH_RESOLUTION = true;
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+    private static final String NEXUS7 = "Nexus 7";
+    private static final String DIRECTORY_PICTURES = "Pictures";
     private Button captureButton;
     private Button playButton;
     private Button chooseButton;
-
     private String binaryName;
-
     private String instanceFolder;
-
-    public static final boolean DEFAULT_HIGH_RESOLUTION = true;
-
-    private static final String NEXUS7 = "Nexus 7";
-    private static final String DIRECTORY_PICTURES = "Pictures";
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
     private Uri nexus7Uri;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
@@ -222,10 +217,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
             playButton.setEnabled(true);
-            playButton.setTextColor(Color.BLACK);
         } else {
             playButton.setEnabled(false);
-            playButton.setTextColor(Color.GRAY);
         }
 
         // finish complex layout
@@ -242,6 +235,54 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             chooseButton.setVisibility(View.GONE);
         }
 
+    }
+
+    /*
+     * Create a file Uri for saving an image or video
+     * For Nexus 7 fix ...
+     * See http://developer.android.com/guide/topics/media/camera.html for more info
+     */
+    private static Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /*
+     *  Create a File for saving an image or video
+     *  For Nexus 7 fix ...
+     *  See http://developer.android.com/guide/topics/media/camera.html for more info
+     */
+    private static File getOutputMediaFile(int type) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(),
+                DIRECTORY_PICTURES);
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Timber.d("failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(
+                new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 
     private void deleteMedia() {
@@ -262,7 +303,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
         // reset buttons
         playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);
     }
 
     @Override
@@ -354,54 +394,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
         playButton.cancelLongPress();
-    }
-
-    /*
-     * Create a file Uri for saving an image or video
-     * For Nexus 7 fix ...
-     * See http://developer.android.com/guide/topics/media/camera.html for more info
-     */
-    private static Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /*
-     *  Create a File for saving an image or video
-     *  For Nexus 7 fix ...
-     *  See http://developer.android.com/guide/topics/media/camera.html for more info
-     */
-    private static File getOutputMediaFile(int type) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory(),
-                DIRECTORY_PICTURES);
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Timber.d("failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSSZ", Locale.US).format(
-                new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
     }
 
 }

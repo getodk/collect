@@ -136,6 +136,7 @@ public class TimeWidget extends QuestionWidget {
         timeTextView.setId(QuestionWidget.newUniqueId());
         timeTextView.setPadding(20, 20, 20, 20);
         timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        timeTextView.setTextColor(Color.BLACK);
     }
 
     private void addViews() {
