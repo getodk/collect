@@ -103,7 +103,7 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
                         getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL
                                 + APP_PACKAGE_NAME);
                 startActivity(Intent.createChooser(shareIntent,
-                        getString(R.string.tell_your_friends_title)));
+                        getString(R.string.tell_your_friends)));
                 break;
 
             case KEY_LEAVE_A_REVIEW:

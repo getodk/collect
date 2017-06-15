@@ -291,11 +291,9 @@
   <string name="google_play_services_error_occured">Нема доступу до Google Карт. Чи встановлено Google Play Services?</string>
   <string name="about_preferences">Про нас</string>
   <string name="tell_your_friends">Розповісти друзям</string>
-  <string name="tell_your_friends_title">Поділитися ODK Collect з друзями</string>
   <string name="tell_your_friends_msg">Завантажити ODK Collect!</string>
   <string name="leave_a_review">Залишити відгук</string>
-  <string name="leave_a_review_summary">Залишити відгук на Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Мапування</string>
   <string name="map_sdk_selector_title">SDK для мапування</string>
   <string name="map_sdk_behavior">SDK для мапування</string>
