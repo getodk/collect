@@ -27,7 +27,8 @@
     <FrameLayout
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <VideoView
             android:id="@+id/videoView"
@@ -46,9 +47,9 @@
                 android:id="@+id/play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/open"
-                android:layout_alignLeft="@+id/open"
-                android:layout_alignStart="@+id/open"
+                android:layout_above="@+id/open_in_external"
+                android:layout_alignLeft="@+id/open_in_external"
+                android:layout_alignStart="@+id/open_in_external"
                 android:layout_centerHorizontal="true"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/ic_play_circle_outline_white_24dp"
@@ -59,7 +60,7 @@
                 android:textSize="@dimen/medium_text_size" />
 
             <Button
-                android:id="@+id/open"
+                android:id="@+id/open_in_external"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

@@ -85,6 +85,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     private VideoView videoView;
     private FrameLayout videoPlayer;
     private RelativeLayout popupView;
+    private MediaController mediaController;
+    private Button playButton;
+    private Button openInExternal;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -93,6 +96,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 .getInstancePath().getParent();
 
         initLayout(context);
+        initMediaPlayer(context);
 
         // setup capture button
         captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
@@ -179,10 +183,23 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
+        playButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                play();
+            }
+        });
+
+        openInExternal.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchExternalIntent();
+            }
+        });
+
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
-            videoPlayer.setVisibility(VISIBLE);
             addMediaToLayout();
         } else {
             videoPlayer.setVisibility(GONE);
@@ -359,34 +376,41 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
         captureButton = (Button) answerLayout.findViewById(R.id.recordBtn);
         chooseButton = (Button) answerLayout.findViewById(R.id.chooseBtn);
-
         videoPlayer = (FrameLayout) answerLayout.findViewById(R.id.videoPlayer);
         videoView = (VideoView) answerLayout.findViewById(R.id.videoView);
         popupView = (RelativeLayout) answerLayout.findViewById(R.id.popupView);
+        playButton = (Button) answerLayout.findViewById(R.id.play);
+        openInExternal = (Button) answerLayout.findViewById(R.id.open_in_external);
 
-        answerLayout.findViewById(R.id.play).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                play();
-            }
-        });
+        // finish complex layout
+        addAnswerView(answerLayout);
+    }
 
-        answerLayout.findViewById(R.id.open).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchExternalIntent(context);
-            }
-        });
+    private void initMediaPlayer(Context context) {
 
-        MediaController mediaController = new MediaController(context);
+        mediaController = new MediaController(context);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
+
         videoView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return popupView.getVisibility() == VISIBLE;
+
+                //prevent the video from playing by touching video when the displaying popup
+                if (popupView.getVisibility() == VISIBLE) {
+                    return true;
+                }
+
+                if (videoView.isPlaying()) {
+                    pause();
+                } else {
+                    play();
+                }
+
+                return false;
             }
         });
+
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -394,23 +418,26 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 popupView.setVisibility(VISIBLE);
             }
         });
-
-        // finish complex layout
-        addAnswerView(answerLayout);
     }
 
     private void play() {
+        mediaController.hide();
         popupView.setVisibility(GONE);
         videoView.start();
     }
 
-    private void launchExternalIntent(Context context) {
+    private void pause() {
+        mediaController.show();
+        videoView.pause();
+    }
+
+    private void launchExternalIntent() {
         Intent i = new Intent("android.intent.action.VIEW");
         File f = new File(instanceFolder + File.separator
                 + binaryName);
         i.setDataAndType(Uri.fromFile(f), "video/*");
         try {
-            context.startActivity(i);
+            getContext().startActivity(i);
         } catch (ActivityNotFoundException e) {
             ToastUtils.showShortToast(
                     getContext().getString(R.string.activity_not_found, "video video"));
@@ -418,23 +445,22 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     private void addMediaToLayout() {
-        try {
+        File f = new File(getFilePath());
+        if (f.isFile()) {
+
+            videoPlayer.setVisibility(VISIBLE);
             adjustVideoPlayerParams();
-            File f = new File(getFilePath());
+
             videoView.setVisibility(View.VISIBLE);
             videoView.setVideoURI(Uri.fromFile(f));
             videoView.requestFocus();
             videoView.seekTo(1);
-        } catch (IllegalArgumentException e) {
-            Timber.e(e);
         }
     }
 
-    @NonNull
-    private String getFilePath() {
-        return instanceFolder + File.separator + binaryName;
-    }
-
+    /**
+     * Resize the video player according to the video frame size
+     */
     private void adjustVideoPlayerParams() {
         Bitmap frame = getVideoFrameInfo();
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -454,5 +480,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(getFilePath());
         return retriever.getFrameAtTime();
+    }
+
+    @NonNull
+    private String getFilePath() {
+        return instanceFolder + File.separator + binaryName;
     }
 }
