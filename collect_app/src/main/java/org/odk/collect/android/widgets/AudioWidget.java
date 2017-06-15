@@ -19,7 +19,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.util.TypedValue;
@@ -183,10 +182,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         binaryName = prompt.getAnswerText();
         if (binaryName != null) {
             playButton.setEnabled(true);
-            playButton.setTextColor(Color.BLACK);
         } else {
             playButton.setEnabled(false);
-            playButton.setTextColor(Color.GRAY);
         }
 
         // finish complex layout
@@ -223,7 +220,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
         // reset buttons
         playButton.setEnabled(false);
-        playButton.setTextColor(Color.GRAY);
     }
 
     @Override

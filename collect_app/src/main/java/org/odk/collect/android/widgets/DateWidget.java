@@ -179,6 +179,7 @@ public class DateWidget extends QuestionWidget {
     private void createDateTextView() {
         dateTextView = new TextView(getContext());
         dateTextView.setId(QuestionWidget.newUniqueId());
+        dateTextView.setTextColor(Color.BLACK);
         dateTextView.setPadding(20, 20, 20, 20);
         dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }

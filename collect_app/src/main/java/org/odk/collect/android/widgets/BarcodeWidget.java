@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -77,6 +78,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        stringAnswer.setTextColor(Color.BLACK);
         stringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
