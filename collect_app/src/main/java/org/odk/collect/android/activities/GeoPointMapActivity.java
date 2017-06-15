@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -71,17 +72,15 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private LatLng latLng;
 
     private TextView locationStatus;
-    private TextView mlocationInfo;
+    private TextView locationInfo;
 
     private LocationManager locationManager;
 
     private Location location;
-    private Button acceptLocation;
-    private Button reloadLocation;
+    private ImageButton reloadLocation;
 
     private boolean isDragged = false;
-    private Button showLocation;
-    private Button layers;
+    private ImageButton showLocation;
     private boolean gpsOn = false;
     private boolean networkOn = false;
 
@@ -95,8 +94,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
     private Button zoomPointButton;
     private Button zoomLocationButton;
-
-    private Button clearPointButton;
 
     private boolean setClear = false;
     private boolean captureLocation = false;
@@ -203,11 +200,11 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationStatus = (TextView) findViewById(R.id.location_status);
-        mlocationInfo = (TextView) findViewById(R.id.location_info);
+        locationInfo = (TextView) findViewById(R.id.location_info);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        acceptLocation = (Button) findViewById(R.id.accept_location);
+        ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
 
         acceptLocation.setOnClickListener(new OnClickListener() {
             @Override
@@ -218,7 +215,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             }
         });
 
-        reloadLocation = (Button) findViewById(R.id.reload_location);
+        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
         reloadLocation.setEnabled(false);
         reloadLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,7 +241,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         });
 
         // Focuses on marked location
-        showLocation = ((Button) findViewById(R.id.show_location));
+        showLocation = (ImageButton) findViewById(R.id.show_location);
         //showLocation.setClickable(false);
         showLocation.setEnabled(false);
         showLocation.setOnClickListener(new OnClickListener() {
@@ -255,7 +252,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         });
 
         // Menu Layer Toggle
-        layers = ((Button) findViewById(R.id.layer_menu));
+        ImageButton layers = (ImageButton) findViewById(R.id.layer_menu);
         layers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,7 +278,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             }
         });
 
-        clearPointButton = (Button) findViewById(R.id.clear);
+        ImageButton clearPointButton = (ImageButton) findViewById(R.id.clear);
         clearPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,7 +290,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                     // locationStatus.setVisibility(View.VISIBLE);
                 }
                 // reloadLocation.setEnabled(true);
-                mlocationInfo.setVisibility(View.VISIBLE);
+                locationInfo.setVisibility(View.VISIBLE);
                 locationStatus.setVisibility(View.VISIBLE);
                 latLng = null;
                 marker = null;
@@ -313,7 +310,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 intentDraggable = draggable;
                 if (!intentDraggable) {
                     // Not Draggable, set text for Map else leave as placement-map text
-                    mlocationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
+                    locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
                 }
             }
 
@@ -337,7 +334,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         }
         /*Zoom only if there's a previous location*/
         if (latLng != null) {
-            mlocationInfo.setVisibility(View.GONE);
+            locationInfo.setVisibility(View.GONE);
             locationStatus.setVisibility(View.GONE);
             showLocation.setEnabled(true);
             markerOptions.position(latLng);
@@ -361,7 +358,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 locationCountFoundLimit = 0;
             } else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                // Only if GPS Providor is not avaibe use network location. bug (well know
+                // Only if GPS Provider is not available use network location. bug (well know
                 // android bug) http://stackoverflow
                 // .com/questions/6719207/locationmanager-returns-old-cached-wifi-location-with
                 // -current-timestamp

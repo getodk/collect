@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -23,6 +23,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
@@ -30,9 +31,9 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.utilities.MediaUtils;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
 /**
  * Handles general preferences.
@@ -46,17 +47,13 @@ public class PreferencesActivity extends PreferenceActivity {
     private PreferencesFragment fragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Timber.d("onCreate");
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragment = new PreferencesFragment();
         getFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content, fragment)
                 .commit();
-
-        setTitle(getString(R.string.general_preferences));
-
     }
 
     @Override
@@ -64,7 +61,6 @@ public class PreferencesActivity extends PreferenceActivity {
         Timber.d("onStart");
         super.onStart();
     }
-
 
     @Override
     protected void onPause() {

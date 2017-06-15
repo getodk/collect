@@ -17,6 +17,8 @@ package org.odk.collect.android.widgets;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -195,9 +197,10 @@ public class TimeWidget extends QuestionWidget {
         private String dialogTitle = getContext().getString(R.string.select_time);
 
         CustomTimePickerDialog(Context context, OnTimeSetListener callBack, int hour, int minute) {
-            super(context, callBack, hour, minute, DateFormat.is24HourFormat(context));
+            super(context, android.R.style.Theme_Holo_Light_Dialog, callBack, hour, minute, DateFormat.is24HourFormat(context));
             setTitle(dialogTitle);
             fixSpinner(context, hour, minute, DateFormat.is24HourFormat(context));
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
         public void setTitle(CharSequence title) {

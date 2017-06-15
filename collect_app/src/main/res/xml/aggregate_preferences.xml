@@ -23,5 +23,5 @@
             android:key="password"
             android:title="@string/password" />
     </PreferenceCategory>
-   
+
 </PreferenceScreen>

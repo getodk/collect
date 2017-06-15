@@ -32,8 +32,6 @@ public class PlayServicesUtil {
     /**
      * Display an error dialog showing that Google Play Services is missing
      * or out of date.
-     *
-     * @param context
      */
     public static void showGooglePlayServicesAvailabilityErrorDialog(Context context) {
         googleApiAvailability = GoogleApiAvailability.getInstance();

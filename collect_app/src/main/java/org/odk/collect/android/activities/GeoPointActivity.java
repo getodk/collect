@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +24,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
 import org.odk.collect.android.R;
@@ -36,7 +36,7 @@ import org.odk.collect.android.widgets.GeoPointWidget;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class GeoPointActivity extends Activity implements LocationListener {
+public class GeoPointActivity extends AppCompatActivity implements LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
 
@@ -178,7 +178,7 @@ public class GeoPointActivity extends Activity implements LocationListener {
                 "show");
         // dialog displayed while fetching gps location
         locationDialog = new ProgressDialog(this);
-        DialogInterface.OnClickListener geopointButtonListener =
+        DialogInterface.OnClickListener geoPointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -205,10 +205,10 @@ public class GeoPointActivity extends Activity implements LocationListener {
         locationDialog.setTitle(getString(R.string.getting_location));
         locationDialog.setMessage(getString(R.string.please_wait_long));
         locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
-                geopointButtonListener);
+                geoPointButtonListener);
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
-                geopointButtonListener);
+                geoPointButtonListener);
     }
 
 

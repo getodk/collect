@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 
@@ -62,6 +63,7 @@ public class StringNumberWidget extends StringWidget {
 
         if (s != null) {
             answer.setText(s);
+            Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 
         setupChangeListener();

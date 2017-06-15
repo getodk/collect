@@ -23,7 +23,6 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -55,14 +54,10 @@ public class DateTimeWidget extends QuestionWidget {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(dateWidget);
-        if (dateWidget.isCalendarShown() || !dateWidget.isDayHidden()) {
+        if (!dateWidget.isDayHidden()) {
             linearLayout.addView(timeWidget);
         }
         addAnswerView(linearLayout);
-        if (dateWidget.isCalendarShown() && timeWidget.getAnswer() == null) {
-            timeWidget.setTimeToCurrent();
-            timeWidget.setTimeLabel();
-        }
     }
 
     @Override
@@ -82,7 +77,6 @@ public class DateTimeWidget extends QuestionWidget {
             
             boolean hideDay = dateWidget.isDayHidden();
             boolean hideMonth = dateWidget.isMonthHidden();
-            boolean showCalendar = dateWidget.isCalendarShown();
 
             int year = dateWidget.getYear();
             int month = dateWidget.getMonth();
@@ -92,23 +86,21 @@ public class DateTimeWidget extends QuestionWidget {
 
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
-                    .withMonthOfYear((!showCalendar && hideMonth) ? 1 : month)
-                    .withDayOfMonth((!showCalendar && (hideMonth || hideDay)) ? 1 : day)
-                    .withHourOfDay((!showCalendar && (hideMonth || hideDay)) ? 0 : hour)
-                    .withMinuteOfHour((!showCalendar && (hideMonth || hideDay)) ? 0 : minute)
-                    .withSecondOfMinute(0);
+                    .withMonthOfYear(hideMonth ? 1 : month)
+                    .withDayOfMonth((hideMonth || hideDay) ? 1 : day)
+                    .withHourOfDay((hideMonth || hideDay) ? 0 : hour)
+                    .withMinuteOfHour((hideMonth || hideDay) ? 0 : minute)
+                    .withSecondOfMinute(0)
+                    .withMillisOfSecond(0);
 
-            ldt = skipDaylightSavingGapIfExists(ldt);
             return new DateTimeData(ldt.toDate());
         }
     }
 
     @Override
     public void clearAnswer() {
-        if (!dateWidget.isCalendarShown()) {
-            dateWidget.clearAnswer();
-            timeWidget.clearAnswer();
-        }
+        dateWidget.clearAnswer();
+        timeWidget.clearAnswer();
     }
 
     @Override
@@ -130,18 +122,5 @@ public class DateTimeWidget extends QuestionWidget {
         super.cancelLongPress();
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
-    }
-
-    // Skip over a "daylight savings gap". This is needed on the day and time of a daylight savings
-    // transition because that date/time doesn't exist.
-    // Today clocks are almost always set one hour back or ahead.
-    // Throughout history there have been several variations, like half adjustments (30 minutes) or
-    // double adjustment (two hours). Adjustments of 20 and 40 minutes have also been used.
-    // https://www.timeanddate.com/time/dst/
-    private LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime ldt) {
-        while (DateTimeZone.getDefault().isLocalDateTimeGap(ldt)) {
-            ldt = ldt.plusMinutes(1);
-        }
-        return ldt;
     }
 }

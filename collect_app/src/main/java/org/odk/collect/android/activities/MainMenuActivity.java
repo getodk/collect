@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -27,12 +26,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,14 +49,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,7 +77,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends Activity {
+public class MainMenuActivity extends AppCompatActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
@@ -107,6 +112,7 @@ public class MainMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        initToolbar();
 
         // enter data button. expects a result.
         enterDataButton = (Button) findViewById(R.id.enter_data);
@@ -209,8 +215,6 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        setTitle(getString(R.string.main_menu));
-
         // must be at the beginning of any activity that can be called from an
         // external intent
         Timber.i("Starting up, creating directories");
@@ -229,7 +233,23 @@ public class MainMenuActivity extends Activity {
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
+        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
@@ -290,6 +310,16 @@ public class MainMenuActivity extends Activity {
 
         updateButtons();
         setupGoogleAnalytics();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.main_menu));
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
+        if (!hasHardwareMenu) {
+            setSupportActionBar(toolbar);
+        }
     }
 
     @Override
@@ -571,7 +601,7 @@ public class MainMenuActivity extends Activity {
         } else {
             sendDataButton.setText(getString(R.string.send_data));
             Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+                    + "Perhaps the app is running in the background?");
         }
 
         if (savedCursor != null && !savedCursor.isClosed()) {
@@ -586,7 +616,7 @@ public class MainMenuActivity extends Activity {
         } else {
             reviewDataButton.setText(getString(R.string.review_data));
             Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+                    + "Perhaps the app is running in the background?");
         }
 
         if (viewSentCursor != null && !viewSentCursor.isClosed()) {
@@ -601,7 +631,7 @@ public class MainMenuActivity extends Activity {
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+                    + "Perhaps the app is running in the background?");
         }
     }
 
@@ -616,23 +646,27 @@ public class MainMenuActivity extends Activity {
             prefEdit.clear();
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
+
+            migrateAutosendPrefKeys(entries, prefEdit);
+
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    prefEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, ((Float) v).floatValue());
+                    prefEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, ((Integer) v).intValue());
+                    prefEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    prefEdit.putLong(key, ((Long) v).longValue());
+                    prefEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     prefEdit.putString(key, ((String) v));
                 }
             }
             prefEdit.apply();
+            AuthDialogUtility.setWebCredentialsFromPreferences(this);
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
@@ -645,13 +679,13 @@ public class MainMenuActivity extends Activity {
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    adminEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, ((Float) v).floatValue());
+                    adminEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, ((Integer) v).intValue());
+                    adminEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    adminEdit.putLong(key, ((Long) v).longValue());
+                    adminEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     adminEdit.putString(key, ((String) v));
                 }
@@ -671,6 +705,43 @@ public class MainMenuActivity extends Activity {
             }
         }
         return res;
+    }
+
+    /**
+     * This method is to provide backward compatibility with v1.7.0 and below
+     * Autosend was originally set into separate wifi and cellular autosend settings
+     */
+    private void migrateAutosendPrefKeys(Map<String, ?> entries, Editor prefEdit) {
+        boolean autosendWifi = false;
+        boolean autosendNetwork = false;
+        String autosend = "";
+
+        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
+            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
+            if (value instanceof Boolean) {
+                autosendWifi = (boolean) value;
+                entries.remove(PreferenceKeys.KEY_AUTOSEND_WIFI);
+            }
+        }
+        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
+            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+            if (value instanceof Boolean) {
+                autosendNetwork = (boolean) value;
+                entries.remove(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+            }
+        }
+
+        if (autosendWifi && autosendNetwork) {
+            autosend = "wifi_and_cellular";
+        } else if (autosendWifi) {
+            autosend = "wifi_only";
+        } else if (autosendNetwork) {
+            autosend = "cellular_only";
+        } else {
+            autosend = "off";
+        }
+
+        prefEdit.putString(PreferenceKeys.KEY_AUTOSEND, autosend);
     }
 
     /*

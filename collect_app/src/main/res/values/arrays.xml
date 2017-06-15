@@ -52,13 +52,6 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/constraint_behavior_on_swipe</item>
         <item>@string/constraint_behavior_on_finalize</item>
     </string-array>
-    <string-array name="form_processing_logic_entry_values" translatable="false">
-        <item>-1</item>
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     <string-array name="map_sdk_selector_entries">
         <item>@string/google_maps_sdk</item>
         <item>@string/openstreetmap_sdk</item>
@@ -108,5 +101,17 @@ the specific language governing permissions and limitations under the License. -
     <string-array name="time_scale" translatable="false">
         <item>Seconds</item>
         <item>Minutes</item>
+    </string-array>
+    <string-array name="autosend_selector_entries">
+        <item>@string/off</item>
+        <item>@string/wifi_autosend</item>
+        <item>@string/cellular_autosend</item>
+        <item>@string/wifi_cellular_autosend</item>
+    </string-array>
+    <string-array name="autosend_selector_entries_values" translatable="false">
+        <item>off</item>
+        <item>wifi_only</item>
+        <item>cellular_only</item>
+        <item>wifi_and_cellular</item>
     </string-array>
 </resources>
