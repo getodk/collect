@@ -300,6 +300,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
             helpText.setText(TextUtils.textToHtml(s));
+            helpText.setTextColor(Color.BLACK);
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {
