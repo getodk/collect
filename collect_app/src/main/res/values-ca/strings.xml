@@ -285,11 +285,9 @@
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="about_preferences">Sobre</string>
   <string name="tell_your_friends">Explica-ho als amics</string>
-  <string name="tell_your_friends_title">Comparteix ODK amb els amics</string>
   <string name="tell_your_friends_msg">Baixa l\'app ODK Collect!</string>
   <string name="leave_a_review">Deixa una opinió</string>
-  <string name="leave_a_review_summary">Deixa una opinió a Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapejant</string>
   <string name="map_sdk_selector_title">Mapejant SDK</string>
   <string name="map_sdk_behavior">Mapejant SDK</string>
