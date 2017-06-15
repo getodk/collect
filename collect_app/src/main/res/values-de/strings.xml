@@ -290,11 +290,9 @@
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
   <string name="about_preferences">Über</string>
   <string name="tell_your_friends">Weiterempfehlen</string>
-  <string name="tell_your_friends_title">Empfehle ODK Collect deinen Freunden</string>
   <string name="tell_your_friends_msg">ODK Collect App herunterladen</string>
   <string name="leave_a_review">Bewertung abgeben</string>
-  <string name="leave_a_review_summary">Bewertung auf Google Play abgeben</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Karten</string>
   <string name="map_sdk_selector_title">Karten-SDK</string>
   <string name="map_sdk_behavior">Karten-SDK</string>
@@ -447,8 +445,7 @@
   <string name="select_time">Uhrzeit auswählen</string>
   <string name="no_date_selected">Kein Datum ausgewählt</string>
   <string name="no_time_selected">Keine Uhrzeit ausgewählt</string>
-  <string name="use_phone_language">Telefonsprache benutzen</string>
-  <string name="import_settings">Import/Export Einstellungen</string>
+    <string name="import_settings">Import/Export Einstellungen</string>
   <string name="qr_code">QR-Code</string>
   <string name="scan_qrcode">Code von anderem Gerät scannen</string>
   <string name="successfully_imported_settings">Einstellungen erfolgreich importiert</string>

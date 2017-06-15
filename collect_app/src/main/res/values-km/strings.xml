@@ -290,11 +290,9 @@
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <string name="about_preferences">អំពី</string>
   <string name="tell_your_friends">ប្រាប់​មិត្តភ័ក្ររបស់អ្នក</string>
-  <string name="tell_your_friends_title">ចែក​រំលែក​ODK Collect ជាមួយមិត្តភ័ក្ររបស់អ្នក</string>
   <string name="tell_your_friends_msg">ទាញយកកម្មវិធី ODK Collect</string>
   <string name="leave_a_review">ទុកមិតិយោបល់</string>
-  <string name="leave_a_review_summary">ទុកមិតិយោបល់លើហាងកម្មវិធី Google</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ដៅផែនទី</string>
   <string name="map_sdk_selector_title">ផែនទី SDK</string>
   <string name="map_sdk_behavior">ផែនទី SDK</string>
@@ -447,8 +445,7 @@
   <string name="select_time">ជ្រើសរើសម៉ោង</string>
   <string name="no_date_selected">មិនបានជ្រើសរើសថ្ងៃខែឆ្នាំ</string>
   <string name="no_time_selected">មិនបានជ្រើសរើសម៉ោង</string>
-  <string name="use_phone_language">ប្រើប្រាស់ភាសារបស់ទូរស័ព្ទ</string>
-  <string name="share">ចែករំលែក</string>
+    <string name="share">ចែករំលែក</string>
   <string name="share_qrcode">ចែក​រំលែក​ QR Code</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
 </resources>

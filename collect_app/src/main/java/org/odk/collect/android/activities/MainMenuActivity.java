@@ -51,12 +51,15 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -231,7 +234,23 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
+        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
@@ -629,7 +648,7 @@ public class MainMenuActivity extends AppCompatActivity {
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
 
-            migrateAutosendPrefKeys(entries, prefEdit);
+            AutoSendPreferenceMigrator.migrate(entries);
 
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
@@ -648,6 +667,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }
             prefEdit.apply();
+            AuthDialogUtility.setWebCredentialsFromPreferences(this);
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
@@ -686,43 +706,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         }
         return res;
-    }
-
-    /**
-     * This method is to provide backward compatibility with v1.7.0 and below
-     * Autosend was originally set into separate wifi and cellular autosend settings
-     */
-    private void migrateAutosendPrefKeys(Map<String, ?> entries, Editor prefEdit) {
-        boolean autosendWifi = false;
-        boolean autosendNetwork = false;
-        String autosend = "";
-
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
-            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
-            if (value instanceof Boolean) {
-                autosendWifi = (boolean) value;
-                entries.remove(PreferenceKeys.KEY_AUTOSEND_WIFI);
-            }
-        }
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
-            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
-            if (value instanceof Boolean) {
-                autosendNetwork = (boolean) value;
-                entries.remove(PreferenceKeys.KEY_AUTOSEND_NETWORK);
-            }
-        }
-
-        if (autosendWifi && autosendNetwork) {
-            autosend = "wifi_and_cellular";
-        } else if (autosendWifi) {
-            autosend = "wifi_only";
-        } else if (autosendNetwork) {
-            autosend = "cellular_only";
-        } else {
-            autosend = "off";
-        }
-
-        prefEdit.putString(PreferenceKeys.KEY_AUTOSEND, autosend);
     }
 
     /*

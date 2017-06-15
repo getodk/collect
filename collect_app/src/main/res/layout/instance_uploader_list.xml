@@ -52,15 +52,8 @@ the License.
 
             <TextView
                 android:id="@android:id/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingEnd="20dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingStart="20dp"
-                android:text="@string/no_items_display_instances"
-                android:textSize="21sp" />
+                style="@style/emptyViewStyle"
+                android:text="@string/no_items_display_instances" />
 
             <LinearLayout
                 android:id="@+id/buttonholder"

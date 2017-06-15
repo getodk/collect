@@ -290,11 +290,9 @@
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <string name="about_preferences">Informazioni</string>
   <string name="tell_your_friends">Dillo agli amici</string>
-  <string name="tell_your_friends_title">Condividi ODK Collect con i tuoi amici</string>
   <string name="tell_your_friends_msg">Scarica l\'app di ODK Collect!</string>
   <string name="leave_a_review">Scrivi una recensione</string>
-  <string name="leave_a_review_summary">Scrivi la tua opinione su Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mappatura</string>
   <string name="map_sdk_selector_title">Mappatura SDK</string>
   <string name="map_sdk_behavior">Mappatura SDK</string>
@@ -447,5 +445,4 @@
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>
   <string name="no_time_selected">Nessun orario selezionato</string>
-  <string name="use_phone_language">Usa la lingua del telefono</string>
 </resources>

@@ -290,11 +290,9 @@
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
   <string name="about_preferences">Om</string>
   <string name="tell_your_friends">Berätta för dina vänner</string>
-  <string name="tell_your_friends_title">Dela ODK Collect med dina vänner</string>
   <string name="tell_your_friends_msg">Ladda ner ODK Collect appen!</string>
   <string name="leave_a_review">Lämna ett omdöme</string>
-  <string name="leave_a_review_summary">Lämna ett omdöme på Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kartering</string>
   <string name="map_sdk_selector_title">Kartering SDK</string>
   <string name="map_sdk_behavior">Kartering SDK</string>
@@ -447,8 +445,7 @@
   <string name="select_time">Välj tid</string>
   <string name="no_date_selected">Inget datum valt</string>
   <string name="no_time_selected">Ingen tidpunkt vald</string>
-  <string name="use_phone_language">Använd telefonens språk</string>
-  <string name="import_settings">Import/export inställningar</string>
+    <string name="import_settings">Import/export inställningar</string>
   <string name="qr_code">QR-kod</string>
   <string name="scan_qrcode">Skanna koden från den andra enheten</string>
   <string name="successfully_imported_settings">Import av inställningarna lyckades</string>

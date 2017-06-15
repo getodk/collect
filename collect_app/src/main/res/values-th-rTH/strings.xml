@@ -274,11 +274,9 @@
   <string name="google_play_services_error_occured">เปิด Google Maps ไม่ได้ ตรวจสอบว่ามี Google Play Services ติดตั้งหรือไม่</string>
   <string name="about_preferences">เกี่ยวกับ</string>
   <string name="tell_your_friends">บอกต่อเพื่อน</string>
-  <string name="tell_your_friends_title">ชวนเพื่อนใช้งาน ODK Collect</string>
   <string name="tell_your_friends_msg">ดาวน์โหลดแอพ ODK Collect</string>
   <string name="leave_a_review">เพิ่มคำวิจารณ์</string>
-  <string name="leave_a_review_summary">เพิ่มคำวิจารณ์ใน Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ทำแผนที่</string>
   <string name="map_sdk_selector_title">Mapping SDK</string>
   <string name="map_sdk_behavior">Mapping SDK</string>
@@ -395,5 +393,4 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
-  <string name="use_phone_language">ใช้ภาษาเดียวกับค่าที่ตั้งในโทรศัพท์</string>
 </resources>

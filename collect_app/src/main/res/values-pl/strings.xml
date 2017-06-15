@@ -283,11 +283,9 @@
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
   <string name="tell_your_friends">Powiadom znajomych</string>
-  <string name="tell_your_friends_title">Podziel się ODK Collect ze swoimi przyjaciółmi</string>
   <string name="tell_your_friends_msg">Pobierz aplikację ODK Collect!</string>
   <string name="leave_a_review">Zostaw recenzję</string>
-  <string name="leave_a_review_summary">Zostaw recenzję na Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>
   <string name="map_sdk_behavior">SDK Mapowania</string>

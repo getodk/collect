@@ -290,11 +290,9 @@
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
   <string name="about_preferences">アプリについて</string>
   <string name="tell_your_friends">友達に教える</string>
-  <string name="tell_your_friends_title">ODK Collect を友達と共有</string>
   <string name="tell_your_friends_msg">ODK Collect アプリをダウンロードしてください!</string>
   <string name="leave_a_review">レビューを残す</string>
-  <string name="leave_a_review_summary">Google Play でレビューを残してください</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">マッピング</string>
   <string name="map_sdk_selector_title">マッピング SDK</string>
   <string name="map_sdk_behavior">マッピング SDK</string>
@@ -447,8 +445,7 @@
   <string name="select_time">時間を選択</string>
   <string name="no_date_selected">日付が選択されていません</string>
   <string name="no_time_selected">時刻が選択されていません</string>
-  <string name="use_phone_language">電話の言語を使用する</string>
-  <string name="import_settings">設定をインポート/エクスポート</string>
+    <string name="import_settings">設定をインポート/エクスポート</string>
   <string name="qr_code">QR コード</string>
   <string name="scan_qrcode">他のデバイスからコードをスキャン</string>
   <string name="successfully_imported_settings">設定を正常にインポートしました</string>
