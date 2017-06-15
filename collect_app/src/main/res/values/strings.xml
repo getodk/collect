@@ -512,4 +512,5 @@
     <string name="server_settings_title">Server</string>
     <string name="type">Type</string>
     <string name="form_entry">Uncheck to hide from Form Entry</string>
+    <string name="use_device_language">Use device language</string>
 </resources>
