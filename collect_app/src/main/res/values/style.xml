@@ -10,4 +10,13 @@
         <item name="android:textColor">@drawable/black</item>
         <item name="android:textSize">21sp</item>
     </style>
+
+    <style name="WidgetStyle">
+        <item name="android:layout_marginLeft">7dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginRight">7dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:padding">20dp</item>
+    </style>
 </resources>

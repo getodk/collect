@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +52,6 @@ public class SpinnerWidget extends QuestionWidget {
     List<SelectChoice> items;
     Spinner spinner;
     String[] choices;
-    private static final int BROWN = 0xFF936931;
-
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -66,7 +65,9 @@ public class SpinnerWidget extends QuestionWidget {
             items = prompt.getSelectChoices();
         }
 
-        spinner = new Spinner(context);
+        View view = inflate(context, R.layout.spinner_layout, null);
+
+        spinner = (Spinner) view.findViewById(R.id.spinner);
         choices = new String[items.size() + 1];
         for (int i = 0; i < items.size(); i++) {
             choices[i] = prompt.getSelectChoiceText(items.get(i));
@@ -103,7 +104,7 @@ public class SpinnerWidget extends QuestionWidget {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
-                    int position, long id) {
+                                       int position, long id) {
                 if (position == items.size()) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged.clearValue",
@@ -121,8 +122,7 @@ public class SpinnerWidget extends QuestionWidget {
             }
         });
 
-        addAnswerView(spinner);
-
+        addAnswerView(view);
     }
 
 
@@ -138,14 +138,12 @@ public class SpinnerWidget extends QuestionWidget {
         }
     }
 
-
     @Override
     public void clearAnswer() {
         // It seems that spinners cannot return a null answer. This resets the answer
         // to its original value, but it is not null.
         spinner.setSelection(items.size());
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -156,6 +154,17 @@ public class SpinnerWidget extends QuestionWidget {
 
     }
 
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        spinner.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        spinner.cancelLongPress();
+    }
+
     // Defines how to display the select answers
     private class SpinnerAdapter extends ArrayAdapter<String> {
         Context context;
@@ -163,9 +172,8 @@ public class SpinnerWidget extends QuestionWidget {
         int textUnit;
         float textSize;
 
-
-        public SpinnerAdapter(final Context context, final int textViewResourceId,
-                final String[] objects, int textUnit, float textSize) {
+        SpinnerAdapter(final Context context, final int textViewResourceId,
+                       final String[] objects, int textUnit, float textSize) {
             super(context, textViewResourceId, objects);
             this.items = objects;
             this.context = context;
@@ -173,14 +181,13 @@ public class SpinnerWidget extends QuestionWidget {
             this.textSize = textSize;
         }
 
-
         @Override
         // Defines the text view parameters for the drop down list entries
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
 
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(R.layout.custom_spinner_item, parent, false);
+                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
             }
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
@@ -188,7 +195,6 @@ public class SpinnerWidget extends QuestionWidget {
             tv.setPadding(10, 10, 10, 10); // Are these values OK?
             if (position == items.length - 1) {
                 tv.setText(parent.getContext().getString(R.string.clear_answer));
-                tv.setTextColor(BROWN);
                 tv.setTypeface(null, Typeface.NORMAL);
                 if (spinner.getSelectedItemPosition() == position) {
                     tv.setBackgroundColor(Color.LTGRAY);
@@ -202,9 +208,9 @@ public class SpinnerWidget extends QuestionWidget {
             return convertView;
         }
 
-
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
                 convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
@@ -216,25 +222,9 @@ public class SpinnerWidget extends QuestionWidget {
             tv.setTextColor(Color.BLACK);
             tv.setTypeface(null, Typeface.BOLD);
             if (position == items.length - 1) {
-                tv.setTextColor(BROWN);
                 tv.setTypeface(null, Typeface.NORMAL);
             }
             return convertView;
         }
-
     }
-
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        spinner.setOnLongClickListener(l);
-    }
-
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        spinner.cancelLongPress();
-    }
-
 }
