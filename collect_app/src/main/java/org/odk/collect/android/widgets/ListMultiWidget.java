@@ -17,8 +17,8 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +89,7 @@ public class ListMultiWidget extends QuestionWidget {
         } else {
             items = prompt.getSelectChoices();
         }
-        checkBoxes = new ArrayList<CheckBox>();
+        checkBoxes = new ArrayList<>();
         formEntryPrompt = prompt;
 
         // Layout holds the horizontal list of buttons
@@ -103,7 +103,7 @@ public class ListMultiWidget extends QuestionWidget {
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
                 CheckBox c = new CheckBox(getContext());
-                c.setTag(Integer.valueOf(i));
+                c.setTag(i);
                 c.setId(QuestionWidget.newUniqueId());
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
@@ -229,7 +229,7 @@ public class ListMultiWidget extends QuestionWidget {
 
                 RelativeLayout.LayoutParams buttonParams =
                         new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
+                                LayoutParams.MATCH_PARENT);
                 buttonParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
                 if (imageView != null) {
@@ -266,11 +266,7 @@ public class ListMultiWidget extends QuestionWidget {
         // Align the buttons so that they appear horizonally and are right justified
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-        addView(buttonLayout, params);
-
+        addAnswerView(buttonLayout);
     }
 
 

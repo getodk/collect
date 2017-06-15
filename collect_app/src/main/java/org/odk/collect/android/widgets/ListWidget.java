@@ -16,8 +16,8 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +84,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         } else {
             items = prompt.getSelectChoices();
         }
-        buttons = new ArrayList<RadioButton>();
+        buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -99,7 +99,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 RadioButton r = new RadioButton(getContext());
 
                 r.setId(QuestionWidget.newUniqueId());
-                r.setTag(Integer.valueOf(i));
+                r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
@@ -201,7 +201,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                 LinearLayout.LayoutParams buttonParams =
                         new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
+                                LayoutParams.MATCH_PARENT);
                 buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
 
                 if (imageView != null) {
@@ -217,8 +217,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                         label.setId(labelId);
                         answer.addView(label, headerParams);
                     }
-
                 }
+
                 answer.addView(r, buttonParams);
                 answer.setPadding(4, 0, 4, 0);
 
@@ -231,14 +231,9 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 buttonLayout.addView(answer, answerParams);
             }
         }
-
-
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-        addView(buttonLayout, params);
+        addAnswerView(buttonLayout);
     }
 
 
