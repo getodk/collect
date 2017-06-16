@@ -65,11 +65,13 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     // Holds the entire question and answers. It is a horizontally aligned linear layout
     // needed because it is created in the super() constructor via addQuestionText() call.
     LinearLayout questionLayout;
-
     List<SelectChoice> items; // may take a while to compute
-
     ArrayList<RadioButton> buttons;
     View center;
+    private TextView label;
+    private TextView missingImage;
+    private ImageView imageView;
+    private RadioButton radioButton;
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
@@ -94,87 +96,22 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-
                 View answerLayout = inflate(context, R.layout.list_widget_item_layout, null);
 
-                RadioButton r = (RadioButton) answerLayout.findViewById(R.id.radioButton);
+                radioButton = (RadioButton) answerLayout.findViewById(R.id.radioButton);
+                imageView = (ImageView) answerLayout.findViewById(R.id.image);
+                missingImage = (TextView) answerLayout.findViewById(R.id.missingImage);
+                label = (TextView) answerLayout.findViewById(R.id.label);
 
-                r.setTag(i);
-                r.setEnabled(!prompt.isReadOnly());
-                r.setFocusable(!prompt.isReadOnly());
+                initRadioButton(radioButton, prompt, i);
+                initImageView(prompt, i);
+                initLabel(prompt, i);
 
-                buttons.add(r);
+                buttons.add(radioButton);
 
                 if (items.get(i).getValue().equals(s)) {
-                    r.setChecked(true);
+                    radioButton.setChecked(true);
                 }
-                r.setOnCheckedChangeListener(this);
-
-                String imageURI;
-                if (items.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
-                } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
-                            FormEntryCaption.TEXT_FORM_IMAGE);
-                }
-
-                // build image view (if an image is provided)
-                ImageView imageView = (ImageView) answerLayout.findViewById(R.id.image);
-                TextView missingImage = (TextView) answerLayout.findViewById(R.id.missingImage);
-                TextView label = (TextView) answerLayout.findViewById(R.id.label);
-
-                // Now set up the image view
-                String errorMsg = null;
-                if (imageURI != null) {
-                    try {
-                        String imageFilename =
-                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
-                        final File imageFile = new File(imageFilename);
-                        if (imageFile.exists()) {
-                            Bitmap b = null;
-                            try {
-                                DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-                                int screenWidth = metrics.widthPixels;
-                                int screenHeight = metrics.heightPixels;
-                                b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                        screenWidth);
-                            } catch (OutOfMemoryError e) {
-                                errorMsg = "ERROR: " + e.getMessage();
-                            }
-
-                            if (b != null) {
-                                imageView.setImageBitmap(b);
-                                label.setVisibility(GONE);
-                            } else if (errorMsg == null) {
-                                // An error hasn't been logged and loading the image failed, so it's
-                                // likely
-                                // a bad file.
-                                errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-                            }
-                        } else {
-                            // An error hasn't been logged. We should have an image, but the file
-                            // doesn't
-                            // exist.
-                            errorMsg = getContext().getString(R.string.file_missing, imageFile);
-                        }
-
-                        if (errorMsg != null) {
-                            // errorMsg is only set when an error has occured
-                            missingImage.setText(errorMsg);
-                            missingImage.setVisibility(VISIBLE);
-                            Timber.e(errorMsg);
-                        }
-                    } catch (InvalidReferenceException e) {
-                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
-                    }
-                } else {
-                    // There's no imageURI listed, so just ignore it.
-                }
-
-                // build text label. Don't assign the text to the built in label to he
-                // button because it aligns horizontally, and we want the label on top
-                label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
 
                 if (!displayLabel) {
                     label.setVisibility(GONE);
@@ -191,10 +128,85 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             }
         }
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
         addAnswerView(buttonLayout);
     }
 
+    private void initLabel(FormEntryPrompt prompt, int i) {
+        // Don't assign the text to the built in label to he
+        // button because it aligns horizontally, and we want the label on top
+        label.setText(prompt.getSelectChoiceText(items.get(i)));
+        label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+    }
+
+    private void initImageView(FormEntryPrompt prompt, int i) {
+
+        String imageURI = getImageURI(prompt, i);
+
+        // Now set up the image view
+        String errorMsg = null;
+        if (imageURI != null) {
+            try {
+                String imageFilename =
+                        ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                final File imageFile = new File(imageFilename);
+                if (imageFile.exists()) {
+                    Bitmap b = null;
+                    try {
+                        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+                        int screenWidth = metrics.widthPixels;
+                        int screenHeight = metrics.heightPixels;
+                        b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
+                                screenWidth);
+                    } catch (OutOfMemoryError e) {
+                        errorMsg = "ERROR: " + e.getMessage();
+                    }
+
+                    if (b != null) {
+                        imageView.setImageBitmap(b);
+                        label.setVisibility(GONE);
+                    } else if (errorMsg == null) {
+                        // An error hasn't been logged and loading the image failed, so it's
+                        // likely
+                        // a bad file.
+                        errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+                    }
+                } else {
+                    // An error hasn't been logged. We should have an image, but the file
+                    // doesn't
+                    // exist.
+                    errorMsg = getContext().getString(R.string.file_missing, imageFile);
+                }
+
+                if (errorMsg != null) {
+                    // errorMsg is only set when an error has occured
+                    missingImage.setText(errorMsg);
+                    missingImage.setVisibility(VISIBLE);
+                    Timber.e(errorMsg);
+                }
+            } catch (InvalidReferenceException e) {
+                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+            }
+        } else {
+            // There's no imageURI listed, so just ignore it.
+        }
+
+    }
+
+    private String getImageURI(FormEntryPrompt prompt, int i) {
+        if (items.get(i) instanceof ExternalSelectChoice) {
+            return ((ExternalSelectChoice) items.get(i)).getImage();
+        } else {
+            return prompt.getSpecialFormSelectChoiceText(items.get(i),
+                    FormEntryCaption.TEXT_FORM_IMAGE);
+        }
+    }
+
+    private void initRadioButton(RadioButton radioButton, FormEntryPrompt prompt, int i) {
+        radioButton.setTag(i);
+        radioButton.setEnabled(!prompt.isReadOnly());
+        radioButton.setFocusable(!prompt.isReadOnly());
+        radioButton.setOnCheckedChangeListener(this);
+    }
 
     @Override
     public void clearAnswer() {
@@ -206,7 +218,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         }
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         int i = getCheckedId();
@@ -217,7 +228,6 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             return new SelectOneData(new Selection(sc));
         }
     }
-
 
     @Override
     public void setFocus(Context context) {
