@@ -16,7 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -187,25 +186,36 @@ public class SpinnerWidget extends QuestionWidget {
 
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+                convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
             }
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
-            tv.setPadding(10, 10, 10, 10); // Are these values OK?
+            tv.setPadding(20, 10, 10, 10);
+
             if (position == items.length - 1) {
                 tv.setText(parent.getContext().getString(R.string.clear_answer));
-                tv.setTypeface(null, Typeface.NORMAL);
-                if (spinner.getSelectedItemPosition() == position) {
-                    tv.setBackgroundColor(Color.LTGRAY);
-                }
             } else {
                 tv.setText(items[position]);
+            }
+
+            if (spinner.getSelectedItemPosition() == position) {
+                tv.setTextColor(getContext().getResources().getColor(R.color.light_blue));
+            } else {
                 tv.setTextColor(Color.BLACK);
-                tv.setTypeface(null, (spinner.getSelectedItemPosition() == position)
-                        ? Typeface.BOLD : Typeface.NORMAL);
             }
             return convertView;
+        }
+
+        @Override
+        public int getCount() {
+
+            // remove the remove response option form dropdown list when no item is selected
+            if (spinner.getSelectedItemPosition() == items.length - 1) {
+                return items.length - 1;
+            }
+
+            return items.length;
         }
 
         @NonNull
@@ -217,13 +227,10 @@ public class SpinnerWidget extends QuestionWidget {
             }
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-            tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
-            tv.setTextColor(Color.BLACK);
-            tv.setTypeface(null, Typeface.BOLD);
-            if (position == items.length - 1) {
-                tv.setTypeface(null, Typeface.NORMAL);
-            }
+            tv.setPadding(10, 10, 10, 10);
+            tv.setText(items[position]);
+
             return convertView;
         }
     }
