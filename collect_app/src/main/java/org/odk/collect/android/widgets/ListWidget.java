@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -184,7 +185,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+                label.setTextColor(Color.BLACK);
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
