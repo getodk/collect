@@ -62,16 +62,12 @@ import timber.log.Timber;
  */
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
 
-    // Holds the entire question and answers. It is a horizontally aligned linear layout
-    // needed because it is created in the super() constructor via addQuestionText() call.
-    LinearLayout questionLayout;
     List<SelectChoice> items; // may take a while to compute
     ArrayList<RadioButton> buttons;
     View center;
     private TextView label;
     private TextView missingImage;
     private ImageView imageView;
-    private RadioButton radioButton;
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
@@ -98,10 +94,10 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             for (int i = 0; i < items.size(); i++) {
                 View answerLayout = inflate(context, R.layout.list_widget_item_layout, null);
 
-                radioButton = (RadioButton) answerLayout.findViewById(R.id.radioButton);
                 imageView = (ImageView) answerLayout.findViewById(R.id.image);
                 missingImage = (TextView) answerLayout.findViewById(R.id.missingImage);
                 label = (TextView) answerLayout.findViewById(R.id.label);
+                RadioButton radioButton = (RadioButton) answerLayout.findViewById(R.id.radioButton);
 
                 initRadioButton(radioButton, prompt, i);
                 initImageView(prompt, i);
