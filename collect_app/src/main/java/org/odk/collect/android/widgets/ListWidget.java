@@ -16,17 +16,14 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -97,9 +94,11 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
 
-                r.setId(QuestionWidget.newUniqueId());
+                View answerLayout = inflate(context, R.layout.list_widget_item_layout, null);
+
+                RadioButton r = (RadioButton) answerLayout.findViewById(R.id.radioButton);
+
                 r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
@@ -120,10 +119,9 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 }
 
                 // build image view (if an image is provided)
-                ImageView imageView = null;
-                TextView missingImage = null;
-
-                final int labelId = QuestionWidget.newUniqueId();
+                ImageView imageView = (ImageView) answerLayout.findViewById(R.id.image);
+                TextView missingImage = (TextView) answerLayout.findViewById(R.id.missingImage);
+                TextView label = (TextView) answerLayout.findViewById(R.id.label);
 
                 // Now set up the image view
                 String errorMsg = null;
@@ -138,27 +136,22 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                                 int screenWidth = metrics.widthPixels;
                                 int screenHeight = metrics.heightPixels;
-                                b =
-                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                                b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
+                                        screenWidth);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }
 
                             if (b != null) {
-                                imageView = new ImageView(getContext());
-                                imageView.setPadding(2, 2, 2, 2);
-                                imageView.setAdjustViewBounds(true);
                                 imageView.setImageBitmap(b);
-                                imageView.setId(labelId);
+                                label.setVisibility(GONE);
                             } else if (errorMsg == null) {
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
                                 // a bad file.
                                 errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-
                             }
-                        } else if (errorMsg == null) {
+                        } else {
                             // An error hasn't been logged. We should have an image, but the file
                             // doesn't
                             // exist.
@@ -167,12 +160,9 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Timber.e(errorMsg);
-                            missingImage = new TextView(getContext());
                             missingImage.setText(errorMsg);
-
-                            missingImage.setPadding(2, 2, 2, 2);
-                            missingImage.setId(labelId);
+                            missingImage.setVisibility(VISIBLE);
+                            Timber.e(errorMsg);
                         }
                     } catch (InvalidReferenceException e) {
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
@@ -183,46 +173,13 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
-                TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));
                 label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
-                label.setTextColor(Color.BLACK);
-                label.setGravity(Gravity.CENTER_HORIZONTAL);
+
                 if (!displayLabel) {
-                    label.setVisibility(View.GONE);
+                    label.setVisibility(GONE);
+                    imageView.setVisibility(GONE);
                 }
-
-                // answer layout holds the label text/image on top and the radio button on bottom
-                LinearLayout answer = new LinearLayout(getContext());
-                answer.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams headerParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
-                headerParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-
-                LinearLayout.LayoutParams buttonParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.MATCH_PARENT);
-                buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-                if (imageView != null) {
-                    imageView.setScaleType(ScaleType.CENTER);
-                    if (!displayLabel) {
-                        imageView.setVisibility(View.GONE);
-                    }
-                    answer.addView(imageView, headerParams);
-                } else if (missingImage != null) {
-                    answer.addView(missingImage, headerParams);
-                } else {
-                    if (displayLabel) {
-                        label.setId(labelId);
-                        answer.addView(label, headerParams);
-                    }
-                }
-
-                answer.addView(r, buttonParams);
-                answer.setPadding(4, 0, 4, 0);
 
                 // Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
@@ -230,7 +187,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
 
-                buttonLayout.addView(answer, answerParams);
+                buttonLayout.addView(answerLayout, answerParams);
             }
         }
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
