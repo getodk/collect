@@ -946,12 +946,12 @@ public abstract class GoogleSheetsAbstractUploader extends
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
 
-    private boolean isValidGoogleSheetsString(String name) {
+    public static boolean isValidGoogleSheetsString(String name) {
         return Pattern
                 .compile(VALID_GOOGLE_SHEETS_ID).matcher(name).matches();
     }
 
-    private static boolean isValidLocation(String answer) {
+    public static boolean isValidLocation(String answer) {
         return Pattern
                 .compile(GPS_LOCATION).matcher(answer).matches();
     }
@@ -976,6 +976,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .execute();
         return response.getValues();
     }
+
 }
 
 
