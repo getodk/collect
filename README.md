@@ -86,6 +86,18 @@ Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opend
 
 Current and previous production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk).
 
+## Creating signed releases
+Create a `secrets.properties` file in the `collect_app` folder with the following:
+```
+// collect_app/secrets.properties
+RELEASE_STORE_FILE=/path/to/collect.keystore
+RELEASE_STORE_PASSWORD=secure-store-password
+RELEASE_KEY_ALIAS=key-alias
+RELEASE_KEY_PASSWORD=secure-alias-password
+```
+Run `./gradlew assembleRelease` and, if successful, a signed release will be at `collect_app/build/outputs/apk`. 
+
+You can also use Android Studio by going to `Build` menu, `Generate Signed APK...`, and generate signed releases that way.
 
 ## Troubleshooting
 #### Error when running Robolectric tests from Android Studio on macOS: `build/intermediates/bundles/debug/AndroidManifest.xml (No such file or directory)`
