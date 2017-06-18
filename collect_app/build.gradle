@@ -57,7 +57,7 @@ def getVersionName = { ->
 
 def secretsFile = file('secrets.properties')
 def secrets = new Properties()
-if(secretsFile.exists()) {
+if (secretsFile.exists()) {
     secrets.load(new FileInputStream(secretsFile))
 }
 
