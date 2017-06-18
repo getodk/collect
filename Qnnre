@@ -1,0 +1,171 @@
+explanatory text	_How much land does this household operate	"1. Purchase 
+2. Gift 
+3. Share tenancy
+4. Family Land 
+6. Leased or rented 
+7. Inherited 
+8. Other"	
+categorial multi-select	Are you farming on land obtained in any of the following ways?		
+text	Please specify other		
+numeric	Size of land operated on and obtained via %rostertitle%	"1. hectare
+2. acre
+3. other, specify"	
+categorial single-select	Units of land described as %rostertitle%:		
+text	Please specify other		(For land purchase write total purchase cost for land here.)
+numeric	"Cost [total payment per year in %currency%]:
+"	yes/no	
+categorial single-select	Are you growing any crops?		
+explanatory text	Last 12 months and up to 2 seasons. First season ist the one longer ago. Second season is the more recent one.	"1. One season
+2. Two season"	
+categorial single-select	Do you have one or two growing seasons for %focusvc_1%?		(Name the variety. If you cannot, write whether improved or not.)
+list	Season 1 - Which varieties of %focusvc_1% are you cultivating: Name of variety cultivated in each season 		(Name the variety. If you cannot, write whether improved or not.)
+list	Season 2 - Which varieties of %focusvc_1% are you cultivating: Name of variety cultivated in each season  		
+numeric	Season 2 - Total area cultivated of variety:	"1. hectare
+2. acre
+3. other, specify"	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	Season 2 - Total area cultivated of variety:	"1. hectare
+2. acre
+3. other, specify"	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+explanatory text	In the last 12 months and up to 2 seasons: How much was harvested?	"1. meters
+2. kg
+3. gramme
+4. ton
+5. litre
+6. ml
+7. bag (10kg)
+8. bag (20kg)
+9. bag (50kg)
+10. bag (70kg)
+11. bag (90kg)
+12. quintal (100kg)
+13. crate or box (15kg)
+14. piece
+15. basket
+16. bowl 
+17. pick up load
+18. tractor load
+19. wheel barrow
+20. other, specify"	
+categorial single-select	Please state first the unit applied in ALL the next questions:		
+text	Please specify other		(Remember: Last 12 months= 2 seasons) 
+numeric	How much of the %focusvc_1% was harvested in the first season? 		(Remember: Last 12 months= 2 seasons) 
+numeric 	How much of the %focusvc_1% was harvested in the second season? 		
+numeric	How much of the harvest was sold (unprocessed) in the first season?		
+numeric	How much of the harvest was sold (unprocessed) in the second season?		
+numeric	How much of harvested %focusvc_1% was kept for household consumption in the first season?		
+numeric	How much of harvested %focusvc_1% was kept for household consumption in the second season?		
+numeric	How much of harvested %focusvc_1% was kept for seed in the first season?		
+numeric	How much of harvested %focusvc_1% was kept for seed in the second season?		What to do if several prices: best: ask for amounts and compute average, if not possible use additional lines provided
+numeric	What was the unit price for the unprocessed sales you did in the last 12 months in %currency%? If no sales yet, what is the current market price in %currency%?		
+numeric	What is the expected unit price in %currency%?	yes/no	
+categorial single-select	Did you use chemical fertilizer for your %focusvc_1% production?		
+numeric	How much?	"1. meters
+2. kg
+3. gramme
+4. ton
+5. litre
+6. ml
+7. bag (10kg)
+8. bag (20kg)
+9. bag (50kg)
+10. bag (70kg)
+11. bag (90kg)
+12. quintal (100kg)
+13. crate or box (15kg)
+14. piece
+15. basket
+16. bowl 
+17. pick up load
+18. tractor load
+19. wheel barrow
+20. other, specify"	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	What did it cost in %currency%? (This refers to total cost for the past year)	yes/no	
+categorial single-select	Did you use manure and/or compost for your %focusvc_1% production?		
+numeric	How much?	see units above	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	What did it cost in %currency%? (This refers to total cost for the past year)	yes/no	
+categorial single-select	Did you use insecticides for your %focusvc_1% production?		
+numeric	How much?	see units above	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	What did it cost in %currency%? (This refers to total cost for the past year)	yes/no	
+categorial single-select	Did you use plastic foil for your %focusvc_1% production?		
+numeric	How much?	see units above	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	What did it cost in %currency%? (This refers to total cost for the past year)	yes/no	
+categorial single-select	Did you use herbicides for your %focusvc_1% production?		
+numeric	How much?	see units above	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	What did it cost in %currency%? (This refers to total cost for the past year)	yes/no	
+categorial single-select	Did you use fungicides for your %focusvc_1% production?		
+numeric	How much?	see units above	
+categorial single-select	Please state the unit applied		
+text	Please specify other		
+numeric	What did it cost in %currency%? (This refers to total cost for the past year)		
+	How many household members worked on the focused value chain production? Differentiated by age and gender		
+numeric	Concerning %focusvc_1%: How many males?		
+numeric	Concerning %focusvc_1%: How many females?		
+numeric	Concerning %focusvc_1%: How many male youth (up to age 35)?		
+numeric	Concerning %focusvc_1%: How many female youth (up to age 35)?		
+	If not zero, please specify who in the household in which production step?		
+fixed set of items	"1. Purchase of inputs (seeds, fertilizers, pesticides..)
+2. Land preperation and plowing
+3. Sowing/Planting
+4. Weeding
+5. Chemical fertilizer application
+6. Pest and disease control
+7. Harvesting
+8. Transportation and packaging of harvest
+9. Selling/Marketing
+10. Processing"		
+explanatory text	Please indicate the approximate number of total days worked in each step in the last 12 months.		
+numeric	%rostertitle%: Total days worked by male household members (over age 35)		
+numeric	%rostertitle%: Total days worked by female household members (over age 35):		
+numeric	%rostertitle%: Total days worked by male youth (up to age 35) household members:		
+numeric	%rostertitle%: Total days worked by female youth (up to age 35) household members:	yes/no	
+categorial single-select	Did you hire labor for your %focusvc_1% production in the last 12 months?		
+	If yes, please specify in which production step(s) you hired labour?		
+fixed set of items	"1. Purchase of inputs (seeds, fertilizers, pesticides..)
+2. Land preperation and plowing
+3. Sowing/Planting
+4. Weeding
+5. Chemical fertilizer application
+6. Pest and disease control
+7. Harvesting
+8. Transportation and packaging of harvest
+9. Selling/Marketing
+10. Processing"		
+	Please indicate the approximate total number of days worked in each step in the last 12 months.		
+numeric	%rostertitle%: Number of total days of hired males (over age 35):		
+numeric	%rostertitle%: Number of total days of hired females (over age 35):		
+numeric	%rostertitle%: Number of total days of hired male youth (up to age 35):		
+numeric	%rostertitle%: Number of total days of hired female youth (up to age 35):		
+numeric	What was the average daily wage in %currency% for hired males labourers (over age 35)?		
+numeric	What was the average daily wage in %currency% for hired females labourers (over age 35)?		
+numeric	What was the average daily wage in %currency% for hired male youth (up 35 years) labourers?		
+numeric	What was the average daily wage in %currency% for hired female youth (up 35 years) labourers?		
+explanatory text	When answering the following questions please consider your household's processing practices of the first focus crop in the last 12 months. The first season is the one longer ago. The second season is the more recent.	"1. Cooking
+2. Cutting into pieces
+3. Drying
+4. Making flour
+5. Making oil
+6. Salting
+7. Making Chips
+8. Making baked products or sweets
+9. Something else/other
+10. Nothing"	
+categorial multi-select	What did you do with %focusvc_1% before selling?		Please summarize all processed products of VC 1
+numeric	How much of the processed product of %focusvc_1% was sold (in %)?		Please use any of the Units stated in the next question / Please summarize all processed products
+numeric	How much of the processed product of %focusvc_1% was sold?	see units above	
+categorial single-select	Please state the unit applied		Please summarize all processed products
+numeric	What is the actual unit price in %currency% of the processed product of %focusvc_1%?		Please summarize all processed products
+numeric	What is the expected unit price in %currency% of the processed product of %focusvc_1%?		
