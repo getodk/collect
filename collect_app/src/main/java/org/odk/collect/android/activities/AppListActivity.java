@@ -81,8 +81,6 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
-    protected TextView emptyView;
-
     protected boolean hasHardwareMenu;
 
     @Override
@@ -90,7 +88,10 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
+
+        TextView emptyView = (TextView) findViewById(android.R.id.empty);
+        listView.setEmptyView(emptyView);
+
         hasHardwareMenu = ViewConfigurationCompat
                 .hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
         initToolbar();
@@ -399,17 +400,5 @@ abstract class AppListActivity extends AppCompatActivity {
 
     protected CharSequence getFilterText() {
         return inputSearch != null ? inputSearch.getText() : "";
-    }
-
-    protected void updateEmptyView() {
-        if (listAdapter == null) {
-            return;
-        }
-
-        if (listAdapter.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-        }
     }
 }

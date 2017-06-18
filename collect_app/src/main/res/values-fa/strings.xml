@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">ثبت مکان</string>
   <string name="add_another">اضافه کردن گروه</string>
-  <string name="add_more">بیشتر</string>
   <string name="cancel">انصراف</string>
   <string name="cancel_loading_form">انصراف</string>
   <string name="cancel_location">انصراف</string>

@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -84,8 +85,9 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle(getString(R.string.import_export_settings));
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.import_export_settings));
         setHasOptionsMenu(true);
         setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);

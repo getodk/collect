@@ -1,18 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">Regjistro vendndodhjen.</string>
-  <string name="accuracy">Saktësia</string>
   <string name="activity_not_found">Nuk gjendet aktivitet për t\'u proçesuar: %s</string>
   <string name="add_another">Shto një grup</string>
   <string name="add_another_repeat">Shto një grup \"%s\"</string>
-  <string name="add_more">Shto edhe një tjetër</string>
   <string name="add_repeat">Shto një grup tjetër \"%s\"?</string>
   <string name="add_repeat_no">Mos shto</string>
-  <string name="advance">Përparo tek \nnext\nprompt</string>
-  <string name="altitude">Gjatësia</string>
   <string name="audio_file_error">Audio file e specifikuar nuk gjendet</string>
   <string name="audio_file_invalid">File: %s nuk është një audio file funksionale</string>
-  <string name="backup">Rikthehu tek \nprevious\nprompt</string>
   <string name="cancel">Anullo</string>
   <string name="cancel_loading_form">Anullo</string>
   <string name="cancel_location">Anullo</string>

@@ -51,12 +51,15 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -231,7 +234,23 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
+        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
@@ -628,23 +647,27 @@ public class MainMenuActivity extends AppCompatActivity {
             prefEdit.clear();
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
+
+            AutoSendPreferenceMigrator.migrate(entries);
+
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    prefEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, ((Float) v).floatValue());
+                    prefEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, ((Integer) v).intValue());
+                    prefEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    prefEdit.putLong(key, ((Long) v).longValue());
+                    prefEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     prefEdit.putString(key, ((String) v));
                 }
             }
             prefEdit.apply();
+            AuthDialogUtility.setWebCredentialsFromPreferences(this);
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
@@ -657,13 +680,13 @@ public class MainMenuActivity extends AppCompatActivity {
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    adminEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, ((Float) v).floatValue());
+                    adminEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, ((Integer) v).intValue());
+                    adminEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    adminEdit.putLong(key, ((Long) v).longValue());
+                    adminEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     adminEdit.putString(key, ((String) v));
                 }

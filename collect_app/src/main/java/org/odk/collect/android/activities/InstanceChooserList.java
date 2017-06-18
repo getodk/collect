@@ -180,7 +180,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     public void syncComplete(String result) {
         TextView textView = (TextView) findViewById(R.id.status_text);
         textView.setText(result);
-        updateEmptyView();
     }
 
     @Override
@@ -219,7 +218,6 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     @Override
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
-        updateEmptyView();
     }
 
     private Cursor getCursor() {

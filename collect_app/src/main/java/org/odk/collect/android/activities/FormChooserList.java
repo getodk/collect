@@ -52,8 +52,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     private DiskSyncTask diskSyncTask;
 
-    private AlertDialog alertDialog;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -180,7 +178,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         Timber.i("Disk sync task complete");
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setText(result.trim());
-        updateEmptyView();
     }
 
     private void setupAdapter() {
@@ -205,7 +202,6 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void updateAdapter() {
         listAdapter.changeCursor(getCursor());
-        updateEmptyView();
     }
 
     private Cursor getCursor() {
@@ -220,7 +216,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
 
-        alertDialog = new AlertDialog.Builder(this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {

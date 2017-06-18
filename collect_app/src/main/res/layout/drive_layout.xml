@@ -66,7 +66,7 @@ the License.
         android:id="@+id/searchholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@id/toolbar"
         android:layout_gravity="center_vertical"
         android:background="#ECECEC"
         android:orientation="horizontal">
@@ -111,11 +111,8 @@ the License.
 
     <TextView
         android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@+id/buttonholder"
         android:layout_below="@+id/searchholder"
-        android:gravity="center"
-        android:text="@string/google_search_browse"
-        android:textSize="21sp" />
+        style="@style/emptyViewStyle"
+        android:text="@string/google_search_browse" />
 </RelativeLayout>

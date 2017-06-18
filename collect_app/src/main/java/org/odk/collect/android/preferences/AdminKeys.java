@@ -35,7 +35,6 @@ public final class AdminKeys {
     static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     static final String KEY_IMPORT_SETTINGS                     = "import_settings";
     private static final String KEY_CHANGE_SERVER               = "change_server";
-    private static final String KEY_CHANGE_PROTOCOL_SETTINGS    = "change_protocol_settings";
     private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
@@ -47,8 +46,7 @@ public final class AdminKeys {
     private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
     private static final String KEY_APP_LANGUAGE                = "app_language";
 
-    private static final String KEY_AUTOSEND_WIFI               = "autosend_wifi";
-    private static final String KEY_AUTOSEND_NETWORK            = "autosend_network";
+    private static final String KEY_AUTOSEND                    = "autosend";
 
     private static final String KEY_NAVIGATION                  = "navigation";
     private static final String KEY_CONSTRAINT_BEHAVIOR         = "constraint_behavior";
@@ -66,7 +64,6 @@ public final class AdminKeys {
     static AdminAndGeneralKeys[] adminToGeneral = new AdminAndGeneralKeys[] {
 
             ag(KEY_CHANGE_SERVER,              PreferenceKeys.KEY_PROTOCOL),
-            ag(KEY_CHANGE_PROTOCOL_SETTINGS,   PreferenceKeys.KEY_PROTOCOL_SETTINGS),
             ag(KEY_CHANGE_FORM_METADATA,       PreferenceKeys.KEY_FORM_METADATA),
 
             ag(KEY_CHANGE_FONT_SIZE,           PreferenceKeys.KEY_FONT_SIZE),
@@ -78,8 +75,7 @@ public final class AdminKeys {
             ag(KEY_DELETE_AFTER_SEND,          PreferenceKeys.KEY_DELETE_AFTER_SEND),
             ag(KEY_INSTANCE_FORM_SYNC,         PreferenceKeys.KEY_INSTANCE_SYNC),
 
-            ag(KEY_AUTOSEND_WIFI,              PreferenceKeys.KEY_AUTOSEND_WIFI),
-            ag(KEY_AUTOSEND_NETWORK,           PreferenceKeys.KEY_AUTOSEND_NETWORK),
+            ag(KEY_AUTOSEND,                   PreferenceKeys.KEY_AUTOSEND),
 
             ag(KEY_NAVIGATION,                 PreferenceKeys.KEY_NAVIGATION),
             ag(KEY_CONSTRAINT_BEHAVIOR,        PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR),

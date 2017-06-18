@@ -117,6 +117,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
+        questionText.setTextColor(Color.BLACK);
         questionText.setPadding(0, 0, 0, 7);
         questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -299,6 +300,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
             helpText.setText(TextUtils.textToHtml(s));
+            helpText.setTextColor(Color.BLACK);
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {

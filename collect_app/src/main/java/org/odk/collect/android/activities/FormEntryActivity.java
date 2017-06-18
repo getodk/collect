@@ -194,6 +194,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
+    private boolean doSwipe = true;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -2230,7 +2231,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Timber.e("Creating PROGRESS_DIALOG");
+                Timber.i("Creating PROGRESS_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
@@ -2262,7 +2263,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         loadingButtonListener);
                 return progressDialog;
             case SAVING_DIALOG:
-                Timber.e("Creating SAVING_DIALOG");
+                Timber.i("Creating SAVING_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
@@ -2322,7 +2323,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Dismiss any showing dialogs that we manually manage.
      */
     private void dismissDialogs() {
-        Timber.e("Dismiss dialogs");
+        Timber.i("Dismiss dialogs");
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
@@ -2827,11 +2828,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String navigation = sharedPreferences.getString(
                 PreferenceKeys.KEY_NAVIGATION,
                 PreferenceKeys.NAVIGATION_SWIPE);
-        Boolean doSwipe = false;
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
-            doSwipe = true;
-        }
-        if (doSwipe) {
+
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 
@@ -2955,5 +2953,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         public EmptyView(Context context) {
             super(context);
         }
+    }
+
+    public void allowSwiping(boolean doSwipe) {
+        this.doSwipe = doSwipe;
     }
 }

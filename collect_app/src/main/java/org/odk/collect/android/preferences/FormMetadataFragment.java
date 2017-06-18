@@ -4,8 +4,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.PropertyManager;
@@ -20,11 +21,8 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EM
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
 
-/**
- * Created by shobhit on 24/4/17.
- */
 
-public class FormMetadataFragment extends PreferenceFragment {
+public class FormMetadataFragment extends BasePreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -38,7 +36,18 @@ public class FormMetadataFragment extends PreferenceFragment {
         initPrefFromProp(pm, prefs, PROPMGR_DEVICE_ID, null);
         initPrefFromProp(pm, prefs, PROPMGR_SUBSCRIBER_ID, null);
         initPrefFromProp(pm, prefs, PROPMGR_SIM_SERIAL, null);
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        toolbar.setTitle(R.string.form_metadata_title);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        toolbar.setTitle(R.string.general_preferences);
     }
 
     /**
