@@ -86,6 +86,18 @@ Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opend
 
 Current and previous production builds can be found on the [ODK website](https://opendatakit.org/downloads/download-info/odk-collect-apk).
 
+## Creating signed releases for Google Play Store
+Project maintainers have the keys to upload signed releases to the Play Store. 
+
+Maintainers have a `secrets.properties` file in the `collect_app` folder with the following:
+```
+// collect_app/secrets.properties
+RELEASE_STORE_FILE=/path/to/collect.keystore
+RELEASE_STORE_PASSWORD=secure-store-password
+RELEASE_KEY_ALIAS=key-alias
+RELEASE_KEY_PASSWORD=secure-alias-password
+```
+To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `secrets.properties` file, and then run `./gradlew assembleRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 
 ## Troubleshooting
 #### Error when running Robolectric tests from Android Studio on macOS: `build/intermediates/bundles/debug/AndroidManifest.xml (No such file or directory)`
