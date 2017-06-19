@@ -362,6 +362,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         deleteMedia();
 
         videoPlayer.setVisibility(GONE);
+        videoView.stopPlayback();
     }
 
     @Override
@@ -465,12 +466,22 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         Bitmap frame = getVideoFrameInfo();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int windowWidth = displayMetrics.widthPixels;
 
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(windowWidth,
-                windowWidth * frame.getHeight() / frame.getWidth());
+        int windowWidth = displayMetrics.widthPixels;
+        int windowHeight = displayMetrics.heightPixels;
+
+        float aspectRatio = frame.getWidth() / frame.getHeight();
+
+        int videoWidth = windowWidth < windowHeight ? windowWidth : windowHeight;
+        int videoHeight = (int) (videoWidth / aspectRatio);
+
+        if (videoHeight > windowHeight) {
+            videoHeight = windowHeight;
+            videoWidth = (int) (videoHeight * aspectRatio);
+        }
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(videoWidth, videoHeight);
         layoutParams.gravity = Gravity.CENTER;
-        layoutParams.topMargin = 20;
 
         videoView.setLayoutParams(layoutParams);
         popupView.setLayoutParams(layoutParams);
