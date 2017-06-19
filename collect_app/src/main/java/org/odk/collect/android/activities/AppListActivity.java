@@ -155,19 +155,10 @@ abstract class AppListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
+        if (!hasHardwareMenu) {
+            getMenuInflater().inflate(R.menu.menu, menu);
+        }
         super.onCreateOptionsMenu(menu);
-
-        menu
-                .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        menu
-                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
-                .setIcon(R.drawable.ic_search)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
         return true;
     }
 
