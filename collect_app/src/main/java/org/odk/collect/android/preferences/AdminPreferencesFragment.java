@@ -20,9 +20,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -48,6 +51,11 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
     public void onResume() {
         super.onResume();
         toolbar.setTitle(getString(R.string.admin_preferences));
+        boolean hasHardwareMenu =
+                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getActivity()));
+        if (!hasHardwareMenu) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        }
     }
 
     @Override
