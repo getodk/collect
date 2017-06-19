@@ -199,22 +199,19 @@ public class SpinnerWidget extends QuestionWidget {
                 tv.setText(items[position]);
             }
 
-            if (spinner.getSelectedItemPosition() == position) {
+            if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
+                tv.setEnabled(false);
+            } else if (spinner.getSelectedItemPosition() == position) {
                 tv.setTextColor(getContext().getResources().getColor(R.color.light_blue));
             } else {
                 tv.setTextColor(Color.BLACK);
             }
+
             return convertView;
         }
 
         @Override
         public int getCount() {
-
-            // remove the remove response option form dropdown list when no item is selected
-            if (spinner.getSelectedItemPosition() == items.length - 1) {
-                return items.length - 1;
-            }
-
             return items.length;
         }
 
