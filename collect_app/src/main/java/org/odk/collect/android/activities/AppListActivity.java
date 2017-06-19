@@ -155,6 +155,7 @@ abstract class AppListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         if (!hasHardwareMenu) {
             getMenuInflater().inflate(R.menu.menu, menu);
         }
