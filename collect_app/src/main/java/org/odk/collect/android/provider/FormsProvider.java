@@ -229,11 +229,21 @@ public class FormsProvider extends ContentProvider {
                 Timber.w("Successfully upgraded database from version %d to %d"
                         + ", without destroying all the old data", oldVersion, newVersion);
             } else {
-                db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
-                        + FormsColumns.AUTO_DELETE + " text;");
+                Cursor cursor = db.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + " LIMIT 0", null);
+                int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
+                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SUBMIT);
+                cursor.close();
 
-                db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
-                        + FormsColumns.AUTO_SUBMIT + " text;");
+                // Only add the column if it doesn't already exist
+                if (autoDeleteColumnIndex == -1) {
+                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
+                            + FormsColumns.AUTO_DELETE + " text;");
+                }
+
+                if (autoSubmitColumnIndex == -1) {
+                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
+                            + FormsColumns.AUTO_SUBMIT + " text;");
+                }
             }
         }
     }
