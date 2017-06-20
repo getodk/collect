@@ -29,6 +29,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -640,8 +641,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 List<Long> toDelete = new ArrayList<>();
                                 results.moveToPosition(-1);
 
+                                boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+                                String formId;
                                 while (results.moveToNext()) {
-                                    if (deleteInstance(results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID)))) {
+                                    formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                                    if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
                                         toDelete.add(results.getLong(results.getColumnIndex(InstanceColumns._ID)));
                                     }
                                 }
@@ -689,7 +693,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
     }
 
-    private boolean deleteInstance(String jrFormId) {
+    // If the form explicitly sets the auto-delete property, then it overrides the preferences.
+    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
 
         String autoDelete = null;
@@ -702,10 +707,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
         }
 
-        boolean autoDeleteSettings = PreferenceManager.getDefaultSharedPreferences(
-                Collect.getInstance().getApplicationContext()).getBoolean(
-                PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
-
-        return autoDelete == null ? autoDeleteSettings : Boolean.valueOf(autoDelete);
+        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
     }
 }

@@ -70,7 +70,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, currentNetworkInfo);
+                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
             }
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
@@ -80,13 +80,12 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             if (ni == null || !ni.isConnected()) {
                 // not connected, do nothing
             } else {
-                uploadForms(context, ni);
+                uploadForms(context, isFormAutoSendOptionEnabled(ni));
             }
         }
     }
 
-    private boolean interfaceIsEnabled(Context context,
-                                       NetworkInfo currentNetworkInfo) {
+    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
@@ -102,7 +101,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
 
-    private void uploadForms(Context context, NetworkInfo networkInfo) {
+    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
         if (!running) {
             running = true;
 
@@ -112,8 +111,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
+                    String formId;
                     while (c.moveToNext()) {
-                        if (submitInstance(c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID)), interfaceIsEnabled(context, networkInfo))) {
+                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
                             Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
                             toUpload.add(l);
                         }
@@ -176,7 +177,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
-    private boolean submitInstance(String jrFormId, boolean autoSendSettings) {
+    // If the form explicitly sets the auto-send property, then it overrides the preferences.
+    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
         Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
 
         String autoSubmit = null;
@@ -189,7 +191,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             }
         }
 
-        return autoSubmit == null ? autoSendSettings : Boolean.valueOf(autoSubmit);
+        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
     }
 
     @Override
