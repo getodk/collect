@@ -18,7 +18,6 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -183,12 +182,9 @@ public class DrawActivity extends AppCompatActivity {
         // output -- where the output should be written
 
         if (OPTION_SIGNATURE.equals(loadOption)) {
-            // set landscape
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             alertTitleString = getString(R.string.quit_application,
                     getString(R.string.sign_button));
         } else if (OPTION_ANNOTATE.equals(loadOption)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             alertTitleString = getString(R.string.quit_application,
                     getString(R.string.markup_image));
         } else {
