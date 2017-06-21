@@ -156,7 +156,6 @@ public class DownloadFormsTask extends
                 message += e.getMessage();
             }
 
-
             if (!isCancelled() && message.length() == 0 && fileResult != null) {
                 // install everything
                 UriResult uriResult = null;
@@ -167,7 +166,6 @@ public class DownloadFormsTask extends
                     // move the media files in the media folder
                     if (tempMediaPath != null) {
                         File formMediaPath = new File(uriResult.getMediaPath());
-
                         FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
                     }
                 } catch (IOException e) {
@@ -200,9 +198,7 @@ public class DownloadFormsTask extends
     }
 
     private void checkForBadSubmissionUrl(FileResult fileResult) throws IllegalArgumentException {
-
         File form = fileResult.getFile();
-
         HashMap<String, String> fields = null;
         try {
             fields = FileUtils.parseXML(form);
@@ -211,12 +207,10 @@ public class DownloadFormsTask extends
         }
 
         String submission = fields.get(FileUtils.SUBMISSIONURI);
-        if (submission != null) {
-            if (!UrlUtils.isValidUrl(submission)) {
-                throw new IllegalArgumentException(
-                        Collect.getInstance().getString(R.string.xform_parse_error,
+        if (submission != null && !UrlUtils.isValidUrl(submission)) {
+            throw new IllegalArgumentException(
+                    Collect.getInstance().getString(R.string.xform_parse_error,
                                 form.getName(), "submission url"));
-            }
         }
     }
 
