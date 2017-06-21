@@ -175,7 +175,7 @@ abstract class AppListFragment extends ListFragment {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (position == getSelectedSortingOrder()) {
-                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
+                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tint_color));
                 }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
@@ -186,7 +186,7 @@ abstract class AppListFragment extends ListFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
-                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
+                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tint_color));
                 performSelectedSearch(position);
                 drawerLayout.closeDrawer(Gravity.END);
             }
