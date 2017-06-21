@@ -23,24 +23,25 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.javarosa.core.model.RangeQuestion;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ToastUtils;
 
-public class RangeWidget extends QuestionWidget {
+import java.math.BigDecimal;
 
-    private int rangeStart;
-    private int rangeEnd;
-    private int rangeStep;
+public abstract class RangeWidget extends QuestionWidget {
+
+    private BigDecimal rangeStart;
+    private BigDecimal rangeEnd;
+    private BigDecimal rangeStep;
+    protected BigDecimal actualValue;
+
     private int progress;
-    private int actualValue;
 
     private SeekBar seekBar;
 
-    private TextView currentValue;
+    protected TextView currentValue;
 
     public RangeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -57,16 +58,11 @@ public class RangeWidget extends QuestionWidget {
     }
 
     @Override
-    public IAnswerData getAnswer() {
-        return new IntegerData(actualValue);
-    }
-
-    @Override
     public void clearAnswer() {
         if (seekBar.isEnabled()) {
             setUpDefaultValues();
             seekBar.setProgress(progress);
-            currentValue.setText(String.valueOf(actualValue));
+            setUpActualValueLabel();
         }
     }
 
@@ -89,39 +85,38 @@ public class RangeWidget extends QuestionWidget {
 
         if (isWidgetValid()) {
             if (getPrompt().getAnswerValue() != null) {
-                actualValue = (int) getPrompt().getAnswerValue().getValue();
-                progress = Math.abs(actualValue - rangeStart) / rangeStep;
+                actualValue = new BigDecimal(getPrompt().getAnswerValue().getValue().toString());
+                progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
             } else {
                 setUpDefaultValues();
             }
 
             currentValue = (TextView) view.findViewById(R.id.currentValue);
-            currentValue.setText(String.valueOf(actualValue));
-
+            setUpActualValueLabel();
             setUpSeekBar();
         }
     }
 
     private void setUpDefaultValues() {
-        progress = Math.abs(rangeEnd - rangeStart) / (rangeStep * 2);
-        if (rangeStart < rangeEnd) {
-            actualValue = rangeStart + progress * rangeStep;
+        progress = rangeEnd.subtract(rangeStart).abs().divide(rangeStep.multiply(new BigDecimal(2))).intValue();
+        if (rangeStart.compareTo(rangeEnd) == -1) {
+            actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep));
         } else {
-            actualValue = rangeStart - progress * rangeStep;
+            actualValue = rangeStart.subtract(new BigDecimal(progress).multiply(rangeStep));
         }
     }
 
     private void setUpWidgetParameters() {
         RangeQuestion rangeQuestion = (RangeQuestion) getPrompt().getQuestion();
 
-        rangeStart = rangeQuestion.getRangeStart().intValue();
-        rangeEnd = rangeQuestion.getRangeEnd().intValue();
-        rangeStep = Math.abs(rangeQuestion.getRangeStep().intValue());
+        rangeStart = rangeQuestion.getRangeStart();
+        rangeEnd = rangeQuestion.getRangeEnd();
+        rangeStep = rangeQuestion.getRangeStep().abs();
     }
 
     private void setUpSeekBar() {
         int seekBarMax;
-        seekBarMax = Math.abs(rangeEnd - rangeStart) / rangeStep;
+        seekBarMax = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
 
         seekBar.setMax(seekBarMax);
         seekBar.setProgress(progress);
@@ -137,24 +132,30 @@ public class RangeWidget extends QuestionWidget {
             }
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                if (rangeStart < rangeEnd) {
-                    actualValue = rangeStart + progress * rangeStep;
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (rangeStart.compareTo(rangeEnd) == -1) {
+                    actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep));
                 } else {
-                    actualValue = rangeStart - progress * rangeStep;
+                    actualValue = rangeStart.subtract(new BigDecimal(progress).multiply(rangeStep));
                 }
-                currentValue.setText(String.valueOf(actualValue));
+                setUpActualValueLabel();
             }
         });
     }
 
+    private void disableSeekBar() {
+        ToastUtils.showLongToast(R.string.invalid_range_widget);
+        seekBar.setEnabled(false);
+    }
+
     private boolean isWidgetValid() {
         boolean result = true;
-        if (rangeStep == 0 || (rangeEnd - rangeStart) % rangeStep != 0) {
-            ToastUtils.showLongToast(R.string.invalid_range_widget);
-            seekBar.setEnabled(false);
+        if (rangeStep.compareTo(new BigDecimal(0)) == 0 || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(new BigDecimal(0)) != 0) {
+            disableSeekBar();
             result = false;
         }
         return result;
     }
+
+    protected abstract void setUpActualValueLabel();
 }
