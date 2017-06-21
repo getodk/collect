@@ -202,7 +202,7 @@
   <string name="admin_password_incorrect">Maaf, kata sandi tidak benar!</string>
   <string name="enter_admin_password">Masukkan Kata Sandi Admin</string>
   <string name="change_admin_password">Ubah Kata sandi Admin</string>
-    <string name="autosend">Kirim Otomatis</string>
+    <string name="auto_send">Kirim Otomatis</string>
     <string name="found_in_main">Hapus centang untuk menyembunyikan dari Menu Utama</string>
   <string name="found_in_settings">Hapus centang untuk menyembunyikan dari Pengaturan Umum</string>
     <string name="no_account">Tidak ada akun</string>

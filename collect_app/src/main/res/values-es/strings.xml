@@ -202,7 +202,7 @@
   <string name="admin_password_incorrect">¡Contraseña incorrecta!</string>
   <string name="enter_admin_password">Entrar contraseña de Administrador</string>
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
-    <string name="autosend">Auto Envío</string>
+    <string name="auto_send">Auto Envío</string>
     <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
     <string name="no_account">Sin cuenta</string>
@@ -268,8 +268,8 @@
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
-  <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
-  <string name="odk_auto_note">Notificación de ODK Autosend</string>
+  <string name="odk_auth_auth_fail">Error de autenticación ODK Auto send, por favor asegúrese de que la configuración es correcta</string>
+  <string name="odk_auto_note">Notificación de ODK Auto send</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>

@@ -193,7 +193,7 @@
   <string name="admin_password_disabled">تعطيل كلمة السر للمدير</string>
   <string name="admin_password_incorrect">عذرًا، كلمة المرور غير صحيحة!</string>
   <string name="enter_admin_password">أدخل كلمة مرور المدير</string>
-    <string name="autosend">إرسال تلقائيا</string>
+    <string name="auto_send">إرسال تلقائيا</string>
     <string name="found_in_main">الغاء القفل للاخفاء من القائمة الرئيسية</string>
   <string name="found_in_settings">الغاء القفل للاخفاء من الاعدادات الرئيسية</string>
     <string name="no_account">لا يوجد حساب</string>

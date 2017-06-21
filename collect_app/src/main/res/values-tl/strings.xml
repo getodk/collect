@@ -183,7 +183,7 @@
   <string name="admin_password_disabled">Admin password disabled</string>
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
-    <string name="autosend">Auto Send</string>
+    <string name="auto_send">Auto Send</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
     <string name="no_account">No account</string>

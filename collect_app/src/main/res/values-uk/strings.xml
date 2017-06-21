@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">Вибачте, пароль невірний!</string>
   <string name="enter_admin_password">Ввести пароль адміністратора</string>
   <string name="change_admin_password">Змінити пароль адміністратора</string>
-    <string name="autosend">Автоматичне надсилання</string>
+    <string name="auto_send">Автоматичне надсилання</string>
     <string name="found_in_main">Зніміть позначку щоб прибрати з Головного меню</string>
   <string name="found_in_settings">Зніміть позначку щоб прибрати з загальних налаштувань</string>
     <string name="no_account">Відсутній обліковий запис</string>
@@ -271,8 +271,8 @@
   <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
   <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
   <string name="media_upload_error">Невдалося завантажити неіснуюче фото: %1$s</string>
-  <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
-  <string name="odk_auto_note">Повідомлення ODK Autosend</string>
+  <string name="odk_auth_auth_fail">Невдалось увійти в ODK Auto send, будь ласка, перевірте налаштування</string>
+  <string name="odk_auto_note">Повідомлення ODK Auto send</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
   <string name="delete_after_send">Видалити після надсилання</string>
   <string name="delete_after_send_summary">Видаляє завершені анкети та медіа файли після надсилання на сервер</string>

@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">សោកស្តាយផង, ពាក្យសម្ងាត់នេះមិនត្រឹមត្រូវ!</string>
   <string name="enter_admin_password">បញ្ចូលពាក្យសម្ងាត់របស់ Admin</string>
   <string name="change_admin_password">ផ្លាស់​ប្តូរ​ពាក្យ​សម្ងាត់​ Admin</string>
-    <string name="autosend">បញ្ជូនចេញដោយស្វ័យប្រវត្តិ</string>
+    <string name="auto_send">បញ្ជូនចេញដោយស្វ័យប្រវត្តិ</string>
     <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
     <string name="no_account">គ្មាន​គណនី</string>

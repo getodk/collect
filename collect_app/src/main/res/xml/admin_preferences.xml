@@ -84,7 +84,7 @@
                     android:id="@+id/autosend"
                     android:defaultValue="true"
                     android:key="autosend"
-                    android:title="@string/autosend" />
+                    android:title="@string/auto_send" />
                 <CheckBoxPreference
                     android:id="@+id/navigation"
                     android:defaultValue="true"

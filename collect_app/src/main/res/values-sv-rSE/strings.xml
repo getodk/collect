@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">Tyvärr, lösenordet är felaktigt!</string>
   <string name="enter_admin_password">Ange administratörslösenordet</string>
   <string name="change_admin_password">Ändra administratörslösenordet</string>
-    <string name="autosend">Skicka automatiskt</string>
+    <string name="auto_send">Skicka automatiskt</string>
     <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
     <string name="no_account">Inget konto</string>

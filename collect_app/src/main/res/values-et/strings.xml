@@ -199,7 +199,7 @@
   <string name="admin_password_incorrect">Vabandust, salasõna on vale!</string>
   <string name="enter_admin_password">Sisestage administraatori salasõna</string>
   <string name="change_admin_password">Muuda administraatori salasõna</string>
-    <string name="autosend">Automaatne saatmine</string>
+    <string name="auto_send">Automaatne saatmine</string>
     <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
     <string name="no_account">Konto puudub</string>

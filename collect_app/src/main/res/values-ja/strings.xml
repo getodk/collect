@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">申し訳ありません、パスワードが正しくありません!</string>
   <string name="enter_admin_password">管理者パスワードを入力してください</string>
   <string name="change_admin_password">管理者パスワードを変更</string>
-    <string name="autosend">自動送信</string>
+    <string name="auto_send">自動送信</string>
     <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
     <string name="no_account">アカウントがありません</string>

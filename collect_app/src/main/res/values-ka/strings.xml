@@ -195,7 +195,7 @@
   <string name="admin_password_incorrect">უკაცრავად, პაროლი არასწორია!</string>
   <string name="enter_admin_password">შეიყვანეთ ადმინისტრატორის პაროლი</string>
   <string name="change_admin_password">ადმინისტრატორის პაროლის შეცვლა</string>
-    <string name="autosend">ავტომატური გაგზავნა</string>
+    <string name="auto_send">ავტომატური გაგზავნა</string>
     <string name="found_in_main">გამორთეთ მთავარი მენიუდან დასამალად</string>
   <string name="found_in_settings">გამორთეთ ძირითადი პარამეტრებიდან დასამალად</string>
     <string name="no_account">ექაუნთი არ არსებობს</string>

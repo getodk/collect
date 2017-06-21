@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">Désolé, le mot de passe n\'est pas correct !</string>
   <string name="enter_admin_password">Saisissez le mot de passe administrateur</string>
   <string name="change_admin_password">Modifier le mot de passe de l\'administrateur</string>
-    <string name="autosend">Envoi Automatique</string>
+    <string name="auto_send">Envoi Automatique</string>
     <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
     <string name="no_account">Pas de compte</string>

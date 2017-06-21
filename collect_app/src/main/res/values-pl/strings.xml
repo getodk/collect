@@ -200,7 +200,7 @@
   <string name="admin_password_incorrect">Przykro mi, hasło jest niepoprawne!</string>
   <string name="enter_admin_password">Wprowadź Hasło Administratora</string>
   <string name="change_admin_password">Zmień Hasło Administratora</string>
-    <string name="autosend">Wyślij Automatycznie</string>
+    <string name="auto_send">Wyślij Automatycznie</string>
     <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
     <string name="no_account">Brak konta</string>
@@ -266,8 +266,8 @@
   <string name="google_set_account">Wybrałeś Google Sheets jako twój serwer, wybierz odpowiadające mu konto Google w Ustawieniach Ogólnych zanim będziesz kontynuowć.</string>
   <string name="invalid_oauth">Niewłaściwy token OAuth 2</string>
   <string name="google_repeat_error">Powtórzenia obecnie nie są wspierane przez Google Sheets.</string>
-  <string name="odk_auth_auth_fail">Błąd autentykacji ODK Autosend, proszę upewnij się, że twoje ustawienia są poprawne</string>
-  <string name="odk_auto_note">Powiadomienie ODK Autosend</string>
+  <string name="odk_auth_auth_fail">Błąd autentykacji ODK Auto send, proszę upewnij się, że twoje ustawienia są poprawne</string>
+  <string name="odk_auto_note">Powiadomienie ODK Auto send</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>

@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">Passwort ist falsch!</string>
   <string name="enter_admin_password">Admin-Passwort eingeben</string>
   <string name="change_admin_password">Admin-Passwort ändern</string>
-    <string name="autosend">Auto-Send</string>
+    <string name="auto_send">Auto-Send</string>
     <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
     <string name="no_account">Kein Benutzerkonto</string>
