@@ -102,9 +102,8 @@ public class StringWidget extends QuestionWidget {
         }
 
         if (readOnly) {
-            answer.setBackground(null);
+            answer.setEnabled(false);
             answer.setFocusable(false);
-            answer.setClickable(false);
         }
 
         addAnswerView(answer);
