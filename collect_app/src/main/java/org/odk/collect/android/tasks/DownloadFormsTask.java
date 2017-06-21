@@ -30,6 +30,7 @@ import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -149,6 +150,12 @@ public class DownloadFormsTask extends
                 message += msg;
             }
 
+            try {
+                checkForBadSubmissionUrl(fileResult);
+            } catch (IllegalArgumentException e) {
+                message += e.getMessage();
+            }
+
             if (!isCancelled() && message.length() == 0 && fileResult != null) {
                 // install everything
                 UriResult uriResult = null;
@@ -159,7 +166,6 @@ public class DownloadFormsTask extends
                     // move the media files in the media folder
                     if (tempMediaPath != null) {
                         File formMediaPath = new File(uriResult.getMediaPath());
-
                         FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
                     }
                 } catch (IOException e) {
@@ -191,6 +197,23 @@ public class DownloadFormsTask extends
         return result;
     }
 
+    private void checkForBadSubmissionUrl(FileResult fileResult) throws IllegalArgumentException {
+        File form = fileResult.getFile();
+        HashMap<String, String> fields = null;
+        try {
+            fields = FileUtils.parseXML(form);
+        } catch (RuntimeException e) {
+            throw new IllegalArgumentException(form.getName() + " :: " + e.toString());
+        }
+
+        String submission = fields.get(FileUtils.SUBMISSIONURI);
+        if (submission != null && !UrlUtils.isValidUrl(submission)) {
+            throw new IllegalArgumentException(
+                    Collect.getInstance().getString(R.string.xform_parse_error,
+                                form.getName(), "submission url"));
+        }
+    }
+
     private void saveResult(HashMap<FormDetails, String> result, FormDetails fd, String message) {
         if (message.equalsIgnoreCase("")) {
             message = Collect.getInstance().getString(R.string.success);
@@ -204,7 +227,7 @@ public class DownloadFormsTask extends
     private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
         if (fileResult == null) {
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
-                            + "very beginning.");
+                    + "very beginning.");
         } else {
             if (fileResult.getFile() != null) {
                 FileUtils.deleteAndReport(fileResult.getFile());
@@ -323,7 +346,7 @@ public class DownloadFormsTask extends
 
                 // delete the file we just downloaded, because it's a duplicate
                 Timber.w("A duplicate file has been found, we need to remove the downloaded file "
-                                + "and return the other one.");
+                        + "and return the other one.");
                 FileUtils.deleteAndReport(f);
 
                 // set the file returned to the file we already had
@@ -344,7 +367,7 @@ public class DownloadFormsTask extends
     /**
      * Common routine to download a document from the downloadUrl and save the contents in the file
      * 'file'. Shared by media file download and form file download.
-     *
+     * <p>
      * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
      * is okay,
      * so that garbage is not left over on cancel.
@@ -702,7 +725,6 @@ public class DownloadFormsTask extends
         return null;
     }
 
-
     @Override
     protected void onPostExecute(HashMap<FormDetails, String> value) {
         synchronized (this) {
@@ -711,7 +733,6 @@ public class DownloadFormsTask extends
             }
         }
     }
-
 
     @Override
     protected void onProgressUpdate(String... values) {
@@ -725,7 +746,6 @@ public class DownloadFormsTask extends
         }
 
     }
-
 
     public void setDownloaderListener(FormDownloaderListener sl) {
         synchronized (this) {
