@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -43,12 +44,13 @@ public abstract class RangeWidget extends QuestionWidget {
 
     protected TextView currentValue;
 
+    private View view;
+
     public RangeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         setUpWidgetParameters();
-        View view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_layout, null);
-        setUpLayoutElements(view);
+        setUpAppearance();
 
         if (prompt.isReadOnly()) {
             seekBar.setEnabled(false);
@@ -141,6 +143,22 @@ public abstract class RangeWidget extends QuestionWidget {
                 setUpActualValueLabel();
             }
         });
+        seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+                v.onTouchEvent(event);
+                return true;
+            }
+        });
     }
 
     private void disableSeekBar() {
@@ -155,6 +173,15 @@ public abstract class RangeWidget extends QuestionWidget {
             result = false;
         }
         return result;
+    }
+
+    private void setUpAppearance() {
+        if ("vertical".equals(getPrompt().getQuestion().getAppearanceAttr())) {
+            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_vertical, null);
+        } else {
+            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_horizontal, null);
+        }
+        setUpLayoutElements(view);
     }
 
     protected abstract void setUpActualValueLabel();
