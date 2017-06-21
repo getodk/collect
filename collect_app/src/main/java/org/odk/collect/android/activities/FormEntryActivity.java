@@ -1062,7 +1062,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getFormController();
 
         menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
-        if (formController.indexContainsRepeatableGroup()) {
+        if (formController.indexContainsRepeatableGroup() && formController.isGroupRemovable()) {
             menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
         }
         menu.setHeaderTitle(getString(R.string.edit_prompt));

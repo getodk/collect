@@ -1177,4 +1177,14 @@ public class FormController {
         return new InstanceMetadata(instanceId, instanceName);
     }
 
+    public boolean isGroupRemovable() {
+        boolean result = true;
+        FormIndex currentIndex = getFormIndex();
+        IFormElement element = formEntryController.getModel().getForm().getChild(currentIndex);
+        if (element instanceof GroupDef) {
+            GroupDef gd = (GroupDef) element;
+            result = !"false()".equals(gd.getAdditionalAttribute(null, "removable"));
+        }
+        return result;
+    }
 }
