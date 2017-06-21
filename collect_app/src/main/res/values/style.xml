@@ -7,7 +7,7 @@
         <item name="android:layout_marginRight">7dp</item>
         <item name="android:layout_marginBottom">5dp</item>
         <item name="android:padding">14dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
     <style name="emptyViewStyle">
@@ -16,7 +16,7 @@
         <item name="android:gravity">center</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textSize">21sp</item>
     </style>
 
