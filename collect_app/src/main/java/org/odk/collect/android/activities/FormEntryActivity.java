@@ -581,6 +581,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
+
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+
                 Intent i = new Intent(FormEntryActivity.this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);

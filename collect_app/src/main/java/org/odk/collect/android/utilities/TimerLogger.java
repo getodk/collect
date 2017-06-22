@@ -221,6 +221,16 @@ public class TimerLogger {
             Event newEvent = new Event(start, eventType, fecType, node, advancingPage);
 
             /*
+             * Close any existing interval events if the view is being exited
+             */
+            if (newEvent.eventType == EventTypes.FORM_EXIT
+                    || newEvent.eventType == EventTypes.HIERARCHY) {
+                for (Event ev : events) {
+                    ev.setEnd(start);
+                }
+            }
+
+            /*
              * Ignore the event if we are already in an interval view event or have jumped
              * This can happen if the user is on a question page and the page gets refreshed
              * The exception is hierarchy events since they interrupt an existing interval event
@@ -243,16 +253,8 @@ public class TimerLogger {
             }
 
             /*
-             * Having got to this point we are going to keep the new Event
-             * Close any existing interval events if the view is being exited
+             * Having got to this point we are going to keep the event
              */
-            if (newEvent.eventType == EventTypes.FORM_EXIT
-                    || newEvent.eventType == EventTypes.HIERARCHY) {
-                for (Event ev : events) {
-                    ev.setEnd(start);
-                }
-            }
-
             events.add(newEvent);
 
             /*
