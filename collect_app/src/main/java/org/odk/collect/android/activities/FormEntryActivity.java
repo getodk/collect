@@ -84,6 +84,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -554,7 +555,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             setTitle(getString(R.string.loading_form));
         }
         toolbar.inflateMenu(R.menu.form_menu);
-        toolbar.findViewById(R.id.menu_save).setOnClickListener(new OnClickListener() {
+
+        View menuSave = toolbar.findViewById(R.id.menu_save);
+        menuSave.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
@@ -566,7 +569,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         });
 
-        toolbar.findViewById(R.id.menu_goto).setOnClickListener(new OnClickListener() {
+        View menuGoto = toolbar.findViewById(R.id.menu_goto);
+        menuGoto.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 FormController formController = Collect.getInstance()
@@ -583,6 +587,19 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
             }
         });
+
+        boolean useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
+        if (!useability) {
+            menuSave.setVisibility(View.GONE);
+            menuSave.setEnabled(false);
+        }
+
+        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_JUMP_TO);
+        if (!useability) {
+            menuGoto.setVisibility(View.GONE);
+            menuGoto.setEnabled(false);
+        }
+
         if (!hasHardwareMenu) {
             setSupportActionBar(toolbar);
         }
