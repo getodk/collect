@@ -42,6 +42,7 @@ import timber.log.Timber;
  */
 public class AdminPreferencesActivity extends AppCompatActivity {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
+    public static final String TAG = "AdminPreferencesFragment";
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
@@ -81,7 +82,7 @@ public class AdminPreferencesActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, new AdminPreferencesFragment())
+                    .replace(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
     }

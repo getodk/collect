@@ -179,6 +179,7 @@ public class DateWidget extends QuestionWidget {
     private void createDateTextView() {
         dateTextView = new TextView(getContext());
         dateTextView.setId(QuestionWidget.newUniqueId());
+        dateTextView.setTextColor(Color.BLACK);
         dateTextView.setPadding(20, 20, 20, 20);
         dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
@@ -270,11 +271,11 @@ public class DateWidget extends QuestionWidget {
         CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, theme, listener, year, month, dayOfMonth);
             this.theme = theme;
-            fixSpinner(context, year, month, dayOfMonth);
-            if (theme == 0) {
+            if (theme != 0) {
                 setTitle(dialogTitle);
-            } else {
+                fixSpinner(context, year, month, dayOfMonth);
                 getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                getDatePicker().setCalendarViewShown(false);
             }
         }
 
@@ -297,7 +298,7 @@ public class DateWidget extends QuestionWidget {
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
                 try {
                     // Get the theme's android:datePickerMode
-                    final int MODE_SPINNER = 1;
+                    final int MODE_SPINNER = 2;
                     Class<?> styleableClass = Class.forName("com.android.internal.R$styleable");
                     Field datePickerStyleableField = styleableClass.getField("DatePicker");
                     int[] datePickerStyleable = (int[]) datePickerStyleableField.get(null);

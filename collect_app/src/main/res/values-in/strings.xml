@@ -289,11 +289,9 @@
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terpasang?</string>
   <string name="about_preferences">Tentang</string>
   <string name="tell_your_friends">Promosikan ke teman anda</string>
-  <string name="tell_your_friends_title">Bagikan ODK Collect ke teman anda</string>
   <string name="tell_your_friends_msg">Unduh aplikasi ODK Collect!</string>
   <string name="leave_a_review">Berikan ulasan</string>
-  <string name="leave_a_review_summary">Berikan ulasan pada Google Play</string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Pemetaan</string>
   <string name="map_sdk_selector_title">SDK Pemetaan</string>
   <string name="map_sdk_behavior">Pemetaan SDK</string>

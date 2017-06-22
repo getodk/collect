@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -67,12 +68,12 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private Boolean playCheck = false;
     private MapView mapView;
     public MyLocationNewOverlay myLocationOverlay;
-    private Button locationButton;
-    private Button playButton;
-    public Button layersButton;
-    public Button clearButton;
+    private ImageButton locationButton;
+    private ImageButton playButton;
+    public ImageButton layersButton;
+    public ImageButton clearButton;
     private Button manualCaptureButton;
-    private Button pauseButton;
+    private ImageButton pauseButton;
     public AlertDialog.Builder builder;
     public AlertDialog.Builder polylineAlertBuilder;
     public LayoutInflater inflater;
@@ -117,7 +118,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         timeDelay = (Spinner) traceSettingsView.findViewById(R.id.trace_delay);
         timeDelay.setSelection(3);
         timeUnits = (Spinner) traceSettingsView.findViewById(R.id.trace_scale);
-        layersButton = (Button) findViewById(R.id.layers);
+        layersButton = (ImageButton) findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -127,7 +128,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
             }
         });
 
-        locationButton = (Button) findViewById(R.id.show_location);
+        locationButton = (ImageButton) findViewById(R.id.show_location);
         locationButton.setEnabled(false);
         locationButton.setOnClickListener(new View.OnClickListener() {
 
@@ -139,7 +140,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         });
 
-        clearButton = (Button) findViewById(R.id.clear);
+        clearButton = (ImageButton) findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -150,7 +151,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
         });
 
-        Button saveButton = (Button) findViewById(R.id.geotrace_save);
+        ImageButton saveButton = (ImageButton) findViewById(R.id.geotrace_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -173,8 +174,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                 addLocationMarker();
             }
         });
-        pauseButton = (Button) findViewById(R.id.pause);
-        playButton = (Button) findViewById(R.id.play);
+        pauseButton = (ImageButton) findViewById(R.id.pause);
+        playButton = (ImageButton) findViewById(R.id.play);
         playButton.setEnabled(false);
         beenPaused = false;
         traceMode = 1;

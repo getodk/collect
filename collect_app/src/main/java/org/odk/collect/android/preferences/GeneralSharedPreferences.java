@@ -84,4 +84,8 @@ public class GeneralSharedPreferences {
         }
         editor.apply();
     }
+
+    public boolean getBoolean(String key, boolean value) {
+        return sharedPreferences.getBoolean(key, value);
+    }
 }

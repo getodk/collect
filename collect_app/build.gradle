@@ -55,6 +55,12 @@ def getVersionName = { ->
     }
 }
 
+def secretsFile = file('secrets.properties')
+def secrets = new Properties()
+if (secretsFile.exists()) {
+    secrets.load(new FileInputStream(secretsFile))
+}
+
 android {
     compileSdkVersion(25)
     buildToolsVersion('25.0.2')
@@ -69,8 +75,22 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            if (secrets.getProperty('RELEASE_STORE_FILE')) {
+                storeFile file(secrets.getProperty('RELEASE_STORE_FILE'))
+                storePassword secrets.getProperty('RELEASE_STORE_PASSWORD')
+                keyAlias secrets.getProperty('RELEASE_KEY_ALIAS')
+                keyPassword secrets.getProperty('RELEASE_KEY_PASSWORD')
+            }
+       }
+    }
+
     buildTypes {
         release {
+            if (secrets.getProperty('RELEASE_STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
@@ -78,6 +98,14 @@ android {
             debuggable(true)
             // Allows AndroidTest JaCoCo reports to be generated
             testCoverageEnabled(true)
+        }
+    }
+
+    // https://stackoverflow.com/a/27119543/152938
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def file = output.outputFile
+            output.outputFile = new File(file.parent, file.name.replace("_app","").replace(".apk", "-" + defaultConfig.versionName + ".apk"))
         }
     }
 

@@ -2254,7 +2254,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                Timber.e("Creating PROGRESS_DIALOG");
+                Timber.i("Creating PROGRESS_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
@@ -2286,7 +2286,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         loadingButtonListener);
                 return progressDialog;
             case SAVING_DIALOG:
-                Timber.e("Creating SAVING_DIALOG");
+                Timber.i("Creating SAVING_DIALOG");
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
@@ -2346,7 +2346,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Dismiss any showing dialogs that we manually manage.
      */
     private void dismissDialogs() {
-        Timber.e("Dismiss dialogs");
+        Timber.i("Dismiss dialogs");
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
