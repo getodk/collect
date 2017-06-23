@@ -41,11 +41,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
@@ -81,7 +77,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
     private static final String ALERT_SHOWING = "alertshowing";
-    protected GoogleAccountCredential credential;
+    private GoogleAccountCredential credential;
     private ProgressDialog progressDialog;
     private AlertDialog alertDialog;
     private String alertMsg;
@@ -528,25 +524,15 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         // in interface, but not needed
     }
 
-    private class InstanceGoogleSheetsInstanceUploaderTask extends
-            InstanceGoogleSheetsUploader {
+    private class InstanceGoogleSheetsInstanceUploaderTask extends InstanceGoogleSheetsUploader {
 
         InstanceGoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
-            driveService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
+            super(credential);
         }
 
         @Override
-        protected HashMap<String, String> doInBackground(Long... values) {
-            results = new HashMap<>();
+        protected Outcome doInBackground(Long... values) {
+            outcome = new Outcome();
 
             String selection = InstanceColumns._ID + "=?";
             String[] selectionArgs = new String[(values == null) ? 0 : values.length];
@@ -567,7 +553,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
                 uploadInstances(selection, selectionArgs, token);
             } catch (UserRecoverableAuthException e) {
-                results = null;
+                outcome = null;
                 startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             } catch (IOException | GoogleAuthException e) {
                 Timber.e(e);
@@ -575,7 +561,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             } catch (MultipleFoldersFoundException e) {
                 Timber.e(e);
             }
-            return results;
+            return outcome;
         }
 
     }

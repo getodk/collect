@@ -15,11 +15,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
@@ -290,31 +286,17 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         running = false;
     }
 
-    private class InstanceGoogleSheetsAutoUploadTask extends
-            InstanceGoogleSheetsUploader {
-
-        private final GoogleAccountCredential credential;
+    private class InstanceGoogleSheetsAutoUploadTask extends InstanceGoogleSheetsUploader {
         private Context context;
 
-        public InstanceGoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
-            context = c;
-            this.credential = credential;
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
-            driveService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
+        InstanceGoogleSheetsAutoUploadTask(Context context, GoogleAccountCredential credential) {
+            super(credential);
+            this.context = context;
         }
 
         @Override
-        protected HashMap<String, String> doInBackground(Long... values) {
-
-            results = new HashMap<String, String>();
+        protected Outcome doInBackground(Long... values) {
+            outcome = new Outcome();
 
             String selection = InstanceColumns._ID + "=?";
             String[] selectionArgs = new String[(values == null) ? 0 : values.length];
@@ -347,8 +329,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             }
 
             uploadInstances(selection, selectionArgs, token);
-            return results;
+            return outcome;
         }
     }
-
 }

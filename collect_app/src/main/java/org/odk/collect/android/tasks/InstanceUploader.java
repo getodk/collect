@@ -123,12 +123,10 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {
             if (stateListener != null) {
-                // update progress and total
-                stateListener.progressUpdate(values[0].intValue(), values[1].intValue());
+                stateListener.progressUpdate(values[0], values[1]);
             }
         }
     }
-
 
     public void setUploaderListener(InstanceUploaderListener sl) {
         synchronized (this) {
@@ -136,7 +134,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
         }
     }
 
-    static class Outcome {
+    public static class Outcome {
         Uri authRequestingServer = null;
         public HashMap<String, String> results = new HashMap<String, String>();
     }
