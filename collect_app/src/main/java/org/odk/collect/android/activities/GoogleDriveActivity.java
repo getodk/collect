@@ -90,9 +90,9 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_ACCOUNT_PICKER;
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_AUTHORIZATION;
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 public class GoogleDriveActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,

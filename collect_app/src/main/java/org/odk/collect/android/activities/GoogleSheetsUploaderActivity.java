@@ -56,7 +56,7 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
+import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.IOException;
@@ -70,9 +70,9 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_ACCOUNT_PICKER;
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_AUTHORIZATION;
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 
 public class GoogleSheetsUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
@@ -88,7 +88,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private boolean alertShowing;
     private boolean authFailed;
     private Long[] instancesToSend;
-    private GoogleSheetsInstanceUploaderTask uiTask;
+    private InstanceGoogleSheetsInstanceUploaderTask uiTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,9 +147,9 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     }
 
     private void runTask() {
-        uiTask = (GoogleSheetsInstanceUploaderTask) getLastCustomNonConfigurationInstance();
+        uiTask = (InstanceGoogleSheetsInstanceUploaderTask) getLastCustomNonConfigurationInstance();
         if (uiTask == null) {
-            uiTask = new GoogleSheetsInstanceUploaderTask(credential);
+            uiTask = new InstanceGoogleSheetsInstanceUploaderTask(credential);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -528,10 +528,10 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         // in interface, but not needed
     }
 
-    private class GoogleSheetsInstanceUploaderTask extends
-            GoogleSheetsAbstractUploader {
+    private class InstanceGoogleSheetsInstanceUploaderTask extends
+            InstanceGoogleSheetsUploader {
 
-        GoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
+        InstanceGoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(

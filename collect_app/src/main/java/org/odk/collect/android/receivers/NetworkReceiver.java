@@ -34,8 +34,8 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.io.IOException;
@@ -51,9 +51,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
-    InstanceUploaderTask instanceUploaderTask;
+    InstanceServerUploader instanceServerUploader;
 
-    GoogleSheetsAutoUploadTask googleSheetsUploadTask;
+    InstanceGoogleSheetsAutoUploadTask googleSheetsUploadTask;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -146,7 +146,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                googleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, accountCredential);
+                googleSheetsUploadTask = new InstanceGoogleSheetsAutoUploadTask(context, accountCredential);
                 String googleUsername = (String) settings.get(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -169,10 +169,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
-                instanceUploaderTask = new InstanceUploaderTask();
-                instanceUploaderTask.setUploaderListener(this);
+                instanceServerUploader = new InstanceServerUploader();
+                instanceServerUploader.setUploaderListener(this);
 
-                instanceUploaderTask.execute(toSendArray);
+                instanceServerUploader.execute(toSendArray);
             }
         }
     }
@@ -197,8 +197,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
         // task is done
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         if (googleSheetsUploadTask != null) {
             googleSheetsUploadTask.setUploaderListener(null);
@@ -281,8 +281,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         if (googleSheetsUploadTask != null) {
             googleSheetsUploadTask.setUploaderListener(null);
@@ -290,13 +290,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         running = false;
     }
 
-    private class GoogleSheetsAutoUploadTask extends
-            GoogleSheetsAbstractUploader {
+    private class InstanceGoogleSheetsAutoUploadTask extends
+            InstanceGoogleSheetsUploader {
 
         private final GoogleAccountCredential credential;
         private Context context;
 
-        public GoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
+        public InstanceGoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
             context = c;
             this.credential = credential;
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
