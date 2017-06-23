@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.tasks.InstanceUploaderTask.Outcome;
+import org.odk.collect.android.tasks.InstanceServerUploader.Outcome;
 import org.odk.collect.android.test.MockedServerTest;
 
 import okhttp3.mockwebserver.RecordedRequest;
@@ -22,7 +22,7 @@ import static org.odk.collect.android.test.TestUtils.cleanUpTempFiles;
 import static org.odk.collect.android.test.TestUtils.createTempFile;
 import static org.odk.collect.android.test.TestUtils.resetInstancesContentProvider;
 
-public class InstanceUploaderTaskTest extends MockedServerTest {
+public class InstanceServerUploaderTest extends MockedServerTest {
     private InstancesDao dao;
 
     @Before
@@ -44,7 +44,7 @@ public class InstanceUploaderTaskTest extends MockedServerTest {
         willRespondWith(headResponse(), postResponse());
 
         // when
-        Outcome o = new InstanceUploaderTask().doInBackground(id);
+        Outcome o = new InstanceServerUploader().doInBackground(id);
 
         // then
         assertNull(o.authRequestingServer);

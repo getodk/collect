@@ -71,7 +71,7 @@ import timber.log.Timber;
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
-public abstract class GoogleSheetsAbstractUploader extends
+public abstract class InstanceGoogleSheetsUploader extends
         AsyncTask<Long, Integer, HashMap<String, String>> {
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;

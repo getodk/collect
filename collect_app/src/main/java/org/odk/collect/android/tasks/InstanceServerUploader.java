@@ -76,7 +76,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
+public class InstanceServerUploader extends AsyncTask<Long, Integer, InstanceServerUploader.Outcome> {
 
     private static enum ContentTypeMapping {
         XML("xml",  ContentType.TEXT_XML),
