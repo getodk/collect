@@ -17,21 +17,15 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -63,11 +57,9 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -76,7 +68,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceServerUploader extends AsyncTask<Long, Integer, InstanceServerUploader.Outcome> {
+public class InstanceServerUploader extends InstanceUploader {
 
     private static enum ContentTypeMapping {
         XML("xml",  ContentType.TEXT_XML),
@@ -120,13 +112,6 @@ public class InstanceServerUploader extends AsyncTask<Long, Integer, InstanceSer
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
-
-    private InstanceUploaderListener stateListener;
-
-    public static class Outcome {
-        public Uri authRequestingServer = null;
-        public HashMap<String, String> results = new HashMap<String, String>();
-    }
 
     /**
      * Uploads to urlString the submission identified by id with filepath of instance
@@ -591,122 +576,11 @@ public class InstanceServerUploader extends AsyncTask<Long, Integer, InstanceSer
         return serverBase + submissionPath;
     }
 
-    @Override
-    protected void onPostExecute(Outcome outcome) {
-        synchronized (this) {
-            if (stateListener != null) {
-                if (outcome.authRequestingServer != null) {
-                    stateListener.authRequest(outcome.authRequestingServer, outcome.results);
-                } else {
-                    stateListener.uploadingComplete(outcome.results);
-
-                    Set<String> keys = outcome.results.keySet();
-                    Iterator<String> it = keys.iterator();
-                    int count = keys.size();
-                    while (count > 0) {
-                        String[] selectionArgs;
-                        if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
-                            selectionArgs = new String[
-                                    ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-                        } else {
-                            selectionArgs = new String[count + 1];
-                        }
-
-                        StringBuilder selection = new StringBuilder();
-
-                        selection.append(InstanceColumns._ID + " IN (");
-                        int i = 0;
-
-                        while (it.hasNext() && i < selectionArgs.length - 1) {
-                            selectionArgs[i] = it.next();
-                            selection.append("?");
-
-                            if (i != selectionArgs.length - 2) {
-                                selection.append(",");
-                            }
-                            i++;
-                        }
-
-                        count -= selectionArgs.length - 1;
-                        selection.append(")");
-                        selection.append(" and status=?");
-                        selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
-
-                        Cursor results = null;
-                        try {
-                            results =
-                                    new InstancesDao().getInstancesCursor(selection.toString(),
-                                            selectionArgs);
-                            if (results.getCount() > 0) {
-                                List<Long> toDelete = new ArrayList<>();
-                                results.moveToPosition(-1);
-
-                                boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
-                                String formId;
-                                while (results.moveToNext()) {
-                                    formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                                    if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
-                                        toDelete.add(results.getLong(results.getColumnIndex(InstanceColumns._ID)));
-                                    }
-                                }
-
-                                DeleteInstancesTask dit = new DeleteInstancesTask();
-                                dit.setContentResolver(Collect.getInstance().getContentResolver());
-                                dit.execute(toDelete.toArray(new Long[toDelete.size()]));
-                            }
-                        } catch (SQLException e) {
-                            Timber.e(e);
-                        } finally {
-                            if (results != null) {
-                                results.close();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        synchronized (this) {
-            if (stateListener != null) {
-                // update progress and total
-                stateListener.progressUpdate(values[0].intValue(), values[1].intValue());
-            }
-        }
-    }
-
-
-    public void setUploaderListener(InstanceUploaderListener sl) {
-        synchronized (this) {
-            stateListener = sl;
-        }
-    }
-
     private static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf(".");
         if (dotIndex == -1) {
             return "";
         }
         return fileName.substring(dotIndex + 1).toLowerCase(Locale.ROOT);
-    }
-
-    // If the form explicitly sets the auto-delete property, then it overrides the preferences.
-    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-
-        String autoDelete = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
     }
 }
