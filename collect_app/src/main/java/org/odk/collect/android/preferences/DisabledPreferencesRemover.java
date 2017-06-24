@@ -24,6 +24,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
+
 class DisabledPreferencesRemover {
 
     private PreferencesActivity pa;
@@ -40,14 +41,16 @@ class DisabledPreferencesRemover {
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
     void remove(AdminAndGeneralKeys... keyPairs) {
-        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
         for (AdminAndGeneralKeys agKeys : keyPairs) {
             boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
 
-            if (!prefAllowed && !adminMode) {
-
+            if (!prefAllowed) {
                 Preference preference = pf.findPreference(agKeys.generalKey);
+
+                if (preference == null) {
+                    // preference not found in the current preference fragment, so ignore
+                    continue;
+                }
 
                 PreferenceGroup parent = getParent(pf.getPreferenceScreen(), preference);
                 if (parent == null) {
@@ -91,7 +94,7 @@ class DisabledPreferencesRemover {
     private void removeEmptyCategories(PreferenceGroup pc) {
 
         final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-        if (adminMode) {
+        if (adminMode || pc == null) {
             return;
         }
 

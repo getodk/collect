@@ -17,10 +17,13 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -40,7 +43,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppCompatActivity {
+public class AdminPreferencesActivity extends PreferenceActivity {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
@@ -76,13 +79,27 @@ public class AdminPreferencesActivity extends AppCompatActivity {
     }
 
     @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        ViewGroup parent = (ViewGroup) root.getParent();
+        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
+        toolbar.setTitle(R.string.admin_preferences);
+        View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
+
+        parent.addView(toolbar, 0);
+        parent.addView(shadow, 1);
 
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, new AdminPreferencesFragment(), TAG)
+                    .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
     }

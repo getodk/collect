@@ -15,7 +15,6 @@ package org.odk.collect.android.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,7 +23,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +43,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
+import org.odk.collect.android.preferences.BasePreferenceFragment;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -69,11 +68,7 @@ import static org.odk.collect.android.utilities.QRCodeUtils.generateQRBitMap;
 import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 
 
-/**
- * Created by shobhit on 6/4/17.
- */
-
-public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
+public class ShowQRCodeFragment extends BasePreferenceFragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
     private boolean[] checkedItems = new boolean[]{true, true};
@@ -86,8 +81,6 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.import_export_settings));
         setHasOptionsMenu(true);
         setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
@@ -100,6 +93,18 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         select.setOnClickListener(this);
         generateCode();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        toolbar.setTitle(R.string.import_export_settings);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        toolbar.setTitle(R.string.admin_preferences);
     }
 
     public void generateCode() {

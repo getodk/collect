@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
      Copyright (C) 2017 Shobhit
 
      Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -12,13 +13,10 @@
      the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
-
-    <include layout="@layout/toolbar" />
 
     <FrameLayout
         android:id="@+id/frame"
@@ -40,12 +38,6 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/qr_code" />
     </FrameLayout>
-
-    <include
-        layout="@layout/toolbar_action_bar_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar" />
 
     <LinearLayout
         android:id="@+id/buttons"
@@ -93,7 +85,6 @@
             android:layout_weight="1"
             android:padding="5dp"
             android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="@string/qrcode_with_password" />
+            android:textStyle="bold"/>
     </LinearLayout>
 </RelativeLayout>
