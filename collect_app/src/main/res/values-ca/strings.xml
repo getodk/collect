@@ -201,7 +201,7 @@
   <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
   <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
   <string name="change_admin_password">Canviar clau d\'administrador</string>
-    <string name="auto_send">Auto-enviament</string>
+    <string name="autosend">Auto-enviament</string>
     <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
     <string name="no_account">Sense compte</string>
@@ -267,8 +267,8 @@
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
-  <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Auto send, si us plau, revisar els paràmetres de la configuració</string>
-  <string name="odk_auto_note">Notificació ODK Auto send</string>
+  <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
+  <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>

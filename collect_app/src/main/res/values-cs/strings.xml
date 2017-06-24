@@ -191,7 +191,7 @@
   <string name="admin_password_disabled">Administrátorské heslo vypnuto</string>
   <string name="admin_password_incorrect">Heslo není správné!</string>
   <string name="enter_admin_password">Zadejte administrátorské heslo</string>
-    <string name="auto_send">Odeslat automaticky</string>
+    <string name="autosend">Odeslat automaticky</string>
     <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
     <string name="no_account">Žádný účet</string>

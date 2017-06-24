@@ -191,7 +191,7 @@
   <string name="admin_password_disabled">Пароль администратора отключен</string>
   <string name="admin_password_incorrect">Пароль неверный!</string>
   <string name="enter_admin_password">Введите пароль администратора</string>
-    <string name="auto_send">Автоматическая отправка</string>
+    <string name="autosend">Автоматическая отправка</string>
     <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
     <string name="no_account">Нет учётной записи</string>

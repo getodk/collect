@@ -187,7 +187,7 @@
   <string name="admin_password_disabled">Senha administrativa desabilitada</string>
   <string name="admin_password_incorrect">Lamento, senha incorreta!</string>
   <string name="enter_admin_password">Digite a senha administrativa</string>
-    <string name="auto_send">Enviar automaticamente</string>
+    <string name="autosend">Enviar automaticamente</string>
     <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
   <string name="found_in_settings">Desmarque para não exibir nas Configurações Gerais  </string>
     <string name="no_account">Sem conta</string>

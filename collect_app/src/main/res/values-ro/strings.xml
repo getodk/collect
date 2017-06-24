@@ -195,7 +195,7 @@
   <string name="admin_password_incorrect">Ne pare rău, parola este incorectă!</string>
   <string name="enter_admin_password">Introduceți parola de administrator</string>
   <string name="change_admin_password">Schimbați parola administratorului</string>
-    <string name="auto_send">Auto-trimitere</string>
+    <string name="autosend">Auto-trimitere</string>
     <string name="found_in_main">Deselectați pentru a ascunde din Meniul principal</string>
   <string name="found_in_settings">Deselectați pentru a ascunde din Setări generale</string>
     <string name="no_account">Niciun cont</string>
@@ -261,8 +261,8 @@
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
   <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="odk_auth_auth_fail">Eroare la autentificare ODK Auto send authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
-  <string name="odk_auto_note">Notificare ODK Auto send</string>
+  <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
+  <string name="odk_auto_note">Notificare ODK Autosend</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>

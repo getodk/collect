@@ -149,7 +149,7 @@
   <string name="admin_password_disabled">Yönetici Şifresi Kapatılmış</string>
   <string name="admin_password_incorrect">Yanliş Şifre</string>
   <string name="enter_admin_password">Yönetici Şifresi Giriniz</string>
-  <string name="auto_send">Otomatik Gönder</string>
+  <string name="autosend">Otomatik Gönder</string>
     <string name="no_account">Hesabınız Yok</string>
   <string name="save_preferences">Değişiklikleri Diske Kaydet</string>
   <string name="form_forward">İleri</string>

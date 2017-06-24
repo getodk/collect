@@ -76,11 +76,11 @@
             <ListPreference
                 android:id="@+id/autosend"
                 android:defaultValue="off"
-                android:dialogTitle="@string/auto_send_selector_title"
-                android:entries="@array/auto_send_selector_entries"
-                android:entryValues="@array/auto_send_selector_entries_values"
+                android:dialogTitle="@string/autosend_selector_title"
+                android:entries="@array/autosend_selector_entries"
+                android:entryValues="@array/autosend_selector_entries_values"
                 android:key="autosend"
-                android:title="@string/auto_send" />
+                android:title="@string/autosend" />
             <CheckBoxPreference
                 android:id="@+id/delete_after_send"
                 android:defaultValue="false"

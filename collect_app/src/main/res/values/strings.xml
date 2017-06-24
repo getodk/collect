@@ -210,7 +210,7 @@
     <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
     <string name="enter_admin_password">Enter Admin Password</string>
     <string name="change_admin_password">Change Admin Password</string>
-    <string name="auto_send">Auto Send</string>
+    <string name="autosend">Auto Send</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
     <string name="no_account">No account</string>
@@ -490,11 +490,11 @@
     <string name="main_menu_settings">Main Menu Settings</string>
     <string name="main_menu_settings_summary">Tap to manage main menu items</string>
     <string name="user_access_control">User Access Control</string>
-    <string name="auto_send_selector_title">Auto send</string>
+    <string name="autosend_selector_title">Auto send</string>
     <string name="off">Off</string>
-    <string name="wifi_auto_send">Wifi only</string>
-    <string name="cellular_auto_send">Cellular only</string>
-    <string name="wifi_cellular_auto_send">Wifi or cellular</string>
+    <string name="wifi_autosend">Wifi only</string>
+    <string name="cellular_autosend">Cellular only</string>
+    <string name="wifi_cellular_autosend">Wifi or cellular</string>
     <string name="map_basemap_behavior_title">Basemap</string>
     <string name="form_management_preferences">Form management</string>
     <string name="form_submission_category">Form submission</string>
