@@ -76,9 +76,7 @@ public abstract class RangeWidget extends QuestionWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    private void setUpLayoutElements(View view) {
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-
+    private void setUpLayoutElements() {
         TextView minValue = (TextView) view.findViewById(R.id.minValue);
         minValue.setText(String.valueOf(rangeStart));
 
@@ -176,12 +174,26 @@ public abstract class RangeWidget extends QuestionWidget {
     }
 
     private void setUpAppearance() {
-        if ("vertical".equals(getPrompt().getQuestion().getAppearanceAttr())) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_vertical, null);
+        String appearance = getPrompt().getQuestion().getAppearanceAttr();
+        if ("no-ticks".equals(appearance)) {
+            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+            seekBar = (SeekBar) view.findViewById(R.id.seekBarNoTicks);
+            view.findViewById(R.id.seekBar).setVisibility(GONE);
+        } else if ("vertical".equals(appearance)) {
+            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+            seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+            view.findViewById(R.id.seekBarNoTicks).setVisibility(GONE);
+        } else if ("vertical no-ticks".equals(appearance)) {
+            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+            seekBar = (SeekBar) view.findViewById(R.id.seekBarNoTicks);
+            view.findViewById(R.id.seekBar).setVisibility(GONE);
         } else {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_horizontal, null);
+            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+            seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+            view.findViewById(R.id.seekBarNoTicks).setVisibility(GONE);
         }
-        setUpLayoutElements(view);
+
+        setUpLayoutElements();
     }
 
     protected abstract void setUpActualValueLabel();
