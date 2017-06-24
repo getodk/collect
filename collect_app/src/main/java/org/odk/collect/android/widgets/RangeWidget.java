@@ -77,10 +77,10 @@ public abstract class RangeWidget extends QuestionWidget {
     }
 
     private void setUpLayoutElements() {
-        TextView minValue = (TextView) view.findViewById(R.id.minValue);
+        TextView minValue = (TextView) view.findViewById(R.id.min_value);
         minValue.setText(String.valueOf(rangeStart));
 
-        TextView maxValue = (TextView) view.findViewById(R.id.maxValue);
+        TextView maxValue = (TextView) view.findViewById(R.id.max_value);
         maxValue.setText(String.valueOf(rangeEnd));
 
         if (isWidgetValid()) {
@@ -91,7 +91,7 @@ public abstract class RangeWidget extends QuestionWidget {
                 setUpDefaultValues();
             }
 
-            currentValue = (TextView) view.findViewById(R.id.currentValue);
+            currentValue = (TextView) view.findViewById(R.id.current_value);
             setUpActualValueLabel();
             setUpSeekBar();
         }
@@ -177,20 +177,20 @@ public abstract class RangeWidget extends QuestionWidget {
         String appearance = getPrompt().getQuestion().getAppearanceAttr();
         if ("no-ticks".equals(appearance)) {
             view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seekBarNoTicks);
-            view.findViewById(R.id.seekBar).setVisibility(GONE);
+            seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+            view.findViewById(R.id.seek_bar).setVisibility(GONE);
         } else if ("vertical".equals(appearance)) {
             view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-            view.findViewById(R.id.seekBarNoTicks).setVisibility(GONE);
+            seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+            view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
         } else if ("vertical no-ticks".equals(appearance)) {
             view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seekBarNoTicks);
-            view.findViewById(R.id.seekBar).setVisibility(GONE);
+            seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+            view.findViewById(R.id.seek_bar).setVisibility(GONE);
         } else {
             view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-            view.findViewById(R.id.seekBarNoTicks).setVisibility(GONE);
+            seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+            view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
         }
 
         setUpLayoutElements();
