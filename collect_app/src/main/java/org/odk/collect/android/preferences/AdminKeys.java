@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.odk.collect.android.preferences.AdminAndGeneralKeys.ag;
 
@@ -34,27 +35,27 @@ public final class AdminKeys {
     // server
     static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     static final String KEY_IMPORT_SETTINGS                     = "import_settings";
-    private static final String KEY_CHANGE_SERVER               = "change_server";
-    private static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
+    public static final String KEY_CHANGE_SERVER               = "change_server";
+    public static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
     // client
-    private static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
-    private static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
-    private static final String KEY_HIGH_RESOLUTION             = "high_resolution";
-    private static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
-    private static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
-    private static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
-    private static final String KEY_APP_LANGUAGE                = "app_language";
+    public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
+    public static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
+    public static final String KEY_HIGH_RESOLUTION             = "high_resolution";
+    public static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
+    public static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
+    public static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
+    public static final String KEY_APP_LANGUAGE                = "change_app_language";
 
-    private static final String KEY_AUTOSEND                    = "autosend";
+    public static final String KEY_AUTOSEND                    = "change_autosend";
 
-    private static final String KEY_NAVIGATION                  = "navigation";
-    private static final String KEY_CONSTRAINT_BEHAVIOR         = "constraint_behavior";
+    public static final String KEY_NAVIGATION                  = "change_navigation";
+    public static final String KEY_CONSTRAINT_BEHAVIOR         = "change_constraint_behavior";
 
-    private static final String KEY_SHOW_MAP_SDK                = "show_map_sdk";
-    private static final String KEY_SHOW_MAP_BASEMAP            = "show_map_basemap";
+    public static final String KEY_SHOW_MAP_SDK                = "show_map_sdk";
+    public static final String KEY_SHOW_MAP_BASEMAP            = "show_map_basemap";
 
-    private static final String KEY_ANALYTICS                   = "analytics";
+    public static final String KEY_ANALYTICS                   = "analytics";
 
     public static final String KEY_TIMER_LOG_ENABLED  = "timer_log";
 
@@ -103,6 +104,33 @@ public final class AdminKeys {
             KEY_SAVE_AS          ,
             KEY_MARK_AS_FINALIZED,
             KEY_CHANGE_ADMIN_PASSWORD
+    );
+
+    static Collection<String> serverKeys = Collections.singletonList(
+            AdminKeys.KEY_CHANGE_SERVER
+    );
+
+    static Collection<String> identityKeys = Arrays.asList(
+            AdminKeys.KEY_CHANGE_FORM_METADATA,
+            AdminKeys.KEY_ANALYTICS
+    );
+
+    static Collection<String> formManagementKeys = Arrays.asList(
+            AdminKeys.KEY_AUTOSEND,
+            AdminKeys.KEY_DELETE_AFTER_SEND,
+            AdminKeys.KEY_DEFAULT_TO_FINALIZED,
+            AdminKeys.KEY_CONSTRAINT_BEHAVIOR,
+            AdminKeys.KEY_HIGH_RESOLUTION,
+            AdminKeys.KEY_INSTANCE_FORM_SYNC
+    );
+
+    static Collection<String> userInterfaceKeys = Arrays.asList(
+            AdminKeys.KEY_APP_LANGUAGE,
+            AdminKeys.KEY_CHANGE_FONT_SIZE,
+            AdminKeys.KEY_NAVIGATION,
+            AdminKeys.KEY_SHOW_SPLASH_SCREEN,
+            AdminKeys.KEY_SHOW_MAP_BASEMAP,
+            AdminKeys.KEY_SHOW_MAP_SDK
     );
 
     private static Collection<String> allKeys() {

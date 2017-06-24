@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 University of Washington
+ * Copyright (C) 2017 Shobhit
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -14,115 +14,108 @@
 
 package org.odk.collect.android.preferences;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.provider.MediaStore.Images;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.utilities.MediaUtils;
 
-import timber.log.Timber;
-
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Handles general preferences.
- *
- * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com;
- *         constraint behavior option)
  */
 public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
-    protected static final int IMAGE_CHOOSER = 0;
-    private PreferencesFragment fragment;
+
+    private AdminSharedPreferences sharedPreferences;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        fragment = new PreferencesFragment();
-        getFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, fragment)
-                .commit();
+    public void onBuildHeaders(List<Header> target) {
+        super.onBuildHeaders(target);
+
+        sharedPreferences = AdminSharedPreferences.getInstance();
+
+        final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+
+        if (adminMode) {
+            loadHeadersFromResource(R.xml.general_preference_headers, target);
+        } else {
+
+            if (hasAtleastOneSettingEnabled(AdminKeys.serverKeys)) {
+                loadHeadersFromResource(R.xml.server_preference_headers, target);
+            }
+
+            if (hasAtleastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
+                loadHeadersFromResource(R.xml.user_interface_preference_headers, target);
+            }
+
+            if (hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {
+                loadHeadersFromResource(R.xml.form_management_preference_headers, target);
+            }
+
+            if (hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
+                loadHeadersFromResource(R.xml.user_device_identity_preference_header, target);
+            }
+        }
     }
 
     @Override
-    public void onStart() {
-        Timber.d("onStart");
-        super.onStart();
+    public void onHeaderClick(Header header, int position) {
+        final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+
+        if (adminMode) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(INTENT_KEY_ADMIN_MODE, true);
+            header.fragmentArguments = bundle;
+        }
+
+        super.onHeaderClick(header, position);
+    }
+
+    private boolean hasAtleastOneSettingEnabled(Collection<String> keys) {
+        for (String key : keys) {
+            boolean value = (boolean) sharedPreferences.get(key);
+            if (value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        ViewGroup parent = (ViewGroup) root.getParent();
+        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
+        toolbar.setTitle(R.string.general_preferences);
+        View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
+
+        parent.addView(toolbar, 0);
+        parent.addView(shadow, 1);
     }
 
     @Override
     protected void onPause() {
-        Timber.d("onPause");
         super.onPause();
 
         // the property manager should be re-assigned, as properties
         // may have changed.
         IPropertyManager mgr = new PropertyManager(this);
         FormController.initializeJavaRosa(mgr);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Timber.d("onActivityResult %d %d", requestCode, resultCode);
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled, so do nothing
-            return;
-        }
-
-        switch (requestCode) {
-            case IMAGE_CHOOSER:
-
-                // get gp of chosen file
-                Uri selectedMedia = intent.getData();
-                String sourceMediaPath = MediaUtils.getPathFromUri(this, selectedMedia,
-                        Images.Media.DATA);
-
-                // setting image path
-                setSplashPath(sourceMediaPath);
-                break;
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        Timber.d("onStop");
-        super.onStop();
-    }
-
-    @Override
-    protected void onRestart() {
-        Timber.d("onRestart");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Timber.d("onDestroy");
-        super.onDestroy();
-    }
-
-    void setSplashPath(String path) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_SPLASH_PATH, path);
-        editor.apply();
-
-        PreferenceScreen splashPathPreference = (PreferenceScreen) fragment.findPreference(KEY_SPLASH_PATH);
-        String summary = splashPathPreference.getSharedPreferences().getString(
-                KEY_SPLASH_PATH, getString(R.string.default_splash_path));
-        splashPathPreference.setSummary(summary);
     }
 }

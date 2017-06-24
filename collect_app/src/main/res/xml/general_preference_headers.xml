@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header
+        android:fragment="org.odk.collect.android.preferences.ServerPreferences"
+        android:icon="@drawable/ic_cloud"
+        android:key="protocol"
+        android:title="@string/server_settings_title" />
+    <header
+        android:fragment="org.odk.collect.android.preferences.UserInterfacePreferences"
+        android:icon="@drawable/ic_phonelink_setup"
+        android:key="@string/client"
+        android:title="@string/client" />
+    <header
+        android:fragment="org.odk.collect.android.preferences.FormManagementPreferences"
+        android:icon="@drawable/ic_assignment"
+        android:key="form_management"
+        android:title="@string/form_management_preferences" />
+    <header
+        android:fragment="org.odk.collect.android.preferences.IdentityPreferences"
+        android:icon="@drawable/ic_face"
+        android:key="user_and_device_identity"
+        android:title="@string/user_and_device_identity_title" />
+</preference-headers>

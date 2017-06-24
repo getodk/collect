@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="form_submission"
+        android:title="@string/form_submission_category">
+        <ListPreference
+            android:id="@+id/autosend"
+            android:defaultValue="off"
+            android:dialogTitle="@string/autosend_selector_title"
+            android:entries="@array/autosend_selector_entries"
+            android:entryValues="@array/autosend_selector_entries_values"
+            android:key="autosend"
+            android:title="@string/autosend" />
+        <CheckBoxPreference
+            android:id="@+id/delete_after_send"
+            android:defaultValue="false"
+            android:key="delete_send"
+            android:summary="@string/delete_after_send_summary"
+            android:title="@string/delete_after_send" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="form_filling"
+        android:title="@string/form_filling_category">
+        <CheckBoxPreference
+            android:id="@+id/default_completed"
+            android:defaultValue="true"
+            android:key="default_completed"
+            android:summary="@string/default_completed_summary"
+            android:title="@string/default_completed" />
+        <ListPreference
+            android:id="@+id/constraint_behavior"
+            android:defaultValue="on_swipe"
+            android:dialogTitle="@string/constraint_behavior"
+            android:entries="@array/constraint_behavior_entries"
+            android:entryValues="@array/constraint_behavior_entry_values"
+            android:key="constraint_behavior"
+            android:title="@string/constraint_behavior_title" />
+        <CheckBoxPreference
+            android:id="@+id/high_resolution"
+            android:defaultValue="true"
+            android:key="high_resolution"
+            android:summary="@string/high_resolution_summary"
+            android:title="@string/high_resolution_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="form_import"
+        android:title="@string/form_import_category">
+        <CheckBoxPreference
+            android:id="@+id/instance_sync"
+            android:defaultValue="true"
+            android:key="instance_sync"
+            android:summary="@string/instance_sync_summary"
+            android:title="@string/instance_sync" />
+    </PreferenceCategory>
+</PreferenceScreen>
