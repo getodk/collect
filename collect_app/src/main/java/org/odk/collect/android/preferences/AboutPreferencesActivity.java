@@ -17,25 +17,31 @@
 package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.odk.collect.android.R;
 
-public class AboutPreferencesActivity extends AppCompatActivity {
+public class AboutPreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.preference_layout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        ViewGroup parent = (ViewGroup) root.getParent();
+        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
         toolbar.setTitle(getString(R.string.about_preferences));
-        setSupportActionBar(toolbar);
+        View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
+
+        parent.addView(toolbar, 0);
+        parent.addView(shadow, 1);
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_frame, new AboutPreferencesFragment())
+                .replace(android.R.id.content, new AboutPreferencesFragment())
                 .commit();
     }
 }

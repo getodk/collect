@@ -130,7 +130,7 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
 
             case KEY_IMPORT_SETTINGS:
                 getActivity().getFragmentManager().beginTransaction()
-                        .add(android.R.id.content, new ShowQRCodeFragment())
+                        .replace(android.R.id.content, new ShowQRCodeFragment())
                         .addToBackStack(null)
                         .commit();
                 break;
