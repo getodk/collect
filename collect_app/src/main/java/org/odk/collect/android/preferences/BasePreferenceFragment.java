@@ -32,6 +32,8 @@ public class BasePreferenceFragment extends PreferenceFragment {
                 if (!adminMode) {
                     removeAllDisabledPrefs();
                 }
+            } else {
+                removeAllDisabledPrefs();
             }
         }
 
