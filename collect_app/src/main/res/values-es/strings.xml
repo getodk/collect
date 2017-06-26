@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
@@ -19,7 +19,7 @@
   <string name="capture_video">Grabar el Video</string>
   <string name="change_language">Cambiar el Idioma</string>
   <string name="change_password">Contraseña</string>
-    <string name="change_username">Nombre de Usuario ODK</string>
+  <string name="change_username">Nombre de Usuario ODK</string>
   <string name="clearanswer_confirm">¿Borrar la respuesta a \"%s\"?</string>
   <string name="clear_answer">Borrar respuesta</string>
   <string name="clear_answer_ask">¿Borrar esta respuesta?</string>
@@ -121,8 +121,7 @@
   <string name="username">Nombre del Usuario</string>
   <string name="view_hierarchy">Ir a la Pregunta</string>
   <string name="general_preferences">Cambiar la configuración</string>
-  <string name="client">Interfaz de usuario</string>
-    <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
+  <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
   <string name="splash_path">Seleccione la Imagen para la pantalla inicial</string>
   <string name="default_splash_path">Predeterminado por ODK</string>
   <string name="select_another_image">Seleccione otra imagen</string>
@@ -131,7 +130,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
-    <string name="change_protocol">Protocolo</string>
+  <string name="change_protocol">Protocolo</string>
   <string name="change_submission_url">Ubicación a donde enviar (se añade a la URL del Servidor)</string>
   <string name="formlist_url">La ubicación de la lista de formularios</string>
   <string name="submission_url">Ubicación de Envio</string>
@@ -145,7 +144,8 @@
   <string name="manifest_tag_error">Al manifiesto %s le fatan una o mas etiquetas: filename, hash, or downloadUrl</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
   <string name="file_fetch_failed">Error: %2$s (%3$s) en %1$s</string>
-  <string name="fetching_manifest">%s. Obteniendo el manifesto</string>
+  <string name="fetching_manifest">%s. Obteniendo el manifesto
+</string>
   <string name="success">Correcto</string>
   <string name="no_forms_uploaded">No se ha cargado ningún formulario.</string>
   <string name="upload_results">Resultados de la carga</string>
@@ -192,9 +192,9 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Seleccionar Color</string>
   <string name="select_drawing_color">Seleccionar Color</string>
-    <string name="admin_preferences">Opciones de administrador</string>
+  <string name="admin_preferences">Opciones de administrador</string>
   <string name="admin_access_settings">Pulsa para entrar en Configuración</string>
-    <string name="save_mid">Guardar sin completar el formulario</string>
+  <string name="save_mid">Guardar sin completar el formulario</string>
   <string name="enter_new_password">Entrar nueva contraseña</string>
   <string name="admin_password">Contraseña de Administrador</string>
   <string name="admin_password_changed">Contraseña Administrador cambiada correctamente</string>
@@ -202,10 +202,10 @@
   <string name="admin_password_incorrect">¡Contraseña incorrecta!</string>
   <string name="enter_admin_password">Entrar contraseña de Administrador</string>
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
-    <string name="autosend">Auto Envío</string>
-    <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
+  <string name="autosend">Auto Envío</string>
+  <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
-    <string name="no_account">Sin cuenta</string>
+  <string name="no_account">Sin cuenta</string>
   <string name="save_preferences">Guardar configuración en disco</string>
   <string name="form_forward">Sig.</string>
   <string name="form_backward">Ant.</string>
@@ -245,7 +245,8 @@
   <string name="fs_create_media_folder_error">No pudo crear la carpeta de medios \'%s\'</string>
   <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
-  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.</string>
+  <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
+</string>
   <string name="survey_loading_reading_form_message">Leyendo definición de formulario…</string>
   <string name="survey_loading_reading_data_message">Leyendo datos sondeo…</string>
   <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
@@ -255,7 +256,7 @@
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
   <string name="survey_saving_encrypting_message">Encriptando datos…</string>
   <string name="high_resolution_summary">Activa grabación de vídeos en HD</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mi Drive</string>
   <string name="go_shared">Compartido conmigo</string>
@@ -263,11 +264,13 @@
   <string name="aggregate_preferences">Ajustes de ODK Aggregate</string>
   <string name="other_preferences">Ajustes de Otras Plataformas</string>
   <string name="google_preferences">Características de Google Sheets</string>
+  <string name="google_sheets_url_hint">Los formularios deben establecer una URL para envio. Si no lo hacen, se usará la siguiente URL</string>
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
+  <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
   <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
   <string name="odk_auto_note">Notificación de ODK Autosend</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
@@ -285,11 +288,9 @@
   <string name="password_error_whitespace">Espacios delante o detras no permitidos en claves</string>
   <string name="username_error_whitespace">Espacios delante o detras no permitidos en nombre de usuario</string>
   <string name="google_play_services_error_occured">No se puede acceder a Google Maps. ¿Hay el servicio instalado?</string>
-  <string name="about_preferences">Acuerda de</string>
-  <string name="tell_your_friends">Dile a tus amigos</string>
+  <string name="about_preferences">Acerca de</string>
   <string name="tell_your_friends_msg">¡Descarga la app ODK Collect!</string>
-  <string name="leave_a_review">Dejar un comentario</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Cartografía</string>
   <string name="map_sdk_selector_title">Cartografía SDK</string>
   <string name="map_sdk_behavior">Cartografía SDK</string>
@@ -307,7 +308,7 @@
   <string name="hybrid">Híbrido</string>
   <string name="satellite">Satélite</string>
   <string name="map_basemap_selector_title">Mapa Base</string>
-    <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
+  <string name="show_map_basemap">Mostrar opciones de Mapa Base</string>
   <string name="save_point">Guardar PuntoGeo</string>
   <string name="get_point">Iniciar PuntoGeo</string>
   <string name="geopoint_view_read_only">Ver PuntoGeo</string>
@@ -366,8 +367,8 @@
   <string name="parser_exception">Excepción XPathParser: \"%s\"</string>
   <string name="selected_answer">Seleccionado: %s</string>
   <string name="version_number">Versión: %s</string>
-  <string name="odk_website">Sitio web Open Data Kit</string>
-  <string name="all_open_source_licenses">Licencias de código abierto</string>
+  <string name="odk_website">Visitar el sitio web de ODK</string>
+  <string name="odk_forum">Unirse al foro de ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -384,10 +385,15 @@
   <string name="phone_does_not_support_rsa">El teléfono no es compatible con el cifrado RSA.</string>
   <string name="invalid_rsa_public_key">Clave publica RSA Invalida.</string>
   <string name="encryption_error_message">%s del Formulario no ha sido guardada como finalizado.</string>
+  <string name="analytics_preferences">Datos de uso</string>
+  <string name="analytics">Recolectar datos de uso anónimos</string>
+  <string name="analytics_summary">El uso anónimo de datos ayuda al equipo de ODK priorizar soluciones a errores y nuevas funciones</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
   <string name="reset_settings">Todos los ajustes  (Ajustes internos, ajustes guardados)</string>
+  <string name="reset_saved_forms">Formularios guardados (carpeta de instancias, base de datos de instancias)</string>
   <string name="reset_layers">Capas cartográficas (carpeta de las capas)</string>
+  <string name="reset_cache">Cache de formularios cargados (carpeta .cache)</string>
   <string name="reset_settings_dialog_title">Seleccione que resetear</string>
   <string name="reset_settings_dialog">Resetear aplicación</string>
   <string name="reset_settings_button_reset">Reset</string>
@@ -413,6 +419,7 @@
   <string name="sort_by_status_asc">Por estado, finalizado primero</string>
   <string name="sort_by_status_desc">Por estado, sin finalizar primero</string>
   <string name="sort_the_list">Ordenar la lista</string>
+  <string name="request_permissions_google_account">ODK Collect necesita acceder a tu cuenta de Google para obtener formularios en blanco y enviar formularios terminados.</string>
   <string name="filter_the_list">Filtrar la lista</string>
   <string name="language">Idioma</string>
   <string name="form_metadata_title">Metadatos del formulario</string>
@@ -427,4 +434,29 @@
   <string name="sim_serial_id">Numero de serie SIM</string>
   <string name="select_date">Seleccione la fecha</string>
   <string name="select_time">Seleccione la hora</string>
+  <string name="no_date_selected">No se ha seleccionado una fecha</string>
+  <string name="no_time_selected">No se ha seleccionado una hora</string>
+  <string name="import_settings">Configuración Importar/Exportar</string>
+  <string name="qr_code">Código QR</string>
+  <string name="scan_qrcode">Escanear código de otro dispositivo</string>
+  <string name="successfully_imported_settings">Ajustes importados exitosamente</string>
+  <string name="encoding_max_limit">Se alcanzó el límite máximo de caracteres: No se puede generar código QR para todos los ajustes</string>
+  <string name="share">Compartir</string>
+  <string name="select_qrcode">Seleccionar código desde SD Card</string>
+  <string name="turn_on_flashlight">Encender linterna</string>
+  <string name="turn_off_flashlight">Apagar linterna</string>
+  <string name="qrcode_with_both_passwords">Este código QR incluye contraseñas de administrador y del servidor. Por favor uselo cuidadosamente. \n(Presione para remover las contraseñas)</string>
+  <string name="qrcode_without_passwords">Este código QR no incluye contraseñas de administrador y del servidor. \n(Presione para agregar las contraseñas)</string>
+  <string name="qrcode_with_admin_password">Este código QR incluye su contraseña de administrador. Por favor uselo cuidadosamente. \n(Presione para remover la contraseña)</string>
+  <string name="qrcode_with_server_password">Este código QR incluye su contraseña del servidor. \n(Presione para remover la contraseña)</string>
+  <string name="import_export_settings">Configuración Importar/Exportar</string>
+  <string name="qrcode_scanner_prompt">Coloque el código QR dentro del rectangulo</string>
+  <string name="server_password">Contraseña del servidor</string>
+  <string name="include_password_dialog">Contraseñas incluidas en el Código</string>
+  <string name="generate">Generar</string>
+  <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
+  <string name="share_qrcode">Compartir código QR</string>
+  <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
+  <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
+  <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
 </resources>

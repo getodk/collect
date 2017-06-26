@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Passwort anzeigen</string>
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="add_another">Gruppe hinzufügen</string>
@@ -19,7 +19,7 @@
   <string name="capture_video">Video aufnehmen</string>
   <string name="change_language">Sprache ändern</string>
   <string name="change_password">ODK Passwort</string>
-    <string name="change_username">ODK Benutzername</string>
+  <string name="change_username">ODK Benutzername</string>
   <string name="clearanswer_confirm">Antwort zu \"%s\" entfernen?</string>
   <string name="clear_answer">Antwort entfernen</string>
   <string name="clear_answer_ask">Diese Antwort entfernen?</string>
@@ -122,7 +122,7 @@
   <string name="view_hierarchy">Zur Eingabe</string>
   <string name="general_preferences">Allgemeine Einstellungen</string>
   <string name="client">Bedienung</string>
-    <string name="show_splash_summary">Wird angezeigt, während die App startet</string>
+  <string name="show_splash_summary">Wird angezeigt, während die App startet</string>
   <string name="splash_path">Ausgewähltes Startbild</string>
   <string name="default_splash_path">ODK Standard</string>
   <string name="select_another_image">Anderes Bild auswählen</string>
@@ -131,7 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>
-    <string name="change_protocol">Server-Plattform</string>
+  <string name="change_protocol">Server-Plattform</string>
   <string name="change_submission_url">Submissionspfad (der Server-URL angehängt)</string>
   <string name="formlist_url">Formularlisten-Pfad</string>
   <string name="submission_url">Submissionspfad</string>
@@ -193,9 +193,9 @@
   <string name="reset_image">Zurücksetzen</string>
   <string name="set_color">Farbe wählen</string>
   <string name="select_drawing_color">Zeichenfarbe wählen</string>
-    <string name="admin_preferences">Admineinstellungen</string>
+  <string name="admin_preferences">Admineinstellungen</string>
   <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
-    <string name="save_mid">Formular speichern</string>
+  <string name="save_mid">Formular speichern</string>
   <string name="enter_new_password">Neues Passwort eingeben</string>
   <string name="admin_password">Admin-Passwort</string>
   <string name="admin_password_changed">Admin-Passwort erfolgreich geändert</string>
@@ -203,10 +203,10 @@
   <string name="admin_password_incorrect">Passwort ist falsch!</string>
   <string name="enter_admin_password">Admin-Passwort eingeben</string>
   <string name="change_admin_password">Admin-Passwort ändern</string>
-    <string name="autosend">Auto-Send</string>
-    <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
+  <string name="autosend">Auto-Send</string>
+  <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
-    <string name="no_account">Kein Benutzerkonto</string>
+  <string name="no_account">Kein Benutzerkonto</string>
   <string name="save_preferences">Einstellungen auf Speicherkarte speichern</string>
   <string name="form_forward">Weiter</string>
   <string name="form_backward">Zurück</string>
@@ -256,7 +256,7 @@
   <string name="survey_saving_finalizing_message">Abschließen auf SD-Karte…</string>
   <string name="survey_saving_encrypting_message">Daten werden verschlüsselt…</string>
   <string name="high_resolution_summary">HD-Videoaufnahmen aktivieren</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Shared with Me</string>
@@ -290,10 +290,10 @@
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
   <string name="about_preferences">Über</string>
-  <string name="tell_your_friends">Weiterempfehlen</string>
+  <string name="tell_your_friends">ODK Collect mit Kollegen teilen</string>
   <string name="tell_your_friends_msg">ODK Collect App herunterladen</string>
-  <string name="leave_a_review">Bewertung abgeben</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <string name="leave_a_review">Bewertung im Google Play Store abgeben</string>
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Karten</string>
   <string name="map_sdk_selector_title">Karten-SDK</string>
   <string name="map_sdk_behavior">Karten-SDK</string>
@@ -311,7 +311,7 @@
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellit</string>
   <string name="map_basemap_selector_title">Basiskarten</string>
-    <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
+  <string name="show_map_basemap">Basiskartenoptionen anzeigen</string>
   <string name="save_point">Standort speichern</string>
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
@@ -370,8 +370,11 @@
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">Ausgewählt: %s</string>
   <string name="version_number">Version: %s</string>
-  <string name="odk_website">Open Data Kit Webseite</string>
-  <string name="all_open_source_licenses">Open Source Lizenzen</string>
+  <string name="odk_website">ODK-Webseite öffnen</string>
+  <string name="odk_website_summary">Open Data Kit (ODK) wird verwendet um Daten für soziale Zwecke in herausfordernden Umgebungen zu sammeln.</string>
+  <string name="odk_forum">Dem ODK-Forum beitreten</string>
+  <string name="odk_forum_summary">Treten Sie dem Forum bei, um Hilfe zu bekommen, neue Funktionen vorzuschlagen, Code/Übersetzungen beizutragen.</string>
+  <string name="all_open_source_licenses">Open-Source-Libraries</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -446,7 +449,7 @@
   <string name="select_time">Uhrzeit auswählen</string>
   <string name="no_date_selected">Kein Datum ausgewählt</string>
   <string name="no_time_selected">Keine Uhrzeit ausgewählt</string>
-    <string name="import_settings">Import/Export Einstellungen</string>
+  <string name="import_settings">Import/Export Einstellungen</string>
   <string name="qr_code">QR-Code</string>
   <string name="scan_qrcode">Code von anderem Gerät scannen</string>
   <string name="successfully_imported_settings">Einstellungen erfolgreich importiert</string>
@@ -469,4 +472,30 @@
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="request_permission">Die App benötigt die Kamera-Berechtigung.</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
+  <string name="invalid_range_widget">Dieses Widget hat ungültige Parameter!</string>
+  <string name="form_entry_setting">Eingabe-Einstellungen</string>
+  <string name="form_entry_settings_summary">Berühren, um Formulareinträge zu verwalten</string>
+  <string name="user_settings">Benutzer-Einstellungen</string>
+  <string name="user_setting_summary">Berühren, um allgemeine Einstellungen zu verwalten</string>
+  <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
+  <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>
+  <string name="user_access_control">Benutzerzugriffskontrolle</string>
+  <string name="autosend_selector_title">Autosend</string>
+  <string name="off">Aus</string>
+  <string name="wifi_autosend">Nur WLAN</string>
+  <string name="cellular_autosend">Nur Mobilfunk</string>
+  <string name="wifi_cellular_autosend">WLAN oder Mobilfunk</string>
+  <string name="map_basemap_behavior_title">Basiskarte</string>
+  <string name="form_management_preferences">Formularverwaltung</string>
+  <string name="form_submission_category">Formulareinsendung</string>
+  <string name="form_filling_category">Formulareingabe</string>
+  <string name="high_resolution_title">HD-Video</string>
+  <string name="form_import_category">Formular-Import</string>
+  <string name="user_and_device_identity_title">Benutzer- und Geräteidentität</string>
+  <string name="constraint_behavior_title">Validierung</string>
+  <string name="show_splash_title">Startbildschirm</string>
+  <string name="server_settings_title">Server</string>
+  <string name="type">Typ</string>
+  <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
+  <string name="use_device_language">Gerätesprache benutzen</string>
 </resources>

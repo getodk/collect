@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostra clau d\'accés</string>
   <string name="activity_not_found">Cap activitat pendent trobada: %s</string>
   <string name="add_another">Afegir grup</string>
@@ -120,8 +120,7 @@
   <string name="username">Nom d\'usuari</string>
   <string name="view_hierarchy">Ves a entrada de dades</string>
   <string name="general_preferences">Configuració general</string>
-  <string name="client">Interfície d\'usuari</string>
-    <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
+  <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
   <string name="splash_path">Imatge de benvinguda seleccionada</string>
   <string name="default_splash_path">ODK per defecte</string>
   <string name="select_another_image">Seleccionar una altre imatge</string>
@@ -130,7 +129,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Desar els canvis</string>
   <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
-    <string name="change_protocol">Plataforma de servidor</string>
+  <string name="change_protocol">Plataforma de servidor</string>
   <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
   <string name="formlist_url">Carpeta de formularis</string>
   <string name="submission_url">Carpeta de presentacions</string>
@@ -191,9 +190,9 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Definir Color</string>
   <string name="select_drawing_color">Selecciona color</string>
-    <string name="admin_preferences">Opcions d\'Administrador</string>
+  <string name="admin_preferences">Opcions d\'Administrador</string>
   <string name="admin_access_settings">Polsa per entrar a Configuració</string>
-    <string name="save_mid">Desar mig formulari</string>
+  <string name="save_mid">Desar mig formulari</string>
   <string name="enter_new_password">Entrar nova clau d\'accés</string>
   <string name="admin_password">Clau d\'administrador</string>
   <string name="admin_password_changed">Clau d\'accés d\'Administrador canviat</string>
@@ -201,10 +200,10 @@
   <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
   <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
   <string name="change_admin_password">Canviar clau d\'administrador</string>
-    <string name="autosend">Auto-enviament</string>
-    <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
+  <string name="autosend">Auto-enviament</string>
+  <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
-    <string name="no_account">Sense compte</string>
+  <string name="no_account">Sense compte</string>
   <string name="save_preferences">Salve Configuració a disc</string>
   <string name="form_forward">Següent</string>
   <string name="form_backward">Previ</string>
@@ -254,7 +253,7 @@
   <string name="survey_saving_finalizing_message">Acabant a tarja SD…</string>
   <string name="survey_saving_encrypting_message">Encriptant dades…</string>
   <string name="high_resolution_summary">Activant enregistrament de  vídeos HD</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">El meu disc</string>
   <string name="go_shared">Comparteix amb mi</string>
@@ -284,10 +283,8 @@
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="about_preferences">Sobre</string>
-  <string name="tell_your_friends">Explica-ho als amics</string>
   <string name="tell_your_friends_msg">Baixa l\'app ODK Collect!</string>
-  <string name="leave_a_review">Deixa una opinió</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapejant</string>
   <string name="map_sdk_selector_title">Mapejant SDK</string>
   <string name="map_sdk_behavior">Mapejant SDK</string>
@@ -299,7 +296,7 @@
   <string name="hybrid">Híbrid</string>
   <string name="satellite">Satel·lit</string>
   <string name="map_basemap_selector_title">Mapes base</string>
-    <string name="show_map_basemap">Veure opcions de mapa base</string>
+  <string name="show_map_basemap">Veure opcions de mapa base</string>
   <string name="save_point">Desar GeoPunt</string>
   <string name="get_point">Comença GeoPunt</string>
   <string name="geopoint_view_read_only">Veure GeoPunt</string>
@@ -348,8 +345,6 @@
   <string name="record_geopoint">Grava GeoPunt</string>
   <string name="selected_answer">Seleccionat: %s</string>
   <string name="version_number">Versió: %s</string>
-  <string name="odk_website">web d\'Open Data Kit</string>
-  <string name="all_open_source_licenses">llicencies programari lliure</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

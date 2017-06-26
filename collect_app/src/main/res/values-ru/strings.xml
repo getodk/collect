@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Случилось что-то страшное: %s</string>
   <string name="add_another">Добавить группу</string>
   <string name="add_another_repeat">Добавить другую группу \"%s\"?</string>
@@ -113,8 +113,7 @@
   <string name="username">Имя пользователя</string>
   <string name="view_hierarchy">Показать иерархию</string>
   <string name="general_preferences">Общие настройки</string>
-  <string name="client">Пользовательский интерфейс</string>
-    <string name="show_splash_summary">Показывается при запуске приложения</string>
+  <string name="show_splash_summary">Показывается при запуске приложения</string>
   <string name="splash_path">Выбранный логотип</string>
   <string name="default_splash_path">Логотип по умолчанию</string>
   <string name="select_another_image">Выбрать другое изображение</string>
@@ -123,7 +122,7 @@
   <string name="app_url">http://kyrgyz-roads.info</string>
   <string name="keep_changes">Сохранить изменения</string>
   <string name="change_formlist_url">Путь к списку форм (добавляется к URL)</string>
-    <string name="change_protocol">Platform</string>
+  <string name="change_protocol">Platform</string>
   <string name="change_submission_url">Путь для отправки форм (добавляется к URL)</string>
   <string name="formlist_url">Путь к списку форм</string>
   <string name="submission_url">Путь для отправки форм</string>
@@ -183,18 +182,18 @@
   <string name="reset_image">Сброс</string>
   <string name="set_color">Выбрать цвет</string>
   <string name="select_drawing_color">Выбрать цвет</string>
-    <string name="admin_preferences">Администрирование</string>
+  <string name="admin_preferences">Администрирование</string>
   <string name="admin_access_settings">Нажмите для админского доступа к настройкам</string>
-    <string name="save_mid">Сохранить форму</string>
+  <string name="save_mid">Сохранить форму</string>
   <string name="enter_new_password">Укажите новый пароль</string>
   <string name="admin_password_changed">Пароль администратора успешно изменён</string>
   <string name="admin_password_disabled">Пароль администратора отключен</string>
   <string name="admin_password_incorrect">Пароль неверный!</string>
   <string name="enter_admin_password">Введите пароль администратора</string>
-    <string name="autosend">Автоматическая отправка</string>
-    <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
+  <string name="autosend">Автоматическая отправка</string>
+  <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
-    <string name="no_account">Нет учётной записи</string>
+  <string name="no_account">Нет учётной записи</string>
   <string name="save_preferences">Сохранить настройки</string>
   <string name="form_forward">Далее</string>
   <string name="form_backward">Назад</string>
@@ -244,7 +243,7 @@
   <string name="survey_saving_finalizing_message">Завершение…</string>
   <string name="survey_saving_encrypting_message">Шифрование данных…</string>
   <string name="high_resolution_summary">Разрешить запись видео высокого разрешения (HD)</string>
-    <string name="google_drive">Google Диск</string>
+  <string name="google_drive">Google Диск</string>
   <string name="go_drive">Мой диск</string>
   <string name="go_shared">Доступные мне</string>
   <string name="modified_on_date_at_time">\'Изменено\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
