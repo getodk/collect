@@ -18,17 +18,14 @@ import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY
 public class BasePreferenceFragment extends PreferenceFragment {
 
     protected Toolbar toolbar;
-
-    private void removeAllDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
-        preferencesRemover.remove(AdminKeys.adminToGeneral);
-        preferencesRemover.removeEmptyCategories();
-    }
+    private LinearLayout root;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        setUpNestedScreen(getPreferenceScreen(), view);
 
+        initToolbar(getPreferenceScreen(), view);
+
+        // removes disabled preferences if in general settings
         if (getActivity() instanceof PreferencesActivity) {
             Bundle args = getArguments();
             if (args != null) {
@@ -44,9 +41,8 @@ public class BasePreferenceFragment extends PreferenceFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void setUpNestedScreen(PreferenceScreen preferenceScreen, View view) {
-        LinearLayout root;
-
+    // inflates toolbar in the preference fragments
+    public void initToolbar(PreferenceScreen preferenceScreen, View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
             if (getActivity() instanceof PreferencesActivity) {
@@ -56,21 +52,29 @@ public class BasePreferenceFragment extends PreferenceFragment {
             } else {
                 root = (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent();
                 toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
-                toolbar.setTitle(preferenceScreen.getTitle());
-                root.addView(toolbar, 0);
 
-                View shadow = LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_action_bar_shadow, root, false);
-                root.addView(shadow, 1);
+                inflateToolbar(preferenceScreen.getTitle());
             }
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             root = (LinearLayout) view.findViewById(android.R.id.list).getParent();
             toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
-            toolbar.setTitle(preferenceScreen.getTitle());
-            root.addView(toolbar, 0);
 
-            View shadow = LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_action_bar_shadow, root, false);
-            root.addView(shadow, 1);
+            inflateToolbar(preferenceScreen.getTitle());
         }
+    }
+
+    private void inflateToolbar(CharSequence title) {
+        toolbar.setTitle(title);
+        root.addView(toolbar, 0);
+
+        View shadow = LayoutInflater.from(getActivity()).inflate(R.layout.toolbar_action_bar_shadow, root, false);
+        root.addView(shadow, 1);
+    }
+
+    private void removeAllDisabledPrefs() {
+        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
+        preferencesRemover.remove(AdminKeys.adminToGeneral);
+        preferencesRemover.removeEmptyCategories();
     }
 }
