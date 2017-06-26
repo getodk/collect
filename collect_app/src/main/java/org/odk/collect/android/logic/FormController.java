@@ -72,6 +72,11 @@ public class FormController {
     private static final String INSTANCE_ID = "instanceID";
     private static final String INSTANCE_NAME = "instanceName";
 
+    /*
+     * Non OpenRosa metadata tag names
+     */
+    private static final String AUDIT = "audit";
+
     /**
      * OpenRosa metadata of a form instance.
      *
@@ -83,10 +88,12 @@ public class FormController {
     public static final class InstanceMetadata {
         public final String instanceId;
         public final String instanceName;
+        public final boolean audit;
 
-        InstanceMetadata(String instanceId, String instanceName) {
+        InstanceMetadata(String instanceId, String instanceName, boolean audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
+            this.audit = audit;
         }
     }
 
@@ -1151,6 +1158,7 @@ public class FormController {
 
         String instanceId = null;
         String instanceName = null;
+        boolean audit = false;
 
         if (e != null) {
             List<TreeElement> v;
@@ -1172,9 +1180,16 @@ public class FormController {
                     instanceName = (String) sa.getValue();
                 }
             }
+
+            // timing element...
+            v = e.getChildrenWithName(AUDIT);
+            if (v.size() == 1) {
+                audit = true;
+            }
+
         }
 
-        return new InstanceMetadata(instanceId, instanceName);
+        return new InstanceMetadata(instanceId, instanceName, audit);
     }
 
 }

@@ -145,6 +145,12 @@
                     android:defaultValue="true"
                     android:key="analytics"
                     android:title="@string/analytics" />
+                <CheckBoxPreference
+                    android:id="@+id/timer_log"
+                    android:defaultValue="true"
+                    android:key="timer_log"
+                    android:summary="@string/found_in_settings"
+                    android:title="@string/timer_log" />
             </PreferenceCategory>
         </PreferenceScreen>
 

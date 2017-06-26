@@ -82,6 +82,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -196,6 +197,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private boolean autoSaved;
     private boolean doSwipe = true;
+
+    private TimerLogger timerLogger;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -582,6 +585,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
+
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+
                 Intent i = new Intent(FormEntryActivity.this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
@@ -907,6 +913,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // repeat events, and indexes in field-lists that is not the containing
         // group.
 
+        if (timerLogger == null) {
+            setTimerLogger(formController);
+        }
+
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
     }
@@ -1012,6 +1022,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
+
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
@@ -1168,6 +1181,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         } else {
             setTitle(formController.getFormTitle());
         }
+
+        timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
+                event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1447,6 +1463,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return;
             }
 
+            timerLogger.exitView();    // Close timer events waiting for an end time
+
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
                 case FormEntryController.EVENT_GROUP:
@@ -1486,6 +1504,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             FormController formController = Collect.getInstance()
                     .getFormController();
+
             // The answer is saved on a back swipe, but question constraints are
             // ignored.
             if (formController.currentPromptIsQuestion()) {
@@ -1514,6 +1533,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         nonblockingCreateSavePointData();
                     }
                 }
+                timerLogger.exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -1898,6 +1918,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
+                        timerLogger.logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -2025,6 +2046,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                             .logInstanceAction(this,
                                                     "createQuitDialog",
                                                     "discardAndExit");
+                                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                     removeTempInstance();
                                     finishReturnInstance();
                                 }
@@ -2040,6 +2062,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 // close all open databases of external data.
                                 Collect.getInstance().getExternalDataManager().close();
 
+                                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                 removeTempInstance();
                                 finishReturnInstance();
                                 break;
@@ -2643,15 +2666,22 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             String path = Collect.INSTANCES_PATH + File.separator + file + "_"
                     + time;
             if (FileUtils.createFolder(path)) {
-                formController.setInstancePath(new File(path + File.separator
-                        + file + "_" + time + ".xml"));
+                File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
+                formController.setInstancePath(instanceFile);
             }
+
+            setTimerLogger(formController);
+            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
+            setTimerLogger(formController);
+            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -2695,15 +2725,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                if (saveResult.getComplete()) {
+                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                } else {
+                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2713,12 +2752,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
+                timerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2746,6 +2787,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (progressDialog != null) {
             progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }
+    }
+
+    /*
+     * Create the timer logger object
+     */
+    private void setTimerLogger(FormController formController) {
+
+        // Create the timer logger and then log the resume event
+        timerLogger = new TimerLogger(formController.getInstancePath(),
+                PreferenceManager.getDefaultSharedPreferences(this),
+                formController);
     }
 
     /**

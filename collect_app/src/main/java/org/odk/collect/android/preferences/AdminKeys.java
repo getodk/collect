@@ -56,6 +56,8 @@ public final class AdminKeys {
 
     private static final String KEY_ANALYTICS                   = "analytics";
 
+    public static final String KEY_TIMER_LOG_ENABLED  = "timer_log";
+
     /**
      * The admin preferences allow removing general preferences. This array contains
      * tuples of admin keys and the keys of general preferences that are removed if the admin
@@ -82,6 +84,7 @@ public final class AdminKeys {
 
             ag(KEY_SHOW_MAP_SDK,               PreferenceKeys.KEY_MAP_SDK),
             ag(KEY_SHOW_MAP_BASEMAP,           PreferenceKeys.KEY_MAP_BASEMAP),
+            ag(KEY_TIMER_LOG_ENABLED,          PreferenceKeys.KEY_TIMER_LOG_ENABLED),
 
             ag(KEY_ANALYTICS,                  PreferenceKeys.KEY_ANALYTICS)
     };
