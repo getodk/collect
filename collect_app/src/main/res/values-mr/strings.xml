@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">संकेतशब्द दर्शवा</string>
   <string name="activity_not_found">हाताळण्यासाठी कोणतीही गतिविधी आढळली नाही: %s</string>
   <string name="add_another">गट जोडा</string>
@@ -91,7 +91,6 @@
   <string name="parse_legacy_formlist_failed">सर्व्हरने एकूण 0.9.x. सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेला नाही. : %s</string>
   <string name="parse_openrosa_formlist_failed">सर्व्हरने ओपेनरोसा आवृत्ती 1.0 मानक सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेले नाही : %s</string>
   <string name="password">संकेतशब्द</string>
-  <string name="play_audio">ध्वनी प्ले करा</string>
   <string name="play_video">व्हिडिओ प्ले करा</string>
   <string name="please_wait">कृपया काही क्षण प्रतीक्षा करा</string>
   <string name="please_wait_long">कृपया थांबा. यास काही मिनिटे लागू शकेल.</string>
