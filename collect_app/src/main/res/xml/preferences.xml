@@ -89,17 +89,6 @@
         </PreferenceCategory>
 
         <PreferenceCategory
-            android:key="@string/audit"
-            android:title="@string/audit" >
-            <CheckBoxPreference
-                android:id="@+id/timer_log"
-                android:defaultValue="true"
-                android:key="timer_log"
-                android:summary="@string/timer_log_summary"
-                android:title="@string/timer_log" />
-        </PreferenceCategory>
-
-        <PreferenceCategory
             android:key="form_filling"
             android:title="@string/form_filling_category">
             <CheckBoxPreference
