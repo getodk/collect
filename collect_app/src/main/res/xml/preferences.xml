@@ -1,5 +1,4 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
     <Preference
         android:icon="@drawable/ic_cloud"
         android:key="protocol"
@@ -87,6 +86,17 @@
                 android:key="delete_send"
                 android:summary="@string/delete_after_send_summary"
                 android:title="@string/delete_after_send" />
+        </PreferenceCategory>
+
+        <PreferenceCategory
+            android:key="@string/audit"
+            android:title="@string/audit" >
+            <CheckBoxPreference
+                android:id="@+id/timer_log"
+                android:defaultValue="true"
+                android:key="timer_log"
+                android:summary="@string/timer_log_summary"
+                android:title="@string/timer_log" />
         </PreferenceCategory>
 
         <PreferenceCategory
