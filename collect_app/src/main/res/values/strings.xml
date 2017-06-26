@@ -210,7 +210,7 @@
     <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
     <string name="enter_admin_password">Enter Admin Password</string>
     <string name="change_admin_password">Change Admin Password</string>
-    <string name="autosend">Auto Send</string>
+    <string name="autosend">Auto send</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
     <string name="no_account">No account</string>
@@ -278,8 +278,8 @@
     <string name="invalid_oauth">Invalid OAuth 2 token</string>
     <string name="google_repeat_error">Repeats are not supported by Google Sheets at this time.</string>
     <string name="media_upload_error">Failed to upload photo that does not exist: %1$s</string>
-    <string name="odk_auth_auth_fail">ODK Auto send authentication failure, please make sure your settings are correct</string>
-    <string name="odk_auto_note">ODK Auto send Notification</string>
+    <string name="odk_auth_auth_fail">ODK auto send authentication failure, please make sure your settings are correct</string>
+    <string name="odk_auto_note">ODK Auto Send Notification</string>
     <string name="notification_error">Error displaying notification text</string>
     <string name="delete_after_send">Delete after send</string>
     <string name="delete_after_send_summary">Deletes finalized forms and media after sending to server</string>
