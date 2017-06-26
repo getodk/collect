@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v7.widget.Toolbar;
@@ -99,14 +100,13 @@ public class PreferencesActivity extends PreferenceActivity {
 
         super.onCreate(savedInstanceState);
 
-        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-        ViewGroup parent = (ViewGroup) root.getParent();
+        ViewGroup root = getRootView();
         Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
         toolbar.setTitle(R.string.general_preferences);
         View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
 
-        parent.addView(toolbar, 0);
-        parent.addView(shadow, 1);
+        root.addView(toolbar, 0);
+        root.addView(shadow, 1);
     }
 
     @Override
@@ -117,5 +117,13 @@ public class PreferencesActivity extends PreferenceActivity {
         // may have changed.
         IPropertyManager mgr = new PropertyManager(this);
         FormController.initializeJavaRosa(mgr);
+    }
+
+    private ViewGroup getRootView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return (ViewGroup) findViewById(android.R.id.list).getParent().getParent().getParent();
+        } else {
+            return (ViewGroup) findViewById(android.R.id.list).getParent();
+        }
     }
 }

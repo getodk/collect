@@ -15,12 +15,13 @@
 package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PAS
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 
 
-public class AdminPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
     public static final String ADMIN_PREFERENCES = "admin_prefs";
 
@@ -65,7 +66,15 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        toolbar.setTitle(R.string.admin_preferences);
+    }
+
+    @Override
     public boolean onPreferenceClick(Preference preference) {
+
+        Fragment fragment = null;
 
         switch (preference.getKey()) {
 
@@ -129,31 +138,27 @@ public class AdminPreferencesFragment extends PreferenceFragment implements Pref
                 break;
 
             case KEY_IMPORT_SETTINGS:
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new ShowQRCodeFragment())
-                        .addToBackStack(null)
-                        .commit();
+                fragment = new ShowQRCodeFragment();
                 break;
 
             case "main_menu":
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new MainMenuAccessPreferences())
-                        .addToBackStack(null)
-                        .commit();
+                fragment = new MainMenuAccessPreferences();
                 break;
             case "user_settings":
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new UserSettingsAccessPreferences())
-                        .addToBackStack(null)
-                        .commit();
+                fragment = new UserSettingsAccessPreferences();
                 break;
             case "form_entry":
-                getActivity().getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new FormEntryAccessPreferences())
-                        .addToBackStack(null)
-                        .commit();
+                fragment = new FormEntryAccessPreferences();
                 break;
         }
+
+        if (fragment != null) {
+            getActivity().getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
         return true;
     }
 }

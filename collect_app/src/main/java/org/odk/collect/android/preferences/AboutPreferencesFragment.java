@@ -8,8 +8,9 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.OpenSourceLicensesActivity;
@@ -20,7 +21,7 @@ import java.util.List;
 import timber.log.Timber;
 
 
-public class AboutPreferencesFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class AboutPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
     public static final String KEY_OPEN_SOURCE_LICENSES = "open_source_licenses";
     public static final String KEY_TELL_YOUR_FRIENDS = "tell_your_friends";
@@ -52,7 +53,12 @@ public class AboutPreferencesFragment extends PreferenceFragment implements Pref
         forumTabHelper = new CustomTabHelper();
         websiteUri = Uri.parse(ODK_WEBSITE);
         forumUri = Uri.parse(ODK_FORUM);
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        toolbar.setTitle(getString(R.string.about_preferences));
     }
 
     @Override

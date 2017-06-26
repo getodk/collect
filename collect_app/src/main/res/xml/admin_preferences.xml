@@ -29,7 +29,6 @@
 
     <PreferenceScreen
         android:id="@+id/import_settings"
-        android:fragment="org.odk.collect.android.fragments.ShowQRCodeFragment"
         android:key="import_settings"
         android:title="@string/import_settings" />
 
