@@ -32,10 +32,7 @@ import android.widget.EditText;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fragments.FormEntryAccessPreferences;
-import org.odk.collect.android.fragments.MainMenuAccessPreferences;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
-import org.odk.collect.android.fragments.UserSettingsAccessPreferences;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -160,5 +157,86 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
 
         return true;
+    }
+
+    public static class MainMenuAccessPreferences extends BasePreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            PreferenceManager prefMgr = getPreferenceManager();
+            prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
+            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+
+            addPreferencesFromResource(R.xml.main_menu_access_preferences);
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            toolbar.setTitle(R.string.main_menu_settings);
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            if (toolbar != null) {
+                toolbar.setTitle(R.string.admin_preferences);
+            }
+        }
+    }
+
+
+    public static class UserSettingsAccessPreferences extends BasePreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            PreferenceManager prefMgr = getPreferenceManager();
+            prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
+            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+
+            addPreferencesFromResource(R.xml.user_settings_access_preferences);
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            toolbar.setTitle(R.string.user_settings);
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            if (toolbar != null) {
+                toolbar.setTitle(R.string.admin_preferences);
+            }
+        }
+    }
+
+    public static class FormEntryAccessPreferences extends BasePreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            PreferenceManager prefMgr = getPreferenceManager();
+            prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
+            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+
+            addPreferencesFromResource(R.xml.form_entry_access_preferences);
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            toolbar.setTitle(R.string.form_entry_setting);
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            if (toolbar != null) {
+                toolbar.setTitle(R.string.admin_preferences);
+            }
+        }
     }
 }
