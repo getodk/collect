@@ -57,7 +57,7 @@ public final class AdminKeys {
 
     public static final String KEY_ANALYTICS                   = "analytics";
 
-    public static final String KEY_TIMER_LOG_ENABLED  = "timer_log";
+    public static final String KEY_TIMER_LOG_ENABLED           = "change_timer_log";
 
     /**
      * The admin preferences allow removing general preferences. This array contains
@@ -107,30 +107,31 @@ public final class AdminKeys {
     );
 
     static Collection<String> serverKeys = Collections.singletonList(
-            AdminKeys.KEY_CHANGE_SERVER
+            KEY_CHANGE_SERVER
     );
 
     static Collection<String> identityKeys = Arrays.asList(
-            AdminKeys.KEY_CHANGE_FORM_METADATA,
-            AdminKeys.KEY_ANALYTICS
+            KEY_CHANGE_FORM_METADATA,
+            KEY_ANALYTICS
     );
 
     static Collection<String> formManagementKeys = Arrays.asList(
-            AdminKeys.KEY_AUTOSEND,
-            AdminKeys.KEY_DELETE_AFTER_SEND,
-            AdminKeys.KEY_DEFAULT_TO_FINALIZED,
-            AdminKeys.KEY_CONSTRAINT_BEHAVIOR,
-            AdminKeys.KEY_HIGH_RESOLUTION,
-            AdminKeys.KEY_INSTANCE_FORM_SYNC
+            KEY_AUTOSEND,
+            KEY_DELETE_AFTER_SEND,
+            KEY_DEFAULT_TO_FINALIZED,
+            KEY_CONSTRAINT_BEHAVIOR,
+            KEY_HIGH_RESOLUTION,
+            KEY_INSTANCE_FORM_SYNC,
+            KEY_TIMER_LOG_ENABLED
     );
 
     static Collection<String> userInterfaceKeys = Arrays.asList(
-            AdminKeys.KEY_APP_LANGUAGE,
-            AdminKeys.KEY_CHANGE_FONT_SIZE,
-            AdminKeys.KEY_NAVIGATION,
-            AdminKeys.KEY_SHOW_SPLASH_SCREEN,
-            AdminKeys.KEY_SHOW_MAP_BASEMAP,
-            AdminKeys.KEY_SHOW_MAP_SDK
+            KEY_APP_LANGUAGE,
+            KEY_CHANGE_FONT_SIZE,
+            KEY_NAVIGATION,
+            KEY_SHOW_SPLASH_SCREEN,
+            KEY_SHOW_MAP_BASEMAP,
+            KEY_SHOW_MAP_SDK
     );
 
     private static Collection<String> allKeys() {
