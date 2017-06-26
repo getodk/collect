@@ -23,6 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -99,11 +101,14 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -725,6 +730,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
+                scaleDownImageIfNeeded(Collect.TMPFILE_PATH);
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
@@ -844,6 +850,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
             if (chosenImage != null) {
+                scaleDownImageIfNeeded(chosenImage.getPath());
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
                 runOnUiThread(new Runnable() {
@@ -874,6 +881,47 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
+        }
+    }
+
+    private void scaleDownImageIfNeeded(String path) {
+        for (QuestionWidget questionWidget :  ((ODKView) currentView).getWidgets()) {
+            if (((IBinaryWidget) questionWidget).isWaitingForBinaryData()) {
+                for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
+                    if ("max-pixels".equals(attrs.getName())) {
+                        int maxPixels = Integer.parseInt(attrs.getAttributeValue());
+
+                        Bitmap originalImage = BitmapFactory.decodeFile(path);
+                        double originalWidth = originalImage.getWidth();
+                        double originalHeight = originalImage.getHeight();
+
+                        int originalPixelCount = (int) (originalWidth * originalHeight);
+
+                        if (originalPixelCount > maxPixels) {
+                            double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
+                            double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
+
+                            Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
+
+                            FileOutputStream out = null;
+                            try {
+                                out = new FileOutputStream(path);
+                                scaledImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                            } catch (Exception e) {
+                                Timber.e(e);
+                            } finally {
+                                try {
+                                    if (out != null) {
+                                        out.close();
+                                    }
+                                } catch (IOException e) {
+                                    Timber.e(e);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
