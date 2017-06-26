@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">Nie znaleziono aktywności do obsługi: %s</string>
   <string name="add_another">Dodaj Grupę</string>
   <string name="add_another_repeat">Czy dodać kolejną grupę \"%s\"?</string>
@@ -119,8 +119,7 @@
   <string name="username">Identyfikator użytkownika</string>
   <string name="view_hierarchy">Idź Do Pytania</string>
   <string name="general_preferences">Ustawienia Ogólne</string>
-  <string name="client">Interfejs Użytkownika</string>
-    <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
+  <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
   <string name="splash_path">Wybrany obraz ekranu powitalnego</string>
   <string name="default_splash_path">Domyślne ODK</string>
   <string name="select_another_image">Wybierz inny obraz</string>
@@ -129,7 +128,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>
-    <string name="change_protocol">Platforma</string>
+  <string name="change_protocol">Platforma</string>
   <string name="change_submission_url">Ścieżka zgłoszeń (dołączana do URL)</string>
   <string name="formlist_url">Ścieżka do listy formularzy</string>
   <string name="submission_url">Ścieżka zgłoszeń</string>
@@ -190,9 +189,9 @@
   <string name="reset_image">Resetuj</string>
   <string name="set_color">Ustaw Kolor</string>
   <string name="select_drawing_color">Wybierz Kolor do Rysowania</string>
-    <string name="admin_preferences">Ustawienia Administratora</string>
+  <string name="admin_preferences">Ustawienia Administratora</string>
   <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
-    <string name="save_mid">Zapisz Formularz</string>
+  <string name="save_mid">Zapisz Formularz</string>
   <string name="enter_new_password">Wprowadź nowe hasło</string>
   <string name="admin_password">Hasło Administratora</string>
   <string name="admin_password_changed">Hasło administratora zostało zmienione</string>
@@ -200,10 +199,10 @@
   <string name="admin_password_incorrect">Przykro mi, hasło jest niepoprawne!</string>
   <string name="enter_admin_password">Wprowadź Hasło Administratora</string>
   <string name="change_admin_password">Zmień Hasło Administratora</string>
-    <string name="autosend">Wyślij Automatycznie</string>
-    <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
+  <string name="autosend">Wyślij Automatycznie</string>
+  <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
-    <string name="no_account">Brak konta</string>
+  <string name="no_account">Brak konta</string>
   <string name="save_preferences">Zapisz Ustawienia na Dysk</string>
   <string name="form_forward">Następny</string>
   <string name="form_backward">Poprzedni</string>
@@ -253,7 +252,7 @@
   <string name="survey_saving_finalizing_message">Zakańczam na kartę SD…</string>
   <string name="survey_saving_encrypting_message">Szyfruję dane…</string>
   <string name="high_resolution_summary">Włącz nagrywanie wideo wysokiej rozdzielczości</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Mój Dysk</string>
   <string name="go_shared">Dzielone ze Mną</string>
@@ -283,10 +282,8 @@
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="about_preferences">O Aplikacji</string>
-  <string name="tell_your_friends">Powiadom znajomych</string>
   <string name="tell_your_friends_msg">Pobierz aplikację ODK Collect!</string>
-  <string name="leave_a_review">Zostaw recenzję</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mapowanie</string>
   <string name="map_sdk_selector_title">SDK Mapowania</string>
   <string name="map_sdk_behavior">SDK Mapowania</string>
@@ -304,7 +301,7 @@
   <string name="hybrid">Hybryda</string>
   <string name="satellite">Satelita</string>
   <string name="map_basemap_selector_title">Mapy bazowe</string>
-    <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
+  <string name="show_map_basemap">Pokaż opcje mapy bazowej</string>
   <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
@@ -362,8 +359,6 @@
   <string name="parser_exception">Wyjątek XPathParser: \"%s\"</string>
   <string name="selected_answer">Wybrany: %s</string>
   <string name="version_number">Wersja: %s</string>
-  <string name="odk_website">Witryna Open Data Kit</string>
-  <string name="all_open_source_licenses">Licencje open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Z %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Tunjukan sandi</string>
   <string name="activity_not_found">Tidak ditemukan aktifitas untuk diselesaikan: %s</string>
   <string name="add_another">Tambah grup</string>
@@ -19,7 +19,7 @@
   <string name="capture_video">Simpan video</string>
   <string name="change_language">Ubah bahasa</string>
   <string name="change_password">Kata sandi ODK</string>
-    <string name="change_username">Nama pengguna ODK</string>
+  <string name="change_username">Nama pengguna ODK</string>
   <string name="clearanswer_confirm">Hapus jawaban atas \"%s\"?</string>
   <string name="clear_answer">Hapus jawaban</string>
   <string name="clear_answer_ask">Hapus jawaban ini?</string>
@@ -121,8 +121,7 @@
   <string name="username">Nama pengguna</string>
   <string name="view_hierarchy">Risalah</string>
   <string name="general_preferences">Pengaturan Umum</string>
-  <string name="client">Klien</string>
-    <string name="show_splash_summary">Tampilkan pada awal aplikasi berjalan</string>
+  <string name="show_splash_summary">Tampilkan pada awal aplikasi berjalan</string>
   <string name="splash_path">Gambar tampilan pembuka yang dipilih</string>
   <string name="default_splash_path">ODK Bawaan</string>
   <string name="select_another_image">Pilih gambar lainnya</string>
@@ -131,7 +130,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="change_formlist_url">Tautan formulir (appended to Server URL)</string>
-    <string name="change_protocol">Platform</string>
+  <string name="change_protocol">Platform</string>
   <string name="change_submission_url">Tautan pengumpulan (appended to Server URL)</string>
   <string name="formlist_url">Tautan daftar formulir</string>
   <string name="submission_url">Tautan pengumpulan</string>
@@ -192,9 +191,9 @@
   <string name="reset_image">Set Ulang</string>
   <string name="set_color">Atur Warna</string>
   <string name="select_drawing_color">Pilih Warna</string>
-    <string name="admin_preferences">Pengaturan Admin</string>
+  <string name="admin_preferences">Pengaturan Admin</string>
   <string name="admin_access_settings">Tekan untuk akses admin ke pengaturan</string>
-    <string name="save_mid">Menyimpan di tengah formulir</string>
+  <string name="save_mid">Menyimpan di tengah formulir</string>
   <string name="enter_new_password">Masukkan kata sandi baru</string>
   <string name="admin_password">Kata sandi Admin</string>
   <string name="admin_password_changed">Kata sandi admin berhasil diubah</string>
@@ -202,10 +201,10 @@
   <string name="admin_password_incorrect">Maaf, kata sandi tidak benar!</string>
   <string name="enter_admin_password">Masukkan Kata Sandi Admin</string>
   <string name="change_admin_password">Ubah Kata sandi Admin</string>
-    <string name="autosend">Kirim Otomatis</string>
-    <string name="found_in_main">Hapus centang untuk menyembunyikan dari Menu Utama</string>
+  <string name="autosend">Kirim Otomatis</string>
+  <string name="found_in_main">Hapus centang untuk menyembunyikan dari Menu Utama</string>
   <string name="found_in_settings">Hapus centang untuk menyembunyikan dari Pengaturan Umum</string>
-    <string name="no_account">Tidak ada akun</string>
+  <string name="no_account">Tidak ada akun</string>
   <string name="save_preferences">Simpan Pengaturan ke Disk</string>
   <string name="form_forward">Lanjut</string>
   <string name="form_backward">Sebelumnya</string>
@@ -255,7 +254,7 @@
   <string name="survey_saving_finalizing_message">Menyempurnakan ke SD card…</string>
   <string name="survey_saving_encrypting_message">Mengenkripsi data…</string>
   <string name="high_resolution_summary">Mengaktifkan perekaman video beresolusi tinggi.</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">Drive saya</string>
   <string name="go_shared">Berbagi dengan saya</string>
@@ -288,10 +287,8 @@
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terpasang?</string>
   <string name="about_preferences">Tentang</string>
-  <string name="tell_your_friends">Promosikan ke teman anda</string>
   <string name="tell_your_friends_msg">Unduh aplikasi ODK Collect!</string>
-  <string name="leave_a_review">Berikan ulasan</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Pemetaan</string>
   <string name="map_sdk_selector_title">SDK Pemetaan</string>
   <string name="map_sdk_behavior">Pemetaan SDK</string>
@@ -309,7 +306,7 @@
   <string name="hybrid">Hibrida</string>
   <string name="satellite">Satelit</string>
   <string name="map_basemap_selector_title">Peta dasar</string>
-    <string name="show_map_basemap">Tampilkan opsi peta dasar</string>
+  <string name="show_map_basemap">Tampilkan opsi peta dasar</string>
   <string name="save_point">Simpan GeoPoint</string>
   <string name="get_point">Mulai GeoPoint</string>
   <string name="geopoint_view_read_only">Tampilkan GeoPoint</string>
