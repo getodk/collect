@@ -18,26 +18,12 @@ package org.odk.collect.android.preferences;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.ViewGroup;
-
-import org.odk.collect.android.R;
 
 public class AboutPreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-        ViewGroup parent = (ViewGroup) root.getParent();
-        Toolbar toolbar = (Toolbar) View.inflate(this, R.layout.toolbar, null);
-        toolbar.setTitle(getString(R.string.about_preferences));
-        View shadow = View.inflate(this, R.layout.toolbar_action_bar_shadow, null);
-
-        parent.addView(toolbar, 0);
-        parent.addView(shadow, 1);
 
         getFragmentManager()
                 .beginTransaction()
