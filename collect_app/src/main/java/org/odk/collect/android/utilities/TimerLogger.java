@@ -172,7 +172,7 @@ public class TimerLogger {
          */
         boolean loggingEnabledInForm = formController.getSubmissionMetadata().audit;
         boolean loggingEnabledInPref = sharedPreferences.getBoolean(
-                AdminKeys.KEY_TIMER_LOG_ENABLED, false);
+                AdminKeys.KEY_TIMER_LOG_ENABLED, true);
         timerEnabled = loggingEnabledInForm && loggingEnabledInPref;
 
         if (timerEnabled) {
