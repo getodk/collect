@@ -30,7 +30,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_US
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
-/** Tests the FormMetadataActivity */
+/** Tests the FormMetadataFragment */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class FormMetadataMigratorTest {

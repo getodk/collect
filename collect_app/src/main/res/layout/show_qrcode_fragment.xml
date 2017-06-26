@@ -12,7 +12,6 @@
      the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -93,7 +92,6 @@
             android:layout_weight="1"
             android:padding="5dp"
             android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="@string/qrcode_with_password" />
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

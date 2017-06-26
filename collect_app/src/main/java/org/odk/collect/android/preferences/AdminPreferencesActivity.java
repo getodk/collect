@@ -17,8 +17,8 @@ package org.odk.collect.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,7 +40,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppCompatActivity {
+public class AdminPreferencesActivity extends PreferenceActivity {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
     private static final int SAVE_PREFS_MENU = Menu.FIRST;
@@ -76,13 +76,18 @@ public class AdminPreferencesActivity extends AppCompatActivity {
     }
 
     @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.content, new AdminPreferencesFragment(), TAG)
+                    .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
     }

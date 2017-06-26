@@ -69,10 +69,6 @@ import static org.odk.collect.android.utilities.QRCodeUtils.generateQRBitMap;
 import static org.odk.collect.android.utilities.QRCodeUtils.saveBitmapToCache;
 
 
-/**
- * Created by shobhit on 6/4/17.
- */
-
 public class ShowQRCodeFragment extends Fragment implements View.OnClickListener, QRCodeListener {
 
     private static final int SELECT_PHOTO = 111;
