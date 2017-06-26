@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">パスワードを表示</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="add_another">グループを追加</string>
@@ -19,7 +19,7 @@
   <string name="capture_video">ビデオを録画</string>
   <string name="change_language">言語を変更</string>
   <string name="change_password">ODK パスワード</string>
-    <string name="change_username">ODK ユーザー名</string>
+  <string name="change_username">ODK ユーザー名</string>
   <string name="clearanswer_confirm">\"%s\" への回答を削除しますか?</string>
   <string name="clear_answer">回答を削除</string>
   <string name="clear_answer_ask">回答を削除しますか?</string>
@@ -121,8 +121,8 @@
   <string name="username">ユーザー名</string>
   <string name="view_hierarchy">プロンプトへ移動</string>
   <string name="general_preferences">全般設定</string>
-  <string name="client">ユーザー インターフェイス</string>
-    <string name="show_splash_summary">アプリケーションの起動時に表示します</string>
+  <string name="client">ユーザーインターフェイス</string>
+  <string name="show_splash_summary">アプリケーションの起動時に表示します</string>
   <string name="splash_path">選択したスプラッシュ画像</string>
   <string name="default_splash_path">ODK デフォルト</string>
   <string name="select_another_image">別の画像を選択</string>
@@ -131,7 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
-    <string name="change_protocol">プラットフォーム</string>
+  <string name="change_protocol">プラットフォーム</string>
   <string name="change_submission_url">提出パス (URLに追加されます)</string>
   <string name="formlist_url">フォーム一覧のパス</string>
   <string name="submission_url">提出パス</string>
@@ -193,9 +193,9 @@
   <string name="reset_image">リセット</string>
   <string name="set_color">色を設定</string>
   <string name="select_drawing_color">描画色を選択します</string>
-    <string name="admin_preferences">管理者設定</string>
+  <string name="admin_preferences">管理者設定</string>
   <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
-    <string name="save_mid">フォームを保存する</string>
+  <string name="save_mid">フォームを保存する</string>
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="admin_password">管理者パスワード</string>
   <string name="admin_password_changed">管理者パスワードが変更されました</string>
@@ -203,10 +203,10 @@
   <string name="admin_password_incorrect">申し訳ありません、パスワードが正しくありません!</string>
   <string name="enter_admin_password">管理者パスワードを入力してください</string>
   <string name="change_admin_password">管理者パスワードを変更</string>
-    <string name="autosend">自動送信</string>
-    <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
+  <string name="autosend">自動送信</string>
+  <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
-    <string name="no_account">アカウントがありません</string>
+  <string name="no_account">アカウントがありません</string>
   <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
   <string name="form_backward">前へ</string>
@@ -256,7 +256,7 @@
   <string name="survey_saving_finalizing_message">SD カードに確定中…</string>
   <string name="survey_saving_encrypting_message">データを暗号化中…</string>
   <string name="high_resolution_summary">高解像度のビデオ録画を有効にします</string>
-    <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
+  <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
   <string name="google_drive">Google ドライブ</string>
   <string name="go_drive">マイ ドライブ</string>
   <string name="go_shared">私と共有</string>
@@ -290,10 +290,10 @@
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
   <string name="about_preferences">アプリについて</string>
-  <string name="tell_your_friends">友達に教える</string>
+  <string name="tell_your_friends">ODK Collect を同僚と共有</string>
   <string name="tell_your_friends_msg">ODK Collect アプリをダウンロードしてください!</string>
-  <string name="leave_a_review">レビューを残す</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <string name="leave_a_review">Google Play ストアでレビューを残してください</string>
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">マッピング</string>
   <string name="map_sdk_selector_title">マッピング SDK</string>
   <string name="map_sdk_behavior">マッピング SDK</string>
@@ -311,7 +311,7 @@
   <string name="hybrid">ハイブリッド</string>
   <string name="satellite">衛星</string>
   <string name="map_basemap_selector_title">基本地図</string>
-    <string name="show_map_basemap">基本地図オプションを表示</string>
+  <string name="show_map_basemap">基本地図オプションを表示</string>
   <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
@@ -370,8 +370,11 @@
   <string name="parser_exception">XPathParser 例外: \"%s\"</string>
   <string name="selected_answer">選択済: %s</string>
   <string name="version_number">バージョン: %s</string>
-  <string name="odk_website">Open Data Kit ウェブサイト</string>
-  <string name="all_open_source_licenses">オープンソースライセンス</string>
+  <string name="odk_website">ODK ウェブサイトを訪問</string>
+  <string name="odk_website_summary">オープンデータキット (ODK) は、課題のある環境での社会的利益のためのデータを収集するために使用されます。</string>
+  <string name="odk_forum">ODK フォーラムに参加</string>
+  <string name="odk_forum_summary">フォーラムに参加して、サポートを受けたり、機能をリクエストしたり、コード/翻訳に貢献してください!</string>
+  <string name="all_open_source_licenses">オープンソースライブラリーおよびライセンス</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -446,7 +449,7 @@
   <string name="select_time">時間を選択</string>
   <string name="no_date_selected">日付が選択されていません</string>
   <string name="no_time_selected">時刻が選択されていません</string>
-    <string name="import_settings">設定をインポート/エクスポート</string>
+  <string name="import_settings">設定をインポート/エクスポート</string>
   <string name="qr_code">QR コード</string>
   <string name="scan_qrcode">他のデバイスからコードをスキャン</string>
   <string name="successfully_imported_settings">設定を正常にインポートしました</string>
@@ -469,4 +472,30 @@
   <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
   <string name="request_permission">このアプリケーションはカメラのアクセス許可が必要です。</string>
   <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>
+  <string name="invalid_range_widget">このウィジェットに無効なパラメータがあります!</string>
+  <string name="form_entry_setting">フォーム入力設定</string>
+  <string name="form_entry_settings_summary">タップしてフォーム入力項目を管理</string>
+  <string name="user_settings">ユーザー設定</string>
+  <string name="user_setting_summary">タップして全般設定項目を管理</string>
+  <string name="main_menu_settings">メインメニュー設定</string>
+  <string name="main_menu_settings_summary">タップしてメインメニュー項目を管理</string>
+  <string name="user_access_control">ユーザーアクセスコントロール</string>
+  <string name="autosend_selector_title">自動送信</string>
+  <string name="off">オフ</string>
+  <string name="wifi_autosend">Wifi のみ</string>
+  <string name="cellular_autosend">データ通信のみ</string>
+  <string name="wifi_cellular_autosend">Wifi またはデータ通信</string>
+  <string name="map_basemap_behavior_title">基本地図</string>
+  <string name="form_management_preferences">フォーム管理</string>
+  <string name="form_submission_category">フォーム送信</string>
+  <string name="form_filling_category">フォーム入力</string>
+  <string name="high_resolution_title">高解像度ビデオ</string>
+  <string name="form_import_category">フォームインポート</string>
+  <string name="user_and_device_identity_title">ユーザーとデバイスの識別</string>
+  <string name="constraint_behavior_title">処理の制約</string>
+  <string name="show_splash_title">スプラッシュ画面</string>
+  <string name="server_settings_title">サーバー</string>
+  <string name="type">種類</string>
+  <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
+  <string name="use_device_language">デバイスの言語を使用する</string>
 </resources>

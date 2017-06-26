@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Visa lösenord</string>
   <string name="activity_not_found">Ingen aktivitet finns för att hantera: %s</string>
   <string name="add_another">Lägg till grupp</string>
@@ -19,7 +19,7 @@
   <string name="capture_video">Spela in film</string>
   <string name="change_language">Ändra språk</string>
   <string name="change_password">ODK lösenord</string>
-    <string name="change_username">ODK användarnamn</string>
+  <string name="change_username">ODK användarnamn</string>
   <string name="clearanswer_confirm">Ta bort svar för \"%s\"</string>
   <string name="clear_answer">Ta bort svar</string>
   <string name="clear_answer_ask">Ska detta svar tas bort?</string>
@@ -121,8 +121,7 @@
   <string name="username">Användarnamn</string>
   <string name="view_hierarchy">Gå till inmatningsrad</string>
   <string name="general_preferences">Allmäna inställningar</string>
-  <string name="client">Användargränssnitt</string>
-    <string name="show_splash_summary">Visas när programmet startas</string>
+  <string name="show_splash_summary">Visas när programmet startas</string>
   <string name="splash_path">Vald välkomstbild</string>
   <string name="default_splash_path">ODK standard</string>
   <string name="select_another_image">Välj en annan bild</string>
@@ -131,7 +130,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Spara ändringar</string>
   <string name="change_formlist_url">Sökväg till formulärlista (tillagd till URL)</string>
-    <string name="change_protocol">Plattform</string>
+  <string name="change_protocol">Plattform</string>
   <string name="change_submission_url">Sökväg till skickade formulär (tillagd till URL)</string>
   <string name="formlist_url">Sökväg till formulär</string>
   <string name="submission_url">Sökväg till skickade formulär</string>
@@ -193,9 +192,9 @@
   <string name="reset_image">Återställ</string>
   <string name="set_color">Välj färg</string>
   <string name="select_drawing_color">Välj pennfärg</string>
-    <string name="admin_preferences">Administratörsinställningar</string>
+  <string name="admin_preferences">Administratörsinställningar</string>
   <string name="admin_access_settings">Knacka för administratörstillgång till inställningarna</string>
-    <string name="save_mid">Spara formulär</string>
+  <string name="save_mid">Spara formulär</string>
   <string name="enter_new_password">Ange nytt lösenord</string>
   <string name="admin_password">Administratörslösenord</string>
   <string name="admin_password_changed">Administratörslösenordet har ändrats</string>
@@ -203,10 +202,10 @@
   <string name="admin_password_incorrect">Tyvärr, lösenordet är felaktigt!</string>
   <string name="enter_admin_password">Ange administratörslösenordet</string>
   <string name="change_admin_password">Ändra administratörslösenordet</string>
-    <string name="autosend">Skicka automatiskt</string>
-    <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
+  <string name="autosend">Skicka automatiskt</string>
+  <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
-    <string name="no_account">Inget konto</string>
+  <string name="no_account">Inget konto</string>
   <string name="save_preferences">Spara inställningar till disk</string>
   <string name="form_forward">Nästa</string>
   <string name="form_backward">Föregående</string>
@@ -256,7 +255,7 @@
   <string name="survey_saving_finalizing_message">Avslutar till minneskort…</string>
   <string name="survey_saving_encrypting_message">Krypterar data…</string>
   <string name="high_resolution_summary">Tillåt högupplösta filminspelningar</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Delat med mig</string>
@@ -290,10 +289,8 @@
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
   <string name="about_preferences">Om</string>
-  <string name="tell_your_friends">Berätta för dina vänner</string>
   <string name="tell_your_friends_msg">Ladda ner ODK Collect appen!</string>
-  <string name="leave_a_review">Lämna ett omdöme</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Kartering</string>
   <string name="map_sdk_selector_title">Kartering SDK</string>
   <string name="map_sdk_behavior">Kartering SDK</string>
@@ -311,7 +308,7 @@
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
   <string name="map_basemap_selector_title">Grundkartor</string>
-    <string name="show_map_basemap">Visa alternativ för grundkarta</string>
+  <string name="show_map_basemap">Visa alternativ för grundkarta</string>
   <string name="save_point">Spara GeoPoint</string>
   <string name="get_point">Starta GeoPoint</string>
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
@@ -370,8 +367,6 @@
   <string name="parser_exception">XPathParser undantag: \"%s\"</string>
   <string name="selected_answer">Vald: %s</string>
   <string name="version_number">Version: %s</string>
-  <string name="odk_website">Open Data Kit webbplats</string>
-  <string name="all_open_source_licenses">Licenser för öppen källkod</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -446,7 +441,7 @@
   <string name="select_time">Välj tid</string>
   <string name="no_date_selected">Inget datum valt</string>
   <string name="no_time_selected">Ingen tidpunkt vald</string>
-    <string name="import_settings">Import/export inställningar</string>
+  <string name="import_settings">Import/export inställningar</string>
   <string name="qr_code">QR-kod</string>
   <string name="scan_qrcode">Skanna koden från den andra enheten</string>
   <string name="successfully_imported_settings">Import av inställningarna lyckades</string>
@@ -466,4 +461,7 @@
   <string name="generate">Generera</string>
   <string name="invalid_qrcode">QR-koden innehåller inga giltiga inställningar</string>
   <string name="share_qrcode">Dela QR-koden</string>
+  <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
+  <string name="request_permission">Programmet behöver behörighet till kameran.</string>
+  <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>
 </resources>
