@@ -76,5 +76,10 @@
             android:defaultValue="true"
             android:key="analytics"
             android:title="@string/analytics" />
+        <CheckBoxPreference
+            android:id="@+id/timer_log"
+            android:defaultValue="true"
+            android:key="change_timer_log"
+            android:title="@string/timer_log" />
     </PreferenceCategory>
 </PreferenceScreen>
