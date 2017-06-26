@@ -9,18 +9,18 @@ import android.preference.PreferenceScreen;
 import org.odk.collect.android.R;
 
 class SplashClickListener implements Preference.OnPreferenceClickListener {
-    private PreferencesActivity pa;
+    private UserInterfacePreferences preferencesFragment;
     private PreferenceScreen splashPathPreference;
 
-    SplashClickListener(PreferencesActivity pa, PreferenceScreen splashPathPreference) {
-        this.pa = pa;
+    SplashClickListener(UserInterfacePreferences preferenceFragment, PreferenceScreen splashPathPreference) {
+        this.preferencesFragment = preferenceFragment;
         this.splashPathPreference = splashPathPreference;
     }
 
     private void launchImageChooser() {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("image/*");
-        pa.startActivityForResult(i, PreferencesActivity.IMAGE_CHOOSER);
+        preferencesFragment.startActivityForResult(i, UserInterfacePreferences.IMAGE_CHOOSER);
     }
 
     @Override
@@ -29,12 +29,12 @@ class SplashClickListener implements Preference.OnPreferenceClickListener {
         CharSequence cs = splashPathPreference.getSummary();
         if (cs != null && cs.toString().contains("/")) {
 
-            final CharSequence[] items = {pa.getString(R.string.select_another_image),
-                    pa.getString(R.string.use_odk_default)};
+            final CharSequence[] items = {preferencesFragment.getString(R.string.select_another_image),
+                    preferencesFragment.getString(R.string.use_odk_default)};
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(pa);
-            builder.setTitle(pa.getString(R.string.change_splash_path));
-            builder.setNeutralButton(pa.getString(R.string.cancel),
+            AlertDialog.Builder builder = new AlertDialog.Builder(preferencesFragment.getActivity());
+            builder.setTitle(preferencesFragment.getString(R.string.change_splash_path));
+            builder.setNeutralButton(preferencesFragment.getString(R.string.cancel),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
@@ -44,10 +44,10 @@ class SplashClickListener implements Preference.OnPreferenceClickListener {
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int item) {
-                    if (items[item].equals(pa.getString(R.string.select_another_image))) {
+                    if (items[item].equals(preferencesFragment.getString(R.string.select_another_image))) {
                         launchImageChooser();
                     } else {
-                        pa.setSplashPath(pa.getString(R.string.default_splash_path));
+                        preferencesFragment.setSplashPath(preferencesFragment.getString(R.string.default_splash_path));
                     }
                 }
             });

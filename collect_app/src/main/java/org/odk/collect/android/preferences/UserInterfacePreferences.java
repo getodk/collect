@@ -1,170 +1,98 @@
+/*
+ * Copyright (C) 2017 Shobhit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package org.odk.collect.android.preferences;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_ANALYTICS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORM_METADATA;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_BASEMAP;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_MAP_SDK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_BASEMAP_KEY;
 import static org.odk.collect.android.preferences.PreferenceKeys.OSM_MAPS_BASEMAP_DEFAULT;
 
+public class UserInterfacePreferences extends BasePreferenceFragment {
 
-public class PreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
+    protected static final int IMAGE_CHOOSER = 0;
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(R.xml.user_interface_preferences);
 
-        removeAllDisabledPrefs();
-
-        initPlatformSettings();
-        initFormMetadata();
         initNavigationPrefs();
-        initConstraintBehaviorPref();
         initFontSizePref();
         initLanguagePrefs();
-        initAnalyticsPref();
         initSplashPrefs();
         initMapPrefs();
-        initAutoSendPrefs();
-    }
-
-    private void initPlatformSettings() {
-        final Preference protocol = findPreference(KEY_PROTOCOL);
-
-        if (protocol == null) {
-            return;
-        }
-
-        protocol.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-
-                getFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .replace(android.R.id.content, new ServerPreferences())
-                        .commit();
-
-                return true;
-            }
-        });
-    }
-
-    private void initAutoSendPrefs() {
-        final ListPreference autosend = (ListPreference) findPreference(KEY_AUTOSEND);
-
-        if (autosend == null) {
-            return;
-        }
-
-        autosend.setSummary(autosend.getEntry());
-        autosend.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
-                return true;
-            }
-        });
     }
 
     @Override
-    public void onResume() {
-        Timber.d("onResume");
-        super.onResume();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        toolbar.setTitle(R.string.client);
+    }
 
-        // has to go in onResume because it may get updated by
-        // a sub-preference screen
-        // this just keeps the widgets in sync
-        GeneralSharedPreferences sp = GeneralSharedPreferences.getInstance();
-
-        ListPreference googleAccountPreference = (ListPreference) findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
-        if (googleAccountPreference != null) {
-            String account = (String) sp.get(KEY_SELECTED_GOOGLE_ACCOUNT);
-            googleAccountPreference.setSummary(account);
-            googleAccountPreference.setValue(account);
-        }
-
-        final EditTextPreference usernamePreference = (EditTextPreference) findPreference(KEY_USERNAME);
-        if (usernamePreference != null) {
-            String user = (String) sp.get(KEY_USERNAME);
-            usernamePreference.setSummary(user);
-            usernamePreference.setText(user);
-        }
-
-        final EditTextPreference passwordPreference = (EditTextPreference) findPreference(KEY_PASSWORD);
-        if (passwordPreference != null) {
-            String pw = (String) sp.get(KEY_PASSWORD);
-            if (pw.length() > 0) {
-                passwordPreference.setSummary("********");
-                passwordPreference.setText(pw);
-            }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.general_preferences);
         }
     }
 
-    private void removeAllDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover((PreferencesActivity) getActivity(), this);
-        preferencesRemover.remove(AdminKeys.adminToGeneral);
-        preferencesRemover.removeEmptyCategories();
-    }
+    private void initNavigationPrefs() {
+        final ListPreference pref = (ListPreference) findPreference(KEY_NAVIGATION);
 
-    private void initAnalyticsPref() {
-        final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
-        if (analyticsPreference != null) {
-            analyticsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
-                    googleAnalytics.setAppOptOut(!analyticsPreference.isChecked());
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    String entry = (String) ((ListPreference) preference).getEntries()[index];
+                    preference.setSummary(entry);
                     return true;
                 }
             });
-        }
-    }
-
-    private void initSplashPrefs() {
-        final PreferenceScreen pref = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-
-        if (pref != null) {
-            pref.setOnPreferenceClickListener(new SplashClickListener((PreferencesActivity) getActivity(), pref));
-            pref.setSummary(pref.getSharedPreferences().getString(
-                    KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
         }
     }
 
@@ -232,23 +160,13 @@ public class PreferencesFragment extends BasePreferenceFragment implements Prefe
         }
     }
 
-    private void initConstraintBehaviorPref() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_CONSTRAINT_BEHAVIOR);
+    private void initSplashPrefs() {
+        final PreferenceScreen pref = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
 
         if (pref != null) {
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            int index = ((ListPreference) preference).findIndexOfValue(
-                                    newValue.toString());
-                            CharSequence entry = ((ListPreference) preference).getEntries()[index];
-                            preference.setSummary(entry);
-                            return true;
-                        }
-                    });
+            pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
+            pref.setSummary(pref.getSharedPreferences().getString(
+                    KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
         }
     }
 
@@ -305,39 +223,38 @@ public class PreferencesFragment extends BasePreferenceFragment implements Prefe
         });
     }
 
-    private void initNavigationPrefs() {
-        final ListPreference pref = (ListPreference) findPreference(KEY_NAVIGATION);
-
-        if (pref != null) {
-            pref.setSummary(pref.getEntry());
-            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                    String entry = (String) ((ListPreference) preference).getEntries()[index];
-                    preference.setSummary(entry);
-                    return true;
-                }
-            });
-        }
-    }
-
-    private void initFormMetadata() {
-        final Preference pref = findPreference(KEY_FORM_METADATA);
-
-        if (pref != null) {
-            final Intent intent = new Intent(getActivity(), FormMetadataActivity.class);
-            pref.setIntent(intent);
-        }
-    }
-
-    /**
-     * Generic listener that sets the summary to the newly selected/entered value
-     */
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        preference.setSummary((CharSequence) newValue);
-        return true;
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Timber.d("onActivityResult %d %d", requestCode, resultCode);
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_CANCELED) {
+            // request was canceled, so do nothing
+            return;
+        }
+
+        switch (requestCode) {
+            case IMAGE_CHOOSER:
+
+                // get gp of chosen file
+                Uri selectedMedia = intent.getData();
+                String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,
+                        MediaStore.Images.Media.DATA);
+
+                // setting image path
+                setSplashPath(sourceMediaPath);
+                break;
+        }
+    }
+
+    void setSplashPath(String path) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_SPLASH_PATH, path);
+        editor.apply();
+
+        PreferenceScreen splashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+        String summary = splashPathPreference.getSharedPreferences().getString(
+                KEY_SPLASH_PATH, getString(R.string.default_splash_path));
+        splashPathPreference.setSummary(summary);
     }
 }

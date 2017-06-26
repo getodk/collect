@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header
+        android:fragment="org.odk.collect.android.preferences.ServerPreferences"
+        android:icon="@drawable/ic_cloud"
+        android:key="protocol"
+        android:title="@string/server_settings_title" />
+</preference-headers>
