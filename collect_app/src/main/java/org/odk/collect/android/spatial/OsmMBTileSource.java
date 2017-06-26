@@ -90,7 +90,9 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             InputStream is = new ByteArrayInputStream(cursor.getBlob(0));
 
             Bitmap bitmap = BitmapFactory.decodeStream(is);
-            tileSize = bitmap.getHeight();
+            if (bitmap != null) {
+                tileSize = bitmap.getHeight();
+            }
             Timber.w("Found a tile size of %d", tileSize);
         }
         cursor.close();

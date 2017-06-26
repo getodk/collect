@@ -24,6 +24,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -198,6 +201,7 @@ public class MapHelper {
                                         osmMap.invalidate();
                                     }
                                 }
+                                selectedLayer = item;
                                 break;
                             default:
                                 File[] spFiles = getFileFromSelectedItem(item);
@@ -206,39 +210,41 @@ public class MapHelper {
                                 } else {
                                     File spfile = spFiles[0];
 
-                                    if (googleMap != null) {
-                                        try {
-                                            //googleMap.clear();
-                                            if (googleTileOverlay != null) {
-                                                googleTileOverlay.remove();
+                                    if (isFileFormatSupported(spfile)) {
+                                        if (googleMap != null) {
+                                            try {
+                                                //googleMap.clear();
+                                                if (googleTileOverlay != null) {
+                                                    googleTileOverlay.remove();
+                                                }
+                                                TileOverlayOptions opts = new TileOverlayOptions();
+                                                GoogleMapsMapBoxOfflineTileProvider provider =
+                                                        new GoogleMapsMapBoxOfflineTileProvider(spfile);
+                                                opts.tileProvider(provider);
+                                                googleTileOverlay = googleMap.addTileOverlay(opts);
+                                            } catch (Exception e) {
+                                                break;
                                             }
-                                            TileOverlayOptions opts = new TileOverlayOptions();
-                                            GoogleMapsMapBoxOfflineTileProvider provider =
-                                                    new GoogleMapsMapBoxOfflineTileProvider(spfile);
-                                            opts.tileProvider(provider);
-                                            googleTileOverlay = googleMap.addTileOverlay(opts);
-                                        } catch (Exception e) {
-                                            break;
-                                        }
-                                    } else {
-                                        if (osmTileOverlay != null) {
-                                            osmMap.getOverlays().remove(osmTileOverlay);
+                                        } else {
+                                            if (osmTileOverlay != null) {
+                                                osmMap.getOverlays().remove(osmTileOverlay);
+                                                osmMap.invalidate();
+                                            }
+                                            osmMap.invalidate();
+                                            OsmMBTileProvider mbprovider = new OsmMBTileProvider(
+                                                    iregisterReceiver, spfile);
+                                            osmTileOverlay = new TilesOverlay(mbprovider, context);
+                                            osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+                                            osmMap.getOverlays().add(0, osmTileOverlay);
                                             osmMap.invalidate();
                                         }
-                                        osmMap.invalidate();
-                                        OsmMBTileProvider mbprovider = new OsmMBTileProvider(
-                                                iregisterReceiver, spfile);
-                                        osmTileOverlay = new TilesOverlay(mbprovider, context);
-                                        osmTileOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-                                        osmMap.getOverlays().add(0, osmTileOverlay);
-                                        osmMap.invalidate();
-
+                                        selectedLayer = item;
+                                    } else {
+                                        ToastUtils.showLongToast(R.string.not_supported_offline_layer_format);
                                     }
-                                    dialog.dismiss();
                                 }
                                 break;
                         }
-                        selectedLayer = item;
                         dialog.dismiss();
                     }
                 });
@@ -256,5 +262,20 @@ public class MapHelper {
         });
     }
 
+    // osmdroid doesn't currently support pbf tiles: https://github.com/osmdroid/osmdroid/issues/101
+    private boolean isFileFormatSupported(File file) {
+        boolean result = true;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
+        Cursor cursor = db.rawQuery("SELECT * FROM metadata where name =?", new String[]{"format"});
+        if (cursor != null && cursor.getCount() == 1) {
+            try {
+                cursor.moveToFirst();
+                result = !"pbf".equals(cursor.getString(cursor.getColumnIndex("value")));
+            } finally {
+                cursor.close();
+            }
+        }
+        return result;
+    }
 
 }
