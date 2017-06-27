@@ -107,8 +107,6 @@ import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -885,43 +883,50 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void scaleDownImageIfNeeded(String path) {
-        for (QuestionWidget questionWidget :  ((ODKView) currentView).getWidgets()) {
-            if (((IBinaryWidget) questionWidget).isWaitingForBinaryData()) {
-                for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
-                    if ("max-pixels".equals(attrs.getName())) {
-                        int maxPixels = Integer.parseInt(attrs.getAttributeValue());
-
-                        Bitmap originalImage = BitmapFactory.decodeFile(path);
-                        double originalWidth = originalImage.getWidth();
-                        double originalHeight = originalImage.getHeight();
-
-                        int originalPixelCount = (int) (originalWidth * originalHeight);
-
-                        if (originalPixelCount > maxPixels) {
-                            double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
-                            double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
-
-                            Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
-
-                            FileOutputStream out = null;
-                            try {
-                                out = new FileOutputStream(path);
-                                scaledImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                            } catch (Exception e) {
-                                Timber.e(e);
-                            } finally {
-                                try {
-                                    if (out != null) {
-                                        out.close();
-                                    }
-                                } catch (IOException e) {
-                                    Timber.e(e);
-                                }
-                            }
-                        }
-                    }
-                }
+        QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
+        if (questionWidget != null) {
+            Integer maxPixels = getMaxPixelsForImageIfDefined(questionWidget);
+            if (maxPixels != null) {
+                scaleDownImage(path, maxPixels);
             }
+        }
+    }
+
+    private QuestionWidget getWidgetWaitingForBinaryData() {
+        QuestionWidget questionWidget = null;
+        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+            if (((IBinaryWidget) qw).isWaitingForBinaryData()) {
+                questionWidget = qw;
+            }
+        }
+
+        return questionWidget;
+    }
+
+    private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
+        Integer maxPixels = null;
+        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
+            if ("max-pixels".equals(attrs.getName())) {
+                maxPixels = Integer.parseInt(attrs.getAttributeValue());
+            }
+        }
+        return maxPixels;
+    }
+
+    private void scaleDownImage(String path, int maxPixels) {
+        Bitmap originalImage = BitmapFactory.decodeFile(path);
+        double originalWidth = originalImage.getWidth();
+        double originalHeight = originalImage.getHeight();
+
+        int originalPixelCount = (int) (originalWidth * originalHeight);
+
+        if (originalPixelCount > maxPixels) {
+            double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
+            double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
+
+            Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
+
+            FileUtils.saveBitmapToFile(scaledImage, path);
         }
     }
 
