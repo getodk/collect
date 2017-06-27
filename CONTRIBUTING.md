@@ -46,6 +46,22 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Follow the guidelines below.
 
+## The review process
+Bug fixes, pull requests corresponding to issues with a clearly stated goal and pull requests with clear tests and/or process for manual verification are given priority. Pull requests that are unclear or controversial may be tagged as "needs discussion" and/or may take longer to review.
+
+We try to have at least two people review every pull request and we encourage everyone to participate in the review process to get familiar with the code base and help ensure higher quality. Reviewers should ask themselves some or all of the following questions:
+- Was this change adequately discussed prior to implementation?
+- Is the intended behavior clear under all conditions?
+- What interesting cases should be verified?
+- Is the behavior as intended in all cases?
+- What other functionality could this PR affect? Does that functionality still work as intended?
+- Was the change verified with several different devices and Android versions?
+- Is the code easy to understand and to maintain?
+
+Pull requests that need more [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) are tagged with "needs testing." Pull requests that need more complete reviews including black-box testing but also review of approach and/or appropriateness are tagged with "reviews wanted." Any contributor is encouraged to participate in both kinds of reviews!
+
+Small fixes that target very particular bugs may occasionally be merged without a second review.
+
 ## Style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
