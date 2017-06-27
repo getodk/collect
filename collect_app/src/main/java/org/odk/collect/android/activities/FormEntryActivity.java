@@ -848,9 +848,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             chosenImage = MediaUtils.getFileFromUri(this, selectedImage, Images.Media.DATA);
             if (chosenImage != null) {
-                scaleDownImageIfNeeded(chosenImage.getPath());
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
+                scaleDownImageIfNeeded(newImage.getPath());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -914,19 +914,26 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void scaleDownImage(String path, int maxPixels) {
-        Bitmap originalImage = BitmapFactory.decodeFile(path);
-        double originalWidth = originalImage.getWidth();
-        double originalHeight = originalImage.getHeight();
+        try {
+            Bitmap originalImage = BitmapFactory.decodeFile(path);
 
-        int originalPixelCount = (int) (originalWidth * originalHeight);
+            if (originalImage != null) {
+                double originalWidth = originalImage.getWidth();
+                double originalHeight = originalImage.getHeight();
 
-        if (originalPixelCount > maxPixels) {
-            double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
-            double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
+                int originalPixelCount = (int) (originalWidth * originalHeight);
 
-            Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
+                if (originalPixelCount > maxPixels) {
+                    double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
+                    double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
 
-            FileUtils.saveBitmapToFile(scaledImage, path);
+                    Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
+
+                    FileUtils.saveBitmapToFile(scaledImage, path);
+                }
+            }
+        } catch (OutOfMemoryError e) {
+            Timber.e(e);
         }
     }
 
