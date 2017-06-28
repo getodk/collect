@@ -15,15 +15,17 @@
 package org.odk.collect.android.views;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.widgets.QuestionWidget;
 
 public class HierarchyElementView extends RelativeLayout {
 
@@ -37,39 +39,23 @@ public class HierarchyElementView extends RelativeLayout {
 
         setColor(it.getColor());
 
-        icon = new ImageView(context);
+        View view = View.inflate(context, R.layout.hierarchy_item_element, null);
+
+        icon = (ImageView) view.findViewById(R.id.icon);
         icon.setImageDrawable(it.getIcon());
-        icon.setId(QuestionWidget.newUniqueId());
-        icon.setPadding(0, 0, dipToPx(4), 0);
 
-        addView(icon, new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
-
-        primaryTextView = new TextView(context);
-        primaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Large);
+        primaryTextView = (TextView) view.findViewById(R.id.primaryText);
         setPrimaryText(it.getPrimaryText());
-        primaryTextView.setId(QuestionWidget.newUniqueId());
-        primaryTextView.setGravity(Gravity.CENTER_VERTICAL);
-        LayoutParams l =
-                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT);
-        l.addRule(RelativeLayout.RIGHT_OF, icon.getId());
-        addView(primaryTextView, l);
 
-        secondaryTextView = new TextView(context);
+        secondaryTextView = (TextView) view.findViewById(R.id.secondaryText);
         secondaryTextView.setText(it.getSecondaryText());
-        secondaryTextView.setTextAppearance(context, android.R.style.TextAppearance_Small);
-        secondaryTextView.setGravity(Gravity.CENTER_VERTICAL);
 
-        LayoutParams lp =
-                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.BELOW, primaryTextView.getId());
-        lp.addRule(RelativeLayout.RIGHT_OF, icon.getId());
-        addView(secondaryTextView, lp);
+        if (it.getType() == FormHierarchyActivity.GROUP
+                || it.getType() == FormHierarchyActivity.REPEAT) {
+            primaryTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        }
 
-        setPadding(dipToPx(8), dipToPx(4), dipToPx(8), dipToPx(8));
-
+        addView(view);
     }
 
 

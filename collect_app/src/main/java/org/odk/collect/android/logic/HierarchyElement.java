@@ -25,13 +25,15 @@ public class HierarchyElement {
     private String secondaryText = "";
     private Drawable icon;
     private int color;
-    int type;
-    FormIndex formIndex;
-    ArrayList<HierarchyElement> children;
-
+    private int type;
+    private FormIndex formIndex;
+    private ArrayList<HierarchyElement> children;
+    private int childGroups;
+    private int childItems;
+    private int childQuestions;
 
     public HierarchyElement(String text1, String text2, Drawable bullet, int color, int type,
-            FormIndex f) {
+                            FormIndex f) {
         icon = bullet;
         primaryText = text1;
         secondaryText = text2;
@@ -41,36 +43,53 @@ public class HierarchyElement {
         children = new ArrayList<HierarchyElement>();
     }
 
+    public int getChildGroups() {
+        return childGroups;
+    }
+
+    public void setChildGroups(int childGroups) {
+        this.childGroups = childGroups;
+    }
+
+    public int getChildItems() {
+        return childItems;
+    }
+
+    public void setChildItems(int childItems) {
+        this.childItems = childItems;
+    }
+
+    public int getChildQuestions() {
+        return childQuestions;
+    }
+
+    public void setChildQuestions(int childQuestions) {
+        this.childQuestions = childQuestions;
+    }
 
     public String getPrimaryText() {
         return primaryText;
     }
 
+    public void setPrimaryText(String text) {
+        primaryText = text;
+    }
 
     public String getSecondaryText() {
         return secondaryText;
     }
 
-
-    public void setPrimaryText(String text) {
-        primaryText = text;
-    }
-
-
     public void setSecondaryText(String text) {
         secondaryText = text;
     }
-
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
-    }
-
 
     public Drawable getIcon() {
         return icon;
     }
 
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
+    }
 
     public FormIndex getFormIndex() {
         return formIndex;
@@ -91,24 +110,20 @@ public class HierarchyElement {
         return children;
     }
 
+    public void setChildren(ArrayList<HierarchyElement> children) {
+        this.children = children;
+    }
 
     public void addChild(HierarchyElement h) {
         children.add(h);
     }
 
-
-    public void setChildren(ArrayList<HierarchyElement> children) {
-        this.children = children;
+    public int getColor() {
+        return color;
     }
-
 
     public void setColor(int color) {
         this.color = color;
-    }
-
-
-    public int getColor() {
-        return color;
     }
 
 }
