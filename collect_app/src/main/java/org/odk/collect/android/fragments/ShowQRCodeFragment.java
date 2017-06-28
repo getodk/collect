@@ -24,12 +24,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,6 +47,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.listeners.QRCodeListener;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -84,6 +87,14 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.import_export_settings));
+
+        boolean hasHardwareMenu = ViewConfigurationCompat
+                .hasPermanentMenuKey(ViewConfiguration.get(getActivity()));
+
+        if (!hasHardwareMenu) {
+            ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
+        }
+
         setHasOptionsMenu(true);
         setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);

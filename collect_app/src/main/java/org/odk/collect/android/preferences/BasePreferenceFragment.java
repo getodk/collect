@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewConfigurationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -61,6 +64,16 @@ public class BasePreferenceFragment extends PreferenceFragment {
             toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
 
             inflateToolbar(preferenceScreen.getTitle());
+        }
+
+        if (getActivity() instanceof AdminPreferencesActivity) {
+
+            boolean hasHardwareMenu = ViewConfigurationCompat
+                    .hasPermanentMenuKey(ViewConfiguration.get(getActivity()));
+
+            if (!hasHardwareMenu) {
+                ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            }
         }
     }
 
