@@ -80,7 +80,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
+    private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";

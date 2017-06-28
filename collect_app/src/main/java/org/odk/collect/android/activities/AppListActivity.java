@@ -58,9 +58,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 abstract class AppListActivity extends AppCompatActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
-    private static final int MENU_SORT = Menu.FIRST;
-    public static final int MENU_FILTER = MENU_SORT + 1;
-
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
@@ -94,30 +91,6 @@ abstract class AppListActivity extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu);
-
-        toolbar.findViewById(R.id.menu_sort).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawerLayout.isDrawerOpen(Gravity.END)) {
-                    drawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
-                    drawerLayout.openDrawer(Gravity.END);
-                }
-            }
-        });
-
-        toolbar.findViewById(R.id.menu_filter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
-            }
-        });
 
         setSupportActionBar(toolbar);
     }
@@ -158,7 +131,7 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SORT:
+            case R.id.menu_sort:
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
@@ -167,7 +140,7 @@ abstract class AppListActivity extends AppCompatActivity {
                 }
                 return true;
 
-            case MENU_FILTER:
+            case R.id.menu_filter:
                 if (searchBoxLayout.getVisibility() == View.GONE) {
                     showSearchBox();
                 } else {
