@@ -224,12 +224,10 @@ public class InstanceUploaderList extends InstanceListActivity
 
         menu
                 .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         menu
                 .add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-                .setIcon(R.drawable.ic_menu_manage)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }

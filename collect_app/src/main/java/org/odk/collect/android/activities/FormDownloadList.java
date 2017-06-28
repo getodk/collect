@@ -360,7 +360,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         menu
                 .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
