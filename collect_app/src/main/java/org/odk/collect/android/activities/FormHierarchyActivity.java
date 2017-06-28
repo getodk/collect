@@ -50,19 +50,18 @@ import timber.log.Timber;
 
 public class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private static final int CHILD = 1;
-    private static final int EXPANDED = 2;
-    private static final int COLLAPSED = 3;
-    private static final int QUESTION = 4;
+    public static final int CHILD = 1;
+    public static final int EXPANDED = 2;
+    public static final int COLLAPSED = 3;
+    public static final int QUESTION = 4;
+    public static final int GROUP = 5;
+    public static final int REPEAT = 5;
 
     private static final String mIndent = "     ";
-
-    private Button jumpPreviousButton;
-
     List<HierarchyElement> formList;
     TextView path;
-
     FormIndex startIndex;
+    private Button jumpPreviousButton;
     private FormIndex currentIndex;
     private ListView listView;
     private TextView emptyView;
@@ -336,14 +335,20 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
-                        // ignore group events
+                        FormEntryCaption fc = formController.getCaptionPrompt();
+
+                        // Display the non-repeat header for the group.
+                        HierarchyElement nonRepeatGroup =
+                                new HierarchyElement(fc.getLongText(), null, null,
+                                        Color.WHITE, GROUP, fc.getIndex());
+                        formList.add(nonRepeatGroup);
                         break;
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                         // this would display the 'add new repeat' dialog
                         // ignore it.
                         break;
                     case FormEntryController.EVENT_REPEAT:
-                        FormEntryCaption fc = formController.getCaptionPrompt();
+                        fc = formController.getCaptionPrompt();
                         // push this repeat onto the stack.
                         repeatGroupRef = currentRef;
                         // Because of the guard conditions above, we will skip
