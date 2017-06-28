@@ -542,7 +542,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.loading_form));
+        setTitle(getString(R.string.loading_form));
         setSupportActionBar(toolbar);
     }
 
@@ -1098,7 +1098,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
 
-        toolbar.setTitle(formController.getFormTitle());
+        setTitle(formController.getFormTitle());
 
         timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);

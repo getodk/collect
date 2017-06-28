@@ -43,7 +43,7 @@ public class OpenSourceLicensesActivity extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.all_open_source_licenses));
+        setTitle(getString(R.string.all_open_source_licenses));
         setSupportActionBar(toolbar);
     }
 }

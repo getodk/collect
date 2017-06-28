@@ -145,7 +145,7 @@ public class InstanceUploaderList extends InstanceListActivity
         });
 
         // set title
-        toolbar.setTitle(getString(R.string.send_data));
+        setTitle(getString(R.string.send_data));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);

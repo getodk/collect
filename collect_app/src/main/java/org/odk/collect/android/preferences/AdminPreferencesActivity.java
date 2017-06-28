@@ -79,6 +79,7 @@ public class AdminPreferencesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.admin_preferences);
         if (savedInstanceState == null) {
             getFragmentManager()
                     .beginTransaction()

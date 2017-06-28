@@ -313,7 +313,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.main_menu));
+        setTitle(getString(R.string.main_menu));
         setSupportActionBar(toolbar);
     }
 

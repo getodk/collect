@@ -135,7 +135,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.google_drive));
+        setTitle(getString(R.string.google_drive));
         setSupportActionBar(toolbar);
     }
 

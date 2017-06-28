@@ -126,8 +126,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
-
-        toolbar.setTitle(getString(R.string.get_forms));
+        setTitle(getString(R.string.get_forms));
 
         alertMsg = getString(R.string.please_wait);
 
