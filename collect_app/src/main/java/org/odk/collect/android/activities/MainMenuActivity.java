@@ -80,10 +80,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
-    // menu options
-    private static final int MENU_ABOUT = Menu.FIRST;
-    private static final int MENU_PREFERENCES = Menu.FIRST + 1;
-    private static final int MENU_ADMIN = Menu.FIRST + 2;
     private static final boolean EXIT = true;
     // buttons
     private Button enterDataButton;
@@ -426,24 +422,14 @@ public class MainMenuActivity extends AppCompatActivity {
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        menu.add(0, MENU_ABOUT, 0, R.string.about_preferences).setShowAsAction(
-                MenuItem.SHOW_AS_ACTION_NEVER);
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu
-                .add(0, MENU_ADMIN, 0, R.string.admin_preferences)
-                .setIcon(R.drawable.ic_menu_login)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_ABOUT:
+            case R.id.menu_about:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
@@ -451,7 +437,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent aboutIntent = new Intent(this, AboutPreferencesActivity.class);
                 startActivity(aboutIntent);
                 return true;
-            case MENU_PREFERENCES:
+            case R.id.menu_general_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
@@ -459,7 +445,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent ig = new Intent(this, PreferencesActivity.class);
                 startActivity(ig);
                 return true;
-            case MENU_ADMIN:
+            case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
                 String pw = adminPreferences.getString(

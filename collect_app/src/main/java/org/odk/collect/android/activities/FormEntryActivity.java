@@ -183,9 +183,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
-    private static final int MENU_LANGUAGES = Menu.FIRST;
-    private static final int MENU_PREFERENCES = MENU_LANGUAGES + 1;
-
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
     private static final int SAVING_IMAGE_DIALOG = 3;
@@ -863,15 +860,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.form_menu, menu);
 
-        menu
-                .add(0, MENU_LANGUAGES, 0, R.string.change_language)
-                .setIcon(R.drawable.ic_menu_start_conversation)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
@@ -905,13 +893,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
 
-        menu.findItem(MENU_LANGUAGES).setVisible(useability)
+        menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
         useability = adminPreferences.getBoolean(
                 AdminKeys.KEY_ACCESS_SETTINGS, true);
 
-        menu.findItem(MENU_PREFERENCES).setVisible(useability)
+        menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
         return true;
     }
@@ -921,7 +909,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
         switch (item.getItemId()) {
-            case MENU_LANGUAGES:
+            case R.id.menu_languages:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -951,7 +939,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
-            case MENU_PREFERENCES:
+            case R.id.menu_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
