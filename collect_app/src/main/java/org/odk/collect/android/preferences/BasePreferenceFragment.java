@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +62,9 @@ public class BasePreferenceFragment extends PreferenceFragment {
             toolbar = (Toolbar) LayoutInflater.from(getActivity()).inflate(R.layout.toolbar, root, false);
 
             inflateToolbar(preferenceScreen.getTitle());
+            if (getActivity() instanceof AdminPreferencesActivity) {
+                ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            }
         }
     }
 

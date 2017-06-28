@@ -127,11 +127,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
 
-        if (hasHardwareMenu) {
-            toolbar.setTitle(getString(R.string.get_forms));
-        } else {
-            setTitle(getString(R.string.get_forms));
-        }
+        toolbar.setTitle(getString(R.string.get_forms));
 
         alertMsg = getString(R.string.please_wait);
 

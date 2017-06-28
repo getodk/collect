@@ -28,7 +28,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
-import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -46,7 +45,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -232,7 +230,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private String stepMessage = "";
     private Toolbar toolbar;
-    private boolean hasHardwareMenu;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -272,9 +269,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
         questionHolder = (LinearLayout) findViewById(R.id.questionholder);
-
-        hasHardwareMenu =
-                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
 
         // get admin preference settings
         adminPreferences = getSharedPreferences(
@@ -551,12 +545,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        if (hasHardwareMenu) {
-            toolbar.setTitle(getString(R.string.loading_form));
-        } else {
-            setTitle(getString(R.string.loading_form));
-        }
+        toolbar.setTitle(getString(R.string.loading_form));
         toolbar.inflateMenu(R.menu.form_menu);
 
         View menuSave = toolbar.findViewById(R.id.menu_save);
@@ -606,9 +595,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             menuGoto.setEnabled(false);
         }
 
-        if (!hasHardwareMenu) {
-            setSupportActionBar(toolbar);
-        }
+        setSupportActionBar(toolbar);
     }
 
     /**
@@ -927,18 +914,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        if (!hasHardwareMenu) {
-            menu
-                    .add(0, MENU_SAVE, 0, R.string.save_all_answers)
-                    .setIcon(android.R.drawable.ic_menu_save)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu
+                .add(0, MENU_SAVE, 0, R.string.save_all_answers)
+                .setIcon(android.R.drawable.ic_menu_save)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-            menu
-                    .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
-                    .setIcon(R.drawable.ic_menu_goto)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        }
-
+        menu
+                .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
+                .setIcon(R.drawable.ic_menu_goto)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         menu
                 .add(0, MENU_LANGUAGES, 0, R.string.change_language)
                 .setIcon(R.drawable.ic_menu_start_conversation)
@@ -961,18 +945,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         boolean useability;
 
-        if (!hasHardwareMenu) {
-            useability = adminPreferences.getBoolean(
-                    AdminKeys.KEY_SAVE_MID, true);
+        useability = adminPreferences.getBoolean(
+                AdminKeys.KEY_SAVE_MID, true);
 
-            menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
+        menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
 
-            useability = adminPreferences.getBoolean(
-                    AdminKeys.KEY_JUMP_TO, true);
+        useability = adminPreferences.getBoolean(
+                AdminKeys.KEY_JUMP_TO, true);
 
-            menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
-                    .setEnabled(useability);
-        }
+        menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
+                .setEnabled(useability);
 
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -1176,11 +1158,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
 
-        if (hasHardwareMenu) {
-            toolbar.setTitle(formController.getFormTitle());
-        } else {
-            setTitle(formController.getFormTitle());
-        }
+        toolbar.setTitle(formController.getFormTitle());
 
         timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);
