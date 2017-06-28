@@ -230,7 +230,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
             // If we're currently at a repeat node, record the name of the node and step to the next
             // node to display.
-            if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+            if (formController.getEvent() == FormEntryController.EVENT_REPEAT
+                    || formController.getEvent() == FormEntryController.EVENT_GROUP) {
                 contextGroupRef =
                         formController.getFormIndex().getReference().toString(true);
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
@@ -338,11 +339,19 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         FormEntryCaption fc = formController.getCaptionPrompt();
 
                         // Display the non-repeat header for the group.
-                        HierarchyElement nonRepeatGroup =
+                        HierarchyElement group =
                                 new HierarchyElement(fc.getLongText(), null, ContextCompat
                                         .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                         Color.WHITE, GROUP, fc.getIndex());
-                        formList.add(nonRepeatGroup);
+                        formList.add(group);
+
+                        /*for (HierarchyElement child : group.getChildren()) {
+                            // Add this group name to the drop down list for this repeating group.
+                            HierarchyElement h = formList.get(formList.size() - 1);
+                            h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
+                                    + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
+                                    .getIndex()));
+                        }*/
                         break;
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                         // this would display the 'add new repeat' dialog
@@ -363,18 +372,19 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
-                            HierarchyElement group =
+                            HierarchyElement repeat =
                                     new HierarchyElement(fc.getLongText(), null, ContextCompat
                                             .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                             Color.WHITE,
-                                            REPEAT, fc.getIndex());
-                            formList.add(group);
+                                            COLLAPSED, fc.getIndex());
+                            formList.add(repeat);
                         }
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
                                 + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
                                 .getIndex()));
+                        h.setSecondaryText(h.getChildren().size() + " items");
                         break;
                 }
                 event =
@@ -476,6 +486,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 }
                 return;
             case CHILD:
+            case GROUP:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
                         "REPEAT-JUMP", h.getFormIndex());
                 Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
