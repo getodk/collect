@@ -339,7 +339,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
                         // Display the non-repeat header for the group.
                         HierarchyElement nonRepeatGroup =
-                                new HierarchyElement(fc.getLongText(), null, null,
+                                new HierarchyElement(fc.getLongText(), null, ContextCompat
+                                        .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                         Color.WHITE, GROUP, fc.getIndex());
                         formList.add(nonRepeatGroup);
                         break;
@@ -366,7 +367,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                     new HierarchyElement(fc.getLongText(), null, ContextCompat
                                             .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                             Color.WHITE,
-                                            COLLAPSED, fc.getIndex());
+                                            REPEAT, fc.getIndex());
                             formList.add(group);
                         }
                         // Add this group name to the drop down list for this repeating group.
