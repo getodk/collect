@@ -53,12 +53,10 @@ import timber.log.Timber;
 
 public class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    public static final int CHILD = 1;
-    public static final int EXPANDED = 2;
-    public static final int COLLAPSED = 3;
-    public static final int QUESTION = 4;
-    public static final int GROUP = 5;
-    public static final int REPEAT = 6;
+    public static final int GROUP = 1;
+    public static final int ITEM = 2;
+    public static final int QUESTION = 3;
+    public static final int REPEAT = 4;
 
     private static final String mIndent = "     ";
     List<HierarchyElement> formList;
@@ -417,7 +415,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
+                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, ITEM, fc
                                 .getIndex()));
                         h.setSecondaryText(h.getChildren().size() + " items");
                         break;
@@ -479,23 +477,14 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         }
 
         switch (h.getType()) {
-            case EXPANDED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "COLLAPSED", h.getFormIndex());
-                h.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = h.getChildren();
-                for (int i = 0; i < children.size(); i++) {
-                    formList.remove(position + 1);
-                }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
-                break;
             case REPEAT:
+                formList.clear();
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
                         "REPEAT", h.getFormIndex());
                 ArrayList<HierarchyElement> children1 = h.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
                     Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    formList.add(position + 1 + i, children1.get(i));
+                    formList.add(children1.get(i));
 
                 }
                 h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
@@ -519,7 +508,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     finish();
                 }
                 return;
-            case CHILD:
+            case ITEM:
             case GROUP:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
                         "REPEAT-JUMP", h.getFormIndex());
