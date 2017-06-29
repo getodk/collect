@@ -509,7 +509,7 @@ public class FormController {
      * If using a view like HierarchyView that doesn't support multi-question per screen, step over
      * the group represented by the FormIndex.
      */
-    private int stepOverGroup() {
+    public int stepOverGroup() {
         ArrayList<FormIndex> indicies = new ArrayList<FormIndex>();
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
