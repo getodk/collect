@@ -198,19 +198,21 @@ public class DownloadFormsTask extends
     }
 
     private void checkForBadSubmissionUrl(FileResult fileResult) throws IllegalArgumentException {
-        File form = fileResult.getFile();
-        HashMap<String, String> fields = null;
-        try {
-            fields = FileUtils.parseXML(form);
-        } catch (RuntimeException e) {
-            throw new IllegalArgumentException(form.getName() + " :: " + e.toString());
-        }
+        if (fileResult != null) {
+            File form = fileResult.getFile();
+            HashMap<String, String> fields;
+            try {
+                fields = FileUtils.parseXML(form);
+            } catch (RuntimeException e) {
+                throw new IllegalArgumentException(form.getName() + " :: " + e.toString());
+            }
 
-        String submission = fields.get(FileUtils.SUBMISSIONURI);
-        if (submission != null && !UrlUtils.isValidUrl(submission)) {
-            throw new IllegalArgumentException(
-                    Collect.getInstance().getString(R.string.xform_parse_error,
+            String submission = fields.get(FileUtils.SUBMISSIONURI);
+            if (submission != null && !UrlUtils.isValidUrl(submission)) {
+                throw new IllegalArgumentException(
+                        Collect.getInstance().getString(R.string.xform_parse_error,
                                 form.getName(), "submission url"));
+            }
         }
     }
 
