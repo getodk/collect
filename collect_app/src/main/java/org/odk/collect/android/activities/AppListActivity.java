@@ -24,7 +24,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +34,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,9 +58,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 abstract class AppListActivity extends AppCompatActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
-    private static final int MENU_SORT = Menu.FIRST;
-    public static final int MENU_FILTER = MENU_SORT + 1;
-
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
@@ -81,7 +76,6 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
-    protected boolean hasHardwareMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,41 +86,13 @@ abstract class AppListActivity extends AppCompatActivity {
         TextView emptyView = (TextView) findViewById(android.R.id.empty);
         listView.setEmptyView(emptyView);
 
-        hasHardwareMenu = ViewConfigurationCompat
-                .hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
         initToolbar();
     }
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu);
 
-        toolbar.findViewById(R.id.menu_sort).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawerLayout.isDrawerOpen(Gravity.END)) {
-                    drawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
-                    drawerLayout.openDrawer(Gravity.END);
-                }
-            }
-        });
-
-        toolbar.findViewById(R.id.menu_filter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
-            }
-        });
-
-        if (!hasHardwareMenu) {
-            setSupportActionBar(toolbar);
-        }
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -156,9 +122,8 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
-        if (!hasHardwareMenu) {
-            getMenuInflater().inflate(R.menu.menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.list_menu, menu);
+
         super.onCreateOptionsMenu(menu);
         return true;
     }
@@ -166,7 +131,7 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SORT:
+            case R.id.menu_sort:
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
@@ -175,7 +140,7 @@ abstract class AppListActivity extends AppCompatActivity {
                 }
                 return true;
 
-            case MENU_FILTER:
+            case R.id.menu_filter:
                 if (searchBoxLayout.getVisibility() == View.GONE) {
                     showSearchBox();
                 } else {

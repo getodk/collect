@@ -44,7 +44,9 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.QRCodeListener;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.CompressionUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
@@ -84,6 +86,7 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.import_export_settings));
+        ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         setRetainInstance(true);
         qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
@@ -247,14 +250,35 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.share_menu, menu);
+        inflater.inflate(R.menu.settings_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_item_share) {
-            getActivity().startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+        switch (item.getItemId()) {
+            case R.id.menu_item_share:
+                getActivity().startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qrcode)));
+                return true;
+            case R.id.menu_save_preferences:
+                File writeDir = new File(Collect.SETTINGS);
+                if (!writeDir.exists()) {
+                    if (!writeDir.mkdirs()) {
+                        ToastUtils.showShortToast("Error creating directory "
+                                + writeDir.getAbsolutePath());
+                        return false;
+                    }
+                }
+
+                File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");
+                boolean success = AdminPreferencesActivity.saveSharedPreferencesToFile(dst, getActivity());
+                if (success) {
+                    ToastUtils.showLongToast("Settings successfully written to "
+                            + dst.getAbsolutePath());
+                } else {
+                    ToastUtils.showLongToast("Error writing settings to " + dst.getAbsolutePath());
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
