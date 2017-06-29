@@ -302,6 +302,18 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     }
                 }
 
+                if (groupStack.size() > 0) {
+                    HierarchyElement lastGroup = groupStack.get(groupStack.size() - 1);
+                    while (formController.getFormIndex().toString().startsWith(lastGroup.getFormIndex().toString())) {
+                        formController.stepToNextEvent(FormController.STEP_OVER_GROUP);
+                    }
+                    groupStack.remove(lastGroup);
+                }
+
+                if (formController.getFormIndex().getReference() == null) {
+                    break;
+                }
+
                 // get the ref to this element
                 String currentRef = formController.getFormIndex().getReference().toString(true);
 
@@ -350,6 +362,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                         .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                         Color.WHITE, GROUP, fc.getIndex());
                         formList.add(group);
+
+                        groupStack.add(group);
 
                         int questionCount = 0;
                         int groupCount = 0;
