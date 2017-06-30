@@ -15,7 +15,7 @@ the License.
 -->
 <resources>
 
-    <color name="tint_color">#2196F3</color>
+    <color name="tintColor">#2196F3</color>
     <color name="primaryTextColor">#000000</color>
     <color name="white">#ffffff</color>
 
