@@ -353,47 +353,16 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     case FormEntryController.EVENT_GROUP:
                         FormEntryCaption fc = formController.getCaptionPrompt();
 
+                        String secondaryText = getChildrenDetails(fc.getFormElement().getChildren());
+
                         // Display the non-repeat header for the group.
                         HierarchyElement group =
-                                new HierarchyElement(fc.getLongText(), null, ContextCompat
+                                new HierarchyElement(fc.getLongText(), secondaryText, ContextCompat
                                         .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                         Color.WHITE, GROUP, fc.getIndex());
                         formList.add(group);
 
                         nonRepeatGroupRef = group.getFormIndex().toString();
-
-                        int questionCount = 0;
-                        int groupCount = 0;
-
-                        List<IFormElement> elements = fc.getFormElement().getChildren();
-                        for (IFormElement formElement : elements) {
-                            if (formElement instanceof QuestionDef) {
-                                questionCount++;
-                            } else if (formElement instanceof GroupDef) {
-                                groupCount++;
-                            }
-                        }
-
-                        StringBuilder stringBuilder = new StringBuilder();
-                        if (questionCount == 1) {
-                            stringBuilder.append(questionCount).append(" Question");
-                        } else if (questionCount > 1) {
-                            stringBuilder.append(questionCount).append(" Questions");
-                        }
-
-                        if (groupCount == 1) {
-                            if (!stringBuilder.toString().equals("")) {
-                                stringBuilder.append(", ");
-                            }
-                            stringBuilder.append(groupCount).append(" Group");
-                        } else if (groupCount > 1) {
-                            if (!stringBuilder.toString().equals("")) {
-                                stringBuilder.append(", ");
-                            }
-                            stringBuilder.append(groupCount).append(" Groups");
-                        }
-
-                        group.setSecondaryText(stringBuilder.toString());
 
                         event = formController.stepOverGroup();
                         continue;
@@ -430,40 +399,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         h.addChild(child);
                         h.setSecondaryText(h.getChildren().size() + " items");
 
-                        questionCount = 0;
-                        groupCount = 0;
-
                         FormIndex currentIndex = formController.getFormIndex();
 
-                        elements = formController.getFormDef().getChild(currentIndex).getChildren();
+                        secondaryText = getChildrenDetails(formController.getFormDef().getChild(currentIndex).getChildren());
 
-                        for (IFormElement formElement : elements) {
-                            if (formElement instanceof QuestionDef) {
-                                questionCount++;
-                            } else if (formElement instanceof GroupDef) {
-                                groupCount++;
-                            }
-                        }
-
-                        stringBuilder = new StringBuilder();
-                        if (questionCount == 1) {
-                            stringBuilder.append(questionCount).append(" Question");
-                        } else if (questionCount > 1) {
-                            stringBuilder.append(questionCount).append(" Questions");
-                        }
-
-                        if (groupCount == 1) {
-                            if (!stringBuilder.toString().equals("")) {
-                                stringBuilder.append(", ");
-                            }
-                            stringBuilder.append(groupCount).append(" Group");
-                        } else if (groupCount > 1) {
-                            if (!stringBuilder.toString().equals("")) {
-                                stringBuilder.append(", ");
-                            }
-                            stringBuilder.append(groupCount).append(" Groups");
-                        }
-                        child.setSecondaryText(stringBuilder.toString());
+                        child.setSecondaryText(secondaryText);
 
                         // moving to the first question of the repeat
                         formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
@@ -498,6 +438,39 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             Timber.e(e);
             createErrorDialog(e.getMessage());
         }
+    }
+
+    private String getChildrenDetails(List<IFormElement> elements) {
+        int questionCount = 0;
+        int groupCount = 0;
+
+        for (IFormElement formElement : elements) {
+            if (formElement instanceof QuestionDef) {
+                questionCount++;
+            } else if (formElement instanceof GroupDef) {
+                groupCount++;
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (questionCount == 1) {
+            stringBuilder.append(questionCount).append(" Question");
+        } else if (questionCount > 1) {
+            stringBuilder.append(questionCount).append(" Questions");
+        }
+
+        if (groupCount == 1) {
+            if (!stringBuilder.toString().equals("")) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(groupCount).append(" Group");
+        } else if (groupCount > 1) {
+            if (!stringBuilder.toString().equals("")) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(groupCount).append(" Groups");
+        }
+        return stringBuilder.toString();
     }
 
     /**
