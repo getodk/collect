@@ -454,21 +454,21 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         StringBuilder stringBuilder = new StringBuilder();
         if (questionCount == 1) {
-            stringBuilder.append(questionCount).append(" Question");
+            stringBuilder.append(questionCount).append(" ").append(getString(R.string.question));
         } else if (questionCount > 1) {
-            stringBuilder.append(questionCount).append(" Questions");
+            stringBuilder.append(questionCount).append(" ").append(getString(R.string.questions));
         }
 
         if (groupCount == 1) {
             if (!stringBuilder.toString().equals("")) {
                 stringBuilder.append(", ");
             }
-            stringBuilder.append(groupCount).append(" Group");
+            stringBuilder.append(groupCount).append(" ").append(getString(R.string.group));
         } else if (groupCount > 1) {
             if (!stringBuilder.toString().equals("")) {
                 stringBuilder.append(", ");
             }
-            stringBuilder.append(groupCount).append(" Groups");
+            stringBuilder.append(groupCount).append(" ").append(getString(R.string.groups));
         }
         return stringBuilder.toString();
     }
