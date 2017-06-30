@@ -62,7 +62,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     List<HierarchyElement> formList;
     TextView path;
     FormIndex startIndex;
-    List<HierarchyElement> groupStack;
     private Button jumpPreviousButton;
     private FormIndex currentIndex;
     private ListView listView;
@@ -78,8 +77,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         emptyView = (TextView) findViewById(android.R.id.empty);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        groupStack = new ArrayList<>();
 
         FormController formController = Collect.getInstance().getFormController();
         // https://github.com/opendatakit/collect/issues/998
@@ -292,6 +289,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             // section.
             //
             String repeatGroupRef = null;
+            String nonRepeatGroupRef = null;
 
             event_search:
             while (event != FormEntryController.EVENT_END_OF_FORM) {
@@ -302,12 +300,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     }
                 }
 
-                if (groupStack.size() > 0) {
-                    HierarchyElement lastGroup = groupStack.get(groupStack.size() - 1);
-                    while (formController.getFormIndex().toString().startsWith(lastGroup.getFormIndex().toString())) {
+                if (nonRepeatGroupRef != null) {
+                    while (formController.getFormIndex().toString().startsWith(nonRepeatGroupRef)) {
                         formController.stepToNextEvent(FormController.STEP_OVER_GROUP);
                     }
-                    groupStack.remove(lastGroup);
+                    nonRepeatGroupRef = null;
                 }
 
                 if (formController.getFormIndex().getReference() == null) {
@@ -363,7 +360,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                         Color.WHITE, GROUP, fc.getIndex());
                         formList.add(group);
 
-                        groupStack.add(group);
+                        nonRepeatGroupRef = group.getFormIndex().toString();
 
                         int questionCount = 0;
                         int groupCount = 0;
@@ -428,10 +425,63 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         }
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, ITEM, fc
-                                .getIndex()));
+                        HierarchyElement child = new HierarchyElement("", null, null, Color.WHITE, ITEM, fc
+                                .getIndex());
+                        h.addChild(child);
                         h.setSecondaryText(h.getChildren().size() + " items");
+
+                        questionCount = 0;
+                        groupCount = 0;
+
+                        FormIndex currentIndex = formController.getFormIndex();
+
+                        elements = formController.getFormDef().getChild(currentIndex).getChildren();
+
+                        for (IFormElement formElement : elements) {
+                            if (formElement instanceof QuestionDef) {
+                                questionCount++;
+                            } else if (formElement instanceof GroupDef) {
+                                groupCount++;
+                            }
+                        }
+
+                        stringBuilder = new StringBuilder();
+                        if (questionCount == 1) {
+                            stringBuilder.append(questionCount).append(" Question");
+                        } else if (questionCount > 1) {
+                            stringBuilder.append(questionCount).append(" Questions");
+                        }
+
+                        if (groupCount == 1) {
+                            if (!stringBuilder.toString().equals("")) {
+                                stringBuilder.append(", ");
+                            }
+                            stringBuilder.append(groupCount).append(" Group");
+                        } else if (groupCount > 1) {
+                            if (!stringBuilder.toString().equals("")) {
+                                stringBuilder.append(", ");
+                            }
+                            stringBuilder.append(groupCount).append(" Groups");
+                        }
+                        child.setSecondaryText(stringBuilder.toString());
+
+                        // moving to the first question of the repeat
+                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+
+                        //setting the answer of first question as the title of item
+                        fp = formController.getQuestionPrompt();
+                        label = fp.getLongText();
+                        if (label != null && label.length() > 0) {
+                            // show the question if it is an editable field.
+                            // or if it is read-only and the label is not blank.
+                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
+                            if (answerDisplay != null && !answerDisplay.equals("")) {
+                                child.setPrimaryText(answerDisplay);
+                            } else {
+                                child.setPrimaryText("[Untitled]");
+                            }
+                        }
+
                         break;
                 }
                 event =
