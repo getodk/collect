@@ -509,5 +509,4 @@
     <string name="open_external_video">Open in external app</string>
     <string name="use_device_language">Use device language</string>
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
-    <string name="open">Open in external app</string>
 </resources>
