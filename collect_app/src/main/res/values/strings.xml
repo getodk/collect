@@ -509,4 +509,20 @@
     <string name="form_entry">Uncheck to hide from Form Entry</string>
     <string name="use_device_language">Use device language</string>
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
+	<string-array
+		name="ethiopian_months">
+		<item>Meskerem</item>
+		<item>Tikimt</item>
+		<item>Hidar</item>
+		<item>Tahsas</item>
+		<item>Tir</item>
+		<item>Yekatit</item>
+		<item>Megabit</item>
+		<item>Miazia</item>
+		<item>Ginbot</item>
+		<item>Senie</item>
+		<item>Hamlie</item>
+		<item>Nehasie</item>
+		<item>Pagumien</item>
+</string-array>
 </resources>
