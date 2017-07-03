@@ -406,7 +406,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         child.setSecondaryText(secondaryText);
 
                         // moving to the first question of the repeat
-                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                        while (formController.getEvent() != FormEntryController.EVENT_QUESTION) {
+                            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                        }
 
                         //setting the answer of first question as the title of item
                         fp = formController.getQuestionPrompt();
