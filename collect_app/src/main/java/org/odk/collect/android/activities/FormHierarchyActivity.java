@@ -203,12 +203,12 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         String path = "";
         while (index != null) {
 
-            path =
-                    formController.getCaptionPrompt(index).getLongText()
-                            + " ("
-                            + (formController.getCaptionPrompt(index)
-                            .getMultiplicity() + 1) + ") > " + path;
-
+            String multiplicity = "";
+            if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+                multiplicity = "(" + formController.getCaptionPrompt(index)
+                        .getMultiplicity() + 1 + ")";
+            }
+            path = formController.getCaptionPrompt(index).getLongText() + multiplicity + " > " + path;
             index = formController.stepIndexOut(index);
         }
         // return path?
