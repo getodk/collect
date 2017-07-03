@@ -66,7 +66,7 @@ public class UrlWidget extends QuestionWidget {
                 if (stringAnswer != null & stringAnswer.getText() != null
                         && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
 
-                    openUrl(stringAnswer.getText().toString());
+                    openUrl();
                 } else {
                     Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
                 }
@@ -80,18 +80,17 @@ public class UrlWidget extends QuestionWidget {
         String s = prompt.getAnswerText();
         if (s != null) {
             stringAnswer.setText(s);
+            uri = Uri.parse(stringAnswer.getText().toString());
         }
 
         // finish complex layout
         addAnswerView(answerLayout);
 
         customTabHelper = new CustomTabHelper();
-        customTabHelper.bindCustomTabsService((AppCompatActivity) context, uri);
+        customTabHelper.bindCustomTabsService((AppCompatActivity) context, null);
     }
 
-    private void openUrl(String url) {
-        uri = Uri.parse(url);
-
+    private void openUrl() {
         if (customTabHelper.getPackageName(getContext()).size() != 0) {
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
             customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getContext()).get(0));
