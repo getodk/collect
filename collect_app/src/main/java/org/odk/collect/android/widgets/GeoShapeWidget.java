@@ -104,6 +104,10 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
+        if (prompt.isReadOnly()) {
+            createShapeButton.setEnabled(false);
+        }
+
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(createShapeButton);

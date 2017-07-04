@@ -138,6 +138,10 @@ public class GridWidget extends QuestionWidget {
                     - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
         }
 
+        if (prompt.isReadOnly()) {
+            gridview.setEnabled(false);
+        }
+
         // Build view
         for (int i = 0; i < items.size(); i++) {
             SelectChoice sc = items.get(i);

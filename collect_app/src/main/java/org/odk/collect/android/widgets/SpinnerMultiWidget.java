@@ -140,6 +140,10 @@ public class SpinnerMultiWidget extends QuestionWidget {
             }
         });
 
+        if (prompt.isReadOnly()) {
+            button.setEnabled(false);
+        }
+
         // Fill in previous answers
         List<Selection> ve = new ArrayList<Selection>();
         if (prompt.getAnswerValue() != null) {
