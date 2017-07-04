@@ -321,10 +321,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             } else if (event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_REPEAT) {
                                 groups++;
 
-                                String localRef = formController.getFormIndex().toString();
-                                while (formController.getFormIndex().toString().startsWith(localRef)) {
-                                    event = formController.stepToNextEvent(FormController.STEP_OVER_GROUP);
-                                }
+                                event = formController.stepOutOfCurrentGroup();
                             }
 
                             if (parentGroupIndex != null) {
@@ -334,7 +331,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             }
                         }
 
-                        String secondaryText = getChildrenDetails(questions, groups);
+                        String secondaryText = getChildrenCount(questions, groups);
 
                         // Display the non-repeat header for the group.
                         HierarchyElement group =
@@ -405,10 +402,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                 } else if (event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_REPEAT) {
                                     groups++;
 
-                                    String localRef = formController.getFormIndex().toString();
-                                    while (formController.getFormIndex().toString().startsWith(localRef)) {
-                                        event = formController.stepToNextEvent(FormController.STEP_OVER_GROUP);
-                                    }
+                                    event = formController.stepOutOfCurrentGroup();
                                 }
 
                                 if (parentGroupIndex != null) {
@@ -418,7 +412,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                 }
                             }
                             child.setPrimaryText(firstAnswer);
-                            secondaryText = getChildrenDetails(questions, groups);
+                            secondaryText = getChildrenCount(questions, groups);
                             child.setSecondaryText(secondaryText);
 
                         } while (event == FormEntryController.EVENT_REPEAT);
@@ -440,7 +434,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    private String getChildrenDetails(int questionCount, int groupCount) {
+    private String getChildrenCount(int questionCount, int groupCount) {
         StringBuilder stringBuilder = new StringBuilder();
         if (questionCount == 1) {
             stringBuilder.append(questionCount).append(" ").append(getString(R.string.question));
