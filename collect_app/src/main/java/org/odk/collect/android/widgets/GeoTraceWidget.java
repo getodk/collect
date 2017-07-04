@@ -100,6 +100,11 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
             }
         });
+
+        if (prompt.isReadOnly()) {
+            createTraceButton.setEnabled(false);
+        }
+
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(createTraceButton);
