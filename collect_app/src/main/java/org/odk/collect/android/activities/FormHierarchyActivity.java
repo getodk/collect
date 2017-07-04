@@ -507,7 +507,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     formList.add(children1.get(i));
 
                 }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
