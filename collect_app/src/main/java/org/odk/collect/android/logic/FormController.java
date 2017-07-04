@@ -77,6 +77,17 @@ public class FormController {
      */
     private static final String AUDIT = "audit";
 
+    /*
+     * Steps out of the current group
+     */
+    public int stepOutOfCurrentGroup() {
+        String localRef = getFormIndex().toString();
+        while (getFormIndex().toString().startsWith(localRef)) {
+            stepToNextEvent(FormController.STEP_OVER_GROUP);
+        }
+        return getEvent();
+    }
+
     /**
      * OpenRosa metadata of a form instance.
      *
