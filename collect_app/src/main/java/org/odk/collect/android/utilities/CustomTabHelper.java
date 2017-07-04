@@ -34,7 +34,7 @@ public class CustomTabHelper {
                 CustomTabHelper.this.customTabsClient = customTabsClient;
                 CustomTabHelper.this.customTabsClient.warmup(0L);
                 customTabsSession = CustomTabHelper.this.customTabsClient.newSession(null);
-                customTabsSession.mayLaunchUrl(url, null, null);
+                customTabsSession.mayLaunchUrl(getNonNullUri(url), null, null);
             }
 
             @Override
@@ -69,5 +69,10 @@ public class CustomTabHelper {
             }
         }
         return packagesSupportingCustomTabs;
+    }
+
+    // https://github.com/opendatakit/collect/issues/1221
+    private Uri getNonNullUri(Uri url) {
+        return url != null ? url : Uri.parse("");
     }
 }
