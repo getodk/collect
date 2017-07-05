@@ -313,7 +313,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
                         event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                         while (formController.getFormIndex().toString().startsWith(groupRef)) {
-                            if (event == FormEntryController.EVENT_END_OF_FORM) {
+                            if (event == FormEntryController.EVENT_END_OF_FORM || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                                 break;
                             } else if (event == FormEntryController.EVENT_QUESTION) {
                                 questions++;
@@ -381,7 +381,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             String repeatRef = formController.getFormIndex().toString();
                             event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                             while (formController.getFormIndex().toString().startsWith(repeatRef)) {
-                                if (event == FormEntryController.EVENT_END_OF_FORM) {
+                                if (event == FormEntryController.EVENT_END_OF_FORM || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                                     break;
                                 } else if (event == FormEntryController.EVENT_QUESTION) {
                                     questions++;
