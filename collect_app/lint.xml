@@ -27,6 +27,7 @@
         <ignore path="res/xml/analytics_tracker.xml" />
         <ignore regexp="ga_trackingId|google_crash_reporting_api_key" />
     </issue>
-
+    <issue id="IconLocation" severity="error" />
+  
     <issue id="ContentDescription" severity="ignore" />
 </lint>

@@ -160,6 +160,10 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
+        if (prompt.isReadOnly()) {
+            launchIntentButton.setEnabled(false);
+        }
+
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
