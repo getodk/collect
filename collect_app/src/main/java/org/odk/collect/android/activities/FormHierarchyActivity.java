@@ -318,9 +318,12 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             } else if (event == FormEntryController.EVENT_QUESTION) {
                                 questions++;
                                 event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                            } else if (event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_REPEAT) {
+                            } else if (event == FormEntryController.EVENT_GROUP) {
                                 groups++;
-
+                                event = formController.stepOutOfCurrentGroup();
+                            } else {
+                                groups++;
+                                formController.stepOutOfCurrentGroup();
                                 event = formController.stepOutOfCurrentGroup();
                             }
 
@@ -399,12 +402,14 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                     }
 
                                     event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                                } else if (event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_REPEAT) {
+                                } else if (event == FormEntryController.EVENT_GROUP) {
                                     groups++;
-
+                                    event = formController.stepOutOfCurrentGroup();
+                                } else {
+                                    groups++;
+                                    formController.stepOutOfCurrentGroup();
                                     event = formController.stepOutOfCurrentGroup();
                                 }
-
                                 if (parentGroupIndex != null) {
                                     if (!formController.getFormIndex().toString().startsWith(parentGroupIndex.toString())) {
                                         break event_search;
