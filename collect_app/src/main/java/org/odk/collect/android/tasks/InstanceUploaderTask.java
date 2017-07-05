@@ -249,7 +249,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Timber.e(e, "Client Protocol Exception");
                 } else if (e instanceof ConnectTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
-                    Timber.e(e, "Connection Timeout");
+                    Timber.i(e, "Connection Timeout");
                 } else if (e instanceof UnknownHostException) {
                     outcome.results.put(id, fail + e.toString() + " :: Network Connection Failed");
                     Timber.i(e, "Network Connection Failed");
@@ -446,7 +446,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     return true;
                 }
             } catch (IOException e) {
-                if (e instanceof UnknownHostException) {
+                if (e instanceof UnknownHostException || e instanceof ConnectTimeoutException) {
                     Timber.i(e);
                 } else {
                     Timber.e(e);
