@@ -285,8 +285,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             event_search:
             while (event != FormEntryController.EVENT_END_OF_FORM) {
 
-                if (formController.getFormIndex().getReference() == null) {
-                    break;
+                if (parentGroupIndex != null
+                        && !formController.getFormIndex().toString().startsWith(parentGroupIndex.toString())) {
+                    break event_search;
                 }
 
                 switch (event) {
