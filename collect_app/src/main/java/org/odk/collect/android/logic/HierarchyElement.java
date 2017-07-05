@@ -28,9 +28,6 @@ public class HierarchyElement {
     private int type;
     private FormIndex formIndex;
     private ArrayList<HierarchyElement> children;
-    private int childGroups;
-    private int childItems;
-    private int childQuestions;
 
     public HierarchyElement(String text1, String text2, Drawable bullet, int color, int type,
                             FormIndex f) {
@@ -41,30 +38,6 @@ public class HierarchyElement {
         formIndex = f;
         this.type = type;
         children = new ArrayList<HierarchyElement>();
-    }
-
-    public int getChildGroups() {
-        return childGroups;
-    }
-
-    public void setChildGroups(int childGroups) {
-        this.childGroups = childGroups;
-    }
-
-    public int getChildItems() {
-        return childItems;
-    }
-
-    public void setChildItems(int childItems) {
-        this.childItems = childItems;
-    }
-
-    public int getChildQuestions() {
-        return childQuestions;
-    }
-
-    public void setChildQuestions(int childQuestions) {
-        this.childQuestions = childQuestions;
     }
 
     public String getPrimaryText() {
