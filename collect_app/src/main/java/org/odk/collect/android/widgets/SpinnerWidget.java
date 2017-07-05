@@ -202,7 +202,7 @@ public class SpinnerWidget extends QuestionWidget {
             if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
                 tv.setEnabled(false);
             } else if (spinner.getSelectedItemPosition() == position) {
-                tv.setTextColor(getContext().getResources().getColor(R.color.tint_color));
+                tv.setTextColor(getContext().getResources().getColor(R.color.tintColor));
             } else {
                 tv.setTextColor(Color.BLACK);
             }
