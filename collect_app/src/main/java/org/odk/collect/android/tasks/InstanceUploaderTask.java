@@ -51,6 +51,7 @@ import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
@@ -251,7 +252,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Timber.e(e, "Connection Timeout");
                 } else if (e instanceof UnknownHostException) {
                     outcome.results.put(id, fail + e.toString() + " :: Network Connection Failed");
-                    Timber.e(e, "Network Connection Failed");
+                    Timber.i(e, "Network Connection Failed");
                 } else if (e instanceof SocketTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
                     Timber.e(e, "Connection timeout");
@@ -444,8 +445,12 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                             .update(toUpdate, cv, null, null);
                     return true;
                 }
-            } catch (Exception e) {
-                Timber.e(e);
+            } catch (IOException e) {
+                if (e instanceof UnknownHostException) {
+                    Timber.i(e);
+                } else {
+                    Timber.e(e);
+                }
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
