@@ -55,7 +55,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     public static final int QUESTION = 3;
     public static final int REPEAT = 4;
 
-    private static final String mIndent = "     ";
     List<HierarchyElement> formList;
     TextView path;
     FormIndex startIndex;
@@ -71,7 +70,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
+        TextView emptyView = (TextView) findViewById(android.R.id.empty);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -489,6 +488,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        FormController formController = Collect.getInstance().getFormController();
         HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
         FormIndex index = h.getFormIndex();
         if (index == null) {
@@ -501,12 +501,19 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 formList.clear();
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
                         "REPEAT", h.getFormIndex());
-                ArrayList<HierarchyElement> children1 = h.getChildren();
-                for (int i = 0; i < children1.size(); i++) {
-                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    formList.add(children1.get(i));
+                formController.jumpToIndex(index);
 
+                ArrayList<HierarchyElement> children = h.getChildren();
+                for (int i = 0; i < children.size(); i++) {
+                    formList.add(children.get(i));
                 }
+
+                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                String pathString = getCurrentPath();
+                path.setVisibility(View.VISIBLE);
+                path.setText(pathString);
+                jumpPreviousButton.setEnabled(true);
+                setTitle(pathString);
                 break;
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
@@ -531,7 +538,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             case GROUP:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
                         "REPEAT-JUMP", h.getFormIndex());
-                Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
+                formController.jumpToIndex(h.getFormIndex());
                 setResult(RESULT_OK);
                 refreshView();
                 return;
