@@ -20,14 +20,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.CardView;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.Constants;
@@ -68,8 +69,11 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     // starter random number for view IDs
     private static final int VIEW_ID = 12345;
 
-    private View rootLayout;
+
+    private LinearLayout view;
+    private LinearLayout.LayoutParams layout;
     private ArrayList<QuestionWidget> widgets;
+    private Handler handler = null;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -77,9 +81,17 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
 
-        widgets = new ArrayList<>();
+        widgets = new ArrayList<QuestionWidget>();
 
-        rootLayout = View.inflate(context, R.layout.odkview_layout, null);
+        view = new LinearLayout(getContext());
+        view.setOrientation(LinearLayout.VERTICAL);
+        view.setGravity(Gravity.TOP);
+        view.setPadding(0, 7, 0, 0);
+
+        layout =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
 
@@ -103,11 +115,17 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 v = c.getSpecialFormQuestionText("noAppErrorString");
                 errorString = (v != null) ? v : context.getString(R.string.no_app);
 
+                TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+                params.setMargins(7, 5, 7, 5);
+
                 // set button formatting
-                Button launchIntentButton = (Button) rootLayout.findViewById(R.id.intentButton);
+                Button launchIntentButton = new Button(getContext());
+                launchIntentButton.setId(QuestionWidget.newUniqueId());
                 launchIntentButton.setText(buttonText);
                 launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                         Collect.getQuestionFontsize() + 2);
+                launchIntentButton.setPadding(20, 20, 20, 20);
+                launchIntentButton.setLayoutParams(params);
 
                 launchIntentButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -154,15 +172,27 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     }
                 });
 
-                launchIntentButton.setVisibility(VISIBLE);
-                rootLayout.findViewById(R.id.divider).setVisibility(VISIBLE);
+                View divider = new View(getContext());
+                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setMinimumHeight(3);
+                view.addView(divider);
+
+                view.addView(launchIntentButton, layout);
             }
         }
 
-        LinearLayout container = (LinearLayout) rootLayout.findViewById(R.id.root);
-
+        boolean first = true;
         int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
+            if (!first) {
+                View divider = new View(getContext());
+                divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
+                divider.setMinimumHeight(3);
+                view.addView(divider);
+            } else {
+                first = false;
+            }
+
             // if question or answer type is not supported, use text widget
             QuestionWidget qw =
                     WidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
@@ -171,13 +201,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.setId(VIEW_ID + id++);
 
             widgets.add(qw);
+            view.addView(qw, layout);
 
-            CardView widgetContainer = (CardView) View.inflate(context, R.layout.question_widget_card_layout, null);
-            widgetContainer.addView(qw);
-            container.addView(widgetContainer);
+
         }
 
-        addView(rootLayout);
+        addView(view);
 
         // see if there is an autoplay option. 
         // Only execute it during forward swipes through the form 
@@ -185,7 +214,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             final String playOption = widgets.get(
                     0).getPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
-                Handler handler = new Handler();
+                handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -205,7 +234,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      */
     public void recycleDrawables() {
         this.destroyDrawingCache();
-        rootLayout.destroyDrawingCache();
+        view.destroyDrawingCache();
         for (QuestionWidget q : widgets) {
             q.recycleDrawables();
         }
@@ -255,11 +284,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         // build view
         if (s.length() > 0) {
-            TextView tv = (TextView) rootLayout.findViewById(R.id.groupText);
+            TextView tv = new TextView(getContext());
             tv.setText(s.substring(0, s.length() - 3));
             int questionFontsize = Collect.getQuestionFontsize();
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
-            tv.setVisibility(VISIBLE);
+            tv.setPadding(0, 0, 0, 5);
+            view.addView(tv, layout);
         }
     }
 
@@ -390,10 +420,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
+
     @Override
     public boolean onLongClick(View v) {
         return false;
     }
+
 
     @Override
     public void cancelLongPress() {
@@ -406,4 +438,5 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void stopAudio() {
         widgets.get(0).stopAudio();
     }
+
 }
