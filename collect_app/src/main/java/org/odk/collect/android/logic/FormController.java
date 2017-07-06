@@ -77,6 +77,17 @@ public class FormController {
      */
     private static final String AUDIT = "audit";
 
+    /*
+     * Steps out of the current group
+     */
+    public int stepOutOfCurrentGroup() {
+        String localRef = getFormIndex().toString();
+        while (getFormIndex().toString().startsWith(localRef)) {
+            stepToNextEvent(FormController.STEP_OVER_GROUP);
+        }
+        return getEvent();
+    }
+
     /**
      * OpenRosa metadata of a form instance.
      *
@@ -642,24 +653,19 @@ public class FormController {
 
 
     /**
-     * Move the current form index to the index of the first enclosing repeat
+     * Move the current form index to the index of the first enclosing repeat/non-repeat group
      * or to the start of the form.
      */
     public int stepToOuterScreenEvent() {
         FormIndex index = stepIndexOut(getFormIndex());
         int currentEvent = getEvent();
 
-        // Step out of any group indexes that are present.
-        while (index != null
-                && getEvent(index) == FormEntryController.EVENT_GROUP) {
-            index = stepIndexOut(index);
-        }
-
         if (index == null) {
             jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
-            if (currentEvent == FormEntryController.EVENT_REPEAT) {
-                // We were at a repeat, so stepping back brought us to then previous level
+            if (currentEvent == FormEntryController.EVENT_REPEAT
+                    || currentEvent == FormEntryController.EVENT_GROUP) {
+                // We were at a repeat or non-repeat group, so stepping back brought us to then previous level
                 jumpToIndex(index);
             } else {
                 // We were at a question, so stepping back brought us to either:
