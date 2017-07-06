@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.bundle.CollectDialogBundle;
 import org.odk.collect.android.fragments.CollectDialogFragment;
 
@@ -42,19 +41,5 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     private void createAndShowDialog(CollectDialogBundle collectDialogBundle) {
         CollectDialogFragment dialogFragment = CollectDialogFragment.newInstance(collectDialogBundle);
         dialogFragment.show(fragmentManager, collectDialogBundle.getDialogTag());
-    }
-
-    public void buildResetSettingsFinalDialog(String message) {
-        CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
-        dialogBuilder
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setDialogTitle(getString(R.string.reset_app_state_result))
-                .setDialogMessage(message)
-                .setRightButtonText(getString(R.string.ok))
-                .setRightButtonAction(CollectDialogFragment.Action.RESETTING_SETTINGS_FINISHED)
-                .setCancelable(false);
-
-        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
-        buildDialog(collectDialogBundle);
     }
 }
