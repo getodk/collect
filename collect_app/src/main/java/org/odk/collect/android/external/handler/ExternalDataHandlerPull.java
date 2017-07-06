@@ -20,6 +20,7 @@ package org.odk.collect.android.external.handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -82,7 +83,6 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
         Cursor c = null;
         try {
-
             ExternalSQLiteOpenHelper sqLiteOpenHelper = getExternalDataManager().getDatabase(
                     dataSetName, false);
             if (sqLiteOpenHelper == null) {
@@ -100,12 +100,12 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                 c.moveToFirst();
                 return ExternalDataUtil.nullSafe(c.getString(0));
             } else {
-                Timber.e("Could not find a value in %s where the column %s has the value %s",
+                Timber.i("Could not find a value in %s where the column %s has the value %s",
                         queriedColumn, referenceColumn, referenceValue);
                 return "";
             }
-        } catch (Exception e) {
-            Timber.e(e);
+        } catch (SQLiteException e) {
+            Timber.i(e);
             return "";
         } finally {
             if (c != null) {
