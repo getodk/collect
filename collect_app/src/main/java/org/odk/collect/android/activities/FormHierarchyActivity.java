@@ -303,50 +303,27 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                     new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));
                         }
+                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                         break;
                     case FormEntryController.EVENT_GROUP:
                         FormEntryCaption fc = formController.getCaptionPrompt();
 
-                        String groupRef = formController.getFormIndex().toString();
-                        int questions = 0;
-                        int groups = 0;
-
-                        event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                        while (formController.getFormIndex().toString().startsWith(groupRef)) {
-                            if (event == FormEntryController.EVENT_END_OF_FORM || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                                break;
-                            } else if (event == FormEntryController.EVENT_QUESTION) {
-                                questions++;
-                                event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                            } else if (event == FormEntryController.EVENT_GROUP) {
-                                groups++;
-                                event = formController.stepOutOfCurrentGroup();
-                            } else {
-                                groups++;
-                                formController.stepOutOfCurrentGroup();
-                                event = formController.stepOutOfCurrentGroup();
-                            }
-
-                            if (parentGroupIndex != null) {
-                                if (!formController.getFormIndex().toString().startsWith(parentGroupIndex.toString())) {
-                                    break event_search;
-                                }
-                            }
-                        }
-
-                        String secondaryText = getChildrenCount(questions, groups);
-
                         // Display the non-repeat header for the group.
                         HierarchyElement group =
-                                new HierarchyElement(fc.getLongText(), secondaryText, ContextCompat
+                                new HierarchyElement(fc.getLongText(), "", ContextCompat
                                         .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
                                         Color.WHITE, GROUP, fc.getIndex());
                         formList.add(group);
 
-                        continue;
+                        if (!updateGroupDetails(parentGroupIndex, group)) {
+                            break event_search;
+                        }
+
+                        break;
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                         // this would display the 'add new repeat' dialog
                         // ignore it.
+                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                         break;
                     case FormEntryController.EVENT_REPEAT:
                         fc = formController.getCaptionPrompt();
@@ -377,54 +354,13 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             h.addChild(child);
                             h.setSecondaryText(h.getChildren().size() + " items");
 
-                            String firstAnswer = "";
-                            questions = 0;
-                            groups = 0;
-
-                            String repeatRef = formController.getFormIndex().toString();
-                            event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                            while (formController.getFormIndex().toString().startsWith(repeatRef)) {
-                                if (event == FormEntryController.EVENT_END_OF_FORM || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                                    break;
-                                } else if (event == FormEntryController.EVENT_QUESTION) {
-                                    questions++;
-
-                                    if (firstAnswer.equals("")) {
-                                        firstAnswer = FormEntryPromptUtils.getAnswerText(formController.getQuestionPrompt());
-
-                                        if (firstAnswer == null) {
-                                            firstAnswer = "";
-                                        }
-
-                                        if (firstAnswer.equals("")) {
-                                            firstAnswer = "[Untitled]";
-                                        }
-                                    }
-
-                                    event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                                } else if (event == FormEntryController.EVENT_GROUP) {
-                                    groups++;
-                                    event = formController.stepOutOfCurrentGroup();
-                                } else {
-                                    groups++;
-                                    formController.stepOutOfCurrentGroup();
-                                    event = formController.stepOutOfCurrentGroup();
-                                }
-                                if (parentGroupIndex != null) {
-                                    if (!formController.getFormIndex().toString().startsWith(parentGroupIndex.toString())) {
-                                        break event_search;
-                                    }
-                                }
+                            if (!updateGroupDetails(parentGroupIndex, child)) {
+                                break event_search;
                             }
-                            child.setPrimaryText(firstAnswer);
-                            secondaryText = getChildrenCount(questions, groups);
-                            child.setSecondaryText(secondaryText);
-
-                        } while (event == FormEntryController.EVENT_REPEAT);
-                        continue;
+                        } while (formController.getEvent() == FormEntryController.EVENT_REPEAT);
+                        break;
                 }
-                event =
-                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                event = formController.getEvent();
             }
 
             HierarchyListAdapter itla = new HierarchyListAdapter(this);
@@ -437,6 +373,60 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             Timber.e(e);
             createErrorDialog(e.getMessage());
         }
+    }
+
+    /*
+     * Updates the question and group count for a group/repeat
+     */
+    private boolean updateGroupDetails(FormIndex parentGroupIndex, HierarchyElement group) {
+        FormController formController = Collect.getInstance().getFormController();
+
+        String groupRef = formController.getFormIndex().toString();
+
+        int questions = 0;
+        int groups = 0;
+        String firstAnswer = "";
+
+        int event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+        while (formController.getFormIndex().toString().startsWith(groupRef)) {
+            if (event == FormEntryController.EVENT_END_OF_FORM || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                break;
+            } else if (event == FormEntryController.EVENT_QUESTION) {
+                questions++;
+
+                if (firstAnswer.equals("")) {
+                    firstAnswer = FormEntryPromptUtils.getAnswerText(formController.getQuestionPrompt());
+
+                    if (firstAnswer == null || firstAnswer.equals("")) {
+                        firstAnswer = "[Untitled]";
+                    }
+                }
+
+                event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+            } else if (event == FormEntryController.EVENT_GROUP) {
+                groups++;
+                event = formController.stepOutOfCurrentGroup();
+            } else {
+                groups++;
+                formController.stepOutOfCurrentGroup();
+                event = formController.stepOutOfCurrentGroup();
+            }
+
+            if (parentGroupIndex != null) {
+                if (!formController.getFormIndex().toString().startsWith(parentGroupIndex.toString())) {
+                    return false;
+                }
+            }
+        }
+
+        // set the first answer as label of the items in repeat
+        if (group.getType() == ITEM) {
+            group.setPrimaryText(firstAnswer);
+        }
+
+        //set the group details
+        group.setSecondaryText(getChildrenCount(questions, groups));
+        return true;
     }
 
     private String getChildrenCount(int questionCount, int groupCount) {
