@@ -291,7 +291,7 @@ public final class WebUtils {
                     // loop until all bytes read
                 }
             } catch (Exception e) {
-                Timber.e(e);
+                Timber.i(e);
             } finally {
                 if (is != null) {
                     try {
