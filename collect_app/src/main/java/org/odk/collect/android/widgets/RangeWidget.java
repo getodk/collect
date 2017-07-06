@@ -33,6 +33,9 @@ import java.math.BigDecimal;
 
 public abstract class RangeWidget extends QuestionWidget {
 
+    private static final String VERTICAL_APPEARANCE = "vertical";
+    private static final String NO_TICKS_APPEARANCE = "no-ticks";
+
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
     private BigDecimal rangeStep;
@@ -175,22 +178,26 @@ public abstract class RangeWidget extends QuestionWidget {
 
     private void setUpAppearance() {
         String appearance = getPrompt().getQuestion().getAppearanceAttr();
-        if ("no-ticks".equals(appearance)) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
-            view.findViewById(R.id.seek_bar).setVisibility(GONE);
-        } else if ("vertical".equals(appearance)) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
-            view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
-        } else if ("vertical no-ticks".equals(appearance)) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
-            view.findViewById(R.id.seek_bar).setVisibility(GONE);
+        if (appearance != null && appearance.contains(NO_TICKS_APPEARANCE)) {
+            if (appearance.contains(VERTICAL_APPEARANCE)) {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+                view.findViewById(R.id.seek_bar).setVisibility(GONE);
+            } else {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+                view.findViewById(R.id.seek_bar).setVisibility(GONE);
+            }
         } else {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
-            seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
-            view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+                view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            } else {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+                view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            }
         }
 
         setUpLayoutElements();
