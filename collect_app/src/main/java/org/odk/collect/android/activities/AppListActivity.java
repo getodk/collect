@@ -209,7 +209,7 @@ abstract class AppListActivity extends AppCompatActivity {
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
                 if (position == getSelectedSortingOrder()) {
-                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.light_blue));
+                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tintColor));
                 }
                 textView.setPadding(50, 0, 0, 0);
                 return textView;
@@ -220,7 +220,7 @@ abstract class AppListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
-                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.light_blue));
+                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.tintColor));
                 performSelectedSearch(position);
                 drawerLayout.closeDrawer(Gravity.END);
             }
