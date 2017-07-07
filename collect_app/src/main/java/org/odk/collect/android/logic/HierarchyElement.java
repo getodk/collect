@@ -18,97 +18,74 @@ import android.graphics.drawable.Drawable;
 
 import org.javarosa.core.model.FormIndex;
 
-import java.util.ArrayList;
-
 public class HierarchyElement {
     private String primaryText = "";
     private String secondaryText = "";
     private Drawable icon;
     private int color;
-    int type;
-    FormIndex formIndex;
-    ArrayList<HierarchyElement> children;
-
+    private int type;
+    private FormIndex formIndex;
+    private int itemsCount = 0;
 
     public HierarchyElement(String text1, String text2, Drawable bullet, int color, int type,
-            FormIndex f) {
+                            FormIndex f) {
         icon = bullet;
         primaryText = text1;
         secondaryText = text2;
         this.color = color;
         formIndex = f;
         this.type = type;
-        children = new ArrayList<HierarchyElement>();
     }
-
 
     public String getPrimaryText() {
         return primaryText;
     }
 
+    public void setPrimaryText(String text) {
+        primaryText = text;
+    }
 
     public String getSecondaryText() {
         return secondaryText;
     }
 
-
-    public void setPrimaryText(String text) {
-        primaryText = text;
-    }
-
-
     public void setSecondaryText(String text) {
         secondaryText = text;
     }
-
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
-    }
-
 
     public Drawable getIcon() {
         return icon;
     }
 
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
+    }
 
     public FormIndex getFormIndex() {
         return formIndex;
     }
 
-
     public int getType() {
         return type;
     }
-
 
     public void setType(int newType) {
         type = newType;
     }
 
-
-    public ArrayList<HierarchyElement> getChildren() {
-        return children;
+    public int getColor() {
+        return color;
     }
-
-
-    public void addChild(HierarchyElement h) {
-        children.add(h);
-    }
-
-
-    public void setChildren(ArrayList<HierarchyElement> children) {
-        this.children = children;
-    }
-
 
     public void setColor(int color) {
         this.color = color;
     }
 
-
-    public int getColor() {
-        return color;
+    public int getItemsCount() {
+        return itemsCount;
     }
 
+    public void setItemsCount(int itemsCount) {
+        this.itemsCount = itemsCount;
+    }
 }

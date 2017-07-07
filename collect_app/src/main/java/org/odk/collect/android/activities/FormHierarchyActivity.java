@@ -50,23 +50,18 @@ import timber.log.Timber;
 
 public class FormHierarchyActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private static final int CHILD = 1;
-    private static final int EXPANDED = 2;
-    private static final int COLLAPSED = 3;
-    private static final int QUESTION = 4;
-
-    private static final String mIndent = "     ";
-
-    private Button jumpPreviousButton;
+    public static final int GROUP = 1;
+    public static final int ITEM = 2;
+    public static final int QUESTION = 3;
+    public static final int REPEAT = 4;
 
     List<HierarchyElement> formList;
     TextView path;
-
     FormIndex startIndex;
+    private Button jumpPreviousButton;
     private FormIndex currentIndex;
     private ListView listView;
-    private TextView emptyView;
-
+    private boolean inRepeat = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +70,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         listView = (ListView) findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
+        TextView emptyView = (TextView) findViewById(android.R.id.empty);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -189,7 +184,12 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     }
 
     private void goUpLevel() {
-        Collect.getInstance().getFormController().stepToOuterScreenEvent();
+        inRepeat = false;
+        try {
+            Collect.getInstance().getFormController().stepToOuterScreenEvent();
+        } catch (Exception e) {
+            // ignore this
+        }
 
         refreshView();
     }
@@ -204,18 +204,17 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         String path = "";
         while (index != null) {
 
-            path =
-                    formController.getCaptionPrompt(index).getLongText()
-                            + " ("
-                            + (formController.getCaptionPrompt(index)
-                            .getMultiplicity() + 1) + ") > " + path;
-
+            String multiplicity = "";
+            if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+                multiplicity = "(" + formController.getCaptionPrompt(index)
+                        .getMultiplicity() + 1 + ")";
+            }
+            path = formController.getCaptionPrompt(index).getLongText() + multiplicity + " > " + path;
             index = formController.stepIndexOut(index);
         }
         // return path?
         return path.substring(0, path.length() - 2);
     }
-
 
     public void refreshView() {
         try {
@@ -223,26 +222,26 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             // Record the current index so we can return to the same place if the user hits 'back'.
             currentIndex = formController.getFormIndex();
 
-            // If we're not at the first level, we're inside a repeated group so we want to only
+            // If we're not at the first level, we're inside a group so we want to only
             // display
             // everything enclosed within that group.
             String contextGroupRef = "";
-            formList = new ArrayList<HierarchyElement>();
+            formList = new ArrayList<>();
 
-            // If we're currently at a repeat node, record the name of the node and step to the next
+            FormIndex parentGroupIndex = null;
+
+            // If we're currently at a group node, record the name of the node and step to the next
             // node to display.
-            if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-                contextGroupRef =
-                        formController.getFormIndex().getReference().toString(true);
-                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+            if (formController.getEvent() == FormEntryController.EVENT_REPEAT
+                    || formController.getEvent() == FormEntryController.EVENT_GROUP) {
+                parentGroupIndex = currentIndex;
+
+                if (!inRepeat) {
+                    formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                }
             } else {
                 FormIndex startTest = formController.stepIndexOut(currentIndex);
-                // If we have a 'group' tag, we want to step back until we hit a repeat or the
-                // beginning.
-                while (startTest != null
-                        && formController.getEvent(startTest) == FormEntryController.EVENT_GROUP) {
-                    startTest = formController.stepIndexOut(startTest);
-                }
+
                 if (startTest == null) {
                     // check to see if the question is at the first level of the hierarchy. If it
                     // is,
@@ -250,15 +249,15 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     formController.jumpToIndex(FormIndex
                             .createBeginningOfFormIndex());
                 } else {
-                    // otherwise we're at a repeated group
+                    // otherwise we're at a group/repeat
                     formController.jumpToIndex(startTest);
+                    parentGroupIndex = formController.getFormIndex();
                 }
 
                 // now test again for repeat. This should be true at this point or we're at the
                 // beginning
-                if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-                    contextGroupRef =
-                            formController.getFormIndex().getReference().toString(true);
+                if (formController.getEvent() == FormEntryController.EVENT_REPEAT
+                        || formController.getEvent() == FormEntryController.EVENT_GROUP) {
                     formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 }
             }
@@ -267,14 +266,18 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 // The beginning of form has no valid prompt to display.
                 formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                contextGroupRef =
-                        formController.getFormIndex().getReference().getParentRef().toString(true);
                 path.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
+                setTitle(formController.getFormTitle());
             } else {
                 path.setVisibility(View.VISIBLE);
-                path.setText(getCurrentPath());
+                try {
+                    path.setText(getCurrentPath());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 jumpPreviousButton.setEnabled(true);
+                setTitle(formController.getCaptionPrompt(parentGroupIndex).getLongText());
             }
 
             // Refresh the current event in case we did step forward.
@@ -291,39 +294,17 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             // The repeatGroupRef is null if we are not skipping a repeat
             // section.
             //
-            String repeatGroupRef = null;
 
             event_search:
             while (event != FormEntryController.EVENT_END_OF_FORM) {
 
-                // get the ref to this element
-                String currentRef = formController.getFormIndex().getReference().toString(true);
-
-                // retrieve the current group
-                String curGroup = (repeatGroupRef == null) ? contextGroupRef : repeatGroupRef;
-
-                if (!currentRef.startsWith(curGroup)) {
-                    // We have left the current group
-                    if (repeatGroupRef == null) {
-                        // We are done.
-                        break event_search;
-                    } else {
-                        // exit the inner repeat group
-                        repeatGroupRef = null;
-                    }
-                }
-
-                if (repeatGroupRef != null) {
-                    // We're in a repeat group within the one we want to list
-                    // skip this question/group/repeat and move to the next index.
-                    event =
-                            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                    continue;
+                if (parentGroupIndex != null && !inRepeat
+                        && !formController.isWithinGroup(parentGroupIndex)) {
+                    break event_search;
                 }
 
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION:
-
                         FormEntryPrompt fp = formController.getQuestionPrompt();
                         String label = fp.getLongText();
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
@@ -334,45 +315,74 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                     new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));
                         }
+                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                         break;
+
                     case FormEntryController.EVENT_GROUP:
-                        // ignore group events
+                        FormEntryCaption fc = formController.getCaptionPrompt();
+
+                        // Display the non-repeat header for the group.
+                        HierarchyElement group =
+                                new HierarchyElement(fc.getLongText(), "", ContextCompat
+                                        .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
+                                        Color.WHITE, GROUP, fc.getIndex());
+                        formList.add(group);
+
+                        if (!updateGroupDetails(parentGroupIndex, group)) {
+                            break event_search;
+                        }
+
                         break;
+
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                         // this would display the 'add new repeat' dialog
                         // ignore it.
-                        break;
-                    case FormEntryController.EVENT_REPEAT:
-                        FormEntryCaption fc = formController.getCaptionPrompt();
-                        // push this repeat onto the stack.
-                        repeatGroupRef = currentRef;
-                        // Because of the guard conditions above, we will skip
-                        // everything until we exit this repeat.
-                        //
-                        // Note that currentRef includes the multiplicity of the
-                        // repeat (e.g., [0], [1], ...), so every repeat will be
-                        // detected as different and reach this case statement.
-                        // Only the [0] emits the repeat header.
-                        // Every one displays the descend-into action element.
 
-                        if (fc.getMultiplicity() == 0) {
-                            // Display the repeat header for the group.
-                            HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, ContextCompat
-                                            .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
-                                            Color.WHITE,
-                                            COLLAPSED, fc.getIndex());
-                            formList.add(group);
+                        if (inRepeat) {
+                            break event_search;
                         }
-                        // Add this group name to the drop down list for this repeating group.
-                        HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
-                                .getIndex()));
+
+                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                        break;
+
+                    case FormEntryController.EVENT_REPEAT:
+                        fc = formController.getCaptionPrompt();
+
+                        if (parentGroupIndex != null && inRepeat) {
+                            // Add this item to the list
+                            HierarchyElement child = new HierarchyElement("", null, null, Color.WHITE, ITEM, fc
+                                    .getIndex());
+
+                            formList.add(child);
+
+                            if (!updateGroupDetails(parentGroupIndex, child)) {
+                                break event_search;
+                            }
+                        } else {
+                            // Note that currentRef includes the multiplicity of the
+                            // repeat (e.g., [0], [1], ...), so every repeat will be
+                            // detected as different and reach this case statement.
+                            // Only the [0] emits the repeat header.
+                            // Every one displays the descend-into action element.
+
+                            if (fc.getMultiplicity() == 0) {
+                                // Display the repeat header for the group.
+                                HierarchyElement repeat =
+                                        new HierarchyElement(fc.getLongText(), null, ContextCompat
+                                                .getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized),
+                                                Color.WHITE,
+                                                REPEAT, fc.getIndex());
+                                formList.add(repeat);
+                            }
+                            HierarchyElement repeat = formList.get(formList.size() - 1);
+                            int items = repeat.getItemsCount() + 1;
+                            repeat.setItemsCount(items);
+                            repeat.setSecondaryText(items + " items");
+                            formController.stepOutOfCurrentGroup();
+                        }
                         break;
                 }
-                event =
-                        formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                event = formController.getEvent();
             }
 
             HierarchyListAdapter itla = new HierarchyListAdapter(this);
@@ -385,6 +395,82 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             Timber.e(e);
             createErrorDialog(e.getMessage());
         }
+    }
+
+    /*
+     * Updates the question and group count for a group/repeat
+     */
+    private boolean updateGroupDetails(FormIndex parentGroupIndex, HierarchyElement group) {
+        FormController formController = Collect.getInstance().getFormController();
+
+        FormIndex groupIndex = formController.getFormIndex();
+
+        int questions = 0;
+        int groups = 0;
+        String firstAnswer = "";
+
+        int event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+        while (formController.isWithinGroup(groupIndex)) {
+            if (event == FormEntryController.EVENT_END_OF_FORM || event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                break;
+            } else if (event == FormEntryController.EVENT_QUESTION) {
+                questions++;
+
+                if (firstAnswer.equals("")) {
+                    firstAnswer = FormEntryPromptUtils.getAnswerText(formController.getQuestionPrompt());
+
+                    if (firstAnswer == null || firstAnswer.equals("")) {
+                        firstAnswer = "[Untitled]";
+                    }
+                }
+
+                event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+            } else if (event == FormEntryController.EVENT_GROUP) {
+                groups++;
+                event = formController.stepOutOfCurrentGroup();
+            } else {
+                groups++;
+                formController.stepOutOfCurrentGroup();
+                event = formController.stepOutOfCurrentGroup();
+            }
+
+            if (parentGroupIndex != null && formController.getEvent(groupIndex) != FormEntryController.EVENT_REPEAT) {
+                if (!formController.isWithinGroup(parentGroupIndex)) {
+                    return false;
+                }
+            }
+        }
+
+        // set the first answer as label of the items in repeat
+        if (group.getType() == ITEM) {
+            group.setPrimaryText(firstAnswer);
+        }
+
+        //set the group details
+        group.setSecondaryText(getChildrenCount(questions, groups));
+        return true;
+    }
+
+    private String getChildrenCount(int questionCount, int groupCount) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (questionCount == 1) {
+            stringBuilder.append(questionCount).append(" ").append(getString(R.string.question));
+        } else if (questionCount > 1) {
+            stringBuilder.append(questionCount).append(" ").append(getString(R.string.questions));
+        }
+
+        if (groupCount == 1) {
+            if (!stringBuilder.toString().equals("")) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(groupCount).append(" ").append(getString(R.string.group));
+        } else if (groupCount > 1) {
+            if (!stringBuilder.toString().equals("")) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(groupCount).append(" ").append(getString(R.string.groups));
+        }
+        return stringBuilder.toString();
     }
 
     /**
@@ -420,6 +506,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        FormController formController = Collect.getInstance().getFormController();
         HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
         FormIndex index = h.getFormIndex();
         if (index == null) {
@@ -427,29 +514,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             return;
         }
 
-        switch (h.getType()) {
-            case EXPANDED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "COLLAPSED", h.getFormIndex());
-                h.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = h.getChildren();
-                for (int i = 0; i < children.size(); i++) {
-                    formList.remove(position + 1);
-                }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
-                break;
-            case COLLAPSED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "EXPANDED", h.getFormIndex());
-                h.setType(EXPANDED);
-                ArrayList<HierarchyElement> children1 = h.getChildren();
-                for (int i = 0; i < children1.size(); i++) {
-                    Timber.i("adding child: %s", children1.get(i).getFormIndex());
-                    formList.add(position + 1 + i, children1.get(i));
+        inRepeat = h.getType() == REPEAT;
 
-                }
-                h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
-                break;
+        switch (h.getType()) {
             case QUESTION:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
                         "QUESTION-JUMP", index);
@@ -468,21 +535,24 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     finish();
                 }
-                return;
-            case CHILD:
+                break;
+            case ITEM:
+            case GROUP:
+            case REPEAT:
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
-                        "REPEAT-JUMP", h.getFormIndex());
-                Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
+                        h.getType() + "", h.getFormIndex());
+                formController.jumpToIndex(h.getFormIndex());
                 setResult(RESULT_OK);
                 refreshView();
-                return;
+                break;
         }
 
-        // Should only get here if we've expanded or collapsed a group
+
+        /*// Should only get here if we've expanded or collapsed a group
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         itla.setListItems(formList);
         listView.setAdapter(itla);
-        listView.setSelection(position);
+        listView.setSelection(position);*/
     }
 
 
