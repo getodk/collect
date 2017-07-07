@@ -190,8 +190,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean autoSaved;
     private boolean doSwipe = true;
 
-    private TimerLogger timerLogger;
-
     // Random ID
     private static final int DELETE_REPEAT = 654321;
 
@@ -845,10 +843,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // repeat events, and indexes in field-lists that is not the containing
         // group.
 
-        if (timerLogger == null) {
-            setTimerLogger(formController);
-        }
-
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
     }
@@ -933,7 +927,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -1088,7 +1082,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         setTitle(formController.getFormTitle());
 
-        timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
+        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
@@ -1369,7 +1363,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return;
             }
 
-            timerLogger.exitView();    // Close timer events waiting for an end time
+            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1439,7 +1433,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         nonblockingCreateSavePointData();
                     }
                 }
-                timerLogger.exitView();    // Close timer events
+                formController.getTimerLogger().exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -1824,7 +1818,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
-                        timerLogger.logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -1952,7 +1946,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                             .logInstanceAction(this,
                                                     "createQuitDialog",
                                                     "discardAndExit");
-                                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                    FormController formController = Collect.getInstance().getFormController();
+                                    if(formController != null) {
+                                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                    }
                                     removeTempInstance();
                                     finishReturnInstance();
                                 }
@@ -1968,7 +1965,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 // close all open databases of external data.
                                 Collect.getInstance().getExternalDataManager().close();
 
-                                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                FormController formController = Collect.getInstance().getFormController();
+                                if(formController != null) {
+                                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                }
                                 removeTempInstance();
                                 finishReturnInstance();
                                 break;
@@ -2577,13 +2577,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
 
             setTimerLogger(formController);
-            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             setTimerLogger(formController);
-            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
@@ -2628,27 +2628,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         dismissDialog(SAVING_DIALOG);
 
         int saveStatus = saveResult.getSaveResult();
+        FormController formController = Collect.getInstance()
+                .getFormController();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 if (saveResult.getComplete()) {
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2658,14 +2660,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2700,10 +2702,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void setTimerLogger(FormController formController) {
 
-        // Create the timer logger and then log the resume event
-        timerLogger = new TimerLogger(formController.getInstancePath(),
-                PreferenceManager.getDefaultSharedPreferences(this),
-                formController);
+        if (formController.getTimerLogger() == null) {
+
+            // Create a new timerLogger object if there is no saved timer logger
+            formController.setTimerLogger(new TimerLogger(formController.getInstancePath(),
+                    PreferenceManager.getDefaultSharedPreferences(this),
+                    formController));
+        }
     }
 
     /**
