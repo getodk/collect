@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.preferences;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,7 +28,6 @@ import android.widget.CheckBox;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.bundle.CollectDialogBundle;
-import org.odk.collect.android.fragments.CollectDialogFragment;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -188,11 +188,16 @@ public class ResetDialogPreference extends DialogPreference {
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setDialogTitle(getContext().getString(R.string.reset_app_state_result))
                 .setDialogMessage(message)
-                .setRightButtonText(getContext().getString(R.string.ok))
-                .setRightButtonAction(CollectDialogFragment.Action.RESETTING_SETTINGS_FINISHED)
+                .setPositiveButtonText(getContext().getString(R.string.ok))
+                .setOnPositiveButtonClickCallback(new CollectDialogBundle.SingleButtonCallback() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        dialog.dismiss();
+                        ((AdminPreferencesActivity) context).recreate();
+                    }
+                })
                 .setCancelable(false);
 
-        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
-        ((CollectAbstractActivity) context).buildDialog(collectDialogBundle);
+        ((CollectAbstractActivity) context).buildDialog(dialogBuilder.build());
     }
 }

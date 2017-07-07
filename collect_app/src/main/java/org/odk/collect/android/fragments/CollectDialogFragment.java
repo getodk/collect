@@ -26,8 +26,6 @@ import org.odk.collect.android.bundle.CollectDialogBundle;
 
 public class CollectDialogFragment extends DialogFragment {
 
-    public enum Action { RESETTING_SETTINGS_FINISHED }
-
     public static final String COLLECT_DIALOG_BUNDLE = "collectDialogBundle";
 
     public static CollectDialogFragment newInstance(CollectDialogBundle collectDialogBundle) {
@@ -41,7 +39,7 @@ public class CollectDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final CollectDialogBundle collectDialogBundle = (CollectDialogBundle) getArguments().getSerializable(COLLECT_DIALOG_BUNDLE);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         if (collectDialogBundle != null) {
             builder
@@ -49,18 +47,26 @@ public class CollectDialogFragment extends DialogFragment {
                     .setMessage(collectDialogBundle.getDialogMessage())
                     .setCancelable(collectDialogBundle.isCancelable());
 
-            if (collectDialogBundle.getLeftButtonText() != null) {
-                builder.setNegativeButton(collectDialogBundle.getLeftButtonText(), new DialogInterface.OnClickListener() {
+            if (collectDialogBundle.getOnNegativeButtonClickCallback() != null) {
+                builder.setNegativeButton(collectDialogBundle.getNegativeButtonText(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        resolveButtonAction(collectDialogBundle.getLeftButtonAction());
+                        collectDialogBundle.onNegativeButtonClickCallback.onClick(getDialog());
                     }
                 });
             }
 
-            if (collectDialogBundle.getRightButtonText() != null) {
-                builder.setPositiveButton(collectDialogBundle.getRightButtonText(), new DialogInterface.OnClickListener() {
+            if (collectDialogBundle.getOnPositiveButtonClickCallback() != null) {
+                builder.setPositiveButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        resolveButtonAction(collectDialogBundle.getRightButtonAction());
+                        collectDialogBundle.onPositiveButtonClickCallback.onClick(getDialog());
+                    }
+                });
+            }
+
+            if (collectDialogBundle.getOnNeutralButtonClickCallback() != null) {
+                builder.setNeutralButton(collectDialogBundle.getNeutralButtonText(), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        collectDialogBundle.onNeutralButtonClickCallback.onClick(getDialog());
                     }
                 });
             }
@@ -73,15 +79,5 @@ public class CollectDialogFragment extends DialogFragment {
         }
 
         return builder.create();
-    }
-
-    private void resolveButtonAction(final Action action) {
-        switch (action) {
-            case RESETTING_SETTINGS_FINISHED:
-                dismiss();
-                getActivity().recreate();
-                break;
-            default:
-        }
     }
 }

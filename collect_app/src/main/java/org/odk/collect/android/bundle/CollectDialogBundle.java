@@ -16,21 +16,24 @@
 
 package org.odk.collect.android.bundle;
 
-import org.odk.collect.android.fragments.CollectDialogFragment;
+import android.app.Dialog;
 
 import java.io.Serializable;
 
 public class CollectDialogBundle implements Serializable {
+
     private static final String COLLECT_DIALOG_TAG = "collectDialogTag";
 
     private String dialogTag;
     private String dialogTitle;
     private String dialogMessage;
-    private String leftButtonText;
-    private String rightButtonText;
+    private String negativeButtonText;
+    private String positiveButtonText;
+    private String neutralButtonText;
 
-    private CollectDialogFragment.Action leftButtonAction;
-    private CollectDialogFragment.Action rightButtonAction;
+    public SingleButtonCallback onNegativeButtonClickCallback;
+    public SingleButtonCallback onPositiveButtonClickCallback;
+    public SingleButtonCallback onNeutralButtonClickCallback;
 
     private boolean cancelable;
 
@@ -40,10 +43,12 @@ public class CollectDialogBundle implements Serializable {
         dialogTag = builder.dialogTag;
         dialogTitle = builder.dialogTitle;
         dialogMessage = builder.dialogMessage;
-        leftButtonText = builder.leftButtonText;
-        rightButtonText = builder.rightButtonText;
-        leftButtonAction = builder.leftButtonAction;
-        rightButtonAction = builder.rightButtonAction;
+        negativeButtonText = builder.negativeButtonText;
+        positiveButtonText = builder.positiveButtonText;
+        neutralButtonText = builder.neutralButtonText;
+        onNegativeButtonClickCallback = builder.onNegativeButtonClickCallback;
+        onPositiveButtonClickCallback = builder.onPositiveButtonClickCallback;
+        onNeutralButtonClickCallback = builder.onNeutralButtonClickCallback;
         cancelable = builder.cancelable;
         icon = builder.icon;
     }
@@ -60,20 +65,28 @@ public class CollectDialogBundle implements Serializable {
         return dialogMessage;
     }
 
-    public String getLeftButtonText() {
-        return leftButtonText;
+    public String getNegativeButtonText() {
+        return negativeButtonText;
     }
 
-    public String getRightButtonText() {
-        return rightButtonText;
+    public String getPositiveButtonText() {
+        return positiveButtonText;
     }
 
-    public CollectDialogFragment.Action getLeftButtonAction() {
-        return leftButtonAction;
+    public String getNeutralButtonText() {
+        return neutralButtonText;
     }
 
-    public CollectDialogFragment.Action getRightButtonAction() {
-        return rightButtonAction;
+    public SingleButtonCallback getOnNegativeButtonClickCallback() {
+        return onNegativeButtonClickCallback;
+    }
+
+    public SingleButtonCallback getOnPositiveButtonClickCallback() {
+        return onPositiveButtonClickCallback;
+    }
+
+    public SingleButtonCallback getOnNeutralButtonClickCallback() {
+        return onNeutralButtonClickCallback;
     }
 
     public boolean isCancelable() {
@@ -89,11 +102,13 @@ public class CollectDialogBundle implements Serializable {
         private String dialogTag;
         private String dialogTitle;
         private String dialogMessage;
-        private String leftButtonText;
-        private String rightButtonText;
+        private String negativeButtonText;
+        private String positiveButtonText;
+        private String neutralButtonText;
 
-        private CollectDialogFragment.Action leftButtonAction;
-        private CollectDialogFragment.Action rightButtonAction;
+        private SingleButtonCallback onNegativeButtonClickCallback;
+        private SingleButtonCallback onPositiveButtonClickCallback;
+        private SingleButtonCallback onNeutralButtonClickCallback;
 
         private boolean cancelable;
 
@@ -117,23 +132,33 @@ public class CollectDialogBundle implements Serializable {
             return this;
         }
 
-        public Builder setLeftButtonText(String leftButtonText) {
-            this.leftButtonText = leftButtonText;
+        public Builder setNegativeButtonText(String negativeButtonText) {
+            this.negativeButtonText = negativeButtonText;
             return this;
         }
 
-        public Builder setRightButtonText(String rightButtonText) {
-            this.rightButtonText = rightButtonText;
+        public Builder setPositiveButtonText(String positiveButtonText) {
+            this.positiveButtonText = positiveButtonText;
             return this;
         }
 
-        public Builder setLeftButtonAction(CollectDialogFragment.Action leftButtonAction) {
-            this.leftButtonAction = leftButtonAction;
+        public Builder setNeutralButtonText(String neutralButtonText) {
+            this.neutralButtonText = neutralButtonText;
             return this;
         }
 
-        public Builder setRightButtonAction(CollectDialogFragment.Action rightButtonAction) {
-            this.rightButtonAction = rightButtonAction;
+        public Builder setOnNegatibeButtonClickCallback(SingleButtonCallback onNegativeButtonClickCallback) {
+            this.onNegativeButtonClickCallback = onNegativeButtonClickCallback;
+            return this;
+        }
+
+        public Builder setOnPositiveButtonClickCallback(SingleButtonCallback onPositiveButtonClickCallback) {
+            this.onPositiveButtonClickCallback = onPositiveButtonClickCallback;
+            return this;
+        }
+
+        public Builder setOnNeutralButtonClickCallback(SingleButtonCallback onNeutralButtonClickCallback) {
+            this.onNeutralButtonClickCallback = onNeutralButtonClickCallback;
             return this;
         }
 
@@ -150,5 +175,9 @@ public class CollectDialogBundle implements Serializable {
         public CollectDialogBundle build() {
             return new CollectDialogBundle(this);
         }
+    }
+
+    public interface SingleButtonCallback {
+        void onClick(Dialog dialog);
     }
 }
