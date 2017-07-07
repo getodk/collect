@@ -1947,7 +1947,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                                     "createQuitDialog",
                                                     "discardAndExit");
                                     FormController formController = Collect.getInstance().getFormController();
-                                    if(formController != null) {
+                                    if (formController != null) {
                                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                     }
                                     removeTempInstance();
@@ -1966,7 +1966,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 Collect.getInstance().getExternalDataManager().close();
 
                                 FormController formController = Collect.getInstance().getFormController();
-                                if(formController != null) {
+                                if (formController != null) {
                                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
                                 }
                                 removeTempInstance();
@@ -2447,7 +2447,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2466,7 +2466,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
@@ -2474,7 +2474,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
