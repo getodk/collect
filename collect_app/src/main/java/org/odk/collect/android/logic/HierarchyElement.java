@@ -18,8 +18,6 @@ import android.graphics.drawable.Drawable;
 
 import org.javarosa.core.model.FormIndex;
 
-import java.util.ArrayList;
-
 public class HierarchyElement {
     private String primaryText = "";
     private String secondaryText = "";
@@ -27,7 +25,7 @@ public class HierarchyElement {
     private int color;
     private int type;
     private FormIndex formIndex;
-    private ArrayList<HierarchyElement> children;
+    private int itemsCount = 0;
 
     public HierarchyElement(String text1, String text2, Drawable bullet, int color, int type,
                             FormIndex f) {
@@ -37,7 +35,6 @@ public class HierarchyElement {
         this.color = color;
         formIndex = f;
         this.type = type;
-        children = new ArrayList<HierarchyElement>();
     }
 
     public String getPrimaryText() {
@@ -68,27 +65,12 @@ public class HierarchyElement {
         return formIndex;
     }
 
-
     public int getType() {
         return type;
     }
 
-
     public void setType(int newType) {
         type = newType;
-    }
-
-
-    public ArrayList<HierarchyElement> getChildren() {
-        return children;
-    }
-
-    public void setChildren(ArrayList<HierarchyElement> children) {
-        this.children = children;
-    }
-
-    public void addChild(HierarchyElement h) {
-        children.add(h);
     }
 
     public int getColor() {
@@ -99,4 +81,11 @@ public class HierarchyElement {
         this.color = color;
     }
 
+    public int getItemsCount() {
+        return itemsCount;
+    }
+
+    public void setItemsCount(int itemsCount) {
+        this.itemsCount = itemsCount;
+    }
 }

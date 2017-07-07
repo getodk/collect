@@ -88,6 +88,12 @@ public class FormController {
         return getEvent();
     }
 
+    public boolean isWithinGroup(FormIndex groupIndex) {
+        String groupRef = groupIndex.toString();
+        String currentRef = getFormIndex().toString();
+        return currentRef.startsWith(groupRef);
+    }
+
     /**
      * OpenRosa metadata of a form instance.
      *
