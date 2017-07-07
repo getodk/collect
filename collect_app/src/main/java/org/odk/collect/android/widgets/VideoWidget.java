@@ -470,14 +470,26 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         int windowWidth = displayMetrics.widthPixels;
         int windowHeight = displayMetrics.heightPixels;
 
-        float aspectRatio = frame.getWidth() / frame.getHeight();
+        float videoAspectRatio = (float) frame.getHeight() / frame.getWidth();
+        float windowAspectRatio = (float) windowHeight / windowWidth;
 
-        int videoWidth = windowWidth < windowHeight ? windowWidth : windowHeight;
-        int videoHeight = (int) (videoWidth / aspectRatio);
+        int videoWidth = 0;
+        int videoHeight = 0;
 
-        if (videoHeight > windowHeight) {
+        if (windowAspectRatio > 1 && videoAspectRatio < 1) {
+            videoWidth = windowWidth;
+        } else if (windowAspectRatio < 1 && videoAspectRatio > 1) {
             videoHeight = windowHeight;
-            videoWidth = (int) (videoHeight * aspectRatio);
+        } else if (videoAspectRatio > windowAspectRatio) {
+            videoHeight = windowHeight;
+        } else if (videoAspectRatio < windowAspectRatio) {
+            videoWidth = windowWidth;
+        }
+
+        if (videoHeight == 0) {
+            videoHeight = (int) (videoWidth * videoAspectRatio);
+        } else {
+            videoWidth = (int) (videoHeight / videoAspectRatio);
         }
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(videoWidth, videoHeight);
