@@ -18,19 +18,21 @@ package org.odk.collect.android.activities;
 
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +47,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -56,26 +59,59 @@ import java.util.List;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListActivity extends AppCompatActivity {
-    protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
-
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
-
-    private ListView drawerList;
+    protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
+    protected SimpleCursorAdapter listAdapter;
+    protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
+    protected String[] sortingOptions;
+    protected Integer selectedSortingOrder;
+    protected Toolbar toolbar;
+    protected ListView listView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private LinearLayout searchBoxLayout;
     private EditText inputSearch;
-
-    protected SimpleCursorAdapter listAdapter;
-    protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected String[] sortingOptions;
-
     private boolean isSearchBoxShown;
 
-    protected Integer selectedSortingOrder;
-    protected Toolbar toolbar;
-    protected ListView listView;
+    // toggles to all checked or all unchecked
+    // returns:
+    // true if result is all checked
+    // false if result is all unchecked
+    //
+    // Toggle behavior is as follows:
+    // if ANY items are unchecked, check them all
+    // if ALL items are checked, uncheck them all
+    public static boolean toggleChecked(ListView lv) {
+        // shortcut null case
+        if (lv == null) {
+            return false;
+        }
+
+        boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
+        setAllToCheckedState(lv, newCheckState);
+        return newCheckState;
+    }
+
+    public static void setAllToCheckedState(ListView lv, boolean check) {
+        // no-op if ListView null
+        if (lv == null) {
+            return;
+        }
+
+        for (int x = 0; x < lv.getCount(); x++) {
+            lv.setItemChecked(x, check);
+        }
+    }
+
+    // Function to toggle button label
+    public static void toggleButtonLabel(Button toggleButton, ListView lv) {
+        if (lv.getCheckedItemCount() != lv.getCount()) {
+            toggleButton.setText(R.string.select_all);
+        } else {
+            toggleButton.setText(R.string.clear_all);
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,8 +137,8 @@ abstract class AppListActivity extends AppCompatActivity {
         searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
         setupSearchBox();
-        setupDrawer();
-        setupDrawerItems();
+        //setupDrawer();
+        //setupDrawerItems();
     }
 
     @Override
@@ -132,12 +168,13 @@ abstract class AppListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_sort:
-                if (drawerLayout.isDrawerOpen(Gravity.END)) {
+                openBottomDialog();
+                /*if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
                     Collect.getInstance().hideKeyboard(inputSearch);
                     drawerLayout.openDrawer(Gravity.END);
-                }
+                }*/
                 return true;
 
             case R.id.menu_filter:
@@ -203,6 +240,7 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     private void setupDrawerItems() {
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sortingOptions) {
             @NonNull
             @Override
@@ -215,16 +253,17 @@ abstract class AppListActivity extends AppCompatActivity {
                 return textView;
             }
         };
-        drawerList.setAdapter(adapter);
-        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
-                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.tintColor));
-                performSelectedSearch(position);
-                drawerLayout.closeDrawer(Gravity.END);
-            }
-        });
+
+        //drawerList.setAdapter(adapter);
+//        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
+//                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.light_blue));
+//                performSelectedSearch(position);
+//                drawerLayout.closeDrawer(Gravity.END);
+//            }
+//        });
     }
 
     private void performSelectedSearch(int position) {
@@ -233,7 +272,7 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     private void setupDrawer() {
-        drawerList = (ListView) findViewById(R.id.sortingMenu);
+        ListView drawerList = (ListView) findViewById(R.id.sortingMenu);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.sorting_menu_open, R.string.sorting_menu_close) {
@@ -286,54 +325,6 @@ abstract class AppListActivity extends AppCompatActivity {
         return listView.getCheckedItemCount();
     }
 
-    // toggles to all checked or all unchecked
-    // returns:
-    // true if result is all checked
-    // false if result is all unchecked
-    //
-    // Toggle behavior is as follows:
-    // if ANY items are unchecked, check them all
-    // if ALL items are checked, uncheck them all
-    public static boolean toggleChecked(ListView lv) {
-        // shortcut null case
-        if (lv == null) {
-            return false;
-        }
-
-        boolean newCheckState = lv.getCount() > lv.getCheckedItemCount();
-        setAllToCheckedState(lv, newCheckState);
-        return newCheckState;
-    }
-
-    public static void setAllToCheckedState(ListView lv, boolean check) {
-        // no-op if ListView null
-        if (lv == null) {
-            return;
-        }
-
-        for (int x = 0; x < lv.getCount(); x++) {
-            lv.setItemChecked(x, check);
-        }
-    }
-
-    // Function to toggle button label
-    public static void toggleButtonLabel(Button toggleButton, ListView lv) {
-        if (lv.getCheckedItemCount() != lv.getCount()) {
-            toggleButton.setText(R.string.select_all);
-        } else {
-            toggleButton.setText(R.string.clear_all);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.END)) {
-            drawerLayout.closeDrawer(Gravity.END);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private void saveSelectedSortingOrder(int selectedStringOrder) {
         selectedSortingOrder = selectedStringOrder;
         PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
@@ -357,5 +348,20 @@ abstract class AppListActivity extends AppCompatActivity {
 
     protected CharSequence getFilterText() {
         return inputSearch != null ? inputSearch.getText() : "";
+    }
+
+    protected void openBottomDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
+
+        SortDialogAdapter adapter = new SortDialogAdapter(sortingOptions);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        bottomSheetDialog.setContentView(sheetView);
+        bottomSheetDialog.show();
     }
 }

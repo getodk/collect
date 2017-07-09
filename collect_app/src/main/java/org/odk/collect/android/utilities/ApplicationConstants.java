@@ -16,6 +16,9 @@
 
 package org.odk.collect.android.utilities;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+
 public class ApplicationConstants {
 
     // based on http://www.sqlite.org/limits.html
@@ -27,6 +30,24 @@ public class ApplicationConstants {
             "my", "nb", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "so",
             "sq", "sw", "sw_KE", "ta", "th_TH", "tl", "tr", "uk", "ur",
             "ur_PK", "vi", "zh", "zu"};
+
+    public static int getSortIcon(String sortBy) {
+        int resource = 0;
+        if (Collect.getInstance().getString(R.string.sort_by_name_asc).equals(sortBy)) {
+            resource = R.drawable.ic_sort_by_alpha_black_24dp;
+        } else if (Collect.getInstance().getString(R.string.sort_by_name_desc).equals(sortBy)) {
+            resource = R.drawable.ic_sort_by_alpha_black_24dp;
+        } else if (Collect.getInstance().getString(R.string.sort_by_date_asc).equals(sortBy)) {
+            resource = R.drawable.ic_access_time_black_24dp;
+        } else if (Collect.getInstance().getString(R.string.sort_by_date_desc).equals(sortBy)) {
+            resource = R.drawable.ic_access_time_black_24dp;
+        } else if (Collect.getInstance().getString(R.string.sort_by_status_asc).equals(sortBy)) {
+            resource = R.drawable.ic_assignment_turned_in_black_24dp;
+        } else if (Collect.getInstance().getString(R.string.sort_by_status_desc).equals(sortBy)) {
+            resource = R.drawable.ic_assignment_late_black_24dp;
+        }
+        return resource;
+    }
 
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
