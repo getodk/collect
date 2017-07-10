@@ -18,7 +18,6 @@ the License.
     android:id="@+id/fragment_history_bottom_sheet_edit"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="#ffffff"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"

@@ -16,16 +16,12 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,9 +32,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -50,6 +44,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
@@ -68,11 +63,10 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
     private LinearLayout searchBoxLayout;
     private EditText inputSearch;
     private boolean isSearchBoxShown;
+    private BottomSheetDialog bottomSheetDialog;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -137,8 +131,10 @@ abstract class AppListActivity extends AppCompatActivity {
         searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
         setupSearchBox();
-        //setupDrawer();
-        //setupDrawerItems();
+
+        if (bottomSheetDialog == null) {
+            setupBottomSheet();
+        }
     }
 
     @Override
@@ -168,13 +164,7 @@ abstract class AppListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_sort:
-                openBottomDialog();
-                /*if (drawerLayout.isDrawerOpen(Gravity.END)) {
-                    drawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
-                    drawerLayout.openDrawer(Gravity.END);
-                }*/
+                bottomSheetDialog.show();
                 return true;
 
             case R.id.menu_filter:
@@ -187,22 +177,6 @@ abstract class AppListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (drawerToggle != null) {
-            drawerToggle.syncState();
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (drawerToggle != null) {
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
     }
 
     private void setupSearchBox() {
@@ -239,58 +213,9 @@ abstract class AppListActivity extends AppCompatActivity {
         Collect.getInstance().showKeyboard(inputSearch);
     }
 
-    private void setupDrawerItems() {
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sortingOptions) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (position == getSelectedSortingOrder()) {
-                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tintColor));
-                }
-                textView.setPadding(50, 0, 0, 0);
-                return textView;
-            }
-        };
-
-        //drawerList.setAdapter(adapter);
-//        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
-//                view.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.light_blue));
-//                performSelectedSearch(position);
-//                drawerLayout.closeDrawer(Gravity.END);
-//            }
-//        });
-    }
-
     private void performSelectedSearch(int position) {
         saveSelectedSortingOrder(position);
         updateAdapter();
-    }
-
-    private void setupDrawer() {
-        ListView drawerList = (ListView) findViewById(R.id.sortingMenu);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.sorting_menu_open, R.string.sorting_menu_close) {
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                supportInvalidateOptionsMenu();
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            }
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                supportInvalidateOptionsMenu();
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
-        };
-
-        drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.addDrawerListener(drawerToggle);
     }
 
     protected void checkPreviouslyCheckedItems() {
@@ -350,18 +275,26 @@ abstract class AppListActivity extends AppCompatActivity {
         return inputSearch != null ? inputSearch.getText() : "";
     }
 
-    protected void openBottomDialog() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+    private void setupBottomSheet() {
+        bottomSheetDialog = new BottomSheetDialog(this);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-        RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
 
-        SortDialogAdapter adapter = new SortDialogAdapter(sortingOptions);
+        final SortDialogAdapter adapter = new SortDialogAdapter(sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+            @Override
+            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
+                TextView previousSelected = (TextView) recyclerView.getChildAt(selectedSortingOrder).findViewById(R.id.title);
+                previousSelected.setTypeface(null, Typeface.NORMAL);
+                holder.txtViewTitle.setTypeface(null, Typeface.BOLD);
+                performSelectedSearch(position);
+                bottomSheetDialog.dismiss();
+            }
+        });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         bottomSheetDialog.setContentView(sheetView);
-        bottomSheetDialog.show();
     }
 }
