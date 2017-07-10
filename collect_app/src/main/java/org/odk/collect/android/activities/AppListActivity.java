@@ -164,6 +164,7 @@ abstract class AppListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_sort:
+                Collect.getInstance().hideKeyboard(inputSearch);
                 bottomSheetDialog.show();
                 return true;
 

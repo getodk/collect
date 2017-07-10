@@ -120,6 +120,7 @@ abstract class AppListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_SORT:
+                Collect.getInstance().hideKeyboard(inputSearch);
                 bottomSheetDialog.show();
                 return true;
 
