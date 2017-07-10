@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">पासवर्ड दिखायें </string>
   <string name="activity_not_found">नियंत्रण के लिए कोई क्रिया नहीं मिली: %s</string>
   <string name="add_another"> समूह जोड़ें</string>
@@ -428,9 +428,7 @@
   <string name="sort_by_date_desc">तिथि के अनुसार, सबसे पुराना पहले</string>
   <string name="sort_by_status_asc">स्टेटस में, फाइनल हुए को पहले</string>
   <string name="sort_by_status_desc">स्थिति के अनुसार, पहले अनफिनिलाइज़ किया गया</string>
-  <string name="sorting_menu_open">सॉर्टिंग मेनू खोलें</string>
-  <string name="sorting_menu_close">सॉर्टिंग मेनू बंद करें</string>
-  <string name="sort_the_list">सूची को सॉर्ट करें</string>
+    <string name="sort_the_list">सूची को सॉर्ट करें</string>
   <string name="request_permissions_google_account">ओडीके को इकट्ठा करने के लिए रिक्त फॉर्म प्राप्त करने के लिए अपने गूगल खाते तक पहुंच की आवश्यकता है और भरे गए फॉर्म सबमिट करें।</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>
   <string name="language">भाषा</string>

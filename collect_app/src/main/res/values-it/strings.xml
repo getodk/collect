@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra password</string>
   <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
   <string name="add_another">Aggiungi gruppo</string>
@@ -421,9 +421,7 @@
   <string name="sort_by_date_desc">Per data, prima i meno recenti</string>
   <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
   <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
-  <string name="sorting_menu_open">Apri il menù di ordinamento</string>
-  <string name="sorting_menu_close">Chiudi il menù di ordinamento</string>
-  <string name="sort_the_list">Ordina la lista</string>
+    <string name="sort_the_list">Ordina la lista</string>
   <string name="request_permissions_google_account">ODK Collect richiede l\'accesso al tuo account Google per utilizzare i moduli vuoti ed inviare i moduli compilati.</string>
   <string name="filter_the_list">Filtra la lista</string>
   <string name="language">Lingua</string>
