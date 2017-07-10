@@ -18,6 +18,8 @@
 
 package org.odk.collect.android.external;
 
+import android.util.Log;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -189,6 +191,7 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
+            Log.i("ExternalDataUtil:", e.getMessage());
             return returnedChoices;  // smap
             //throw new ExternalDataException(e.getMessage(), e);  smap
         }
