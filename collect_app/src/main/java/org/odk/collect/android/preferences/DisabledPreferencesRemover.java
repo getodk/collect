@@ -16,46 +16,23 @@
 
 package org.odk.collect.android.preferences;
 
-import android.content.SharedPreferences;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceScreen;
-import android.util.Log;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
-class DisabledPreferencesRemover {
-    private static final String t = "DisabledPrefRemover"; // Full name was too long
 
-    /** A map used to find the parent category of any preference */ // ToDo: find a better way?
-    private final Map<Preference, PreferenceCategory> preferencePreferenceCategoryMap;
+class DisabledPreferencesRemover {
 
     private PreferencesActivity pa;
-    private PreferencesFragment pf;
+    private PreferenceFragment pf;
 
-    DisabledPreferencesRemover(PreferencesActivity pa, PreferencesFragment pf) {
+    DisabledPreferencesRemover(PreferencesActivity pa, PreferenceFragment pf) {
         this.pa = pa;
         this.pf = pf;
-        preferencePreferenceCategoryMap = createPreferenceToPreferenceCategoryMap();
-    }
-
-    private Map<Preference, PreferenceCategory> createPreferenceToPreferenceCategoryMap() {
-        final Map<Preference, PreferenceCategory> map = new HashMap<>();
-        PreferenceScreen screen = pf.getPreferenceScreen();
-        for (int i = 0; i < screen.getPreferenceCount(); i++) {
-            Preference p = screen.getPreference(i);
-            if (p instanceof PreferenceCategory) {
-                PreferenceCategory pc = (PreferenceCategory) p;
-                for (int j = 0; j < pc.getPreferenceCount(); ++j) {
-                    map.put(pc.getPreference(j), pc);
-                }
-            }
-        }
-        return map;
     }
 
     /**
@@ -64,34 +41,102 @@ class DisabledPreferencesRemover {
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
     void remove(AdminAndGeneralKeys... keyPairs) {
-        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
-        final SharedPreferences adminPreferences = pa.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            final boolean prefAllowed = adminPreferences.getBoolean(agKeys.adminKey, true);
+            boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
 
-            if (!prefAllowed && !adminMode) {
-                Preference pref = pf.findPreference(agKeys.generalKey);
-                PreferenceCategory preferenceCategory = preferencePreferenceCategoryMap.get(pref);
-                if (preferenceCategory != null && pref != null) { // Neither should ever be null
-                    preferenceCategory.removePreference(pref);
-                    Log.d(t, "Removed " + pref.toString());
+            if (!prefAllowed) {
+                Preference preference = pf.findPreference(agKeys.generalKey);
+
+                if (preference == null) {
+                    // preference not found in the current preference fragment, so ignore
+                    continue;
+                }
+
+                PreferenceGroup parent = getParent(pf.getPreferenceScreen(), preference);
+                if (parent == null) {
+                    throw new RuntimeException("Couldn't find preference");
+                }
+
+                parent.removePreference(preference);
+                Timber.d("Removed %s", preference.toString());
+            }
+        }
+    }
+
+    private PreferenceGroup getParent(PreferenceGroup groupToSearchIn, Preference preference) {
+        for (int i = 0; i < groupToSearchIn.getPreferenceCount(); ++i) {
+            Preference child = groupToSearchIn.getPreference(i);
+
+            if (child == preference) {
+                return groupToSearchIn;
+            }
+
+            if (child instanceof PreferenceGroup) {
+                PreferenceGroup childGroup = (PreferenceGroup) child;
+                PreferenceGroup result = getParent(childGroup, preference);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Deletes all empty PreferenceCategory items.
+     */
+    void removeEmptyCategories() {
+        removeEmptyCategories(pf.getPreferenceScreen());
+        removeEmptyCategories(pf.getPreferenceScreen());
+    }
+
+    private void removeEmptyCategories(PreferenceGroup pc) {
+
+        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
+        if (adminMode || pc == null) {
+            return;
+        }
+
+        for (int i = 0; i < pc.getPreferenceCount(); i++) {
+            Preference preference = pc.getPreference(i);
+
+            if (preference instanceof PreferenceGroup) {
+
+                if (!removeEmptyPreference(pc, preference)) {
+                    removeEmptyCategories((PreferenceGroup) preference);
+
+                    // try to remove preference group if it is empty now
+                    removeEmptyPreference(pc, preference);
                 }
             }
         }
     }
 
-    /** Deletes all empty PreferenceCategory items. */
-    void removeEmptyCategories() {
-        final boolean adminMode = pa.getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-        HashSet<PreferenceCategory> uniqueCategories = new
-                HashSet<>(preferencePreferenceCategoryMap.values());
-        for (PreferenceCategory pc : uniqueCategories) {
-            if (pc.getPreferenceCount() == 0 && !adminMode) {
-                pf.getPreferenceScreen().removePreference(pc);
+    private boolean removeEmptyPreference(PreferenceGroup pc, Preference preference) {
+        if (((PreferenceGroup) preference).getPreferenceCount() == 0
+                && hasChildPrefs(preference.getKey())) {
+            pc.removePreference(preference);
+            Timber.d("Removed %s", preference.toString());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether the preferenceGroup actually has any child preferences defined
+     */
+    private boolean hasChildPrefs(String preferenceKey) {
+        String[] preferenceScreensWithNoChildren = {
+                PreferenceKeys.KEY_SPLASH_PATH,
+                PreferenceKeys.KEY_FORM_METADATA
+        };
+
+        for (String pref : preferenceScreensWithNoChildren) {
+            if (pref.equals(preferenceKey)) {
+                return false;
             }
         }
+        return true;
     }
 }

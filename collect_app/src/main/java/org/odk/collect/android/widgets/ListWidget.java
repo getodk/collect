@@ -16,17 +16,14 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -51,6 +48,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * ListWidget handles select-one fields using radio buttons. The radio buttons are aligned
  * horizontally. They are typically meant to be used in a field list, where multiple questions with
@@ -62,29 +61,26 @@ import java.util.List;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-    private static final String t = "ListWidget";
 
-    // Holds the entire question and answers. It is a horizontally aligned linear layout
-    // needed because it is created in the super() constructor via addQuestionText() call.
-    LinearLayout questionLayout;
-
-    List<SelectChoice> mItems; // may take a while to compute
-
+    List<SelectChoice> items; // may take a while to compute
     ArrayList<RadioButton> buttons;
     View center;
+    private TextView label;
+    private TextView missingImage;
+    private ImageView imageView;
 
     public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xPathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
+        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
                 prompt.getAppearanceHint());
-        if (xPathFuncExpr != null) {
-            mItems = ExternalDataUtil.populateExternalChoices(prompt, xPathFuncExpr);
+        if (xpathFuncExpr != null) {
+            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
         } else {
-            mItems = prompt.getSelectChoices();
+            items = prompt.getSelectChoices();
         }
-        buttons = new ArrayList<RadioButton>();
+        buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -94,134 +90,29 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
         }
 
-        if (mItems != null) {
-            for (int i = 0; i < mItems.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                View answerLayout = inflate(context, R.layout.list_widget_item_layout, null);
 
-                r.setId(QuestionWidget.newUniqueId());
-                r.setTag(Integer.valueOf(i));
-                r.setEnabled(!prompt.isReadOnly());
-                r.setFocusable(!prompt.isReadOnly());
+                imageView = (ImageView) answerLayout.findViewById(R.id.image);
+                missingImage = (TextView) answerLayout.findViewById(R.id.missingImage);
+                label = (TextView) answerLayout.findViewById(R.id.label);
+                RadioButton radioButton = (RadioButton) answerLayout.findViewById(R.id.radioButton);
 
-                buttons.add(r);
+                initRadioButton(radioButton, prompt, i);
+                initImageView(prompt, i);
+                initLabel(prompt, i);
 
-                if (mItems.get(i).getValue().equals(s)) {
-                    r.setChecked(true);
-                }
-                r.setOnCheckedChangeListener(this);
+                buttons.add(radioButton);
 
-                String imageURI;
-                if (mItems.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) mItems.get(i)).getImage();
-                } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(mItems.get(i),
-                            FormEntryCaption.TEXT_FORM_IMAGE);
+                if (items.get(i).getValue().equals(s)) {
+                    radioButton.setChecked(true);
                 }
 
-                // build image view (if an image is provided)
-                ImageView mImageView = null;
-                TextView mMissingImage = null;
-
-                final int labelId = QuestionWidget.newUniqueId();
-
-                // Now set up the image view
-                String errorMsg = null;
-                if (imageURI != null) {
-                    try {
-                        String imageFilename =
-                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
-                        final File imageFile = new File(imageFilename);
-                        if (imageFile.exists()) {
-                            Bitmap b = null;
-                            try {
-                                DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-                                int screenWidth = metrics.widthPixels;
-                                int screenHeight = metrics.heightPixels;
-                                b =
-                                        FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
-                            } catch (OutOfMemoryError e) {
-                                errorMsg = "ERROR: " + e.getMessage();
-                            }
-
-                            if (b != null) {
-                                mImageView = new ImageView(getContext());
-                                mImageView.setPadding(2, 2, 2, 2);
-                                mImageView.setAdjustViewBounds(true);
-                                mImageView.setImageBitmap(b);
-                                mImageView.setId(labelId);
-                            } else if (errorMsg == null) {
-                                // An error hasn't been logged and loading the image failed, so it's
-                                // likely
-                                // a bad file.
-                                errorMsg = getContext().getString(R.string.file_invalid, imageFile);
-
-                            }
-                        } else if (errorMsg == null) {
-                            // An error hasn't been logged. We should have an image, but the file
-                            // doesn't
-                            // exist.
-                            errorMsg = getContext().getString(R.string.file_missing, imageFile);
-                        }
-
-                        if (errorMsg != null) {
-                            // errorMsg is only set when an error has occured
-                            Log.e(t, errorMsg);
-                            mMissingImage = new TextView(getContext());
-                            mMissingImage.setText(errorMsg);
-
-                            mMissingImage.setPadding(2, 2, 2, 2);
-                            mMissingImage.setId(labelId);
-                        }
-                    } catch (InvalidReferenceException e) {
-                        Log.e(t, "image invalid reference exception");
-                        e.printStackTrace();
-                    }
-                } else {
-                    // There's no imageURI listed, so just ignore it.
-                }
-
-                // build text label. Don't assign the text to the built in label to he
-                // button because it aligns horizontally, and we want the label on top
-                TextView label = new TextView(getContext());
-                label.setText(prompt.getSelectChoiceText(mItems.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-                label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
-                    label.setVisibility(View.GONE);
+                    label.setVisibility(GONE);
+                    imageView.setVisibility(GONE);
                 }
-
-                // answer layout holds the label text/image on top and the radio button on bottom
-                LinearLayout answer = new LinearLayout(getContext());
-                answer.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams headerParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
-                headerParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-
-                LinearLayout.LayoutParams buttonParams =
-                        new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
-                buttonParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-                if (mImageView != null) {
-                    mImageView.setScaleType(ScaleType.CENTER);
-                    if (!displayLabel) {
-                        mImageView.setVisibility(View.GONE);
-                    }
-                    answer.addView(mImageView, headerParams);
-                } else if (mMissingImage != null) {
-                    answer.addView(mMissingImage, headerParams);
-                } else {
-                    if (displayLabel) {
-                        label.setId(labelId);
-                        answer.addView(label, headerParams);
-                    }
-
-                }
-                answer.addView(r, buttonParams);
-                answer.setPadding(4, 0, 4, 0);
 
                 // Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
@@ -229,19 +120,89 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 LayoutParams.MATCH_PARENT);
                 answerParams.weight = 1;
 
-                buttonLayout.addView(answer, answerParams);
+                buttonLayout.addView(answerLayout, answerParams);
             }
         }
-
-
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.RIGHT_OF, center.getId());
-        addView(buttonLayout, params);
+        addAnswerView(buttonLayout);
     }
 
+    private void initLabel(FormEntryPrompt prompt, int i) {
+        // Don't assign the text to the built in label to he
+        // button because it aligns horizontally, and we want the label on top
+        label.setText(prompt.getSelectChoiceText(items.get(i)));
+        label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+    }
+
+    private void initImageView(FormEntryPrompt prompt, int i) {
+
+        String imageURI = getImageURI(prompt, i);
+
+        // Now set up the image view
+        String errorMsg = null;
+        if (imageURI != null) {
+            try {
+                String imageFilename =
+                        ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                final File imageFile = new File(imageFilename);
+                if (imageFile.exists()) {
+                    Bitmap b = null;
+                    try {
+                        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+                        int screenWidth = metrics.widthPixels;
+                        int screenHeight = metrics.heightPixels;
+                        b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight,
+                                screenWidth);
+                    } catch (OutOfMemoryError e) {
+                        errorMsg = "ERROR: " + e.getMessage();
+                    }
+
+                    if (b != null) {
+                        imageView.setImageBitmap(b);
+                        label.setVisibility(GONE);
+                    } else if (errorMsg == null) {
+                        // An error hasn't been logged and loading the image failed, so it's
+                        // likely
+                        // a bad file.
+                        errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+                    }
+                } else {
+                    // An error hasn't been logged. We should have an image, but the file
+                    // doesn't
+                    // exist.
+                    errorMsg = getContext().getString(R.string.file_missing, imageFile);
+                }
+
+                if (errorMsg != null) {
+                    // errorMsg is only set when an error has occured
+                    missingImage.setText(errorMsg);
+                    missingImage.setVisibility(VISIBLE);
+                    Timber.e(errorMsg);
+                }
+            } catch (InvalidReferenceException e) {
+                Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
+            }
+        } else {
+            // There's no imageURI listed, so just ignore it.
+        }
+
+    }
+
+    private String getImageURI(FormEntryPrompt prompt, int i) {
+        if (items.get(i) instanceof ExternalSelectChoice) {
+            return ((ExternalSelectChoice) items.get(i)).getImage();
+        } else {
+            return prompt.getSpecialFormSelectChoiceText(items.get(i),
+                    FormEntryCaption.TEXT_FORM_IMAGE);
+        }
+    }
+
+    private void initRadioButton(RadioButton radioButton, FormEntryPrompt prompt, int i) {
+        radioButton.setTag(i);
+        radioButton.setEnabled(!prompt.isReadOnly());
+        radioButton.setFocusable(!prompt.isReadOnly());
+        radioButton.setOnCheckedChangeListener(this);
+    }
 
     @Override
     public void clearAnswer() {
@@ -253,18 +214,16 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         }
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         int i = getCheckedId();
         if (i == -1) {
             return null;
         } else {
-            SelectChoice sc = mItems.get(i);
+            SelectChoice sc = items.get(i);
             return new SelectOneData(new Selection(sc));
         }
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -299,7 +258,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                mItems.get((Integer) buttonView.getTag()).getValue(), mPrompt.getIndex());
+                items.get((Integer) buttonView.getTag()).getValue(), formEntryPrompt.getIndex());
     }
 
 

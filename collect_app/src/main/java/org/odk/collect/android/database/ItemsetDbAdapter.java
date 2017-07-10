@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 
@@ -12,13 +11,14 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import timber.log.Timber;
+
 public class ItemsetDbAdapter {
 
     public static final String KEY_ID = "_id";
 
-    private static final String TAG = "ItemsetDbAdapter";
-    private DatabaseHelper mDbHelper;
-    private SQLiteDatabase mDb;
+    private DatabaseHelper dbHelper;
+    private SQLiteDatabase db;
 
     public static final String DATABASE_NAME = "itemsets.db";
     private static final String DATABASE_TABLE = "itemset_";
@@ -51,8 +51,7 @@ public class ItemsetDbAdapter {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
+            Timber.w("Upgrading database from version %d to %d, which will destroy all old data", oldVersion, newVersion);
             // first drop all of our generated itemset tables
             Cursor c = db.query(ITEMSET_TABLE, null, null, null, null, null, null);
             if (c != null) {
@@ -83,13 +82,13 @@ public class ItemsetDbAdapter {
      * @throws SQLException if the database could be neither opened or created
      */
     public ItemsetDbAdapter open() throws SQLException {
-        mDbHelper = new DatabaseHelper();
-        mDb = mDbHelper.getWritableDatabase();
+        dbHelper = new DatabaseHelper();
+        db = dbHelper.getWritableDatabase();
         return this;
     }
 
     public void close() {
-        mDbHelper.close();
+        dbHelper.close();
     }
 
     public boolean createTable(String formHash, String pathHash, String[] columns, String path) {
@@ -113,13 +112,13 @@ public class ItemsetDbAdapter {
         sb.append(");");
 
         String tableCreate = sb.toString();
-        Log.i(TAG, "create string: " + tableCreate);
-        mDb.execSQL(tableCreate);
+        Timber.i("create string: %s", tableCreate);
+        db.execSQL(tableCreate);
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_ITEMSET_HASH, formHash);
         cv.put(KEY_PATH, path);
-        mDb.insert(ITEMSET_TABLE, null, cv);
+        db.insert(ITEMSET_TABLE, null, cv);
 
         return true;
     }
@@ -134,17 +133,17 @@ public class ItemsetDbAdapter {
                 cv.put("\"" + columns[i] + "\"", newRow[i]);
             }
         }
-        mDb.insert(DATABASE_TABLE + tableName, null, cv);
+        db.insert(DATABASE_TABLE + tableName, null, cv);
         return true;
     }
 
     public boolean tableExists(String tableName) {
         // select name from sqlite_master where type = 'table'
         String selection = "type=? and name=?";
-        String selectionArgs[] = {
+        String[] selectionArgs = {
                 "table", DATABASE_TABLE + tableName
         };
-        Cursor c = mDb.query("sqlite_master", null, selection, selectionArgs,
+        Cursor c = db.query("sqlite_master", null, selection, selectionArgs,
                 null, null, null);
         boolean exists = false;
         if (c.getCount() == 1) {
@@ -156,29 +155,28 @@ public class ItemsetDbAdapter {
     }
 
     public void beginTransaction() {
-        mDb.execSQL("BEGIN");
+        db.execSQL("BEGIN");
     }
 
     public void commit() {
-        mDb.execSQL("COMMIT");
+        db.execSQL("COMMIT");
     }
 
     public Cursor query(String hash, String selection, String[] selectionArgs) throws SQLException {
-        Cursor mCursor = mDb.query(true, DATABASE_TABLE + hash, null, selection, selectionArgs,
+        return db.query(true, DATABASE_TABLE + hash, null, selection, selectionArgs,
                 null, null, null, null);
-        return mCursor;
     }
 
     public void dropTable(String pathHash, String path) {
         // drop the table
-        mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
+        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
 
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
         String[] whereArgs = {
                 path
         };
-        mDb.delete(ITEMSET_TABLE, where, whereArgs);
+        db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
     public Cursor getItemsets(String path) {
@@ -186,8 +184,7 @@ public class ItemsetDbAdapter {
         String[] selectionArgs = {
                 path
         };
-        Cursor c = mDb.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
-        return c;
+        return db.query(ITEMSET_TABLE, null, selection, selectionArgs, null, null, null);
     }
 
     public void delete(String path) {
@@ -196,7 +193,7 @@ public class ItemsetDbAdapter {
             if (c.getCount() == 1) {
                 c.moveToFirst();
                 String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
-                mDb.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
+                db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
         }
@@ -205,7 +202,7 @@ public class ItemsetDbAdapter {
         String[] whereArgs = {
                 path
         };
-        mDb.delete(ITEMSET_TABLE, where, whereArgs);
+        db.delete(ITEMSET_TABLE, where, whereArgs);
     }
 
     public static String getMd5FromString(String toEncode) {
@@ -213,14 +210,12 @@ public class ItemsetDbAdapter {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            Log.e("MD5", e.getMessage());
+            Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
         }
         md.update(toEncode.getBytes());
         byte[] digest = md.digest();
         BigInteger bigInt = new BigInteger(1, digest);
-        String hashtext = bigInt.toString(16);
-        return hashtext;
+        return bigInt.toString(16);
     }
 
 }

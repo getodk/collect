@@ -3,7 +3,6 @@ package org.odk.collect.android.spatial;
 import android.content.Context;
 
 import org.odk.collect.android.R;
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
@@ -13,65 +12,63 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
   * are available in new version of osmdroid but not in currently used 4.2
  */
 public class TileSourceFactory {
-    public final OnlineTileSourceBase mUSGSTopo;
-    public final OnlineTileSourceBase mUsgsSat;
-    public final OnlineTileSourceBase mStamenTerrain;
-    public final OnlineTileSourceBase mCartoDbPositron;
-    public final OnlineTileSourceBase mCartoDbDarkMatter;
+    public final OnlineTileSourceBase usgsTopo;
+    public final OnlineTileSourceBase usgsSat;
+    public final OnlineTileSourceBase stamenTerrain;
+    public final OnlineTileSourceBase cartoDbPositron;
+    public final OnlineTileSourceBase cartoDbDarkMatter;
 
     public TileSourceFactory(Context context) {
-        mUSGSTopo = new OnlineTileSourceBase(
+        usgsTopo = new OnlineTileSourceBase(
                 context.getString(R.string.openmap_usgs_topo),
-                ResourceProxy.string.unknown,
                 0, 18, 256, "",
                 new String[] { "http://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/" }) {
             @Override
-            public String getTileURLString(MapTile aTile) {
-                return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
+            public String getTileURLString(MapTile tile) {
+                return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
             }
         };
 
-        mUsgsSat = new OnlineTileSourceBase(
+        usgsSat = new OnlineTileSourceBase(
                 context.getString(R.string.openmap_usgs_sat),
-                ResourceProxy.string.unknown,
                 0, 18, 256, "",
                 new String[]{"http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/"}) {
             @Override
-            public String getTileURLString(MapTile aTile) {
-                return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getY() + "/" + aTile.getX();
+            public String getTileURLString(MapTile tile) {
+                return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
             }
         };
 
-        mStamenTerrain = new XYTileSource(context.getString(R.string.openmap_stamen_terrain),
-                ResourceProxy.string.unknown, 0, 18, 256, ".jpg", new String[] {
+        stamenTerrain = new XYTileSource(context.getString(R.string.openmap_stamen_terrain),
+                0, 18, 256, ".jpg", new String[] {
                 "http://tile.stamen.com/terrain/" });
 
-        mCartoDbPositron = new XYTileSource(context.getString(R.string.openmap_cartodb_positron),
-                ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
+        cartoDbPositron = new XYTileSource(context.getString(R.string.openmap_cartodb_positron),
+                0, 18, 256, ".png", new String[] {
                 "http://1.basemaps.cartocdn.com/light_all/" });
 
-        mCartoDbDarkMatter = new XYTileSource(context.getString(R.string.openmap_cartodb_darkmatter),
-                ResourceProxy.string.unknown, 0, 18, 256, ".png", new String[] {
+        cartoDbDarkMatter = new XYTileSource(context.getString(R.string.openmap_cartodb_darkmatter),
+                0, 18, 256, ".png", new String[] {
                 "http://1.basemaps.cartocdn.com/dark_all/" });
     }
 
     public OnlineTileSourceBase getUSGSTopo() {
-        return mUSGSTopo;
+        return usgsTopo;
     }
 
     public OnlineTileSourceBase getUsgsSat() {
-        return mUsgsSat;
+        return usgsSat;
     }
 
     public OnlineTileSourceBase getStamenTerrain() {
-        return mStamenTerrain;
+        return stamenTerrain;
     }
 
     public OnlineTileSourceBase getCartoDbPositron() {
-        return mCartoDbPositron;
+        return cartoDbPositron;
     }
 
     public OnlineTileSourceBase getCartoDbDarkMatter() {
-        return mCartoDbDarkMatter;
+        return cartoDbDarkMatter;
     }
 }

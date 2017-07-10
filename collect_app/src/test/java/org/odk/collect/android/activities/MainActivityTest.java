@@ -1,6 +1,8 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
@@ -9,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.preferences.AboutPreferencesActivity;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -44,11 +48,61 @@ public class MainActivityTest {
     }
 
     /**
+     * {@link Test} to assert layout of {@link MainMenuActivity} for layout test.
+     */
+    @Test
+    public void layoutTest() throws Exception {
+        //testing layout with layout id
+        assertEquals(R.id.rl, shadowOf(mainMenuActivity).getContentView().getId());
+    }
+
+    /**
      * {@link Test} to assert title of {@link MainMenuActivity} for not null.
      */
     @Test
     public void titleTest() throws Exception {
-        assertEquals(mainMenuActivity.getTitle(), mainMenuActivity.getString(R.string.main_menu));
+        Toolbar toolbar = (Toolbar) mainMenuActivity.findViewById(R.id.toolbar);
+        assertEquals(mainMenuActivity.getString(R.string.main_menu), toolbar.getTitle());
+    }
+
+    /**
+     * {@link Test} to assert Options Menu's functioning.
+     */
+    @Test
+    public void optionsMenuTest() throws Exception {
+        Menu menu = shadowOf(mainMenuActivity).getOptionsMenu();
+
+        assertNotNull(menu);
+        assertNotNull(mainMenuActivity.onCreateOptionsMenu(menu));
+
+        //Test for AboutPreferencesActivity
+        mainMenuActivity.onOptionsItemSelected(menu.getItem(0));
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        ShadowIntent shadowIntent = shadowOf(startedIntent);
+        assertEquals(AboutPreferencesActivity.class.getName(), shadowIntent.getIntentClass().getName());
+
+        //Test for About Menu Title
+        String menuTitle = mainMenuActivity.getResources().getString(R.string.about_preferences);
+        String shadowTitle = menu.getItem(0).getTitle().toString();
+        assertEquals(shadowTitle, menuTitle);
+
+        //Test for PreferencesActivity
+        mainMenuActivity.onOptionsItemSelected(menu.getItem(1));
+        shadowActivity = shadowOf(mainMenuActivity);
+        startedIntent = shadowActivity.getNextStartedActivity();
+        shadowIntent = shadowOf(startedIntent);
+        assertEquals(PreferencesActivity.class.getName(), shadowIntent.getIntentClass().getName());
+
+        //Test for General Settings Menu Title
+        menuTitle = mainMenuActivity.getResources().getString(R.string.general_preferences);
+        shadowTitle = menu.getItem(1).getTitle().toString();
+        assertEquals(shadowTitle, menuTitle);
+
+        //Test for Admin Settings Menu Title
+        menuTitle = mainMenuActivity.getResources().getString(R.string.admin_preferences);
+        shadowTitle = menu.getItem(2).getTitle().toString();
+        assertEquals(shadowTitle, menuTitle);
     }
 
     /**
@@ -63,8 +117,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.enter_data_button), dataButton.getText());
 
         dataButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(FormChooserList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -82,8 +136,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.review_data_button), reviewDataButton.getText());
 
         reviewDataButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(InstanceChooserList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -101,8 +155,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.send_data_button), sendDataButton.getText());
 
         sendDataButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(InstanceUploaderList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -120,8 +174,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.view_sent_forms), viewSentFormButton.getText());
 
         viewSentFormButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(InstanceChooserList.class.getName(),
                 shadowIntent.getIntentClass().getName());
@@ -150,8 +204,8 @@ public class MainActivityTest {
         assertEquals(mainMenuActivity.getString(R.string.manage_files), manageFilesButton.getText());
 
         manageFilesButton.performClick();
-        ShadowActivity mShadowActivity = shadowOf(mainMenuActivity);
-        Intent startedIntent = mShadowActivity.getNextStartedActivity();
+        ShadowActivity shadowActivity = shadowOf(mainMenuActivity);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
         assertEquals(FileManagerTabs.class.getName(),
                 shadowIntent.getIntentClass().getName());

@@ -14,15 +14,14 @@
 
 package org.odk.collect.android.utilities;
 
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
+import timber.log.Timber;
 
 /**
  * Used for logging data to log files that could be retrieved after a field deployment.
@@ -32,7 +31,6 @@ import java.io.UnsupportedEncodingException;
  * @author mitchellsundt@gmail.com
  */
 public class InfoLogger {
-    private static final String t = "InfoLogger";
 
     private static final String LOG_DIRECTORY = "logging";
     private static final String LOG_FILE = "geotrace.log";
@@ -42,7 +40,7 @@ public class InfoLogger {
     }
 
     private static final void geologToLogcat(String msg) {
-        Log.i(t, msg);
+        Timber.i(msg);
     }
 
     @SuppressWarnings("unused")
@@ -60,15 +58,8 @@ public class InfoLogger {
             fo.write(msg.getBytes("UTF-8"));
             fo.flush();
             fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.e(t, "exception: " + e.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            Log.e(t, "exception: " + e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(t, "exception: " + e.toString());
+            Timber.e(e, "Unable to write to log file %s due to %s", log.getAbsolutePath(), e.getMessage());
         }
     }
 }

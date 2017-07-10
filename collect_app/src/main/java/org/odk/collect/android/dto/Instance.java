@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.dto;
 
 /**
@@ -23,89 +24,89 @@ package org.odk.collect.android.dto;
  */
 public class Instance {
 
-    private String mDisplayName;
-    private String mSubmissionUri;
-    private String mCanEditWhenComplete;
-    private String mInstanceFilePath;
-    private String mJrFormId;
-    private String mJrVersion;
-    private String mStatus;
-    private Long mLastStatusChangeDate;
-    private String mDisplaySubtext;
-    private Long mDeletedDate;
+    private String displayName;
+    private String submissionUri;
+    private String canEditWhenComplete;
+    private String instanceFilePath;
+    private String jrFormId;
+    private String jrVersion;
+    private String status;
+    private Long lastStatusChangeDate;
+    private String displaySubtext;
+    private Long deletedDate;
 
     private Instance(Builder builder) {
-        mDisplayName = builder.mDisplayName;
-        mSubmissionUri = builder.mSubmissionUri;
-        mCanEditWhenComplete = builder.mCanEditWhenComplete;
-        mInstanceFilePath = builder.mInstanceFilePath;
-        mJrFormId = builder.mJrFormId;
-        mJrVersion = builder.mJrVersion;
-        mStatus = builder.mStatus;
-        mLastStatusChangeDate = builder.mLastStatusChangeDate;
-        mDisplaySubtext = builder.mDisplaySubtext;
-        mDeletedDate = builder.mDeletedDate;
+        displayName = builder.displayName;
+        submissionUri = builder.submissionUri;
+        canEditWhenComplete = builder.canEditWhenComplete;
+        instanceFilePath = builder.instanceFilePath;
+        jrFormId = builder.jrFormId;
+        jrVersion = builder.jrVersion;
+        status = builder.status;
+        lastStatusChangeDate = builder.lastStatusChangeDate;
+        displaySubtext = builder.displaySubtext;
+        deletedDate = builder.deletedDate;
     }
 
     public static class Builder {
-        private String mDisplayName;
-        private String mSubmissionUri;
-        private String mCanEditWhenComplete;
-        private String mInstanceFilePath;
-        private String mJrFormId;
-        private String mJrVersion;
-        private String mStatus;
-        private Long mLastStatusChangeDate;
-        private String mDisplaySubtext;
-        private Long mDeletedDate;
+        private String displayName;
+        private String submissionUri;
+        private String canEditWhenComplete;
+        private String instanceFilePath;
+        private String jrFormId;
+        private String jrVersion;
+        private String status;
+        private Long lastStatusChangeDate;
+        private String displaySubtext;
+        private Long deletedDate;
 
         public Builder displayName(String displayName) {
-            mDisplayName = displayName;
+            this.displayName = displayName;
             return this;
         }
 
         public Builder submissionUri(String submissionUri) {
-            mSubmissionUri = submissionUri;
+            this.submissionUri = submissionUri;
             return this;
         }
 
         public Builder canEditWhenComplete(String canEditWhenComplete) {
-            mCanEditWhenComplete = canEditWhenComplete;
+            this.canEditWhenComplete = canEditWhenComplete;
             return this;
         }
 
         public Builder instanceFilePath(String instanceFilePath) {
-            mInstanceFilePath = instanceFilePath;
+            this.instanceFilePath = instanceFilePath;
             return this;
         }
 
         public Builder jrFormId(String jrFormId) {
-            mJrFormId = jrFormId;
+            this.jrFormId = jrFormId;
             return this;
         }
 
         public Builder jrVersion(String jrVersion) {
-            mJrVersion = jrVersion;
+            this.jrVersion = jrVersion;
             return this;
         }
 
         public Builder status(String status) {
-            mStatus = status;
+            this.status = status;
             return this;
         }
 
         public Builder lastStatusChangeDate(Long lastStatusChangeDate) {
-            mLastStatusChangeDate = lastStatusChangeDate;
+            this.lastStatusChangeDate = lastStatusChangeDate;
             return this;
         }
 
         public Builder displaySubtext(String displaySubtext) {
-            mDisplaySubtext = displaySubtext;
+            this.displaySubtext = displaySubtext;
             return this;
         }
 
         public Builder deletedDate(Long deletedDate) {
-            mDeletedDate = deletedDate;
+            this.deletedDate = deletedDate;
             return this;
         }
 
@@ -115,42 +116,42 @@ public class Instance {
     }
 
     public String getDisplayName() {
-        return mDisplayName;
+        return displayName;
     }
 
     public String getSubmissionUri() {
-        return mSubmissionUri;
+        return submissionUri;
     }
 
     public String getCanEditWhenComplete() {
-        return mCanEditWhenComplete;
+        return canEditWhenComplete;
     }
 
     public String getInstanceFilePath() {
-        return mInstanceFilePath;
+        return instanceFilePath;
     }
 
     public String getJrFormId() {
-        return mJrFormId;
+        return jrFormId;
     }
 
     public String getJrVersion() {
-        return mJrVersion;
+        return jrVersion;
     }
 
     public String getStatus() {
-        return mStatus;
+        return status;
     }
 
     public Long getLastStatusChangeDate() {
-        return mLastStatusChangeDate;
+        return lastStatusChangeDate;
     }
 
     public String getDisplaySubtext() {
-        return mDisplaySubtext;
+        return displaySubtext;
     }
 
     public Long getDeletedDate() {
-        return mDeletedDate;
+        return deletedDate;
     }
 }

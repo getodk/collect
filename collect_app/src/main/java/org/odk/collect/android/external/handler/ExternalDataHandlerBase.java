@@ -21,6 +21,8 @@ package org.odk.collect.android.external.handler;
 import org.odk.collect.android.external.ExternalDataHandler;
 import org.odk.collect.android.external.ExternalDataManager;
 
+import java.util.Locale;
+
 /**
  * Author: Meletis Margaritis
  * Date: 16/05/13
@@ -49,7 +51,7 @@ public abstract class ExternalDataHandlerBase implements ExternalDataHandler {
      * @return the normalized data-set name.
      */
     protected String normalize(String dataSetName) {
-        dataSetName = dataSetName.toLowerCase();
+        dataSetName = dataSetName.toLowerCase(Locale.US);
         if (dataSetName.endsWith(".csv")) {
             dataSetName = dataSetName.substring(0, dataSetName.lastIndexOf(".csv"));
         }

@@ -46,10 +46,7 @@ public class VersionHidingCursorAdapter extends SimpleCursorAdapter {
                     int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
                 if (!columnName.equals(VersionHidingCursorAdapter.this.versionColumnName)) {
-                    if (originalBinder != null) {
-                        return originalBinder.setViewValue(view, cursor, columnIndex);
-                    }
-                    return false;
+                    return originalBinder != null && originalBinder.setViewValue(view, cursor, columnIndex);
                 } else {
                     String version = cursor.getString(columnIndex);
                     TextView v = (TextView) view;

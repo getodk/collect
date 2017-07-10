@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android;
 
 import android.content.ContentValues;
@@ -31,7 +32,7 @@ import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ResetUtility;
-import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
+import org.osmdroid.config.Configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -70,8 +72,8 @@ public class ResetAppStateTestCase {
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        assertEquals(null, settings.getString(PreferenceKeys.KEY_USERNAME, null));
-        assertEquals(null, settings.getString(PreferenceKeys.KEY_PASSWORD, null));
+        assertNull(settings.getString(PreferenceKeys.KEY_USERNAME, null));
+        assertNull(settings.getString(PreferenceKeys.KEY_PASSWORD, null));
         assertEquals(true, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());
@@ -114,7 +116,7 @@ public class ResetAppStateTestCase {
     public void resetOSMDroidTest() throws IOException {
         saveTestOSMDroidFiles();
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_OSM_DROID));
-        assertFolderEmpty(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath());
+        assertFolderEmpty(Configuration.getInstance().getOsmdroidTileCache().getPath());
     }
 
     private void resetAppState(List<Integer> resetActions) {
@@ -210,9 +212,9 @@ public class ResetAppStateTestCase {
     }
 
     private void saveTestOSMDroidFiles() throws IOException {
-        assertTrue(new File(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath() + "/testFile1").mkdirs());
-        assertTrue(new File(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath() + "/testFile2").mkdirs());
-        assertTrue(new File(OpenStreetMapTileProviderConstants.TILE_PATH_BASE.getPath() + "/testFile3").mkdirs());
+        assertTrue(new File(Configuration.getInstance().getOsmdroidTileCache().getPath() + "/testFile1").mkdirs());
+        assertTrue(new File(Configuration.getInstance().getOsmdroidTileCache().getPath() + "/testFile2").mkdirs());
+        assertTrue(new File(Configuration.getInstance().getOsmdroidTileCache().getPath() + "/testFile3").mkdirs());
     }
 
     private int getFormsCount() {

@@ -42,13 +42,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import timber.log.Timber;
+
 public class SplashScreenActivity extends Activity {
 
     private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;
 
-    private int mImageMaxWidth;
-    private AlertDialog mAlertDialog;
+    private int imageMaxWidth;
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -64,14 +66,14 @@ public class SplashScreenActivity extends Activity {
         }
 
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
-        mImageMaxWidth = displayMetrics.widthPixels;
+        imageMaxWidth = displayMetrics.widthPixels;
         // this splash screen should be a blank slate
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
 
         // get the shared preferences object
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Editor editor = mSharedPreferences.edit();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sharedPreferences.edit();
 
         // get the package info object with version number
         PackageInfo packageInfo = null;
@@ -80,18 +82,18 @@ public class SplashScreenActivity extends Activity {
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Timber.e(e, "Unable to get package info");
         }
 
-        boolean firstRun = mSharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
+        boolean firstRun = sharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
-                mSharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
+                sharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
         String splashPath =
-                mSharedPreferences.getString(PreferenceKeys.KEY_SPLASH_PATH,
+                sharedPreferences.getString(PreferenceKeys.KEY_SPLASH_PATH,
                         getString(R.string.default_splash_path));
 
         // if you've increased version code, then update the version number and set firstRun to true
-        if (mSharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
+        if (sharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)
                 < packageInfo.versionCode) {
             editor.putLong(PreferenceKeys.KEY_LAST_VERSION, packageInfo.versionCode);
             editor.apply();
@@ -133,15 +135,15 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                Timber.e(e, "Unable to close file input stream");
             }
 
             int scale = 1;
-            if (o.outHeight > mImageMaxWidth || o.outWidth > mImageMaxWidth) {
+            if (o.outHeight > imageMaxWidth || o.outWidth > imageMaxWidth) {
                 scale =
                         (int) Math.pow(
                                 2,
-                                (int) Math.round(Math.log(mImageMaxWidth
+                                (int) Math.round(Math.log(imageMaxWidth
                                         / (double) Math.max(o.outHeight, o.outWidth))
                                         / Math.log(0.5)));
             }
@@ -155,9 +157,10 @@ public class SplashScreenActivity extends Activity {
                 fis.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                Timber.e(e, "Unable to close file input stream");
             }
         } catch (FileNotFoundException e) {
+            Timber.e(e);
         }
         return b;
     }
@@ -190,7 +193,7 @@ public class SplashScreenActivity extends Activity {
                         count += 100;
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 } finally {
                     endSplashScreen();
                 }
@@ -202,9 +205,9 @@ public class SplashScreenActivity extends Activity {
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertDialog.setMessage(errorMsg);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -219,9 +222,9 @@ public class SplashScreenActivity extends Activity {
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.show();
     }
 
     @Override

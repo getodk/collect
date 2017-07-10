@@ -100,8 +100,6 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                     Collect.getInstance().getString(R.string.ext_search_wrong_arguments_error));
         }
 
-        String dataSetName = XPathFuncExpr.toString(args[0]);
-
         String searchType = null;
 
         String queriedColumnsParam = null;
@@ -133,7 +131,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
         }
 
         // SCTO-545
-        dataSetName = normalize(dataSetName);
+        String dataSetName = normalize(XPathFuncExpr.toString(args[0]));
 
         Cursor c = null;
         try {

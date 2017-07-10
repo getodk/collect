@@ -1,19 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="accept_location">ثبت مکان</string>
   <string name="add_another">اضافه کردن گروه</string>
-  <string name="add_more">بیشتر</string>
   <string name="cancel">انصراف</string>
   <string name="cancel_loading_form">انصراف</string>
   <string name="cancel_location">انصراف</string>
-  <string name="cannot_edit_completed_form">این فایل کامل شده است و شما نمیتوانید در آن تغییرات بیاورید و ممکن هست به صورت رمزگذاری شده باشد</string>
   <string name="capture_audio">ثبت صدا</string>
   <string name="capture_image">عکس گرفتن</string>
   <string name="capture_osm">اجرای ابزار نقشه</string>
   <string name="capture_video">ثبت ویدیو</string>
   <string name="change_language">تغییر زبان</string>
   <string name="change_password">پسورد</string>
-  <string name="change_protocol_settings_default">تنظیمات محیط کار</string>
   <string name="change_username">اسم کاربری</string>
   <string name="clear_answer">حذف پاسخ</string>
   <string name="clear_answer_ask">آیا پاسخ حذف شود؟</string>

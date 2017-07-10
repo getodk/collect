@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -16,7 +16,6 @@ package org.odk.collect.android.utilities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.xform.parse.XFormParser;
@@ -35,10 +34,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+
+import timber.log.Timber;
 
 /**
  * Static methods used for common file operations.
@@ -46,17 +49,19 @@ import java.util.HashMap;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FileUtils {
-    private final static String t = "FileUtils";
-
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
-
     public static final String FORMID = "formid";
     public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
 
+    public static String getMimeType(String fileUrl)
+            throws java.io.IOException {
+        FileNameMap fileNameMap = URLConnection.getFileNameMap();
+        return fileNameMap.getContentTypeFor(fileUrl);
+    }
 
     public static boolean createFolder(String path) {
         boolean made = true;
@@ -67,7 +72,6 @@ public class FileUtils {
         return made;
     }
 
-
     public static byte[] getFileAsBytes(File file) {
         byte[] bytes = null;
         InputStream is = null;
@@ -77,7 +81,7 @@ public class FileUtils {
             // Get the size of the file
             long length = file.length();
             if (length > Integer.MAX_VALUE) {
-                Log.e(t, "File " + file.getName() + "is too large");
+                Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
@@ -93,8 +97,7 @@ public class FileUtils {
                     offset += read;
                 }
             } catch (IOException e) {
-                Log.e(t, "Cannot read " + file.getName());
-                e.printStackTrace();
+                Timber.e(e, "Cannot read file %s", file.getName());
                 return null;
             }
 
@@ -103,7 +106,7 @@ public class FileUtils {
                 try {
                     throw new IOException("Could not completely read file " + file.getName());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                     return null;
                 }
             }
@@ -111,8 +114,7 @@ public class FileUtils {
             return bytes;
 
         } catch (FileNotFoundException e) {
-            Log.e(t, "Cannot find " + file.getName());
-            e.printStackTrace();
+            Timber.e(e, "Cannot find file %s", file.getName());
             return null;
 
         } finally {
@@ -120,13 +122,11 @@ public class FileUtils {
             try {
                 is.close();
             } catch (IOException e) {
-                Log.e(t, "Cannot close input stream for " + file.getName());
-                e.printStackTrace();
+                Timber.e(e, "Cannot close input stream for file %s", file.getName());
                 return null;
             }
         }
     }
-
 
     public static String getMd5Hash(File file) {
         try {
@@ -137,14 +137,14 @@ public class FileUtils {
             byte[] chunk = new byte[chunkSize];
 
             // Get the size of the file
-            long lLength = file.length();
+            long llength = file.length();
 
-            if (lLength > Integer.MAX_VALUE) {
-                Log.e(t, "File " + file.getName() + "is too large");
+            if (llength > Integer.MAX_VALUE) {
+                Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
-            int length = (int) lLength;
+            int length = (int) llength;
 
             InputStream is = null;
             is = new FileInputStream(file);
@@ -170,18 +170,16 @@ public class FileUtils {
             is.close();
             return md5;
 
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("MD5", e.getMessage());
-            return null;
-
-        } catch (FileNotFoundException e) {
-            Log.e("No Cache File", e.getMessage());
-            return null;
-        } catch (IOException e) {
-            Log.e("Problem reading file", e.getMessage());
+        } catch (NoSuchAlgorithmException | IOException e) {
+            if (e instanceof NoSuchAlgorithmException) {
+                Timber.e(e);
+            } else if (e instanceof FileNotFoundException) {
+                Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            } else {
+                Timber.e(e, "Problem reading file %s", file.getAbsolutePath());
+            }
             return null;
         }
-
     }
 
 
@@ -205,10 +203,8 @@ public class FileUtils {
         options.inSampleSize = scale;
         Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
         if (b != null) {
-            Log.i(t,
-                    "Screen is " + screenHeight + "x" + screenWidth
-                            + ".  Image has been scaled down by "
-                            + scale + " to " + b.getHeight() + "x" + b.getWidth());
+            Timber.i("Screen is %dx%d.  Image has been scaled down by %d to %dx%d",
+                    screenHeight, screenWidth, scale, b.getHeight(), b.getWidth());
         }
         return b;
     }
@@ -218,7 +214,7 @@ public class FileUtils {
      * more on a precise scaling to maximize use of space on the screen
      */
     public static Bitmap getBitmapAccuratelyScaledToDisplay(File f, int screenHeight,
-            int screenWidth) {
+                                                            int screenWidth) {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
@@ -241,10 +237,8 @@ public class FileUtils {
         bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
 
         if (bitmap != null) {
-            Log.i(t,
-                    "Screen is " + screenHeight + "x" + screenWidth
-                            + ".  Image has been scaled down by "
-                            + scale + " to " + bitmap.getHeight() + "x" + bitmap.getWidth());
+            Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
+                    screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
         }
 
         return bitmap;
@@ -257,17 +251,17 @@ public class FileUtils {
             if (errorMessage != null) {
                 try {
                     Thread.sleep(500);
-                    Log.e(t, "Retrying to copy the file after 500ms: "
-                            + sourceFile.getAbsolutePath());
+                    Timber.e("Retrying to copy the file after 500ms: %s",
+                            sourceFile.getAbsolutePath());
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
-                    Log.e(t, e.getMessage(), e);
+                    Timber.e(e);
                 }
             }
             return errorMessage;
         } else {
             String msg = "Source file does not exist: " + sourceFile.getAbsolutePath();
-            Log.e(t, msg);
+            Timber.e(msg);
             return msg;
         }
     }
@@ -285,14 +279,14 @@ public class FileUtils {
             dst.transferFrom(src, 0, src.size());
             dst.force(true);
             return null;
-        } catch (FileNotFoundException e) {
-            Log.e(t, "FileNotFoundException while copying file", e);
-            return e.getMessage();
-        } catch (IOException e) {
-            Log.e(t, "IOException while copying file", e);
-            return e.getMessage();
         } catch (Exception e) {
-            Log.e(t, "Exception while copying file", e);
+            if (e instanceof  FileNotFoundException) {
+                Timber.e(e, "FileNotFoundException while copying file");
+            } else if (e instanceof  IOException) {
+                Timber.e(e, "IOException while copying file");
+            } else {
+                Timber.e(e, "Exception while copying file");
+            }
             return e.getMessage();
         } finally {
             IOUtils.closeQuietly(fileInputStream);
@@ -308,6 +302,7 @@ public class FileUtils {
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
+            Timber.e(e1);
             throw new IllegalStateException(e1);
         }
 
@@ -315,7 +310,7 @@ public class FileUtils {
         try {
             isr = new InputStreamReader(is, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            Log.w(t, "UTF 8 encoding unavailable, trying default encoding");
+            Timber.w(uee, "Trying default encoding as UTF 8 encoding unavailable");
             isr = new InputStreamReader(is);
         }
 
@@ -325,14 +320,13 @@ public class FileUtils {
             try {
                 doc = XFormParser.getXMLDocument(isr);
             } catch (IOException e) {
-                e.printStackTrace();
+                Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
                 throw new IllegalStateException("Unable to parse XML document", e);
             } finally {
                 try {
                     isr.close();
                 } catch (IOException e) {
-                    Log.w(t, xmlFile.getAbsolutePath() + " Error closing form reader");
-                    e.printStackTrace();
+                    Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
                 }
             }
 
@@ -368,8 +362,8 @@ public class FileUtils {
                 String uiVersion = cur.getAttributeValue(null, "uiVersion");
                 if (uiVersion != null) {
                     // pre-OpenRosa 1.0 variant of spec
-                    Log.e(t, "Obsolete use of uiVersion -- IGNORED -- only using version: "
-                            + version);
+                    Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
+                            version);
                 }
 
                 fields.put(FORMID, (id == null) ? xmlns : id);
@@ -387,7 +381,7 @@ public class FileUtils {
                         (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
                                 ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
-                Log.i(t, xmlFile.getAbsolutePath() + " does not have a submission element");
+                Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
                 // and that's totally fine.
             }
 
@@ -414,10 +408,10 @@ public class FileUtils {
         if (file != null && file.exists()) {
             // remove garbage
             if (!file.delete()) {
-                Log.w(t, file.getAbsolutePath() + " will be deleted upon exit.");
+                Timber.w("%s will be deleted upon exit.", file.getAbsolutePath());
                 file.deleteOnExit();
             } else {
-                Log.w(t, file.getAbsolutePath() + " has been deleted.");
+                Timber.w("%s has been deleted.", file.getAbsolutePath());
             }
         }
     }
@@ -432,8 +426,7 @@ public class FileUtils {
      */
     public static void checkMediaPath(File mediaDir) {
         if (mediaDir.exists() && mediaDir.isFile()) {
-            Log.e(t,
-                    "The media folder is already there and it is a FILE!! We will need to delete "
+            Timber.e("The media folder is already there and it is a FILE!! We will need to delete "
                             + "it and create a folder instead");
             boolean deleted = mediaDir.delete();
             if (!deleted) {

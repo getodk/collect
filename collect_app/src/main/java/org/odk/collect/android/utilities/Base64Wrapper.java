@@ -42,22 +42,16 @@ public class Base64Wrapper {
             Object[] argList = new Object[]{ba, FLAGS};
             Object o = m.invoke(null, argList);
             byte[] outArray = (byte[]) o;
-            String s = new String(outArray, "UTF-8");
-            return s;
+            return new String(outArray, "UTF-8");
         } catch (SecurityException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         }
     }
@@ -70,16 +64,12 @@ public class Base64Wrapper {
             Object[] argList = new Object[]{base64String, FLAGS};
             o = m.invoke(null, argList);
         } catch (SecurityException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
             throw new IllegalArgumentException(e.toString());
         }
         return (byte[]) o;

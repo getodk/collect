@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -40,12 +39,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  *
  */
 public class FormsProvider extends ContentProvider {
 
-    private static final String t = "FormsProvider";
 
     private static final String DATABASE_NAME = "forms.db";
     private static final int DATABASE_VERSION = 4;
@@ -99,11 +99,9 @@ public class FormsProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
             if (oldVersion < 2) {
-                Log.w(t, "Upgrading database from version " + oldVersion
-                        + " to " + newVersion
-                        + ", which will destroy all old data");
+                Timber.w("Upgrading database from version %d to %d"
+                        + ", which will destroy all old data", oldVersion, newVersion);
                 db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
                 onCreate(db);
                 return;
@@ -226,29 +224,28 @@ public class FormsProvider extends ContentProvider {
                         + TEMP_FORMS_TABLE_NAME);
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
 
-                Log.w(t, "Successfully upgraded database from version "
-                        + initialVersion + " to " + newVersion
-                        + ", without destroying all the old data");
+                Timber.w("Successfully upgraded database from version %d to %d"
+                        + ", without destroying all the old data", oldVersion, newVersion);
             }
         }
     }
 
-    private DatabaseHelper mDbHelper;
+    private DatabaseHelper databaseHelper;
 
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            mDbHelper = null;
+            databaseHelper = null;
             return null;
         }
 
-        if (mDbHelper != null) {
-            return mDbHelper;
+        if (databaseHelper != null) {
+            return databaseHelper;
         }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
-        return mDbHelper;
+        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        return databaseHelper;
     }
 
     @Override
@@ -336,11 +333,11 @@ public class FormsProvider extends ContentProvider {
         Long now = Long.valueOf(System.currentTimeMillis());
 
         // Make sure that the necessary fields are all set
-        if (values.containsKey(FormsColumns.DATE) == false) {
+        if (!values.containsKey(FormsColumns.DATE)) {
             values.put(FormsColumns.DATE, now);
         }
 
-        if (values.containsKey(FormsColumns.DISPLAY_SUBTEXT) == false) {
+        if (!values.containsKey(FormsColumns.DISPLAY_SUBTEXT)) {
             Date today = new Date();
             String ts = new SimpleDateFormat(getContext().getString(
                     R.string.added_on_date_at_time), Locale.getDefault())
@@ -348,7 +345,7 @@ public class FormsProvider extends ContentProvider {
             values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
         }
 
-        if (values.containsKey(FormsColumns.DISPLAY_NAME) == false) {
+        if (!values.containsKey(FormsColumns.DISPLAY_NAME)) {
             values.put(FormsColumns.DISPLAY_NAME, form.getName());
         }
 
@@ -359,12 +356,12 @@ public class FormsProvider extends ContentProvider {
         String md5 = FileUtils.getMd5Hash(form);
         values.put(FormsColumns.MD5_HASH, md5);
 
-        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH) == false) {
+        if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
             String cachePath = Collect.CACHE_PATH + File.separator + md5
                     + ".formdef";
             values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
         }
-        if (values.containsKey(FormsColumns.FORM_MEDIA_PATH) == false) {
+        if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
             String pathNoExtension = filePath.substring(0,
                     filePath.lastIndexOf("."));
             String mediaPath = pathNoExtension + "-media";
@@ -420,22 +417,20 @@ public class FormsProvider extends ContentProvider {
                 int video = MediaUtils
                         .deleteVideoInFolderFromMediaProvider(file);
 
-                Log.i(t, "removed from content providers: " + images
-                        + " image files, " + audio + " audio files," + " and "
-                        + video + " video files.");
+                Timber.i("removed from content providers: %d image files, %d audio files, and %d"
+                        + " video files.", images, audio, video);
 
                 // delete all the containing files
                 File[] files = file.listFiles();
                 for (File f : files) {
                     // should make this recursive if we get worried about
                     // the media directory containing directories
-                    Log.i(t,
-                            "attempting to delete file: " + f.getAbsolutePath());
+                    Timber.i("attempting to delete file: %s", f.getAbsolutePath());
                     f.delete();
                 }
             }
             file.delete();
-            Log.i(t, "attempting to delete file: " + file.getAbsolutePath());
+            Timber.i("attempting to delete file: %s", file.getAbsolutePath());
         }
     }
 
@@ -592,7 +587,7 @@ public class FormsProvider extends ContentProvider {
                 }
 
                 // Make sure that the necessary fields are all set
-                if (values.containsKey(FormsColumns.DATE) == true) {
+                if (values.containsKey(FormsColumns.DATE)) {
                     Date today = new Date();
                     String ts = new SimpleDateFormat(getContext().getString(
                             R.string.added_on_date_at_time), Locale.getDefault())
@@ -661,7 +656,7 @@ public class FormsProvider extends ContentProvider {
                         }
 
                         // Make sure that the necessary fields are all set
-                        if (values.containsKey(FormsColumns.DATE) == true) {
+                        if (values.containsKey(FormsColumns.DATE)) {
                             Date today = new Date();
                             String ts = new SimpleDateFormat(getContext()
                                     .getString(R.string.added_on_date_at_time),
@@ -678,7 +673,7 @@ public class FormsProvider extends ContentProvider {
                                         + (!TextUtils.isEmpty(where) ? " AND ("
                                         + where + ')' : ""), whereArgs);
                     } else {
-                        Log.e(t, "Attempting to update row that does not exist");
+                        Timber.e("Attempting to update row that does not exist");
                     }
                 } finally {
                     if (update != null) {

@@ -15,6 +15,7 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -55,12 +56,12 @@ public class OsmMBTileProvider extends MapTileProviderArray {
                 file,
                 (OsmMBTileSource) getTileSource());
 
-        MapTileModuleProviderBase[] pTileProviderArray;
-        pTileProviderArray = new MapTileModuleProviderBase[]{moduleProvider};
+        MapTileModuleProviderBase[] tileProviderArray;
+        tileProviderArray = new MapTileModuleProviderBase[]{moduleProvider};
 
         // Add the module provider to the array of providers; mTileProviderList
         // is defined by the superclass.
-        Collections.addAll(mTileProviderList, pTileProviderArray);
+        Collections.addAll(mTileProviderList, tileProviderArray);
     }
 
     // TODO: implement public Drawable getMapTile(final MapTile pTile) {}

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -14,19 +13,29 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:id="@+id/rl" >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- Toolbar -->
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    <LinearLayout
-     android:id="@+id/questionholder"
-        android:orientation="horizontal"
+    <include
+        layout="@layout/toolbar_action_bar_shadow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/buttonholder">
-        </LinearLayout>
+        android:layout_below="@id/toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/questionholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonholder"
+        android:layout_below="@id/toolbar"
+        android:orientation="horizontal"/>
 
     <LinearLayout
         android:id="@+id/buttonholder"
@@ -35,11 +44,11 @@ the License.
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:paddingBottom="0dip"
-        android:paddingStart="4dip"
-        android:paddingLeft="4dip"
         android:paddingEnd="4dip"
+        android:paddingLeft="4dip"
         android:paddingRight="4dip"
-        android:paddingTop="4dip" >
+        android:paddingStart="4dip"
+        android:paddingTop="4dip">
 
         <ImageButton
             android:id="@+id/form_back_button"
@@ -48,7 +57,7 @@ the License.
             android:layout_weight="1"
             android:contentDescription="@string/form_backward"
             android:src="@drawable/ic_menu_backward"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
 
         <ImageButton
             android:id="@+id/form_forward_button"
@@ -57,7 +66,7 @@ the License.
             android:layout_weight="1"
             android:contentDescription="@string/form_forward"
             android:src="@drawable/ic_menu_forward"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </RelativeLayout>

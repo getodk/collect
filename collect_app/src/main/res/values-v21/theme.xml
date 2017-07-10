@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Collect" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
+        <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
+        <item name="android:scrollbarSize">1.75mm</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="colorAccent">@color/tintColor</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:panelBackground">@android:color/white</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+    </style>
+</resources>

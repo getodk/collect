@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 University of Washington
+ * Copyright (C) 2017 University of Washington
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -19,8 +19,6 @@ import android.text.Html;
 import java.util.regex.MatchResult;
 
 public class TextUtils {
-    private static final String t = "TextUtils";
-
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
         public String matchFound(MatchResult match) {
             int level = match.group(1).length();
@@ -66,8 +64,9 @@ public class TextUtils {
         }
     };
 
-    private static String markdownToHtml(String text) {
+    protected static String markdownToHtml(String text) {
 
+        text = text.replaceAll("<([^a-zA-Z/])", "&lt;$1");
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js
 
         // span - replaced &lt; and &gt; with <>
@@ -97,7 +96,5 @@ public class TextUtils {
         }
 
         return Html.fromHtml(markdownToHtml(text));
-
     }
-
 } 

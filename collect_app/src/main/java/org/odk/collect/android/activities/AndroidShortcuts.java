@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -23,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
@@ -36,10 +36,10 @@ import java.util.ArrayList;
  * @author ctsims
  * @author carlhartung (modified for ODK)
  */
-public class AndroidShortcuts extends Activity {
+public class AndroidShortcuts extends AppCompatActivity {
 
-    private Uri[] mCommands;
-    private String[] mNames;
+    private Uri[] commands;
+    private String[] names;
 
 
     @Override
@@ -87,12 +87,12 @@ public class AndroidShortcuts extends Activity {
             }
         }
 
-        mNames = names.toArray(new String[0]);
-        mCommands = commands.toArray(new Uri[0]);
+        this.names = names.toArray(new String[0]);
+        this.commands = commands.toArray(new Uri[0]);
 
-        builder.setItems(this.mNames, new DialogInterface.OnClickListener() {
+        builder.setItems(this.names, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                returnShortcut(mNames[item], mCommands[item]);
+                returnShortcut(AndroidShortcuts.this.names[item], AndroidShortcuts.this.commands[item]);
             }
         });
 

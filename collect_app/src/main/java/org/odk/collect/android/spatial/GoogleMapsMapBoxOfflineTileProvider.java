@@ -37,13 +37,13 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     // Instance Variables
     // ------------------------------------------------------------------------
 
-    private int mMinimumZoom = Integer.MIN_VALUE;
+    private int minimumZoom = Integer.MIN_VALUE;
 
-    private int mMaximumZoom = Integer.MAX_VALUE;
+    private int maximumZoom = Integer.MAX_VALUE;
 
-    private LatLngBounds mBounds;
+    private LatLngBounds bounds;
 
-    private SQLiteDatabase mDatabase;
+    private SQLiteDatabase database;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -55,7 +55,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
     public GoogleMapsMapBoxOfflineTileProvider(String pathToFile) {
         int flags = SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
-        this.mDatabase = SQLiteDatabase.openDatabase(pathToFile, null, flags);
+        this.database = SQLiteDatabase.openDatabase(pathToFile, null, flags);
         this.calculateZoomConstraints();
         this.calculateBounds();
     }
@@ -76,7 +76,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
             String[] values = {
                     String.valueOf(row), String.valueOf(x), String.valueOf(z)
             };
-            Cursor c = this.mDatabase.query("tiles", projection, predicate, values, null, null,
+            Cursor c = this.database.query("tiles", projection, predicate, values, null, null,
                     null);
             if (c != null) {
                 c.moveToFirst();
@@ -94,9 +94,9 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     // ------------------------------------------------------------------------
     @Override
     public void close() {
-        if (this.mDatabase != null) {
-            this.mDatabase.close();
-            this.mDatabase = null;
+        if (this.database != null) {
+            this.database.close();
+            this.database = null;
         }
     }
 
@@ -106,20 +106,20 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
 
     public int getMinimumZoom() {
-        return this.mMinimumZoom;
+        return this.minimumZoom;
     }
 
     public int getMaximumZoom() {
-        return this.mMaximumZoom;
+        return this.maximumZoom;
     }
 
 
     public LatLngBounds getBounds() {
-        return this.mBounds;
+        return this.bounds;
     }
 
     public boolean isZoomLevelAvailable(int zoom) {
-        return (zoom >= this.mMinimumZoom) && (zoom <= this.mMaximumZoom);
+        return (zoom >= this.minimumZoom) && (zoom <= this.maximumZoom);
     }
 
     // ------------------------------------------------------------------------
@@ -128,33 +128,24 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
 
     private void calculateZoomConstraints() {
         if (this.isDatabaseAvailable()) {
-            String[] projection = new String[]{
-                    "value"
-            };
 
-            String[] minArgs = new String[]{
-                    "minzoom"
-            };
+            String[] projection = new String[]{"value"};
+            String[] minArgs = new String[]{"minzoom"};
 
-            String[] maxArgs = new String[]{
-                    "maxzoom"
-            };
-
-            Cursor c;
-
-            c = this.mDatabase.query("metadata", projection, "name = ?", minArgs, null, null, null);
+            Cursor c = this.database.query("metadata", projection, "name = ?", minArgs, null, null, null);
 
             c.moveToFirst();
             if (!c.isAfterLast()) {
-                this.mMinimumZoom = c.getInt(0);
+                this.minimumZoom = c.getInt(0);
             }
             c.close();
 
-            c = this.mDatabase.query("metadata", projection, "name = ?", maxArgs, null, null, null);
+            String[] maxArgs = new String[]{"maxzoom"};
+            c = this.database.query("metadata", projection, "name = ?", maxArgs, null, null, null);
 
             c.moveToFirst();
             if (!c.isAfterLast()) {
-                this.mMaximumZoom = c.getInt(0);
+                this.maximumZoom = c.getInt(0);
             }
             c.close();
         }
@@ -169,7 +160,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
             String[] subArgs = new String[]{
                     "bounds"
             };
-            Cursor c = this.mDatabase.query("metadata", projection, "name = ?", subArgs, null, null,
+            Cursor c = this.database.query("metadata", projection, "name = ?", subArgs, null, null,
                     null);
             c.moveToFirst();
             if (!c.isAfterLast()) {
@@ -183,14 +174,14 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
                 LatLng ne = new LatLng(n, e);
                 LatLng sw = new LatLng(s, w);
 
-                this.mBounds = new LatLngBounds(sw, ne);
+                this.bounds = new LatLngBounds(sw, ne);
             }
             c.close();
         }
     }
 
     private boolean isDatabaseAvailable() {
-        return (this.mDatabase != null) && (this.mDatabase.isOpen());
+        return (this.database != null) && (this.database.isOpen());
     }
 
 }

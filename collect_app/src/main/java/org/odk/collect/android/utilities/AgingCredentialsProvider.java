@@ -132,8 +132,7 @@ public class AgingCredentialsProvider implements CredentialsProvider {
             clear();
         }
         nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
-        Credentials c = matchCredentials(this.credMap, authscope);
-        return c;
+        return matchCredentials(this.credMap, authscope);
     }
 
     public void clear() {

@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.external;
 
-import android.util.Log;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
@@ -38,6 +37,8 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Author: Meletis Margaritis
  * Date: 17/05/13
@@ -53,17 +54,17 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                 || questionDef.getControlType() == Constants.CONTROL_SELECT_MULTI)) {
             boolean containsSearchExpression = false;
 
-            XPathFuncExpr xPathExpression = null;
+            XPathFuncExpr xpathExpression = null;
             try {
-                xPathExpression = ExternalDataUtil.getSearchXPathExpression(
+                xpathExpression = ExternalDataUtil.getSearchXPathExpression(
                         questionDef.getAppearanceAttr());
             } catch (Exception e) {
-                Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage(), e);
+                Timber.e(e);
                 // there is a search expression, but has syntax errors
                 containsSearchExpression = true;
             }
 
-            if (xPathExpression != null || containsSearchExpression) {
+            if (xpathExpression != null || containsSearchExpression) {
                 // that means that we have dynamic selects
 
                 // read the static choices from the options sheet
@@ -91,6 +92,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                         return new SelectOneData(selection);
                                     }
                                 }
+                                break;
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
                                 // we should search in a potential comma-separated string of

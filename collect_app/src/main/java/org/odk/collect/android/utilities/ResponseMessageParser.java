@@ -12,6 +12,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import timber.log.Timber;
+
 /**
  * Created by Jon Nordling on 2/21/17.
  * The purpose of this class is to handle the XML parsing
@@ -20,7 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class ResponseMessageParser {
     private HttpEntity httpEntity;
-    private final String MESSAGE_XML_TAG = "message";
+    private static final String MESSAGE_XML_TAG = "message";
     public Boolean isValid = false;
     public String messageResponse;
 
@@ -44,17 +46,18 @@ public class ResponseMessageParser {
         return this.messageResponse;
     }
 
-
     public String parseXMLMessage() {
         String message = null;
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder;
+        DocumentBuilder builder;
         try {
-            dBuilder = dbFactory.newDocumentBuilder();
+            builder = dbFactory.newDocumentBuilder();
             Document doc = null;
-            try {
-                String httpEntityString = EntityUtils.toString(httpEntity);
-                doc = dBuilder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
+
+            String httpEntityString = EntityUtils.toString(httpEntity);
+
+            if (httpEntityString.contains("OpenRosaResponse")) {
+                doc = builder.parse(new ByteArrayInputStream(httpEntityString.getBytes()));
                 doc.getDocumentElement().normalize();
 
                 if (doc.getElementsByTagName(MESSAGE_XML_TAG).item(0) != null) {
@@ -62,23 +65,20 @@ public class ResponseMessageParser {
                 } else {
                     isValid = false;
                 }
-                return message;
-
-            } catch (SAXException e) {
-                e.printStackTrace();
-                isValid = false;
-            } catch (IOException e) {
-                e.printStackTrace();
-                isValid = false;
             }
 
             return message;
 
+        } catch (SAXException | IOException e) {
+            Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
+            isValid = false;
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            Timber.e(e, "Error parsing XML message due to %s ", e.getMessage());
             isValid = false;
         }
 
         return message;
     }
+
+
 }

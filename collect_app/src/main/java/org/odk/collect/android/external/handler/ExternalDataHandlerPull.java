@@ -20,7 +20,6 @@ package org.odk.collect.android.external.handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
@@ -30,6 +29,8 @@ import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Author: Meletis Margaritis
@@ -67,8 +68,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
         if (args.length != 4) {
-            Log.e(ExternalDataUtil.LOGGER_NAME,
-                    "4 arguments are needed to evaluate the " + HANDLER_NAME + " function");
+            Timber.e("4 arguments are needed to evaluate the %s function", HANDLER_NAME);
             return "";
         }
 
@@ -100,13 +100,12 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                 c.moveToFirst();
                 return ExternalDataUtil.nullSafe(c.getString(0));
             } else {
-                Log.e(ExternalDataUtil.LOGGER_NAME,
-                        "Could not find a value in " + queriedColumn + " where the column "
-                                + referenceColumn + " has the value " + referenceValue);
+                Timber.e("Could not find a value in %s where the column %s has the value %s",
+                        queriedColumn, referenceColumn, referenceValue);
                 return "";
             }
         } catch (Exception e) {
-            Log.e(ExternalDataUtil.LOGGER_NAME, e.getMessage());
+            Timber.e(e);
             return "";
         } finally {
             if (c != null) {

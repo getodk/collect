@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -27,8 +26,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,22 +47,27 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import timber.log.Timber;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -71,35 +76,30 @@ import java.util.Map.Entry;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends Activity {
-    private static final String t = "MainMenuActivity";
+public class MainMenuActivity extends AppCompatActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
-    // menu options
-    private static final int MENU_ABOUT = Menu.FIRST;
-    private static final int MENU_PREFERENCES = Menu.FIRST + 1;
-    private static final int MENU_ADMIN = Menu.FIRST + 2;
-    private static boolean EXIT = true;
+    private static final boolean EXIT = true;
     // buttons
-    private Button mEnterDataButton;
-    private Button mManageFilesButton;
-    private Button mSendDataButton;
-    private Button mViewSentFormsButton;
-    private Button mReviewDataButton;
-    private Button mGetFormsButton;
-    private View mReviewSpacer;
-    private View mGetFormsSpacer;
-    private AlertDialog mAlertDialog;
-    private SharedPreferences mAdminPreferences;
-    private int mCompletedCount;
-    private int mSavedCount;
-    private int mViewSentCount;
-    private Cursor mFinalizedCursor;
-    private Cursor mSavedCursor;
-    private Cursor mViewSentCursor;
-    private IncomingHandler mHandler = new IncomingHandler(this);
-    private MyContentObserver mContentObserver = new MyContentObserver();
+    private Button enterDataButton;
+    private Button manageFilesButton;
+    private Button sendDataButton;
+    private Button viewSentFormsButton;
+    private Button reviewDataButton;
+    private Button getFormsButton;
+    private View reviewSpacer;
+    private View getFormsSpacer;
+    private AlertDialog alertDialog;
+    private SharedPreferences adminPreferences;
+    private int completedCount;
+    private int savedCount;
+    private int viewSentCount;
+    private Cursor finalizedCursor;
+    private Cursor savedCursor;
+    private Cursor viewSentCursor;
+    private IncomingHandler handler = new IncomingHandler(this);
+    private MyContentObserver contentObserver = new MyContentObserver();
 
     // private static boolean DO_NOT_EXIT = false;
 
@@ -107,11 +107,12 @@ public class MainMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        initToolbar();
 
         // enter data button. expects a result.
-        mEnterDataButton = (Button) findViewById(R.id.enter_data);
-        mEnterDataButton.setText(getString(R.string.enter_data_button));
-        mEnterDataButton.setOnClickListener(new OnClickListener() {
+        enterDataButton = (Button) findViewById(R.id.enter_data);
+        enterDataButton.setText(getString(R.string.enter_data_button));
+        enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -123,9 +124,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // review data button. expects a result.
-        mReviewDataButton = (Button) findViewById(R.id.review_data);
-        mReviewDataButton.setText(getString(R.string.review_data_button));
-        mReviewDataButton.setOnClickListener(new OnClickListener() {
+        reviewDataButton = (Button) findViewById(R.id.review_data);
+        reviewDataButton.setText(getString(R.string.review_data_button));
+        reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -138,9 +139,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // send data button. expects a result.
-        mSendDataButton = (Button) findViewById(R.id.send_data);
-        mSendDataButton.setText(getString(R.string.send_data_button));
-        mSendDataButton.setOnClickListener(new OnClickListener() {
+        sendDataButton = (Button) findViewById(R.id.send_data);
+        sendDataButton.setText(getString(R.string.send_data_button));
+        sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -152,8 +153,8 @@ public class MainMenuActivity extends Activity {
         });
 
         //View sent forms
-        mViewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
-        mViewSentFormsButton.setOnClickListener(new OnClickListener() {
+        viewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this,
@@ -166,9 +167,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // manage forms button. no result expected.
-        mGetFormsButton = (Button) findViewById(R.id.get_forms);
-        mGetFormsButton.setText(getString(R.string.get_forms));
-        mGetFormsButton.setOnClickListener(new OnClickListener() {
+        getFormsButton = (Button) findViewById(R.id.get_forms);
+        getFormsButton.setText(getString(R.string.get_forms));
+        getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -179,8 +180,13 @@ public class MainMenuActivity extends Activity {
                         PreferenceKeys.KEY_PROTOCOL, getString(R.string.protocol_odk_default));
                 Intent i = null;
                 if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
-                    i = new Intent(getApplicationContext(),
-                            GoogleDriveActivity.class);
+                    if (PlayServicesUtil.isGooglePlayServicesAvailable(MainMenuActivity.this)) {
+                        i = new Intent(getApplicationContext(),
+                                GoogleDriveActivity.class);
+                    } else {
+                        PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(MainMenuActivity.this);
+                        return;
+                    }
                 } else {
                     i = new Intent(getApplicationContext(),
                             FormDownloadList.class);
@@ -191,9 +197,9 @@ public class MainMenuActivity extends Activity {
         });
 
         // manage forms button. no result expected.
-        mManageFilesButton = (Button) findViewById(R.id.manage_forms);
-        mManageFilesButton.setText(getString(R.string.manage_files));
-        mManageFilesButton.setOnClickListener(new OnClickListener() {
+        manageFilesButton = (Button) findViewById(R.id.manage_forms);
+        manageFilesButton.setText(getString(R.string.manage_files));
+        manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
@@ -204,11 +210,9 @@ public class MainMenuActivity extends Activity {
             }
         });
 
-        setTitle(getString(R.string.main_menu));
-
         // must be at the beginning of any activity that can be called from an
         // external intent
-        Log.i(t, "Starting up, creating directories");
+        Timber.i("Starting up, creating directories");
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
@@ -224,7 +228,23 @@ public class MainMenuActivity extends Activity {
         }
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
-        if (f.exists()) {
+        File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
+        // Give JSON file preference
+        if (j.exists()) {
+            SharedPreferencesUtils sharedPrefs = new SharedPreferencesUtils();
+            boolean success = sharedPrefs.loadSharedPreferencesFromJSONFile(j);
+            if (success) {
+                ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
+                j.delete();
+
+                // Delete settings file to prevent overwrite of settings from JSON file on next startup
+                if (f.exists()) {
+                    f.delete();
+                }
+            } else {
+                ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
+            }
+        } else if (f.exists()) {
             boolean success = loadSharedPreferencesFromFile(f);
             if (success) {
                 ToastUtils.showLongToast(R.string.settings_successfully_loaded_file_notification);
@@ -234,57 +254,63 @@ public class MainMenuActivity extends Activity {
             }
         }
 
-        mReviewSpacer = findViewById(R.id.review_spacer);
-        mGetFormsSpacer = findViewById(R.id.get_forms_spacer);
+        reviewSpacer = findViewById(R.id.review_spacer);
+        getFormsSpacer = findViewById(R.id.get_forms_spacer);
 
-        mAdminPreferences = this.getSharedPreferences(
+        adminPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         InstancesDao instancesDao = new InstancesDao();
 
         // count for finalized instances
         try {
-            mFinalizedCursor = instancesDao.getFinalizedInstancesCursor();
+            finalizedCursor = instancesDao.getFinalizedInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
 
-        if (mFinalizedCursor != null) {
-            startManagingCursor(mFinalizedCursor);
+        if (finalizedCursor != null) {
+            startManagingCursor(finalizedCursor);
         }
-        mCompletedCount = mFinalizedCursor != null ? mFinalizedCursor.getCount() : 0;
+        completedCount = finalizedCursor != null ? finalizedCursor.getCount() : 0;
         getContentResolver().registerContentObserver(InstanceColumns.CONTENT_URI, true,
-                mContentObserver);
-//		mFinalizedCursor.registerContentObserver(mContentObserver);
+                contentObserver);
+        // finalizedCursor.registerContentObserver(contentObserver);
 
         // count for saved instances
         try {
-            mSavedCursor = instancesDao.getUnsentInstancesCursor();
+            savedCursor = instancesDao.getUnsentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
 
-        if (mSavedCursor != null) {
-            startManagingCursor(mSavedCursor);
+        if (savedCursor != null) {
+            startManagingCursor(savedCursor);
         }
-        mSavedCount = mSavedCursor != null ? mSavedCursor.getCount() : 0;
+        savedCount = savedCursor != null ? savedCursor.getCount() : 0;
 
         //count for view sent form
         try {
-            mViewSentCursor = instancesDao.getSentInstancesCursor();
+            viewSentCursor = instancesDao.getSentInstancesCursor();
         } catch (Exception e) {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
-        if (mViewSentCursor != null) {
-            startManagingCursor(mViewSentCursor);
+        if (viewSentCursor != null) {
+            startManagingCursor(viewSentCursor);
         }
-        mViewSentCount = mViewSentCursor != null ? mViewSentCursor.getCount() : 0;
+        viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
 
         updateButtons();
         setupGoogleAnalytics();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setTitle(getString(R.string.main_menu));
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -296,72 +322,72 @@ public class MainMenuActivity extends Activity {
         boolean edit = sharedPreferences.getBoolean(
                 AdminKeys.KEY_EDIT_SAVED, true);
         if (!edit) {
-            if (mReviewDataButton != null) {
-                mReviewDataButton.setVisibility(View.GONE);
+            if (reviewDataButton != null) {
+                reviewDataButton.setVisibility(View.GONE);
             }
-            if (mReviewSpacer != null) {
-                mReviewSpacer.setVisibility(View.GONE);
+            if (reviewSpacer != null) {
+                reviewSpacer.setVisibility(View.GONE);
             }
         } else {
-            if (mReviewDataButton != null) {
-                mReviewDataButton.setVisibility(View.VISIBLE);
+            if (reviewDataButton != null) {
+                reviewDataButton.setVisibility(View.VISIBLE);
             }
-            if (mReviewSpacer != null) {
-                mReviewSpacer.setVisibility(View.VISIBLE);
+            if (reviewSpacer != null) {
+                reviewSpacer.setVisibility(View.VISIBLE);
             }
         }
 
         boolean send = sharedPreferences.getBoolean(
                 AdminKeys.KEY_SEND_FINALIZED, true);
         if (!send) {
-            if (mSendDataButton != null) {
-                mSendDataButton.setVisibility(View.GONE);
+            if (sendDataButton != null) {
+                sendDataButton.setVisibility(View.GONE);
             }
         } else {
-            if (mSendDataButton != null) {
-                mSendDataButton.setVisibility(View.VISIBLE);
+            if (sendDataButton != null) {
+                sendDataButton.setVisibility(View.VISIBLE);
             }
         }
 
-        boolean view_sent = sharedPreferences.getBoolean(
+        boolean viewSent = sharedPreferences.getBoolean(
                 AdminKeys.KEY_VIEW_SENT, true);
-        if (!view_sent) {
-            if (mViewSentFormsButton != null) {
-                mViewSentFormsButton.setVisibility(View.GONE);
+        if (!viewSent) {
+            if (viewSentFormsButton != null) {
+                viewSentFormsButton.setVisibility(View.GONE);
             }
         } else {
-            if (mViewSentFormsButton != null) {
-                mViewSentFormsButton.setVisibility(View.VISIBLE);
+            if (viewSentFormsButton != null) {
+                viewSentFormsButton.setVisibility(View.VISIBLE);
             }
         }
 
-        boolean get_blank = sharedPreferences.getBoolean(
+        boolean getBlank = sharedPreferences.getBoolean(
                 AdminKeys.KEY_GET_BLANK, true);
-        if (!get_blank) {
-            if (mGetFormsButton != null) {
-                mGetFormsButton.setVisibility(View.GONE);
+        if (!getBlank) {
+            if (getFormsButton != null) {
+                getFormsButton.setVisibility(View.GONE);
             }
-            if (mGetFormsSpacer != null) {
-                mGetFormsSpacer.setVisibility(View.GONE);
+            if (getFormsSpacer != null) {
+                getFormsSpacer.setVisibility(View.GONE);
             }
         } else {
-            if (mGetFormsButton != null) {
-                mGetFormsButton.setVisibility(View.VISIBLE);
+            if (getFormsButton != null) {
+                getFormsButton.setVisibility(View.VISIBLE);
             }
-            if (mGetFormsSpacer != null) {
-                mGetFormsSpacer.setVisibility(View.VISIBLE);
+            if (getFormsSpacer != null) {
+                getFormsSpacer.setVisibility(View.VISIBLE);
             }
         }
 
-        boolean delete_saved = sharedPreferences.getBoolean(
+        boolean deleteSaved = sharedPreferences.getBoolean(
                 AdminKeys.KEY_DELETE_SAVED, true);
-        if (!delete_saved) {
-            if (mManageFilesButton != null) {
-                mManageFilesButton.setVisibility(View.GONE);
+        if (!deleteSaved) {
+            if (manageFilesButton != null) {
+                manageFilesButton.setVisibility(View.GONE);
             }
         } else {
-            if (mManageFilesButton != null) {
-                mManageFilesButton.setVisibility(View.VISIBLE);
+            if (manageFilesButton != null) {
+                manageFilesButton.setVisibility(View.VISIBLE);
             }
         }
 
@@ -373,8 +399,8 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
     }
 
@@ -396,24 +422,14 @@ public class MainMenuActivity extends Activity {
                 .logAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
 
-        menu.add(0, MENU_ABOUT, 0, R.string.about_preferences).setShowAsAction(
-                MenuItem.SHOW_AS_ACTION_NEVER);
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu
-                .add(0, MENU_ADMIN, 0, R.string.admin_preferences)
-                .setIcon(R.drawable.ic_menu_login)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_ABOUT:
+            case R.id.menu_about:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
@@ -421,7 +437,7 @@ public class MainMenuActivity extends Activity {
                 Intent aboutIntent = new Intent(this, AboutPreferencesActivity.class);
                 startActivity(aboutIntent);
                 return true;
-            case MENU_PREFERENCES:
+            case R.id.menu_general_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logAction(this, "onOptionsItemSelected",
@@ -429,10 +445,10 @@ public class MainMenuActivity extends Activity {
                 Intent ig = new Intent(this, PreferencesActivity.class);
                 startActivity(ig);
                 return true;
-            case MENU_ADMIN:
+            case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-                String pw = mAdminPreferences.getString(
+                String pw = adminPreferences.getString(
                         AdminKeys.KEY_ADMIN_PW, "");
                 if ("".equalsIgnoreCase(pw)) {
                     Intent i = new Intent(getApplicationContext(),
@@ -451,9 +467,9 @@ public class MainMenuActivity extends Activity {
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger()
                 .logAction(this, "createErrorDialog", "show");
-        mAlertDialog = new AlertDialog.Builder(this).create();
-        mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        mAlertDialog.setMessage(errorMsg);
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+        alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -470,9 +486,9 @@ public class MainMenuActivity extends Activity {
                 }
             }
         };
-        mAlertDialog.setCancelable(false);
-        mAlertDialog.setButton(getString(R.string.ok), errorListener);
-        mAlertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.show();
     }
 
     @Override
@@ -504,7 +520,7 @@ public class MainMenuActivity extends Activity {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
                                 String value = input.getText().toString();
-                                String pw = mAdminPreferences.getString(
+                                String pw = adminPreferences.getString(
                                         AdminKeys.KEY_ADMIN_PW, "");
                                 if (pw.compareTo(value) == 0) {
                                     Intent i = new Intent(getApplicationContext(),
@@ -554,52 +570,49 @@ public class MainMenuActivity extends Activity {
     }
 
     private void updateButtons() {
-        if (mFinalizedCursor != null && !mFinalizedCursor.isClosed()) {
-            mFinalizedCursor.requery();
-            mCompletedCount = mFinalizedCursor.getCount();
-            if (mCompletedCount > 0) {
-                mSendDataButton.setText(
-                        getString(R.string.send_data_button, String.valueOf(mCompletedCount)));
+        if (finalizedCursor != null && !finalizedCursor.isClosed()) {
+            finalizedCursor.requery();
+            completedCount = finalizedCursor.getCount();
+            if (completedCount > 0) {
+                sendDataButton.setText(
+                        getString(R.string.send_data_button, String.valueOf(completedCount)));
             } else {
-                mSendDataButton.setText(getString(R.string.send_data));
+                sendDataButton.setText(getString(R.string.send_data));
             }
         } else {
-            mSendDataButton.setText(getString(R.string.send_data));
-            Log.w(t,
-                    "Cannot update \"Send Finalized\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+            sendDataButton.setText(getString(R.string.send_data));
+            Timber.w("Cannot update \"Send Finalized\" button label since the database is closed. "
+                    + "Perhaps the app is running in the background?");
         }
 
-        if (mSavedCursor != null && !mSavedCursor.isClosed()) {
-            mSavedCursor.requery();
-            mSavedCount = mSavedCursor.getCount();
-            if (mSavedCount > 0) {
-                mReviewDataButton.setText(getString(R.string.review_data_button,
-                        String.valueOf(mSavedCount)));
+        if (savedCursor != null && !savedCursor.isClosed()) {
+            savedCursor.requery();
+            savedCount = savedCursor.getCount();
+            if (savedCount > 0) {
+                reviewDataButton.setText(getString(R.string.review_data_button,
+                        String.valueOf(savedCount)));
             } else {
-                mReviewDataButton.setText(getString(R.string.review_data));
+                reviewDataButton.setText(getString(R.string.review_data));
             }
         } else {
-            mReviewDataButton.setText(getString(R.string.review_data));
-            Log.w(t,
-                    "Cannot update \"Edit Form\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+            reviewDataButton.setText(getString(R.string.review_data));
+            Timber.w("Cannot update \"Edit Form\" button label since the database is closed. "
+                    + "Perhaps the app is running in the background?");
         }
 
-        if (mViewSentCursor != null && !mViewSentCursor.isClosed()) {
-            mViewSentCursor.requery();
-            mViewSentCount = mViewSentCursor.getCount();
-            if (mViewSentCount > 0) {
-                mViewSentFormsButton.setText(
-                        getString(R.string.view_sent_forms_button, String.valueOf(mViewSentCount)));
+        if (viewSentCursor != null && !viewSentCursor.isClosed()) {
+            viewSentCursor.requery();
+            viewSentCount = viewSentCursor.getCount();
+            if (viewSentCount > 0) {
+                viewSentFormsButton.setText(
+                        getString(R.string.view_sent_forms_button, String.valueOf(viewSentCount)));
             } else {
-                mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
+                viewSentFormsButton.setText(getString(R.string.view_sent_forms));
             }
         } else {
-            mViewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Log.w(t,
-                    "Cannot update \"View Sent\" button label since the database is closed. "
-                            + "Perhaps the app is running in the background?");
+            viewSentFormsButton.setText(getString(R.string.view_sent_forms));
+            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
+                    + "Perhaps the app is running in the background?");
         }
     }
 
@@ -614,23 +627,27 @@ public class MainMenuActivity extends Activity {
             prefEdit.clear();
             // first object is preferences
             Map<String, ?> entries = (Map<String, ?>) input.readObject();
+
+            AutoSendPreferenceMigrator.migrate(entries);
+
             for (Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    prefEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    prefEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    prefEdit.putFloat(key, ((Float) v).floatValue());
+                    prefEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    prefEdit.putInt(key, ((Integer) v).intValue());
+                    prefEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    prefEdit.putLong(key, ((Long) v).longValue());
+                    prefEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     prefEdit.putString(key, ((String) v));
                 }
             }
             prefEdit.apply();
+            AuthDialogUtility.setWebCredentialsFromPreferences(this);
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,
@@ -643,13 +660,13 @@ public class MainMenuActivity extends Activity {
                 String key = entry.getKey();
 
                 if (v instanceof Boolean) {
-                    adminEdit.putBoolean(key, ((Boolean) v).booleanValue());
+                    adminEdit.putBoolean(key, (Boolean) v);
                 } else if (v instanceof Float) {
-                    adminEdit.putFloat(key, ((Float) v).floatValue());
+                    adminEdit.putFloat(key, (Float) v);
                 } else if (v instanceof Integer) {
-                    adminEdit.putInt(key, ((Integer) v).intValue());
+                    adminEdit.putInt(key, (Integer) v);
                 } else if (v instanceof Long) {
-                    adminEdit.putLong(key, ((Long) v).longValue());
+                    adminEdit.putLong(key, (Long) v);
                 } else if (v instanceof String) {
                     adminEdit.putString(key, ((String) v));
                 }
@@ -657,19 +674,15 @@ public class MainMenuActivity extends Activity {
             adminEdit.apply();
 
             res = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } finally {
             try {
                 if (input != null) {
                     input.close();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
             }
         }
         return res;
@@ -679,15 +692,15 @@ public class MainMenuActivity extends Activity {
      * Used to prevent memory leaks
      */
     static class IncomingHandler extends Handler {
-        private final WeakReference<MainMenuActivity> mTarget;
+        private final WeakReference<MainMenuActivity> target;
 
         IncomingHandler(MainMenuActivity target) {
-            mTarget = new WeakReference<MainMenuActivity>(target);
+            this.target = new WeakReference<MainMenuActivity>(target);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MainMenuActivity target = mTarget.get();
+            MainMenuActivity target = this.target.get();
             if (target != null) {
                 target.updateButtons();
             }
@@ -706,7 +719,7 @@ public class MainMenuActivity extends Activity {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            mHandler.sendEmptyMessage(0);
+            handler.sendEmptyMessage(0);
         }
     }
 

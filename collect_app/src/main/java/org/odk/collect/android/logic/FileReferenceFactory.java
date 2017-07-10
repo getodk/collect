@@ -24,7 +24,7 @@ public class FileReferenceFactory extends PrefixedRootFactory {
 
 
     @Override
-    protected Reference factory(String terminal, String URI) {
+    protected Reference factory(String terminal, String uri) {
         return new FileReference(localRoot, terminal);
     }
 

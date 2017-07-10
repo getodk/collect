@@ -15,16 +15,14 @@
 /**
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+
 package org.odk.collect.android.spatial;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.ResourceProxy.string;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.BitmapTileSourceBase;
 
@@ -32,17 +30,18 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 
+import timber.log.Timber;
+
 public class OsmMBTileSource extends BitmapTileSourceBase {
 
     // Log log log log ...
-//    private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
-    private static final String t = "MBTileSource";
+    // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);
     // Database related fields
-    public final static String TABLE_TILES = "tiles";
-    public final static String COL_TILES_ZOOM_LEVEL = "zoom_level";
-    public final static String COL_TILES_TILE_COLUMN = "tile_column";
-    public final static String COL_TILES_TILE_ROW = "tile_row";
-    public final static String COL_TILES_TILE_DATA = "tile_data";
+    public static final String TABLE_TILES = "tiles";
+    public static final String COL_TILES_ZOOM_LEVEL = "zoom_level";
+    public static final String COL_TILES_TILE_COLUMN = "tile_column";
+    public static final String COL_TILES_TILE_ROW = "tile_row";
+    public static final String COL_TILES_TILE_DATA = "tile_data";
 
     protected SQLiteDatabase database;
     protected File archive;
@@ -52,25 +51,17 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
     public static final int maxZoom = 15;
     public static final int tileSizePixels = 256;
 
-    // Required for the superclass
-    public static final string resourceId = ResourceProxy.string.offline_mode;
-
     /**
      * The reason this constructor is protected is because all parameters,
      * except file should be determined from the archive file. Therefore a
      * factory method is necessary.
-     *
-     * @param minZoom
-     * @param maxZoom
-     * @param tileSizePixels
-     * @param file
      */
     protected OsmMBTileSource(int minZoom,
-            int maxZoom,
-            int tileSizePixels,
-            File file,
-            SQLiteDatabase db) {
-        super("MBTiles", resourceId, minZoom, maxZoom, tileSizePixels, ".png");
+                              int maxZoom,
+                              int tileSizePixels,
+                              File file,
+                              SQLiteDatabase db) {
+        super("MBTiles", minZoom, maxZoom, tileSizePixels, ".png");
 
         archive = file;
         database = db;
@@ -78,50 +69,41 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
 
     /**
      * Creates a new MBTileSource from file.
-     *
+     * <p>
      * Parameters minZoom, maxZoom en tileSizePixels are obtained from the
      * database. If they cannot be obtained from the DB, the default values as
      * defined by this class are used.
-     *
-     * @param file
-     * @return
      */
     public static OsmMBTileSource createFromFile(File file) {
-        SQLiteDatabase db;
         int flags = SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READONLY;
-
-        int value;
-        int minZoomLevel;
-        int maxZoomLevel;
         int tileSize = tileSizePixels;
-        InputStream is = null;
 
         // Open the database
-        db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
-
-        // Get the minimum zoomlevel from the MBTiles file
-        value = getInt(db, "SELECT MIN(zoom_level) FROM tiles;");
-        minZoomLevel = value > -1 ? value : minZoom;
-
-        // Get the maximum zoomlevel from the MBTiles file
-        value = getInt(db, "SELECT MAX(zoom_level) FROM tiles;");
-        maxZoomLevel = value > -1 ? value : maxZoom;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
 
         // Get the tile size
-        Cursor cursor = db.rawQuery("SELECT tile_data FROM images LIMIT 0,1",
+        Cursor cursor = db.rawQuery("SELECT tile_data FROM tiles LIMIT 0,1",
                 new String[]{});
 
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
-            is = new ByteArrayInputStream(cursor.getBlob(0));
+            InputStream is = new ByteArrayInputStream(cursor.getBlob(0));
 
             Bitmap bitmap = BitmapFactory.decodeStream(is);
-            tileSize = bitmap.getHeight();
-            Log.w(t, String.format("Found a tile size of %d", tileSize));
+            if (bitmap != null) {
+                tileSize = bitmap.getHeight();
+            }
+            Timber.w("Found a tile size of %d", tileSize);
         }
-
         cursor.close();
-        // db.close();
+
+        // Get the minimum zoomlevel from the MBTiles file
+        int value = getInt(db, "SELECT MIN(zoom_level) FROM tiles;");
+        int minZoomLevel = value > -1 ? value : minZoom;
+
+        // Get the maximum zoomlevel from the MBTiles file
+        value = getInt(db, "SELECT MAX(zoom_level) FROM tiles;");
+        int maxZoomLevel = value > -1 ? value : maxZoom;
 
         return new OsmMBTileSource(minZoomLevel, maxZoomLevel, tileSize, file, db);
     }
@@ -133,21 +115,21 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
             value = cursor.getInt(0);
-            Log.e(t, String.format("Found a minimum zoomlevel of %d", value));
+            Timber.e("Found a minimum zoomlevel of %d", value);
         }
 
         cursor.close();
         return value;
     }
 
-    public InputStream getInputStream(MapTile pTile) {
+    public InputStream getInputStream(MapTile mapTile) {
 
         try {
             InputStream ret = null;
             final String[] tile = {COL_TILES_TILE_DATA};
-            final String[] xyz = {Integer.toString(pTile.getX()),
-                    Double.toString(Math.pow(2, pTile.getZoomLevel()) - pTile.getY() - 1),
-                    Integer.toString(pTile.getZoomLevel())};
+            final String[] xyz = {Integer.toString(mapTile.getX()),
+                    Double.toString(Math.pow(2, mapTile.getZoomLevel()) - mapTile.getY() - 1),
+                    Integer.toString(mapTile.getZoomLevel())};
 
             final Cursor cur = database.query(TABLE_TILES,
                     tile,
@@ -169,11 +151,8 @@ public class OsmMBTileSource extends BitmapTileSourceBase {
             }
 
         } catch (final Throwable e) {
-            Log.w(t, "Error getting db stream: " + pTile, e);
+            Timber.w(e, "Error getting db stream: %s", mapTile);
         }
-
         return null;
-
     }
-
 }

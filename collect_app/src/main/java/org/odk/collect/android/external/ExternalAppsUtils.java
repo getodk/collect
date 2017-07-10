@@ -117,8 +117,8 @@ public class ExternalAppsUtils {
                     } else if (paramEntryValue.startsWith("/")) {
                         // treat this is an xpath
                         XPathPathExpr pathExpr = XPathReference.getPathExpr(paramEntryValue);
-                        XPathNodeset xPathNodeset = pathExpr.eval(formInstance, evaluationContext);
-                        result = XPathFuncExpr.unpack(xPathNodeset);
+                        XPathNodeset xpathNodeset = pathExpr.eval(formInstance, evaluationContext);
+                        result = XPathFuncExpr.unpack(xpathNodeset);
                     } else if (paramEntryValue.equals("instanceProviderID()")) {
                         // instanceProviderID returns -1 if the current instance has not been
                         // saved to disk already
@@ -140,9 +140,9 @@ public class ExternalAppsUtils {
                         result = instanceProviderID;
                     } else {
                         // treat this is a function
-                        XPathExpression xPathExpression = XPathParseTool.parseXPath(
+                        XPathExpression xpathExpression = XPathParseTool.parseXPath(
                                 paramEntryValue);
-                        result = xPathExpression.eval(formInstance, evaluationContext);
+                        result = xpathExpression.eval(formInstance, evaluationContext);
                     }
                     if (result != null && result instanceof Serializable) {
                         intent.putExtra(paramEntry.getKey(), (Serializable) result);

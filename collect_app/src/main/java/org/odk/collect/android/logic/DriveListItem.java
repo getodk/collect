@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.logic;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.api.client.util.DateTime;
+
+import java.util.Locale;
 
 public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
     private String name;
@@ -84,7 +87,7 @@ public class DriveListItem implements Comparable<DriveListItem>, Parcelable {
 
     public int compareTo(DriveListItem o) {
         if (this.name != null) {
-            return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
+            return this.name.toLowerCase(Locale.US).compareTo(o.getName().toLowerCase(Locale.US));
         } else {
             throw new IllegalArgumentException();
         }

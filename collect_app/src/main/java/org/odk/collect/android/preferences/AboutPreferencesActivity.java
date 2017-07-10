@@ -19,14 +19,15 @@ package org.odk.collect.android.preferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import org.odk.collect.android.R;
-
 public class AboutPreferencesActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new AboutPreferencesFragment()).commit();
-        setTitle(getString(R.string.about_preferences));
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new AboutPreferencesFragment())
+                .commit();
     }
 }

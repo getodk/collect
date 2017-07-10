@@ -17,7 +17,6 @@ package org.odk.collect.android.tasks;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
@@ -33,6 +32,8 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task
  * a
@@ -43,13 +44,12 @@ import java.util.HashMap;
  * @author carlhartung
  */
 public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String, FormDetails>> {
-    private static final String t = "DownloadFormsTask";
 
     // used to store error message if one occurs
     public static final String DL_ERROR_MSG = "dlerrormessage";
     public static final String DL_AUTH_REQUIRED = "dlauthrequired";
 
-    private FormListDownloaderListener mStateListener;
+    private FormListDownloaderListener stateListener;
 
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
@@ -102,7 +102,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             Element xformsElement = result.doc.getRootElement();
             if (!xformsElement.getName().equals("xforms")) {
                 String error = "root element is not <xforms> : " + xformsElement.getName();
-                Log.e(t, "Parsing OpenRosa reply -- " + error);
+                Timber.e("Parsing OpenRosa reply -- %s", error);
                 formList.put(
                         DL_ERROR_MSG,
                         new FormDetails(Collect.getInstance().getString(
@@ -112,15 +112,15 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             String namespace = xformsElement.getNamespace();
             if (!isXformsListNamespacedElement(xformsElement)) {
                 String error = "root element namespace is incorrect:" + namespace;
-                Log.e(t, "Parsing OpenRosa reply -- " + error);
+                Timber.e("Parsing OpenRosa reply -- %s", error);
                 formList.put(
                         DL_ERROR_MSG,
                         new FormDetails(Collect.getInstance().getString(
                                 R.string.parse_openrosa_formlist_failed, error)));
                 return formList;
             }
-            int nElements = xformsElement.getChildCount();
-            for (int i = 0; i < nElements; ++i) {
+            int elements = xformsElement.getChildCount();
+            for (int i = 0; i < elements; ++i) {
                 if (xformsElement.getType(i) != Element.ELEMENT) {
                     // e.g., whitespace (text)
                     continue;
@@ -157,48 +157,56 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         continue;
                     }
                     String tag = child.getName();
-                    if (tag.equals("formID")) {
-                        formId = XFormParser.getXMLText(child, true);
-                        if (formId != null && formId.length() == 0) {
-                            formId = null;
-                        }
-                    } else if (tag.equals("name")) {
-                        formName = XFormParser.getXMLText(child, true);
-                        if (formName != null && formName.length() == 0) {
-                            formName = null;
-                        }
-                    } else if (tag.equals("version")) {
-                        version = XFormParser.getXMLText(child, true);
-                        if (version != null && version.length() == 0) {
-                            version = null;
-                        }
-                    } else if (tag.equals("majorMinorVersion")) {
-                        majorMinorVersion = XFormParser.getXMLText(child, true);
-                        if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
-                            majorMinorVersion = null;
-                        }
-                    } else if (tag.equals("descriptionText")) {
-                        description = XFormParser.getXMLText(child, true);
-                        if (description != null && description.length() == 0) {
-                            description = null;
-                        }
-                    } else if (tag.equals("downloadUrl")) {
-                        downloadUrl = XFormParser.getXMLText(child, true);
-                        if (downloadUrl != null && downloadUrl.length() == 0) {
-                            downloadUrl = null;
-                        }
-                    } else if (tag.equals("manifestUrl")) {
-                        manifestUrl = XFormParser.getXMLText(child, true);
-                        if (manifestUrl != null && manifestUrl.length() == 0) {
-                            manifestUrl = null;
-                        }
+                    switch (tag) {
+                        case "formID":
+                            formId = XFormParser.getXMLText(child, true);
+                            if (formId != null && formId.length() == 0) {
+                                formId = null;
+                            }
+                            break;
+                        case "name":
+                            formName = XFormParser.getXMLText(child, true);
+                            if (formName != null && formName.length() == 0) {
+                                formName = null;
+                            }
+                            break;
+                        case "version":
+                            version = XFormParser.getXMLText(child, true);
+                            if (version != null && version.length() == 0) {
+                                version = null;
+                            }
+                            break;
+                        case "majorMinorVersion":
+                            majorMinorVersion = XFormParser.getXMLText(child, true);
+                            if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
+                                majorMinorVersion = null;
+                            }
+                            break;
+                        case "descriptionText":
+                            description = XFormParser.getXMLText(child, true);
+                            if (description != null && description.length() == 0) {
+                                description = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
+                        case "manifestUrl":
+                            manifestUrl = XFormParser.getXMLText(child, true);
+                            if (manifestUrl != null && manifestUrl.length() == 0) {
+                                manifestUrl = null;
+                            }
+                            break;
                     }
                 }
                 if (formId == null || downloadUrl == null || formName == null) {
                     String error =
                             "Forms list entry " + Integer.toString(i)
                                     + " is missing one or more tags: formId, name, or downloadUrl";
-                    Log.e(t, "Parsing OpenRosa reply -- " + error);
+                    Timber.e("Parsing OpenRosa reply -- %s", error);
                     formList.clear();
                     formList.put(
                             DL_ERROR_MSG,
@@ -242,7 +250,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         String error =
                                 "Forms list entry " + Integer.toString(i)
                                         + " is missing form name or url attribute";
-                        Log.e(t, "Parsing OpenRosa reply -- " + error);
+                        Timber.e("Parsing OpenRosa reply -- %s", error);
                         formList.clear();
                         formList.put(
                                 DL_ERROR_MSG,
@@ -264,8 +272,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     @Override
     protected void onPostExecute(HashMap<String, FormDetails> value) {
         synchronized (this) {
-            if (mStateListener != null) {
-                mStateListener.formListDownloadingComplete(value);
+            if (stateListener != null) {
+                stateListener.formListDownloadingComplete(value);
             }
         }
     }
@@ -273,7 +281,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     public void setDownloaderListener(FormListDownloaderListener sl) {
         synchronized (this) {
-            mStateListener = sl;
+            stateListener = sl;
         }
     }
 

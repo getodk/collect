@@ -22,13 +22,13 @@ import java.util.regex.Pattern;
 // http://stackoverflow.com/a/2563382/152938
 
 public class ReplaceCallback {
-    public static interface Callback {
+    public interface Callback {
         /**
          * This function is called when a match is made. The string which was matched
          * can be obtained via match.group(), and the individual groupings via
          * match.group(n).
          */
-        public String matchFound(MatchResult match);
+        String matchFound(MatchResult match);
     }
 
     /**

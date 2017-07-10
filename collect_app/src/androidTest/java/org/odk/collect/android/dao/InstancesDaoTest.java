@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.odk.collect.android.dao;
 
 import android.database.Cursor;
@@ -36,19 +37,19 @@ import static org.junit.Assert.assertEquals;
  */
 public class InstancesDaoTest {
 
-    private InstancesDao mInstancesDao;
+    private InstancesDao instancesDao;
 
     @Before
     public void setUp() {
-        mInstancesDao = new InstancesDao();
-        mInstancesDao.deleteInstancesDatabase();
+        instancesDao = new InstancesDao();
+        instancesDao.deleteInstancesDatabase();
         fillDatabase();
     }
 
     @Test
     public void getUnsentInstancesCursorTest() {
-        Cursor cursor = mInstancesDao.getUnsentInstancesCursor();
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getUnsentInstancesCursor();
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(4, instances.size());
 
         assertEquals("Cascading Select Form", instances.get(0).getDisplayName());
@@ -66,8 +67,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getSentInstancesCursorTest() {
-        Cursor cursor = mInstancesDao.getSentInstancesCursor();
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getSentInstancesCursor();
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(2, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
@@ -79,8 +80,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getSavedInstancesCursorTest() {
-        Cursor cursor = mInstancesDao.getSavedInstancesCursor(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getSavedInstancesCursor(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC");
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(5, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
@@ -101,8 +102,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getFinalizedInstancesCursorTest() {
-        Cursor cursor = mInstancesDao.getFinalizedInstancesCursor();
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getFinalizedInstancesCursor();
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(1, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
@@ -111,8 +112,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getInstancesCursorForFilePathTest() {
-        Cursor cursor = mInstancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml");
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml");
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(1, instances.size());
 
         assertEquals("Hypertension Screening", instances.get(0).getDisplayName());
@@ -121,8 +122,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getAllCompletedUndeletedInstancesCursorTest() {
-        Cursor cursor = mInstancesDao.getAllCompletedUndeletedInstancesCursor();
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getAllCompletedUndeletedInstancesCursor();
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(2, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
@@ -134,8 +135,8 @@ public class InstancesDaoTest {
 
     @Test
     public void getInstancesCursorForIdTest() {
-        Cursor cursor = mInstancesDao.getInstancesCursorForId("2");
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getInstancesCursorForId("2");
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(1, instances.size());
 
         assertEquals("Cascading Select Form", instances.get(0).getDisplayName());
@@ -145,8 +146,8 @@ public class InstancesDaoTest {
 
     @Test
     public void updateInstanceTest() {
-        Cursor cursor = mInstancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
-        List<Instance> instances = mInstancesDao.getInstancesFromCursor(cursor);
+        Cursor cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
+        List<Instance> instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(1, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
@@ -164,11 +165,11 @@ public class InstancesDaoTest {
         String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
         String[] whereArgs = {Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml"};
 
-        assertEquals(mInstancesDao.updateInstance(mInstancesDao.getValuesFromInstanceObject(instance), where, whereArgs), 1);
+        assertEquals(instancesDao.updateInstance(instancesDao.getValuesFromInstanceObject(instance), where, whereArgs), 1);
 
-        cursor = mInstancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
+        cursor = instancesDao.getInstancesCursorForFilePath(Collect.INSTANCES_PATH + "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml");
 
-        instances = mInstancesDao.getInstancesFromCursor(cursor);
+        instances = instancesDao.getInstancesFromCursor(cursor);
         assertEquals(1, instances.size());
 
         assertEquals("Biggest N of Set", instances.get(0).getDisplayName());
@@ -184,7 +185,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487595836793L)
                 .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:03")
                 .build();
-        mInstancesDao.saveInstance(mInstancesDao.getValuesFromInstanceObject(instance1));
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance1));
 
         Instance instance2 = new Instance.Builder()
                 .displayName("Cascading Select Form")
@@ -194,7 +195,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487596015000L)
                 .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:06")
                 .build();
-        mInstancesDao.saveInstance(mInstancesDao.getValuesFromInstanceObject(instance2));
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance2));
 
         Instance instance3 = new Instance.Builder()
                 .displayName("Biggest N of Set")
@@ -204,7 +205,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487596015100L)
                 .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:06")
                 .build();
-        mInstancesDao.saveInstance(mInstancesDao.getValuesFromInstanceObject(instance3));
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance3));
 
         Instance instance4 = new Instance.Builder()
                 .displayName("Widgets")
@@ -215,7 +216,7 @@ public class InstancesDaoTest {
                 .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:07")
                 .deletedDate(1487596020803L)
                 .build();
-        mInstancesDao.saveInstance(mInstancesDao.getValuesFromInstanceObject(instance4));
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance4));
 
         Instance instance5 = new Instance.Builder()
                 .displayName("sample")
@@ -225,7 +226,7 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487596026373L)
                 .displaySubtext("Saved on Mon, Feb 20, 2017 at 14:07")
                 .build();
-        mInstancesDao.saveInstance(mInstancesDao.getValuesFromInstanceObject(instance5));
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance5));
 
         Instance instance6 = new Instance.Builder()
                 .displayName("Biggest N of Set")
@@ -235,11 +236,11 @@ public class InstancesDaoTest {
                 .lastStatusChangeDate(1487597090653L)
                 .displaySubtext("Finalized on Mon, Feb 20, 2017 at 14:24")
                 .build();
-        mInstancesDao.saveInstance(mInstancesDao.getValuesFromInstanceObject(instance6));
+        instancesDao.saveInstance(instancesDao.getValuesFromInstanceObject(instance6));
     }
 
     @After
     public void tearDown() {
-        mInstancesDao.deleteInstancesDatabase();
+        instancesDao.deleteInstancesDatabase();
     }
 }

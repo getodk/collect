@@ -15,37 +15,41 @@
 package org.odk.collect.android.tasks;
 
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Images;
-import android.util.Log;
+import android.provider.MediaStore;
 import android.util.Xml;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.InputStreamContent;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.FileContent;
+import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.GridProperties;
+import com.google.api.services.sheets.v4.model.Request;
+import com.google.api.services.sheets.v4.model.SheetProperties;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
+import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest;
+import com.google.api.services.sheets.v4.model.UpdateSpreadsheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.FormException;
-import org.odk.collect.android.picasa.AlbumEntry;
-import org.odk.collect.android.picasa.AlbumFeed;
-import org.odk.collect.android.picasa.PhotoEntry;
-import org.odk.collect.android.picasa.PicasaClient;
-import org.odk.collect.android.picasa.PicasaUrl;
-import org.odk.collect.android.picasa.UserFeed;
+import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -53,8 +57,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -62,27 +66,41 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import timber.log.Timber;
+
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
-public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> extends
-        GoogleSheetsTask<Long, Integer, HashMap<String, String>> {
+public abstract class GoogleSheetsAbstractUploader extends
+        AsyncTask<Long, Integer, HashMap<String, String>> {
 
-    protected static final String picasa_fail = "Picasa Error: ";
-    protected static final String oauth_fail = "OAUTH Error: ";
-    protected static final String form_fail = "Form Error: ";
-    private final static String TAG = "GoogleSheetsUploadTask";
+    public static final int REQUEST_ACCOUNT_PICKER = 1000;
+    public static final int REQUEST_AUTHORIZATION = 1001;
+    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
+    protected static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
+    private static final String oauth_fail = "OAUTH Error: ";
+    private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
+    private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
-    protected HashMap<String, String> mResults;
+    protected HashMap<String, String> results;
+    private String spreadsheetName;
+    private String spreadsheetId;
+    protected com.google.api.services.sheets.v4.Sheets sheetsService = null;
+    protected com.google.api.services.drive.Drive driveService = null;
+    private InstanceUploaderListener stateListener;
+    private boolean hasWritePermissonToSheet = false;
+    private String spreadsheetFileName;
+    private Integer sheetId;
 
-    /**
-     * @param selection
-     * @param selectionArgs
-     * @param token
-     */
+    public void setUploaderListener(InstanceUploaderListener sl) {
+        synchronized (this) {
+            stateListener = sl;
+        }
+    }
+
     protected void uploadInstances(String selection, String[] selectionArgs, String token) {
-
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -93,8 +111,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     if (isCancelled()) {
                         return;
                     }
-                    String instance = c.getString(c
-                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     String jrformid = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
@@ -113,11 +129,13 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
                     if (md5 == null) {
                         // fail and exit
-                        Log.e(TAG, "no md5");
+                        Timber.e("no md5");
                         return;
                     }
 
                     publishProgress(c.getPosition() + 1, c.getCount());
+                    String instance = c.getString(c
+                            .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -140,19 +158,55 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                                         String token, String formFilePath) {
         // if the token is null fail immediately
         if (token == null) {
-            mResults.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
+            results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
             return false;
         }
 
+        // get spreadsheet id
+        if (spreadsheetId == null) {
+            try {
+                spreadsheetId = UrlUtils.getSpreadsheetID(id);
+            } catch (BadUrlException e) {
+                Timber.e(e);
+                results.put(id, e.getMessage());
+                return false;
+            }
+        }
+
+        // checking for write permissions to the spreadsheet
+        if (!hasWritePermissonToSheet) {
+            try {
+                spreadsheetName = getSpreadSheetName();
+
+                //// TODO: 22/3/17 Find a better way to check the write permissions
+                List<Request> requests = new ArrayList<>();
+                requests.add(new Request()
+                        .setUpdateSpreadsheetProperties(new UpdateSpreadsheetPropertiesRequest()
+                                .setProperties(new SpreadsheetProperties()
+                                        .setTitle(spreadsheetFileName))
+                                .setFields("title")));
+
+                sheetsService.spreadsheets()
+                        .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
+                                .setRequests(requests))
+                        .execute();
+            } catch (GoogleJsonResponseException e) {
+                String message = e.getMessage();
+                if (e.getDetails().getCode() == 403) {
+                    message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
+                }
+                results.put(id, message);
+                return false;
+            } catch (IOException e) {
+                results.put(id, e.getMessage());
+                return false;
+            }
+            hasWritePermissonToSheet = true;
+        }
+
         HashMap<String, String> answersToUpload = new HashMap<>();
-        HashMap<String, String> photosToUpload = new HashMap<>();
-        HashMap<String, PhotoEntry> uploadedPhotos = new HashMap<>();
-
-        HttpTransport h = AndroidHttp.newCompatibleTransport();
-        GoogleCredential gc = new GoogleCredential();
-        gc.setAccessToken(token);
-
-        PicasaClient client = new PicasaClient(h.createRequestFactory(gc));
+        HashMap<String, String> mediaToUpload = new HashMap<>();
+        HashMap<String, String> uploadedMedia = new HashMap<>();
 
         // get instance file
         File instanceFile = new File(instanceFilePath);
@@ -161,41 +215,27 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         ArrayList<String> columnNames = new ArrayList<String>();
         try {
             getColumns(formFilePath, columnNames);
-        } catch (FileNotFoundException e2) {
-            e2.printStackTrace();
-            mResults.put(id, e2.getMessage());
-            return false;
-        } catch (XmlPullParserException e2) {
-            e2.printStackTrace();
-            mResults.put(id, e2.getMessage());
-            return false;
-        } catch (IOException e2) {
-            e2.printStackTrace();
-            mResults.put(id, e2.getMessage());
-            return false;
-        } catch (FormException e2) {
-            e2.printStackTrace();
-            mResults.put(id, e2.getMessage());
+        } catch (XmlPullParserException | IOException | FormException e2) {
+            Timber.e(e2, "Exception thrown while getting columns from form file");
+            results.put(id, e2.getMessage());
             return false;
         }
 
         if (columnNames.size() == 0) {
-            mResults.put(id,
-                    form_fail + "No columns found in the form to upload");
+            results.put(id, "No columns found in the form to upload");
             return false;
         }
 
         if (columnNames.size() > 255) {
-            mResults.put(id,
-                    Collect.getInstance()
-                            .getString(R.string.sheets_max_columns, String.valueOf(columnNames.size())));
+            results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
+                    String.valueOf(columnNames.size())));
             return false;
         }
 
         // make sure column names are legal
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id,
+                results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
                 return false;
@@ -205,141 +245,99 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // parses the instance file and populates the answers and photos
         // hashmaps.
         try {
-            processInstanceXML(instanceFile, answersToUpload, photosToUpload);
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
+            processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
         } catch (FormException e) {
-            mResults.put(id,
-                    form_fail + Collect.getInstance().getString(R.string.google_repeat_error));
+            results.put(id,
+                    Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
+        } catch (XmlPullParserException | IOException e) {
+            Timber.e(e, "Exception thrown while parsing the file");
+            results.put(id, e.getMessage());
             return false;
         }
 
         try {
             Thread.sleep(GOOGLE_SLEEP_TIME);
         } catch (InterruptedException e3) {
-            e3.printStackTrace();
+            Timber.d(e3);
         }
 
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
-                mResults.put(id, Collect.getInstance().getString(
-                        R.string.google_sheets_invalid_column_instance, n));
+                results.put(id, Collect.getInstance()
+                        .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
         }
 
-        // if we have any photos to upload,
-        // get the picasa album or create a new one
-        // then upload the photos
-        if (photosToUpload.size() > 0) {
-            // First set up a picasa album to upload to:
-            // maybe we should move this, because if we don't have any
-            // photos we don't care...
-            AlbumEntry albumToUse;
-            try {
-                albumToUse = getOrCreatePicasaAlbum(client, jrFormId);
-            } catch (IOException e) {
-                e.printStackTrace();
-                GoogleAuthUtil.invalidateToken(Collect.getInstance(), token);
-                mResults.put(id, picasa_fail + e.getMessage());
-                return false;
-            }
+        /*  # NOTE #
+         *  Media files are uploaded to Google Drive of user
+         *  All media files are currently saved under folder "Open Data Kit/Submissions/formID/"
+         */
 
-            try {
-                uploadPhotosToPicasa(photosToUpload, uploadedPhotos, client, albumToUse,
-                        instanceFile);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                mResults.put(id, picasa_fail + e1.getMessage());
-                return false;
-            }
-        }
+        // if we have any media files to upload,
+        // get the folder or create a new one
+        // then upload the media files
+        if (mediaToUpload.size() > 0) {
 
-        // All photos have been sent to picasa (if there were any)
-        // now upload data to Google Sheet
+            for (String key : mediaToUpload.keySet()) {
+                String filename = instanceFile.getParentFile() + "/" + mediaToUpload.get(key);
+                File toUpload = new File(filename);
 
-        Cursor cursor = null;
-        String urlString = null;
-        try {
-            // see if the submission element was defined in the form
-            cursor = new InstancesDao().getInstancesCursorForId(id);
-
-            if (cursor.getCount() > 0) {
-                cursor.moveToPosition(-1);
-                while (cursor.moveToNext()) {
-                    int subIdx = cursor.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
-
-                    // if we didn't find one in the content provider,
-                    // try to get from settings
-                    if (urlString == null) {
-                        SharedPreferences settings = PreferenceManager
-                                .getDefaultSharedPreferences(Collect.getInstance());
-                        urlString = settings
-                                .getString(PreferenceKeys.KEY_GOOGLE_SHEETS_URL, Collect
-                                        .getInstance()
-                                        .getString(R.string.default_google_sheets_url));
+                // first check the local content provider
+                // to see if this photo still exists at the location or not
+                String selection = MediaStore.Images.Media.DATA + "=?";
+                String[] selectionArgs = {
+                        filename
+                };
+                Cursor c = Collect.getInstance().getContentResolver()
+                        .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, selection,
+                                selectionArgs, null);
+                if (c.getCount() != 1) {
+                    c.close();
+                    try {
+                        throw new FileNotFoundException(Collect.getInstance()
+                                .getString(R.string.media_upload_error, filename));
+                    } catch (FileNotFoundException e) {
+                        Timber.e(e);
                     }
                 }
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+                c.close();
+
+                String folderId;
+                try {
+                    folderId = createOrGetIDOfFolderWithName(jrFormId);
+                } catch (IOException | MultipleFoldersFoundException e) {
+                    Timber.e(e);
+                    results.put(id, e.getMessage());
+                    return false;
+                }
+
+                String uploadedFileId;
+
+                // file is ready to be uploaded
+                try {
+                    uploadedFileId = uploadFileToDrive(mediaToUpload.get(key),
+                            folderId, toUpload);
+                } catch (IOException e) {
+                    Timber.e(e, "Exception thrown while uploading the file to drive");
+                    results.put(id, e.getMessage());
+                    return false;
+                }
+
+                //checking if file was successfully uploaded
+                if (uploadedFileId == null) {
+                    results.put(id, "Unable to upload the media files. Try again");
+                    return false;
+                }
+
+                // uploadedPhotos keeps track of the uploaded URL
+                uploadedMedia.put(key, UPLOADED_MEDIA_URL + uploadedFileId);
             }
         }
-
-        // now parse the url string if we have one
-        final String googleHeader = "docs.google.com/spreadsheets/d/";
-        String spreadsheetId;
-        if (urlString == null || urlString.length() < googleHeader.length()) {
-            mResults.put(
-                    id,
-                    form_fail
-                            + Collect.getInstance().getString(R.string.invalid_sheet_id,
-                            urlString));
-            return false;
-        } else {
-            int start = urlString.indexOf(googleHeader) + googleHeader.length();
-            int end = urlString.indexOf("/", start);
-            if (end == -1) {
-                // if there wasn't a "/", just try to get the end
-                end = urlString.length();
-            }
-            if (start == -1 || end == -1) {
-                mResults.put(
-                        id,
-                        form_fail
-                                + Collect.getInstance().getString(R.string.invalid_sheet_id,
-                                urlString));
-                return false;
-            }
-            spreadsheetId = urlString.substring(start, end);
-        }
-
-        Spreadsheet response = null;
-        try {
-            response = mService.spreadsheets()
-                    .get(spreadsheetId)
-                    .setIncludeGridData(false)
-                    .execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
-            return false;
-        }
-
-        String spreadsheetName = response.getSheets().get(0).getProperties().getTitle();
+        // All photos have been sent to Google Drive (if there were any)
+        // now upload data to Google Sheet
 
         List<List<Object>> values;
         List headerFeed = null;
@@ -347,13 +345,13 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, form_fail + "No data found");
+                results.put(id, "No data found");
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
+            Timber.e(e);
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -375,17 +373,41 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             // if the headers were empty, resize the spreadsheet
             // and add the headers
 
+            //resizing the spreadsheet
+            SheetProperties sheetProperties = new SheetProperties()
+                    .setSheetId(sheetId)
+                    .setGridProperties(new GridProperties()
+                            .setColumnCount(columnNames.size()));
+
+            List<Request> requests = new ArrayList<>();
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(sheetProperties)
+                            .setFields("gridProperties.columnCount")));
+
+            try {
+                sheetsService.spreadsheets()
+                        .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
+                                .setRequests(requests))
+                        .execute();
+            } catch (IOException e) {
+                Timber.e(e);
+                results.put(id, e.getMessage());
+                return false;
+            }
+
+            //adding the headers
             ArrayList<Object> list = new ArrayList<>();
-            for (String column : columnNames)
+            for (String column : columnNames) {
                 list.add(column);
+            }
 
             ArrayList<List<Object>> content = new ArrayList<>();
             content.add(list);
             ValueRange row = new ValueRange();
             row.setValues(content);
 
-
-            /**
+            /*
              *  Appends the data at the last row
              *
              *  append(spreadsheetId, range, ValueRange)
@@ -402,13 +424,13 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             // Send the new row to the API for insertion.
             // write the headers
             try {
-                mService.spreadsheets().values()
+                sheetsService.spreadsheets().values()
                         .append(spreadsheetId, spreadsheetName, row)
                         .setIncludeValuesInResponse(true)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                e.printStackTrace();
-                mResults.put(id, form_fail + e.getMessage());
+                Timber.e(e);
+                results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -419,14 +441,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, form_fail + "No data found");
+                results.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
+            Timber.e(e, "Exception thrown while getting the header feed");
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -458,12 +480,12 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             row.setValues(content);
 
             try {
-                mService.spreadsheets().values()
+                sheetsService.spreadsheets().values()
                         .update(spreadsheetId, spreadsheetName + "!A1:1", row)
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
-                e.printStackTrace();
-                mResults.put(id, form_fail + e.getMessage());
+                Timber.e(e);
+                results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -474,14 +496,14 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                mResults.put(id, form_fail + "No data found");
+                results.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
+            Timber.e(e, "Exception thrown while getting the header feed");
+            results.put(id, e.getMessage());
             return false;
         }
 
@@ -492,7 +514,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                 sheetCols.add(column.toString());
             }
         } else {
-            mResults.put(id, form_fail + "couldn't get header feed");
+            results.put(id, "couldn't get header feed");
             return false;
         }
 
@@ -512,11 +534,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     missingString += ", ";
                 }
             }
-            mResults.put(
-                    id,
-                    form_fail
-                            + Collect.getInstance().getString(
-                            R.string.google_sheets_missing_columns, missingString));
+            results.put(id, Collect.getInstance().getString(
+                    R.string.google_sheets_missing_columns, missingString));
             return false;
         }
 
@@ -524,8 +543,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
         // so write the values
 
         // add photos to answer set
-        for (String key : uploadedPhotos.keySet()) {
-            String url = uploadedPhotos.get(key).getImageLink();
+        for (String key : uploadedMedia.keySet()) {
+            String url = uploadedMedia.get(key);
             answersToUpload.put(key, url);
         }
 
@@ -535,8 +554,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
             String answer = "";
             if (path.equals(" ") || !columnNames.contains(path)) {
                 //ignores the blank fields and extra fields
-            }
-            else if (columnNames.contains(path)) { // if column present in sheet
+            } else if (columnNames.contains(path)) { // if column present in sheet
                 if (answersToUpload.containsKey(path)) {
                     answer = answersToUpload.get(path);
                     // Check to see if answer is a location, if so, get rid of accuracy
@@ -558,7 +576,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     }
                 }
             }
-            list.add(answer);
+            // https://github.com/opendatakit/collect/issues/931
+            list.add(answer.isEmpty() ? " " : answer);
         }
         ArrayList<List<Object>> content = new ArrayList<>();
         content.add(list);
@@ -569,128 +588,149 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         // Send the new row to the API for insertion.
         try {
-            mService.spreadsheets().values()
+            sheetsService.spreadsheets().values()
                     .append(spreadsheetId, spreadsheetName, row)
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
-            e.printStackTrace();
-            mResults.put(id, form_fail + e.getMessage());
+            Timber.e(e);
+            results.put(id, e.getMessage());
             return false;
         }
 
-        mResults.put(id, Collect.getInstance().getString(R.string.success));
+        results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
     }
 
-    private void uploadPhotosToPicasa(HashMap<String, String> photos,
-                                      HashMap<String, PhotoEntry> uploaded, PicasaClient client, AlbumEntry albumToUse,
-                                      File instanceFile) throws IOException {
-        for (String key : photos.keySet()) {
-            String filename = instanceFile.getParentFile() + "/" + photos.get(key);
-            File toUpload = new File(filename);
+    private String getSpreadSheetName() throws IOException {
+        Spreadsheet response;
+        response = sheetsService.spreadsheets()
+                .get(spreadsheetId)
+                .setIncludeGridData(false)
+                .execute();
 
-            // first check the local content provider
-            // to see if this photo already has a picasa_id
-            String selection = Images.Media.DATA + "=?";
-            String[] selectionArgs = {
-                    filename
-            };
-            Cursor c = Collect.getInstance().getContentResolver()
-                    .query(Images.Media.EXTERNAL_CONTENT_URI, null, selection, selectionArgs, null);
-            if (c.getCount() != 1) {
-                c.close();
-                throw new FileNotFoundException(picasa_fail
-                        + Collect.getInstance().getString(R.string.picasa_upload_error, filename));
-            }
-
-            // assume it's not already in picasa
-            boolean inPicasa = false;
-
-            // this will contain the link to the photo
-            PhotoEntry picasaPhoto = null;
-
-            c.moveToFirst();
-            String picasa_id = c.getString(c.getColumnIndex(Images.Media.PICASA_ID));
-            if (picasa_id == null || picasa_id.equalsIgnoreCase("")) {
-                // not in picasa, so continue
-            } else {
-                // got a picasa ID, make sure it exists in this
-                // particular album online
-                // if it does, go on
-                // if it doesn't, upload it and update the picasa_id
-                if (albumToUse.numPhotos != 0) {
-                    PicasaUrl photosUrl = new PicasaUrl(albumToUse.getFeedLink());
-                    AlbumFeed albumFeed = client.executeGetAlbumFeed(photosUrl);
-
-                    for (PhotoEntry photo : albumFeed.photos) {
-                        if (picasa_id.equals(photo.id)) {
-                            // already in picasa, no need to upload
-                            inPicasa = true;
-                            picasaPhoto = photo;
-                        }
-                    }
-                }
-            }
-
-            // wasn't already there, so upload a new copy and update the
-            // content provder with its picasa_id
-            if (!inPicasa) {
-                String fileName = toUpload.getAbsolutePath();
-                File file = new File(fileName);
-                String mimetype = URLConnection.guessContentTypeFromName(file.getName());
-                InputStreamContent content = new InputStreamContent(mimetype, new FileInputStream(
-                        file));
-
-                picasaPhoto = client.executeInsertPhotoEntry(
-                        new PicasaUrl(albumToUse.getFeedLink()), content, toUpload.getName());
-
-                ContentValues cv = new ContentValues();
-                cv.put(Images.Media.PICASA_ID, picasaPhoto.id);
-
-                // update the content provider picasa_id once we upload
-                String where = Images.Media.DATA + "=?";
-                String[] whereArgs = {
-                        toUpload.getAbsolutePath()
-                };
-                Collect.getInstance().getContentResolver()
-                        .update(Images.Media.EXTERNAL_CONTENT_URI, cv, where, whereArgs);
-            }
-
-            // uploadedPhotos keeps track of the uploaded URL
-            // relative to the path
-            uploaded.put(key, picasaPhoto);
-        }
+        spreadsheetFileName = response.getProperties().getTitle();
+        sheetId = response.getSheets().get(0).getProperties().getSheetId();
+        return response.getSheets().get(0).getProperties().getTitle();
     }
 
-    private AlbumEntry getOrCreatePicasaAlbum(PicasaClient client, String jrFormId)
-            throws IOException {
-        AlbumEntry albumToUse = null;
-        PicasaUrl url = PicasaUrl.relativeToRoot("feed/api/user/default");
-        UserFeed feed;
+    private String createOrGetIDOfFolderWithName(String jrFormId)
+            throws IOException, MultipleFoldersFoundException {
 
-        feed = client.executeGetUserFeed(url);
+        String submissionsFolderId = createOrGetIDOfSubmissionsFolder();
+        return getIDOfFolderWithName(jrFormId, submissionsFolderId);
+    }
 
-        // Find an album with a title matching the form_id
-        // Technically there could be multiple albums that match
-        // We just use the first one that matches
-        if (feed.albums != null) {
-            for (AlbumEntry album : feed.albums) {
-                if (jrFormId.equals(album.title)) {
-                    albumToUse = album;
-                    break;
-                }
+    private String createOrGetIDOfSubmissionsFolder() throws IOException,
+            MultipleFoldersFoundException {
+
+        String rootFolderId = getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+        return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
+    }
+
+    protected String getIDOfFolderWithName(String name, String inFolder)
+            throws IOException, MultipleFoldersFoundException {
+
+        com.google.api.services.drive.model.File folder = null;
+
+        // check if the folder exists
+        ArrayList<com.google.api.services.drive.model.File> files =
+                getFilesFromDrive(name, inFolder);
+
+        for (com.google.api.services.drive.model.File file : files) {
+            if (folder == null) {
+                folder = file;
+            } else {
+                throw new MultipleFoldersFoundException("Multiple \"" + name
+                        + "\" folders found");
             }
         }
 
-        // no album exited, so create one
-        if (albumToUse == null) {
-            AlbumEntry newAlbum = new AlbumEntry();
-            newAlbum.access = "private";
-            newAlbum.title = jrFormId;
-            newAlbum.summary = "Images for form: " + jrFormId;
-            albumToUse = client.executeInsert(feed, newAlbum);
+        // if the folder is not found then create a new one
+        if (folder == null) {
+            folder = createFolderInDrive(name, inFolder);
         }
-        return albumToUse;
+        return folder.getId();
+
+    }
+
+    private String uploadFileToDrive(String mediaName, String destinationFolderID,
+                                     File toUpload) throws IOException {
+
+        //adding meta-data to the file
+        com.google.api.services.drive.model.File fileMetadata =
+                new com.google.api.services.drive.model.File()
+                        .setName(mediaName)
+                        .setViewersCanCopyContent(true)
+                        .setParents(Collections.singletonList(destinationFolderID));
+
+        String type = FileUtils.getMimeType(toUpload.getPath());
+        FileContent mediaContent = new FileContent(type, toUpload);
+        com.google.api.services.drive.model.File file;
+        file = driveService.files().create(fileMetadata, mediaContent)
+                .setFields("id, parents")
+                .setIgnoreDefaultVisibility(true)
+                .execute();
+
+        return file.getId();
+    }
+
+    private com.google.api.services.drive.model.File createFolderInDrive(String folderName,
+                                                                         String parentId)
+            throws IOException {
+
+        //creating a new folder
+        com.google.api.services.drive.model.File fileMetadata = new
+                com.google.api.services.drive.model.File();
+        fileMetadata.setName(folderName);
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+        if (parentId != null) {
+            fileMetadata.setParents(Collections.singletonList(parentId));
+        }
+
+        com.google.api.services.drive.model.File folder;
+        folder = driveService.files().create(fileMetadata)
+                .setFields("id")
+                .execute();
+
+        //adding the permissions to folder
+        Permission sharePermission = new Permission()
+                .setType("anyone")
+                .setRole("reader");
+
+        driveService.permissions().create(folder.getId(), sharePermission)
+                .setFields("id")
+                .execute();
+
+        return folder;
+    }
+
+    private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
+            String folderName,
+            String parentId) throws IOException {
+
+        ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
+        FileList fileList;
+        String pageToken;
+        do {
+            if (parentId == null) {
+                fileList = driveService.files().list()
+                        .setQ("name = '" + folderName + "' and "
+                                + "mimeType = 'application/vnd.google-apps.folder'"
+                                + " and trashed=false")
+                        .execute();
+            } else {
+                fileList = driveService.files().list()
+                        .setQ("name = '" + folderName + "' and "
+                                + "mimeType = 'application/vnd.google-apps.folder'"
+                                + " and '" + parentId + "' in parents" + " and trashed=false")
+                        .execute();
+            }
+            for (com.google.api.services.drive.model.File file : fileList.getFiles()) {
+                files.add(file);
+            }
+            pageToken = fileList.getNextPageToken();
+        } while (pageToken != null);
+        return files;
     }
 
     private void getColumns(String filePath, ArrayList<String> columns)
@@ -727,20 +767,6 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     } else if (inBody && parser.getName().equalsIgnoreCase("repeat")) {
                         throw new FormException(Collect.getInstance().getString(
                                 R.string.google_repeat_error));
-                    } else if (parser.getName().equalsIgnoreCase("upload")) {
-                        for (int i = 0; i < parser.getAttributeCount(); i++) {
-                            String attr = parser.getAttributeName(i);
-                            if (attr.startsWith("mediatype")) {
-                                String attrValue = parser.getAttributeValue(i);
-                                if (attrValue.startsWith("audio")) {
-                                    throw new FormException(Collect.getInstance().getString(
-                                            R.string.google_audio_error));
-                                } else if (attrValue.startsWith("video")) {
-                                    throw new FormException(Collect.getInstance().getString(
-                                            R.string.google_video_error));
-                                }
-                            }
-                        }
                     }
                     if (getPaths) {
                         path.add(parser.getName());
@@ -772,7 +798,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     }
                     break;
                 default:
-                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Timber.i("DEFAULTING: %s :: %d", parser.getName(), parser.getEventType());
                     break;
             }
             event = parser.next();
@@ -781,7 +807,7 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
     private void processInstanceXML(File instanceFile,
                                     HashMap<String, String> answersToUpload,
-                                    HashMap<String, String> photosToUpload)
+                                    HashMap<String, String> mediaToUpload)
             throws XmlPullParserException, IOException,
             FormException {
         FileInputStream in;
@@ -791,15 +817,16 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
 
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(in, null);
-        readInstanceFeed(parser, answersToUpload, photosToUpload);
+        readInstanceFeed(parser, answersToUpload, mediaToUpload, instanceFile.getParentFile());
         in.close();
     }
 
     private void readInstanceFeed(XmlPullParser parser,
                                   HashMap<String, String> answersToUpload,
-                                  HashMap<String, String> photosToUpload)
+                                  HashMap<String, String> mediaToUpload, File instanceFolder)
             throws XmlPullParserException, IOException,
             FormException {
+
         ArrayList<String> path = new ArrayList<String>();
 
         int event = parser.next();
@@ -810,17 +837,22 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
                     break;
                 case XmlPullParser.TEXT:
                     String answer = parser.getText();
-                    if (answer.endsWith(".jpg") || answer.endsWith(".png")) {
-                        photosToUpload.put(getPath(path), answer);
+
+                    String filename = instanceFolder + "/" + answer;
+                    File file = new File(filename);
+
+                    if (file.isFile()) {
+                        mediaToUpload.put(getPath(path), answer);
                     } else {
                         answersToUpload.put(getPath(path), answer);
                     }
+
                     break;
                 case XmlPullParser.END_TAG:
                     path.remove(path.size() - 1);
                     break;
                 default:
-                    Log.i(TAG, "DEFAULTING: " + parser.getName() + " :: " + parser.getEventType());
+                    Timber.i("DEFAULTING: %s :: %d", parser.getName(), parser.getEventType());
                     break;
             }
             event = parser.next();
@@ -844,8 +876,8 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
     @Override
     protected void onPostExecute(HashMap<String, String> results) {
         synchronized (this) {
-            if (mStateListener != null) {
-                mStateListener.uploadingComplete(results);
+            if (stateListener != null) {
+                stateListener.uploadingComplete(results);
 
                 if (results != null && !results.isEmpty()) {
                     StringBuilder selection = new StringBuilder();
@@ -905,9 +937,9 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
     @Override
     protected void onProgressUpdate(Integer... values) {
         synchronized (this) {
-            if (mStateListener != null) {
+            if (stateListener != null) {
                 // update progress and total
-                mStateListener.progressUpdate(values[0], values[1]);
+                stateListener.progressUpdate(values[0], values[1]);
             }
         }
     }
@@ -933,15 +965,10 @@ public abstract class GoogleSheetsAbstractUploader<Params, Progress, Result> ext
      * eg. Sheet1!A1:G7
      * <p>
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
-     *
-     * @param spreadsheetId
-     * @param spreadsheetName
-     * @return
-     * @throws IOException
      */
     private List<List<Object>> getHeaderFeed(String spreadsheetId, String spreadsheetName)
             throws IOException {
-        ValueRange response = mService.spreadsheets()
+        ValueRange response = sheetsService.spreadsheets()
                 .values()
                 .get(spreadsheetId, spreadsheetName)
                 .execute();

@@ -24,7 +24,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -38,12 +37,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  *
  */
 public class InstanceProvider extends ContentProvider {
 
-    private static final String t = "InstancesProvider";
 
     private static final String DATABASE_NAME = "instances.db";
     private static final int DATABASE_VERSION = 4;
@@ -79,54 +79,59 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                     + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " date );" );
+                    + InstanceColumns.DELETED_DATE + " date );");
         }
 
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            int initialVersion = oldVersion;
+            final int initialVersion = oldVersion;
             if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
-                        InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " +
-                        InstanceColumns.STATUS + " IS NOT NULL AND " +
-                        InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
+                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
+                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                         + "'");
                 oldVersion = 2;
             }
             if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.JR_VERSION + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                        + InstanceColumns.JR_VERSION + " text;");
             }
             if (oldVersion == 3) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
-                        InstanceColumns.DELETED_DATE + " date;");
+                Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
+                int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
+                cursor.close();
+
+                // Only add the column if it doesn't already exist
+                if (columnIndex == -1) {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
+                            + InstanceColumns.DELETED_DATE + " date;");
+                }
             }
-            Log.w(t, "Successfully upgraded database from version " + initialVersion + " to "
-                    + newVersion
-                    + ", without destroying all the old data");
+            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
+                    initialVersion, newVersion);
         }
     }
 
-    private DatabaseHelper mDbHelper;
+    private DatabaseHelper databaseHelper;
 
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            mDbHelper = null;
+            databaseHelper = null;
             return null;
         }
 
-        if (mDbHelper != null) {
-            return mDbHelper;
+        if (databaseHelper != null) {
+            return databaseHelper;
         }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
-        return mDbHelper;
+        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        return databaseHelper;
     }
 
     @Override
@@ -142,7 +147,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-            String sortOrder) {
+                        String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
@@ -202,17 +207,17 @@ public class InstanceProvider extends ContentProvider {
         Long now = Long.valueOf(System.currentTimeMillis());
 
         // Make sure that the fields are all set
-        if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
+        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
-        if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
+        if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
             Date today = new Date();
             String text = getDisplaySubtext(InstanceProviderAPI.STATUS_INCOMPLETE, today);
             values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
         }
 
-        if (values.containsKey(InstanceColumns.STATUS) == false) {
+        if (!values.containsKey(InstanceColumns.STATUS)) {
             values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
         }
 
@@ -264,9 +269,8 @@ public class InstanceProvider extends ContentProvider {
                 int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(directory);
                 int video = MediaUtils.deleteVideoInFolderFromMediaProvider(directory);
 
-                Log.i(t, "removed from content providers: " + images
-                        + " image files, " + audio + " audio files,"
-                        + " and " + video + " video files.");
+                Timber.i("removed from content providers: %d image files, %d audio files,"
+                        + " and %d video files.", images, audio, video);
 
                 // delete all the files in the directory
                 File[] files = directory.listFiles();
@@ -342,7 +346,7 @@ public class InstanceProvider extends ContentProvider {
 
                 //We are going to update the status, if the form is submitted
                 //We will not delete the record in table but we will delete the file
-                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)){
+                if (status != null && status.equals(InstanceProviderAPI.STATUS_SUBMITTED)) {
                     ContentValues cv = new ContentValues();
                     cv.put(InstanceColumns.DELETED_DATE, System.currentTimeMillis());
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
@@ -371,7 +375,7 @@ public class InstanceProvider extends ContentProvider {
         Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
-        if (values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE) == false) {
+        if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {
             values.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, now);
         }
 
@@ -382,7 +386,7 @@ public class InstanceProvider extends ContentProvider {
                 if (values.containsKey(InstanceColumns.STATUS)) {
                     status = values.getAsString(InstanceColumns.STATUS);
 
-                    if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
+                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
@@ -398,7 +402,7 @@ public class InstanceProvider extends ContentProvider {
                 if (values.containsKey(InstanceColumns.STATUS)) {
                     status = values.getAsString(InstanceColumns.STATUS);
 
-                    if (values.containsKey(InstanceColumns.DISPLAY_SUBTEXT) == false) {
+                    if (!values.containsKey(InstanceColumns.DISPLAY_SUBTEXT)) {
                         Date today = new Date();
                         String text = getDisplaySubtext(status, today);
                         values.put(InstanceColumns.DISPLAY_SUBTEXT, text);
