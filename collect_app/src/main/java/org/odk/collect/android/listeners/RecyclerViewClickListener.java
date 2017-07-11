@@ -15,8 +15,6 @@
 package org.odk.collect.android.listeners;
 
 
-import android.view.View;
-
 import org.odk.collect.android.adapters.SortDialogAdapter;
 
 public interface RecyclerViewClickListener {
