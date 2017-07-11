@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
 import android.view.View;
@@ -322,6 +323,8 @@ public class ItemsetWidget extends QuestionWidget implements
                     allOptionsLayout.setOrientation(LinearLayout.VERTICAL);
                     c.close();
                 }
+            } catch (SQLiteException e) {
+                Timber.i(e);
             } finally {
                 ida.close();
             }
