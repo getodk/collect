@@ -15,7 +15,6 @@ limitations under the License.
 package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialog;
@@ -33,7 +32,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
@@ -107,7 +105,7 @@ abstract class AppListFragment extends ListFragment {
 
         menu
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
+                .setIcon(R.drawable.ic_sort_black_36dp)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menu
@@ -161,12 +159,10 @@ abstract class AppListFragment extends ListFragment {
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override
             public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
-                TextView previousSelected = (TextView) recyclerView.getChildAt(selectedSortingOrder).findViewById(R.id.title);
-                previousSelected.setTypeface(null, Typeface.NORMAL);
-                holder.txtViewTitle.setTypeface(null, Typeface.BOLD);
+                holder.updateItemColor(selectedSortingOrder);
                 performSelectedSearch(position);
                 bottomSheetDialog.dismiss();
             }

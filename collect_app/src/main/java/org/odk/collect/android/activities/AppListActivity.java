@@ -17,7 +17,6 @@
 package org.odk.collect.android.activities;
 
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -281,12 +280,10 @@ abstract class AppListActivity extends AppCompatActivity {
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+        final SortDialogAdapter adapter = new SortDialogAdapter(this, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override
             public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
-                TextView previousSelected = (TextView) recyclerView.getChildAt(selectedSortingOrder).findViewById(R.id.title);
-                previousSelected.setTypeface(null, Typeface.NORMAL);
-                holder.txtViewTitle.setTypeface(null, Typeface.BOLD);
+                holder.updateItemColor(selectedSortingOrder);
                 performSelectedSearch(position);
                 bottomSheetDialog.dismiss();
             }
