@@ -55,6 +55,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 abstract class AppListActivity extends AppCompatActivity {
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
+    private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
@@ -65,6 +66,7 @@ abstract class AppListActivity extends AppCompatActivity {
     private LinearLayout searchBoxLayout;
     private EditText inputSearch;
     private boolean isSearchBoxShown;
+    private boolean isBottomDialogShown;
     private BottomSheetDialog bottomSheetDialog;
 
     // toggles to all checked or all unchecked
@@ -130,10 +132,7 @@ abstract class AppListActivity extends AppCompatActivity {
         searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
         setupSearchBox();
-
-        if (bottomSheetDialog == null) {
-            setupBottomSheet();
-        }
+        setupBottomSheet();
     }
 
     @Override
@@ -141,6 +140,7 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
         outState.putBoolean(IS_SEARCH_BOX_SHOWN, searchBoxLayout.getVisibility() == View.VISIBLE);
+        outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
     }
 
     @Override
@@ -148,6 +148,7 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onRestoreInstanceState(state);
         selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
         isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
+        isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
     }
 
     @Override
@@ -276,7 +277,7 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     private void setupBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog = new BottomSheetDialog(this, R.style.MaterialDialogSheet);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
 
@@ -294,5 +295,9 @@ abstract class AppListActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         bottomSheetDialog.setContentView(sheetView);
+
+        if (isBottomDialogShown) {
+            bottomSheetDialog.show();
+        }
     }
 }
