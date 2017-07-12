@@ -84,7 +84,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private boolean alertShowing;
     private boolean authFailed;
     private Long[] instancesToSend;
-    private InstanceGoogleSheetsInstanceUploaderTask uiTask;
+    private InstanceGoogleSheetsUploaderTask uiTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,9 +143,9 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     }
 
     private void runTask() {
-        uiTask = (InstanceGoogleSheetsInstanceUploaderTask) getLastCustomNonConfigurationInstance();
+        uiTask = (InstanceGoogleSheetsUploaderTask) getLastCustomNonConfigurationInstance();
         if (uiTask == null) {
-            uiTask = new InstanceGoogleSheetsInstanceUploaderTask(credential);
+            uiTask = new InstanceGoogleSheetsUploaderTask(credential);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -524,9 +524,9 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         // in interface, but not needed
     }
 
-    private class InstanceGoogleSheetsInstanceUploaderTask extends InstanceGoogleSheetsUploader {
+    private class InstanceGoogleSheetsUploaderTask extends InstanceGoogleSheetsUploader {
 
-        InstanceGoogleSheetsInstanceUploaderTask(GoogleAccountCredential credential) {
+        InstanceGoogleSheetsUploaderTask(GoogleAccountCredential credential) {
             super(credential);
         }
 
