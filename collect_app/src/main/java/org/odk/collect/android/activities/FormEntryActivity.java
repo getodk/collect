@@ -914,26 +914,22 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void scaleDownImage(String path, int maxPixels) {
-        try {
-            Bitmap originalImage = BitmapFactory.decodeFile(path);
+        Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
 
-            if (originalImage != null) {
-                double originalWidth = originalImage.getWidth();
-                double originalHeight = originalImage.getHeight();
+        if (originalImage != null) {
+            double originalWidth = originalImage.getWidth();
+            double originalHeight = originalImage.getHeight();
 
-                int originalPixelCount = (int) (originalWidth * originalHeight);
+            int originalPixelCount = (int) (originalWidth * originalHeight);
 
-                if (originalPixelCount > maxPixels) {
-                    double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
-                    double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
+            if (originalPixelCount > maxPixels) {
+                double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
+                double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
 
-                    Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
 
-                    FileUtils.saveBitmapToFile(scaledImage, path);
-                }
+                FileUtils.saveBitmapToFile(scaledImage, path);
             }
-        } catch (OutOfMemoryError e) {
-            Timber.e(e);
         }
     }
 
