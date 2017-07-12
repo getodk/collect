@@ -20,14 +20,13 @@
         <item name="android:textSize">21sp</item>
     </style>
 
-    <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:windowIsFloating">false</item>
+    <style name="MaterialDialogSheet" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
         <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="behavior_peekHeight">250dp</item>
     </style>
 
     <style name="MaterialDialogSheetAnimation">
