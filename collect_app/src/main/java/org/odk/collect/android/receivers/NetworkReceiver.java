@@ -15,25 +15,23 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.io.IOException;
@@ -49,9 +47,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
-    InstanceUploaderTask instanceUploaderTask;
+    InstanceServerUploader instanceServerUploader;
 
-    GoogleSheetsAutoUploadTask googleSheetsUploadTask;
+    InstanceGoogleSheetsAutoUploadTask googleSheetsUploadTask;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -68,9 +66,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                if (interfaceIsEnabled(context, currentNetworkInfo)) {
-                    uploadForms(context);
-                }
+                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
             }
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
@@ -80,15 +76,12 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             if (ni == null || !ni.isConnected()) {
                 // not connected, do nothing
             } else {
-                if (interfaceIsEnabled(context, ni)) {
-                    uploadForms(context);
-                }
+                uploadForms(context, isFormAutoSendOptionEnabled(ni));
             }
         }
     }
 
-    private boolean interfaceIsEnabled(Context context,
-                                       NetworkInfo currentNetworkInfo) {
+    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
@@ -104,7 +97,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
 
-    private void uploadForms(Context context) {
+    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
         if (!running) {
             running = true;
 
@@ -114,9 +107,13 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
+                    String formId;
                     while (c.moveToNext()) {
-                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(l);
+                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
+                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
+                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                            toUpload.add(l);
+                        }
                     }
                 }
             } finally {
@@ -145,7 +142,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                googleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, accountCredential);
+                googleSheetsUploadTask = new InstanceGoogleSheetsAutoUploadTask(context, accountCredential);
                 String googleUsername = (String) settings.get(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -168,19 +165,36 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
-                instanceUploaderTask = new InstanceUploaderTask();
-                instanceUploaderTask.setUploaderListener(this);
+                instanceServerUploader = new InstanceServerUploader();
+                instanceServerUploader.setUploaderListener(this);
 
-                instanceUploaderTask.execute(toSendArray);
+                instanceServerUploader.execute(toSendArray);
             }
         }
+    }
+
+    // If the form explicitly sets the auto-send property, then it overrides the preferences.
+    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
+        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
+
+        String autoSubmit = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SUBMIT);
+                autoSubmit = cursor.getString(autoSubmitColumnIndex);
+            } finally {
+                cursor.close();
+            }
+        }
+
+        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
     }
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
         // task is done
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         if (googleSheetsUploadTask != null) {
             googleSheetsUploadTask.setUploaderListener(null);
@@ -263,8 +277,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         if (googleSheetsUploadTask != null) {
             googleSheetsUploadTask.setUploaderListener(null);
@@ -272,31 +286,17 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         running = false;
     }
 
-    private class GoogleSheetsAutoUploadTask extends
-            GoogleSheetsAbstractUploader {
-
-        private final GoogleAccountCredential credential;
+    private class InstanceGoogleSheetsAutoUploadTask extends InstanceGoogleSheetsUploader {
         private Context context;
 
-        public GoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
-            context = c;
-            this.credential = credential;
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
-            driveService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
+        InstanceGoogleSheetsAutoUploadTask(Context context, GoogleAccountCredential credential) {
+            super(credential);
+            this.context = context;
         }
 
         @Override
-        protected HashMap<String, String> doInBackground(Long... values) {
-
-            results = new HashMap<String, String>();
+        protected Outcome doInBackground(Long... values) {
+            outcome = new Outcome();
 
             String selection = InstanceColumns._ID + "=?";
             String[] selectionArgs = new String[(values == null) ? 0 : values.length];
@@ -329,8 +329,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             }
 
             uploadInstances(selection, selectionArgs, token);
-            return results;
+            return outcome;
         }
     }
-
 }

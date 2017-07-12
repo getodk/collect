@@ -17,13 +17,16 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Xml;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.FileContent;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
@@ -43,8 +46,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.FormException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -60,9 +61,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,8 +70,7 @@ import timber.log.Timber;
 /**
  * @author carlhartung (chartung@nafundi.com)
  */
-public abstract class GoogleSheetsAbstractUploader extends
-        AsyncTask<Long, Integer, HashMap<String, String>> {
+public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
@@ -84,20 +82,29 @@ public abstract class GoogleSheetsAbstractUploader extends
 
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
-    protected HashMap<String, String> results;
+    protected Outcome outcome;
     private String spreadsheetName;
     private String spreadsheetId;
     protected com.google.api.services.sheets.v4.Sheets sheetsService = null;
     protected com.google.api.services.drive.Drive driveService = null;
-    private InstanceUploaderListener stateListener;
     private boolean hasWritePermissonToSheet = false;
     private String spreadsheetFileName;
     private Integer sheetId;
 
-    public void setUploaderListener(InstanceUploaderListener sl) {
-        synchronized (this) {
-            stateListener = sl;
-        }
+    protected GoogleAccountCredential credential;
+
+    public InstanceGoogleSheetsUploader(GoogleAccountCredential credential) {
+        this.credential = credential;
+        HttpTransport transport = AndroidHttp.newCompatibleTransport();
+        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
+                transport, jsonFactory, credential)
+                .setApplicationName("ODK-Collect")
+                .build();
+        driveService = new com.google.api.services.drive.Drive.Builder(
+                transport, jsonFactory, credential)
+                .setApplicationName("ODK-Collect")
+                .build();
     }
 
     protected void uploadInstances(String selection, String[] selectionArgs, String token) {
@@ -158,7 +165,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                                         String token, String formFilePath) {
         // if the token is null fail immediately
         if (token == null) {
-            results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
+            outcome.results.put(id, oauth_fail + Collect.getInstance().getString(R.string.invalid_oauth));
             return false;
         }
 
@@ -168,7 +175,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 spreadsheetId = UrlUtils.getSpreadsheetID(id);
             } catch (BadUrlException e) {
                 Timber.e(e);
-                results.put(id, e.getMessage());
+                outcome.results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -195,10 +202,10 @@ public abstract class GoogleSheetsAbstractUploader extends
                 if (e.getDetails().getCode() == 403) {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 }
-                results.put(id, message);
+                outcome.results.put(id, message);
                 return false;
             } catch (IOException e) {
-                results.put(id, e.getMessage());
+                outcome.results.put(id, e.getMessage());
                 return false;
             }
             hasWritePermissonToSheet = true;
@@ -217,17 +224,17 @@ public abstract class GoogleSheetsAbstractUploader extends
             getColumns(formFilePath, columnNames);
         } catch (XmlPullParserException | IOException | FormException e2) {
             Timber.e(e2, "Exception thrown while getting columns from form file");
-            results.put(id, e2.getMessage());
+            outcome.results.put(id, e2.getMessage());
             return false;
         }
 
         if (columnNames.size() == 0) {
-            results.put(id, "No columns found in the form to upload");
+            outcome.results.put(id, "No columns found in the form to upload");
             return false;
         }
 
         if (columnNames.size() > 255) {
-            results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
+            outcome.results.put(id, Collect.getInstance().getString(R.string.sheets_max_columns,
                     String.valueOf(columnNames.size())));
             return false;
         }
@@ -235,7 +242,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // make sure column names are legal
         for (String n : columnNames) {
             if (!isValidGoogleSheetsString(n)) {
-                results.put(id,
+                outcome.results.put(id,
                         Collect.getInstance().getString(R.string.google_sheets_invalid_column_form,
                                 n));
                 return false;
@@ -247,12 +254,12 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             processInstanceXML(instanceFile, answersToUpload, mediaToUpload);
         } catch (FormException e) {
-            results.put(id,
+            outcome.results.put(id,
                     Collect.getInstance().getString(R.string.google_repeat_error));
             return false;
         } catch (XmlPullParserException | IOException e) {
             Timber.e(e, "Exception thrown while parsing the file");
-            results.put(id, e.getMessage());
+            outcome.results.put(id, e.getMessage());
             return false;
         }
 
@@ -265,7 +272,7 @@ public abstract class GoogleSheetsAbstractUploader extends
         // make sure column names in submission are legal (may be different than form)
         for (String n : answersToUpload.keySet()) {
             if (!isValidGoogleSheetsString(n)) {
-                results.put(id, Collect.getInstance()
+                outcome.results.put(id, Collect.getInstance()
                         .getString(R.string.google_sheets_invalid_column_instance, n));
                 return false;
             }
@@ -310,7 +317,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     folderId = createOrGetIDOfFolderWithName(jrFormId);
                 } catch (IOException | MultipleFoldersFoundException e) {
                     Timber.e(e);
-                    results.put(id, e.getMessage());
+                    outcome.results.put(id, e.getMessage());
                     return false;
                 }
 
@@ -322,13 +329,13 @@ public abstract class GoogleSheetsAbstractUploader extends
                             folderId, toUpload);
                 } catch (IOException e) {
                     Timber.e(e, "Exception thrown while uploading the file to drive");
-                    results.put(id, e.getMessage());
+                    outcome.results.put(id, e.getMessage());
                     return false;
                 }
 
                 //checking if file was successfully uploaded
                 if (uploadedFileId == null) {
-                    results.put(id, "Unable to upload the media files. Try again");
+                    outcome.results.put(id, "Unable to upload the media files. Try again");
                     return false;
                 }
 
@@ -345,13 +352,13 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                results.put(id, "No data found");
+                outcome.results.put(id, "No data found");
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
             Timber.e(e);
-            results.put(id, e.getMessage());
+            outcome.results.put(id, e.getMessage());
             return false;
         }
 
@@ -392,7 +399,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .execute();
             } catch (IOException e) {
                 Timber.e(e);
-                results.put(id, e.getMessage());
+                outcome.results.put(id, e.getMessage());
                 return false;
             }
 
@@ -430,7 +437,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
                 Timber.e(e);
-                results.put(id, e.getMessage());
+                outcome.results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -441,14 +448,14 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                results.put(id, "No data found");
+                outcome.results.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while getting the header feed");
-            results.put(id, e.getMessage());
+            outcome.results.put(id, e.getMessage());
             return false;
         }
 
@@ -485,7 +492,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                         .setValueInputOption("USER_ENTERED").execute();
             } catch (IOException e) {
                 Timber.e(e);
-                results.put(id, e.getMessage());
+                outcome.results.put(id, e.getMessage());
                 return false;
             }
         }
@@ -496,14 +503,14 @@ public abstract class GoogleSheetsAbstractUploader extends
         try {
             values = getHeaderFeed(spreadsheetId, spreadsheetName);
             if (values == null || values.size() == 0) {
-                results.put(id, "No data found");
+                outcome.results.put(id, "No data found");
                 return false;
             } else {
                 headerFeed = values.get(0);
             }
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while getting the header feed");
-            results.put(id, e.getMessage());
+            outcome.results.put(id, e.getMessage());
             return false;
         }
 
@@ -514,7 +521,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                 sheetCols.add(column.toString());
             }
         } else {
-            results.put(id, "couldn't get header feed");
+            outcome.results.put(id, "couldn't get header feed");
             return false;
         }
 
@@ -534,7 +541,7 @@ public abstract class GoogleSheetsAbstractUploader extends
                     missingString += ", ";
                 }
             }
-            results.put(id, Collect.getInstance().getString(
+            outcome.results.put(id, Collect.getInstance().getString(
                     R.string.google_sheets_missing_columns, missingString));
             return false;
         }
@@ -593,11 +600,11 @@ public abstract class GoogleSheetsAbstractUploader extends
                     .setValueInputOption("USER_ENTERED").execute();
         } catch (IOException e) {
             Timber.e(e);
-            results.put(id, e.getMessage());
+            outcome.results.put(id, e.getMessage());
             return false;
         }
 
-        results.put(id, Collect.getInstance().getString(R.string.success));
+        outcome.results.put(id, Collect.getInstance().getString(R.string.success));
         return true;
     }
 
@@ -873,77 +880,6 @@ public abstract class GoogleSheetsAbstractUploader extends
         return currentPath;
     }
 
-    @Override
-    protected void onPostExecute(HashMap<String, String> results) {
-        synchronized (this) {
-            if (stateListener != null) {
-                stateListener.uploadingComplete(results);
-
-                if (results != null && !results.isEmpty()) {
-                    StringBuilder selection = new StringBuilder();
-                    Set<String> keys = results.keySet();
-                    Iterator<String> it = keys.iterator();
-
-                    String[] selectionArgs = new String[keys.size() + 1];
-                    int i = 0;
-                    selection.append("(");
-                    while (it.hasNext()) {
-                        String id = it.next();
-                        selection.append(InstanceColumns._ID + "=?");
-                        selectionArgs[i++] = id;
-                        if (i != keys.size()) {
-                            selection.append(" or ");
-                        }
-                    }
-
-                    selection.append(") and status=?");
-                    selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
-
-                    Cursor uploadResults = null;
-                    try {
-                        uploadResults = new InstancesDao().getInstancesCursor(selection.toString(),
-                                selectionArgs);
-                        if (uploadResults.getCount() > 0) {
-                            Long[] toDelete = new Long[uploadResults.getCount()];
-                            uploadResults.moveToPosition(-1);
-
-                            int cnt = 0;
-                            while (uploadResults.moveToNext()) {
-                                toDelete[cnt] = uploadResults.getLong(uploadResults
-                                        .getColumnIndex(InstanceColumns._ID));
-                                cnt++;
-                            }
-
-                            boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
-                                    Collect.getInstance().getApplicationContext()).getBoolean(
-                                    PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
-                            if (deleteFlag) {
-                                DeleteInstancesTask dit = new DeleteInstancesTask();
-                                dit.setContentResolver(Collect.getInstance().getContentResolver());
-                                dit.execute(toDelete);
-                            }
-
-                        }
-                    } finally {
-                        if (uploadResults != null) {
-                            uploadResults.close();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        synchronized (this) {
-            if (stateListener != null) {
-                // update progress and total
-                stateListener.progressUpdate(values[0], values[1]);
-            }
-        }
-    }
-
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
@@ -973,5 +909,10 @@ public abstract class GoogleSheetsAbstractUploader extends
                 .get(spreadsheetId, spreadsheetName)
                 .execute();
         return response.getValues();
+    }
+
+    @Override
+    protected Outcome doInBackground(Long... values) {
+        return null;
     }
 }

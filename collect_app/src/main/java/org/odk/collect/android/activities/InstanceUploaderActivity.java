@@ -32,7 +32,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
+import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 
@@ -65,7 +65,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     private String alertMsg;
     private boolean alertShowing;
 
-    private InstanceUploaderTask instanceUploaderTask;
+    private InstanceServerUploader instanceServerUploader;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] instancesToSend;
@@ -125,16 +125,16 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         }
 
         // get the task if we've changed orientations. If it's null it's a new upload.
-        instanceUploaderTask = (InstanceUploaderTask) getLastCustomNonConfigurationInstance();
-        if (instanceUploaderTask == null) {
+        instanceServerUploader = (InstanceServerUploader) getLastCustomNonConfigurationInstance();
+        if (instanceServerUploader == null) {
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
-            instanceUploaderTask = new InstanceUploaderTask();
+            instanceServerUploader = new InstanceServerUploader();
 
             // register this activity with the new uploader task
-            instanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
+            instanceServerUploader.setUploaderListener(InstanceUploaderActivity.this);
 
-            instanceUploaderTask.execute(instancesToSend);
+            instanceServerUploader.execute(instancesToSend);
         }
     }
 
@@ -147,8 +147,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     @Override
     protected void onResume() {
         Timber.i("onResume: Resuming upload of %d instances!", instancesToSend.length);
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(this);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(this);
         }
         if (alertShowing) {
             createAlertDialog(alertMsg);
@@ -174,7 +174,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return instanceUploaderTask;
+        return instanceServerUploader;
     }
 
     @Override
@@ -195,8 +195,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
     @Override
     protected void onDestroy() {
-        if (instanceUploaderTask != null) {
-            instanceUploaderTask.setUploaderListener(null);
+        if (instanceServerUploader != null) {
+            instanceServerUploader.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -307,8 +307,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                                 Collect.getInstance().getActivityLogger().logAction(this,
                                         "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
-                                instanceUploaderTask.cancel(true);
-                                instanceUploaderTask.setUploaderListener(null);
+                                instanceServerUploader.cancel(true);
+                                instanceServerUploader.setUploaderListener(null);
                                 finish();
                             }
                         };
@@ -406,11 +406,11 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     @Override
     public void updatedCredentials() {
         showDialog(PROGRESS_DIALOG);
-        instanceUploaderTask = new InstanceUploaderTask();
+        instanceServerUploader = new InstanceServerUploader();
 
         // register this activity with the new uploader task
-        instanceUploaderTask.setUploaderListener(InstanceUploaderActivity.this);
-        instanceUploaderTask.execute(instancesToSend);
+        instanceServerUploader.setUploaderListener(InstanceUploaderActivity.this);
+        instanceServerUploader.execute(instancesToSend);
     }
 
     @Override
