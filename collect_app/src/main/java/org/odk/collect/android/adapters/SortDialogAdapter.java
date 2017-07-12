@@ -52,7 +52,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.txtViewTitle.setText(sortList[position]);
-        viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortIcon(sortList[position]));
+        viewHolder.imgViewIcon.setImageResource(ApplicationConstants.getSortLabelToIconMap().get(sortList[position]));
         viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()));
 
         if (position == selectedSortingOrder) {
