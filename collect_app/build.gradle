@@ -83,7 +83,7 @@ android {
                 keyAlias secrets.getProperty('RELEASE_KEY_ALIAS')
                 keyPassword secrets.getProperty('RELEASE_KEY_PASSWORD')
             }
-       }
+        }
     }
 
     buildTypes {
