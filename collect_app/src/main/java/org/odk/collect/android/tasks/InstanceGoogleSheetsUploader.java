@@ -14,12 +14,17 @@
 
 package org.odk.collect.android.tasks;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Xml;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -93,8 +98,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     protected GoogleAccountCredential credential;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountCredential credential) {
+    private Context context;
+
+    private boolean authFailed;
+
+    public InstanceGoogleSheetsUploader(GoogleAccountCredential credential, Context context) {
         this.credential = credential;
+        this.context = context;
+
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
@@ -913,6 +924,43 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     protected Outcome doInBackground(Long... values) {
-        return null;
+        outcome = new Outcome();
+
+        String selection = InstanceColumns._ID + "=?";
+        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
+        if (values != null) {
+            for (int i = 0; i < values.length; i++) {
+                if (i != values.length - 1) {
+                    selection += " or " + InstanceColumns._ID + "=?";
+                }
+                selectionArgs[i] = values[i].toString();
+            }
+        }
+        String token;
+        try {
+            token = credential.getToken();
+            //Immediately invalidate so we get a different one if we have to try again
+            GoogleAuthUtil.invalidateToken(context, token);
+
+            getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+            uploadInstances(selection, selectionArgs, token);
+        } catch (UserRecoverableAuthException e) {
+            outcome = null;
+            ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+        } catch (IOException | GoogleAuthException e) {
+            Timber.e(e);
+            authFailed = true;
+        } catch (MultipleFoldersFoundException e) {
+            Timber.e(e);
+        }
+        return outcome;
+    }
+
+    public boolean isAuthFailed() {
+        return authFailed;
+    }
+
+    public void setAuthFailed(boolean authFailed) {
+        this.authFailed = authFailed;
     }
 }

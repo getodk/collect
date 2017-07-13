@@ -13,8 +13,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
@@ -24,7 +22,6 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -34,14 +31,11 @@ import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.WebUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-
-import timber.log.Timber;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
@@ -49,7 +43,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     public static boolean running = false;
     InstanceServerUploader instanceServerUploader;
 
-    InstanceGoogleSheetsAutoUploadTask googleSheetsUploadTask;
+    InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -96,7 +90,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
-
     private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
         if (!running) {
             running = true;
@@ -142,7 +135,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                googleSheetsUploadTask = new InstanceGoogleSheetsAutoUploadTask(context, accountCredential);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountCredential, context);
                 String googleUsername = (String) settings.get(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -151,8 +144,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     return;
                 }
                 accountCredential.setSelectedAccountName(googleUsername);
-                googleSheetsUploadTask.setUploaderListener(this);
-                googleSheetsUploadTask.execute(toSendArray);
+                instanceGoogleSheetsUploader.setUploaderListener(this);
+                instanceGoogleSheetsUploader.execute(toSendArray);
 
             } else {
                 // get the username, password, and server from preferences
@@ -196,8 +189,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(null);
         }
-        if (googleSheetsUploadTask != null) {
-            googleSheetsUploadTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         running = false;
 
@@ -207,7 +200,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
         } else {
-
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
             Iterator<String> it = keys.iterator();
@@ -267,12 +259,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         notificationManager.notify(1328974928, builder.build());
     }
 
-
     @Override
     public void progressUpdate(int progress, int total) {
         // do nothing
     }
-
 
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
@@ -280,56 +270,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(null);
         }
-        if (googleSheetsUploadTask != null) {
-            googleSheetsUploadTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         running = false;
-    }
-
-    private class InstanceGoogleSheetsAutoUploadTask extends InstanceGoogleSheetsUploader {
-        private Context context;
-
-        InstanceGoogleSheetsAutoUploadTask(Context context, GoogleAccountCredential credential) {
-            super(credential);
-            this.context = context;
-        }
-
-        @Override
-        protected Outcome doInBackground(Long... values) {
-            outcome = new Outcome();
-
-            String selection = InstanceColumns._ID + "=?";
-            String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-            if (values != null) {
-                for (int i = 0; i < values.length; i++) {
-                    if (i != values.length - 1) {
-                        selection += " or " + InstanceColumns._ID + "=?";
-                    }
-                    selectionArgs[i] = values[i].toString();
-                }
-            }
-
-            String token;
-            try {
-                token = credential.getToken();
-                GoogleAuthUtil.invalidateToken(context, token);
-
-                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
-
-
-            } catch (IOException | GoogleAuthException | MultipleFoldersFoundException e) {
-                Timber.e(e);
-                return null;
-            }
-            context = null;
-
-            if (token == null) {
-                // failed, so just return
-                return null;
-            }
-
-            uploadInstances(selection, selectionArgs, token);
-            return outcome;
-        }
     }
 }
