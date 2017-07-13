@@ -48,7 +48,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget;
+        QuestionWidget questionWidget = new StringWidget(context, fep, readOnlyOverride);
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -113,9 +113,6 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_BOOLEAN:
                         questionWidget = new BooleanWidget(context, fep);
-                        break;
-                    default:
-                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
                 break;
@@ -217,13 +214,16 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
             case Constants.CONTROL_RANGE:
-                questionWidget = new RangeWidget(context, fep);
-                break;
-            default:
-                questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                switch (fep.getDataType()) {
+                    case Constants.DATATYPE_INTEGER:
+                        questionWidget = new RangeIntegerWidget(context, fep);
+                        break;
+                    case Constants.DATATYPE_DECIMAL:
+                        questionWidget = new RangeDecimalWidget(context, fep);
+                        break;
+                }
                 break;
         }
         return questionWidget;
     }
-
 }

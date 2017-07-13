@@ -122,13 +122,9 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             answer.setText(s);
         }
 
-        if (formEntryPrompt.isReadOnly()) {
-            answer.setBackground(null);
-        }
-
         if (formEntryPrompt.isReadOnly() || hasExApp) {
             answer.setFocusable(false);
-            answer.setClickable(false);
+            answer.setEnabled(false);
         }
 
         String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
@@ -177,7 +173,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                     answer.setBackground(textBackground);
                     answer.setFocusable(true);
                     answer.setFocusableInTouchMode(true);
-                    answer.setClickable(true);
+                    answer.setEnabled(true);
                 }
                 launchIntentButton.setEnabled(false);
                 launchIntentButton.setFocusable(false);

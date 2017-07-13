@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">পরিচালনা করার মত কোন কর্মকাণ্ড পাওয়া যায় নিঃ %s</string>
   <string name="add_another">সংযুক্ত করণ</string>
   <string name="add_another_repeat">অন্যান্য বিষয় \"%s\" সংযুক্ত করণ</string>
@@ -115,8 +115,7 @@
   <string name="username">ব্যবহারকারীর নাম।</string>
   <string name="view_hierarchy">অনুক্রম  অনুসারে দেখা</string>
   <string name="general_preferences">সাধারন সেটীংস।</string>
-  <string name="client">ক্লেয়েন্ট </string>
-    <string name="show_splash_summary">স্প্ল্যাশ summary দেখান</string>
+  <string name="show_splash_summary">স্প্ল্যাশ summary দেখান</string>
   <string name="splash_path">স্প্ল্যাশ path </string>
   <string name="default_splash_path">default স্প্ল্যাশ path</string>
   <string name="select_another_image">অন্য ভাষা নির্বাচন করুন।</string>
@@ -125,7 +124,7 @@
   <string name="app_url">এপ্লিকেশন url</string>
   <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
   <string name="change_formlist_url">ফর্ম তালিকা URL পরিবর্তন</string>
-    <string name="change_protocol">প্লাটফর্ম</string>
+  <string name="change_protocol">প্লাটফর্ম</string>
   <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
   <string name="formlist_url">ফর্ম তালিকা URL</string>
   <string name="submission_url"> সাবমিশান URL</string>
@@ -172,16 +171,16 @@
   <string name="reset_image">রিসেট</string>
   <string name="set_color">কালার সেট</string>
   <string name="select_drawing_color">ড্রয়িং কালার সিলেক্ট</string>
-    <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
+  <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
   <string name="admin_access_settings">অ্যাডমিনের settings</string>
-    <string name="save_mid">সংরক্ষণ করুন ফরম </string>
+  <string name="save_mid">সংরক্ষণ করুন ফরম </string>
   <string name="enter_new_password">পাসওয়ার্ড দিন।</string>
   <string name="admin_password_changed">অ্যাডমিনের পাসওয়ার্ড পরিবর্তন</string>
   <string name="admin_password_disabled">অ্যাডমিনের পাসওয়ার্ড disabled</string>
   <string name="admin_password_incorrect">পাসওয়ার্ড সঠিক হয়নি।</string>
   <string name="enter_admin_password">এডমিন পাসওয়ার্ড দিন।</string>
-    <string name="autosend">অটো পাঠানো </string>
-    <string name="found_in_main">প্রধান মেনু্তে পাবেন</string>
+  <string name="autosend">অটো পাঠানো </string>
+  <string name="found_in_main">প্রধান মেনু্তে পাবেন</string>
   <string name="form_forward">ফর্মের সামনের দিকে</string>
   <string name="form_backward">ফর্মের পিছনের দিকে</string>
   <string name="navigation">নেভিগেশান</string>

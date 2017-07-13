@@ -12,7 +12,7 @@
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black" />
+        android:textColor="@color/primaryTextColor" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
         android:padding="2dp"
-        android:textColor="@color/black"
+        android:textColor="@color/primaryTextColor"
         android:visibility="gone" />
 
     <android.support.v7.widget.AppCompatCheckBox

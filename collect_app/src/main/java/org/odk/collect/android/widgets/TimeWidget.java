@@ -220,7 +220,7 @@ public class TimeWidget extends QuestionWidget {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 try {
                     // Get the theme's android:timePickerMode
-                    final int MODE_SPINNER = 1;
+                    final int MODE_SPINNER = 2;
                     Class<?> styleableClass = Class.forName("com.android.internal.R$styleable");
                     Field timePickerStyleableField = styleableClass.getField("TimePicker");
                     int[] timePickerStyleable = (int[]) timePickerStyleableField.get(null);

@@ -28,7 +28,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
-import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -46,7 +45,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -82,6 +80,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -184,11 +183,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
-    private static final int MENU_LANGUAGES = Menu.FIRST;
-    private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
-    private static final int MENU_SAVE = Menu.FIRST + 2;
-    private static final int MENU_PREFERENCES = Menu.FIRST + 3;
-
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
     private static final int SAVING_IMAGE_DIALOG = 3;
@@ -228,7 +222,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private String stepMessage = "";
     private Toolbar toolbar;
-    private boolean hasHardwareMenu;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -268,9 +261,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
         questionHolder = (LinearLayout) findViewById(R.id.questionholder);
-
-        hasHardwareMenu =
-                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
 
         // get admin preference settings
         adminPreferences = getSharedPreferences(
@@ -547,45 +537,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        if (hasHardwareMenu) {
-            toolbar.setTitle(getString(R.string.loading_form));
-        } else {
-            setTitle(getString(R.string.loading_form));
-        }
-        toolbar.inflateMenu(R.menu.form_menu);
-        toolbar.findViewById(R.id.menu_save).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_SAVE");
-                // don't exit
-                saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
-            }
-        });
-
-        toolbar.findViewById(R.id.menu_goto).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FormController formController = Collect.getInstance()
-                        .getFormController();
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
-                                "MENU_HIERARCHY_VIEW");
-                if (formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
-                Intent i = new Intent(FormEntryActivity.this, FormHierarchyActivity.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                startActivityForResult(i, HIERARCHY_ACTIVITY);
-            }
-        });
-        if (!hasHardwareMenu) {
-            setSupportActionBar(toolbar);
-        }
+        setTitle(getString(R.string.loading_form));
+        setSupportActionBar(toolbar);
     }
 
     /**
@@ -899,28 +852,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.form_menu, menu);
 
-        if (!hasHardwareMenu) {
-            menu
-                    .add(0, MENU_SAVE, 0, R.string.save_all_answers)
-                    .setIcon(android.R.drawable.ic_menu_save)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-            menu
-                    .add(0, MENU_HIERARCHY_VIEW, 0, R.string.view_hierarchy)
-                    .setIcon(R.drawable.ic_menu_goto)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        }
-
-        menu
-                .add(0, MENU_LANGUAGES, 0, R.string.change_language)
-                .setIcon(R.drawable.ic_menu_start_conversation)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        menu
-                .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
@@ -934,18 +867,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         boolean useability;
 
-        if (!hasHardwareMenu) {
-            useability = adminPreferences.getBoolean(
-                    AdminKeys.KEY_SAVE_MID, true);
+        useability = adminPreferences.getBoolean(
+                AdminKeys.KEY_SAVE_MID, true);
 
-            menu.findItem(MENU_SAVE).setVisible(useability).setEnabled(useability);
+        menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-            useability = adminPreferences.getBoolean(
-                    AdminKeys.KEY_JUMP_TO, true);
+        useability = adminPreferences.getBoolean(
+                AdminKeys.KEY_JUMP_TO, true);
 
-            menu.findItem(MENU_HIERARCHY_VIEW).setVisible(useability)
-                    .setEnabled(useability);
-        }
+        menu.findItem(R.id.menu_goto).setVisible(useability)
+                .setEnabled(useability);
 
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -956,13 +887,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
 
-        menu.findItem(MENU_LANGUAGES).setVisible(useability)
+        menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
         useability = adminPreferences.getBoolean(
                 AdminKeys.KEY_ACCESS_SETTINGS, true);
 
-        menu.findItem(MENU_PREFERENCES).setVisible(useability)
+        menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
         return true;
     }
@@ -972,14 +903,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
         switch (item.getItemId()) {
-            case MENU_LANGUAGES:
+            case R.id.menu_languages:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_LANGUAGES");
                 createLanguageDialog();
                 return true;
-            case MENU_SAVE:
+            case R.id.menu_save:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -987,7 +918,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // don't exit
                 saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
                 return true;
-            case MENU_HIERARCHY_VIEW:
+            case R.id.menu_goto:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -995,11 +926,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
+
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivityForResult(i, HIERARCHY_ACTIVITY);
                 return true;
-            case MENU_PREFERENCES:
+            case R.id.menu_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -1146,11 +1080,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
 
-        if (hasHardwareMenu) {
-            toolbar.setTitle(formController.getFormTitle());
-        } else {
-            setTitle(formController.getFormTitle());
-        }
+        setTitle(formController.getFormTitle());
+
+        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FEC,
+                event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
             case FormEntryController.EVENT_BEGINNING_OF_FORM:
@@ -1430,6 +1363,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return;
             }
 
+            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
+
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
                 case FormEntryController.EVENT_GROUP:
@@ -1469,6 +1404,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             FormController formController = Collect.getInstance()
                     .getFormController();
+
             // The answer is saved on a back swipe, but question constraints are
             // ignored.
             if (formController.currentPromptIsQuestion()) {
@@ -1497,6 +1433,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         nonblockingCreateSavePointData();
                     }
                 }
+                formController.getTimerLogger().exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -1881,6 +1818,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -2008,6 +1946,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                             .logInstanceAction(this,
                                                     "createQuitDialog",
                                                     "discardAndExit");
+                                    FormController formController = Collect.getInstance().getFormController();
+                                    if (formController != null) {
+                                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                    }
                                     removeTempInstance();
                                     finishReturnInstance();
                                 }
@@ -2023,6 +1965,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 // close all open databases of external data.
                                 Collect.getInstance().getExternalDataManager().close();
 
+                                FormController formController = Collect.getInstance().getFormController();
+                                if (formController != null) {
+                                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                }
                                 removeTempInstance();
                                 finishReturnInstance();
                                 break;
@@ -2501,7 +2447,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2520,7 +2466,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
@@ -2528,7 +2474,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
@@ -2626,15 +2572,22 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             String path = Collect.INSTANCES_PATH + File.separator + file + "_"
                     + time;
             if (FileUtils.createFolder(path)) {
-                formController.setInstancePath(new File(path + File.separator
-                        + file + "_" + time + ".xml"));
+                File instanceFile = new File(path + File.separator + file + "_" + time + ".xml");
+                formController.setInstancePath(instanceFile);
             }
+
+            setTimerLogger(formController);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
+            setTimerLogger(formController);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -2675,18 +2628,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         dismissDialog(SAVING_DIALOG);
 
         int saveStatus = saveResult.getSaveResult();
+        FormController formController = Collect.getInstance()
+                .getFormController();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                if (saveResult.getComplete()) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                } else {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2696,12 +2660,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2728,6 +2694,20 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         this.stepMessage = stepMessage;
         if (progressDialog != null) {
             progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+        }
+    }
+
+    /*
+     * Create the timer logger object
+     */
+    private void setTimerLogger(FormController formController) {
+
+        if (formController.getTimerLogger() == null) {
+
+            // Create a new timerLogger object if there is no saved timer logger
+            formController.setTimerLogger(new TimerLogger(formController.getInstancePath(),
+                    PreferenceManager.getDefaultSharedPreferences(this),
+                    formController));
         }
     }
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostra password</string>
   <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
   <string name="add_another">Aggiungi gruppo</string>
@@ -19,7 +19,7 @@
   <string name="capture_video">Registra Video</string>
   <string name="change_language">Cambia Lingua</string>
   <string name="change_password">Password ODK</string>
-    <string name="change_username">Nome utente ODK</string>
+  <string name="change_username">Nome utente ODK</string>
   <string name="clearanswer_confirm">Rimuovere la risposta a \"%s\"?</string>
   <string name="clear_answer">Rimuovere la risposta</string>
   <string name="clear_answer_ask">Rimuovere questa risposta?</string>
@@ -89,7 +89,8 @@
   <string name="ok">OK</string>
   <string name="parse_error">Spiacenti, non sono in grado di analizzare il modulo.</string>
   <string name="parse_legacy_formlist_failed">Il server non ha fornito un modulo compatibile con Aggregate 0.9.x. : %s </string>
-  <string name="parse_openrosa_formlist_failed">Il server non ha fornito un modulo compatibile con OpenRosa version 1.0 standard: %s</string>
+  <string name="parse_openrosa_formlist_failed">Il server non ha fornito un modulo compatibile con OpenRosa version 1.0 standard: %s
+</string>
   <string name="password">Password</string>
   <string name="play_audio">Riproduci Suono</string>
   <string name="play_video">Riproduci Video</string>
@@ -121,8 +122,7 @@
   <string name="username">Nome Utente</string>
   <string name="view_hierarchy">Apri visione gerarchica</string>
   <string name="general_preferences">Impostazioni Generali</string>
-  <string name="client">Interfaccia utente</string>
-    <string name="show_splash_summary">Indica quando l\'applicazione si avvia</string>
+  <string name="show_splash_summary">Indica quando l\'applicazione si avvia</string>
   <string name="splash_path">Immagine di avvio selezionata</string>
   <string name="default_splash_path">ODK Default</string>
   <string name="select_another_image">Selezionare un\'altra immagine</string>
@@ -131,7 +131,7 @@
   <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
-    <string name="change_protocol">Piattaforma server</string>
+  <string name="change_protocol">Piattaforma server</string>
   <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
   <string name="formlist_url">Percorso Elenco Moduli</string>
   <string name="submission_url">Luogo di consegna</string>
@@ -193,9 +193,9 @@
   <string name="reset_image">Reset</string>
   <string name="set_color">Imposta Colore</string>
   <string name="select_drawing_color">Seleziona Colore per disegnare</string>
-    <string name="admin_preferences">Impostazioni Amministratore</string>
+  <string name="admin_preferences">Impostazioni Amministratore</string>
   <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
-    <string name="save_mid">Salva Modulo</string>
+  <string name="save_mid">Salva Modulo</string>
   <string name="enter_new_password">Inserire nuova password</string>
   <string name="admin_password">Password di amministratore</string>
   <string name="admin_password_changed">Password dell\'Amministratore cambiata con successo</string>
@@ -203,10 +203,10 @@
   <string name="admin_password_incorrect">Attenzione, la password è sbagliata!</string>
   <string name="enter_admin_password">Inserire Password Amministratore</string>
   <string name="change_admin_password">Cambia la password di amministratore</string>
-    <string name="autosend">Invio automatico</string>
-    <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
+  <string name="autosend">Invio automatico</string>
+  <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
-    <string name="no_account">Nessun account</string>
+  <string name="no_account">Nessun account</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
   <string name="form_forward">Prossimo</string>
   <string name="form_backward">Precedente</string>
@@ -256,7 +256,7 @@
   <string name="survey_saving_finalizing_message">Completamento nella scheda SD…</string>
   <string name="survey_saving_encrypting_message">Crittografia dati…</string>
   <string name="high_resolution_summary">Permetti la registrazione di video ad alta risoluzione</string>
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="google_drive">Google Drive</string>
   <string name="go_drive">My Drive</string>
   <string name="go_shared">Condiviso con Me</string>
@@ -290,10 +290,8 @@
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <string name="about_preferences">Informazioni</string>
-  <string name="tell_your_friends">Dillo agli amici</string>
   <string name="tell_your_friends_msg">Scarica l\'app di ODK Collect!</string>
-  <string name="leave_a_review">Scrivi una recensione</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Mappatura</string>
   <string name="map_sdk_selector_title">Mappatura SDK</string>
   <string name="map_sdk_behavior">Mappatura SDK</string>
@@ -311,7 +309,7 @@
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
   <string name="map_basemap_selector_title">Mappe base</string>
-    <string name="show_map_basemap">Mostra opzioni mappa base</string>
+  <string name="show_map_basemap">Mostra opzioni mappa base</string>
   <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
@@ -370,8 +368,6 @@
   <string name="parser_exception">Eccezione XPathParser: \"%s\"</string>
   <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
-  <string name="odk_website">Sito web di Open Data Kit</string>
-  <string name="all_open_source_licenses">Licenze open source </string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

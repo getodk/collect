@@ -7,12 +7,17 @@
         <item name="android:scrollbarSize">1.75mm</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:fadeScrollbars">false</item>
-        <item name="colorAccent">@color/light_blue</item>
+        <item name="colorAccent">@color/tintColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
+        <item name="android:panelBackground">@android:color/white</item>
     </style>
 
     <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">@color/light_blue</item>
+        <item name="colorAccent">@color/tintColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:panelBackground">@android:color/white</item>
+        <item name="android:listDivider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
     </style>
 </resources>

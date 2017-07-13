@@ -10,10 +10,17 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/menu_item_share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
-        android:title="@string/share"
-        android:icon="@android:drawable/ic_menu_share"
-        app:showAsAction="always" />
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/sort_the_list"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/ic_search"
+        android:title="@string/filter_the_list"
+        app:showAsAction="always"/>
+
 </menu>

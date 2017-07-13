@@ -64,7 +64,7 @@ public class InstanceUploaderList extends InstanceListActivity
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
+    private static final int MENU_PREFERENCES = Menu.FIRST;
     private static final int MENU_SHOW_UNSENT = MENU_PREFERENCES + 1;
 
     private static final int INSTANCE_UPLOADER = 0;
@@ -145,12 +145,7 @@ public class InstanceUploaderList extends InstanceListActivity
         });
 
         // set title
-
-        if (hasHardwareMenu) {
-            toolbar.setTitle(getString(R.string.send_data));
-        } else {
-            setTitle(getString(R.string.send_data));
-        }
+        setTitle(getString(R.string.send_data));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -229,12 +224,10 @@ public class InstanceUploaderList extends InstanceListActivity
 
         menu
                 .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
         menu
                 .add(0, MENU_SHOW_UNSENT, 1, R.string.change_view)
-                .setIcon(R.drawable.ic_menu_manage)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }

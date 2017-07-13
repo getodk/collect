@@ -47,7 +47,9 @@ public class ServerPreferences extends ServerPreferencesFragment implements Pref
     @Override
     public void onDetach() {
         super.onDetach();
-        toolbar.setTitle(R.string.general_preferences);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.general_preferences);
+        }
     }
 
     private void initProtocolPrefs() {
