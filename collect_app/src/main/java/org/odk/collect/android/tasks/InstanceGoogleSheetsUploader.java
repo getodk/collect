@@ -54,6 +54,7 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -118,7 +119,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 .build();
     }
 
-    protected void uploadInstances(String selection, String[] selectionArgs, String token) {
+    protected void uploadInstances(String selection, String[] selectionArgs, String token, int low, int vauesCount) {
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -151,7 +152,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         return;
                     }
 
-                    publishProgress(c.getPosition() + 1, c.getCount());
+                    publishProgress(c.getPosition() + 1 + low, vauesCount);
                     String instance = c.getString(c
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
@@ -925,25 +926,37 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     @Override
     protected Outcome doInBackground(Long... values) {
         outcome = new Outcome();
+        int counter = 0;
 
-        String selection = InstanceColumns._ID + "=?";
-        String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-        if (values != null) {
-            for (int i = 0; i < values.length; i++) {
-                if (i != values.length - 1) {
-                    selection += " or " + InstanceColumns._ID + "=?";
-                }
-                selectionArgs[i] = values[i].toString();
-            }
-        }
-        String token;
         try {
-            token = credential.getToken();
-            //Immediately invalidate so we get a different one if we have to try again
-            GoogleAuthUtil.invalidateToken(context, token);
+            while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+                int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+                int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+                if (high > values.length) {
+                    high = values.length;
+                }
 
-            getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
-            uploadInstances(selection, selectionArgs, token);
+                StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+                String[] selectionArgs = new String[high - low];
+                for (int i = 0; i < (high - low); i++) {
+                    if (i > 0) {
+                        selectionBuf.append(",");
+                    }
+                    selectionBuf.append("?");
+                    selectionArgs[i] = values[i + low].toString();
+                }
+
+                selectionBuf.append(")");
+                String selection = selectionBuf.toString();
+
+                String token = credential.getToken();
+                //Immediately invalidate so we get a different one if we have to try again
+                GoogleAuthUtil.invalidateToken(context, token);
+
+                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+                uploadInstances(selection, selectionArgs, token, low, values.length);
+                counter++;
+            }
         } catch (UserRecoverableAuthException e) {
             outcome = null;
             ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
