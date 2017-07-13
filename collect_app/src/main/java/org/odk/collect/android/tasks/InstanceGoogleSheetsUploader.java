@@ -199,7 +199,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         .execute();
             } catch (GoogleJsonResponseException e) {
                 String message = e.getMessage();
-                if (e.getDetails().getCode() == 403) {
+                if (e.getDetails() != null && e.getDetails().getCode() == 403) {
                     message = Collect.getInstance().getString(R.string.google_sheets_access_denied);
                 }
                 outcome.results.put(id, message);
