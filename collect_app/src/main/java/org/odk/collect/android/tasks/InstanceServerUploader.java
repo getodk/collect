@@ -234,7 +234,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
                 if (e instanceof ClientProtocolException) {
                     outcome.results.put(id, fail + "Client Protocol Exception");
-                    Timber.e(e, "Client Protocol Exception");
+                    Timber.i(e, "Client Protocol Exception");
                 } else if (e instanceof ConnectTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
                     Timber.i(e, "Connection Timeout");
@@ -243,10 +243,10 @@ public class InstanceServerUploader extends InstanceUploader {
                     Timber.i(e, "Network Connection Failed");
                 } else if (e instanceof SocketTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
-                    Timber.e(e, "Connection timeout");
+                    Timber.i(e, "Connection timeout");
                 } else {
                     outcome.results.put(id, fail + "Network Connection Refused");
-                    Timber.e(e, "Network Connection Refused");
+                    Timber.i(e, "Network Connection Refused");
                 }
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -434,11 +434,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     return true;
                 }
             } catch (IOException e) {
-                if (e instanceof UnknownHostException || e instanceof ConnectTimeoutException) {
-                    Timber.i(e);
-                } else {
-                    Timber.e(e);
-                }
+                Timber.i(e);
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
