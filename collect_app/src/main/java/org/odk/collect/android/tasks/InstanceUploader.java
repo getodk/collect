@@ -46,7 +46,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
     @Override
     protected void onPostExecute(Outcome outcome) {
         synchronized (this) {
-            if (stateListener != null) {
+            if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
                     stateListener.authRequest(outcome.authRequestingServer, outcome.results);
                 } else {
