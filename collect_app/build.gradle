@@ -4,11 +4,11 @@ apply plugin: 'checkstyle'
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)
 
-ant.condition(property: 'os', value: 'windows') { 
-    os(family: 'windows') 
+ant.condition(property: 'os', value: 'windows') {
+    os(family: 'windows')
 }
-ant.condition(property: 'os', value: 'unix') { 
-    os(family: 'unix') 
+ant.condition(property: 'os', value: 'unix') {
+    os(family: 'unix')
 }
 
 // Build numbers were manually set until 1067
@@ -110,7 +110,7 @@ android {
 }
 
 // Required to use fileExtensions property in checkstyle file
-checkstyle.toolVersion = '7.6.1' 
+checkstyle.toolVersion = '7.6.1'
 
 // The normal check task reports nothing probably because Android uses its own sourceSets
 task checkstyle(type: Checkstyle) {
@@ -181,7 +181,6 @@ dependencies {
     androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
     androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
     androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
-    compile 'org.hamcrest:hamcrest-core:1.3'
 }
 
 // Must be at bottom to prevent dependency collisions

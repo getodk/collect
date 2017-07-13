@@ -80,9 +80,7 @@ public abstract class GoogleSheetsAbstractUploader extends
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
-    public static final String VALID_GOOGLE_SHEETS_ID = "^[a-zA-Z0-9\\-]+$";
-    public static final String GPS_LOCATION = "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-            + ".[0-9]+\\s[0-9]+\\.[0-9]+$";
+
 
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
@@ -948,12 +946,13 @@ public abstract class GoogleSheetsAbstractUploader extends
 
     public static boolean isValidGoogleSheetsString(String name) {
         return Pattern
-                .compile(VALID_GOOGLE_SHEETS_ID).matcher(name).matches();
+                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
     }
 
     public static boolean isValidLocation(String answer) {
         return Pattern
-                .compile(GPS_LOCATION).matcher(answer).matches();
+                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
     }
 
     /**
