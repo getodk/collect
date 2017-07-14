@@ -30,8 +30,10 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -166,6 +168,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
+    private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -194,6 +197,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int DELETE_REPEAT = 654321;
 
     private String formPath;
+    private String saveName;
+
     private GestureDetector gestureDetector;
 
     private Animation inAnimation;
@@ -313,6 +318,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (savedInstanceState.containsKey(KEY_ERROR)) {
                 errorMessage = savedInstanceState.getString(KEY_ERROR);
             }
+            saveName = savedInstanceState.getString(KEY_SAVE_NAME);
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
@@ -575,6 +581,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
+        outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
     }
 
@@ -1106,8 +1113,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView
-                        .findViewById(R.id.save_name);
+                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1123,11 +1129,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 };
                 saveAs.setFilters(new InputFilter[]{returnFilter});
 
-                String saveName = formController.getSubmissionMetadata().instanceName;
-                if (saveName == null) {
+                if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
-                    if (getContentResolver().getType(getIntent().getData())
+                    if (saveName == null && getContentResolver().getType(getIntent().getData())
                             == InstanceColumns.CONTENT_ITEM_TYPE) {
                         Uri instanceUri = getIntent().getData();
                         Cursor instance = null;
@@ -1151,18 +1156,31 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView
-                            .findViewById(R.id.save_form_as);
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.VISIBLE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
                     saveAs.setVisibility(View.VISIBLE);
+                    saveAs.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            saveName = String.valueOf(s);
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+                    });
                 } else {
                     // if instanceName is defined in form, this is the name -- no
                     // revisions
                     // display only the name, not the prompt, and disable edits
-                    TextView sa = (TextView) endView
-                            .findViewById(R.id.save_form_as);
+                    saveName = formController.getSubmissionMetadata().instanceName;
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
