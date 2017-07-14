@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
+
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
@@ -79,6 +79,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
+
 
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
@@ -569,12 +570,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     // try to match a fairly specific pattern to determine
                     // if it's a location
                     // [-]#.# [-]#.# #.# #.#
-                    Pattern p = Pattern
-                            .compile(
-                                    "^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                                            + ".[0-9]+\\s[0-9]+\\.[0-9]+$");
-                    Matcher m = p.matcher(answer);
-                    if (m.matches()) {
+
+                    if (isValidLocation(answer)) {
                         // get rid of everything after the second space
                         int firstSpace = answer.indexOf(" ");
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
@@ -883,11 +880,16 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     /**
      * Google sheets currently only allows a-zA-Z0-9 and dash
      */
-    private boolean isValidGoogleSheetsString(String name) {
-        Pattern p = Pattern
-                .compile("^[a-zA-Z0-9\\-]+$");
-        Matcher m = p.matcher(name);
-        return m.matches();
+
+    public static boolean isValidGoogleSheetsString(String name) {
+        return Pattern
+                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
+    }
+
+    public static boolean isValidLocation(String answer) {
+        return Pattern
+                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
     }
 
     /**
@@ -911,8 +913,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return response.getValues();
     }
 
+
     @Override
     protected Outcome doInBackground(Long... values) {
         return null;
     }
+
 }
+
+
