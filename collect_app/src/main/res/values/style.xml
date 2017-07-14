@@ -26,7 +26,7 @@
     </style>
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="behavior_peekHeight">250dp</item>
+        <item name="behavior_peekHeight">300dp</item>
     </style>
 
     <style name="MaterialDialogSheetAnimation">
