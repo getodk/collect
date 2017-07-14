@@ -4,11 +4,11 @@ apply plugin: 'checkstyle'
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)
 
-ant.condition(property: 'os', value: 'windows') { 
-    os(family: 'windows') 
+ant.condition(property: 'os', value: 'windows') {
+    os(family: 'windows')
 }
-ant.condition(property: 'os', value: 'unix') { 
-    os(family: 'unix') 
+ant.condition(property: 'os', value: 'unix') {
+    os(family: 'unix')
 }
 
 // Build numbers were manually set until 1067
@@ -83,7 +83,7 @@ android {
                 keyAlias secrets.getProperty('RELEASE_KEY_ALIAS')
                 keyPassword secrets.getProperty('RELEASE_KEY_PASSWORD')
             }
-       }
+        }
     }
 
     buildTypes {
@@ -138,7 +138,7 @@ android {
 }
 
 // Required to use fileExtensions property in checkstyle file
-checkstyle.toolVersion = '7.6.1' 
+checkstyle.toolVersion = '7.6.1'
 
 // The normal check task reports nothing probably because Android uses its own sourceSets
 task checkstyle(type: Checkstyle) {
