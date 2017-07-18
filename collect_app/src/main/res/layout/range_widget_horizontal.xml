@@ -21,24 +21,35 @@ limitations under the License.
     android:paddingBottom="15dp">
 
     <TextView
-        android:id="@+id/currentValue"
+        android:id="@+id/current_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="25sp" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Base.Widget.AppCompat.SeekBar.Discrete"/>
+        android:layout_height="wrap_content">
+
+        <SeekBar
+            android:id="@+id/seek_bar_no_ticks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Base.Widget.AppCompat.SeekBar.Discrete" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/minValue"
+            android:id="@+id/min_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -46,7 +57,7 @@ limitations under the License.
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/maxValue"
+            android:id="@+id/max_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

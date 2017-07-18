@@ -33,6 +33,9 @@ import java.math.BigDecimal;
 
 public abstract class RangeWidget extends QuestionWidget {
 
+    private static final String VERTICAL_APPEARANCE = "vertical";
+    private static final String NO_TICKS_APPEARANCE = "no-ticks";
+
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
     private BigDecimal rangeStep;
@@ -76,13 +79,11 @@ public abstract class RangeWidget extends QuestionWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    private void setUpLayoutElements(View view) {
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-
-        TextView minValue = (TextView) view.findViewById(R.id.minValue);
+    private void setUpLayoutElements() {
+        TextView minValue = (TextView) view.findViewById(R.id.min_value);
         minValue.setText(String.valueOf(rangeStart));
 
-        TextView maxValue = (TextView) view.findViewById(R.id.maxValue);
+        TextView maxValue = (TextView) view.findViewById(R.id.max_value);
         maxValue.setText(String.valueOf(rangeEnd));
 
         if (isWidgetValid()) {
@@ -93,7 +94,7 @@ public abstract class RangeWidget extends QuestionWidget {
                 setUpDefaultValues();
             }
 
-            currentValue = (TextView) view.findViewById(R.id.currentValue);
+            currentValue = (TextView) view.findViewById(R.id.current_value);
             setUpActualValueLabel();
             setUpSeekBar();
         }
@@ -176,12 +177,30 @@ public abstract class RangeWidget extends QuestionWidget {
     }
 
     private void setUpAppearance() {
-        if ("vertical".equals(getPrompt().getQuestion().getAppearanceAttr())) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_vertical, null);
+        String appearance = getPrompt().getQuestion().getAppearanceAttr();
+        if (appearance != null && appearance.contains(NO_TICKS_APPEARANCE)) {
+            if (appearance.contains(VERTICAL_APPEARANCE)) {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+                view.findViewById(R.id.seek_bar).setVisibility(GONE);
+            } else {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+                view.findViewById(R.id.seek_bar).setVisibility(GONE);
+            }
         } else {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_horizontal, null);
+            if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+                view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            } else {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+                view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            }
         }
-        setUpLayoutElements(view);
+
+        setUpLayoutElements();
     }
 
     protected abstract void setUpActualValueLabel();
