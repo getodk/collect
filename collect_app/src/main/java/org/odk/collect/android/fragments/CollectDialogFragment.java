@@ -18,62 +18,26 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 import org.odk.collect.android.bundle.CollectDialogBundle;
 
-public class CollectDialogFragment extends DialogFragment {
+public abstract class CollectDialogFragment extends DialogFragment {
 
     public static final String COLLECT_DIALOG_BUNDLE = "collectDialogBundle";
 
-    public static CollectDialogFragment newInstance(CollectDialogBundle collectDialogBundle) {
-        CollectDialogFragment dialogFragment = new CollectDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(COLLECT_DIALOG_BUNDLE, collectDialogBundle);
-        dialogFragment.setArguments(bundle);
-        return dialogFragment;
-    }
+    protected AlertDialog.Builder builder;
+
+    protected CollectDialogBundle collectDialogBundle;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final CollectDialogBundle collectDialogBundle = (CollectDialogBundle) getArguments().getSerializable(COLLECT_DIALOG_BUNDLE);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         if (collectDialogBundle != null) {
             builder
                     .setTitle(collectDialogBundle.getDialogTitle())
                     .setMessage(collectDialogBundle.getDialogMessage())
-                    .setCancelable(collectDialogBundle.isCancelable());
-
-            if (collectDialogBundle.getOnNegativeButtonClickCallback() != null) {
-                builder.setNegativeButton(collectDialogBundle.getNegativeButtonText(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        collectDialogBundle.onNegativeButtonClickCallback.onClick(getDialog());
-                    }
-                });
-            }
-
-            if (collectDialogBundle.getOnPositiveButtonClickCallback() != null) {
-                builder.setPositiveButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        collectDialogBundle.onPositiveButtonClickCallback.onClick(getDialog());
-                    }
-                });
-            }
-
-            if (collectDialogBundle.getOnNeutralButtonClickCallback() != null) {
-                builder.setNeutralButton(collectDialogBundle.getNeutralButtonText(), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        collectDialogBundle.onNeutralButtonClickCallback.onClick(getDialog());
-                    }
-                });
-            }
-
-            if (collectDialogBundle.getIcon() != null) {
-                builder.setIcon(collectDialogBundle.getIcon());
-            }
+                    .setIcon(collectDialogBundle.getIcon());
 
             setCancelable(collectDialogBundle.isCancelable());
         }
