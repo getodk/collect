@@ -2,7 +2,6 @@ build
 .gradle
 .idea
 local.properties
-*.iml
 .DS_Store
 
 fieldTask-release/
