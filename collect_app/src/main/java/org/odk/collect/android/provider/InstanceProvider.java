@@ -46,7 +46,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 9;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -68,48 +68,132 @@ public class InstanceProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-                    + InstanceColumns._ID + " integer primary key, "
-                    + InstanceColumns.DISPLAY_NAME + " text not null, "
-                    + InstanceColumns.SUBMISSION_URI + " text, "
-                    + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                    + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                    + InstanceColumns.JR_FORM_ID + " text not null, "
-                    + InstanceColumns.JR_VERSION + " text, "
-                    + InstanceColumns.STATUS + " text not null, "
-                    + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " date );");
+           db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
+               + InstanceColumns._ID + " integer primary key, "
+               + InstanceColumns.DISPLAY_NAME + " text not null, "
+               + InstanceColumns.SUBMISSION_URI + " text, "
+               + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
+               + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
+               + InstanceColumns.JR_FORM_ID + " text not null, "
+               + InstanceColumns.JR_VERSION + " text, "
+               + InstanceColumns.SOURCE + " text, "		        // smap
+               + InstanceColumns.FORM_PATH + " text, "		    // smap
+               + InstanceColumns.ACT_LON + " double, "		    // smap
+               + InstanceColumns.ACT_LAT + " double, "		    // smap
+               + InstanceColumns.SCHED_LON + " double, "		// smap
+               + InstanceColumns.SCHED_LAT + " double, "		// smap
+               + InstanceColumns.T_TITLE + " text, "		    // smap
+               + InstanceColumns.T_SCHED_START + " long, "		// smap
+               + InstanceColumns.T_ACT_START + " long, "		// smap
+               + InstanceColumns.T_ACT_FINISH + " long, "		// smap
+               + InstanceColumns.T_ADDRESS + " text, "		    // smap
+               + InstanceColumns.T_GEOM + " text, "		        // smap
+               + InstanceColumns.T_GEOM_TYPE + " text, "		// smap
+               + InstanceColumns.T_IS_SYNC + " text, "		    // smap
+               + InstanceColumns.T_ASS_ID + " long, "		    // smap
+               + InstanceColumns.T_TASK_STATUS + " text, "		// smap
+               + InstanceColumns.T_REPEAT + " integer, "		// smap
+               + InstanceColumns.T_UPDATEID + " text, "		    // smap
+               + InstanceColumns.T_LOCATION_TRIGGER + " text, " // smap
+               + InstanceColumns.T_SURVEY_NOTES + " text, "     // smap
+               + InstanceColumns.UUID + " text, "		        // smap
+               + InstanceColumns.STATUS + " text not null, "
+               + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
+               + InstanceColumns.DISPLAY_SUBTEXT + " text not null, "
+               + InstanceColumns.DELETED_DATE + " date );" );
         }
 
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            final int initialVersion = oldVersion;
-            if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
-                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
-                        + "'");
-                oldVersion = 2;
+        	int initialVersion = oldVersion;
+        	if ( oldVersion == 1 ) {
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+        		db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET " +
+        					InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true) + "' WHERE " +
+        					InstanceColumns.STATUS + " IS NOT NULL AND " +
+        					InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE + "'");
+        		oldVersion = 2;
+        	}
+        	if ( oldVersion == 2 ) {
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+    					InstanceColumns.JR_VERSION + " text;");
+        	}
+            // Smap Start
+        	if ( oldVersion < 4 ) {
+        		db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+    					InstanceColumns.SOURCE + " text;");
+        	}
+            if ( oldVersion < 5 ) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.FORM_PATH + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.ACT_LON + " double;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.ACT_LAT + " double;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.SCHED_LON + " double;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.SCHED_LAT + " double;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_TITLE + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_SCHED_START + " long;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_ACT_START + " long;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_ACT_FINISH + " long;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_ADDRESS + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_GEOM + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_GEOM_TYPE + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_IS_SYNC + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_ASS_ID + " long;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_TASK_STATUS + " text;");
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.UUID + " text;");
             }
-            if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.JR_VERSION + " text;");
-            }
-            if (oldVersion == 3) {
-                Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-                int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
-                cursor.close();
-
-                // Only add the column if it doesn't already exist
-                if (columnIndex == -1) {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                            + InstanceColumns.DELETED_DATE + " date;");
+            if ( oldVersion < 6 ) {
+                try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_REPEAT + " integer;");
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_UPDATEID + " text;");
+                }catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Log.w(t, "Error in upgrading to database version 6");
+                    e.printStackTrace();
                 }
+            }
+            if ( oldVersion < 7 ) {
+                try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_LOCATION_TRIGGER + " text;");
+                }catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Log.w(t, "Error in upgrading to database version 7");
+                    e.printStackTrace();
+                }
+            }
+            if ( oldVersion < 8 ) {
+                try {
+                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                            InstanceColumns.T_SURVEY_NOTES + " text;");
+                }catch(Exception e) {
+                    // Catch errors, its possible the user upgraded then downgraded
+                    Log.w(t, "Error in upgrading to database version 8");
+                    e.printStackTrace();
+                }
+            }
+            if (oldVersion < 9) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.DELETED_DATE + " date;");
             }
             Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
                     initialVersion, newVersion);
@@ -440,10 +524,28 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.JR_FORM_ID, InstanceColumns.JR_FORM_ID);
         sInstancesProjectionMap.put(InstanceColumns.JR_VERSION, InstanceColumns.JR_VERSION);
         sInstancesProjectionMap.put(InstanceColumns.STATUS, InstanceColumns.STATUS);
-        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE,
-                InstanceColumns.LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
-                InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(InstanceColumns.T_REPEAT, InstanceColumns.T_REPEAT);
+        sInstancesProjectionMap.put(InstanceColumns.T_UPDATEID, InstanceColumns.T_UPDATEID);
+        sInstancesProjectionMap.put(InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_LOCATION_TRIGGER);
+        sInstancesProjectionMap.put(InstanceColumns.T_SURVEY_NOTES, InstanceColumns.T_SURVEY_NOTES);
+        sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, InstanceColumns.LAST_STATUS_CHANGE_DATE);
+        sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DISPLAY_SUBTEXT);
+        sInstancesProjectionMap.put(InstanceColumns.SOURCE, InstanceColumns.SOURCE);                // smap
+        sInstancesProjectionMap.put(InstanceColumns.FORM_PATH, InstanceColumns.FORM_PATH);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.ACT_LON, InstanceColumns.ACT_LON);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.ACT_LAT, InstanceColumns.ACT_LAT);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.SCHED_LON, InstanceColumns.SCHED_LON);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.SCHED_LAT, InstanceColumns.SCHED_LAT);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TITLE, InstanceColumns.T_TITLE);              // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_SCHED_START, InstanceColumns.T_SCHED_START);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ACT_FINISH, InstanceColumns.T_ACT_FINISH);    // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ADDRESS, InstanceColumns.T_ADDRESS);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_GEOM, InstanceColumns.T_GEOM);                // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_GEOM_TYPE, InstanceColumns.T_GEOM_TYPE);      // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_IS_SYNC, InstanceColumns.T_IS_SYNC);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);          // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);                    // smap
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
 

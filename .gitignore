@@ -3,6 +3,9 @@ build
 .idea
 local.properties
 .DS_Store
+
+fieldTask-release/
+fieldTask/fieldTask-release/
 *.sublime-project
 
 # emacs backup files

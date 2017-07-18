@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.views;
 
+import java.io.Serializable;
+import java.util.*;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -41,6 +44,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.NFCActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -79,7 +83,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public static final String FIELD_LIST = "field-list";
 
     public ODKView(Context context, final FormEntryPrompt[] questionPrompts,
-            FormEntryCaption[] groups, boolean advancingPage) {
+            FormEntryCaption[] groups, boolean advancingPage, boolean canUpdate) {      // smap
         super(context);
 
         widgets = new ArrayList<QuestionWidget>();
@@ -100,6 +104,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
         // when the grouped fields are populated by an external app, this will get true.
         boolean readOnlyOverride = false;
+
+        // Smap set read only if this is a completed task
+        if(!canUpdate) {
+            readOnlyOverride = true;
+        }
+        // Smap
 
         // get the group we are showing -- it will be the last of the groups in the groups list
         if (groups != null && groups.length > 0) {
@@ -183,6 +193,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         boolean first = true;
+        FormEntryPrompt nfcPrompt = null;   // smap
         int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
@@ -190,9 +201,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 divider.setMinimumHeight(3);
                 view.addView(divider);
-            } else {
-                first = false;
-            }
+                mView.addView(divider);
+            } // else {     smap - move to end
+              //  first = false;
+            //}
 
             // if question or answer type is not supported, use text widget
             QuestionWidget qw =
@@ -204,6 +216,23 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             widgets.add(qw);
             view.addView(qw, layout);
 
+            // Start smap
+            // Auto get NFC if first question, and not already obtained a code
+            if(first && p.getDataType() == Constants.DATATYPE_BARCODE) {
+                String appearance = p.getAppearanceHint();
+                if ( appearance == null ) appearance = "";
+                appearance = appearance.toLowerCase(Locale.ENGLISH);
+                if (appearance.contains("read_nfc")) {
+                    // Make sure an NFC code has not alredy been retrieved
+                    String s = p.getAnswerText();
+                    if (s == null) {
+                        nfcPrompt = p;
+                    }
+                }
+            }
+            // End Smap
+
+            first = false;   // smap - relocated flag for false
 
         }
 
@@ -226,6 +255,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                         }
                     }
                 }, 150);
+            } else if(nfcPrompt != null) {    // Smap - auto get NFC
+                Intent i = new Intent(getContext(), NFCActivity.class);
+                Collect.getInstance().getFormController()
+                        .setIndexWaitingForData(nfcPrompt.getIndex());
+                ((Activity) getContext()).startActivityForResult(i,
+                        FormEntryActivity.NFC_CAPTURE);
             }
         }
     }

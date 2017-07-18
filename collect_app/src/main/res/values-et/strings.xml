@@ -125,7 +125,6 @@
   <string name="select_another_image">Vali teine pilt</string>
   <string name="use_odk_default">Kasuta vaikimisi pildina</string>
   <string name="change_splash_path">Muuda pilti</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
   <string name="change_protocol">Platvorm</string>

@@ -15,7 +15,7 @@
   <string name="capture_osm">Anzisha OpenMapkit</string>
   <string name="capture_video">Rekodi kanda</string>
   <string name="change_language">Badilisha Lugha</string>
-  <string name="change_password">Nywila ya ODK</string>
+  <string name="change_password">Nywila</string>
   <string name="change_username">Jina la mtumiaji</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
   <string name="clear_answer">Ondoa jibu</string>
@@ -116,7 +116,6 @@
   <string name="select_another_image">Chagua Picha nyingine</string>
   <string name="use_odk_default">Tumia picha ya kawaida</string>
   <string name="change_splash_path">Badilisha picha</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>
   <string name="change_protocol">Jukwaa</string>

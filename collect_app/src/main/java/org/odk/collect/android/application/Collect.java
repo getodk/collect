@@ -22,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.location.Location;       // smap
 import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.view.View;
@@ -65,7 +66,7 @@ public class Collect extends Application {
 
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
-            + File.separator + "odk";
+            + File.separator + "fieldTask";   // smap
     public static final String FORMS_PATH = ODK_ROOT + File.separator + "forms";
     public static final String INSTANCES_PATH = ODK_ROOT + File.separator + "instances";
     public static final String CACHE_PATH = ODK_ROOT + File.separator + ".cache";
@@ -92,6 +93,9 @@ public class Collect extends Application {
     private Tracker tracker;
 
     public static String defaultSysLanguage;
+
+    private Location location = null;       // smap
+    private boolean recordLocation = false; // smap
 
     public static Collect getInstance() {
         return singleton;
@@ -273,6 +277,18 @@ public class Collect extends Application {
             new LocaleHelper().updateLocale(this);
         }
     }
+
+    // Begin Smap
+    // start, set and get location
+    public void setLocation(Location l) {
+        location = l;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+    // End Smap
+
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.

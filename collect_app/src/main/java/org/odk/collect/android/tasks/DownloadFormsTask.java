@@ -27,10 +27,12 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.utilities.STFileUtils;		// smap
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -40,6 +42,12 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
+import android.content.ContentValues;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -84,7 +92,7 @@ public class DownloadFormsTask extends
 
 
     @Override
-    protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
+    public HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {		// smap make public
         ArrayList<FormDetails> toDownload = values[0];
 
         formsDao = new FormsDao();
@@ -160,7 +168,7 @@ public class DownloadFormsTask extends
                 // install everything
                 UriResult uriResult = null;
                 try {
-                    uriResult = findExistingOrCreateNewUri(fileResult.getFile());
+                    uriResult = findExistingOrCreateNewUri(fileResult.getFile(), STFileUtils.getSource(fd.downloadUrl), fd.tasks_only);   // smap add source
                     Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
 
                     // move the media files in the media folder
@@ -252,7 +260,7 @@ public class DownloadFormsTask extends
      * @return a {@link org.odk.collect.android.tasks.DownloadFormsTask.UriResult} object
      * @throws TaskCancelledException if the user cancels the task during the download.
      */
-    private UriResult findExistingOrCreateNewUri(File formFile) throws TaskCancelledException {
+    private UriResult findExistingOrCreateNewUri(File formFile, String source, boolean tasks_only) throws TaskCancelledException {		// smap add source as a parameter
         Cursor cursor = null;
         Uri uri = null;
         String mediaPath;
@@ -286,6 +294,9 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
                 v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
                 v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
+                v.put(FormsColumns.PROJECT, formInfo.get(FileUtils.PROJECT));		// smap
+                v.put(FormsColumns.TASKS_ONLY, tasks_only ? "yes" : "no");		    // smap
+                v.put(FormsColumns.SOURCE, source);									// smap
                 v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
                 v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
                         formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
@@ -315,7 +326,7 @@ public class DownloadFormsTask extends
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url) throws Exception {
+    public FileResult downloadXform(String formName, String url) throws Exception {	// Smap (made public)
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
@@ -377,9 +388,8 @@ public class DownloadFormsTask extends
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    private void downloadFile(File file, String downloadUrl) throws Exception {
-        File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
-                new File(Collect.CACHE_PATH));
+    public void downloadFile(File file, String downloadUrl) throws Exception {		// smap made public
+        File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION, new File(Collect.CACHE_PATH));
 
         URI uri;
         try {
@@ -411,6 +421,22 @@ public class DownloadFormsTask extends
 
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
+            // ---------------- Smap Start
+	    // Add credentials
+	    SharedPreferences settings =
+	            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+
+	    String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+	    String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+
+	    String server =
+	            settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
+
+	    if(username != null && password != null) {
+	        Uri u = Uri.parse(downloadUrl);
+	        WebUtils.addCredentials(username, password, u.getHost());
+	    }
+	    // Smap End
             // set up request...
             HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
             req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
@@ -539,21 +565,21 @@ public class DownloadFormsTask extends
         }
     }
 
-    private static class FileResult {
+    public static class FileResult {		// smap make public
 
         private final File file;
         private final boolean isNew;
 
-        private FileResult(File file, boolean isNew) {
+        public FileResult(File file, boolean aNew) {	// smap make public
             this.file = file;
             this.isNew = isNew;
         }
 
-        private File getFile() {
+        public File getFile() {				// smap make public
             return file;
         }
 
-        private boolean isNew() {
+        public boolean isNew() {			// smap make public
             return isNew;
         }
     }

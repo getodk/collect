@@ -23,6 +23,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.Location;               // smap
+import android.location.LocationListener;       // smap
+import android.location.LocationManager;        // smap
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -156,16 +162,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final int OSM_CAPTURE = 19;
     public static final int GEOSHAPE_CAPTURE = 20;
     public static final int GEOTRACE_CAPTURE = 21;
+    public static final int NFC_CAPTURE = 22;                           // smap
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
     public static final String BEARING_RESULT = "BEARING_RESULT";
     public static final String GEOSHAPE_RESULTS = "GEOSHAPE_RESULTS";
     public static final String GEOTRACE_RESULTS = "GEOTRACE_RESULTS";
+    public static final String NFC_RESULT = "NFC_RESULT";               // smap
 
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
+    public static final String KEY_TASK = "task";                       // SMAP
+    public static final String KEY_SURVEY_NOTES = "surveyNotes";        // SMAP
+    public static final String KEY_CAN_UPDATE = "canUpdate";            // SMAP
+    private long mTaskId;                                               // SMAP
+    private String mSurveyNotes = null;                                 // SMAP
+    private boolean mCanUpdate = true;                                  // SMAP
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -318,6 +332,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
+           //-------- SMAP Start ---------
+           if (savedInstanceState.containsKey(KEY_TASK)) {
+               mTaskId = savedInstanceState.getLong(KEY_TASK);
+           }
+           //-------- SMAP End ---------
         }
 
         // If a parse error message is showing then nothing else is loaded
@@ -528,6 +547,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 formLoaderTask = new FormLoaderTask(instancePath, null, null);
+                mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
+                mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);        // smap
+                mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "formLoaded", formPath);
                 showDialog(PROGRESS_DIALOG);
@@ -578,6 +600,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
+        outState.putLong(KEY_TASK, mTaskId);	    // SMAP
     }
 
     @Override
@@ -757,6 +780,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 ((ODKView) currentView).setBinaryData(traceExtra);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
+            case NFC_CAPTURE:       // smap
+                String nfcId = intent.getStringExtra(NFC_RESULT);
+                ((ODKView) mCurrentView).setBinaryData(nfcId);
+                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                break;
             case BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
                 ((ODKView) currentView).setBinaryData(bearing);
@@ -832,6 +860,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void refreshCurrentView() {
         FormController formController = Collect.getInstance()
                 .getFormController();
+
+        // SMAP start - seems to be a bug onresume when edit is completed by different engine
+        if(formController == null) {
+            return;
+    	}
+    	// SMAP end
+
         int event = formController.getEvent();
 
         // When we refresh, repeat dialog state isn't maintained, so step back
@@ -946,6 +981,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 "MENU_PREFERENCES");
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
+                return true;
+             case MENU_COMMENT:              // smap
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "onOptionsItemSelected",
+                                "MENU_COMMENT");
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
+                Log.i("debug instance: ", getIntent().getData().toString());
+                Intent comment = new Intent(this, SurveyNotesActivity.class);
+                startActivity(comment);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -1159,10 +1206,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     // present the prompt to allow user to name the form
                     TextView sa = (TextView) endView
                             .findViewById(R.id.save_form_as);
-                    sa.setVisibility(View.VISIBLE);
+                    // sa.setVisibility(View.VISIBLE);   // smap
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
-                    saveAs.setVisibility(View.VISIBLE);
+                    // saveAs.setVisibility(View.VISIBLE);  // smap
                 } else {
                     // if instanceName is defined in form, this is the name -- no
                     // revisions
@@ -1172,7 +1219,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
-                    saveAs.setVisibility(View.VISIBLE);
+                    // saveAs.setVisibility(View.VISIBLE);   // smap
                 }
 
                 // override the visibility settings based upon admin preferences
@@ -1223,7 +1270,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
                     odkv = new ODKView(this, formController.getQuestionPrompts(),
-                            groups, advancingPage);
+                            groups, advancingPage, formController.getCanUpdate());   // smap pass parameter indicating if view is updatable
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -1869,9 +1916,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
+        // Smap start
+        String surveyNotes = null;
+        FormController formController = Collect.getInstance().getFormController();
+        if(formController != null) {
+            surveyNotes = formController.getSurveyNotes();
+        }
+        // Smap end
+
         synchronized (saveDialogLock) {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName);
+                    updatedSaveName, mTaskId, mFormPath, surveyNotes, mCanUpdate); 	// SMAP added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);
@@ -2327,7 +2382,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     t.cancel(true);
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
-                    startActivity(new Intent(this, MainMenuActivity.class));
+                    // startActivity(new Intent(this, MainMenuActivity.class));     // smap
                 }
             }
         } else {
@@ -2502,6 +2557,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
+        formController.setSurveyNotes(mSurveyNotes);        // smap
+        formController.setCanUpdate(mCanUpdate);	    // smap
+
         // Set the language if one has already been set in the past
         String[] languageTest = formController.getLanguages();
         if (languageTest != null) {
@@ -2624,9 +2682,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Called by SavetoDiskTask if everything saves correctly.
      */
     @Override
-    public void savingComplete(SaveResult saveResult) {
+    public void savingComplete(SaveResult saveResult, long taskId) {		// smap added assignment_id
         dismissDialog(SAVING_DIALOG);
 
+	mTaskId = taskId;				// smap
         int saveStatus = saveResult.getSaveResult();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:

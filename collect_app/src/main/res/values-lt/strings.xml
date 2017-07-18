@@ -15,7 +15,7 @@
   <string name="capture_video">Įrašyti video</string>
   <string name="change_language">Pakeisti kalbą</string>
   <string name="change_password">Slaptažodis</string>
-  <string name="change_username">ODK naudotojo vardas</string>
+  <string name="change_username">naudotojo vardas</string>
   <string name="clearanswer_confirm">Pašalinti atsakymą į \"%s\"?</string>
   <string name="clear_answer">Pašalinti atsakymą</string>
   <string name="clear_answer_ask">Pašalinti šį atsakymą?</string>
@@ -114,7 +114,6 @@
   <string name="select_another_image">Parinkti kitą paveikslėlį</string>
   <string name="use_odk_default">Naudoti numatytąjį paveikslėlį</string>
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
   <string name="change_protocol">Protokolas</string>

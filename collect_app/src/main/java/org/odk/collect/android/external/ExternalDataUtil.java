@@ -18,6 +18,8 @@
 
 package org.odk.collect.android.external;
 
+import android.util.Log;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -139,9 +141,10 @@ public final class ExternalDataUtil {
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
             XPathFuncExpr xpathfuncexpr) {
+        ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();        // smap
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
-            ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();
+            //ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();  // smap
             for (SelectChoice selectChoice : selectChoices) {
                 String value = selectChoice.getValue();
                 if (isAnInteger(value)) {
@@ -187,7 +190,9 @@ public final class ExternalDataUtil {
             }
             return returnedChoices;
         } catch (Exception e) {
-            throw new ExternalDataException(e.getMessage(), e);
+            Log.i("ExternalDataUtil:", e.getMessage());
+            return returnedChoices;  // smap
+            //throw new ExternalDataException(e.getMessage(), e);  smap
         }
     }
 

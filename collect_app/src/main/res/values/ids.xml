@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="reject_button" type="id"/>
+    <item name="complete_button" type="id"/>
+
+</resources>

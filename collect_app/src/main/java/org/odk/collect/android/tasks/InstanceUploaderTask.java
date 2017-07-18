@@ -129,13 +129,22 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
      * Uploads to urlString the submission identified by id with filepath of instance
      *
      * @param urlString    destination URL
+     * @param id
+     * @param instanceFilePath
      * @param toUpdate     - Instance URL for recording status update.
      * @param localContext - context (e.g., credentials, cookies) for client connection
      * @param uriRemap     - mapping of Uris to avoid redirects on subsequent invocations
+     * @param outcome
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-                                        Uri toUpdate, HttpContext localContext, Map<Uri, Uri> uriRemap, Outcome outcome) {
+                            Uri toUpdate,
+                            HttpContext localContext,
+                            Map<Uri, Uri> uriRemap,
+                            Outcome outcome,
+                            String status,              // smap
+                            String location_trigger,    // smap
+                            String survey_notes) {		// smap add status
 
         Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
@@ -155,17 +164,17 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             u = uriRemap.get(u);
 
             // if https then enable preemptive basic auth...
-            if (u.getScheme().equals("https")) {
-                WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
-            }
+            //if ( u.getScheme().equals("https") ) {	smap
+            //	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            //}
 
             Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
         } else {
 
             // if https then enable preemptive basic auth...
-            if (u.getScheme() != null && u.getScheme().equals("https")) {
-                WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
-            }
+            //if ( u.getScheme() != null && u.getScheme().equals("https") ) { smap
+            //	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            //}
 
             // we need to issue a head request
             HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
@@ -184,8 +193,20 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     WebUtils.discardEntityBytes(response);
                     // we need authentication, so stop and return what we've
                     // done so far.
-                    outcome.authRequestingServer = u;
-                    return false;
+               	    /*
+                     * Smap Start
+                     *   just fail the request, the user will need to update userid and password in the parameters
+                     *   Smap does not at this stage support submissionURL's per survey each with a different user id and password
+                     *   The thinking is that this may be too complex and this type of function is better handled by subscribers
+                      */
+                    //outcome.authRequestingServer = u;
+                    //return false;
+                    outcome.mResults.put(id, fail
+                    			+ "Authentication failure.  You will need to fix the username, password or URL in the settings screen.  ");
+                    //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
+                    Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                    return true;
+                    // Smap end
                 } else if (statusCode == 204) {
                     Header[] locations = response.getHeaders("Location");
                     WebUtils.discardEntityBytes(response);
@@ -199,6 +220,11 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 // ... and possibly to use https instead.
                                 uriRemap.put(u, newURI);
                                 u = newURI;
+ 				// Start Smap
+                                String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+                                        .getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
+                                u = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
+                                // End Smap
                             } else {
                                 // Don't follow a redirection attempt to a different host.
                                 // We can't tell if this is a spoof or not.
@@ -208,8 +234,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                                 + "Unexpected redirection attempt to a different "
                                                 + "host: "
                                                 + newURI.toString());
-                                cv.put(InstanceColumns.STATUS,
-                                        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                                //cv.put(InstanceColumns.STATUS,
+                                //        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                                 Collect.getInstance().getContentResolver()
                                         .update(toUpdate, cv, null, null);
                                 return true;
@@ -217,8 +243,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         } catch (Exception e) {
                             Timber.e(e, "Exception thrown parsing URI for url %s", urlString);
                             outcome.results.put(id, fail + urlString + " " + e.toString());
-                            cv.put(InstanceColumns.STATUS,
-                                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                            //cv.put(InstanceColumns.STATUS,
+                            //        InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                             Collect.getInstance().getContentResolver()
                                     .update(toUpdate, cv, null, null);
                             return true;
@@ -236,8 +262,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 fail
                                         + "Invalid status code on Head request.  If you have a "
                                         + "web proxy, you may need to login to your network. ");
-                        cv.put(InstanceColumns.STATUS,
-                                InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                        // cv.put(InstanceColumns.STATUS,
+                        //         InstanceProviderAPI.STATUS_SUBMISSION_FAILED);  // smap
                         Collect.getInstance().getContentResolver()
                                 .update(toUpdate, cv, null, null);
                         return true;
@@ -270,7 +296,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                 }
                 outcome.results.put(id, fail + "Generic Exception: " + msg);
                 Timber.e(e);
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             }
@@ -305,7 +331,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             outcome.results.put(id, fail + "instance XML file does not exist!");
-            cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+            //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
             Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
             return true;
         }
@@ -405,6 +431,26 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
+            httppost.setHeader("form_status", status);						// smap add form_status header
+            // Start Smap - Add the location trigger and comments if they exist
+            if(location_trigger != null) {
+                try {
+                    StringBody sb = new StringBody(location_trigger, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("location_trigger", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            if(survey_notes != null) {
+                try {
+                    StringBody sb = new StringBody(survey_notes, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
+                    builder.addPart("survey_notes", sb);
+                } catch (Exception e) {
+                    e.printStackTrace(); // never happens...
+                }
+            }
+            // End Smap
+
             httppost.setEntity(builder.build());
 
             // prepare response and return uploaded
@@ -439,8 +485,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         }
 
                     }
-                    cv.put(InstanceColumns.STATUS,
-                            InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                    //cv.put(InstanceColumns.STATUS,
+                    //    InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                     Collect.getInstance().getContentResolver()
                             .update(toUpdate, cv, null, null);
                     return true;
@@ -456,7 +502,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     msg = e.toString();
                 }
                 outcome.results.put(id, fail + "Generic Exception: " + msg);
-                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                 return true;
             }
@@ -471,6 +517,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        cv.put(InstanceColumns.T_TASK_STATUS, InstanceProviderAPI.STATUS_SUBMITTED);     // smap
         Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
         return true;
     }
@@ -493,6 +540,8 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         selectionBuf.append(")");
         String selection = selectionBuf.toString();
+        Log.i(t, "Getting instances "  + selection);
+        // end smap
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                 .getSingularProperty(PropertyManager.withUri(PropertyManager.PROPMGR_DEVICE_ID));
@@ -519,25 +568,51 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-                    // Use the app's configured URL unless the form included a submission URL
-                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-                    String urlString = c.isNull(subIdx)
-                            ? getServerSubmissionURL() : c.getString(subIdx).trim();
+	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx)i.trim();
+	                if (urlString == null) {
+                            urlString = getServerSubmissionURL();
 
-                    // add the deviceID to the request...
-                    try {
-                        urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        // unreachable...
-                        Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-                    }
+	                    // ---------------- Smap Start
+	                    // Add credentials pre-emptively
 
-                    if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext,
-                            uriRemap, outcome)) {
-                        return false; // get credentials...
-                    }
-                }
-            }
+	                    String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
+	                    String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+
+	                    if(username != null && password != null) {
+	                    	Uri u = Uri.parse(urlString);
+	                    	WebUtils.addCredentials(username, password, u.getHost());
+	                    }
+
+                        // Add updateid if this is a non repeating task
+                        boolean repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
+                        String updateid = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
+                        if(!repeat && updateid != null) {
+                            urlString = urlString + "/" + updateid;
+                        }
+	                    // Smap End
+	                }
+
+                    // Smap start get smap specific data values to send to the server
+	                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));	// smap get status
+                    String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));	// smap get location trigger
+                    String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));	// smap get survey notes
+                    // smap end
+
+	                // add the deviceID to the request...
+	                try {
+						urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						// unreachable...
+                                                Timber.i(e, "Error encoding URL for device id : %s", deviceId);
+					}
+
+	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap, outcome,
+                            status, location_trigger, survey_notes) ) {	// smap add status
+	                	return false; // get credentials...
+	                }
+	            }
+	        }
         } finally {
             if (c != null) {
                 c.close();
@@ -547,7 +622,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         return true;
     }
 
-    protected Outcome doInBackground(Long... values) {
+    public Outcome doInBackground(Long... values) {    // smap make public
         Outcome outcome = new Outcome();
         int counter = 0;
         while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {

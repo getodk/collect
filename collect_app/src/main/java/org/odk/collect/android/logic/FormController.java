@@ -66,6 +66,9 @@ public class FormController {
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
 
+    public String surveyNotes = null;       // smap
+    public boolean canUpdate = true;        // smap
+
     /**
      * OpenRosa metadata tag names.
      */
@@ -1191,5 +1194,23 @@ public class FormController {
 
         return new InstanceMetadata(instanceId, instanceName, audit);
     }
+
+    // Start Smap
+    public void setSurveyNotes(String notes) {
+        surveyNotes = notes;
+    }
+
+    public String getSurveyNotes() {
+        return surveyNotes;
+    }
+
+    public void setCanUpdate(boolean v) {
+        canUpdate = v;
+    }
+
+    public boolean getCanUpdate() {
+        return canUpdate;
+    }
+    // End Smap
 
 }

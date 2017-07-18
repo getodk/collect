@@ -14,8 +14,8 @@
   <string name="capture_image">Resim Çek</string>
   <string name="capture_video">Video Kayit</string>
   <string name="change_language">Dil Değiştir</string>
-  <string name="change_password">ODK Şifresi</string>
-  <string name="change_username">ODK Kullanici Adi</string>
+  <string name="change_password">Şifresi</string>
+  <string name="change_username">Kullanici Adi</string>
   <string name="clearanswer_confirm">Bu yanıt kaldırılsın mı \"%s\"?</string>
   <string name="clear_answer">Yanıtları kaldır</string>
   <string name="clear_answer_ask">Bu yanıt kaldırılsın mı ?</string>
@@ -96,7 +96,6 @@
   <string name="select_another_image">Başka bir görüntü seçin</string>
   <string name="use_odk_default">Geçerli görüntüyü kullan</string>
   <string name="change_splash_path">Görüntüyü Değiştir</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
   <string name="change_protocol">Platform</string>

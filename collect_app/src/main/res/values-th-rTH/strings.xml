@@ -16,8 +16,9 @@
   <string name="capture_osm">เปิด OpenMapKit</string>
   <string name="capture_video">บันทึกภาพเคลื่อนไหว</string>
   <string name="change_language">เปลี่ยนภาษา</string>
-  <string name="change_password">รหัสผ่าน ODK</string>
-  <string name="change_username">ชื่อผู้ใช้งาน ODK</string>
+  <string name="change_password">รหัสผ่าน</string>
+  <string name="change_protocol_settings_default">ตั้งค่า Platform</string>
+  <string name="change_username">ชื่อผู้ใช้งาน</string>
   <string name="clearanswer_confirm">ย้ายคำตอบไปที่ \"%s\" หรือไม่?</string>
   <string name="clear_answer">ปิดคำตอบ</string>
   <string name="clear_answer_ask">ปิดคำตอบนี้หรือไม่?</string>
@@ -123,7 +124,6 @@
   <string name="select_another_image">เลือกภาพอื่น</string>
   <string name="use_odk_default">ใช้ภาพที่กำหนดไว้</string>
   <string name="change_splash_path">เปลี่ยนภาพใหม่</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
   <string name="change_formlist_url">Form list path (appended to URL)</string>
   <string name="change_protocol">Platform</string>

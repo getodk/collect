@@ -26,12 +26,13 @@
         android:orientation="horizontal"
         android:paddingBottom="5dip">
 
+        <!-- smap change src of image -->
         <ImageView
             android:id="@+id/app_icon"
             android:layout_width="72dip"
             android:layout_height="72dip"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/notes" />
+            android:src="@drawable/ic_launcher" />
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -53,39 +53,39 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     GoogleSheetsAutoUploadTask googleSheetsUploadTask;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
+   @Override
+	public void onReceive(Context context, Intent intent) {
         // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return;
         }
 
-        String action = intent.getAction();
+		String action = intent.getAction();
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
-        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+		NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                if (interfaceIsEnabled(context, currentNetworkInfo)) {
+				if (interfaceIsEnabled(context, currentNetworkInfo)) {
                     uploadForms(context);
-                }
-            }
-        } else if (action.equals("org.odk.collect.android.FormSaved")) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+				}
+			}
+		} else if (action.equals("org.odk.collect.android.FormSaved")) {
+			ConnectivityManager connectivityManager = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (ni == null || !ni.isConnected()) {
-                // not connected, do nothing
-            } else {
-                if (interfaceIsEnabled(context, ni)) {
+			if (ni == null || !ni.isConnected()) {
+				// not connected, do nothing
+			} else {
+				if (interfaceIsEnabled(context, ni)) {
                     uploadForms(context);
-                }
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 
     private boolean interfaceIsEnabled(Context context,
                                        NetworkInfo currentNetworkInfo) {
@@ -172,9 +172,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 instanceUploaderTask.setUploaderListener(this);
 
                 instanceUploaderTask.execute(toSendArray);
-            }
-        }
-    }
+	                }
+	            }
+	            }
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
@@ -206,8 +206,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 selectionArgs[i++] = id;
                 if (i != keys.size()) {
                     selection.append(" or ");
-                }
-            }
+    	}
+    }
 
             {
                 Cursor results = null;
@@ -326,7 +326,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             if (token == null) {
                 // failed, so just return
                 return null;
-            }
+    }
 
             uploadInstances(selection, selectionArgs, token);
             return results;

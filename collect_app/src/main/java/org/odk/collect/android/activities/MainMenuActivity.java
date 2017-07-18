@@ -304,7 +304,7 @@ public class MainMenuActivity extends AppCompatActivity {
         viewSentCount = viewSentCursor != null ? viewSentCursor.getCount() : 0;
 
         updateButtons();
-        setupGoogleAnalytics();
+        // setupGoogleAnalytics();   smap disable
     }
 
     private void initToolbar() {
@@ -564,7 +564,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private void setupGoogleAnalytics() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
                 .getInstance());
-        boolean isAnalyticsEnabled = settings.getBoolean(PreferenceKeys.KEY_ANALYTICS, true);
+        //boolean isAnalyticsEnabled = settings.getBoolean(PreferencesActivity.KEY_ANALYTICS, true);        smap disable
+        boolean isAnalyticsEnabled = false;                                                                 // smap disable
         GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
         googleAnalytics.setAppOptOut(!isAnalyticsEnabled);
     }

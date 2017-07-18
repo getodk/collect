@@ -29,6 +29,7 @@ public class FormDetails implements Serializable {
     public final String manifestUrl;
     public final String formID;
     public final String formVersion;
+    public final boolean tasks_only;    // smap
 
 
     public FormDetails(String error) {
@@ -38,16 +39,18 @@ public class FormDetails implements Serializable {
         formID = null;
         formVersion = null;
         errorStr = error;
+        tasks_only = false;     // smap
     }
 
 
-    public FormDetails(String name, String url, String manifest, String id, String version) {
+    public FormDetails(String name, String url, String manifest, String id, String version, boolean tasks_only) {
         manifestUrl = manifest;
         downloadUrl = url;
         formName = name;
         formID = id;
         formVersion = version;
         errorStr = null;
+        this.tasks_only = tasks_only;   // smap
     }
 
 }

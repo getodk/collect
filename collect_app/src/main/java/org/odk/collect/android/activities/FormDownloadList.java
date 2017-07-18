@@ -688,6 +688,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             selectSupersededForms();
             formListAdapter.notifyDataSetChanged();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
+
+            Intent intent = new Intent("refresh");  // smap refresh task list
+            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
+
             toggleButtonLabel(toggleButton, listView);
         }
     }

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
+apply plugin: 'android'
 
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)
@@ -11,49 +12,6 @@ ant.condition(property: 'os', value: 'unix') {
     os(family: 'unix') 
 }
 
-// Build numbers were manually set until 1067
-def LEGACY_BUILD_NUMBER_OFFSET = 1067
-
-// Based on http://stackoverflow.com/questions/17097263#24121734
-def getMasterCommitCount = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            switch (ant.properties.os) {
-                case 'windows':
-                    commandLine 'cmd', '/c', 'git', 'rev-list', '--first-parent', '--count', 'master'
-                    break
-                case 'unix':
-                    commandLine 'git', 'rev-list', '--first-parent', '--count', 'master'
-                    break
-            }
-            standardOutput = stdout
-        }
-        return Integer.parseInt(stdout.toString().trim())
-    } catch (ignored) {
-        return -1;
-    }
-}
-
-def getVersionName = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            switch (ant.properties.os) {
-                case 'windows':
-                    commandLine 'cmd', '/c', 'git', 'describe', '--tags', '--dirty', '--always'
-                    break
-                case 'unix':
-                    commandLine 'git', 'describe', '--tags', '--dirty', '--always'
-                    break
-            }
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
-    } catch (ignored) {
-        return null;
-    }
-}
 
 def secretsFile = file('secrets.properties')
 def secrets = new Properties()
@@ -65,32 +23,38 @@ android {
     compileSdkVersion(25)
     buildToolsVersion('25.0.2')
 
+
     defaultConfig {
-        applicationId('org.odk.collect.android')
+        applicationId "org.smap.smapTask.android"
         minSdkVersion(16)
         targetSdkVersion(22)
-        versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
+        versionCode(5000)
         versionName getVersionName()
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
     }
 
-    signingConfigs {
-        release {
-            if (secrets.getProperty('RELEASE_STORE_FILE')) {
-                storeFile file(secrets.getProperty('RELEASE_STORE_FILE'))
-                storePassword secrets.getProperty('RELEASE_STORE_PASSWORD')
-                keyAlias secrets.getProperty('RELEASE_KEY_ALIAS')
-                keyPassword secrets.getProperty('RELEASE_KEY_PASSWORD')
-            }
-       }
+    productFlavors {
+        standard {
+            applicationId "org.smap.smapTask.android"
+            versionName "5.00"
+        }
+        plan {
+            applicationId "org.smap.smapTask.android.plan"
+            versionName "5.00-plan"
+        }
+        kontrolid {
+            applicationId "org.smap.smapTask.android.kontrolid"
+            versionName "5.00-kontrolid"
+        }
+        pop {
+            applicationId "org.smap.smapTask.android.pop"
+            versionName "5.00-pop"
+        }
     }
 
     buildTypes {
         release {
-            if (secrets.getProperty('RELEASE_STORE_FILE')) {
-                signingConfig signingConfigs.release
-            }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
@@ -98,6 +62,9 @@ android {
             debuggable(true)
             // Allows AndroidTest JaCoCo reports to be generated
             testCoverageEnabled(true)
+            //minifyEnabled(true)
+            minifyEnabled(false)
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 

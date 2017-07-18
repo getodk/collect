@@ -200,7 +200,13 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.addView(annotateButton);
         answerLayout.addView(errorTextView);
 
+        // smap hide the choose button if appearance is nochoose
+        if(nochoose(prompt)) {
+            mChooseButton.setVisibility(View.GONE);
+        }
+
         // and hide the capture, choose and annotate button if read-only
+
         if (prompt.isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
@@ -385,6 +391,17 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         if (imageView != null) {
             imageView.cancelLongPress();
         }
+    }
+
+    // Smap added function
+    private boolean nochoose(FormEntryPrompt prompt) {
+        boolean nochoose = false;
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+
+        if(appearance != null && appearance.contains("nochoose")) {
+            nochoose = true;
+        }
+        return nochoose;
     }
 
 }

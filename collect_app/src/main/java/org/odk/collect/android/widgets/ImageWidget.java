@@ -182,6 +182,10 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         } else if (selfie) {
             chooseButton.setVisibility(View.GONE);
         }
+        // Smap hide the choose button if appearance is nochoose
+        if(nochoose(prompt)) {
+            mChooseButton.setVisibility(View.GONE);
+        }
         errorTextView.setVisibility(View.GONE);
 
         // retrieve answer from data model and update ui
@@ -343,6 +347,17 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         if (imageView != null) {
             imageView.cancelLongPress();
         }
+    }
+
+    // Smap added function
+    private boolean nochoose(FormEntryPrompt prompt) {
+        boolean nochoose = false;
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+
+        if(appearance != null && appearance.contains("nochoose")) {
+            nochoose = true;
+        }
+        return nochoose;
     }
 
 }

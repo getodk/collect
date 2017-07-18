@@ -354,10 +354,159 @@ public class DrawActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+<<<<<<< HEAD
     public void clear(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
             reset();
+=======
+    public class DrawView extends View {
+        private boolean isSignature;
+        private Bitmap mBitmap;
+        private Canvas mCanvas;
+        private Path mCurrentPath;
+        private Path mOffscreenPath; // Adjusted for position of the bitmap in the view
+        private Paint mBitmapPaint;
+        private File mBackgroundBitmapFile;
+
+        public DrawView(final Context c) {
+            super(c);
+            isSignature = false;
+            mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+            mCurrentPath = new Path();
+            mOffscreenPath = new Path();
+            setBackgroundColor(0xFFFFFFFF);
+            mBackgroundBitmapFile = new File(Collect.TMPDRAWFILE_PATH);
+        }
+
+        public DrawView(Context c, boolean isSignature, File f) {
+            this(c);
+            this.isSignature = isSignature;
+            mBackgroundBitmapFile = f;
+        }
+
+        public void reset() {
+            Display display = ((WindowManager) getContext().getSystemService(
+                    Context.WINDOW_SERVICE)).getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
+            resetImage(screenWidth, screenHeight);
+        }
+
+        public void resetImage(int w, int h) {
+
+            if (mBackgroundBitmapFile.exists()) {
+            // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
+            // is called upon with flipped w/h (before orientation changes have been applied)
+            if (w > h) {
+                int temp = w;
+                w = h;
+                h = temp;
+            }
+
+                mBitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
+                        mBackgroundBitmapFile, w, h).copy(
+                        Bitmap.Config.ARGB_8888, true);
+                // mBitmap =
+                // Bitmap.createScaledBitmap(BitmapFactory.decodeFile(mBackgroundBitmapFile.getPath()),
+                // w, h, true);
+                mCanvas = new Canvas(mBitmap);
+            } else {
+                mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                mCanvas = new Canvas(mBitmap);
+                mCanvas.drawColor(0xFFFFFFFF);
+                if (isSignature) {
+                    drawSignLine();
+                }
+            }
+        }
+
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            super.onSizeChanged(w, h, oldw, oldh);
+            resetImage(w, h);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            drawOnCanvas(canvas, getBitmapLeft(), getBitmapTop());
+        }
+
+        public void drawOnCanvas(Canvas canvas, float left, float top) {
+            canvas.drawColor(0xFFAAAAAA);
+            canvas.drawBitmap(mBitmap, left, top, mBitmapPaint);
+            canvas.drawPath(mCurrentPath, paint);
+        }
+
+        private float mX, mY;
+
+        private void touch_start(float x, float y) {
+            mCurrentPath.reset();
+            mCurrentPath.moveTo(x, y);
+
+            mOffscreenPath.reset();
+            mOffscreenPath.moveTo(x - getBitmapLeft(), y - getBitmapTop());
+
+            mX = x;
+            mY = y;
+        }
+
+        public void drawSignLine() {
+            mCanvas.drawLine(0, (int) (mCanvas.getHeight() * .7),
+                    mCanvas.getWidth(), (int) (mCanvas.getHeight() * .7), paint);
+        }
+
+        private void touch_move(float x, float y) {
+            mCurrentPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+            mOffscreenPath.quadTo(mX - getBitmapLeft(), mY - getBitmapTop(),
+                    (x + mX) / 2 - getBitmapLeft(), (y + mY) / 2 - getBitmapTop());
+            mX = x;
+            mY = y;
+        }
+
+        private void touch_up() {
+            if (mCurrentPath.isEmpty()) {
+                mCanvas.drawPoint(mX, mY, pointPaint);
+            } else {
+                mCurrentPath.lineTo(mX, mY);
+                mOffscreenPath.lineTo(mX - getBitmapLeft(), mY - getBitmapTop());
+
+                // commit the path to our offscreen
+                mCanvas.drawPath(mOffscreenPath, paint);
+            }
+            // kill this so we don't double draw
+            mCurrentPath.reset();
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            float x = event.getX();
+            float y = event.getY();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    touch_start(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    touch_move(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    touch_up();
+                    invalidate();
+                    break;
+            }
+            return true;
+        }
+
+        public int getBitmapHeight(){
+            return mBitmap.getHeight();
+        }
+
+        public int getBitmapWidth(){
+            return mBitmap.getWidth();
+>>>>>>> smap-merge
         }
     }
 

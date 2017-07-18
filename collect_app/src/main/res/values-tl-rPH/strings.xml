@@ -15,7 +15,7 @@
   <string name="capture_video">Mag-tala ng Bidyo</string>
   <string name="change_language">Palitan ang Wika</string>
   <string name="change_password">Hudyat</string>
-  <string name="change_username">ODK Username</string>
+  <string name="change_username">Username</string>
   <string name="clearanswer_confirm">Tanggalin ang tugon sa \"%s\"?</string>
   <string name="clear_answer">Tanggalin ang tugon</string>
   <string name="clear_answer_ask">Tanggalin ang tugon na ito?</string>
@@ -113,7 +113,6 @@
   <string name="select_another_image">Pumili ng Ibang Imahe</string>
   <string name="use_odk_default">Gamitin ang Paunang natukoy na Imahe</string>
   <string name="change_splash_path">Palitan ang Imahe</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
     <string name="change_protocol">Server Platform</string>

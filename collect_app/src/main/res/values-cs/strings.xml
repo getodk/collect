@@ -120,7 +120,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="select_another_image">Vybrat další obrázek</string>
   <string name="use_odk_default">Použít výchozí obrázek</string>
   <string name="change_splash_path">Změnit obrázek</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Uložit změny</string>
   <string name="change_formlist_url">Cesta k seznamu dotazníků (přidat k URL)</string>
   <string name="change_protocol">Platforma</string>

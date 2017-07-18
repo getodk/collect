@@ -14,6 +14,16 @@
 
 package org.odk.collect.android.widgets;
 
+import android.util.Base64;
+import android.view.ViewGroup;
+import android.widget.*;
+import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;

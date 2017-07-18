@@ -116,7 +116,6 @@
   <string name="select_another_image">دوسری تصویر کا ینتخاب کریں۔</string>
   <string name="use_odk_default">Default  تصویر کو استعمال کریں</string>
   <string name="change_splash_path">عکس بدل دیں</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لیسٹ کا راستہ (ملحقہ ہو آر ایل)</string>
   <string name="change_protocol">پلیٹ فارم</string>

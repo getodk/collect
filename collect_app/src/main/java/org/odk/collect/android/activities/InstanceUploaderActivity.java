@@ -275,6 +275,9 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         if (message.length() == 0) {
             message.append(getString(R.string.no_forms_uploaded));
         }
+
+        Intent intent = new Intent("refresh");  // smap refresh task list
+        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
         createAlertDialog(message.toString().trim());
     }
 
