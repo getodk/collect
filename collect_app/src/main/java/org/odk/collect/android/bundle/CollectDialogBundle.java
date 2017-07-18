@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.bundle;
 
-import android.app.Dialog;
-
 import java.io.Serializable;
 
 public class CollectDialogBundle implements Serializable {
@@ -31,13 +29,10 @@ public class CollectDialogBundle implements Serializable {
     private String positiveButtonText;
     private String neutralButtonText;
 
-    public SingleButtonCallback onNegativeButtonClickCallback;
-    public SingleButtonCallback onPositiveButtonClickCallback;
-    public SingleButtonCallback onNeutralButtonClickCallback;
-
     private boolean cancelable;
 
     private int icon;
+    private int actionTag;
 
     CollectDialogBundle(Builder builder) {
         dialogTag = builder.dialogTag;
@@ -46,11 +41,9 @@ public class CollectDialogBundle implements Serializable {
         negativeButtonText = builder.negativeButtonText;
         positiveButtonText = builder.positiveButtonText;
         neutralButtonText = builder.neutralButtonText;
-        onNegativeButtonClickCallback = builder.onNegativeButtonClickCallback;
-        onPositiveButtonClickCallback = builder.onPositiveButtonClickCallback;
-        onNeutralButtonClickCallback = builder.onNeutralButtonClickCallback;
         cancelable = builder.cancelable;
         icon = builder.icon;
+        actionTag = builder.actionTag;
     }
 
     public String getDialogTag() {
@@ -77,24 +70,16 @@ public class CollectDialogBundle implements Serializable {
         return neutralButtonText;
     }
 
-    public SingleButtonCallback getOnNegativeButtonClickCallback() {
-        return onNegativeButtonClickCallback;
-    }
-
-    public SingleButtonCallback getOnPositiveButtonClickCallback() {
-        return onPositiveButtonClickCallback;
-    }
-
-    public SingleButtonCallback getOnNeutralButtonClickCallback() {
-        return onNeutralButtonClickCallback;
-    }
-
     public boolean isCancelable() {
         return cancelable;
     }
 
     public Integer getIcon() {
         return icon;
+    }
+
+    public int getActionTag() {
+        return actionTag;
     }
 
     public static class Builder {
@@ -106,13 +91,10 @@ public class CollectDialogBundle implements Serializable {
         private String positiveButtonText;
         private String neutralButtonText;
 
-        private SingleButtonCallback onNegativeButtonClickCallback;
-        private SingleButtonCallback onPositiveButtonClickCallback;
-        private SingleButtonCallback onNeutralButtonClickCallback;
-
         private boolean cancelable;
 
         private int icon;
+        private int actionTag;
 
         public Builder() {
             this(COLLECT_DIALOG_TAG);
@@ -147,21 +129,6 @@ public class CollectDialogBundle implements Serializable {
             return this;
         }
 
-        public Builder setOnNegatibeButtonClickCallback(SingleButtonCallback onNegativeButtonClickCallback) {
-            this.onNegativeButtonClickCallback = onNegativeButtonClickCallback;
-            return this;
-        }
-
-        public Builder setOnPositiveButtonClickCallback(SingleButtonCallback onPositiveButtonClickCallback) {
-            this.onPositiveButtonClickCallback = onPositiveButtonClickCallback;
-            return this;
-        }
-
-        public Builder setOnNeutralButtonClickCallback(SingleButtonCallback onNeutralButtonClickCallback) {
-            this.onNeutralButtonClickCallback = onNeutralButtonClickCallback;
-            return this;
-        }
-
         public Builder setCancelable(Boolean cancelable) {
             this.cancelable = cancelable;
             return this;
@@ -172,12 +139,13 @@ public class CollectDialogBundle implements Serializable {
             return this;
         }
 
+        public Builder setActionTag(int actionTag) {
+            this.actionTag = actionTag;
+            return this;
+        }
+
         public CollectDialogBundle build() {
             return new CollectDialogBundle(this);
         }
-    }
-
-    public interface SingleButtonCallback {
-        void onClick(Dialog dialog);
     }
 }

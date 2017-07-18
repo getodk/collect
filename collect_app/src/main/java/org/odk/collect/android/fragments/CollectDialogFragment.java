@@ -18,6 +18,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -27,6 +28,16 @@ import org.odk.collect.android.bundle.CollectDialogBundle;
 public class CollectDialogFragment extends DialogFragment {
 
     public static final String COLLECT_DIALOG_BUNDLE = "collectDialogBundle";
+
+    public interface DialogButtonCallbacks {
+        void onNegativeButtonClick(DialogInterface dialog, int actionTag);
+
+        void onPositiveButtonClick(DialogInterface dialog, int actionTag);
+
+        void onNeutralButtonClick(DialogInterface dialog, int actionTag);
+    }
+
+    private DialogButtonCallbacks callback;
 
     public static CollectDialogFragment newInstance(CollectDialogBundle collectDialogBundle) {
         CollectDialogFragment dialogFragment = new CollectDialogFragment();
@@ -42,31 +53,42 @@ public class CollectDialogFragment extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         if (collectDialogBundle != null) {
+            final int actionTag = collectDialogBundle.getActionTag();
+
             builder
                     .setTitle(collectDialogBundle.getDialogTitle())
                     .setMessage(collectDialogBundle.getDialogMessage())
                     .setCancelable(collectDialogBundle.isCancelable());
 
-            if (collectDialogBundle.getOnNegativeButtonClickCallback() != null) {
-                builder.setNegativeButton(collectDialogBundle.getNegativeButtonText(), new DialogInterface.OnClickListener() {
+            if (collectDialogBundle.getNegativeButtonText() != null) {
+                builder.setNegativeButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        collectDialogBundle.onNegativeButtonClickCallback.onClick(getDialog());
+                        if (callback != null) {
+                            callback.onNegativeButtonClick(dialog, actionTag);
+                        }
                     }
                 });
             }
 
-            if (collectDialogBundle.getOnPositiveButtonClickCallback() != null) {
+            if (collectDialogBundle.getPositiveButtonText() != null) {
                 builder.setPositiveButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        collectDialogBundle.onPositiveButtonClickCallback.onClick(getDialog());
+                        if (callback != null) {
+                            callback.onPositiveButtonClick(dialog, actionTag);
+                        }
                     }
                 });
             }
 
-            if (collectDialogBundle.getOnNeutralButtonClickCallback() != null) {
-                builder.setNeutralButton(collectDialogBundle.getNeutralButtonText(), new DialogInterface.OnClickListener() {
+            if (collectDialogBundle.getNeutralButtonText() != null) {
+                builder.setNeutralButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        collectDialogBundle.onNeutralButtonClickCallback.onClick(getDialog());
+                        if (callback != null) {
+                            callback.onNeutralButtonClick(dialog, actionTag);
+                        }
                     }
                 });
             }
@@ -79,5 +101,11 @@ public class CollectDialogFragment extends DialogFragment {
         }
 
         return builder.create();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callback = (DialogButtonCallbacks) context;
     }
 }

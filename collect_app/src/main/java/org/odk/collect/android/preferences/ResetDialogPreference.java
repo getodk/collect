@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.preferences;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,6 +32,8 @@ import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.odk.collect.android.preferences.AdminPreferencesActivity.FINISH_RESET_SETTINGS;
 
 public class ResetDialogPreference extends DialogPreference {
     private CheckBox preferences;
@@ -185,17 +186,11 @@ public class ResetDialogPreference extends DialogPreference {
     private void buildResetSettingsFinalDialog(String message) {
         CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
         dialogBuilder
+                .setActionTag(FINISH_RESET_SETTINGS)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setDialogTitle(getContext().getString(R.string.reset_app_state_result))
                 .setDialogMessage(message)
                 .setPositiveButtonText(getContext().getString(R.string.ok))
-                .setOnPositiveButtonClickCallback(new CollectDialogBundle.SingleButtonCallback() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        dialog.dismiss();
-                        ((AdminPreferencesActivity) context).recreate();
-                    }
-                })
                 .setCancelable(false);
 
         ((CollectAbstractActivity) context).buildDialog(dialogBuilder.build());
