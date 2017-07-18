@@ -15,12 +15,14 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.fragments.CollectDialogFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,9 +38,11 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppCompatActivity {
+public class AdminPreferencesActivity extends CollectAbstractActivity implements CollectDialogFragment.DialogButtonCallbacks {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
+
+    public static final int FINISH_RESET_SETTINGS = 1;
 
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
@@ -81,5 +85,25 @@ public class AdminPreferencesActivity extends AppCompatActivity {
                     .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
+    }
+
+    @Override
+    public void onNegativeButtonClick(DialogInterface dialog, int actionTag) {
+
+    }
+
+    @Override
+    public void onPositiveButtonClick(DialogInterface dialog, int actionTag) {
+        switch (actionTag) {
+            case FINISH_RESET_SETTINGS:
+                dialog.dismiss();
+                recreate();
+                break;
+        }
+    }
+
+    @Override
+    public void onNeutralButtonClick(DialogInterface dialog, int actionTag) {
+
     }
 }
