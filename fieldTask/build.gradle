@@ -2,6 +2,7 @@
  GRADLE CONFIG
  *************************************************************************************************/
 
+
 apply plugin: 'com.android.application'
 
 com.android.ddmlib.DdmPreferences.setTimeOut(60000)

@@ -264,7 +264,7 @@
             android:name=".receivers.LocationChangedReceiver"
             android:enabled="true"></receiver>
         <!-- Register AnalyticsReceiver and AnalyticsService to support background
-        dispatching on non-Google Play devices. -->
+        dispatching on non-Google Play devices.
         <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
@@ -274,6 +274,7 @@
         <service android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false"/>
+            -->
         <!-- ... -->
 
         <meta-data
