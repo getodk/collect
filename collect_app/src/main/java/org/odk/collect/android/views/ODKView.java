@@ -442,4 +442,13 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         widgets.get(0).stopAudio();
     }
 
+    public QuestionWidget getQuestionWidgetByID(int questionWidgetId) {
+        QuestionWidget questionWidget = null;
+        for (QuestionWidget qw : getWidgets()) {
+            if (qw.getId() == questionWidgetId) {
+                questionWidget = qw;
+            }
+        }
+        return questionWidget;
+    }
 }

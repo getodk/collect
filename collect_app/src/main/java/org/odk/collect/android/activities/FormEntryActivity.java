@@ -70,10 +70,12 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.bundle.CollectDialogBundle;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.fragments.dialogs.RemoveResponseDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -120,7 +122,7 @@ import timber.log.Timber;
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener {
+        OnGestureListener, SavePointListener, RemoveResponseDialog.RemoveResponseDialogCallbacks {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -183,6 +185,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
+    public static final String KEY_QUESTION_WIDGET_ID = "questionWidgetId";
+
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
     private static final int SAVING_IMAGE_DIALOG = 3;
@@ -224,6 +228,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private String stepMessage = "";
     private Toolbar toolbar;
+
+    private int questionWidgetId;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -318,6 +324,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
+            questionWidgetId = savedInstanceState.getInt(KEY_QUESTION_WIDGET_ID);
         }
 
         // If a parse error message is showing then nothing else is loaded
@@ -578,6 +585,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
+        outState.putInt(KEY_QUESTION_WIDGET_ID, questionWidgetId);
     }
 
     @Override
@@ -1041,6 +1049,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             .getActivityLogger()
                             .logInstanceAction(this, "onContextItemSelected",
                                     "createClearDialog", qw.getPrompt().getIndex());
+                    questionWidgetId = qw.getId();
                     createClearDialog(qw);
                     break;
                 }
@@ -2047,14 +2056,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Confirm clear answer dialog
      */
     private void createClearDialog(final QuestionWidget qw) {
-        Collect.getInstance()
+        Collect
+                .getInstance()
                 .getActivityLogger()
-                .logInstanceAction(this, "createClearDialog", "show",
-                        qw.getPrompt().getIndex());
-        alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-
-        alertDialog.setTitle(getString(R.string.clear_answer_ask));
+                .logInstanceAction(this, "createClearDialog", "show", qw.getPrompt().getIndex());
 
         String question = qw.getPrompt().getLongText();
         if (question == null) {
@@ -2064,37 +2069,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             question = question.substring(0, 50) + "...";
         }
 
-        alertDialog.setMessage(getString(R.string.clearanswer_confirm,
-                question));
+        CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
+        dialogBuilder
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setDialogTitle(getString(R.string.clear_answer_ask))
+                .setDialogMessage(getString(R.string.clearanswer_confirm, question))
+                .setPositiveButtonText(getString(R.string.discard_answer))
+                .setNegativeButtonText(getString(R.string.clear_answer_no))
+                .setCancelable(false);
 
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "clearAnswer", qw.getPrompt().getIndex());
-                        clearAnswer(qw);
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE: // no
-                        Collect.getInstance()
-                                .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "cancel", qw.getPrompt().getIndex());
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog
-                .setButton(getString(R.string.discard_answer), quitListener);
-        alertDialog.setButton2(getString(R.string.clear_answer_no),
-                quitListener);
-        alertDialog.show();
+        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
+        RemoveResponseDialog dialogFragment = RemoveResponseDialog.newInstance(collectDialogBundle);
+        dialogFragment.show(getSupportFragmentManager(), collectDialogBundle.getDialogTag());
     }
 
     /**
@@ -2932,5 +2918,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     public void allowSwiping(boolean doSwipe) {
         this.doSwipe = doSwipe;
+    }
+
+    @Override
+    public void removeAnswer(DialogInterface dialog) {
+        QuestionWidget qw = ((ODKView) currentView).getQuestionWidgetByID(questionWidgetId);
+        Collect
+                .getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "createClearDialog", "clearAnswer", qw.getPrompt().getIndex());
+
+        clearAnswer(qw);
+        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 }
