@@ -26,7 +26,7 @@ import android.widget.CheckBox;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.bundle.CollectDialogBundle;
-import org.odk.collect.android.fragments.ResetSettingsFinalDialog;
+import org.odk.collect.android.fragments.dialogs.ResetSettingsFinalDialog;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -178,10 +178,10 @@ public class ResetDialogPreference extends DialogPreference {
                 resultMessage.append("\n\n");
             }
         }
-        buildResetSettingsFinalDialog(String.valueOf(resultMessage));
+        buildAndShowResetSettingsFinalDialog(String.valueOf(resultMessage));
     }
 
-    private void buildResetSettingsFinalDialog(String message) {
+    private void buildAndShowResetSettingsFinalDialog(String message) {
         CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
         dialogBuilder
                 .setIcon(android.R.drawable.ic_dialog_info)

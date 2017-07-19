@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments;
+package org.odk.collect.android.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,7 +24,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.bundle.CollectDialogBundle;
 
-public class ResetSettingsFinalDialog extends CollectDialogFragment {
+public class ResetSettingsFinalDialog extends CollectAbstractDialog {
 
     public interface ResetSettingsFinalDialogCallbacks {
         void finishResetSettings(DialogInterface dialog);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments;
+package org.odk.collect.android.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,9 +23,9 @@ import android.support.v4.app.DialogFragment;
 
 import org.odk.collect.android.bundle.CollectDialogBundle;
 
-public abstract class CollectDialogFragment extends DialogFragment {
+public abstract class CollectAbstractDialog extends DialogFragment {
 
-    public static final String COLLECT_DIALOG_BUNDLE = "collectDialogBundle";
+    protected static final String COLLECT_DIALOG_BUNDLE = "collectDialogBundle";
 
     protected AlertDialog.Builder builder;
 

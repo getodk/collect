@@ -22,7 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.ResetSettingsFinalDialog;
+import org.odk.collect.android.fragments.dialogs.ResetSettingsFinalDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
