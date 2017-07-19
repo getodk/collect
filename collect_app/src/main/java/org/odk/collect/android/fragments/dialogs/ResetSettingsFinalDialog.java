@@ -18,19 +18,12 @@ package org.odk.collect.android.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import org.odk.collect.android.bundle.CollectDialogBundle;
 
 public class ResetSettingsFinalDialog extends CollectAbstractDialog {
-
-    public interface ResetSettingsFinalDialogCallbacks {
-        void finishResetSettings(DialogInterface dialog);
-    }
-
-    private ResetSettingsFinalDialogCallbacks callback;
 
     public static ResetSettingsFinalDialog newInstance(CollectDialogBundle collectDialogBundle) {
         ResetSettingsFinalDialog dialogFragment = new ResetSettingsFinalDialog();
@@ -48,20 +41,11 @@ public class ResetSettingsFinalDialog extends CollectAbstractDialog {
         builder.setPositiveButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                if (callback != null) {
-                    callback.finishResetSettings(dialog);
-                }
             }
         });
 
         super.onCreateDialog(savedInstanceState);
 
         return builder.create();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        callback = (ResetSettingsFinalDialogCallbacks) context;
     }
 }

@@ -15,14 +15,12 @@
 package org.odk.collect.android.preferences;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.ResetSettingsFinalDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,7 +36,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppCompatActivity implements ResetSettingsFinalDialog.ResetSettingsFinalDialogCallbacks {
+public class AdminPreferencesActivity extends AppCompatActivity {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
@@ -83,11 +81,5 @@ public class AdminPreferencesActivity extends AppCompatActivity implements Reset
                     .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
-    }
-
-    @Override
-    public void finishResetSettings(DialogInterface dialog) {
-        dialog.dismiss();
-        recreate();
     }
 }
