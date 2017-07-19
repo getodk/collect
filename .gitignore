@@ -5,6 +5,10 @@ local.properties
 .DS_Store
 *.sublime-project
 
+*.iml
+
+collect_app/src/kontrolid/
+
 # emacs backup files
 *.*~
 
