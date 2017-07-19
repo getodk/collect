@@ -29,6 +29,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -117,6 +118,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
+    private static SharedPreferences settings = null;   //smap
 
     private InstanceUploaderListener stateListener;
 
@@ -148,6 +150,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
+        settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());    // smap
         File instanceFile = new File(instanceFilePath);
         ContentValues cv = new ContentValues();
         Uri u = Uri.parse(urlString);
@@ -201,7 +204,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                       */
                     //outcome.authRequestingServer = u;
                     //return false;
-                    outcome.mResults.put(id, fail
+                    outcome.results.put(id, fail
                     			+ "Authentication failure.  You will need to fix the username, password or URL in the settings screen.  ");
                     //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                     Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -220,9 +223,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 // ... and possibly to use https instead.
                                 uriRemap.put(u, newURI);
                                 u = newURI;
- 				// Start Smap
+ 				                // Start Smap
                                 String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                                        .getSingularProperty(PropertyManager.OR_DEVICE_ID_PROPERTY);
+                                        .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
                                 u = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
                                 // End Smap
                             } else {
@@ -540,7 +543,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         selectionBuf.append(")");
         String selection = selectionBuf.toString();
-        Log.i(t, "Getting instances "  + selection);
+        Timber.i("Getting instances "  + selection);
         // end smap
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
@@ -569,15 +572,15 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
 	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx)i.trim();
+	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx).trim();
 	                if (urlString == null) {
                             urlString = getServerSubmissionURL();
 
 	                    // ---------------- Smap Start
 	                    // Add credentials pre-emptively
 
-	                    String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-	                    String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+	                    String username = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+	                    String password = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
 
 	                    if(username != null && password != null) {
 	                    	Uri u = Uri.parse(urlString);

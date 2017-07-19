@@ -38,6 +38,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -107,7 +108,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     static String TAG = "DownloadTasksTask";
 	private TaskDownloaderListener mStateListener;
 	HashMap<String, String> results = null;
-    SharedPreferences settings = null;
+    SharedPreferences sharedPreferences = null;
     ArrayList<TaskEntry> tasks = new ArrayList<TaskEntry>();
     HashMap<Long, TaskStatus> taskMap = new HashMap<Long, TaskStatus>();
     HttpResponse getResponse = null;
@@ -173,14 +174,15 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     protected HashMap<String, String> doInBackground(Void... values) {
 	
 		results = new HashMap<String,String>();
-        settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
-        serverUrl = settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
+        serverUrl = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
         taskURL = serverUrl + "/surveyKPI/myassignments";
 
         // Get the username and password
-        username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-        password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+        username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+        password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
         synchronise();      // Synchronise the phone with the server
 
@@ -252,9 +254,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  * Submit any completed forms
                  */
                 Outcome submitOutcome = submitCompletedForms();
-                if(submitOutcome != null && submitOutcome.mResults != null) {
-                    for (String key : submitOutcome.mResults.keySet()) {
-                        results.put(key, submitOutcome.mResults.get(key));
+                if(submitOutcome != null && submitOutcome.results != null) {
+                    for (String key : submitOutcome.results.keySet()) {
+                        results.put(key, submitOutcome.results.get(key));
                     }
                 }
 
@@ -324,12 +326,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
                 if(tr.settings !=null ) {
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(PreferencesActivity.KEY_STORE_USER_TRAIL, tr.settings.ft_send_trail);
-                    editor.putBoolean(PreferencesActivity.KEY_STORE_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
-                    editor.putBoolean(PreferencesActivity.KEY_STORE_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
-                    editor.putBoolean(PreferencesActivity.KEY_STORE_REVIEW_FINAL, tr.settings.ft_review_final);
-                    editor.commit();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(PreferenceKeys.KEY_STORE_USER_TRAIL, tr.settings.ft_send_trail);
+                    editor.putBoolean(PreferenceKeys.KEY_STORE_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
+                    editor.putBoolean(PreferenceKeys.KEY_STORE_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
+                    editor.putBoolean(PreferenceKeys.KEY_STORE_REVIEW_FINAL, tr.settings.ft_review_final);
+                    editor.apply();
                 }
 
                 /*
@@ -472,7 +474,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         
         // Add device id to response
         updateResponse.deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-				.getSingularProperty(PropertyManager.DEVICE_ID_PROPERTY);
+                .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
         // Get tasks that have not been synchronised
         ArrayList<TaskEntry> nonSynchTasks = new ArrayList<TaskEntry>();

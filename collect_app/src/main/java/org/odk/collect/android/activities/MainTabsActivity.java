@@ -65,11 +65,11 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.CompatibilityUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -120,7 +120,6 @@ public class MainTabsActivity extends TabActivity implements
     private ProgressDialog mProgressDialog;  
     public DownloadTasksTask mDownloadTasks;
 	private Context mContext;
-	private SharedPreferences mAdminPreferences;
     private Thread locnThread = null;
 	
 	private TextView mTVFF;
@@ -130,7 +129,6 @@ public class MainTabsActivity extends TabActivity implements
     boolean listenerRegistered = false;
     private static List<TaskEntry> mTasks = null;
     private static List<TaskEntry> mMapTasks = null;
-    private static SharedPreferences settings = null;
     private TabHost tabHost = null;
     
 	public void onCreate(Bundle savedInstanceState) {
@@ -199,9 +197,8 @@ public class MainTabsActivity extends TabActivity implements
 		 * NFC
 		 */
         boolean authorised = false;
-        if (settings == null) {
-            settings = PreferenceManager.getDefaultSharedPreferences(this);
-        }
+        SharedPreferences sharedPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         if (settings.getBoolean(PreferencesActivity.KEY_STORE_LOCATION_TRIGGER, true)) {
             mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -264,8 +261,9 @@ public class MainTabsActivity extends TabActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean odkStyle = settings.getBoolean(PreferencesActivity.KEY_STORE_ODK_STYLE_MENUS, true);
+        SharedPreferences sharedPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+        boolean odkStyle = sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_ODK_STYLE_MENUS, true);
 
         if(odkStyle) {
             CompatibilityUtils.setShowAsAction(
@@ -530,6 +528,8 @@ public class MainTabsActivity extends TabActivity implements
 
     			AlertDialog.Builder builder = new AlertDialog.Builder(this);
     			final AlertDialog passwordDialog = builder.create();
+                final SharedPreferences adminPreferences = this.getSharedPreferences(
+                        AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
     			passwordDialog.setTitle(getString(R.string.enter_admin_password));
     			final EditText input = new EditText(this);
@@ -544,7 +544,7 @@ public class MainTabsActivity extends TabActivity implements
     						public void onClick(DialogInterface dialog,
     								int whichButton) {
     							String value = input.getText().toString();
-    							String pw = mAdminPreferences.getString(
+    							String pw = adminPreferences.getString(
     									AdminPreferencesActivity.KEY_ADMIN_PW, "");
     							if (pw.compareTo(value) == 0) {
     								Intent i = new Intent(getApplicationContext(),
@@ -668,11 +668,10 @@ public class MainTabsActivity extends TabActivity implements
 	 */
 	public void setupNFCDispatch(final Activity activity, NfcAdapter adapter) {
 
-        if (settings == null) {
-            settings = PreferenceManager.getDefaultSharedPreferences(activity);
-        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        if (settings.getBoolean(PreferencesActivity.KEY_STORE_LOCATION_TRIGGER, true)) {
+
+        if (sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_LOCATION_TRIGGER, true)) {
             adapter.enableForegroundDispatch(activity, mNfcPendingIntent, mNfcFilters, null);
         }
 	}
@@ -829,8 +828,8 @@ public class MainTabsActivity extends TabActivity implements
             e.printStackTrace();
         }
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean reviewFinal = settings.getBoolean(PreferencesActivity.KEY_STORE_REVIEW_FINAL, true);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean reviewFinal = sharedPreferences.getBoolean( PreferenceKeys.KEY_STORE_REVIEW_FINAL, true);
 
         if(!canUpdate && reviewFinal) {
             // Show a message if this task is read only

@@ -71,6 +71,12 @@ public final class PreferenceKeys {
            static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
 
+    // START Smap Specific
+    public static final String KEY_STORE_REVIEW_FINAL       = "review_final";  // Allow review of Form after finalising
+    public static final String KEY_STORE_USER_TRAIL         = "user_trail";  // Record a user trail
+    public static final String KEY_STORE_LOCATION_TRIGGER   = "location_trigger";  // Enable triggering of forms by location
+    public static final String KEY_STORE_ODK_STYLE_MENUS    = "odk_style_menus";  // Show ODK style menus as well as refresh
+
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
 

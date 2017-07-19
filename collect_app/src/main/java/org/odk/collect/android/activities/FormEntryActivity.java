@@ -782,7 +782,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 break;
             case NFC_CAPTURE:       // smap
                 String nfcId = intent.getStringExtra(NFC_RESULT);
-                ((ODKView) mCurrentView).setBinaryData(nfcId);
+                ((ODKView) currentView).setBinaryData(nfcId);
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case BEARING_CAPTURE:
@@ -982,7 +982,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
                 return true;
-             case MENU_COMMENT:              // smap
+             case R.id.menu_comment:              // smap
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -990,7 +990,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
-                Log.i("debug instance: ", getIntent().getData().toString());
+                Timber.i(getIntent().getData().toString());
                 Intent comment = new Intent(this, SurveyNotesActivity.class);
                 startActivity(comment);
                 return true;
@@ -1926,7 +1926,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         synchronized (saveDialogLock) {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName, mTaskId, mFormPath, surveyNotes, mCanUpdate); 	// SMAP added mTaskId, mFormPath, surveyNotes
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate); 	// SMAP added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);

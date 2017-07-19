@@ -33,4 +33,10 @@
         android:title="@string/general_preferences"
         app:showAsAction="never"/>
 
+    <!-- smap add a menu for comments -->
+    <item
+        android:id="@+id/menu_comment"
+        android:title="@string/smap_add_comment"
+        app:showAsAction="ifRoom"/>
+
 </menu>
