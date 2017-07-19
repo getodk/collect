@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -32,6 +33,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.WebUtils;
@@ -50,6 +52,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
     InstanceUploaderTask instanceUploaderTask;
+    public DownloadTasksTask mDownloadTasks;
+    Context mContext = null;        // smap
 
     GoogleSheetsAutoUploadTask googleSheetsUploadTask;
 
@@ -69,7 +73,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
 				if (interfaceIsEnabled(context, currentNetworkInfo)) {
-                    uploadForms(context);
+                    //uploadForms(context);    // smap
+                    refreshTasks(context);   // smap
 				}
 			}
 		} else if (action.equals("org.odk.collect.android.FormSaved")) {
@@ -81,7 +86,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 				// not connected, do nothing
 			} else {
 				if (interfaceIsEnabled(context, ni)) {
-                    uploadForms(context);
+                    // uploadForms(context); // smap
+                    refreshTasks(context);   // smap
 				}
 			}
 		}
@@ -103,6 +109,22 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
+
+    /*
+     * Smap initiates a refresh
+     * Uploading to google sheets is not supported
+     */
+    private void refreshTasks(Context context) {
+        //mProgressMsg = getString(org.smap.smapTask.android.R.string.smap_synchronising);
+        //showDialog(PROGRESS_DIALOG);
+        if (!running) {
+            running = true;
+            mContext = context;
+            mDownloadTasks = new DownloadTasksTask();
+            mDownloadTasks.setDownloaderListener(this, context);
+            mDownloadTasks.execute();
+        }
+    }
 
     private void uploadForms(Context context) {
         if (!running) {
@@ -178,7 +200,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        // task is done
+        /* smap
+        // No need to reset uploader tasks as refresh was used
         if (instanceUploaderTask != null) {
             instanceUploaderTask.setUploaderListener(null);
         }
@@ -251,8 +274,16 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1328974928, builder.build());
+        */
     }
 
+    public void taskDownloadingComplete(HashMap<String, String> result) {
+
+        running = false;
+        Timber.i("Send intent");
+        Intent intent = new Intent("refresh");
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
 
     @Override
     public void progressUpdate(int progress, int total) {
