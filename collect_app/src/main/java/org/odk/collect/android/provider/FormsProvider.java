@@ -48,7 +48,7 @@ public class FormsProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 4;
     private static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
@@ -94,9 +94,7 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.LANGUAGE + " text, "
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                    + FormsColumns.JRCACHE_FILE_PATH + " text not null, "
-                    + FormsColumns.AUTO_DELETE + " text, "
-                    + FormsColumns.AUTO_SUBMIT + " text);");
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null);");
         }
 
         @Override
@@ -107,7 +105,7 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
                 onCreate(db);
                 return;
-            } else if (oldVersion < 4) {
+            } else {
                 // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
                 // integer MODEL_VERSION to text VERSION
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
@@ -228,22 +226,6 @@ public class FormsProvider extends ContentProvider {
 
                 Timber.w("Successfully upgraded database from version %d to %d"
                         + ", without destroying all the old data", oldVersion, newVersion);
-            } else {
-                Cursor cursor = db.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + " LIMIT 0", null);
-                int autoDeleteColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_DELETE);
-                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsColumns.AUTO_SUBMIT);
-                cursor.close();
-
-                // Only add the column if it doesn't already exist
-                if (autoDeleteColumnIndex == -1) {
-                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
-                            + FormsColumns.AUTO_DELETE + " text;");
-                }
-
-                if (autoSubmitColumnIndex == -1) {
-                    db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN "
-                            + FormsColumns.AUTO_SUBMIT + " text;");
-                }
             }
         }
     }
@@ -738,8 +720,5 @@ public class FormsProvider extends ContentProvider {
         sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH,
                 FormsColumns.JRCACHE_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
-        sFormsProjectionMap.put(FormsColumns.AUTO_DELETE, FormsColumns.AUTO_DELETE);
-        sFormsProjectionMap.put(FormsColumns.AUTO_SUBMIT, FormsColumns.AUTO_SUBMIT);
     }
-
 }

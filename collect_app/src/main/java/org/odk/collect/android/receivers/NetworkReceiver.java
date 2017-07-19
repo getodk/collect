@@ -22,13 +22,11 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
@@ -107,10 +105,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
-                    String formId;
                     while (c.moveToNext()) {
-                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
+                        if (isFormAutoSendOptionEnabled) {
                             Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
                             toUpload.add(l);
                         }
@@ -171,23 +167,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 instanceServerUploader.execute(toSendArray);
             }
         }
-    }
-
-    // If the form explicitly sets the auto-send property, then it overrides the preferences.
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-
-        String autoSubmit = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SUBMIT);
-                autoSubmit = cursor.getString(autoSubmitColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
     }
 
     @Override
