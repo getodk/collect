@@ -21,33 +21,31 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import org.odk.collect.android.bundle.CollectDialogBundle;
-
 public abstract class CollectAbstractDialog extends DialogFragment {
 
-    protected static final String COLLECT_DIALOG_BUNDLE = "collectDialogBundle";
+    public static final String COLLECT_DIALOG_TAG = "collectDialogTag";
+    protected static final String DIALOG_TITLE = "dialogTitle";
+    protected static final String ICON_ID = "iconId";
+    protected static final String MESSAGE = "message";
+    protected static final String BUTTON_TITLE = "buttonTitle";
 
     protected AlertDialog.Builder builder;
 
-    protected CollectDialogBundle collectDialogBundle;
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (collectDialogBundle != null) {
-            if (collectDialogBundle.getDialogTitle() != null) {
-                builder.setTitle(collectDialogBundle.getDialogTitle());
-            }
-
-            if (collectDialogBundle.getDialogMessage() != null) {
-                builder.setMessage(collectDialogBundle.getDialogMessage());
-            }
-
-            if (collectDialogBundle.getIcon() != null) {
-                builder.setIcon(collectDialogBundle.getIcon());
-            }
-
-            setCancelable(false);
+        if (getArguments().getString(DIALOG_TITLE) != null) {
+            builder.setTitle(getArguments().getString(DIALOG_TITLE));
         }
+
+        if (getArguments().getString(MESSAGE) != null) {
+            builder.setMessage(getArguments().getString(MESSAGE));
+        }
+
+        if (getArguments().getInt(ICON_ID) != 0) {
+            builder.setIcon(getArguments().getInt(ICON_ID));
+        }
+
+        setCancelable(false);
 
         return builder.create();
     }

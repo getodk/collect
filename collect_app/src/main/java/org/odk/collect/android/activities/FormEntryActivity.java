@@ -70,11 +70,11 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.bundle.CollectDialogBundle;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.fragments.dialogs.CollectAbstractDialog;
 import org.odk.collect.android.fragments.dialogs.RemoveResponseDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -2061,12 +2061,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getActivityLogger()
                 .logInstanceAction(this, "createClearDialog", "show", qw.getPrompt().getIndex());
 
-        CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
-        dialogBuilder.setDialogMessage(getString(R.string.clearanswer_confirm, getQuestionForRemoveResponseDialog(qw)));
-
-        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
-        RemoveResponseDialog dialogFragment = RemoveResponseDialog.newInstance(collectDialogBundle);
-        dialogFragment.show(getSupportFragmentManager(), collectDialogBundle.getDialogTag());
+        RemoveResponseDialog dialogFragment = RemoveResponseDialog.newInstance(getString(R.string.clearanswer_confirm, getQuestionForRemoveResponseDialog(qw)));
+        dialogFragment.show(getSupportFragmentManager(), CollectAbstractDialog.COLLECT_DIALOG_TAG);
     }
 
     private String getQuestionForRemoveResponseDialog(QuestionWidget qw) {

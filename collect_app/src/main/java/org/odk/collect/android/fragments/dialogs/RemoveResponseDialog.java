@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.bundle.CollectDialogBundle;
 
 public class RemoveResponseDialog extends CollectAbstractDialog {
 
@@ -33,17 +32,16 @@ public class RemoveResponseDialog extends CollectAbstractDialog {
 
     private RemoveResponseDialogCallbacks callback;
 
-    public static RemoveResponseDialog newInstance(CollectDialogBundle collectDialogBundle) {
+    public static RemoveResponseDialog newInstance(String message) {
         RemoveResponseDialog dialogFragment = new RemoveResponseDialog();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(COLLECT_DIALOG_BUNDLE, collectDialogBundle);
+        bundle.putString(MESSAGE, message);
         dialogFragment.setArguments(bundle);
         return dialogFragment;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        collectDialogBundle = (CollectDialogBundle) getArguments().getSerializable(COLLECT_DIALOG_BUNDLE);
         builder = new AlertDialog.Builder(getActivity());
 
         builder

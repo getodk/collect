@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.bundle.CollectDialogBundle;
+import org.odk.collect.android.fragments.dialogs.CollectAbstractDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -182,15 +182,7 @@ public class ResetDialogPreference extends DialogPreference {
     }
 
     private void buildAndShowResetSettingsFinalDialog(String message) {
-        CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
-        dialogBuilder
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setDialogTitle(getContext().getString(R.string.reset_app_state_result))
-                .setDialogMessage(message)
-                .setPositiveButtonText(getContext().getString(R.string.ok));
-
-        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
-        SimpleDialog dialogFragment = SimpleDialog.newInstance(collectDialogBundle);
-        dialogFragment.show(((AdminPreferencesActivity) context).getSupportFragmentManager(), collectDialogBundle.getDialogTag());
+        SimpleDialog dialogFragment = SimpleDialog.newInstance(getContext().getString(R.string.reset_app_state_result), android.R.drawable.ic_dialog_info, message, getContext().getString(R.string.ok));
+        dialogFragment.show(((AdminPreferencesActivity) context).getSupportFragmentManager(), CollectAbstractDialog.COLLECT_DIALOG_TAG);
     }
 }

@@ -21,28 +21,30 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import org.odk.collect.android.bundle.CollectDialogBundle;
-
 /**
  * This class might be used as an universal simple dialog. You can use it if you just need to
  * display it and you don't need any callback.
  */
 public class SimpleDialog extends CollectAbstractDialog {
 
-    public static SimpleDialog newInstance(CollectDialogBundle collectDialogBundle) {
+    public static SimpleDialog newInstance(String dialogTitle, int iconId, String message, String buttonTitle) {
         SimpleDialog dialogFragment = new SimpleDialog();
+
         Bundle bundle = new Bundle();
-        bundle.putSerializable(COLLECT_DIALOG_BUNDLE, collectDialogBundle);
+        bundle.putString(DIALOG_TITLE, dialogTitle);
+        bundle.putInt(ICON_ID, iconId);
+        bundle.putString(MESSAGE, message);
+        bundle.putString(BUTTON_TITLE, buttonTitle);
+
         dialogFragment.setArguments(bundle);
         return dialogFragment;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        collectDialogBundle = (CollectDialogBundle) getArguments().getSerializable(COLLECT_DIALOG_BUNDLE);
         builder = new AlertDialog.Builder(getActivity());
 
-        builder.setPositiveButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getArguments().getString(BUTTON_TITLE), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
             }
