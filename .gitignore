@@ -15,6 +15,7 @@ fieldTask/fieldTask-release/
 collect_app/collect_app.iml
 
 collect_app/src/kontrolid
+collect_app/src/pop/
 
 # gradle env props
 gradle.properties
