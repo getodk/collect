@@ -26,7 +26,7 @@ import android.widget.CheckBox;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.bundle.CollectDialogBundle;
-import org.odk.collect.android.fragments.dialogs.ResetSettingsFinalDialog;
+import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -187,11 +187,10 @@ public class ResetDialogPreference extends DialogPreference {
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setDialogTitle(getContext().getString(R.string.reset_app_state_result))
                 .setDialogMessage(message)
-                .setPositiveButtonText(getContext().getString(R.string.ok))
-                .setCancelable(false);
+                .setPositiveButtonText(getContext().getString(R.string.ok));
 
         CollectDialogBundle collectDialogBundle = dialogBuilder.build();
-        ResetSettingsFinalDialog dialogFragment = ResetSettingsFinalDialog.newInstance(collectDialogBundle);
+        SimpleDialog dialogFragment = SimpleDialog.newInstance(collectDialogBundle);
         dialogFragment.show(((AdminPreferencesActivity) context).getSupportFragmentManager(), collectDialogBundle.getDialogTag());
     }
 }

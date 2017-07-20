@@ -2061,6 +2061,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getActivityLogger()
                 .logInstanceAction(this, "createClearDialog", "show", qw.getPrompt().getIndex());
 
+        CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
+        dialogBuilder.setDialogMessage(getString(R.string.clearanswer_confirm, getQuestionForRemoveResponseDialog(qw)));
+
+        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
+        RemoveResponseDialog dialogFragment = RemoveResponseDialog.newInstance(collectDialogBundle);
+        dialogFragment.show(getSupportFragmentManager(), collectDialogBundle.getDialogTag());
+    }
+
+    private String getQuestionForRemoveResponseDialog(QuestionWidget qw) {
         String question = qw.getPrompt().getLongText();
         if (question == null) {
             question = "";
@@ -2069,18 +2078,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             question = question.substring(0, 50) + "...";
         }
 
-        CollectDialogBundle.Builder dialogBuilder = new CollectDialogBundle.Builder();
-        dialogBuilder
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setDialogTitle(getString(R.string.clear_answer_ask))
-                .setDialogMessage(getString(R.string.clearanswer_confirm, question))
-                .setPositiveButtonText(getString(R.string.discard_answer))
-                .setNegativeButtonText(getString(R.string.clear_answer_no))
-                .setCancelable(false);
-
-        CollectDialogBundle collectDialogBundle = dialogBuilder.build();
-        RemoveResponseDialog dialogFragment = RemoveResponseDialog.newInstance(collectDialogBundle);
-        dialogFragment.show(getSupportFragmentManager(), collectDialogBundle.getDialogTag());
+        return question;
     }
 
     /**

@@ -23,10 +23,14 @@ import android.os.Bundle;
 
 import org.odk.collect.android.bundle.CollectDialogBundle;
 
-public class ResetSettingsFinalDialog extends CollectAbstractDialog {
+/**
+ * This class might be used as an universal simple dialog. You can use it if you just need to
+ * display it and you don't need any callback.
+ */
+public class SimpleDialog extends CollectAbstractDialog {
 
-    public static ResetSettingsFinalDialog newInstance(CollectDialogBundle collectDialogBundle) {
-        ResetSettingsFinalDialog dialogFragment = new ResetSettingsFinalDialog();
+    public static SimpleDialog newInstance(CollectDialogBundle collectDialogBundle) {
+        SimpleDialog dialogFragment = new SimpleDialog();
         Bundle bundle = new Bundle();
         bundle.putSerializable(COLLECT_DIALOG_BUNDLE, collectDialogBundle);
         dialogFragment.setArguments(bundle);

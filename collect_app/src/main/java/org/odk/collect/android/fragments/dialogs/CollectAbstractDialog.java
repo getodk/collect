@@ -34,12 +34,19 @@ public abstract class CollectAbstractDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (collectDialogBundle != null) {
-            builder
-                    .setTitle(collectDialogBundle.getDialogTitle())
-                    .setMessage(collectDialogBundle.getDialogMessage())
-                    .setIcon(collectDialogBundle.getIcon());
+            if (collectDialogBundle.getDialogTitle() != null) {
+                builder.setTitle(collectDialogBundle.getDialogTitle());
+            }
 
-            setCancelable(collectDialogBundle.isCancelable());
+            if (collectDialogBundle.getDialogMessage() != null) {
+                builder.setMessage(collectDialogBundle.getDialogMessage());
+            }
+
+            if (collectDialogBundle.getIcon() != null) {
+                builder.setIcon(collectDialogBundle.getIcon());
+            }
+
+            setCancelable(false);
         }
 
         return builder.create();

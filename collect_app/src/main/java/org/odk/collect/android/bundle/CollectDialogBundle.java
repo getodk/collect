@@ -29,9 +29,7 @@ public class CollectDialogBundle implements Serializable {
     private String positiveButtonText;
     private String neutralButtonText;
 
-    private boolean cancelable;
-
-    private int icon;
+    private Integer icon;
 
     CollectDialogBundle(Builder builder) {
         dialogTag = builder.dialogTag;
@@ -40,7 +38,6 @@ public class CollectDialogBundle implements Serializable {
         negativeButtonText = builder.negativeButtonText;
         positiveButtonText = builder.positiveButtonText;
         neutralButtonText = builder.neutralButtonText;
-        cancelable = builder.cancelable;
         icon = builder.icon;
     }
 
@@ -68,10 +65,6 @@ public class CollectDialogBundle implements Serializable {
         return neutralButtonText;
     }
 
-    public boolean isCancelable() {
-        return cancelable;
-    }
-
     public Integer getIcon() {
         return icon;
     }
@@ -85,9 +78,7 @@ public class CollectDialogBundle implements Serializable {
         private String positiveButtonText;
         private String neutralButtonText;
 
-        private boolean cancelable;
-
-        private int icon;
+        private Integer icon;
 
         public Builder() {
             this(COLLECT_DIALOG_TAG);
@@ -119,11 +110,6 @@ public class CollectDialogBundle implements Serializable {
 
         public Builder setNeutralButtonText(String neutralButtonText) {
             this.neutralButtonText = neutralButtonText;
-            return this;
-        }
-
-        public Builder setCancelable(Boolean cancelable) {
-            this.cancelable = cancelable;
             return this;
         }
 

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.bundle.CollectDialogBundle;
 
 public class RemoveResponseDialog extends CollectAbstractDialog {
@@ -45,20 +46,23 @@ public class RemoveResponseDialog extends CollectAbstractDialog {
         collectDialogBundle = (CollectDialogBundle) getArguments().getSerializable(COLLECT_DIALOG_BUNDLE);
         builder = new AlertDialog.Builder(getActivity());
 
-        builder.setPositiveButton(collectDialogBundle.getPositiveButtonText(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                if (callback != null) {
-                    callback.removeAnswer(dialog);
-                }
-            }
-        });
+        builder
+                .setPositiveButton(getString(R.string.discard_answer), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (callback != null) {
+                            callback.removeAnswer(dialog);
+                        }
+                    }
+                })
+                .setNegativeButton(getString(R.string.clear_answer_no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle(getContext().getString(R.string.clear_answer_ask));
 
-        builder.setNegativeButton(collectDialogBundle.getNegativeButtonText(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
 
         super.onCreateDialog(savedInstanceState);
 
