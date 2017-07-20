@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
@@ -65,8 +66,8 @@ public abstract class RangeWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         if (seekBar.isEnabled()) {
+            seekBar.setProgress(0);
             setUpDefaultValues();
-            seekBar.setProgress(progress);
             setUpActualValueLabel();
         }
     }
@@ -101,12 +102,11 @@ public abstract class RangeWidget extends QuestionWidget {
     }
 
     private void setUpDefaultValues() {
-        progress = rangeEnd.subtract(rangeStart).abs().divide(rangeStep.multiply(new BigDecimal(2))).intValue();
-        if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep));
-        } else {
-            actualValue = rangeStart.subtract(new BigDecimal(progress).multiply(rangeStep));
+        actualValue = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            seekBar.setSplitTrack(false);
         }
+        seekBar.getThumb().mutate().setAlpha(0);
     }
 
     private void setUpWidgetParameters() {
@@ -147,6 +147,7 @@ public abstract class RangeWidget extends QuestionWidget {
         seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                seekBar.getThumb().mutate().setAlpha(255);
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:

@@ -35,6 +35,7 @@ public class RangeIntegerWidget extends RangeWidget {
 
     @Override
     protected void setUpActualValueLabel() {
-        currentValue.setText(String.valueOf(actualValue.intValue()));
+        String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
+        currentValue.setText(value);
     }
 }
