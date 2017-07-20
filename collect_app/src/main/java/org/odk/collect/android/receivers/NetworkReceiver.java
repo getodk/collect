@@ -11,8 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -21,15 +19,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.NotificationActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -284,7 +275,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         running = false;
         Timber.i("Send intent");
         Intent intent = new Intent("refresh");
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        mContext.sendBroadcast(intent);     // smap
     }
 
     @Override

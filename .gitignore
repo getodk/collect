@@ -11,6 +11,9 @@ fieldTask/fieldTask-release/
 # emacs backup files
 *.*~
 
+*.iml
+collect_app/collect_app.iml
+
 collect_app/src/kontrolid
 
 # gradle env props

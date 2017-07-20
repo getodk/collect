@@ -100,7 +100,7 @@ public class MainListActivity extends FragmentActivity  {
 	    }
 	    @Override
 	    public void onActivityCreated(Bundle savedInstanceState) {
-	        super.onCreate(savedInstanceState);
+	        super.onActivityCreated(savedInstanceState);
 	        
 	        mAdapter = new TaskListArrayAdapter(getActivity());
 	        setListAdapter(mAdapter);

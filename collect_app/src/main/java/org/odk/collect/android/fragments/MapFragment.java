@@ -1,28 +1,19 @@
 package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 /*
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -40,23 +31,14 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 */
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.PathOverlay;
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainListActivity;
 import org.odk.collect.android.activities.MainTabsActivity;
-import org.odk.collect.android.loaders.MapLocationObserver;
-import org.odk.collect.android.receivers.LocationChangedReceiver;
-import org.odk.collect.android.utilities.Utilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.odk.collect.android.loaders.MapDataLoader;
 import org.odk.collect.android.loaders.MapEntry;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
-
-import static org.odk.collect.android.R.drawable;
 
 public class MapFragment extends Fragment implements LoaderManager.LoaderCallbacks<MapEntry>
 {

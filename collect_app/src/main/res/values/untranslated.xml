@@ -9,7 +9,7 @@ the specific language governing permissions and limitations under the License. -
 <resources>
     <!-- strings that should not be translated -->
     <item name="mapview" type="id" />
-    <string translatable="false" name="app_name">FieldTask 5.0</string>
+    <string translatable="false" name="app_name">FieldTask 5.00</string>
     <string translatable="false" name="default_username">gplay</string>
     <string translatable="false" name="default_password">gplay</string>
     <string translatable="false" name="default_server_url">https://sg.smap.com.au</string>

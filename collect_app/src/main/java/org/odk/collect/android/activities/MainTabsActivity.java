@@ -44,7 +44,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,13 +84,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class MainTabsActivity extends TabActivity implements 
+import timber.log.Timber;
+
+public class MainTabsActivity extends TabActivity implements
 		TaskDownloaderListener,
         NFCListener,
 		InstanceUploaderListener,
 		FormDownloaderListener{
 
-    private static final String TAG = "MainTabsActivity";
     private AlertDialog mAlertDialog;
     private static final int PROGRESS_DIALOG = 1;
     private static final int ALERT_DIALOG = 2;
@@ -121,7 +121,6 @@ public class MainTabsActivity extends TabActivity implements
     private ProgressDialog mProgressDialog;  
     public DownloadTasksTask mDownloadTasks;
 	private Context mContext;
-    private Thread locnThread = null;
 	
 	private TextView mTVFF;
 	private TextView mTVDF;
@@ -131,7 +130,7 @@ public class MainTabsActivity extends TabActivity implements
     private static List<TaskEntry> mTasks = null;
     private static List<TaskEntry> mMapTasks = null;
     private TabHost tabHost = null;
-    
+
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
@@ -150,14 +149,14 @@ public class MainTabsActivity extends TabActivity implements
 
 	    Resources res = getResources();  // Resource object to get Drawables
 	    tabHost = getTabHost();  // The activity TabHost
-	    TabHost.TabSpec spec;  
+	    TabHost.TabSpec spec;
 	    Intent intent;  
 
 		tabHost.setBackgroundColor(Color.WHITE);
 		tabHost.getTabWidget().setBackgroundColor(Color.DKGRAY);
 		
 	    // Initialise a TabSpec and intent for each tab and add it to the TabHost
-	    intent = new Intent().setClass(this, MainListActivity.class);    
+	    intent = new Intent().setClass(this, MainListActivity.class);
 	    spec = tabHost.newTabSpec("taskList").setIndicator(getString(R.string.smap_taskList)).setContent(intent);
 	    tabHost.addTab(spec);
 
@@ -167,7 +166,7 @@ public class MainTabsActivity extends TabActivity implements
 	    /*
 	     * Initialise a Map tab
 	     */
-        Log.i(TAG, "Creating Maps Activity");
+        Timber.i("Creating Maps Activity");
 	    intent = new Intent().setClass(this, MapsActivity.class);
 	    spec = tabHost.newTabSpec("taskMap").setIndicator(getString(R.string.smap_taskMap)).setContent(intent);
 	    tabHost.addTab(spec);
@@ -247,7 +246,7 @@ public class MainTabsActivity extends TabActivity implements
             }
         }
     }
-	
+
 	private TextView getTextViewChild(ViewGroup viewGroup) {
 		for (int i = 0; i < viewGroup.getChildCount(); i++) {
 			View view = viewGroup.getChildAt(i);
@@ -404,11 +403,11 @@ public class MainTabsActivity extends TabActivity implements
 	 */
 	public void taskDownloadingComplete(HashMap<String, String> result) {
 		
-		Log.i(TAG, "Complete - Send intent");
+		Timber.i("Complete - Send intent");
 
         // Refresh task list
     	Intent intent = new Intent("refresh");
-	    LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
+	    getApplication().sendBroadcast(intent);
 	    
 		try {
             dismissDialog(PROGRESS_DIALOG);
@@ -474,7 +473,7 @@ public class MainTabsActivity extends TabActivity implements
 	            		} else {
 	            			if (intent.hasExtra("message")) {
 	    	            		String message = intent.getExtras().getString("message");
-	    	            		Log.e("MainListActivity", message);
+	    	            		Timber.e(message);
 	            			}
 	            			
 	            		}
@@ -502,7 +501,7 @@ public class MainTabsActivity extends TabActivity implements
                             mDownloadTasks.cancel(true);
                             // Refresh the task list
                             Intent intent = new Intent("refresh");
-                	        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                            mContext.sendBroadcast(intent);
                         }
                     };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
@@ -699,7 +698,7 @@ public class MainTabsActivity extends TabActivity implements
 	private void handleNFCIntent(Intent intent) {
 
         if(nfcTriggersList != null && nfcTriggersList.size() > 0) {
-            Log.i(TAG, "tag discovered");
+            Timber.i("tag discovered");
             String action = intent.getAction();
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
@@ -815,7 +814,7 @@ public class MainTabsActivity extends TabActivity implements
         long taskId = entry.id;
         String status = entry.taskStatus;
 
-        Log.i(TAG, "Complete task" + entry.id + " : " + entry.name + " : " + entry.taskStatus);
+        Timber.i("Complete task" + entry.id + " : " + entry.name + " : " + entry.taskStatus);
 
         if(entry.repeat) {
             entry.instancePath = duplicateInstance(formPath, entry.instancePath, entry);
@@ -858,7 +857,7 @@ public class MainTabsActivity extends TabActivity implements
                     null, where, whereArgs, null);
 
             if (cInstanceProvider.getCount() != 1) {
-                Log.e("completeTask", "Unique instance not found: count is:" +
+                Timber.e("Unique instance not found: count is:" +
                         cInstanceProvider.getCount());
             } else {
                 cInstanceProvider.moveToFirst();
@@ -920,7 +919,7 @@ public class MainTabsActivity extends TabActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.i(TAG, "Intent received: " + intent.getAction());
+            Timber.i("Intent received: " + intent.getAction());
 
             if (intent.getAction().equals("startTask")) {
 

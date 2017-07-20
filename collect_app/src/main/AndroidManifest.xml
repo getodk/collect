@@ -106,6 +106,10 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation"
             android:label="@string/app_name" />
         <activity
+            android:name=".activities.TaskTabs"
+            android:configChanges="orientation"
+            android:label="@string/app_name" />
+        <activity
             android:name="org.odk.collect.android.activities.FormEntryActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
