@@ -62,7 +62,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     private long mTaskId;		    // ---------- SMAP
     private String mFormPath;	    // ---------- SMAP
     private String mSurveyNotes;	// ---------- SMAP
-    private boolean mCanUpdate = true;  // Smap
+    private boolean canUpdate = true;  // Smap
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -80,7 +80,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         mTaskId = taskId;  // SMAP
         mFormPath = formPath; // SMAP
         mSurveyNotes = surveyNotes; // Smap
-        mCanUpdate = canUpdate; // Smap
+        this.canUpdate = canUpdate; // Smap
     }
 
 
@@ -167,7 +167,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
         // Update the instance database...
         ContentValues values = new ContentValues();
-        if (canUpdate && mInstanceName != null) {       // smap
+        if (canUpdate && instanceName != null) {       // smap
             values.put(InstanceColumns.DISPLAY_NAME, instanceName);
         }
         if(canUpdate) {
@@ -198,11 +198,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             double lon = 0.0;
             double lat = 0.0;
             if (location != null) {
-                Log.i("saveToDiskTask", "Setting location");
+                Timber.i("saveToDiskTask", "Setting location");
                 lon = location.getLongitude();
                 lat = location.getLatitude();
             } else {
-                Log.i("saveToDiskTask", "Location is null");
+                Timber.i("saveToDiskTask", "Location is null");
             }
             values.put(InstanceColumns.ACT_LON, lon);
             values.put(InstanceColumns.ACT_LAT, lat);
@@ -252,7 +252,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 Cursor c = null;
                 try {
                 	// retrieve the form definition...
-                	c = Collect.getInstance().getContentResolver().query(mUri, null, null, null, null);
+                	c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
 	                c.moveToFirst();
 	                source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));				// smap
 	                String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
@@ -272,8 +272,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
                     // Smap Start
                     values.put(InstanceColumns.SOURCE, source);
-                    if (mInstanceName != null) {
-                        values.put(InstanceColumns.T_TITLE, mInstanceName);
+                    if (instanceName != null) {
+                        values.put(InstanceColumns.T_TITLE, instanceName);
                     } else {
                         values.put(InstanceColumns.T_TITLE, formname);
                     }

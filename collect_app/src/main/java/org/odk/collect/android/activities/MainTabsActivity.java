@@ -64,6 +64,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.NFCListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -200,7 +201,7 @@ public class MainTabsActivity extends TabActivity implements
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        if (settings.getBoolean(PreferencesActivity.KEY_STORE_LOCATION_TRIGGER, true)) {
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_LOCATION_TRIGGER, true)) {
             mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
             authorised = true;
         } else {
@@ -263,40 +264,40 @@ public class MainTabsActivity extends TabActivity implements
 
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-        boolean odkStyle = sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_ODK_STYLE_MENUS, true);
+        boolean odkStyle = sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_ODK_STYLE_MENUS, true);
 
+        getMenuInflater().inflate(R.menu.smap_menu, menu);
         if(odkStyle) {
-            CompatibilityUtils.setShowAsAction(
-                    menu.add(0, MENU_ENTERDATA, 0, R.string.enter_data).setIcon(
-                            android.R.drawable.ic_menu_edit),
-                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu
+                    .add(0, MENU_ENTERDATA, 0, R.string.enter_data).setIcon(
+                    android.R.drawable.ic_menu_edit)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
 		
-		CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_GETTASKS, 1, R.string.smap_get_tasks).setIcon(
-                        android.R.drawable.ic_menu_rotate),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		menu.add(0, MENU_GETTASKS, 1, R.string.smap_get_tasks).setIcon(
+                android.R.drawable.ic_menu_rotate)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		
-		CompatibilityUtils.setShowAsAction(
-                menu.add(0, MENU_PREFERENCES, 2, R.string.server_preferences).setIcon(
-                        android.R.drawable.ic_menu_preferences),
-                MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		menu
+                .add(0, MENU_PREFERENCES, 2, R.string.server_preferences).setIcon(
+                android.R.drawable.ic_menu_preferences)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         if(odkStyle) {
-            CompatibilityUtils.setShowAsAction(
-                    menu.add(0, MENU_GETFORMS, 3, R.string.get_forms).setIcon(
-                            android.R.drawable.ic_input_add),
-                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu
+                    .add(0, MENU_GETFORMS, 3, R.string.get_forms).setIcon(
+                    android.R.drawable.ic_input_add)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-            CompatibilityUtils.setShowAsAction(
-                    menu.add(0, MENU_SENDDATA, 4, R.string.send_data).setIcon(
-                            android.R.drawable.ic_menu_send),
-                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu
+                    .add(0, MENU_SENDDATA, 4, R.string.send_data).setIcon(
+                    android.R.drawable.ic_menu_send)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-            CompatibilityUtils.setShowAsAction(
-                    menu.add(0, MENU_MANAGEFILES, 5, R.string.manage_files).setIcon(
-                            android.R.drawable.ic_delete),
-                    MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            menu
+                    .add(0, MENU_MANAGEFILES, 5, R.string.manage_files).setIcon(
+                    android.R.drawable.ic_delete)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
         return true;
     }
@@ -544,8 +545,8 @@ public class MainTabsActivity extends TabActivity implements
     						public void onClick(DialogInterface dialog,
     								int whichButton) {
     							String value = input.getText().toString();
-    							String pw = adminPreferences.getString(
-    									AdminPreferencesActivity.KEY_ADMIN_PW, "");
+                                String pw = adminPreferences.getString(
+                                        AdminKeys.KEY_ADMIN_PW, "");
     							if (pw.compareTo(value) == 0) {
     								Intent i = new Intent(getApplicationContext(),
     										AdminPreferencesActivity.class);
@@ -595,7 +596,7 @@ public class MainTabsActivity extends TabActivity implements
 	@Override
 	public void progressUpdate(String currentFile, int progress, int total) {
 		// TODO Auto-generated method stub
-		mProgressMsg = getString(R.string.fetching_file, currentFile, progress, total);
+		mProgressMsg = getString(R.string.fetching_file, currentFile, String.valueOf(progress), String.valueOf(total));
 		mProgressDialog.setMessage(mProgressMsg);
 	}
 
@@ -607,7 +608,7 @@ public class MainTabsActivity extends TabActivity implements
 
 	@Override
 	public void progressUpdate(int progress, int total) {
-		 mAlertMsg = getString(R.string.sending_items, progress, total);
+		 mAlertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
 	        mProgressDialog.setMessage(mAlertMsg);
 	}
 
@@ -671,7 +672,7 @@ public class MainTabsActivity extends TabActivity implements
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
 
-        if (sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_LOCATION_TRIGGER, true)) {
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_LOCATION_TRIGGER, true)) {
             adapter.enableForegroundDispatch(activity, mNfcPendingIntent, mNfcFilters, null);
         }
 	}

@@ -28,6 +28,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.TraceUtilities;
@@ -41,7 +42,7 @@ import org.odk.collect.android.utilities.TraceUtilities;
 public class LocationChangedReceiver extends BroadcastReceiver {
 
     protected static String TAG = "LocationChangedReceiver";
-    private SharedPreferences settings = null;
+    private SharedPreferences sharedPreferences = null;
 
     /**
      * When a new location is received, extract it from the Intent and use
@@ -74,10 +75,10 @@ public class LocationChangedReceiver extends BroadcastReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("locationChanged"));
 
                 // Save the location in the database
-                if (settings == null) {
-                    settings = PreferenceManager.getDefaultSharedPreferences(context);
+                if (sharedPreferences == null) {
+                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 }
-                if (settings.getBoolean(PreferencesActivity.KEY_STORE_USER_TRAIL, false)) {
+                if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_USER_TRAIL, false)) {
                     TraceUtilities.insertPoint(location);
                 }
             }

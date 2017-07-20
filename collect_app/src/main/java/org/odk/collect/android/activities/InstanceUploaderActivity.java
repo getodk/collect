@@ -277,7 +277,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         }
 
         Intent intent = new Intent("refresh");  // smap refresh task list
-        LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
+        this.sendBroadcast(intent);             // smap
         createAlertDialog(message.toString().trim());
     }
 
@@ -330,7 +330,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
 
 
                 // Get the server, username, and password from the settings
-                SharedPreferences settings =
+                SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
                 return new AuthDialogUtility().createDialog(this, this);

@@ -296,10 +296,12 @@ public class Collect extends Application {
      * @return tracker
      */
     public synchronized Tracker getDefaultTracker() {
+        /* smap disable tracker
         if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             tracker = analytics.newTracker(R.xml.global_tracker);
         }
+        */
         return tracker;
     }
 

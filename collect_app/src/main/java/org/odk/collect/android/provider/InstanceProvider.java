@@ -167,7 +167,7 @@ public class InstanceProvider extends ContentProvider {
                             InstanceColumns.T_UPDATEID + " text;");
                 }catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Log.w(t, "Error in upgrading to database version 6");
+                    Timber.w("Error in upgrading to database version 6");
                     e.printStackTrace();
                 }
             }
@@ -177,7 +177,7 @@ public class InstanceProvider extends ContentProvider {
                             InstanceColumns.T_LOCATION_TRIGGER + " text;");
                 }catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Log.w(t, "Error in upgrading to database version 7");
+                    Timber.w("Error in upgrading to database version 7");
                     e.printStackTrace();
                 }
             }
@@ -187,7 +187,7 @@ public class InstanceProvider extends ContentProvider {
                             InstanceColumns.T_SURVEY_NOTES + " text;");
                 }catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Log.w(t, "Error in upgrading to database version 8");
+                    Timber.w("Error in upgrading to database version 8");
                     e.printStackTrace();
                 }
             }

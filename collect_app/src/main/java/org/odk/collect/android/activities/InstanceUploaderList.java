@@ -196,8 +196,11 @@ public class InstanceUploaderList extends InstanceListActivity
     }
 
     private void uploadSelectedFiles() {
-        Intent i = new Intent(this, InstanceUploaderActivity.class);  // Smap no google sheets
-        i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIDs);
+        // Smap no google sheets update removed
+        String server = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_PROTOCOL);
+        long[] instanceIds = listView.getCheckedItemIds();
+        Intent i = new Intent(this, InstanceUploaderActivity.class);
+        i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
         startActivityForResult(i, INSTANCE_UPLOADER);
     }
 

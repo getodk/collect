@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
-apply plugin: 'android'
+
 
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)

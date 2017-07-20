@@ -201,7 +201,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
                 divider.setMinimumHeight(3);
                 view.addView(divider);
-                mView.addView(divider);
             } // else {     smap - move to end
               //  first = false;
             //}

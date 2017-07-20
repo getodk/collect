@@ -27,6 +27,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
@@ -423,14 +424,14 @@ public class DownloadFormsTask extends
 
             // ---------------- Smap Start
 	    // Add credentials
-	    SharedPreferences settings =
+	    SharedPreferences sharedPreferences =
 	            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 
-	    String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-	    String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+	    String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+	    String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
 	    String server =
-	            settings.getString(PreferencesActivity.KEY_SERVER_URL, null);
+	            sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
 
 	    if(username != null && password != null) {
 	        Uri u = Uri.parse(downloadUrl);
@@ -572,7 +573,7 @@ public class DownloadFormsTask extends
 
         public FileResult(File file, boolean aNew) {	// smap make public
             this.file = file;
-            this.isNew = isNew;
+            this.isNew = aNew;
         }
 
         public File getFile() {				// smap make public

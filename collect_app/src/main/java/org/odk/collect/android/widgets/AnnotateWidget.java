@@ -202,7 +202,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
 
         // smap hide the choose button if appearance is nochoose
         if(nochoose(prompt)) {
-            mChooseButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
         }
 
         // and hide the capture, choose and annotate button if read-only

@@ -28,6 +28,7 @@ import com.google.gson.GsonBuilder;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -76,11 +77,11 @@ public class Utilities {
 	
 	// Get the task source
 	public static String getSource() {
-		SharedPreferences settings = PreferenceManager
+		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(Collect.getInstance()
 						.getBaseContext());
-		String serverUrl = settings.getString(
-                PreferencesActivity.KEY_SERVER_URL, null);
+		String serverUrl = sharedPreferences.getString(
+                PreferenceKeys.KEY_SERVER_URL, null);
 		String source = STFileUtils.getSource(serverUrl);
 		
 		
@@ -227,11 +228,11 @@ public class Utilities {
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         // Add credentials
-        SharedPreferences settings =
+        SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 
-        String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-        String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+        String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+        String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
         if(username != null && password != null) {
             Uri u = Uri.parse(downloadUrl);

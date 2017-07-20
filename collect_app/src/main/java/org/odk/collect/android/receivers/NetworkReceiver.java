@@ -30,6 +30,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -47,7 +48,7 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
+public class NetworkReceiver extends BroadcastReceiver implements TaskDownloaderListener {  // smap implement task download listner
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
@@ -126,6 +127,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
+    /* smap comment out upload forms
     private void uploadForms(Context context) {
         if (!running) {
             running = true;
@@ -198,9 +200,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 	            }
 	            }
 
+
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        /* smap
         // No need to reset uploader tasks as refresh was used
         if (instanceUploaderTask != null) {
             instanceUploaderTask.setUploaderListener(null);
@@ -274,8 +276,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         NotificationManager notificationManager = (NotificationManager) Collect.getInstance()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1328974928, builder.build());
-        */
     }
+    */
 
     public void taskDownloadingComplete(HashMap<String, String> result) {
 
@@ -286,11 +288,14 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     }
 
     @Override
-    public void progressUpdate(int progress, int total) {
+    //public void progressUpdate(int progress, int total) {    // smap
+    public void progressUpdate(String progress) {    // Replace with String parameter
         // do nothing
     }
 
 
+
+    /* smap not used
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
@@ -302,6 +307,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
         running = false;
     }
+    */
 
     private class GoogleSheetsAutoUploadTask extends
             GoogleSheetsAbstractUploader {

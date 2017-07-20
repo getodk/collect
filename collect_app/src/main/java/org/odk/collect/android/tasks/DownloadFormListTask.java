@@ -25,6 +25,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebUtils;
 
@@ -92,8 +93,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
         // ---------------- Smap Start
         // Add credentials
-        String username = settings.getString(PreferencesActivity.KEY_USERNAME, null);
-        String password = settings.getString(PreferencesActivity.KEY_PASSWORD, null);
+        String username = settings.getString(PreferenceKeys.KEY_USERNAME, null);
+        String password = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
 
         if(username != null && password != null) {
         	Uri u = Uri.parse(downloadListUrl);

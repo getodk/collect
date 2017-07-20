@@ -108,14 +108,14 @@ public class FormsProvider extends ContentProvider {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			int initialVersion = oldVersion;
 			if (oldVersion < 2) {
-				Log.w(t, "Upgrading database from version " + oldVersion
+				Timber.w("Upgrading database from version " + oldVersion
 						+ " to " + newVersion
 						+ ", which will destroy all old data");
 				db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
 				onCreate(db);
 				return;
 			} else if(oldVersion < 6) {
-				Log.w(t, "Upgrading database from version " + oldVersion		// smap
+				Timber.w("Upgrading database from version " + oldVersion		// smap
 						+ " to " + newVersion);
 				// adding BASE64_RSA_PUBLIC_KEY and changing type and name of
 				// integer MODEL_VERSION to text VERSION
@@ -250,7 +250,7 @@ public class FormsProvider extends ContentProvider {
 						+ TEMP_FORMS_TABLE_NAME);
 				db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
 
-				Log.w(t, "Successfully upgraded database from version "
+				Timber.w("Successfully upgraded database from version "
 						+ initialVersion + " to " + newVersion
 						+ ", without destroying all the old data");
 			}
@@ -263,7 +263,7 @@ public class FormsProvider extends ContentProvider {
                             FormsColumns.TASKS_ONLY + " = 'no';" );
                 }catch(Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
-                    Log.w(t, "Error in upgrading to forms database version 7");
+                    Timber.w("Error in upgrading to forms database version 7");
                     e.printStackTrace();
                 }
             }
@@ -277,15 +277,15 @@ public class FormsProvider extends ContentProvider {
         try {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
-            databaseHelper = null;
+            mDbHelper = null;
             return null;
         }
 
-        if (databaseHelper != null) {
-            return databaseHelper;
+        if (mDbHelper != null) {
+            return mDbHelper;
         }
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);
-        return databaseHelper;
+        mDbHelper = new DatabaseHelper(DATABASE_NAME);
+        return mDbHelper;
     }
 
     @Override
@@ -713,7 +713,7 @@ public class FormsProvider extends ContentProvider {
 									+ (!TextUtils.isEmpty(where) ? " AND ("
 											+ where + ')' : ""), whereArgs);
 				} else {
-					Log.e(t, "Attempting to update row that does not exist");
+					Timber.e("Attempting to update row that does not exist");
 				}
 			} finally {
 				if (update != null) {

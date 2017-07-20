@@ -184,7 +184,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         }
         // Smap hide the choose button if appearance is nochoose
         if(nochoose(prompt)) {
-            mChooseButton.setVisibility(View.GONE);
+            chooseButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
 

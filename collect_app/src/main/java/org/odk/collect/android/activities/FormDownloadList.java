@@ -690,7 +690,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
 
             Intent intent = new Intent("refresh");  // smap refresh task list
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent); // smap
+            this.sendBroadcast(intent);     // smap
 
             toggleButtonLabel(toggleButton, listView);
         }

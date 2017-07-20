@@ -62,7 +62,7 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 		mGetNfcButton.setId(QuestionWidget.newUniqueId());
 		mGetNfcButton.setText(getContext().getString(R.string.smap_read_nfc));
 		mGetNfcButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-				mAnswerFontsize);
+				answerFontsize);
 		mGetNfcButton.setPadding(20, 20, 20, 20);
 		mGetNfcButton.setEnabled(!prompt.isReadOnly());
 		mGetNfcButton.setLayoutParams(params);
@@ -74,12 +74,12 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 				Collect.getInstance()
 						.getActivityLogger()
 						.logInstanceAction(this, "recordNfc", "click",
-								mPrompt.getIndex());
+								formEntryPrompt.getIndex());
 
 
                 Intent i = new Intent(getContext(), NFCActivity.class);
                 Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(mPrompt.getIndex());
+                        .setIndexWaitingForData(formEntryPrompt.getIndex());
                 ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.NFC_CAPTURE);
 
@@ -89,7 +89,7 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 		// set text formatting
 		mStringAnswer = new TextView(getContext());
 		mStringAnswer.setId(QuestionWidget.newUniqueId());
-		mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
+		mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
 		mStringAnswer.setGravity(Gravity.CENTER);
 
 		String s = prompt.getAnswerText();
@@ -143,7 +143,7 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 
 	@Override
 	public boolean isWaitingForBinaryData() {
-		return mPrompt.getIndex().equals(
+		return formEntryPrompt.getIndex().equals(
 				Collect.getInstance().getFormController()
 						.getIndexWaitingForData());
 	}
