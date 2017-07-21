@@ -14,12 +14,17 @@
 
 package org.odk.collect.android.tasks;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Xml;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -49,6 +54,7 @@ import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -94,8 +100,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     protected GoogleAccountCredential credential;
 
-    public InstanceGoogleSheetsUploader(GoogleAccountCredential credential) {
+    private Context context;
+
+    private boolean authFailed;
+
+    public InstanceGoogleSheetsUploader(GoogleAccountCredential credential, Context context) {
         this.credential = credential;
+        this.context = context;
+
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
@@ -108,7 +120,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 .build();
     }
 
-    protected void uploadInstances(String selection, String[] selectionArgs, String token) {
+    protected void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -141,7 +153,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         return;
                     }
 
-                    publishProgress(c.getPosition() + 1, c.getCount());
+                    publishProgress(c.getPosition() + 1 + low, instanceCount);
                     String instance = c.getString(c
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
@@ -916,7 +928,58 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     protected Outcome doInBackground(Long... values) {
-        return null;
+        outcome = new Outcome();
+        int counter = 0;
+
+        try {
+            while (counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER < values.length) {
+                int low = counter * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+                int high = (counter + 1) * ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER;
+                if (high > values.length) {
+                    high = values.length;
+                }
+
+                StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+                String[] selectionArgs = new String[high - low];
+                for (int i = 0; i < (high - low); i++) {
+                    if (i > 0) {
+                        selectionBuf.append(",");
+                    }
+                    selectionBuf.append("?");
+                    selectionArgs[i] = values[i + low].toString();
+                }
+
+                selectionBuf.append(")");
+                String selection = selectionBuf.toString();
+
+                String token = credential.getToken();
+                //Immediately invalidate so we get a different one if we have to try again
+                GoogleAuthUtil.invalidateToken(context, token);
+
+                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+                uploadInstances(selection, selectionArgs, token, low, values.length);
+                counter++;
+            }
+        } catch (UserRecoverableAuthException e) {
+            outcome = null;
+            if (context instanceof Activity) {
+                ((Activity) context).startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            }
+        } catch (IOException | GoogleAuthException e) {
+            Timber.e(e);
+            authFailed = true;
+        } catch (MultipleFoldersFoundException e) {
+            Timber.e(e);
+        }
+        return outcome;
+    }
+
+    public boolean isAuthFailed() {
+        return authFailed;
+    }
+
+    public void setAuthFailed(boolean authFailed) {
+        this.authFailed = authFailed;
     }
 
 }

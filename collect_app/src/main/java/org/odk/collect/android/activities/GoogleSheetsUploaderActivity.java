@@ -38,9 +38,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
@@ -48,14 +45,12 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -82,9 +77,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private AlertDialog alertDialog;
     private String alertMsg;
     private boolean alertShowing;
-    private boolean authFailed;
     private Long[] instancesToSend;
-    private InstanceGoogleSheetsUploaderTask uiTask;
+    private InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +92,6 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         // default initializers
         alertMsg = getString(R.string.please_wait);
         alertShowing = false;
-        authFailed = false;
 
         setTitle(getString(R.string.send_data));
 
@@ -143,9 +136,9 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     }
 
     private void runTask() {
-        uiTask = (InstanceGoogleSheetsUploaderTask) getLastCustomNonConfigurationInstance();
-        if (uiTask == null) {
-            uiTask = new InstanceGoogleSheetsUploaderTask(credential);
+        instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
+        if (instanceGoogleSheetsUploader == null) {
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, GoogleSheetsUploaderActivity.this);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -158,8 +151,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
 
             showDialog(PROGRESS_DIALOG);
 
-            uiTask.setUploaderListener(this);
-            uiTask.execute(instancesToSend);
+            instanceGoogleSheetsUploader.setUploaderListener(this);
+            instanceGoogleSheetsUploader.execute(instancesToSend);
         } else {
             // it's not null, so we have a task running
             // progress dialog is handled by the system
@@ -329,8 +322,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
 
     @Override
     protected void onResume() {
-        if (uiTask != null) {
-            uiTask.setUploaderListener(this);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(this);
         }
         if (alertShowing) {
             createAlertDialog(alertMsg);
@@ -347,7 +340,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return uiTask;
+        return instanceGoogleSheetsUploader;
     }
 
     @Override
@@ -366,8 +359,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
 
     @Override
     protected void onDestroy() {
-        if (uiTask != null) {
-            uiTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         super.onDestroy();
     }
@@ -392,9 +385,9 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         StringBuilder message = new StringBuilder();
 
         if (keys.size() == 0) {
-            if (authFailed) {
+            if (instanceGoogleSheetsUploader.isAuthFailed()) {
                 message.append(getString(R.string.google_auth_io_exception_msg));
-                authFailed = false;
+                instanceGoogleSheetsUploader.setAuthFailed(false);
             } else {
                 message.append(getString(R.string.no_forms_uploaded));
             }
@@ -424,9 +417,9 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                         message.append(name).append(" - ").append(result.get(id)).append("\n\n");
                     }
                 } else {
-                    if (authFailed) {
+                    if (instanceGoogleSheetsUploader.isAuthFailed()) {
                         message.append(getString(R.string.google_auth_io_exception_msg));
-                        authFailed = false;
+                        instanceGoogleSheetsUploader.setAuthFailed(false);
                     } else {
                         message.append(getString(R.string.no_forms_uploaded));
                     }
@@ -462,8 +455,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                                         .logAction(this, "onCreateDialog.PROGRESS_DIALOG",
                                                 "cancel");
                                 dialog.dismiss();
-                                uiTask.cancel(true);
-                                uiTask.setUploaderListener(null);
+                                instanceGoogleSheetsUploader.cancel(true);
+                                instanceGoogleSheetsUploader.setUploaderListener(null);
                                 finish();
                             }
                         };
@@ -522,47 +515,5 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // in interface, but not needed
-    }
-
-    private class InstanceGoogleSheetsUploaderTask extends InstanceGoogleSheetsUploader {
-
-        InstanceGoogleSheetsUploaderTask(GoogleAccountCredential credential) {
-            super(credential);
-        }
-
-        @Override
-        protected Outcome doInBackground(Long... values) {
-            outcome = new Outcome();
-
-            String selection = InstanceColumns._ID + "=?";
-            String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-            if (values != null) {
-                for (int i = 0; i < values.length; i++) {
-                    if (i != values.length - 1) {
-                        selection += " or " + InstanceColumns._ID + "=?";
-                    }
-                    selectionArgs[i] = values[i].toString();
-                }
-            }
-            String token;
-            try {
-                token = credential.getToken();
-                //Immediately invalidate so we get a different one if we have to try again
-                GoogleAuthUtil.invalidateToken(GoogleSheetsUploaderActivity.this, token);
-
-                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
-                uploadInstances(selection, selectionArgs, token);
-            } catch (UserRecoverableAuthException e) {
-                outcome = null;
-                startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
-            } catch (IOException | GoogleAuthException e) {
-                Timber.e(e);
-                authFailed = true;
-            } catch (MultipleFoldersFoundException e) {
-                Timber.e(e);
-            }
-            return outcome;
-        }
-
     }
 }
