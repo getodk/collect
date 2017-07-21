@@ -1,132 +1,137 @@
 package org.odk.collect.android.location;
 
-import android.content.Context;
 import android.location.Location;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 /**
- * Retrieves the User's location via Google Play Services.
+ * An interface for classes that allow monitoring and retrieving the User's Location.
+ * Currently there are only two implementations:
+ * - {@link GoogleLocationClient}: A LocationClient using Google Play Services.
+ * - {@link AndroidLocationClient}: A LocationClient using Android's existing Location Services.
  */
-public class LocationClient implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    @NonNull
-    private final FusedLocationProviderApi fusedLocationProviderApi;
-    @NonNull
-    private final GoogleApiClient googleApiClient;
-
-    @Nullable
-    private LocationListener locationListener = null;
-
-    private int priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+public interface LocationClient {
+    /**
+     * Prepares the LocationClient for use. This method must be called prior
+     * to {@link LocationClient#requestLocationUpdates(LocationListener)}
+     * or {@link LocationClient#getLastLocation()}.
+     */
+    void start();
 
     /**
-     * For normal use.
-     * @param context The Context the LocationClient will be used with.
+     * Stops the LocationClient, ending any current connections and allowing
+     * resources to be reclaimed.
+     *
+     * Implementations should call {@link LocationClient#stopLocationUpdates()} if
+     * they have been previously requested.
      */
-    public LocationClient(@NonNull Context context) {
-        this(locationServicesClientForContext(context), LocationServices.FusedLocationApi);
-    }
+    void stop();
 
     /**
-     * For testing.
-     * @param googleApiClient
-     * @param fusedLocationProviderApi
+     * Begins requesting Location updates with the provided {@link LocationListener}
+     * @param locationListener The LocationListener to pass location updates to.
      */
-    public LocationClient(@NonNull GoogleApiClient googleApiClient, @NonNull FusedLocationProviderApi fusedLocationProviderApi) {
-        this.googleApiClient = googleApiClient;
-        this.fusedLocationProviderApi = fusedLocationProviderApi;
-    }
+    void requestLocationUpdates(@NonNull LocationListener locationListener);
 
-    public void start() {
-        googleApiClient.registerConnectionCallbacks(this);
-        googleApiClient.registerConnectionFailedListener(this);
+    /**
+     * Ends Location updates for the previously provided LocationListener.
+     * Implementations should call this from within {@link LocationClient#stop()}.
+     */
+    void stopLocationUpdates();
 
-        googleApiClient.connect();
-    }
+    /**
+     * Sets the {@link LocationClientListener} which will receive status updates
+     * for the LocationClient.
+     *
+     * @param locationClientListener The new {@link LocationClientListener}.
+     */
+    void setListener(@Nullable LocationClientListener locationClientListener);
 
-    public void stop() {
-        stopLocationUpdates();
+    /**
+     * Sets the LocationClient's {@link Priority} which will be used to determine
+     * which Provider (GPS, Network, etc.) will be used to retrieve the User's location.
+     *
+     * If the LocationClient is already receiving updates, the new Priority will not
+     * take effect until the next time Location updates are requested.
+     *
+     * @param priority The new Priorty.
+     */
+    void setPriority(@NonNull Priority priority);
 
-        googleApiClient.unregisterConnectionCallbacks(this);
-        googleApiClient.unregisterConnectionFailedListener(this);
+    /**
+     * Retrieves the most recent known Location, or null if none is available.
+     * This method may block if start was not called before hand.
+     * @return The most recent Location.
+     */
+    @Nullable Location getLastLocation();
 
-        googleApiClient.disconnect();
-    }
+    /**
+     * An interface for listening to status changes on a LocaitonClient.
+     */
+    interface LocationClientListener {
+        /**
+         * Called after the LocationClient has been successfully started.
+         */
+        void onStart();
 
-    public void requestLocationUpdates(@NonNull LocationListener locationListener) {
-        if (this.locationListener != null) {
-            stopLocationUpdates();
-        }
+        /**
+         * Called if any issue ocurred during LocationClient start-up.
+         */
+        void onStartFailure();
 
-        fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequst(), locationListener);
-        this.locationListener = locationListener;
-    }
-
-    public void stopLocationUpdates() {
-        if (this.locationListener == null) {
-            return;
-        }
-
-        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, this.locationListener);
-        this.locationListener = null;
-    }
-
-    public void setPriority(int priority) {
-        switch (priority) {
-            case LocationRequest.PRIORITY_HIGH_ACCURACY:
-            case LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY:
-            case LocationRequest.PRIORITY_LOW_POWER:
-            case LocationRequest.PRIORITY_NO_POWER:
-                this.priority = priority;
-
-            default:
-                throw new IllegalArgumentException("Priority must be one of the LocationRequest constants.");
-        }
-    }
-
-    private LocationRequest createLocationRequst() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setPriority(priority);
-
-        return locationRequest;
-    }
-
-    // ConnectionCallbacks:
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        // TODO: Should we Log something here? Pass up to Activity?
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        // TODO: Should we Log something here? Pass up to Activity?
-    }
-
-    // OnConnectionFailedListener:
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // TODO: Should we Log something here? Pass up to Activity?
+        /**
+         * Called after the LocationClient has been stopped, either by calling
+         * {@link LocationClient#stop()} or because it was stopped by another process.
+         */
+        void onStop();
     }
 
     /**
-     * Helper method for building a GoogleApiClient with the LocationServices API.
-     * @param context The Context for building the GoogleApiClient.
-     * @return A GoogleApiClient with the LocationServices API.
+     * Enumerates the options for preferring certain Location Providers over others.
      */
-    private static GoogleApiClient locationServicesClientForContext(@NonNull Context context) {
-        return new GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .build();
+    enum Priority {
+        /**
+         * Preferred: GPS
+         * Backup: Network
+         */
+        PRIORITY_HIGH_ACCURACY(LocationRequest.PRIORITY_HIGH_ACCURACY),
+
+        /**
+         * Preferred: Network
+         * Backup: GPS
+         */
+        PRIORITY_BALANCED_POWER_ACCURACY(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY),
+
+        /**
+         * Preferred: Network
+         * Backup: GPS (Play Services), Passive (Android)
+         */
+        PRIORITY_LOW_POWER(LocationRequest.PRIORITY_LOW_POWER),
+
+        /**
+         * Preferred: Passive (only receives updates if another Application requests them).
+         * Backup: N/A
+         */
+        PRIORITY_NO_POWER(LocationRequest.PRIORITY_NO_POWER);
+
+        private final int value;
+
+        Priority(int value) {
+            this.value = value;
+        }
+
+        /**
+         * The numeric value of the Priority;
+         * LocationServices uses integer constants.
+         *
+         * @return The integer constant value for the Priority.
+         *
+         */
+        public int getValue() {
+            return value;
+        }
     }
 }
