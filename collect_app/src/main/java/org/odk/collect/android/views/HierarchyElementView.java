@@ -16,6 +16,7 @@ package org.odk.collect.android.views;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -38,7 +39,10 @@ public class HierarchyElementView extends RelativeLayout {
         setColor(it.getColor());
 
         icon = new ImageView(context);
-        icon.setImageDrawable(it.getIcon());
+        int iconRes = it.getIcon();
+        if (iconRes != -1) {
+            icon.setImageDrawable(ContextCompat.getDrawable(context, iconRes));
+        }
         icon.setId(QuestionWidget.newUniqueId());
         icon.setPadding(0, 0, dipToPx(4), 0);
 

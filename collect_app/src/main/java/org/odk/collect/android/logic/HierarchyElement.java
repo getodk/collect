@@ -14,23 +14,24 @@
 
 package org.odk.collect.android.logic;
 
-import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.javarosa.core.model.FormIndex;
 
 import java.util.ArrayList;
 
-public class HierarchyElement {
+public class HierarchyElement implements Parcelable {
     private int type;
     private FormIndex formIndex;
     private ArrayList<HierarchyElement> list;
     private HierarchyElement parent;
     private String primaryText = "";
     private String secondaryText = "";
-    private Drawable icon;
+    private int icon;
     private int color;
 
-    public HierarchyElement(String text1, String text2, Drawable bullet, int color, int type,
+    public HierarchyElement(String text1, String text2, int bullet, int color, int type,
                             FormIndex f, HierarchyElement parent, ArrayList<HierarchyElement> list) {
         icon = bullet;
         primaryText = text1;
@@ -40,6 +41,18 @@ public class HierarchyElement {
         this.type = type;
         this.parent = parent;
         this.list = list;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(type);
+        dest.writeSerializable(formIndex);
+        dest.writeTypedList(list);
+        dest.writeParcelable(parent, 1);
+        dest.writeString(primaryText);
+        dest.writeString(secondaryText);
+        dest.writeInt(icon);
+        dest.writeInt(color);
     }
 
     public ArrayList<HierarchyElement> getList() {
@@ -62,31 +75,25 @@ public class HierarchyElement {
         return primaryText;
     }
 
+    public void setPrimaryText(String text) {
+        primaryText = text;
+    }
 
     public String getSecondaryText() {
         return secondaryText;
     }
 
-
-    public void setPrimaryText(String text) {
-        primaryText = text;
-    }
-
-
     public void setSecondaryText(String text) {
         secondaryText = text;
     }
 
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
-    }
-
-
-    public Drawable getIcon() {
+    public int getIcon() {
         return icon;
     }
 
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
 
     public FormIndex getFormIndex() {
         return formIndex;
@@ -109,4 +116,10 @@ public class HierarchyElement {
     public void setColor(int color) {
         this.color = color;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
 }

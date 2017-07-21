@@ -18,7 +18,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -52,8 +51,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private static final int ITEM = 1;
     private static final int GROUP = 2;
     private static final int QUESTION = 3;
-
-
+    private static final String FORM_LIST = "formlist";
     ArrayList<HierarchyElement> formList;
     TextView path;
 
@@ -144,10 +142,18 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             jumpEndButton.setVisibility(View.GONE);
         }
 
-        formList = new ArrayList<>();
-
-        refreshView(null);
-
+        if (savedInstanceState != null && savedInstanceState.containsKey(FORM_LIST)) {
+            formList = savedInstanceState.getParcelableArrayList(FORM_LIST);
+            if (formList == null || formList.size() == 0) {
+                formList = new ArrayList<>();
+                refreshView(null);
+            } else {
+                goUpLevel(formList.get(0));
+            }
+        } else {
+            formList = new ArrayList<>();
+            refreshView(null);
+        }
         // kinda slow, but works.
         // this scrolls to the last question the user was looking at
         if (getListAdapter() != null && listView != null) {
@@ -203,6 +209,12 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Timber.i("onSaveInstanceState");
+        outState.putParcelableArrayList(FORM_LIST, formList);
+        super.onSaveInstanceState(outState);
+    }
 
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
@@ -332,8 +344,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     if (event == FormEntryController.EVENT_REPEAT) {
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         HierarchyElement item = new HierarchyElement(fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, ContextCompat
-                                .getDrawable(getApplicationContext(), R.drawable.ic_folder_black_24dp),
+                                + (fc.getMultiplicity() + 1), null, R.drawable.ic_folder_black_24dp,
                                 Color.WHITE, ITEM, fc.getIndex(), parent, formList);
                         formList.add(item);
                         event = formController.stepOverGroupInHierarchy();
@@ -354,19 +365,16 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
-                            formList.add(
-                                    new HierarchyElement(fp.getLongText(), answerDisplay, null,
-                                            Color.WHITE, QUESTION, fp.getIndex(), parent, formList));
+                            formList.add(new HierarchyElement(fp.getLongText(), answerDisplay, -1,
+                                    Color.WHITE, QUESTION, fp.getIndex(), parent, formList));
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         label = fc.getLongText();
                         if (label != null && !label.trim().equals("")) {
-                            formList.add(
-                                    new HierarchyElement(label, null, ContextCompat
-                                            .getDrawable(getApplicationContext(), R.drawable.ic_folder_black_24dp),
-                                            Color.WHITE, GROUP, fc.getIndex(), parent, formList));
+                            formList.add(new HierarchyElement(label, null, R.drawable.ic_folder_black_24dp,
+                                    Color.WHITE, GROUP, fc.getIndex(), parent, formList));
                             event = formController.stepOverGroupInHierarchy();
                             continue event_search;
                         }
@@ -390,8 +398,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, ContextCompat
-                                            .getDrawable(getApplicationContext(), R.drawable.ic_folder_black_24dp),
+                                    new HierarchyElement(fc.getLongText(), null, R.drawable.ic_folder_black_24dp,
                                             Color.WHITE, GROUP, fc.getIndex(), parent, formList);
                             formList.add(group);
                         }
