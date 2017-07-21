@@ -119,7 +119,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 .build();
     }
 
-    protected void uploadInstances(String selection, String[] selectionArgs, String token, int low, int vauesCount) {
+    protected void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -152,7 +152,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         return;
                     }
 
-                    publishProgress(c.getPosition() + 1 + low, vauesCount);
+                    publishProgress(c.getPosition() + 1 + low, instanceCount);
                     String instance = c.getString(c
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath)) {
