@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 University of Washington
+ * Copyright (C) 2017 Shobhit
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -29,7 +29,6 @@ public class HierarchyElementView extends RelativeLayout {
     private TextView primaryTextView;
     private TextView secondaryTextView;
     private ImageView icon;
-    private int iconVisibility;
 
     public HierarchyElementView(Context context) {
         super(context);

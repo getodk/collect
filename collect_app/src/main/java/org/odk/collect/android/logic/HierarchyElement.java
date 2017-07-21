@@ -22,6 +22,19 @@ import org.javarosa.core.model.FormIndex;
 import java.util.ArrayList;
 
 public class HierarchyElement implements Parcelable {
+
+    public static final Creator<HierarchyElement> CREATOR = new Creator<HierarchyElement>() {
+        @Override
+        public HierarchyElement createFromParcel(Parcel in) {
+            return new HierarchyElement(in);
+        }
+
+        @Override
+        public HierarchyElement[] newArray(int size) {
+            return new HierarchyElement[size];
+        }
+    };
+
     private int type;
     private FormIndex formIndex;
     private ArrayList<HierarchyElement> list;
@@ -41,6 +54,16 @@ public class HierarchyElement implements Parcelable {
         this.type = type;
         this.parent = parent;
         this.list = list;
+    }
+
+    private HierarchyElement(Parcel in) {
+        type = in.readInt();
+        list = in.createTypedArrayList(HierarchyElement.CREATOR);
+        parent = in.readParcelable(HierarchyElement.class.getClassLoader());
+        primaryText = in.readString();
+        secondaryText = in.readString();
+        displayIcon = in.readInt();
+        color = in.readInt();
     }
 
     @Override
