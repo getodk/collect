@@ -272,6 +272,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO: I would like to kill this method, it seems like we should be able to do this somewhere else.
         switch (status) {
             case LocationProvider.AVAILABLE:
                 if (location != null) {
