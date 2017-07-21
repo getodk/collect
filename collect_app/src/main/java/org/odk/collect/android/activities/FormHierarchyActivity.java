@@ -344,8 +344,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     if (event == FormEntryController.EVENT_REPEAT) {
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         HierarchyElement item = new HierarchyElement(fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, R.drawable.ic_folder_black_24dp,
-                                Color.WHITE, ITEM, fc.getIndex(), parent, formList);
+                                + (fc.getMultiplicity() + 1), null, 1, Color.WHITE, ITEM,
+                                fc.getIndex(), parent, formList);
                         formList.add(item);
                         event = formController.stepOverGroupInHierarchy();
                     } else if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
@@ -365,7 +365,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
-                            formList.add(new HierarchyElement(fp.getLongText(), answerDisplay, -1,
+                            formList.add(new HierarchyElement(fp.getLongText(), answerDisplay, 0,
                                     Color.WHITE, QUESTION, fp.getIndex(), parent, formList));
                         }
                         break;
@@ -373,7 +373,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         label = fc.getLongText();
                         if (label != null && !label.trim().equals("")) {
-                            formList.add(new HierarchyElement(label, null, R.drawable.ic_folder_black_24dp,
+                            formList.add(new HierarchyElement(label, null, 1,
                                     Color.WHITE, GROUP, fc.getIndex(), parent, formList));
                             event = formController.stepOverGroupInHierarchy();
                             continue event_search;
@@ -398,7 +398,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, R.drawable.ic_folder_black_24dp,
+                                    new HierarchyElement(fc.getLongText(), null, 1,
                                             Color.WHITE, GROUP, fc.getIndex(), parent, formList);
                             formList.add(group);
                         }

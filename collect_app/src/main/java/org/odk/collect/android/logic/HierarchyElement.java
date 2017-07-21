@@ -28,12 +28,12 @@ public class HierarchyElement implements Parcelable {
     private HierarchyElement parent;
     private String primaryText = "";
     private String secondaryText = "";
-    private int icon;
+    private int displayIcon;
     private int color;
 
-    public HierarchyElement(String text1, String text2, int bullet, int color, int type,
+    public HierarchyElement(String text1, String text2, int showIcon, int color, int type,
                             FormIndex f, HierarchyElement parent, ArrayList<HierarchyElement> list) {
-        icon = bullet;
+        displayIcon = showIcon;
         primaryText = text1;
         secondaryText = text2;
         this.color = color;
@@ -51,7 +51,7 @@ public class HierarchyElement implements Parcelable {
         dest.writeParcelable(parent, 1);
         dest.writeString(primaryText);
         dest.writeString(secondaryText);
-        dest.writeInt(icon);
+        dest.writeInt(displayIcon);
         dest.writeInt(color);
     }
 
@@ -75,35 +75,21 @@ public class HierarchyElement implements Parcelable {
         return primaryText;
     }
 
-    public void setPrimaryText(String text) {
-        primaryText = text;
-    }
-
     public String getSecondaryText() {
         return secondaryText;
     }
 
-    public void setSecondaryText(String text) {
-        secondaryText = text;
-    }
-
-    public int getIcon() {
-        return icon;
-    }
-
-    public void setIcon(int icon) {
-        this.icon = icon;
+    public int getDisplayIcon() {
+        return displayIcon;
     }
 
     public FormIndex getFormIndex() {
         return formIndex;
     }
 
-
     public int getType() {
         return type;
     }
-
 
     public void setType(int newType) {
         type = newType;

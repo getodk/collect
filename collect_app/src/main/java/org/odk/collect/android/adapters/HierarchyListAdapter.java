@@ -15,7 +15,6 @@
 package org.odk.collect.android.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -65,10 +64,7 @@ public class HierarchyListAdapter extends BaseAdapter {
             hev.setPrimaryText(items.get(position).getPrimaryText());
             hev.setSecondaryText(items.get(position).getSecondaryText());
             hev.setColor(items.get(position).getColor());
-            int iconRes = items.get(position).getIcon();
-            if (iconRes != -1) {
-                hev.setIcon(ContextCompat.getDrawable(context, iconRes));
-            }
+            hev.setIconVisibility(items.get(position).getDisplayIcon() == 1 ? View.VISIBLE : View.GONE);
         }
 
         if (items.get(position).getSecondaryText() == null
@@ -78,7 +74,6 @@ public class HierarchyListAdapter extends BaseAdapter {
             hev.showSecondary(true);
         }
         return hev;
-
     }
 
 
