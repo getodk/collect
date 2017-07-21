@@ -192,7 +192,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     }
 
     private void goUpLevel(HierarchyElement parent) {
-        Collect.getInstance().getFormController().stepToOuterScreenEvent();
+        Collect.getInstance().getFormController().jumpToIndex(parent.getFormIndex());
 
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         formList = parent.getList();
@@ -211,34 +211,32 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Timber.i("onSaveInstanceState");
         outState.putParcelableArrayList(FORM_LIST, formList);
         super.onSaveInstanceState(outState);
     }
 
     private String getCurrentPath() {
-        FormController formController = Collect.getInstance().getFormController();
-        FormIndex index = formController.getFormIndex();
-        // move to enclosing group...
-        index = formController.stepIndexOut(index);
+        FormEntryCaption[] groups = Collect.getInstance().getFormController().getGroupsForCurrentIndex();
 
-        String path = "";
-        while (index != null) {
+        StringBuilder s = new StringBuilder("");
+        String t = "";
+        int i;
+        // list all groups in one string
+        for (FormEntryCaption g : groups) {
+            i = g.getMultiplicity() + 1;
+            t = g.getLongText();
+            if (t != null) {
+                if (!s.toString().equals("")) {
+                    s.append(" > ");
+                }
 
-            path =
-                    formController.getCaptionPrompt(index).getLongText()
-                            + " ("
-                            + (formController.getCaptionPrompt(index)
-                            .getMultiplicity() + 1) + ") > " + path;
-
-            index = formController.stepIndexOut(index);
+                s.append(t);
+                if (g.repeats() && i > 0) {
+                    s.append(" (").append(i).append(")");
+                }
+            }
         }
-        // return path?
-        if (path.equals("")) {
-            return path;
-        } else {
-            return path.substring(0, path.length() - 2);
-        }
+        return s.toString();
     }
 
     public void refreshView(HierarchyElement parent) {
