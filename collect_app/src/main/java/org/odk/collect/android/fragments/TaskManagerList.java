@@ -23,6 +23,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -33,6 +36,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainListActivity;
 import org.odk.collect.android.activities.TaskTabs;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
@@ -50,11 +54,10 @@ import timber.log.Timber;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
- *
  */
 public class TaskManagerList extends InstanceListFragment
-        implements  View.OnClickListener,
-        LoaderManager.LoaderCallbacks<List<TaskEntry>>{
+        implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<List<TaskEntry>> {
     private static final String DATA_MANAGER_LIST_SORTING_ORDER = "dataManagerListSortingOrder";
 
     DeleteInstancesTask deleteInstancesTask = null;
@@ -64,6 +67,10 @@ public class TaskManagerList extends InstanceListFragment
 
     private TaskListArrayAdapter mAdapter;
     private TaskTabs mActivity;
+
+    private static final int MENU_GETTASKS = Menu.FIRST;
+    private static final int MENU_SORT = Menu.FIRST + 1;
+    private static final int MENU_FILTER = MENU_SORT + 1;
 
     public static TaskManagerList newInstance() {
         return new TaskManagerList();
@@ -186,12 +193,10 @@ public class TaskManagerList extends InstanceListFragment
     }
 
 
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long rowId) {
         super.onListItemClick(l, v, position, rowId);
     }
-
 
 
     @Override
@@ -204,6 +209,27 @@ public class TaskManagerList extends InstanceListFragment
                 deleteButton.setEnabled(allChecked);
                 break;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
+        //super.onCreateOptionsMenu(menu, inflater);
+
+        menu
+                .add(0, MENU_GETTASKS, 0, R.string.smap_get_tasks)
+                .setIcon(R.drawable.ic_menu_rotate)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        menu
+                .add(0, MENU_SORT, 0, R.string.sort_the_list)
+                .setIcon(R.drawable.ic_sort)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        menu
+                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
+                .setIcon(R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
 }

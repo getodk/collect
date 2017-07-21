@@ -25,7 +25,6 @@ import android.support.v7.widget.Toolbar;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fragments.DataManagerList;
 import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.fragments.TaskManagerList;
 import org.odk.collect.android.views.SlidingTabLayout;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 
 public class TaskTabs extends AppCompatActivity {
 
-    private TaskManagerList dataManagerList = TaskManagerList.newInstance();
+    private TaskManagerList taskManagerList = TaskManagerList.newInstance();
     private FormManagerList formManagerList = FormManagerList.newInstance();
 
     private void initToolbar() {
@@ -50,12 +49,12 @@ public class TaskTabs extends AppCompatActivity {
         setContentView(R.layout.task_tabs_layout);
         initToolbar();
 
-        String[] tabNames = {getString(R.string.data), getString(R.string.forms)};
+        String[] tabNames = {getString(R.string.smap_taskList), getString(R.string.smap_taskMap)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(dataManagerList);
+        fragments.add(taskManagerList);
         fragments.add(formManagerList);
 
         viewPager.setAdapter(new ViewPagerAdapter(
@@ -74,7 +73,7 @@ public class TaskTabs extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.notes);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher);
     }
 
     @Override
@@ -91,8 +90,8 @@ public class TaskTabs extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //if (dataManagerList.getDrawerStatus()) {
-        //    dataManagerList.setUserVisibleHint(false);
+        //if (taskManagerList.getDrawerStatus()) {
+        //    taskManagerList.setUserVisibleHint(false);
         //} else {
         //    super.onBackPressed();
         //}
