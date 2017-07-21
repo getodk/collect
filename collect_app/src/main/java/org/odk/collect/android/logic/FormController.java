@@ -503,6 +503,40 @@ public class FormController {
         }
     }
 
+    public boolean isWithinGroup(FormIndex group) {
+        return isWithinGroup(getFormIndex(), group);
+    }
+
+    public boolean isWithinGroup(FormIndex current, FormIndex group) {
+        String currentIndexPath = current.toString();
+        String groupIndexPath = group.toString();
+        return currentIndexPath.startsWith(groupIndexPath);
+    }
+
+    public int stepOverGroupInHierarchy() {
+        try {
+            FormIndex currentIndex = getFormIndex();
+
+            FormIndex index = currentIndex;
+
+            while (isWithinGroup(index, currentIndex)) {
+                index = formEntryController.getModel().incrementIndex(index, false);
+
+                if (index.isEndOfFormIndex()) {
+                    index = FormIndex.createEndOfFormIndex();
+                    break;
+                }
+            }
+            return formEntryController.jumpToIndex(index);
+        } catch (Exception e) {
+            Timber.e(e);
+            return formEntryController.jumpToIndex(FormIndex.createEndOfFormIndex());
+        }
+    }
+
+    public int stepToNextEvent() {
+        return formEntryController.stepToNextEvent();
+    }
 
     /**
      * Navigates forward in the form.
@@ -545,7 +579,7 @@ public class FormController {
 
     /**
      * used to go up one level in the formIndex. That is, if you're at 5_0, 1 (the second question
-     * in a repeating group), this method will return a FormInex of 5_0 (the start of the repeating
+     * in a repeating group), this method will return a FormIndex of 5_0 (the start of the repeating
      * group). If your at index 16 or 5_0, this will return null;
      *
      * @return index
