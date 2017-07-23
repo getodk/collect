@@ -47,7 +47,7 @@ import timber.log.Timber;
 public class SplashScreenActivity extends Activity {
 
     @SuppressWarnings("rawtypes")
-    private Class mNextActivity = TaskTabs.class;
+    private Class mNextActivity = SmapMain.class;
     private int mSplashTimeout = 3000; // milliseconds
     private static final boolean EXIT = true;
 

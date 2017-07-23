@@ -42,6 +42,9 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
 	private List<TaskEntry> mTasks = null;
 	private TaskObserver mTaskObserver;	// Monitor changes to task data
 
+    private String sortOrder = "BY_NAME_ASC";
+    private CharSequence filter = "";
+
 	public TaskLoader(Context ctx) {
 		super(ctx);
 	}
@@ -69,14 +72,13 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
                 FormsColumns.PROJECT,
                 FormsColumns.DISPLAY_NAME};
 
-        String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
         String selectClause = "(lower(" + FormsColumns.SOURCE + ")='" + Utilities.getSource() + "' or " +
                 FormsColumns.SOURCE + " is null)" +
                 " and " + FormsColumns.TASKS_ONLY + " = 'no'";
 
 
         final ContentResolver resolver = Collect.getInstance().getContentResolver();
-        Cursor formListCursor = resolver.query(FormsColumns.CONTENT_URI, proj, selectClause, null, sortOrder);
+        Cursor formListCursor = resolver.query(FormsColumns.CONTENT_URI, proj, selectClause, null, getSortOrderExpr(sortOrder));
 
 
 		if(formListCursor != null) {
@@ -213,4 +215,33 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
 
 	}
 
+	private String getSortOrderExpr(String sortOrder) {
+
+        String sortOrderExpr = "";
+
+        if(sortOrder.equals("BY_NAME_ASC")) {
+            sortOrderExpr = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " ASC";
+        } else if(sortOrder.equals("BY_NAME_DESC")) {
+            sortOrderExpr = FormsColumns.DISPLAY_NAME + " DESC, " + FormsColumns.JR_VERSION + " DESC";
+        } else if(sortOrder.equals("BY_DATE_ASC")) {
+            sortOrderExpr = FormsColumns.DATE + " ASC, " + FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " ASC";
+        } else if(sortOrder.equals("BY_DATE_DESC")) {
+            sortOrderExpr = FormsColumns.DATE + " DESC, " + FormsColumns.DISPLAY_NAME + " DESC, " + FormsColumns.JR_VERSION + " DESC";
+        }
+        return sortOrderExpr;
+    }
+
+	/*
+	 * Change sort order
+	 */
+	public void updateSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    /*
+	 * Change filter
+	 */
+    public void updateFilter(CharSequence filter) {
+        this.filter = filter;
+    }
 }

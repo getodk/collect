@@ -76,4 +76,5 @@
     <string name="smap_created">"Created"</string>
     <string name="smap_error">"Error"</string>
     <string name="smap_unauth">"Unauthorised"</string>
+    <string name="smap_no_server">"Server not specified in settings"</string>
 </resources>

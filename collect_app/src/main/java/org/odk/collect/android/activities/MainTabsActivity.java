@@ -407,7 +407,7 @@ public class MainTabsActivity extends TabActivity implements
 
         // Refresh task list
     	Intent intent = new Intent("refresh");
-	    getApplication().sendBroadcast(intent);
+	    this.sendBroadcast(intent);
 	    
 		try {
             dismissDialog(PROGRESS_DIALOG);

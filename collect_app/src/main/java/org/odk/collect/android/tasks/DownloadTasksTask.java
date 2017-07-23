@@ -174,7 +174,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     protected HashMap<String, String> doInBackground(Void... values) {
 	
 		results = new HashMap<String,String>();
-        SharedPreferences sharedPreferences = PreferenceManager
+        sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
         source = Utilities.getSource();
         serverUrl = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
@@ -274,6 +274,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	 */
                 publishProgress(Collect.getInstance().getString(R.string.smap_new_forms));
 
+                if(taskURL.startsWith("null")) {
+                    throw new Exception(Collect.getInstance().getString(R.string.smap_no_server));
+                }
                 HttpContext localContext = Collect.getInstance().getHttpContext();
                 HttpClient client = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
                 Uri u = Uri.parse(taskURL);

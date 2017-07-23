@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+
+import timber.log.Timber;
 
 
 public class TaskObserver extends BroadcastReceiver {
@@ -21,7 +22,7 @@ public TaskObserver(TaskLoader loader) {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-	  Log.i("SmapTaskObserver: ", "++++++++received refresh");
+	  Timber.i("++++++++received refresh");
 	  mLoader.onContentChanged();
   }
 }
