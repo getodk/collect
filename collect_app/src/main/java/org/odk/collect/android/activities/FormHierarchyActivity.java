@@ -192,13 +192,13 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     }
 
     private void goUpLevel(HierarchyElement parent) {
-        Collect.getInstance().getFormController().jumpToIndex(parent.getFormIndex());
-
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         formList = parent.getList();
         itla.setListItems(formList);
         listView.setAdapter(itla);
         listView.setSelection(formList.indexOf(parent));
+
+        Collect.getInstance().getFormController().jumpToIndex(formList.get(0).getFormIndex());
 
         if (parent.getParent() == null) {
             jumpPreviousButton.setEnabled(false);
@@ -236,7 +236,12 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 }
             }
         }
-        return s.toString();
+
+        if (Collect.getInstance().getFormController().getEvent() == FormEntryController.EVENT_REPEAT) {
+            return s.substring(0, s.length() - 3);
+        } else {
+            return s.toString();
+        }
     }
 
     public void refreshView(HierarchyElement parent) {
