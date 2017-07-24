@@ -724,34 +724,26 @@ public class FormController {
 
 
     /**
-     * Move the current form index to the index of the first enclosing repeat
+     * Move the current form index to the index of the first enclosing group/event
      * or to the start of the form.
      */
     public int stepToOuterScreenEvent() {
         FormIndex index = stepIndexOut(getFormIndex());
-        int currentEvent = getEvent();
-
-        // Step out of any group indexes that are present.
-        while (index != null
-                && getEvent(index) == FormEntryController.EVENT_GROUP) {
-            index = stepIndexOut(index);
-        }
-
         if (index == null) {
             jumpToIndex(FormIndex.createBeginningOfFormIndex());
         } else {
-            if (currentEvent == FormEntryController.EVENT_REPEAT) {
-                // We were at a repeat, so stepping back brought us to then previous level
-                jumpToIndex(index);
-            } else {
-                // We were at a question, so stepping back brought us to either:
-                // The beginning. or The start of a repeat. So we need to step
-                // out again to go passed the repeat.
-                index = stepIndexOut(index);
-                if (index == null) {
-                    jumpToIndex(FormIndex.createBeginningOfFormIndex());
-                } else {
-                    jumpToIndex(index);
+            jumpToIndex(index);
+
+            if (getEvent() == FormEntryController.EVENT_GROUP) {
+                FormEntryCaption fc = getCaptionPrompt();
+                String label = fc.getLongText();
+                if (label == null || label.trim().length() == 0) {
+                    index = stepIndexOut(getFormIndex());
+                    if (index == null) {
+                        jumpToIndex(FormIndex.createBeginningOfFormIndex());
+                    } else {
+                        jumpToIndex(index);
+                    }
                 }
             }
         }

@@ -59,7 +59,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private Button jumpPreviousButton;
     private FormIndex currentIndex;
     private ListView listView;
-    private boolean isJump = false;
+    private boolean isJumpToPrevious = false;
 
 
     @Override
@@ -98,7 +98,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     FormIndex currentIndex = formList.get(0).getFormIndex();
                     formController.jumpToIndex(formController.getPreviousHierarchyScreen(currentIndex));
                     formList = new ArrayList<>();
-                    isJump = true;
+                    isJumpToPrevious = true;
                     refreshView(null);
                 } else {
                     goUpLevel(formList.get(0).getParent());
@@ -155,13 +155,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         if (savedInstanceState != null && savedInstanceState.containsKey(FORM_LIST)) {
             formList = savedInstanceState.getParcelableArrayList(FORM_LIST);
             if (formList == null || formList.size() == 0) {
-                formList = new ArrayList<>();
                 refreshView(null);
             } else {
                 goUpLevel(formList.get(0));
             }
         } else {
-            formList = new ArrayList<>();
             refreshView(null);
         }
         // kinda slow, but works.
@@ -258,67 +256,69 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         try {
             FormController formController = Collect.getInstance().getFormController();
 
-            if (parent != null) {
-                formList = new ArrayList<>();
-                formController.jumpToIndex(parent.getFormIndex());
-            }
-
             // Record the current index so we can return to the same place if the user hits 'back'.
             currentIndex = formController.getFormIndex();
 
             // If we're not at the first level, we're inside a repeated group so we want to only
             // display
             // everything enclosed within that group.
-            FormIndex contextGroupRef = formController.getFormIndex();
+            FormIndex contextGroupRef = currentIndex;
             FormIndex repeatGroupRef = null;
 
-            // If we're currently at a repeat node, record the name of the node and step to the next
-            // node to display.
-            if (formController.getEvent() == FormEntryController.EVENT_GROUP || (parent != null && parent.getType() == ITEM)) {
-                if (parent == null && !isJump) {
-                    contextGroupRef = FormIndex.createBeginningOfFormIndex();
-                } else {
-                    contextGroupRef = currentIndex;
-                }
-                formController.stepToNextEvent();
-            } else if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-                if (parent == null && !isJump) {
-                    contextGroupRef = currentIndex;
-                    formController.jumpToIndex(currentIndex);
-                    formController.stepToNextEvent();
-                } else {
-                    contextGroupRef = currentIndex;
-                    formController.jumpToIndex(currentIndex);
-                    repeatGroupRef = currentIndex;
+
+            if (parent == null) {
+                formList = new ArrayList<>();
+                int event = formController.getEvent();
+                switch (event) {
+                    case FormEntryController.EVENT_REPEAT:
+                        contextGroupRef = currentIndex;
+                        if (isJumpToPrevious) {
+                            int multiplicity = formController.getCaptionPrompt().getMultiplicity();
+
+                            // if multiplicity is 0 then we are already at the first repeat
+                            while (multiplicity != 0) {
+                                event = formController.stepToPreviousEvent();
+
+                                if (event == FormEntryController.EVENT_REPEAT) {
+                                    multiplicity = formController.getCaptionPrompt().getMultiplicity();
+                                }
+                            }
+
+                            repeatGroupRef = formController.getFormIndex();
+                        } else {
+                            formController.stepToNextEvent();
+                        }
+                        break;
+                    case FormEntryController.EVENT_GROUP:
+                        if (isJumpToPrevious) {
+                            contextGroupRef = currentIndex;
+                        } else if (!formController.indexIsInFieldList()) {
+                            contextGroupRef = formController.getPreviousHierarchyScreen(currentIndex);
+                        }
+                        formController.stepToNextEvent();
+                        break;
+                    case FormEntryController.EVENT_QUESTION:
+                        formController.stepToOuterScreenEvent();
+                        contextGroupRef = formController.getFormIndex();
+                        if (!contextGroupRef.isBeginningOfFormIndex()) {
+                            formController.stepToNextEvent();
+                        }
+                        break;
                 }
             } else {
-                FormIndex startTest = formController.stepIndexOut(currentIndex);
-                // If we have a 'group' tag, we want to step back until we hit a repeat or the
-                // beginning.
-                if (startTest == null) {
-                    formController.jumpToIndex(FormIndex
-                            .createBeginningOfFormIndex());
-                } else {
-                    contextGroupRef = startTest;
-                    formController.jumpToIndex(startTest);
+                formList = new ArrayList<>();
+                contextGroupRef = currentIndex;
+                if (formController.getEvent() == FormEntryController.EVENT_REPEAT && parent.getType() == GROUP) {
+                    repeatGroupRef = currentIndex;
+                } else if (parent.getType() == ITEM || parent.getType() == GROUP) {
                     formController.stepToNextEvent();
-                }
-                // check to see if the question is at the first level of the hierarchy. If it
-                // is,
-                // display the root level from the beginning.
-
-                // now test again for repeat. This should be true at this point or we're at the
-                // beginning
-                if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-                    contextGroupRef = formController.getFormIndex();
-                    formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                 }
             }
 
             int event = formController.getEvent();
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
                 // The beginning of form has no valid prompt to display.
-                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                formController.stepToNextEvent();
                 contextGroupRef = null;
                 path.setVisibility(View.GONE);
                 jumpPreviousButton.setEnabled(false);
@@ -474,10 +474,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HierarchyElement h = (HierarchyElement) listView.getItemAtPosition(position);
         FormIndex index = h.getFormIndex();
-        if (index == null) {
-            goUpLevel(h.getParent());
-            return;
-        }
 
         switch (h.getType()) {
             case QUESTION:
