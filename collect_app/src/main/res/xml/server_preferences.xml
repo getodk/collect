@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- smap not type selection
     <ListPreference
         android:id="@+id/protocol"
         android:defaultValue="odk_default"
@@ -8,4 +9,5 @@
         android:entryValues="@array/protocol_entry_values"
         android:key="protocol"
         android:title="@string/type" />
+        -->
 </PreferenceScreen>

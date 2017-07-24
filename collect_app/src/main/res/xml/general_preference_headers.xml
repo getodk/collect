@@ -20,4 +20,10 @@
         android:icon="@drawable/ic_face"
         android:key="user_and_device_identity"
         android:title="@string/user_and_device_identity_title" />
+    <!-- smap add section for fieldTask specific preferences -->
+    <header
+        android:fragment="org.odk.collect.android.preferences.SmapInterfacePreferences"
+        android:icon="@drawable/ic_launcher"
+        android:key="@string/app_name_nv"
+        android:title="@string/app_name_nv" />
 </preference-headers>

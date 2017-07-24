@@ -29,7 +29,6 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -77,21 +76,21 @@ import timber.log.Timber;
 public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
 
     private static enum ContentTypeMapping {
-        XML("xml",  ContentType.TEXT_XML),
-      _3GPP("3gpp", ContentType.create("audio/3gpp")),
-       _3GP("3gp",  ContentType.create("video/3gpp")),
-        AVI("avi",  ContentType.create("video/avi")),
-        AMR("amr",  ContentType.create("audio/amr")),
-        CSV("csv",  ContentType.create("text/csv")),
-        JPG("jpg",  ContentType.create("image/jpeg")),
-        MP3("mp3",  ContentType.create("audio/mp3")),
-        MP4("mp4",  ContentType.create("video/mp4")),
-        OGA("oga",  ContentType.create("audio/ogg")),
-        OGG("ogg",  ContentType.create("audio/ogg")),
-        OGV("ogv",  ContentType.create("video/ogg")),
-        WAV("wav",  ContentType.create("audio/wav")),
-       WEBM("webm", ContentType.create("video/webm")),
-        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
+        XML("xml", ContentType.TEXT_XML),
+        _3GPP("3gpp", ContentType.create("audio/3gpp")),
+        _3GP("3gp", ContentType.create("video/3gpp")),
+        AVI("avi", ContentType.create("video/avi")),
+        AMR("amr", ContentType.create("audio/amr")),
+        CSV("csv", ContentType.create("text/csv")),
+        JPG("jpg", ContentType.create("image/jpeg")),
+        MP3("mp3", ContentType.create("audio/mp3")),
+        MP4("mp4", ContentType.create("video/mp4")),
+        OGA("oga", ContentType.create("audio/ogg")),
+        OGG("ogg", ContentType.create("audio/ogg")),
+        OGV("ogv", ContentType.create("video/ogg")),
+        WAV("wav", ContentType.create("audio/wav")),
+        WEBM("webm", ContentType.create("video/webm")),
+        XLS("xls", ContentType.create("application/vnd.ms-excel"));
 
         private String extension;
         private ContentType contentType;
@@ -118,7 +117,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
-    private static SharedPreferences settings = null;   //smap
 
     private InstanceUploaderListener stateListener;
 
@@ -130,27 +128,27 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     /**
      * Uploads to urlString the submission identified by id with filepath of instance
      *
-     * @param urlString    destination URL
+     * @param urlString        destination URL
      * @param id
      * @param instanceFilePath
-     * @param toUpdate     - Instance URL for recording status update.
-     * @param localContext - context (e.g., credentials, cookies) for client connection
-     * @param uriRemap     - mapping of Uris to avoid redirects on subsequent invocations
+     * @param toUpdate         - Instance URL for recording status update.
+     * @param localContext     - context (e.g., credentials, cookies) for client connection
+     * @param uriRemap         - mapping of Uris to avoid redirects on subsequent invocations
      * @param outcome
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
-                            Uri toUpdate,
-                            HttpContext localContext,
-                            Map<Uri, Uri> uriRemap,
-                            Outcome outcome,
-                            String status,              // smap
-                            String location_trigger,    // smap
-                            String survey_notes) {		// smap add status
+                                        Uri toUpdate,
+                                        HttpContext localContext,
+                                        Map<Uri, Uri> uriRemap,
+                                        Outcome outcome,
+                                        String status,              // smap
+                                        String location_trigger,    // smap
+                                        String survey_notes) {        // smap add status
 
         Collect.getInstance().getActivityLogger().logAction(this, urlString, instanceFilePath);
 
-        settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());    // smap
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());    // smap
         File instanceFile = new File(instanceFilePath);
         ContentValues cv = new ContentValues();
         Uri u = Uri.parse(urlString);
@@ -196,7 +194,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     WebUtils.discardEntityBytes(response);
                     // we need authentication, so stop and return what we've
                     // done so far.
-               	    /*
+                       /*
                      * Smap Start
                      *   just fail the request, the user will need to update userid and password in the parameters
                      *   Smap does not at this stage support submissionURL's per survey each with a different user id and password
@@ -205,7 +203,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     //outcome.authRequestingServer = u;
                     //return false;
                     outcome.results.put(id, fail
-                    			+ "Authentication failure.  You will need to fix the username, password or URL in the settings screen.  ");
+                            + "Authentication failure.  You will need to fix the username, password or URL in the sharedPreferences screen.  ");
                     //cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED); smap
                     Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
                     return true;
@@ -223,7 +221,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                                 // ... and possibly to use https instead.
                                 uriRemap.put(u, newURI);
                                 u = newURI;
- 				                // Start Smap
+                                // Start Smap
                                 String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                                         .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
                                 u = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
@@ -434,9 +432,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
             }
 
             HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
-            httppost.setHeader("form_status", status);						// smap add form_status header
+            httppost.setHeader("form_status", status);                        // smap add form_status header
             // Start Smap - Add the location trigger and comments if they exist
-            if(location_trigger != null) {
+            if (location_trigger != null) {
                 try {
                     StringBody sb = new StringBody(location_trigger, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                     builder.addPart("location_trigger", sb);
@@ -444,7 +442,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     e.printStackTrace(); // never happens...
                 }
             }
-            if(survey_notes != null) {
+            if (survey_notes != null) {
                 try {
                     StringBody sb = new StringBody(survey_notes, ContentType.TEXT_PLAIN.withCharset(Charset.forName("UTF-8")));
                     builder.addPart("survey_notes", sb);
@@ -543,7 +541,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
         selectionBuf.append(")");
         String selection = selectionBuf.toString();
-        Timber.i("Getting instances "  + selection);
+        Timber.i("Getting instances " + selection);
         // end smap
 
         String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
@@ -571,51 +569,52 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
-	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
-	                String urlString = c.isNull(subIdx) ? null : c.getString(subIdx).trim();
-	                if (urlString == null) {
-                            urlString = getServerSubmissionURL();
+                    int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);
+                    String urlString = c.isNull(subIdx) ? null : c.getString(subIdx).trim();
+                    if (urlString == null) {
+                        urlString = getServerSubmissionURL();
 
-	                    // ---------------- Smap Start
-	                    // Add credentials pre-emptively
+                        // ---------------- Smap Start
+                        // Add credentials pre-emptively
 
-	                    String username = settings.getString(PreferenceKeys.KEY_USERNAME, null);
-	                    String password = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+                        String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+                        String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
-	                    if(username != null && password != null) {
-	                    	Uri u = Uri.parse(urlString);
-	                    	WebUtils.addCredentials(username, password, u.getHost());
-	                    }
+                        if (username != null && password != null) {
+                            Uri u = Uri.parse(urlString);
+                            WebUtils.addCredentials(username, password, u.getHost());
+                        }
 
                         // Add updateid if this is a non repeating task
                         boolean repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
                         String updateid = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
-                        if(!repeat && updateid != null) {
+                        if (!repeat && updateid != null) {
                             urlString = urlString + "/" + updateid;
                         }
-	                    // Smap End
-	                }
+                        // Smap End
+                    }
 
                     // Smap start get smap specific data values to send to the server
-	                String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));	// smap get status
-                    String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));	// smap get location trigger
-                    String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));	// smap get survey notes
+                    String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));    // smap get status
+                    String location_trigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));    // smap get location trigger
+                    String survey_notes = c.getString(c.getColumnIndex(InstanceColumns.T_SURVEY_NOTES));    // smap get survey notes
                     // smap end
 
-	                // add the deviceID to the request...
-	                try {
-						urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						// unreachable...
-                                                Timber.i(e, "Error encoding URL for device id : %s", deviceId);
-					}
+                    // add the deviceID to the request...
+                    try {
+                        urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        // unreachable...
+                        Timber.i(e, "Error encoding URL for device id : %s", deviceId);
+                    }
 
-	                if ( !uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap, outcome,
-                            status, location_trigger, survey_notes) ) {	// smap add status
-	                	return false; // get credentials...
-	                }
-	            }
-	        }
+                    if (!uploadOneSubmission(urlString, id, instance, toUpdate, localContext, uriRemap, outcome,
+                            status, location_trigger, survey_notes)) {    // smap add status
+                        return false; // get credentials...
+                    }
+                }
+            }
         } finally {
             if (c != null) {
                 c.close();
@@ -645,10 +644,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private String getServerSubmissionURL() {
 
         Collect app = Collect.getInstance();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(
-                Collect.getInstance());
-        String serverBase = settings.getString(PreferenceKeys.KEY_SERVER_URL,
+        String serverBase = sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL,
                 app.getString(R.string.default_server_url));
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
@@ -656,7 +654,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = settings.getString(PreferenceKeys.KEY_SUBMISSION_URL,
+        String submissionPath = sharedPreferences.getString(PreferenceKeys.KEY_SUBMISSION_URL,
                 app.getString(R.string.default_odk_submission));
 
         if (!submissionPath.startsWith(URL_PATH_SEP)) {

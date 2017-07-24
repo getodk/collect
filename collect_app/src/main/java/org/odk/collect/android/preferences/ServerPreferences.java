@@ -53,12 +53,14 @@ public class ServerPreferences extends ServerPreferencesFragment implements Pref
     }
 
     private void initProtocolPrefs() {
-        ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);
+        //ListPreference protocolPref = (ListPreference) findPreference(KEY_PROTOCOL);    // smap
 
-        protocolPref.setSummary(protocolPref.getEntry());
-        protocolPref.setOnPreferenceChangeListener(this);
 
-        addPreferencesResource(protocolPref.getValue());
+        //protocolPref.setSummary(protocolPref.getEntry());    // smap
+        //protocolPref.setOnPreferenceChangeListener(this);    // smap
+
+        //addPreferencesResource(protocolPref.getValue());
+        addPreferencesResource("odk_default");
     }
 
     private void addPreferencesResource(CharSequence value) {
