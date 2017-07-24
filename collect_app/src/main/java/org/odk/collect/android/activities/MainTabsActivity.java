@@ -41,7 +41,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
@@ -56,8 +55,6 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.odk.collect.android.activities.FormDownloadList;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -200,7 +197,7 @@ public class MainTabsActivity extends TabActivity implements
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_LOCATION_TRIGGER, true)) {
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
             mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
             authorised = true;
         } else {
@@ -263,7 +260,7 @@ public class MainTabsActivity extends TabActivity implements
 
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-        boolean odkStyle = sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_ODK_STYLE_MENUS, true);
+        boolean odkStyle = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_ODK_STYLE_MENUS, true);
 
         getMenuInflater().inflate(R.menu.smap_menu, menu);
         if(odkStyle) {
@@ -671,7 +668,7 @@ public class MainTabsActivity extends TabActivity implements
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
 
-        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_LOCATION_TRIGGER, true)) {
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
             adapter.enableForegroundDispatch(activity, mNfcPendingIntent, mNfcFilters, null);
         }
 	}
@@ -829,7 +826,7 @@ public class MainTabsActivity extends TabActivity implements
         }
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean reviewFinal = sharedPreferences.getBoolean( PreferenceKeys.KEY_STORE_REVIEW_FINAL, true);
+        boolean reviewFinal = sharedPreferences.getBoolean( PreferenceKeys.KEY_SMAP_REVIEW_FINAL, true);
 
         if(!canUpdate && reviewFinal) {
             // Show a message if this task is read only

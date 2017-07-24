@@ -29,7 +29,6 @@ import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.Constants;
 import org.odk.collect.android.utilities.TraceUtilities;
 
@@ -78,7 +77,7 @@ public class LocationChangedReceiver extends BroadcastReceiver {
                 if (sharedPreferences == null) {
                     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 }
-                if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_USER_TRAIL, false)) {
+                if (sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, false)) {
                     TraceUtilities.insertPoint(location);
                 }
             }

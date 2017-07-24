@@ -94,9 +94,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 public class SmapTaskMapFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<List<TaskEntry>>, OnMapReadyCallback {
 
-    private static final int MENU_SORT = Menu.FIRST;
-    private static final int MENU_FILTER = MENU_SORT + 1;
-
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
     View rootView;
@@ -141,8 +138,6 @@ public class SmapTaskMapFragment extends Fragment
     private static final int MAP_LOADER_ID = 2;
 
     private TaskListArrayAdapter mAdapter;
-
-    private static final int MENU_GETTASKS = 100;
 
     public static SmapTaskMapFragment newInstance() {
         return new SmapTaskMapFragment();
@@ -238,20 +233,14 @@ public class SmapTaskMapFragment extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
 
-
         getActivity().getMenuInflater().inflate(R.menu.smap_menu, menu);
-
-        menu
-                .add(0, MENU_GETTASKS, 0, R.string.smap_get_tasks)
-                .setIcon(android.R.drawable.ic_menu_rotate)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
         super.onCreateOptionsMenu(menu, inflater);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.menu_about:
                 Collect.getInstance()
@@ -269,24 +258,10 @@ public class SmapTaskMapFragment extends Fragment
                 Intent ig = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(ig);
                 return true;
-            /*
-             * Smap disable admin preferences
-            case R.id.menu_admin_preferences:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-                String pw = adminPreferences.getString(
-                        AdminKeys.KEY_ADMIN_PW, "");
-                if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
-                    startActivity(i);
-                } else {
-                    showDialog(PASSWORD_DIALOG);
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "createAdminPasswordDialog", "show");
-                }
+            case R.id.menu_gettasks:
+                ((SmapMain) getActivity()).processGetTask();
                 return true;
-                */
+
 
             /*
             case MENU_ENTERDATA:
@@ -299,30 +274,12 @@ public class SmapTaskMapFragment extends Fragment
                 processSendData();
                 return true;
                 */
-            case MENU_GETTASKS:
-                ((SmapMain) getActivity()).processGetTask();
-                return true;
             /*
             case MENU_MANAGEFILES:
                 processManageFiles();
                 return true;
                 */
-            case MENU_SORT:
-                if (drawerLayout.isDrawerOpen(Gravity.END)) {
-                    drawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
-                    drawerLayout.openDrawer(Gravity.END);
-                }
-                return true;
 
-            case MENU_FILTER:
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }

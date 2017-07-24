@@ -17,6 +17,7 @@ package org.odk.collect.android.fragments;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -58,6 +59,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -85,8 +87,16 @@ public class SmapTaskListFragment extends ListFragment
         implements //View.OnClickListener,
         LoaderManager.LoaderCallbacks<List<TaskEntry>> {
 
+    // request codes for returning chosen form to main menu.
+    private static final int FORM_CHOOSER = 0;
+    private static final int INSTANCE_UPLOADER = 2;
+
     private static final int MENU_SORT = Menu.FIRST;
-    private static final int MENU_FILTER = MENU_SORT + 1;
+    private static final int MENU_FILTER = Menu.FIRST + 1;
+    private static final int MENU_ENTERDATA = Menu.FIRST + 2;
+    private static final int MENU_GETFORMS = Menu.FIRST + 3;
+    private static final int MENU_SENDDATA = Menu.FIRST + 4;
+    private static final int MENU_MANAGEFILES = Menu.FIRST + 5;
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
@@ -112,8 +122,6 @@ public class SmapTaskListFragment extends ListFragment
     private static final int TASK_LOADER_ID = 1;
 
     private TaskListArrayAdapter mAdapter;
-
-    private static final int MENU_GETTASKS = 100;
 
     public static SmapTaskListFragment newInstance() {
         return new SmapTaskListFragment();
@@ -197,18 +205,12 @@ public class SmapTaskListFragment extends ListFragment
             Timber.i("Form: " + te.displayName);
         }
 
-        // smap TODO enable when adapter added
+        // smap
         mAdapter.setData(data);
 
         // TODO Smap
         //tabsActivity.setLocationTriggers(data, false);      // NFC and geofence triggers
 
-        // smap todo
-        //if (isResumed()) {
-        //    setListShown(true);
-        //} else {
-        //    setListShownNoAnimation(true);
-        //}
     }
 
     @Override
@@ -277,7 +279,6 @@ public class SmapTaskListFragment extends ListFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
 
-
         getActivity().getMenuInflater().inflate(R.menu.smap_menu, menu);
 
         menu
@@ -290,10 +291,16 @@ public class SmapTaskListFragment extends ListFragment
                 .setIcon(R.drawable.ic_search)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        menu
-                .add(0, MENU_GETTASKS, 0, R.string.smap_get_tasks)
-                .setIcon(android.R.drawable.ic_menu_rotate)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        boolean odkMenus = PreferenceManager
+                .getDefaultSharedPreferences(getContext())
+                .getBoolean(PreferenceKeys.KEY_SMAP_ODK_STYLE_MENUS, true);
+
+        if(odkMenus) {
+            menu
+                    .add(0, MENU_ENTERDATA, 0, R.string.enter_data_button)
+                    .setIcon(android.R.drawable.ic_menu_edit)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        }
 
         super.onCreateOptionsMenu(menu, inflater);
 
@@ -318,44 +325,21 @@ public class SmapTaskListFragment extends ListFragment
                 Intent ig = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(ig);
                 return true;
-            /*
-             * Smap disable admin preferences
-            case R.id.menu_admin_preferences:
-                Collect.getInstance().getActivityLogger()
-                        .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-                String pw = adminPreferences.getString(
-                        AdminKeys.KEY_ADMIN_PW, "");
-                if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
-                    startActivity(i);
-                } else {
-                    showDialog(PASSWORD_DIALOG);
-                    Collect.getInstance().getActivityLogger()
-                            .logAction(this, "createAdminPasswordDialog", "show");
-                }
+            case R.id.menu_gettasks:
+                ((SmapMain) getActivity()).processGetTask();
                 return true;
-                */
-
-            /*
             case MENU_ENTERDATA:
                 processEnterData();
                 return true;
             case MENU_GETFORMS:
-                processGetForms();
+                //processGetForms();
                 return true;
             case MENU_SENDDATA:
-                processSendData();
+                //processSendData();
                 return true;
-                */
-            case MENU_GETTASKS:
-                ((SmapMain) getActivity()).processGetTask();
-                return true;
-            /*
             case MENU_MANAGEFILES:
-                processManageFiles();
+                //processManageFiles();
                 return true;
-                */
             case MENU_SORT:
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
@@ -508,7 +492,7 @@ public class SmapTaskListFragment extends ListFragment
 
     protected void restoreSelectedSortingOrder() {
         selectedSortingOrder = PreferenceManager
-                .getDefaultSharedPreferences(Collect.getInstance())
+                .getDefaultSharedPreferences(getContext())
                 .getInt(getSortingOrderKey(), BY_NAME_ASC);
     }
 
@@ -527,6 +511,11 @@ public class SmapTaskListFragment extends ListFragment
         mTaskLoader.updateSortOrder(getSortingOrder());
         mTaskLoader.updateFilter(getFilterText());
         mTaskLoader.forceLoad();
+    }
+
+    private void processEnterData() {
+        Intent i = new Intent(getContext(), org.odk.collect.android.activities.FormChooserList.class);
+        startActivityForResult(i, FORM_CHOOSER);
     }
 
 }

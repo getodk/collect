@@ -8,15 +8,12 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.activities.MapsActivity;
-import org.odk.collect.android.fragments.MapFragment;
 
 
 public class MapLocationObserver extends BroadcastReceiver {
@@ -37,9 +34,9 @@ public MapLocationObserver(Context context, MapsActivity map) {
   public void onReceive(Context context, Intent intent) {
       Location locn = Collect.getInstance().getLocation();
       LatLng point = new LatLng(locn.getLatitude(), locn.getLongitude());
-      if(settings.getBoolean(PreferenceKeys.KEY_STORE_USER_TRAIL, false)) {
+      if(settings.getBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, false)) {
           mMap.updatePath(point);
       }
-      //mMap.setUserLocation(Collect.getInstance().getLocation(), settings.getBoolean(PreferencesActivity.KEY_STORE_USER_TRAIL, false));
+      //mMap.setUserLocation(Collect.getInstance().getLocation(), settings.getBoolean(PreferencesActivity.KEY_STORE_SMAP_USER_TRAIL, false));
   }
 }

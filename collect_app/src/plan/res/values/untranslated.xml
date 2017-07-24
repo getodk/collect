@@ -13,8 +13,7 @@
 
 <resources>
     <!-- strings that should not be translated -->
-	<string translatable="false" name="app_name">Plan Collect v5.00</string>
-    <string translatable="false" name="app_name_nv">Plan Collect</string>
+	<string translatable="false" name="app_name">Plan Collect</string>
 	<string translatable="false" name="default_server_url">https://plan.smap.com.au</string>
 	<string translatable="false" name="default_username"></string>
 	<string translatable="false" name="default_password"></string>

@@ -22,6 +22,12 @@ limitations under the License.
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/menu_gettasks"
+        android:title="@string/smap_get_tasks"
+        android:icon="@android:drawable/ic_menu_rotate"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/menu_general_preferences"
         android:title="@string/general_preferences"
         app:showAsAction="never"/>

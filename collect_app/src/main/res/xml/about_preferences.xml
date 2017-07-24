@@ -1,5 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--
     <PreferenceScreen
         android:id="@+id/odk_website"
         android:key="odk_website"
@@ -15,6 +16,11 @@
     <PreferenceScreen
         android:key="tell_your_friends"
         android:title="@string/tell_your_friends" />
+    -->
+
+    <PreferenceScreen
+        android:key="app_version"
+        android:title="@string/app_version" />
 
     <PreferenceScreen
         android:key="leave_a_review"

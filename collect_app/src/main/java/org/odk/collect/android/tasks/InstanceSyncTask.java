@@ -127,7 +127,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(
-                        PreferenceKeys.KEY_INSTANCE_SYNC, true);
+                        PreferenceKeys.KEY_INSTANCE_SYNC, false);    // smap change default to false
 
                 int counter = 0;
                 // Begin parsing and add them to the content provider

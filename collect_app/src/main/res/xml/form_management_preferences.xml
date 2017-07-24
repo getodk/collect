@@ -22,12 +22,14 @@
     <PreferenceCategory
         android:key="form_filling"
         android:title="@string/form_filling_category">
+        <!-- smap remove
         <CheckBoxPreference
             android:id="@+id/default_completed"
             android:defaultValue="true"
             android:key="default_completed"
             android:summary="@string/default_completed_summary"
             android:title="@string/default_completed" />
+            -->
         <ListPreference
             android:id="@+id/constraint_behavior"
             android:defaultValue="on_swipe"
@@ -44,6 +46,7 @@
             android:title="@string/high_resolution_title" />
     </PreferenceCategory>
 
+    <!-- Remove
     <PreferenceCategory
         android:key="form_import"
         android:title="@string/form_import_category">
@@ -54,4 +57,5 @@
             android:summary="@string/instance_sync_summary"
             android:title="@string/instance_sync" />
     </PreferenceCategory>
+    -->
 </PreferenceScreen>

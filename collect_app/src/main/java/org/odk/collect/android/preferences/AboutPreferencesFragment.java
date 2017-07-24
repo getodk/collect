@@ -44,10 +44,10 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.about_preferences);
 
-        findPreference(KEY_ODK_WEBSITE).setOnPreferenceClickListener(this);
-        findPreference(KEY_ODK_FORUM).setOnPreferenceClickListener(this);
+        //findPreference(KEY_ODK_WEBSITE).setOnPreferenceClickListener(this);    // smap
+        //findPreference(KEY_ODK_FORUM).setOnPreferenceClickListener(this);    // smap
         findPreference(KEY_OPEN_SOURCE_LICENSES).setOnPreferenceClickListener(this);
-        findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);
+        //findPreference(KEY_TELL_YOUR_FRIENDS).setOnPreferenceClickListener(this);   // smap
         findPreference(KEY_LEAVE_A_REVIEW).setOnPreferenceClickListener(this);
         websiteTabHelper = new CustomTabHelper();
         forumTabHelper = new CustomTabHelper();

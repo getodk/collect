@@ -1,44 +1,22 @@
 package org.odk.collect.android.receivers;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-
-import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DownloadTasksTask;
-import org.odk.collect.android.tasks.GoogleSheetsAbstractUploader;
-import org.odk.collect.android.tasks.InstanceUploaderTask;
-import org.odk.collect.android.utilities.WebUtils;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -94,8 +72,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
-        boolean sendwifi = autosend.equals("wifi_only");
-        boolean sendnetwork = autosend.equals("cellular_only");
+        boolean autosend_wifi_override = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);    // smap
+        boolean autosend_wifi_cell_override = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);    // smap
+        boolean sendwifi = autosend.equals("wifi_only") || autosend_wifi_override || autosend_wifi_cell_override;    // smap add overrides
+        boolean sendnetwork = autosend.equals("cellular_only") || autosend_wifi_cell_override;    // smap add orverrides
         if (autosend.equals("wifi_and_cellular")) {
             sendwifi = true;
             sendnetwork = true;

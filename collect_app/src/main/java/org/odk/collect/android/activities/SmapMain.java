@@ -33,6 +33,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -40,7 +42,6 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fragments.FormManagerList;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.listeners.FormDownloaderListener;
@@ -53,6 +54,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
@@ -183,11 +185,11 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
     @Override
     public void onBackPressed() {
-        //if (taskManagerList.getDrawerStatus()) {
-        //    taskManagerList.setUserVisibleHint(false);
-        //} else {
-        //    super.onBackPressed();
-        //}
+        if (taskManagerList.getDrawerStatus()) {
+            taskManagerList.setUserVisibleHint(false);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     // Get tasks and forms from the server
@@ -543,7 +545,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         }
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean reviewFinal = sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_REVIEW_FINAL, true);
+        boolean reviewFinal = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, true);
 
         if (!canUpdate && reviewFinal) {
             // Show a message if this task is read only
@@ -624,9 +626,10 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     }
 
     /*
- * Get the tasks shown on the map
- */
+     * Get the tasks shown on the map
+     */
     public List<TaskEntry> getMapTasks() {
         return mMapTasks;
     }
+
 }
