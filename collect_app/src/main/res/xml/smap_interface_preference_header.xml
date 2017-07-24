@@ -2,6 +2,7 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
     <header
         android:fragment="org.odk.collect.android.preferences.SmapInterfacePreferences"
+        android:icon="@drawable/ic_tasks"
         android:key="@string/app_name_nv"
         android:title="@string/app_name_nv" />
 </preference-headers>

@@ -23,7 +23,7 @@
     <!-- smap add section for fieldTask specific preferences -->
     <header
         android:fragment="org.odk.collect.android.preferences.SmapInterfacePreferences"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_tasks"
         android:key="@string/app_name_nv"
         android:title="@string/app_name_nv" />
 </preference-headers>
