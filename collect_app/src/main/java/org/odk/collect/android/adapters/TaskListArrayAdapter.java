@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,11 +42,13 @@ import java.util.TimeZone;
 public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     
     private int mLayout;
+    Context mContext;
     LayoutInflater mInflater;
     static String TAG = "TaskListArrayAdapter";
 	
     public TaskListArrayAdapter(Context context) {
 		super(context, R.layout.main_list);
+        mContext = context;
 		mLayout = R.layout.task_row;
 		mInflater = LayoutInflater.from(context);
 	}
@@ -115,7 +119,9 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
             }
         }
 
-    	 
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        view.startAnimation(animation);
+
     	return view;
     }
     
