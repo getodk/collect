@@ -292,7 +292,7 @@ public final class WebUtils {
                     // loop until all bytes read
                 }
             } catch (Exception e) {
-                Timber.i(e);
+                Timber.i(e.getMessage());   // smap just show the message
             } finally {
                 if (is != null) {
                     try {

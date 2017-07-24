@@ -21,7 +21,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
+import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -39,54 +42,56 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public class NetworkReceiver extends BroadcastReceiver implements TaskDownloaderListener {  // smap implement task download listner
+public class NetworkReceiver extends BroadcastReceiver implements TaskDownloaderListener,
+        InstanceUploaderListener,
+        FormDownloaderListener {  // smap implement task, instance, form list
 
     // turning on wifi often gets two CONNECTED events. we only want to run one thread at a time
     public static boolean running = false;
-    InstanceUploaderTask instanceUploaderTask;
-    public DownloadTasksTask mDownloadTasks;
+    //InstanceServerUploader instanceServerUploader;    // smap
+    public DownloadTasksTask mDownloadTasks;    // smap
     Context mContext = null;        // smap
 
-    GoogleSheetsAutoUploadTask googleSheetsUploadTask;
+    // GoogleSheetsAutoUploadTask googleSheetsUploadTask;    // smap
 
-   @Override
-	public void onReceive(Context context, Intent intent) {
+    @Override
+    public void onReceive(Context context, Intent intent) {
         // make sure sd card is ready, if not don't try to send
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return;
         }
 
-		String action = intent.getAction();
+        String action = intent.getAction();
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
-		NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+        if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-				if (interfaceIsEnabled(context, currentNetworkInfo)) {
-                    //uploadForms(context);    // smap
+                //uploadForms(context);    // smap
+                if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {    // smap
                     refreshTasks(context);   // smap
-				}
-			}
-		} else if (action.equals("org.odk.collect.android.FormSaved")) {
-			ConnectivityManager connectivityManager = (ConnectivityManager) context
-					.getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+                }
+            }
+        } else if (action.equals("org.odk.collect.android.FormSaved")) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-			if (ni == null || !ni.isConnected()) {
-				// not connected, do nothing
-			} else {
-				if (interfaceIsEnabled(context, ni)) {
-                    // uploadForms(context); // smap
+            if (ni == null || !ni.isConnected()) {
+                // not connected, do nothing
+            } else {
+                // uploadForms(context); // smap
+                if (isFormAutoSendOptionEnabled(ni)) {    // smap
                     refreshTasks(context);   // smap
-				}
-			}
-		}
-	}
+                }
 
-    private boolean interfaceIsEnabled(Context context,
-                                       NetworkInfo currentNetworkInfo) {
+            }
+        }
+    }
+
+    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
@@ -116,6 +121,21 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             mDownloadTasks.setDownloaderListener(this, context);
             mDownloadTasks.execute();
         }
+    }
+
+    @Override
+    public void uploadingComplete(HashMap<String, String> result) {
+        /* smap
+        // task is done
+    	if(mContext != null) {
+	        mInstanceUploaderTask.setUploaderListener(null);
+	        running = false;
+	        //  Smap Refresh the task list  - start
+	        Intent intent = new Intent("refresh");
+	        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+	        // End Smap
+    	}
+    	*/
     }
 
     /* smap comment out upload forms
@@ -279,52 +299,58 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     }
 
     @Override
+    public void formsDownloadingComplete(HashMap<FormDetails, String> results) {
+        // do nothing
+
+    }
+
+    @Override
+    public void progressUpdate(String currentFile, int progress, int total) {
+        // do nothing
+    }
+
+    @Override
     //public void progressUpdate(int progress, int total) {    // smap
     public void progressUpdate(String progress) {    // Replace with String parameter
         // do nothing
     }
 
 
+    @Override
+    public void progressUpdate(int progress, int total) {
+        // do nothing
+    }
 
-    /* smap not used
+
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
+        if(mDownloadTasks != null) {    // smap
+            mDownloadTasks.setDownloaderListener(null, mContext);
+        }
+        /* smap
         if (instanceUploaderTask != null) {
             instanceUploaderTask.setUploaderListener(null);
         }
         if (googleSheetsUploadTask != null) {
             googleSheetsUploadTask.setUploaderListener(null);
         }
+        */
         running = false;
     }
-    */
 
-    private class GoogleSheetsAutoUploadTask extends
-            GoogleSheetsAbstractUploader {
-
-        private final GoogleAccountCredential credential;
+    /* smap
+    private class InstanceGoogleSheetsAutoUploadTask extends InstanceGoogleSheetsUploader {
         private Context context;
 
-        public GoogleSheetsAutoUploadTask(Context c, GoogleAccountCredential credential) {
-            context = c;
-            this.credential = credential;
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            sheetsService = new com.google.api.services.sheets.v4.Sheets.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
-            driveService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("ODK-Collect")
-                    .build();
+        InstanceGoogleSheetsAutoUploadTask(Context context, GoogleAccountCredential credential) {
+            super(credential);
+            this.context = context;
         }
 
         @Override
-        protected HashMap<String, String> doInBackground(Long... values) {
-
-            results = new HashMap<String, String>();
+        protected Outcome doInBackground(Long... values) {
+            outcome = new Outcome();
 
             String selection = InstanceColumns._ID + "=?";
             String[] selectionArgs = new String[(values == null) ? 0 : values.length];
@@ -354,11 +380,11 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             if (token == null) {
                 // failed, so just return
                 return null;
-    }
+            }
 
             uploadInstances(selection, selectionArgs, token);
-            return results;
+            return outcome;
         }
     }
-
+    */
 }
