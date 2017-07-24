@@ -149,6 +149,13 @@ public class InstanceServerUploader extends InstanceUploader {
 
             Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
         } else {
+            if (u.getHost() == null) {
+                Timber.i("Host name may not be null");
+                outcome.results.put(id, fail + "Host name may not be null");
+                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                return true;
+            }
 
             // if https then enable preemptive basic auth...
             if (u.getScheme() != null && u.getScheme().equals("https")) {
