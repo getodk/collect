@@ -30,6 +30,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.FileUtils;
@@ -61,6 +62,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
+
 public class Utilities {
 
     // Valid values for task status
@@ -74,27 +76,26 @@ public class Utilities {
     // Valid values for is synced
     public static final String STATUS_SYNC_YES = "synchronized";
     public static final String STATUS_SYNC_NO = "not synchronized";
-	
-	// Get the task source
-	public static String getSource() {
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(Collect.getInstance()
-						.getBaseContext());
-		String serverUrl = sharedPreferences.getString(
-                PreferenceKeys.KEY_SERVER_URL, null);
-		String source = STFileUtils.getSource(serverUrl);
-		
-		
 
-		return source;
-	}
+    // Get the task source
+    public static String getSource() {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(Collect.getInstance()
+                        .getBaseContext());
+        String serverUrl = sharedPreferences.getString(
+                PreferenceKeys.KEY_SERVER_URL, null);
+        String source = STFileUtils.getSource(serverUrl);
+
+
+        return source;
+    }
 
     public static TaskEntry getTaskWithIdOrPath(long id, String instancePath) {
 
         TaskEntry entry = null;
 
         // Get cursor
-        String [] proj = {
+        String[] proj = {
                 InstanceColumns._ID,
                 InstanceColumns.T_TITLE,
                 InstanceColumns.T_TASK_STATUS,
@@ -115,7 +116,7 @@ public class Utilities {
         };
 
         String selectClause = InstanceColumns._ID + " = " + id;
-        if(instancePath != null) {
+        if (instancePath != null) {
             selectClause = InstanceColumns.INSTANCE_FILE_PATH + " = '" + instancePath + "'";
         }
 
@@ -149,10 +150,10 @@ public class Utilities {
             // entry.taskId = c.getLong(c.getColumnIndex(InstanceColumns.T_TASK_ID));
             entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(c != null) {
+            if (c != null) {
                 try {
                     c.close();
                 } catch (Exception e) {
@@ -190,7 +191,7 @@ public class Utilities {
             resolver.insert(InstanceColumns.CONTENT_URI, values);
 
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -198,7 +199,7 @@ public class Utilities {
 
     /**
      * Common routine to download an instance XML document including any attachments
-     *
+     * <p>
      * Smap Specific
      *
      * @param file        the final file
@@ -234,7 +235,7 @@ public class Utilities {
         String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
         String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
-        if(username != null && password != null) {
+        if (username != null && password != null) {
             Uri u = Uri.parse(downloadUrl);
             WebUtils.addCredentials(username, password, u.getHost());
         }
@@ -271,7 +272,7 @@ public class Utilities {
                 HttpEntity entity = response.getEntity();
                 is = entity.getContent();
                 Header contentEncoding = entity.getContentEncoding();
-                if ( contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING) ) {
+                if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase(WebUtils.GZIP_CONTENT_ENCODING)) {
                     is = new GZIPInputStream(is);
                 }
 
@@ -281,7 +282,7 @@ public class Utilities {
                 byte buf[] = new byte[4096];
                 int len;
 
-                if(version < 1) {
+                if (version < 1) {
                     while ((len = is.read(buf)) > 0) {
                         os.write(buf, 0, len);
                     }
@@ -290,8 +291,8 @@ public class Utilities {
 
                     os.write(instance.instanceStrToEdit.getBytes());
 
-                    if(instance.files != null && instance.files.size() > 0) {
-                        for(String media : instance.files) {
+                    if (instance.files != null && instance.files.size() > 0) {
+                        for (String media : instance.files) {
                             DownloadFormsTask dft = new DownloadFormsTask();
                             String mediaUrl = serverUrl + "/attachments/" +
                                     formId + "/" + media;
@@ -307,7 +308,6 @@ public class Utilities {
                 }
 
                 os.flush();
-
 
 
             } finally {
@@ -345,10 +345,10 @@ public class Utilities {
 
     }
 
-    public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised) {
+    public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised, String sortOrder, String filter) {
 
         // Get cursor
-        String [] proj = {
+        String[] proj = {
                 InstanceColumns._ID,
                 InstanceColumns.T_TITLE,
                 InstanceColumns.DISPLAY_NAME,
@@ -374,7 +374,7 @@ public class Utilities {
         };
 
         String selectClause = null;
-        if(all_non_synchronised) {
+        if (all_non_synchronised) {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_IS_SYNC + " = ? ";
@@ -384,17 +384,24 @@ public class Utilities {
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
         }
 
-        String [] selectArgs = {"",""};
-        selectArgs[0] = Utilities.getSource();
-        if(all_non_synchronised) {
-            selectArgs[1] = Utilities.STATUS_SYNC_NO;
+        ArrayList<String> selectArgsList = new ArrayList<> ();
+
+        selectArgsList.add(Utilities.getSource());
+        if (all_non_synchronised) {
+            selectArgsList.add(Utilities.STATUS_SYNC_NO);
         } else {
-            selectArgs[1] = Utilities.STATUS_T_CLOSED;
+            selectArgsList.add(Utilities.STATUS_T_CLOSED);
         }
 
-        String sortOrder = InstanceColumns.T_SCHED_START + " DESC";
+        if(filter.toString().trim().length() > 0 ) {
+            selectClause += " and " + InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            selectArgsList.add("%" + filter + "%");
+        }
+        String [] selectArgs = new String[selectArgsList.size()];
+        selectArgs = selectArgsList.toArray(selectArgs);
 
-        Cursor c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj, selectClause, selectArgs, sortOrder);
+        Cursor c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj,
+                selectClause, selectArgs, getTaskSortOrderExpr(sortOrder));
 
         try {
             c.moveToFirst();
@@ -428,10 +435,10 @@ public class Utilities {
                 tasks.add(entry);
                 c.moveToNext();
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(c != null) {
+            if (c != null) {
                 try {
                     c.close();
                 } catch (Exception e) {
@@ -446,7 +453,7 @@ public class Utilities {
      */
     public static void deleteTask(Long id) {
 
-        Uri taskUri =  Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
+        Uri taskUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
         final ContentResolver cr = Collect.getInstance().getContentResolver();
         cr.delete(taskUri, null, null);
     }
@@ -457,13 +464,13 @@ public class Utilities {
      */
     public static int deleteTasksWithStatus(String status) {
 
-        Uri dbUri =  InstanceColumns.CONTENT_URI;
+        Uri dbUri = InstanceColumns.CONTENT_URI;
 
         String selectClause = InstanceColumns.T_TASK_STATUS + " = ? and "
                 + InstanceColumns.SOURCE + " = ? and "
                 + InstanceColumns.T_IS_SYNC + " = ?";
 
-        String [] selectArgs = {"","",""};
+        String[] selectArgs = {"", "", ""};
         selectArgs[0] = status;
         selectArgs[1] = Utilities.getSource();
         selectArgs[2] = Utilities.STATUS_SYNC_YES;
@@ -471,28 +478,28 @@ public class Utilities {
         return Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
     }
 
-/*
- * Delete any tasks with that are not in the array of assignment identifiers
- * This can be used to remove tasks that have been removed from the server
- * Do not delete repeating tasks
- */
+    /*
+     * Delete any tasks with that are not in the array of assignment identifiers
+     * This can be used to remove tasks that have been removed from the server
+     * Do not delete repeating tasks
+     */
     public static int deleteObsoleteTasks(List<TaskAssignment> assignmentsToKeep) {
 
-        Uri dbUri =  InstanceColumns.CONTENT_URI;
+        Uri dbUri = InstanceColumns.CONTENT_URI;
         int nIds = 0;
-        if(assignmentsToKeep != null) {
+        if (assignmentsToKeep != null) {
             nIds = assignmentsToKeep.size();
         }
 
-        String [] selectArgs = new String[nIds + 1];
+        String[] selectArgs = new String[nIds + 1];
         selectArgs[0] = Utilities.getSource();
 
         StringBuffer selectClause = new StringBuffer(InstanceColumns.T_REPEAT + " = 0 and " + InstanceColumns.SOURCE + " = ?");
 
-        if(nIds > 0) {
+        if (nIds > 0) {
             selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");
             for (int i = 0; i < nIds; i++) {
-                if(i > 0) {
+                if (i > 0) {
                     selectClause.append(",");
                 }
                 selectClause.append("?");
@@ -504,12 +511,12 @@ public class Utilities {
         return Collect.getInstance().getContentResolver().delete(dbUri, selectClause.toString(), selectArgs);
     }
 
-/*
- * Close the task with the matching status
- */
+    /*
+     * Close the task with the matching status
+     */
     public static void closeTasksWithStatus(String status) {
 
-        Uri dbUri =  InstanceColumns.CONTENT_URI;
+        Uri dbUri = InstanceColumns.CONTENT_URI;
 
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.T_TASK_STATUS, Utilities.STATUS_T_CLOSED);
@@ -517,7 +524,7 @@ public class Utilities {
         String selectClause = InstanceColumns.T_TASK_STATUS + " = ? and "
                 + InstanceColumns.SOURCE + "= ? ";
 
-        String [] selectArgs = {"",""};
+        String[] selectArgs = {"", ""};
         selectArgs[0] = status;
         selectArgs[1] = Utilities.getSource();
 
@@ -530,7 +537,7 @@ public class Utilities {
      */
     public static void setTaskSynchronized(Long id) {
 
-        Uri taskUri =  Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
+        Uri taskUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
 
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.T_IS_SYNC, STATUS_SYNC_YES);
@@ -544,7 +551,7 @@ public class Utilities {
      */
     public static void setStatusForTask(Long id, String status) {
 
-        Uri taskUri =  Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
+        Uri taskUri = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id.toString());
 
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.T_TASK_STATUS, status);
@@ -555,19 +562,18 @@ public class Utilities {
     }
 
 
-
- /*
- * Set the status for the provided assignment id
- */
+    /*
+    * Set the status for the provided assignment id
+    */
     public static void setStatusForAssignment(long assId, String status) {
 
-        Uri dbUri =  InstanceColumns.CONTENT_URI;
+        Uri dbUri = InstanceColumns.CONTENT_URI;
 
         String selectClause = InstanceColumns.T_ASS_ID + " = " + assId + " and "
                 + InstanceColumns.SOURCE + " = ?";
 
 
-        String [] selectArgs = {""};
+        String[] selectArgs = {""};
         selectArgs[0] = Utilities.getSource();
 
         ContentValues values = new ContentValues();
@@ -582,18 +588,18 @@ public class Utilities {
      */
     public static void updateParametersForAssignment(long assId, TaskAssignment ta) {
 
-        Uri dbUri =  InstanceColumns.CONTENT_URI;
+        Uri dbUri = InstanceColumns.CONTENT_URI;
 
         String selectClause = InstanceColumns.T_ASS_ID + " = " + assId + " and "
                 + InstanceColumns.SOURCE + " = ?";
 
 
-        String [] selectArgs = {""};
+        String[] selectArgs = {""};
         selectArgs[0] = Utilities.getSource();
 
         ContentValues values = new ContentValues();
         values.put(InstanceColumns.T_REPEAT, ta.task.repeat ? 1 : 0);
-        if(ta.task.scheduled_at != null) {
+        if (ta.task.scheduled_at != null) {
             values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
         }
         values.put(InstanceColumns.T_LOCATION_TRIGGER, ta.task.location_trigger);
@@ -607,7 +613,7 @@ public class Utilities {
      */
     public static boolean canReject(String currentStatus) {
         boolean valid = false;
-        if(currentStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
+        if (currentStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
             valid = true;
         }
         return valid;
@@ -619,7 +625,7 @@ public class Utilities {
     public static boolean canComplete(String currentStatus) {
 
         boolean valid = false;
-        if(currentStatus.equals(STATUS_T_ACCEPTED)) {
+        if (currentStatus.equals(STATUS_T_ACCEPTED)) {
             valid = true;
         }
 
@@ -631,7 +637,7 @@ public class Utilities {
      */
     public static boolean canAccept(String currentStatus) {
         boolean valid = false;
-        if(currentStatus.equals(STATUS_T_REJECTED)) {
+        if (currentStatus.equals(STATUS_T_REJECTED)) {
             valid = true;
         }
 
@@ -653,7 +659,7 @@ public class Utilities {
             for (File f : instanceFiles) {
                 try {
                     String fileName = f.getName();
-                    if(fileName.endsWith("xml")) {
+                    if (fileName.endsWith("xml")) {
                         // Copy xml file to new instance path
                         File toFile = new File(toInstancePath);
                         org.apache.commons.io.FileUtils.copyFile(f, toFile, false);
@@ -678,9 +684,9 @@ public class Utilities {
         long theTime = 0;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-        if(status.equals(Utilities.STATUS_T_COMPLETE) || status.equals(Utilities.STATUS_T_SUBMITTED)) {
+        if (status.equals(Utilities.STATUS_T_COMPLETE) || status.equals(Utilities.STATUS_T_SUBMITTED)) {
             theTime = actFinish;
-        } else if (taskStart >  0) {
+        } else if (taskStart > 0) {
             theTime = taskStart;
         } else {
             theTime = actFinish;
@@ -697,12 +703,28 @@ public class Utilities {
      */
     public static String translateMsg(String in) {
         String out = in;
-        if(in != null) {
+        if (in != null) {
             if (in.contains("Unauthorized")) {
                 out = Collect.getInstance().getString(R.string.smap_unauth);
             }
         }
         return out;
+    }
+
+    private static String getTaskSortOrderExpr(String sortOrder) {
+
+        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " ASC";;
+
+        if(sortOrder.equals("BY_NAME_ASC")) {
+            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.T_SCHED_START + " ASC";
+        } else if(sortOrder.equals("BY_NAME_DESC")) {
+            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceColumns.T_SCHED_START + " DESC";
+        } else if(sortOrder.equals("BY_DATE_ASC")) {
+            sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " ASC";
+        } else if(sortOrder.equals("BY_DATE_DESC")) {
+            sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.DISPLAY_NAME+ " DESC";
+        }
+        return sortOrderExpr;
     }
 
 }

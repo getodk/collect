@@ -193,7 +193,7 @@ public class SmapTaskListFragment extends ListFragment
     @Override
     public void onLoadFinished(Loader<List<TaskEntry>> loader, List<TaskEntry> data) {
 
-        for(TaskEntry te : data) {
+        for (TaskEntry te : data) {
             Timber.i("Form: " + te.displayName);
         }
 
@@ -249,8 +249,8 @@ public class SmapTaskListFragment extends ListFragment
 
         TaskEntry entry = (TaskEntry) getListAdapter().getItem(position);
 
-        if(entry.type.equals("task")) {
-            if(entry.locationTrigger != null && entry.locationTrigger.length() > 0) {
+        if (entry.type.equals("task")) {
+            if (entry.locationTrigger != null && entry.locationTrigger.length() > 0) {
                 Toast.makeText(
                         getActivity(),
                         getString(R.string.smap_must_start_from_nfc),
@@ -280,15 +280,15 @@ public class SmapTaskListFragment extends ListFragment
 
         getActivity().getMenuInflater().inflate(R.menu.smap_menu, menu);
 
-            menu
-                    .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                    .setIcon(R.drawable.ic_sort)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu
+                .add(0, MENU_SORT, 0, R.string.sort_the_list)
+                .setIcon(R.drawable.ic_sort)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-            menu
-                    .add(0, MENU_FILTER, 0, R.string.filter_the_list)
-                    .setIcon(R.drawable.ic_search)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu
+                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
+                .setIcon(R.drawable.ic_search)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menu
                 .add(0, MENU_GETTASKS, 0, R.string.smap_get_tasks)
@@ -493,6 +493,7 @@ public class SmapTaskListFragment extends ListFragment
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateAdapter();
             }
         });
     }

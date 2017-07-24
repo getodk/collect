@@ -59,7 +59,7 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
 		// Create corresponding array of entries and load their labels.
 		ArrayList<TaskEntry> entries = new ArrayList<TaskEntry>(10);
 		getForms(entries);
-        Utilities.getTasks(entries, false);
+        Utilities.getTasks(entries, false, sortOrder, filter.toString());
 
 		return entries;
 	}
@@ -76,9 +76,14 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
                 FormsColumns.SOURCE + " is null)" +
                 " and " + FormsColumns.TASKS_ONLY + " = 'no'";
 
+        String[] selectArgs = null;
+        if(filter.toString().trim().length() > 0 ) {
+            selectClause += " and " + FormsColumns.DISPLAY_NAME + " LIKE ?";
+            selectArgs = new String[] {"%" + filter + "%"};
+        }
 
         final ContentResolver resolver = Collect.getInstance().getContentResolver();
-        Cursor formListCursor = resolver.query(FormsColumns.CONTENT_URI, proj, selectClause, null, getSortOrderExpr(sortOrder));
+        Cursor formListCursor = resolver.query(FormsColumns.CONTENT_URI, proj, selectClause, selectArgs, getSortOrderExpr(sortOrder));
 
 
 		if(formListCursor != null) {
