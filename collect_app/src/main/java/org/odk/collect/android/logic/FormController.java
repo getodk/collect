@@ -577,6 +577,39 @@ public class FormController {
         return stepToNextEvent(STEP_OVER_GROUP);
     }
 
+    public FormIndex getPreviousHierarchyScreen(FormIndex formIndex) {
+        FormIndex index = stepIndexOut(formIndex);
+        if (index == null) {
+            jumpToIndex(FormIndex.createBeginningOfFormIndex());
+        } else {
+            jumpToIndex(index);
+        }
+
+        if (getEvent() == FormEntryController.EVENT_REPEAT) {
+            int multiplicity = getCaptionPrompt().getMultiplicity();
+
+            // if multiplicity is 0 then we are already at the first repeat
+
+            while (multiplicity != 0) {
+                int event = stepToPreviousEvent();
+
+                if (event == FormEntryController.EVENT_REPEAT) {
+                    multiplicity = getCaptionPrompt().getMultiplicity();
+                }
+            }
+        } else if (getEvent() == FormEntryController.EVENT_GROUP) {
+            FormIndex currentIndex = getFormIndex();
+            while (isWithinGroup(currentIndex, index)) {
+                currentIndex = stepIndexOut(currentIndex);
+                if (currentIndex == null) {
+                    return FormIndex.createBeginningOfFormIndex();
+                }
+            }
+            jumpToIndex(currentIndex);
+        }
+        return getFormIndex();
+    }
+
     /**
      * used to go up one level in the formIndex. That is, if you're at 5_0, 1 (the second question
      * in a repeating group), this method will return a FormIndex of 5_0 (the start of the repeating

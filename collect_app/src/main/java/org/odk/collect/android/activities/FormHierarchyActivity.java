@@ -59,6 +59,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private Button jumpPreviousButton;
     private FormIndex currentIndex;
     private ListView listView;
+    private boolean isJump = false;
 
 
     @Override
@@ -72,7 +73,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FormController formController = Collect.getInstance().getFormController();
+        final FormController formController = Collect.getInstance().getFormController();
         // https://github.com/opendatakit/collect/issues/998
         if (formController == null) {
             finish();
@@ -92,7 +93,16 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton",
                         "click");
-                goUpLevel(formList.get(0).getParent());
+                HierarchyElement parent = formList.get(0).getParent();
+                if (parent == null) {
+                    FormIndex currentIndex = formList.get(0).getFormIndex();
+                    formController.jumpToIndex(formController.getPreviousHierarchyScreen(currentIndex));
+                    formList = new ArrayList<>();
+                    isJump = true;
+                    refreshView(null);
+                } else {
+                    goUpLevel(formList.get(0).getParent());
+                }
             }
         });
 
@@ -265,31 +275,37 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             // If we're currently at a repeat node, record the name of the node and step to the next
             // node to display.
             if (formController.getEvent() == FormEntryController.EVENT_GROUP || (parent != null && parent.getType() == ITEM)) {
-                contextGroupRef = parent.getFormIndex();
+                if (parent == null && !isJump) {
+                    contextGroupRef = FormIndex.createBeginningOfFormIndex();
+                } else {
+                    contextGroupRef = currentIndex;
+                }
                 formController.stepToNextEvent();
             } else if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-                formController.stepToPreviousEvent();
-                contextGroupRef = parent.getFormIndex();
-                formController.jumpToIndex(parent.getFormIndex());
-                repeatGroupRef = formController.getFormIndex();
+                if (parent == null && !isJump) {
+                    contextGroupRef = currentIndex;
+                    formController.jumpToIndex(currentIndex);
+                    formController.stepToNextEvent();
+                } else {
+                    contextGroupRef = currentIndex;
+                    formController.jumpToIndex(currentIndex);
+                    repeatGroupRef = currentIndex;
+                }
             } else {
                 FormIndex startTest = formController.stepIndexOut(currentIndex);
                 // If we have a 'group' tag, we want to step back until we hit a repeat or the
                 // beginning.
-                while (startTest != null
-                        && formController.getEvent(startTest) == FormEntryController.EVENT_GROUP) {
-                    startTest = formController.stepIndexOut(startTest);
-                }
                 if (startTest == null) {
-                    // check to see if the question is at the first level of the hierarchy. If it
-                    // is,
-                    // display the root level from the beginning.
                     formController.jumpToIndex(FormIndex
                             .createBeginningOfFormIndex());
                 } else {
-                    // otherwise we're at a repeated group
+                    contextGroupRef = startTest;
                     formController.jumpToIndex(startTest);
+                    formController.stepToNextEvent();
                 }
+                // check to see if the question is at the first level of the hierarchy. If it
+                // is,
+                // display the root level from the beginning.
 
                 // now test again for repeat. This should be true at this point or we're at the
                 // beginning
