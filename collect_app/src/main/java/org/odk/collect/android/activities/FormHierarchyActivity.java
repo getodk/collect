@@ -303,6 +303,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             formController.stepToNextEvent();
                         }
                         break;
+                    default:
+                        formController.jumpToIndex(FormIndex.createBeginningOfFormIndex());
                 }
             } else {
                 contextGroupRef = currentIndex;
