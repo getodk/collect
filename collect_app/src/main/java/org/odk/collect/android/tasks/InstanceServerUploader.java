@@ -35,6 +35,7 @@ import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
 import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
@@ -50,6 +51,7 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -231,7 +233,7 @@ public class InstanceServerUploader extends InstanceUploader {
                         return true;
                     }
                 }
-            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
+            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | NoHttpResponseException | SocketException e) {
                 if (e instanceof ClientProtocolException) {
                     outcome.results.put(id, fail + "Client Protocol Exception");
                     Timber.i(e, "Client Protocol Exception");
@@ -434,7 +436,13 @@ public class InstanceServerUploader extends InstanceUploader {
                     return true;
                 }
             } catch (IOException e) {
-                Timber.i(e);
+                if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
+                        || e instanceof SocketException || e instanceof NoHttpResponseException
+                        || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
+                    Timber.i(e);
+                } else {
+                    Timber.e(e);
+                }
                 String msg = e.getMessage();
                 if (msg == null) {
                     msg = e.toString();
