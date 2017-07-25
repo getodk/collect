@@ -14,26 +14,12 @@
 
 package org.odk.collect.android.logic;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.javarosa.core.model.FormIndex;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class HierarchyElement implements Parcelable {
-
-    public static final Creator<HierarchyElement> CREATOR = new Creator<HierarchyElement>() {
-        @Override
-        public HierarchyElement createFromParcel(Parcel in) {
-            return new HierarchyElement(in);
-        }
-
-        @Override
-        public HierarchyElement[] newArray(int size) {
-            return new HierarchyElement[size];
-        }
-    };
+public class HierarchyElement implements Serializable {
 
     private int type;
     private FormIndex formIndex;
@@ -54,28 +40,6 @@ public class HierarchyElement implements Parcelable {
         this.type = type;
         this.parent = parent;
         this.itemsAtLevel = list;
-    }
-
-    private HierarchyElement(Parcel in) {
-        type = in.readInt();
-        itemsAtLevel = in.createTypedArrayList(HierarchyElement.CREATOR);
-        parent = in.readParcelable(HierarchyElement.class.getClassLoader());
-        primaryText = in.readString();
-        secondaryText = in.readString();
-        displayIcon = in.readInt();
-        color = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(type);
-        dest.writeSerializable(formIndex);
-        dest.writeTypedList(itemsAtLevel);
-        dest.writeParcelable(parent, 1);
-        dest.writeString(primaryText);
-        dest.writeString(secondaryText);
-        dest.writeInt(displayIcon);
-        dest.writeInt(color);
     }
 
     public ArrayList<HierarchyElement> getItemsAtLevel() {
@@ -125,10 +89,4 @@ public class HierarchyElement implements Parcelable {
     public void setColor(int color) {
         this.color = color;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
 }

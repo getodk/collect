@@ -152,7 +152,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FORM_LIST)) {
-            itemsAtCurrentLevel = savedInstanceState.getParcelableArrayList(FORM_LIST);
+            itemsAtCurrentLevel = (ArrayList<HierarchyElement>) savedInstanceState.getSerializable(FORM_LIST);
             if (itemsAtCurrentLevel == null || itemsAtCurrentLevel.size() == 0) {
                 refreshView(null);
             } else {
@@ -218,7 +218,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(FORM_LIST, itemsAtCurrentLevel);
+        outState.putSerializable(FORM_LIST, itemsAtCurrentLevel);
         super.onSaveInstanceState(outState);
     }
 
