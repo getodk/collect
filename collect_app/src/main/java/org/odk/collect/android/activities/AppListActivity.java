@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -57,7 +56,7 @@ abstract class AppListActivity extends AppCompatActivity {
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
-    private static BottomSheetDialog bottomSheetDialog;
+    private BottomSheetDialog bottomSheetDialog;
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
@@ -142,6 +141,10 @@ abstract class AppListActivity extends AppCompatActivity {
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
         outState.putBoolean(IS_SEARCH_BOX_SHOWN, searchBoxLayout.getVisibility() == View.VISIBLE);
         outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
+
+        if (bottomSheetDialog.isShowing()) {
+            bottomSheetDialog.dismiss();
+        }
     }
 
     @Override
@@ -279,9 +282,6 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     private void setupBottomSheet() {
-        if (bottomSheetDialog != null) {
-            bottomSheetDialog.dismiss();
-        }
         bottomSheetDialog = new BottomSheetDialog(this, R.style.MaterialDialogSheet);
         View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
@@ -301,13 +301,6 @@ abstract class AppListActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         bottomSheetDialog.setContentView(sheetView);
-
-        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isBottomDialogShown = false;
-            }
-        });
 
         if (isBottomDialogShown) {
             bottomSheetDialog.show();
