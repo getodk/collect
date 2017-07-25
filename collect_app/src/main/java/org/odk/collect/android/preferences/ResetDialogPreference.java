@@ -183,7 +183,12 @@ public class ResetDialogPreference extends DialogPreference {
     }
 
     private void showResultDialog(final String resultMessage) {
-        SimpleDialog simpleDialog = SimpleDialog.newInstance(getContext().getString(R.string.reset_app_state_result), android.R.drawable.ic_dialog_info, resultMessage, getContext().getString(R.string.ok));
+        String dialogTitle = getContext().getString(R.string.reset_app_state_result);
+        int iconID = android.R.drawable.ic_dialog_info;
+        String buttonTitle = getContext().getString(R.string.ok);
+
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle);
+
         try {
             simpleDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
         } catch (ClassCastException e) {
