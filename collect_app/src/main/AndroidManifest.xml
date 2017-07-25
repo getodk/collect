@@ -306,6 +306,12 @@ the specific language governing permissions and limitations under the License.
             -->
         <!-- ... -->
 
+        <service android:name=".services.NotificationService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyA9C_8FYpFfBansLdEqXl1JU2Mq-M4Bhhw"/>

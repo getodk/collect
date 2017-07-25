@@ -31,6 +31,7 @@
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/kontrolid/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/kontrolid/debug" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/kontrolid/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/google-services/kontrolid/debug" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/kontrolid/debug" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/kontrolid/debug" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolidDebug/res" type="java-resource" />
@@ -40,13 +41,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolidDebug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolidDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolidDebug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/kontrolid/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/kontrolid/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/kontrolid/debug" isTestSource="true" generated="true" />
@@ -54,6 +48,13 @@
       <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/kontrolid/debug" isTestSource="true" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/kontrolid/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/kontrolid/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testKontrolidDebug/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolid/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolid/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/kontrolid/assets" type="java-resource" />
@@ -118,7 +119,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/multi-dex" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/pre-dexed" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
@@ -140,8 +140,8 @@
     <orderEntry type="library" exported="" scope="TEST" name="mockito-core-1.10.19" level="project" />
     <orderEntry type="library" exported="" name="firebase-crash-10.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="multidex-instrumentation-1.0.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="robolectric-annotations-3.1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="exposed-instrumentation-api-publish-0.5" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="robolectric-annotations-3.1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="icu4j-53.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="robolectric-utils-3.1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="sqlite4java-0.282" level="project" />
@@ -175,20 +175,21 @@
     <orderEntry type="library" exported="" scope="TEST" name="maven-artifact-2.2.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="guava-19.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="rules-0.5" level="project" />
+    <orderEntry type="library" exported="" name="play-services-iid-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-impl-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="google-api-services-sheets-v4-rev463-1.22.0" level="project" />
     <orderEntry type="library" exported="" name="kxml2-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="google-http-client-jackson2-1.22.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="asm-analysis-5.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="okhttp-ws-3.2.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="asm-analysis-5.0.1" level="project" />
     <orderEntry type="library" exported="" name="multidex-1.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="vtd-xml-2.11" level="project" />
     <orderEntry type="library" exported="" name="timber-4.5.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="okhttp-3.2.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="okio-1.6.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-profile-2.2.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="xercesMinimal-1.9.6.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="okio-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="easypermissions-0.2.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="runner-0.5" level="project" />
     <orderEntry type="library" exported="" name="firebase-core-10.0.1" level="project" />
@@ -215,10 +216,11 @@
     <orderEntry type="library" exported="" scope="TEST" name="maven-project-2.2.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="plexus-container-default-1.0-alpha-9-stable-1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-25.3.1" level="project" />
+    <orderEntry type="library" exported="" name="play-services-gcm-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="httpclientandroidlib-4.5.2-2" level="project" />
     <orderEntry type="library" exported="" name="google-http-client-android-1.22.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="ant-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="bcprov-jdk15on-1.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="ant-1.8.0" level="project" />
     <orderEntry type="library" exported="" name="google-api-client-android-1.22.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="maven-error-diagnostics-2.2.1" level="project" />
     <orderEntry type="library" exported="" name="design-25.3.1" level="project" />

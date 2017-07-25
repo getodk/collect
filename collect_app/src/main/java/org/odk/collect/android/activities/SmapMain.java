@@ -33,8 +33,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -56,6 +54,7 @@ import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.services.NotificationService;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -135,6 +134,10 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         slidingTabLayout.setFontColor(android.R.color.white);
         slidingTabLayout.setBackgroundColor(Color.DKGRAY);
         slidingTabLayout.setViewPager(viewPager);
+
+        // TODO - Temporary get notification registration token
+        Intent intent = new Intent(this, NotificationService.class);
+        startService(intent);
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
         File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
