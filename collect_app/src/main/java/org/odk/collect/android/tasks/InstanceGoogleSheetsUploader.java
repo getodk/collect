@@ -187,7 +187,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(id);
             } catch (BadUrlException e) {
-                Timber.e(e);
+                Timber.i(e);
                 outcome.results.put(id, e.getMessage());
                 return false;
             }
