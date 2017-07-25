@@ -264,6 +264,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         return answers;
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            pageScroll(View.FOCUS_UP);
+            fullScroll(View.FOCUS_UP);
+        }
+    }
 
     /**
      * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
