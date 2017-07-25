@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/recordBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_videocam_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_videocam_black_24dp"
+        android:text="@string/capture_video" />
+
+    <Button
+        android:id="@+id/chooseBtn"
+        style="@style/WidgetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_attach_file_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableStart="@drawable/ic_attach_file_black_24dp"
+        android:text="@string/choose_video" />
+
+    <FrameLayout
+        android:id="@+id/videoPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/popupView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.7"
+            android:background="#000000"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/open_in_external"
+                android:layout_alignLeft="@+id/open_in_external"
+                android:layout_alignStart="@+id/open_in_external"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_play_circle_outline_white_24dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_play_circle_outline_white_24dp"
+                android:text="@string/play_video"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_medium"/>
+
+            <Button
+                android:id="@+id/open_in_external"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_open_in_browser_white_24dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_open_in_browser_white_24dp"
+                android:text="@string/open_external_video"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_medium"/>
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>
