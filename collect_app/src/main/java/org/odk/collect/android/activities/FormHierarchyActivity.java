@@ -52,7 +52,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private static final int GROUP = 2;
     private static final int QUESTION = 3;
     private static final String FORM_LIST = "formlist";
-    ArrayList<HierarchyElement> formList;
+    private ArrayList<HierarchyElement> itemsAtCurrentLevel;
     TextView path;
 
     FormIndex startIndex;
@@ -93,15 +93,14 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton",
                         "click");
-                HierarchyElement parent = formList.get(0).getParent();
+                HierarchyElement parent = itemsAtCurrentLevel.get(0).getParent();
                 if (parent == null) {
-                    FormIndex currentIndex = formList.get(0).getFormIndex();
+                    FormIndex currentIndex = itemsAtCurrentLevel.get(0).getFormIndex();
                     formController.jumpToIndex(formController.getPreviousHierarchyScreen(currentIndex));
-                    formList = new ArrayList<>();
                     isJumpToPrevious = true;
                     refreshView(null);
                 } else {
-                    goUpLevel(formList.get(0).getParent());
+                    goUpLevel(itemsAtCurrentLevel.get(0).getParent());
                 }
             }
         });
@@ -153,11 +152,11 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(FORM_LIST)) {
-            formList = savedInstanceState.getParcelableArrayList(FORM_LIST);
-            if (formList == null || formList.size() == 0) {
+            itemsAtCurrentLevel = savedInstanceState.getParcelableArrayList(FORM_LIST);
+            if (itemsAtCurrentLevel == null || itemsAtCurrentLevel.size() == 0) {
                 refreshView(null);
             } else {
-                goUpLevel(formList.get(0));
+                goUpLevel(itemsAtCurrentLevel.get(0));
             }
         } else {
             refreshView(null);
@@ -201,12 +200,12 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     private void goUpLevel(HierarchyElement parent) {
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
-        formList = parent.getList();
-        itla.setListItems(formList);
+        itemsAtCurrentLevel = parent.getItemsAtLevel();
+        itla.setListItems(itemsAtCurrentLevel);
         listView.setAdapter(itla);
-        listView.setSelection(formList.indexOf(parent));
+        listView.setSelection(itemsAtCurrentLevel.indexOf(parent));
 
-        Collect.getInstance().getFormController().jumpToIndex(formList.get(0).getFormIndex());
+        Collect.getInstance().getFormController().jumpToIndex(itemsAtCurrentLevel.get(0).getFormIndex());
 
         if (parent.getParent() == null) {
             jumpPreviousButton.setEnabled(false);
@@ -219,7 +218,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(FORM_LIST, formList);
+        outState.putParcelableArrayList(FORM_LIST, itemsAtCurrentLevel);
         super.onSaveInstanceState(outState);
     }
 
@@ -265,9 +264,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             FormIndex contextGroupRef = currentIndex;
             FormIndex repeatGroupRef = null;
 
+            ArrayList<HierarchyElement> itemsInGroup = new ArrayList<>();
 
             if (parent == null) {
-                formList = new ArrayList<>();
                 int event = formController.getEvent();
                 switch (event) {
                     case FormEntryController.EVENT_REPEAT:
@@ -306,7 +305,6 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         break;
                 }
             } else {
-                formList = new ArrayList<>();
                 contextGroupRef = currentIndex;
                 if (formController.getEvent() == FormEntryController.EVENT_REPEAT && parent.getType() == GROUP) {
                     repeatGroupRef = currentIndex;
@@ -364,8 +362,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         HierarchyElement item = new HierarchyElement(fc.getLongText() + " "
                                 + (fc.getMultiplicity() + 1), null, 1, Color.WHITE, ITEM,
-                                fc.getIndex(), parent, formList);
-                        formList.add(item);
+                                fc.getIndex(), parent, itemsInGroup);
+                        itemsInGroup.add(item);
                         event = formController.stepOverGroupInHierarchy();
                     } else if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                         break event_search;
@@ -377,23 +375,22 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
                 switch (event) {
                     case FormEntryController.EVENT_QUESTION:
-
                         FormEntryPrompt fp = formController.getQuestionPrompt();
                         String label = fp.getLongText();
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
-                            formList.add(new HierarchyElement(fp.getLongText(), answerDisplay, 0,
-                                    Color.WHITE, QUESTION, fp.getIndex(), parent, formList));
+                            itemsInGroup.add(new HierarchyElement(fp.getLongText(), answerDisplay, 0,
+                                    Color.WHITE, QUESTION, fp.getIndex(), parent, itemsInGroup));
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         label = fc.getLongText();
                         if (label != null && !label.trim().equals("")) {
-                            formList.add(new HierarchyElement(label, null, 1,
-                                    Color.WHITE, GROUP, fc.getIndex(), parent, formList));
+                            itemsInGroup.add(new HierarchyElement(label, null, 1,
+                                    Color.WHITE, GROUP, fc.getIndex(), parent, itemsInGroup));
                             event = formController.stepOverGroupInHierarchy();
                             continue event_search;
                         }
@@ -418,17 +415,18 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             // Display the repeat header for the group.
                             HierarchyElement group =
                                     new HierarchyElement(fc.getLongText(), null, 1,
-                                            Color.WHITE, GROUP, fc.getIndex(), parent, formList);
-                            formList.add(group);
+                                            Color.WHITE, GROUP, fc.getIndex(), parent, itemsInGroup);
+                            itemsInGroup.add(group);
                         }
                         event = formController.stepOverGroupInHierarchy();
                         continue event_search;
                 }
                 event = formController.stepToNextEvent();
             }
+            itemsAtCurrentLevel = itemsInGroup;
 
             HierarchyListAdapter itla = new HierarchyListAdapter(this);
-            itla.setListItems(formList);
+            itla.setListItems(itemsAtCurrentLevel);
             listView.setAdapter(itla);
 
             // set the controller back to the current index in case the user hits 'back'

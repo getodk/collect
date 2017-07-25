@@ -37,7 +37,7 @@ public class HierarchyElement implements Parcelable {
 
     private int type;
     private FormIndex formIndex;
-    private ArrayList<HierarchyElement> list;
+    private ArrayList<HierarchyElement> itemsAtLevel;
     private HierarchyElement parent;
     private String primaryText = "";
     private String secondaryText = "";
@@ -53,12 +53,12 @@ public class HierarchyElement implements Parcelable {
         formIndex = f;
         this.type = type;
         this.parent = parent;
-        this.list = list;
+        this.itemsAtLevel = list;
     }
 
     private HierarchyElement(Parcel in) {
         type = in.readInt();
-        list = in.createTypedArrayList(HierarchyElement.CREATOR);
+        itemsAtLevel = in.createTypedArrayList(HierarchyElement.CREATOR);
         parent = in.readParcelable(HierarchyElement.class.getClassLoader());
         primaryText = in.readString();
         secondaryText = in.readString();
@@ -70,7 +70,7 @@ public class HierarchyElement implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(type);
         dest.writeSerializable(formIndex);
-        dest.writeTypedList(list);
+        dest.writeTypedList(itemsAtLevel);
         dest.writeParcelable(parent, 1);
         dest.writeString(primaryText);
         dest.writeString(secondaryText);
@@ -78,12 +78,12 @@ public class HierarchyElement implements Parcelable {
         dest.writeInt(color);
     }
 
-    public ArrayList<HierarchyElement> getList() {
-        return list;
+    public ArrayList<HierarchyElement> getItemsAtLevel() {
+        return itemsAtLevel;
     }
 
-    public void setList(ArrayList<HierarchyElement> list) {
-        this.list = list;
+    public void setItemsAtLevel(ArrayList<HierarchyElement> itemsAtLevel) {
+        this.itemsAtLevel = itemsAtLevel;
     }
 
     public HierarchyElement getParent() {
