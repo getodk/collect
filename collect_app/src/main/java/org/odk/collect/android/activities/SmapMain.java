@@ -637,4 +637,39 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         return mMapTasks;
     }
 
+    /*
+     * Manage location triggers
+     */
+    public void setLocationTriggers(List<TaskEntry> data, boolean map) {
+
+        // Need to maintain two lists of tasks as the position in the task list is different for maps than for the list view
+        ArrayList<NfcTrigger> triggers = null;
+
+        if(map) {
+            mMapTasks = data;
+            nfcTriggersMap = new ArrayList<NfcTrigger> ();
+            triggers = nfcTriggersMap;
+        } else {
+            mTasks = data;
+            nfcTriggersList = new ArrayList<NfcTrigger> ();
+            triggers = nfcTriggersList;
+        }
+        /*
+         * Set NFC triggers
+         */
+
+        int position = 0;
+        for (TaskEntry t : data) {
+            if(t.type.equals("task") && t.locationTrigger != null && t.locationTrigger.trim().length() > 0
+                    && t.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
+                triggers.add(new NfcTrigger(t.id, t.locationTrigger, position));
+            }
+            position++;
+        }
+
+        /*
+         * TODO set geofence triggers
+         */
+    }
+
 }

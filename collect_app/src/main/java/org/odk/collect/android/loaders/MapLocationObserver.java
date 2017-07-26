@@ -12,19 +12,19 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.activities.MapsActivity;
 
 
 public class MapLocationObserver extends BroadcastReceiver {
 
-    private MapsActivity mMap = null;
-    SharedPreferences settings = null;
+    private SmapTaskMapFragment mMap = null;
+    SharedPreferences sharedPreferences = null;
 
-public MapLocationObserver(Context context, MapsActivity map) {
+public MapLocationObserver(Context context, SmapTaskMapFragment map) {
     mMap = map;
 
-    settings = PreferenceManager.getDefaultSharedPreferences(context);
+    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
     LocalBroadcastManager.getInstance(context).registerReceiver(this,
             new IntentFilter("locationChanged"));
@@ -34,9 +34,9 @@ public MapLocationObserver(Context context, MapsActivity map) {
   public void onReceive(Context context, Intent intent) {
       Location locn = Collect.getInstance().getLocation();
       LatLng point = new LatLng(locn.getLatitude(), locn.getLongitude());
-      if(settings.getBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, false)) {
+      if(sharedPreferences.getBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, false)) {
           mMap.updatePath(point);
       }
-      //mMap.setUserLocation(Collect.getInstance().getLocation(), settings.getBoolean(PreferencesActivity.KEY_STORE_SMAP_USER_TRAIL, false));
+      //mMap.setUserLocation(Collect.getInstance().getLocation(), sharedPreferences.getBoolean(PreferencesActivity.KEY_STORE_SMAP_USER_TRAIL, false));
   }
 }

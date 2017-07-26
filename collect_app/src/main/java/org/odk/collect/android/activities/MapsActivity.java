@@ -145,7 +145,8 @@ public class MapsActivity extends FragmentActivity
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
-        mo = new MapLocationObserver(getApplicationContext(), thisActivity);
+
+        //mo = new MapLocationObserver(getApplicationContext(), thisActivity);
     }
 
     @Override

@@ -34,6 +34,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,10 +55,14 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SmapMain;
@@ -65,6 +70,10 @@ import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.loaders.MapDataLoader;
+import org.odk.collect.android.loaders.MapEntry;
+import org.odk.collect.android.loaders.MapLocationObserver;
+import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
@@ -73,6 +82,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.utilities.KeyValueJsonFns;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,6 +92,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.R.id.map;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
@@ -92,7 +104,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskMapFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<TaskEntry>>, OnMapReadyCallback {
+        implements LoaderManager.LoaderCallbacks<MapEntry>, OnMapReadyCallback {
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
@@ -106,6 +118,7 @@ public class SmapTaskMapFragment extends Fragment
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected EditText inputSearch;
 
+    private MapLocationObserver mo = null;
     private GoogleMap mMap;
     private Polyline mPath;
     private MapHelper mHelper;
@@ -152,6 +165,20 @@ public class SmapTaskMapFragment extends Fragment
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.ft_map_layout, container, false);
 
+        userLocationIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_userlocation);
+        accepted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_open);
+        repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_repeat);
+        rejected = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_reject);
+        complete = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_done);
+        submitted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_submitted);
+        triggered = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered);
+        triggered_repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered_repeat);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        mo = new MapLocationObserver(getContext(), this);
+
         setHasOptionsMenu(true);
         return rootView;
     }
@@ -159,10 +186,8 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
 
-        mAdapter = new TaskListArrayAdapter(getActivity());
-        getLoaderManager().initLoader(TASK_LOADER_ID, null, this);
-
         super.onViewCreated(rootView, savedInstanceState);
+
     }
 
 
@@ -171,12 +196,6 @@ public class SmapTaskMapFragment extends Fragment
         super.onViewStateRestored(bundle);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_launcher);
-    }
 
     @Override
     public void onPause() {
@@ -198,34 +217,9 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     @Override
-    public Loader<List<TaskEntry>> onCreateLoader(int id, Bundle args) {
-        return new TaskLoader(getContext());
-    }
+    public void onLoaderReset(Loader<MapEntry> loader) {
 
-    @Override
-    public void onLoadFinished(Loader<List<TaskEntry>> loader, List<TaskEntry> data) {
-
-        for (TaskEntry te : data) {
-            Timber.i("Form: " + te.displayName);
-        }
-
-        // smap TODO enable when adapter added
-        mAdapter.setData(data);
-
-        // TODO Smap
-        //tabsActivity.setLocationTriggers(data, false);      // NFC and geofence triggers
-
-        // smap todo
-        //if (isResumed()) {
-        //    setListShown(true);
-        //} else {
-        //    setListShownNoAnimation(true);
-        //}
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<TaskEntry>> loader) {
-        mAdapter.setData(null);
+        clearTasks();
     }
 
 
@@ -263,22 +257,7 @@ public class SmapTaskMapFragment extends Fragment
                 return true;
 
 
-            /*
-            case MENU_ENTERDATA:
-                processEnterData();
-                return true;
-            case MENU_GETFORMS:
-                processGetForms();
-                return true;
-            case MENU_SENDDATA:
-                processSendData();
-                return true;
-                */
-            /*
-            case MENU_MANAGEFILES:
-                processManageFiles();
-                return true;
-                */
+
 
         }
         return super.onOptionsItemSelected(item);
@@ -419,5 +398,166 @@ public class SmapTaskMapFragment extends Fragment
     }
 
 
+    @Override
+    public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
+        return new MapDataLoader(getContext());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
+        Timber.i( "######### Load Finished");
+        ((SmapMain) getActivity()).setLocationTriggers(data.tasks, true);
+        showTasks(data.tasks);
+        showPoints(data.points);
+        //zoomToData(false);
+    }
+
+    @Override
+    public void onResume() {
+        if(mHelper != null) {
+            mHelper.setBasemap();
+        }
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher);
+        super.onResume();
+    }
+
+
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+
+    private void clearTasks() {
+
+        if(markers != null && markers.size() > 0) {
+            for (int i = 0; i < markers.size(); i++) {
+                markers.get(i).remove();
+            }
+        }
+    }
+
+    private void showTasks(List<TaskEntry> data) {
+
+        clearTasks();   // remove existing markers
+
+        // Update markers
+        markers = new ArrayList<Marker>();
+        markerMap = new HashMap<Marker, Integer>();
+
+        // Add the tasks to the marker array and to the map
+        int index = 0;
+        for(TaskEntry t : data) {
+            if(t.type.equals("task")) {
+                LatLng ll = getTaskCoords(t);
+                if (ll != null) {
+                    String taskTime = Utilities.getTaskTime(t.taskStatus, t.actFinish, t.taskStart);
+                    String addressText = KeyValueJsonFns.getValues(t.taskAddress);
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(ll)
+                            .title(t.name)
+                            .snippet(taskTime + "\n" + addressText);
+
+                    markerOptions.icon(getIcon(t.taskStatus, t.repeat, t.locationTrigger != null));
+
+                    Marker m = mMap.addMarker(markerOptions);
+                    markers.add(m);
+                    markerMap.put(m, index);
+
+                }
+            }
+            index++;
+        }
+
+    }
+
+    private void showPoints(List<PointEntry> data) {
+
+        mPoints = new ArrayList<LatLng> ();
+        if(mPath != null) {
+            mPath.remove();
+        }
+        mPath = mMap.addPolyline((new PolylineOptions()));
+
+        for(PointEntry p : data) {
+            mPoints.add(new LatLng(p.lat, p.lon));
+        }
+        mPath.setPoints(mPoints);
+    }
+
+    public void updatePath(LatLng point) {
+        mPoints.add(point);
+        mPath.setPoints(mPoints);
+    }
+
+    /*
+     * Get the coordinates of the task and update the bounding box
+     */
+    private LatLng getTaskCoords(TaskEntry t) {
+
+        double lat = 0.0;
+        double lon = 0.0;
+        LatLng locn = null;
+
+        if((t.actLat == 0.0) && (t.actLon == 0.0)) {
+            lat = t.schedLat;       // Scheduled coordinates of task
+            lon = t.schedLon;
+        } else  {
+            lat = t.actLat;         // Actual coordinates of task
+            lon = t.actLon;
+        }
+
+        if(lat != 0.0 && lon != 0.0) {
+            // Update bounding box
+            if(lat > tasksNorth) {
+                tasksNorth = lat;
+            }
+            if(lat < tasksSouth) {
+                tasksSouth = lat;
+            }
+            if(lon > tasksEast) {
+                tasksEast = lon;
+            }
+            if(lat < tasksWest) {
+                tasksWest = lon;
+            }
+
+            // Create Point
+            locn = new LatLng(lat, lon);
+        }
+
+
+        return locn;
+    }
+
+    /*
+     * Get the colour to represent the passed in task status
+     */
+    private BitmapDescriptor getIcon(String status, boolean isRepeat, boolean hasTrigger) {
+
+        if(status.equals(Utilities.STATUS_T_REJECTED) || status.equals(Utilities.STATUS_T_CANCELLED)) {
+            return rejected;
+        } else if(status.equals(Utilities.STATUS_T_ACCEPTED)) {
+            if(hasTrigger && !isRepeat) {
+                return triggered;
+            } else if (hasTrigger && isRepeat) {
+                return triggered_repeat;
+            } else if(isRepeat) {
+                return repeat;
+            } else {
+                return accepted;
+            }
+        } else if(status.equals(Utilities.STATUS_T_COMPLETE)) {
+            return complete;
+        } else if(status.equals(Utilities.STATUS_T_SUBMITTED)) {
+            return submitted;
+        } else {
+            Timber.i("Unknown task status: " + status);
+            return accepted;
+        }
+    }
 
 }
