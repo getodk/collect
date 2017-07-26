@@ -35,13 +35,15 @@ public class SimpleDialog extends DialogFragment {
     private static final String ICON_ID = "iconId";
     private static final String MESSAGE = "message";
     private static final String BUTTON_TITLE = "buttonTitle";
+    private static final String FINISH_ACTIVITY = "finishActivity";
 
-    public static SimpleDialog newInstance(String dialogTitle, int iconId, String message, String buttonTitle) {
+    public static SimpleDialog newInstance(String dialogTitle, int iconId, String message, String buttonTitle, boolean finishActivity) {
         Bundle bundle = new Bundle();
         bundle.putString(DIALOG_TITLE, dialogTitle);
         bundle.putInt(ICON_ID, iconId);
         bundle.putString(MESSAGE, message);
         bundle.putString(BUTTON_TITLE, buttonTitle);
+        bundle.putBoolean(FINISH_ACTIVITY, finishActivity);
 
         SimpleDialog dialogFragment = new SimpleDialog();
         dialogFragment.setArguments(bundle);
@@ -59,6 +61,9 @@ public class SimpleDialog extends DialogFragment {
                 .setPositiveButton(getArguments().getString(BUTTON_TITLE), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        if (getArguments().getBoolean(FINISH_ACTIVITY)) {
+                            getActivity().finish();
+                        }
                     }
                 })
                 .create();

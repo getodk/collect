@@ -187,7 +187,7 @@ public class ResetDialogPreference extends DialogPreference {
         int iconID = android.R.drawable.ic_dialog_info;
         String buttonTitle = getContext().getString(R.string.ok);
 
-        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle);
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle, false);
 
         try {
             simpleDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
