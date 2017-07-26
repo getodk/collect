@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -217,8 +218,8 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                                 mDownloadTasks.setDownloaderListener(null, SmapMain.this);
                                 mDownloadTasks.cancel(true);
                                 // Refresh the task list
-                                Intent intent = new Intent("refresh");
-                                SmapMain.this.sendBroadcast(intent);
+                                Intent intent = new Intent("org.smap.smapTask.refresh");
+                                LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
                             }
                         };
                 mProgressDialog.setTitle(getString(R.string.downloading_data));
@@ -334,8 +335,9 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         Timber.i("Complete - Send intent");
 
         // Refresh task list
-        Intent intent = new Intent("refresh");
-        getApplication().sendBroadcast(intent);
+        Intent intent = new Intent("org.smap.smapTask.refresh");
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
 
         try {
             dismissDialog(PROGRESS_DIALOG);

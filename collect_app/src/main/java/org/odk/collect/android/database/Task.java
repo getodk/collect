@@ -6,6 +6,7 @@ public class Task {
 	public int id;
 	public String type;
 	public String title;
+    public String name;
 	public String url;
 	public String form_id;
 	public int form_version;

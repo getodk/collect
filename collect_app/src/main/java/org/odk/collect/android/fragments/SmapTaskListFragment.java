@@ -51,6 +51,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
@@ -89,6 +90,7 @@ public class SmapTaskListFragment extends ListFragment
 
     // request codes for returning chosen form to main menu.
     private static final int FORM_CHOOSER = 0;
+    private static final int TASK_LOADER_ID = 1;
     private static final int INSTANCE_UPLOADER = 2;
 
     private static final int MENU_SORT = Menu.FIRST;
@@ -119,7 +121,6 @@ public class SmapTaskListFragment extends ListFragment
     DeleteInstancesTask deleteInstancesTask = null;
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
-    private static final int TASK_LOADER_ID = 1;
 
     private TaskListArrayAdapter mAdapter;
 
@@ -143,9 +144,8 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     @Override
-    public void onViewCreated(View rootView, Bundle savedInstanceState) {
-
-        super.onViewCreated(rootView, savedInstanceState);
+    public void onActivityCreated(Bundle b) {
+        super.onActivityCreated(b);
 
         mAdapter = new TaskListArrayAdapter(getActivity());
         setListAdapter(mAdapter);
@@ -161,6 +161,12 @@ public class SmapTaskListFragment extends ListFragment
         if (drawerToggle != null) {
             drawerToggle.syncState();
         }
+    }
+
+    @Override
+    public void onViewCreated(View rootView, Bundle savedInstanceState) {
+
+        super.onViewCreated(rootView, savedInstanceState);
 
     }
 
@@ -194,16 +200,12 @@ public class SmapTaskListFragment extends ListFragment
 
     @Override
     public Loader<List<TaskEntry>> onCreateLoader(int id, Bundle args) {
-        mTaskLoader = new TaskLoader(getActivity());
+        mTaskLoader = new TaskLoader(getContext());
         return mTaskLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<List<TaskEntry>> loader, List<TaskEntry> data) {
-
-        for (TaskEntry te : data) {
-            Timber.i("Form: " + te.displayName);
-        }
 
         // smap
         mAdapter.setData(data);
@@ -297,8 +299,23 @@ public class SmapTaskListFragment extends ListFragment
 
         if(odkMenus) {
             menu
-                    .add(0, MENU_ENTERDATA, 0, R.string.enter_data_button)
+                    .add(0, MENU_ENTERDATA, 0, R.string.enter_data)
                     .setIcon(android.R.drawable.ic_menu_edit)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+            menu
+                    .add(0, MENU_GETFORMS, 0, R.string.get_forms)
+                    .setIcon(android.R.drawable.ic_input_add)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+            menu
+                    .add(0, MENU_SENDDATA, 0, R.string.send_data)
+                    .setIcon(android.R.drawable.ic_menu_send)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+            menu
+                    .add(0, MENU_MANAGEFILES, 0, R.string.manage_files)
+                    .setIcon(android.R.drawable.ic_delete)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
 
@@ -332,13 +349,13 @@ public class SmapTaskListFragment extends ListFragment
                 processEnterData();
                 return true;
             case MENU_GETFORMS:
-                //processGetForms();
+                processGetForms();
                 return true;
             case MENU_SENDDATA:
-                //processSendData();
+                processSendData();
                 return true;
             case MENU_MANAGEFILES:
-                //processManageFiles();
+                processManageFiles();
                 return true;
             case MENU_SORT:
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
@@ -516,6 +533,25 @@ public class SmapTaskListFragment extends ListFragment
     private void processEnterData() {
         Intent i = new Intent(getContext(), org.odk.collect.android.activities.FormChooserList.class);
         startActivityForResult(i, FORM_CHOOSER);
+    }
+
+    // Get new forms
+    private void processGetForms() {
+
+        Collect.getInstance().getActivityLogger().logAction(this, "downloadBlankForms", "click");
+        Intent i = new Intent(getContext(), FormDownloadList.class);
+        startActivity(i);
+    }
+
+    // Send data
+    private void processSendData() {
+        Intent i = new Intent(getContext(), org.odk.collect.android.activities.InstanceUploaderList.class);
+        startActivityForResult(i, INSTANCE_UPLOADER);
+    }
+
+    private void processManageFiles() {
+        Intent i = new Intent(getContext(), org.odk.collect.android.activities.FileManagerTabs.class);
+        startActivity(i);
     }
 
 }

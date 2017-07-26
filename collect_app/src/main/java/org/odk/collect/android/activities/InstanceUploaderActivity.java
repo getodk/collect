@@ -25,6 +25,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
@@ -276,8 +277,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             message.append(getString(R.string.no_forms_uploaded));
         }
 
-        Intent intent = new Intent("refresh");  // smap refresh task list
-        this.sendBroadcast(intent);             // smap
+        Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
         createAlertDialog(message.toString().trim());
     }
 

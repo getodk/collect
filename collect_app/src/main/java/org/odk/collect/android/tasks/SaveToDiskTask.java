@@ -293,7 +293,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             }
         }
 
-        Intent intent = new Intent("refresh");      // Smap
+        Intent intent = new Intent("org.smap.smapTask.refresh");      // Smap
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // Smap
     }
 

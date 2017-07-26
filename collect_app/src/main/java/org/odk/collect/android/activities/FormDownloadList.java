@@ -25,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -689,8 +690,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             formListAdapter.notifyDataSetChanged();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
 
-            Intent intent = new Intent("refresh");  // smap refresh task list
-            this.sendBroadcast(intent);     // smap
+            Intent intent = new Intent("org.smap.smapTask.refresh");  // smap refresh task list
+            LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
 
             toggleButtonLabel(toggleButton, listView);
         }

@@ -20,7 +20,7 @@ import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
+// import com.google.android.gms.analytics.GoogleAnalytics;  // smap
 
 import org.odk.collect.android.R;
 
@@ -33,7 +33,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.identity_preferences);
 
-        initAnalyticsPref();
+        // initAnalyticsPref();  // smap
     }
 
     @Override
@@ -50,6 +50,7 @@ public class IdentityPreferences extends BasePreferenceFragment {
         }
     }
 
+    /* smap
     private void initAnalyticsPref() {
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
@@ -64,4 +65,5 @@ public class IdentityPreferences extends BasePreferenceFragment {
             });
         }
     }
+    */
 }

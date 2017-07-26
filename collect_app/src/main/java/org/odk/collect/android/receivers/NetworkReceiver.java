@@ -7,7 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
@@ -72,9 +74,9 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
-        boolean autosend_wifi_override = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);    // smap
-        boolean autosend_wifi_cell_override = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);    // smap
-        boolean sendwifi = autosend.equals("wifi_only") || autosend_wifi_override || autosend_wifi_cell_override;    // smap add overrides
+        boolean autosend_wifi_override = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);    // smap
+        boolean autosend_wifi_cell_override = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI_CELL);    // smap
+        boolean sendwifi = autosend.equals("wifi_only") || autosend_wifi_override || autosend_wifi_override;    // smap add overrides
         boolean sendnetwork = autosend.equals("cellular_only") || autosend_wifi_cell_override;    // smap add orverrides
         if (autosend.equals("wifi_and_cellular")) {
             sendwifi = true;
@@ -105,17 +107,6 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        /* smap
-        // task is done
-    	if(mContext != null) {
-	        mInstanceUploaderTask.setUploaderListener(null);
-	        running = false;
-	        //  Smap Refresh the task list  - start
-	        Intent intent = new Intent("refresh");
-	        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-	        // End Smap
-    	}
-    	*/
     }
 
     /* smap comment out upload forms
@@ -274,8 +265,8 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 
         running = false;
         Timber.i("Send intent");
-        Intent intent = new Intent("refresh");
-        mContext.sendBroadcast(intent);     // smap
+        Intent intent = new Intent("org.smap.smapTask.refresh");   // smap
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);  // smap
     }
 
     @Override

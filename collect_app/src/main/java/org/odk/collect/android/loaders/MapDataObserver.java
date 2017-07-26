@@ -16,7 +16,7 @@ public MapDataObserver(MapDataLoader loader) {
     mLoader = loader;
 	
     LocalBroadcastManager.getInstance(mLoader.getContext()).registerReceiver(this,
-  	      new IntentFilter("refresh"));
+  	      new IntentFilter("org.smap.smapTask.refresh"));
   }
 
   @Override

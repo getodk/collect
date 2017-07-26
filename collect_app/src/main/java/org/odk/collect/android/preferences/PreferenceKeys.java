@@ -108,6 +108,15 @@ public final class PreferenceKeys {
         hashMap.put(KEY_MAP_SDK, "google_maps");
         hashMap.put(KEY_MAP_BASEMAP, "streets");
         hashMap.put(KEY_AUTOSEND, "off");
+
+        // smap start
+        hashMap.put(KEY_SMAP_REVIEW_FINAL, true);
+        hashMap.put(KEY_STORE_SMAP_USER_TRAIL, true);
+        hashMap.put(KEY_SMAP_LOCATION_TRIGGER, true);
+        hashMap.put(KEY_SMAP_ODK_STYLE_MENUS, true);
+        hashMap.put(KEY_SMAP_AUTOSEND_WIFI, true);
+        hashMap.put(KEY_SMAP_AUTOSEND_WIFI_CELL, true);
+        // smap end
         return hashMap;
     }
 

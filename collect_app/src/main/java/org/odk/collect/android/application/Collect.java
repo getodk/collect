@@ -28,9 +28,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.crash.FirebaseCrash;
+// import com.google.android.gms.analytics.GoogleAnalytics;    // smap
+//import com.google.android.gms.analytics.Tracker;    // smap
+//import com.google.firebase.crash.FirebaseCrash;    // smap
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -90,7 +90,7 @@ public class Collect extends Application {
     private ActivityLogger activityLogger;
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
-    private Tracker tracker;
+    //private Tracker tracker;    // smap
 
     public static String defaultSysLanguage;
 
@@ -259,11 +259,14 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        Timber.plant(new Timber.DebugTree());   // smap
+        /* smap
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashReportingTree());
         }
+        */
     }
 
     @Override
@@ -294,14 +297,15 @@ public class Collect extends Application {
      * Gets the default {@link Tracker} for this {@link Application}.
      *
      * @return tracker
-     */
+     *
+     * smap commented out trcker and error reporting functions
     public synchronized Tracker getDefaultTracker() {
         /* smap disable tracker
         if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             tracker = analytics.newTracker(R.xml.global_tracker);
         }
-        */
+
         return tracker;
     }
 
@@ -319,5 +323,6 @@ public class Collect extends Application {
             }
         }
     }
+    */
 
 }

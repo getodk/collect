@@ -403,7 +403,7 @@ public class MainTabsActivity extends TabActivity implements
 		Timber.i("Complete - Send intent");
 
         // Refresh task list
-    	Intent intent = new Intent("refresh");
+    	Intent intent = new Intent("org.smap.smapTask.refresh");
 	    this.sendBroadcast(intent);
 	    
 		try {
@@ -497,7 +497,7 @@ public class MainTabsActivity extends TabActivity implements
                             mDownloadTasks.setDownloaderListener(null, mContext);
                             mDownloadTasks.cancel(true);
                             // Refresh the task list
-                            Intent intent = new Intent("refresh");
+                            Intent intent = new Intent("org.smap.smapTask.refresh");
                             mContext.sendBroadcast(intent);
                         }
                     };

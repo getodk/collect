@@ -187,7 +187,7 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
 
 	    		if(Utilities.canReject(taskEntry.taskStatus)) {
                     Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED);
-                    Intent intent = new Intent("refresh");      // Notify map and task list of change
+                    Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
                     LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
 	    		} else {
 	    			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),

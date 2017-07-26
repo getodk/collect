@@ -199,7 +199,7 @@ public class SmapTaskMapFragment extends Fragment
 
     @Override
     public Loader<List<TaskEntry>> onCreateLoader(int id, Bundle args) {
-        return new TaskLoader(getActivity());
+        return new TaskLoader(getContext());
     }
 
     @Override
@@ -291,7 +291,6 @@ public class SmapTaskMapFragment extends Fragment
             drawerToggle.onConfigurationChanged(newConfig);
         }
     }
-
 
     private void hideSearchBox() {
         inputSearch.setText("");
