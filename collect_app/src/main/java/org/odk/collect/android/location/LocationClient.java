@@ -69,6 +69,12 @@ public interface LocationClient {
     @Nullable Location getLastLocation();
 
     /**
+     * Provides a way to tell if the LocationClient is currently monitoring the User's Location.
+     * @return Whether or not the client is currently monitoring the User's Location.
+     */
+    boolean isMonitoringLocation();
+
+    /**
      * An interface for listening to status changes on a LocaitonClient.
      */
     interface LocationClientListener {

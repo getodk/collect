@@ -15,7 +15,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-
 /**
  * An implementation of {@link LocationClient} that uses Google Play
  * Services to retrieve the User's location.
@@ -26,7 +25,7 @@ import com.google.android.gms.location.LocationServices;
  * {@link LocationClient}.
  */
 class GoogleLocationClient implements LocationClient,
-        ConnectionCallbacks, OnConnectionFailedListener {
+        ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     @NonNull
     private final FusedLocationProviderApi fusedLocationProviderApi;
@@ -48,7 +47,7 @@ class GoogleLocationClient implements LocationClient,
      *
      * @param context The Context where the GoogleLocationClient will be running.
      */
-    GoogleLocationClient(@NonNull Context context) {
+    public GoogleLocationClient(@NonNull Context context) {
         this(locationServicesClientForContext(context), LocationServices.FusedLocationApi);
     }
 
@@ -64,8 +63,8 @@ class GoogleLocationClient implements LocationClient,
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
-    public GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
-                                @NonNull FusedLocationProviderApi fusedLocationProviderApi) {
+    GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
+                         @NonNull FusedLocationProviderApi fusedLocationProviderApi) {
 
         this.googleApiClient = googleApiClient;
         this.fusedLocationProviderApi = fusedLocationProviderApi;
@@ -86,27 +85,29 @@ class GoogleLocationClient implements LocationClient,
         googleApiClient.unregisterConnectionCallbacks(this);
         googleApiClient.unregisterConnectionFailedListener(this);
 
-        googleApiClient.disconnect();
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+
+        } else {
+            onConnectionSuspended(0);
+        }
     }
 
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
-        if (this.locationListener != null) {
-            stopLocationUpdates();
+        if (!isMonitoringLocation()) {
+            fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequest(), this);
         }
-
-        fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequst(),
-                locationListener);
 
         this.locationListener = locationListener;
     }
 
     public void stopLocationUpdates() {
-        if (this.locationListener == null) {
+        if (!isMonitoringLocation()) {
             return;
         }
 
-        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, this.locationListener);
-        this.locationListener = null;
+        locationListener = null;
+        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, this);
     }
 
     @Override
@@ -128,9 +129,14 @@ class GoogleLocationClient implements LocationClient,
         return fusedLocationProviderApi.getLastLocation(googleApiClient);
     }
 
+    @Override
+    public boolean isMonitoringLocation() {
+        return locationListener != null;
+    }
+
     // GoogleLocationClient:
 
-    private LocationRequest createLocationRequst() {
+    private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setPriority(priority.getValue());
 
@@ -159,6 +165,15 @@ class GoogleLocationClient implements LocationClient,
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (locationClientListener != null) {
             locationClientListener.onStartFailure();
+        }
+    }
+
+    // LocationListener:
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (locationListener != null) {
+            locationListener.onLocationChanged(location);
         }
     }
 

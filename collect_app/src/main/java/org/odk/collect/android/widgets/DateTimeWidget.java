@@ -123,4 +123,14 @@ public class DateTimeWidget extends QuestionWidget {
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
     }
+
+    // For testing purposes.
+    public void setDateWidget(DateWidget dateWidget) {
+        this.dateWidget = dateWidget;
+    }
+
+    // For testing purposes.
+    public void setTimeWidget(TimeWidget timeWidget) {
+        this.timeWidget = timeWidget;
+    }
 }

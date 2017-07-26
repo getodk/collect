@@ -11,6 +11,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
  * available on the device.
  */
 public class LocationClients {
+
     /**
      * Checks and returns a {@link LocationClient} based on whether or not Google Play Services
      * are available.

@@ -26,7 +26,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.internal.util.reflection.Whitebox;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
@@ -39,7 +38,7 @@ import java.util.TimeZone;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -97,21 +96,20 @@ public class DaylightSavingTest {
         IFormElement iformElementStub = mock(IFormElement.class);
         FormEntryPrompt formEntryPromptStub = mock(FormEntryPrompt.class);
 
-        stub(iformElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
-        stub(formEntryPromptStub.getQuestion()).toReturn(questionDefStub);
-        stub(formEntryPromptStub.getFormElement()).toReturn(iformElementStub);
-        stub(formEntryPromptStub.getQuestion().getAppearanceAttr()).toReturn("no-calendar");
+        when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
+        when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);
+        when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
+        when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
 
         DatePickerDialog datePickerDialog = mock(DatePickerDialog.class);
         DatePicker datePicker = mock(DatePicker.class);
-        stub(datePickerDialog.getDatePicker()).toReturn(datePicker);
-        stub(datePickerDialog.getDatePicker().getYear()).toReturn(year);
-        stub(datePickerDialog.getDatePicker().getMonth()).toReturn(month);
-        stub(datePickerDialog.getDatePicker().getDayOfMonth()).toReturn(day);
+        when(datePickerDialog.getDatePicker()).thenReturn(datePicker);
+        when(datePickerDialog.getDatePicker().getYear()).thenReturn(year);
+        when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
+        when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
         DateWidget dateWidget = new DateWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        Whitebox.setInternalState(dateWidget, "datePickerDialog", datePickerDialog);
-
+        dateWidget.setDatePickerDialog(datePickerDialog);
         return dateWidget;
     }
 
@@ -120,23 +118,23 @@ public class DaylightSavingTest {
         IFormElement iformElementStub = mock(IFormElement.class);
         FormEntryPrompt formEntryPromptStub = mock(FormEntryPrompt.class);
 
-        stub(iformElementStub.getAdditionalAttribute(anyString(), anyString())).toReturn(null);
-        stub(formEntryPromptStub.getQuestion()).toReturn(questionDefStub);
-        stub(formEntryPromptStub.getFormElement()).toReturn(iformElementStub);
-        stub(formEntryPromptStub.getQuestion().getAppearanceAttr()).toReturn("no-calendar");
+        when(iformElementStub.getAdditionalAttribute(anyString(), anyString())).thenReturn(null);
+        when(formEntryPromptStub.getQuestion()).thenReturn(questionDefStub);
+        when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
+        when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
 
         DateWidget dateWidget = mock(DateWidget.class);
-        stub(dateWidget.getYear()).toReturn(year);
-        stub(dateWidget.getMonth()).toReturn(month);
-        stub(dateWidget.getDay()).toReturn(day);
+        when(dateWidget.getYear()).thenReturn(year);
+        when(dateWidget.getMonth()).thenReturn(month);
+        when(dateWidget.getDay()).thenReturn(day);
 
         TimeWidget timeWidget = mock(TimeWidget.class);
-        stub(timeWidget.getHour()).toReturn(hour);
-        stub(timeWidget.getMinute()).toReturn(minute);
+        when(timeWidget.getHour()).thenReturn(hour);
+        when(timeWidget.getMinute()).thenReturn(minute);
 
         DateTimeWidget dateTimeWidget = new DateTimeWidget(RuntimeEnvironment.application, formEntryPromptStub);
-        Whitebox.setInternalState(dateTimeWidget, "dateWidget", dateWidget);
-        Whitebox.setInternalState(dateTimeWidget, "timeWidget", timeWidget);
+        dateTimeWidget.setDateWidget(dateWidget);
+        dateTimeWidget.setTimeWidget(timeWidget);
 
         return dateTimeWidget;
     }

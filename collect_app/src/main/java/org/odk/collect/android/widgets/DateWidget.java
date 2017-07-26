@@ -365,4 +365,9 @@ public class DateWidget extends QuestionWidget {
             return null;
         }
     }
+
+    // For testing only.
+    public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
+        this.datePickerDialog = datePickerDialog;
+    }
 }

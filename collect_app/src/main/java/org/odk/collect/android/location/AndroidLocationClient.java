@@ -34,8 +34,9 @@ public class AndroidLocationClient implements LocationClient,
     private LocationListener locationListener;
 
     @NonNull
-    private Priority priority;
+    private Priority priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
+    private Location cachedLocation;
     private boolean isConnected;
 
     /**
@@ -52,7 +53,7 @@ public class AndroidLocationClient implements LocationClient,
      * This Constructor should only be used for testing.
      * @param locationManager The LocationManager to retrieve locations from.
      */
-    public AndroidLocationClient(@NonNull LocationManager locationManager) {
+    AndroidLocationClient(@NonNull LocationManager locationManager) {
         this.locationManager = locationManager;
     }
 
@@ -69,11 +70,17 @@ public class AndroidLocationClient implements LocationClient,
         }
 
         isConnected = true;
+        if (locationClientListener != null) {
+            locationClientListener.onStart();
+        }
     }
 
     @Override
     public void stop() {
+        // Implementations of LocationClient are expected to call this:
+        stopLocationUpdates();
         isConnected = false;
+
         if (locationClientListener != null) {
             locationClientListener.onStop();
         }
@@ -115,14 +122,20 @@ public class AndroidLocationClient implements LocationClient,
 
     @Override
     public Location getLastLocation() {
-        return locationManager.getLastKnownLocation(getProvider());
+        String provider = getProvider();
+        if (provider != null) {
+            return locationManager.getLastKnownLocation(provider);
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isMonitoringLocation() {
+        return locationListener != null;
     }
 
     // AndroidLocationClient:
-
-    private boolean isMonitoringLocation() {
-        return this.locationClientListener != null;
-    }
 
     private String getProvider() {
         String provider = LocationManager.PASSIVE_PROVIDER;
@@ -160,7 +173,7 @@ public class AndroidLocationClient implements LocationClient,
             return provider;
 
         } else if (hasProvider(backupProvider)) {
-            return provider;
+            return backupProvider;
         }
 
         return null;
