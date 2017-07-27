@@ -24,12 +24,30 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 
 import timber.log.Timber;
 
+import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.provider.FormsProvider.FORMS_TABLE_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.JR_VERSION;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.LANGUAGE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.MD5_HASH;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 
 /**
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
+    private String[] columnsInVersion4 = new String[] {_ID, DISPLAY_NAME, DISPLAY_SUBTEXT, DESCRIPTION, JR_FORM_ID, JR_VERSION,
+            MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE, SUBMISSION_URI,
+            BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH};
+
     private static final int DATABASE_VERSION = 4;
 
     // These exist in database versions 2 and 3, but not in 4...
@@ -42,29 +60,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        onCreateNamed(db, FORMS_TABLE_NAME);
-    }
-
-    private void onCreateNamed(SQLiteDatabase db, String tableName) {
-        db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
-                + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
-                + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
-                + " text not null, " + FormsProviderAPI.FormsColumns.DESCRIPTION
-                + " text, "
-                + FormsProviderAPI.FormsColumns.JR_FORM_ID
-                + " text not null, "
-                + FormsProviderAPI.FormsColumns.JR_VERSION
-                + " text, "
-                + FormsProviderAPI.FormsColumns.MD5_HASH
-                + " text not null, "
-                + FormsProviderAPI.FormsColumns.DATE
-                + " integer not null, " // milliseconds
-                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.LANGUAGE + " text, "
-                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + " text, "
-                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " text not null);");
+        createTablesForVersion4(db, FORMS_TABLE_NAME);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -93,6 +89,21 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        boolean success = true;
+        switch (newVersion) {
+            case 4:
+                success = downgradeToVersion4(db);
+                break;
+
+            default:
+                Timber.i("Unknown version " + newVersion);
+        }
+
+        if (success) {
+            Timber.i("Downgrading database completed with success.");
+        } else {
+            Timber.i("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+        }
     }
 
     private boolean upgradeToVersion2(SQLiteDatabase db) {
@@ -113,7 +124,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-            onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
+            createTablesForVersion4(db, TEMP_FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + TEMP_FORMS_TABLE_NAME
                     + " ("
@@ -180,7 +191,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
             // risky failures here...
             db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-            onCreateNamed(db, FORMS_TABLE_NAME);
+            createTablesForVersion4(db, FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + FORMS_TABLE_NAME
                     + " ("
@@ -233,5 +244,60 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         }
 
         return success;
+    }
+
+    private boolean downgradeToVersion4(SQLiteDatabase db) {
+        boolean success = true;
+        String temporaryTable = FORMS_TABLE_NAME + "_tmp";
+
+        try {
+            QueryBuilder
+                    .begin(db)
+                    .renameTable(FORMS_TABLE_NAME)
+                    .to(temporaryTable)
+                    .end();
+
+            createTablesForVersion4(db, FORMS_TABLE_NAME);
+
+            QueryBuilder
+                    .begin(db)
+                    .insertInto(FORMS_TABLE_NAME)
+                    .columnsForInsert(columnsInVersion4)
+                    .select()
+                    .columnsForSelect(columnsInVersion4)
+                    .from(temporaryTable)
+                    .end();
+
+            QueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
+        }
+        return success;
+    }
+
+    private void createTablesForVersion4(SQLiteDatabase db, String tableName) {
+        db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
+                + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
+                + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                + " text not null, " + FormsProviderAPI.FormsColumns.DESCRIPTION
+                + " text, "
+                + FormsProviderAPI.FormsColumns.JR_FORM_ID
+                + " text not null, "
+                + FormsProviderAPI.FormsColumns.JR_VERSION
+                + " text, "
+                + FormsProviderAPI.FormsColumns.MD5_HASH
+                + " text not null, "
+                + FormsProviderAPI.FormsColumns.DATE
+                + " integer not null, " // milliseconds
+                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + " text not null, "
+                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " text not null, "
+                + FormsProviderAPI.FormsColumns.LANGUAGE + " text, "
+                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + " text, "
+                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
+                + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " text not null);");
     }
 }
