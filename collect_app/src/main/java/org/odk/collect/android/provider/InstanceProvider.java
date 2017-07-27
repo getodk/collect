@@ -27,6 +27,7 @@ import android.text.TextUtils;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.InstanceDatabaseHelper;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -43,11 +44,8 @@ import timber.log.Timber;
  *
  */
 public class InstanceProvider extends ContentProvider {
-
-
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 4;
-    private static final String INSTANCES_TABLE_NAME = "instances";
+    public static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
 
@@ -56,73 +54,9 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher;
 
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+    private InstanceDatabaseHelper databaseHelper;
 
-        DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
-        }
-
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-                    + InstanceColumns._ID + " integer primary key, "
-                    + InstanceColumns.DISPLAY_NAME + " text not null, "
-                    + InstanceColumns.SUBMISSION_URI + " text, "
-                    + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                    + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                    + InstanceColumns.JR_FORM_ID + " text not null, "
-                    + InstanceColumns.JR_VERSION + " text, "
-                    + InstanceColumns.STATUS + " text not null, "
-                    + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " date );");
-        }
-
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            final int initialVersion = oldVersion;
-            if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
-                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
-                        + "'");
-                oldVersion = 2;
-            }
-            if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.JR_VERSION + " text;");
-            }
-            if (oldVersion == 3) {
-                Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-                int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
-                cursor.close();
-
-                // Only add the column if it doesn't already exist
-                if (columnIndex == -1) {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                            + InstanceColumns.DELETED_DATE + " date;");
-                }
-            }
-            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
-                    initialVersion, newVersion);
-        }
-
-        @Override
-        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        }
-    }
-
-    private DatabaseHelper databaseHelper;
-
-    private DatabaseHelper getDbHelper() {
+    private InstanceDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -134,14 +68,14 @@ public class InstanceProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        databaseHelper = new InstanceDatabaseHelper(DATABASE_NAME);
         return databaseHelper;
     }
 
     @Override
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
+        InstanceDatabaseHelper h = getDbHelper();
         if (h == null) {
             return false;
         }
