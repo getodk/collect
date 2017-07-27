@@ -43,7 +43,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  * This class helps open, create, and upgrade the database file.
  */
 public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
-    private String[] columnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+    private String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
 
     private static final int DATABASE_VERSION = 4;
@@ -54,7 +54,7 @@ public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createTablesForVersion4(db, INSTANCES_TABLE_NAME);
+        createInstancesTableForVersion4(db, INSTANCES_TABLE_NAME);
     }
 
     @Override
@@ -159,14 +159,14 @@ public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
                     .to(temporaryTable)
                     .end();
 
-            createTablesForVersion4(db, INSTANCES_TABLE_NAME);
+            createInstancesTableForVersion4(db, INSTANCES_TABLE_NAME);
 
             QueryBuilder
                     .begin(db)
                     .insertInto(INSTANCES_TABLE_NAME)
-                    .columnsForInsert(columnsInVersion4)
+                    .columnsForInsert(instancesTableColumnsInVersion4)
                     .select()
-                    .columnsForSelect(columnsInVersion4)
+                    .columnsForSelect(instancesTableColumnsInVersion4)
                     .from(temporaryTable)
                     .end();
 
@@ -181,7 +181,7 @@ public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
         return success;
     }
 
-    private void createTablesForVersion4(SQLiteDatabase db, String tableName) {
+    private void createInstancesTableForVersion4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE " + tableName + " ("
                 + _ID + " integer primary key, "
                 + DISPLAY_NAME + " text not null, "

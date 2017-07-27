@@ -45,7 +45,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUB
  * This class helps open, create, and upgrade the database file.
  */
 public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
-    private String[] columnsInVersion4 = new String[] {_ID, DISPLAY_NAME, DISPLAY_SUBTEXT, DESCRIPTION, JR_FORM_ID, JR_VERSION,
+    private String[] formsTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, DISPLAY_SUBTEXT, DESCRIPTION, JR_FORM_ID, JR_VERSION,
             MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE, SUBMISSION_URI,
             BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH};
 
@@ -61,7 +61,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createTablesForVersion4(db, FORMS_TABLE_NAME);
+        createFormsTableForVersion4(db, FORMS_TABLE_NAME);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -125,7 +125,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-            createTablesForVersion4(db, TEMP_FORMS_TABLE_NAME);
+            createFormsTableForVersion4(db, TEMP_FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + TEMP_FORMS_TABLE_NAME
                     + " ("
@@ -192,7 +192,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
             // risky failures here...
             db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-            createTablesForVersion4(db, FORMS_TABLE_NAME);
+            createFormsTableForVersion4(db, FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + FORMS_TABLE_NAME
                     + " ("
@@ -258,14 +258,14 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
                     .to(temporaryTable)
                     .end();
 
-            createTablesForVersion4(db, FORMS_TABLE_NAME);
+            createFormsTableForVersion4(db, FORMS_TABLE_NAME);
 
             QueryBuilder
                     .begin(db)
                     .insertInto(FORMS_TABLE_NAME)
-                    .columnsForInsert(columnsInVersion4)
+                    .columnsForInsert(formsTableColumnsInVersion4)
                     .select()
-                    .columnsForSelect(columnsInVersion4)
+                    .columnsForSelect(formsTableColumnsInVersion4)
                     .from(temporaryTable)
                     .end();
 
@@ -280,7 +280,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         return success;
     }
 
-    private void createTablesForVersion4(SQLiteDatabase db, String tableName) {
+    private void createFormsTableForVersion4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
                 + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
                 + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT

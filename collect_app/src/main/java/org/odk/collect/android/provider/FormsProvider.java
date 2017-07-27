@@ -23,6 +23,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.odk.collect.android.R;
@@ -41,12 +42,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-/**
- *
- */
 public class FormsProvider extends ContentProvider {
-
-
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
@@ -78,16 +74,12 @@ public class FormsProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-        FormsDatabaseHelper h = getDbHelper();
-        if (h == null) {
-            return false;
-        }
-        return true;
+        return getDbHelper() != null;
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
-            String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
+                        String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
 
@@ -118,7 +110,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case FORMS:
                 return FormsColumns.CONTENT_TYPE;
@@ -132,7 +124,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public synchronized Uri insert(Uri uri, ContentValues initialValues) {
+    public synchronized Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != FORMS) {
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -146,8 +138,7 @@ public class FormsProvider extends ContentProvider {
         }
 
         if (!values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-            throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH
-                    + " must be specified.");
+            throw new IllegalArgumentException(FormsColumns.FORM_FILE_PATH + " must be specified.");
         }
 
         // Normalize the file path.
@@ -157,7 +148,7 @@ public class FormsProvider extends ContentProvider {
         filePath = form.getAbsolutePath(); // normalized
         values.put(FormsColumns.FORM_FILE_PATH, filePath);
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the necessary fields are all set
         if (!values.containsKey(FormsColumns.DATE)) {
@@ -184,8 +175,7 @@ public class FormsProvider extends ContentProvider {
         values.put(FormsColumns.MD5_HASH, md5);
 
         if (!values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-            String cachePath = Collect.CACHE_PATH + File.separator + md5
-                    + ".formdef";
+            String cachePath = Collect.CACHE_PATH + File.separator + md5 + ".formdef";
             values.put(FormsColumns.JRCACHE_FILE_PATH, cachePath);
         }
         if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
@@ -203,8 +193,7 @@ public class FormsProvider extends ContentProvider {
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
         Cursor c = null;
         try {
-            c = db.query(FORMS_TABLE_NAME, projection, selection,
-                    selectionArgs, null, null, null);
+            c = db.query(FORMS_TABLE_NAME, projection, selection, selectionArgs, null, null, null);
             if (c.getCount() > 0) {
                 // already exists
                 throw new SQLException("FAILED Insert into " + uri
@@ -237,12 +226,9 @@ public class FormsProvider extends ContentProvider {
         if (file.exists()) {
             if (file.isDirectory()) {
                 // delete any media entries for files in this directory...
-                int images = MediaUtils
-                        .deleteImagesInFolderFromMediaProvider(file);
-                int audio = MediaUtils
-                        .deleteAudioInFolderFromMediaProvider(file);
-                int video = MediaUtils
-                        .deleteVideoInFolderFromMediaProvider(file);
+                int images = MediaUtils.deleteImagesInFolderFromMediaProvider(file);
+                int audio = MediaUtils.deleteAudioInFolderFromMediaProvider(file);
+                int video = MediaUtils.deleteVideoInFolderFromMediaProvider(file);
 
                 Timber.i("removed from content providers: %d image files, %d audio files, and %d"
                         + " video files.", images, audio, video);
@@ -267,7 +253,7 @@ public class FormsProvider extends ContentProvider {
      * {directory}
      */
     @Override
-    public int delete(Uri uri, String where, String[] whereArgs) {
+    public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
@@ -276,7 +262,7 @@ public class FormsProvider extends ContentProvider {
                 Cursor del = null;
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
-                    if (del.getCount() > 0) {
+                    if (del != null && del.getCount() > 0) {
                         del.moveToFirst();
                         do {
                             deleteFileOrDir(del
@@ -306,7 +292,7 @@ public class FormsProvider extends ContentProvider {
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
                     // This should only ever return 1 record.
-                    if (c.getCount() > 0) {
+                    if (c != null && c.getCount() > 0) {
                         c.moveToFirst();
                         do {
                             deleteFileOrDir(c.getString(c
@@ -358,8 +344,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String where,
-            String[] whereArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count = 0;
         switch (sUriMatcher.match(uri)) {
@@ -382,7 +367,7 @@ public class FormsProvider extends ContentProvider {
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
 
-                    if (c.getCount() > 0) {
+                    if (c != null && c.getCount() > 0) {
                         c.moveToPosition(-1);
                         while (c.moveToNext()) {
                             // before updating the paths, delete all the files
@@ -392,9 +377,7 @@ public class FormsProvider extends ContentProvider {
                                 String delFile = c
                                         .getString(c
                                                 .getColumnIndex(FormsColumns.FORM_FILE_PATH));
-                                if (newFile.equalsIgnoreCase(delFile)) {
-                                    // same file, so don't delete anything
-                                } else {
+                                if (!newFile.equalsIgnoreCase(delFile)) {
                                     // different files, delete the old one
                                     deleteFileOrDir(delFile);
                                 }
@@ -434,7 +417,7 @@ public class FormsProvider extends ContentProvider {
                     update = this.query(uri, null, where, whereArgs, null);
 
                     // This should only ever return 1 record.
-                    if (update.getCount() > 0) {
+                    if (update != null && update.getCount() > 0) {
                         update.moveToFirst();
 
                         // don't let users manually update md5
@@ -458,14 +441,8 @@ public class FormsProvider extends ContentProvider {
                             String oldFile = update.getString(update
                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH));
 
-                            if (formFile != null
-                                    && formFile.equalsIgnoreCase(oldFile)) {
-                                // Files are the same, so we may have just copied
-                                // over something we had
-                                // already
-                            } else {
-                                // New file name. This probably won't ever happen,
-                                // though.
+                            if (formFile == null || !formFile.equalsIgnoreCase(oldFile)) {
+                                // New file name. This probably won't ever happen, though.
                                 deleteFileOrDir(oldFile);
                             }
 
@@ -478,8 +455,7 @@ public class FormsProvider extends ContentProvider {
                                     .getMd5Hash(new File(formFile));
                             values.put(FormsColumns.MD5_HASH, newMd5);
                             values.put(FormsColumns.JRCACHE_FILE_PATH,
-                                    Collect.CACHE_PATH + File.separator + newMd5
-                                            + ".formdef");
+                                    Collect.CACHE_PATH + File.separator + newMd5 + ".formdef");
                         }
 
                         // Make sure that the necessary fields are all set
@@ -522,7 +498,7 @@ public class FormsProvider extends ContentProvider {
         sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
         sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
 
-        sFormsProjectionMap = new HashMap<String, String>();
+        sFormsProjectionMap = new HashMap<>();
         sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
         sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME,
                 FormsColumns.DISPLAY_NAME);
