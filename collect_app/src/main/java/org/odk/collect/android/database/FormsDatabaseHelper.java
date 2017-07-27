@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-
 package org.odk.collect.android.database;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -69,13 +69,52 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            Timber.w("Upgrading database from version %d to %d"
+        Timber.i("Upgrading database from version %d to %d" + ", which will destroy all old data", oldVersion, newVersion);
+
+        boolean success = true;
+        switch (oldVersion) {
+            case 1:
+                success = upgradeToVersion2(db, oldVersion, newVersion);
+            case 2:
+            case 3:
+                success &= upgradeToVersion4(db, oldVersion, newVersion);
+                break;
+            default:
+                Timber.i("Unknown version " + newVersion + ". Creating new database.");
+        }
+
+        if (success) {
+            Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
+        } else {
+            Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+        }
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
+    private boolean upgradeToVersion2(SQLiteDatabase db, int oldVersion, int newVersion) {
+        boolean success = true;
+        try {
+            Timber.i("Upgrading database from version %d to %d"
                     + ", which will destroy all old data", oldVersion, newVersion);
+
             db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
             onCreate(db);
-            return;
-        } else {
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
+        }
+        return success;
+    }
+
+    private boolean upgradeToVersion4(SQLiteDatabase db, int oldVersion, int newVersion) {
+        boolean success = true;
+        try {
+            Timber.i("Upgrading database from version %d to %d"
+                    + ", which will destroy all old data", oldVersion, newVersion);
+
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
@@ -193,13 +232,11 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
                     + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
                     + TEMP_FORMS_TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-
-            Timber.w("Successfully upgraded database from version %d to %d"
-                    + ", without destroying all the old data", oldVersion, newVersion);
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
         }
-    }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        return success;
     }
 }
