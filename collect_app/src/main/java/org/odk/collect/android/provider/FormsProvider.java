@@ -27,8 +27,8 @@ import android.text.TextUtils;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.FormsDatabaseHelper;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -48,8 +48,7 @@ public class FormsProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "forms.db";
-    private static final int DATABASE_VERSION = 4;
-    private static final String FORMS_TABLE_NAME = "forms";
+    public static final String FORMS_TABLE_NAME = "forms";
 
     private static HashMap<String, String> sFormsProjectionMap;
 
@@ -58,181 +57,9 @@ public class FormsProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher;
 
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
-        // These exist in database versions 2 and 3, but not in 4...
-        private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
-        private static final String MODEL_VERSION = "modelVersion";
+    private FormsDatabaseHelper databaseHelper;
 
-        DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            onCreateNamed(db, FORMS_TABLE_NAME);
-        }
-
-        private void onCreateNamed(SQLiteDatabase db, String tableName) {
-            db.execSQL("CREATE TABLE " + tableName + " (" + FormsColumns._ID
-                    + " integer primary key, " + FormsColumns.DISPLAY_NAME
-                    + " text not null, " + FormsColumns.DISPLAY_SUBTEXT
-                    + " text not null, " + FormsColumns.DESCRIPTION
-                    + " text, "
-                    + FormsColumns.JR_FORM_ID
-                    + " text not null, "
-                    + FormsColumns.JR_VERSION
-                    + " text, "
-                    + FormsColumns.MD5_HASH
-                    + " text not null, "
-                    + FormsColumns.DATE
-                    + " integer not null, " // milliseconds
-                    + FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                    + FormsColumns.FORM_FILE_PATH + " text not null, "
-                    + FormsColumns.LANGUAGE + " text, "
-                    + FormsColumns.SUBMISSION_URI + " text, "
-                    + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                    + FormsColumns.JRCACHE_FILE_PATH + " text not null);");
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            if (oldVersion < 2) {
-                Timber.w("Upgrading database from version %d to %d"
-                        + ", which will destroy all old data", oldVersion, newVersion);
-                db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-                onCreate(db);
-                return;
-            } else {
-                // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
-                // integer MODEL_VERSION to text VERSION
-                db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-                onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
-                db.execSQL("INSERT INTO "
-                        + TEMP_FORMS_TABLE_NAME
-                        + " ("
-                        + FormsColumns._ID
-                        + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH
-                        + ", "
-                        + FormsColumns.FORM_FILE_PATH
-                        + ", "
-                        + FormsColumns.LANGUAGE
-                        + ", "
-                        + FormsColumns.SUBMISSION_URI
-                        + ", "
-                        + FormsColumns.JR_VERSION
-                        + ", "
-                        + ((oldVersion != 3) ? ""
-                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH
-                        + ") SELECT "
-                        + FormsColumns._ID
-                        + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH
-                        + ", "
-                        + FormsColumns.FORM_FILE_PATH
-                        + ", "
-                        + FormsColumns.LANGUAGE
-                        + ", "
-                        + FormsColumns.SUBMISSION_URI
-                        + ", "
-                        + "CASE WHEN "
-                        + MODEL_VERSION
-                        + " IS NOT NULL THEN "
-                        + "CAST("
-                        + MODEL_VERSION
-                        + " AS TEXT) ELSE NULL END, "
-                        + ((oldVersion != 3) ? ""
-                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
-                        + FORMS_TABLE_NAME);
-
-                // risky failures here...
-                db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-                onCreateNamed(db, FORMS_TABLE_NAME);
-                db.execSQL("INSERT INTO "
-                        + FORMS_TABLE_NAME
-                        + " ("
-                        + FormsColumns._ID
-                        + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", "
-                        + FormsColumns.LANGUAGE + ", "
-                        + FormsColumns.SUBMISSION_URI + ", "
-                        + FormsColumns.JR_VERSION + ", "
-                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-                        + FormsColumns._ID + ", "
-                        + FormsColumns.DISPLAY_NAME
-                        + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
-                        + ", "
-                        + FormsColumns.DESCRIPTION
-                        + ", "
-                        + FormsColumns.JR_FORM_ID
-                        + ", "
-                        + FormsColumns.MD5_HASH
-                        + ", "
-                        + FormsColumns.DATE
-                        + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", "
-                        + FormsColumns.LANGUAGE + ", "
-                        + FormsColumns.SUBMISSION_URI + ", "
-                        + FormsColumns.JR_VERSION + ", "
-                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
-                        + TEMP_FORMS_TABLE_NAME);
-                db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-
-                Timber.w("Successfully upgraded database from version %d to %d"
-                        + ", without destroying all the old data", oldVersion, newVersion);
-            }
-        }
-    }
-
-    private DatabaseHelper databaseHelper;
-
-    private DatabaseHelper getDbHelper() {
+    private FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -244,14 +71,14 @@ public class FormsProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        databaseHelper = new FormsDatabaseHelper(DATABASE_NAME);
         return databaseHelper;
     }
 
     @Override
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
+        FormsDatabaseHelper h = getDbHelper();
         if (h == null) {
             return false;
         }
