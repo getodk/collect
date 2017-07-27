@@ -198,4 +198,8 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
                     + ", without destroying all the old data", oldVersion, newVersion);
         }
     }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
 }

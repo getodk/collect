@@ -257,6 +257,10 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
     private void onProgress(String message) {
         if (formLoaderTask != null) {
             formLoaderTask.publishExternalDataLoadingProgress(message);

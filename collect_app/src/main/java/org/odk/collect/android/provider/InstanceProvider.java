@@ -114,6 +114,10 @@ public class InstanceProvider extends ContentProvider {
             Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
                     initialVersion, newVersion);
         }
+
+        @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        }
     }
 
     private DatabaseHelper databaseHelper;

@@ -67,6 +67,10 @@ public class ItemsetDbAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + ITEMSET_TABLE);
             onCreate(db);
         }
+
+        @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        }
     }
 
     public ItemsetDbAdapter() {
