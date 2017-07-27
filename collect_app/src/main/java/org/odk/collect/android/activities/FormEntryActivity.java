@@ -920,14 +920,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             double originalWidth = originalImage.getWidth();
             double originalHeight = originalImage.getHeight();
 
-            int originalPixelCount = (int) (originalWidth * originalHeight);
+            if (originalWidth > originalHeight && originalWidth > maxPixels) {
+                int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
 
-            if (originalPixelCount > maxPixels) {
-                double newWidth = Math.sqrt(maxPixels / (originalHeight / originalWidth));
-                double newHeight = Math.sqrt(maxPixels / (originalWidth / originalHeight));
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, maxPixels, newHeight, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            } else if (originalHeight > maxPixels) {
+                int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
 
-                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, (int) newWidth, (int) newHeight, false);
-
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, newWidth, maxPixels, false);
                 FileUtils.saveBitmapToFile(scaledImage, path);
             }
         }
