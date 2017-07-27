@@ -75,13 +75,13 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         boolean success = true;
         switch (oldVersion) {
             case 1:
-                success = upgradeToVersion2(db, oldVersion, newVersion);
+                success = upgradeToVersion2(db);
             case 2:
             case 3:
-                success &= upgradeToVersion4(db, oldVersion, newVersion);
+                success &= upgradeToVersion4(db, oldVersion);
                 break;
             default:
-                Timber.i("Unknown version " + newVersion + ". Creating new database.");
+                Timber.i("Unknown version " + newVersion);
         }
 
         if (success) {
@@ -95,12 +95,9 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    private boolean upgradeToVersion2(SQLiteDatabase db, int oldVersion, int newVersion) {
+    private boolean upgradeToVersion2(SQLiteDatabase db) {
         boolean success = true;
         try {
-            Timber.i("Upgrading database from version %d to %d"
-                    + ", which will destroy all old data", oldVersion, newVersion);
-
             db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
             onCreate(db);
         } catch (SQLiteException e) {
@@ -110,12 +107,9 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         return success;
     }
 
-    private boolean upgradeToVersion4(SQLiteDatabase db, int oldVersion, int newVersion) {
+    private boolean upgradeToVersion4(SQLiteDatabase db, int oldVersion) {
         boolean success = true;
         try {
-            Timber.i("Upgrading database from version %d to %d"
-                    + ", which will destroy all old data", oldVersion, newVersion);
-
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
