@@ -25,12 +25,26 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import timber.log.Timber;
 
+import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.provider.InstanceProvider.INSTANCES_TABLE_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
 
 /**
  * This class helps open, create, and upgrade the database file.
  */
 public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
+    private String[] columnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+            INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
+
     private static final int DATABASE_VERSION = 4;
 
     public InstanceDatabaseHelper(String databaseName) {
@@ -68,6 +82,21 @@ public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        boolean success = true;
+        switch (newVersion) {
+            case 4:
+                success = downgradeToVersion4(db);
+                break;
+
+            default:
+                Timber.i("Unknown version " + newVersion);
+        }
+
+        if (success) {
+            Timber.i("Downgrading database completed with success.");
+        } else {
+            Timber.i("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+        }
     }
 
     private boolean upgradeToVersion2(SQLiteDatabase db) {
@@ -118,17 +147,50 @@ public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
         return success;
     }
 
+    private boolean downgradeToVersion4(SQLiteDatabase db) {
+        boolean success = true;
+        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
+
+        try {
+            QueryBuilder
+                    .begin(db)
+                    .renameTable(INSTANCES_TABLE_NAME)
+                    .to(temporaryTable)
+                    .end();
+
+            createTablesForVersion4(db, INSTANCES_TABLE_NAME);
+
+            QueryBuilder
+                    .begin(db)
+                    .insertInto(INSTANCES_TABLE_NAME)
+                    .columnsForInsert(columnsInVersion4)
+                    .select()
+                    .columnsForSelect(columnsInVersion4)
+                    .from(temporaryTable)
+                    .end();
+
+            QueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
+        }
+        return success;
+    }
+
     private void createTablesForVersion4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE " + tableName + " ("
-                + InstanceProviderAPI.InstanceColumns._ID + " integer primary key, "
-                + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " text not null, "
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
                 + InstanceProviderAPI.InstanceColumns.SUBMISSION_URI + " text, "
                 + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
                 + InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                 + InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " text not null, "
                 + InstanceProviderAPI.InstanceColumns.JR_VERSION + " text, "
                 + InstanceProviderAPI.InstanceColumns.STATUS + " text not null, "
-                + InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
+                + LAST_STATUS_CHANGE_DATE + " date not null, "
                 + InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
                 + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " date );");
     }
