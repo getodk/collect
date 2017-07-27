@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;

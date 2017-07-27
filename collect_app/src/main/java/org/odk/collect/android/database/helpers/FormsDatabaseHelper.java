@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.QueryBuilder;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
 import timber.log.Timber;

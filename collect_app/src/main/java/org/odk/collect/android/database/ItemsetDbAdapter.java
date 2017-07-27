@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.helpers.ODKSQLiteOpenHelper;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

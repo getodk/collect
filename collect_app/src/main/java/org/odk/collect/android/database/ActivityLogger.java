@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteException;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.helpers.ODKSQLiteOpenHelper;
 import org.odk.collect.android.logic.FormController;
 
 import java.io.File;
