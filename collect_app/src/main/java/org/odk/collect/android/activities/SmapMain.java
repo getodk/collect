@@ -14,17 +14,24 @@
 
 package org.odk.collect.android.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -57,6 +64,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
+import org.odk.collect.android.tasks.NdefReaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ManageForm;
@@ -93,14 +101,20 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     private SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
     private SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
 
+    private NfcAdapter mNfcAdapter;        // NFC
+    public PendingIntent mNfcPendingIntent;
+    public IntentFilter[] mNfcFilters;
+    public NdefReaderTask mReadNFC;
     public ArrayList<NfcTrigger> nfcTriggersList;   // nfcTriggers (geofence should have separate list)
     public ArrayList<NfcTrigger> nfcTriggersMap;    // nfcTriggers (geofence should have separate list)
 
-    private static List<TaskEntry> mTasks = null;
-    private static List<TaskEntry> mMapTasks = null;
-
     private String mProgressMsg;
     public DownloadTasksTask mDownloadTasks;
+
+    private MainTaskListener listener = null;
+    boolean listenerRegistered = false;
+    private static List<TaskEntry> mTasks = null;
+    private static List<TaskEntry> mMapTasks = null;
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -139,6 +153,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         Intent intent = new Intent(this, NotificationRegistrationService.class);
         startService(intent);
 
+        // Get settings if available in a file
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
         File j = new File(Collect.ODK_ROOT + "/collect.settings.json");
         // Give JSON file preference
@@ -165,6 +180,57 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
+
+        // NFC
+        boolean authorised = false;
+        SharedPreferences sharedPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
+            mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            authorised = true;
+        } else {
+            Toast.makeText(
+                    this,
+                    getString(R.string.smap_nfc_not_authorised),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        if (authorised) {
+            if (mNfcAdapter == null) {
+                Toast.makeText(
+                        this,
+                        getString(R.string.smap_nfc_not_available),
+                        Toast.LENGTH_SHORT).show();
+            } else if (!mNfcAdapter.isEnabled()) {
+                Toast.makeText(
+                        this,
+                        getString(R.string.smap_nfc_not_enabled),
+                        Toast.LENGTH_LONG).show();
+            } else {
+                /*
+                 * Set up NFC adapter
+                 */
+
+                // Pending intent
+                Intent nfcIntent = new Intent(getApplicationContext(), getClass());
+                nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent, 0);
+
+                // Filter
+                IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+                mNfcFilters = new IntentFilter[]{
+                        filter
+                };
+
+
+                Toast.makeText(
+                        this,
+                        getString(R.string.smap_nfc_is_available),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        }
     }
 
     @Override
@@ -172,6 +238,23 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_launcher);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mNfcAdapter != null && mNfcAdapter.isEnabled()) {
+            setupNFCDispatch(this, mNfcAdapter);        // NFC
+        }
+
+        if (!listenerRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("startTask");
+            filter.addAction("startMapTask");
+            registerReceiver(listener, filter);
+            listenerRegistered = true;
+        }
     }
 
     @Override
@@ -400,6 +483,58 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     /*
      * NFC Reading Overrides
      */
+
+    /**
+     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
+     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     */
+    public void setupNFCDispatch(final Activity activity, NfcAdapter adapter) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
+            adapter.enableForegroundDispatch(activity, mNfcPendingIntent, mNfcFilters, null);
+        }
+    }
+
+    /**
+     * @param activity The corresponding {@link Activity} requesting to stop the foreground dispatch.
+     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     */
+    public static void stopNFCDispatch(final Activity activity, NfcAdapter adapter) {
+
+        if (adapter != null) {
+            adapter.disableForegroundDispatch(activity);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleNFCIntent(intent);
+    }
+
+    /*
+     * NFC detected
+     */
+    private void handleNFCIntent(Intent intent) {
+
+        if(nfcTriggersList != null && nfcTriggersList.size() > 0) {
+            Timber.i("tag discovered");
+            String action = intent.getAction();
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            mReadNFC = new NdefReaderTask();
+            mReadNFC.setDownloaderListener(this);
+            mReadNFC.execute(tag);
+        } else {
+            Toast.makeText(
+                    this,
+                    R.string.smap_no_tasks_nfc,
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
     @Override
     public void readComplete(String result) {
@@ -644,13 +779,13 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         // Need to maintain two lists of tasks as the position in the task list is different for maps than for the list view
         ArrayList<NfcTrigger> triggers = null;
 
-        if(map) {
+        if (map) {
             mMapTasks = data;
-            nfcTriggersMap = new ArrayList<NfcTrigger> ();
+            nfcTriggersMap = new ArrayList<NfcTrigger>();
             triggers = nfcTriggersMap;
         } else {
             mTasks = data;
-            nfcTriggersList = new ArrayList<NfcTrigger> ();
+            nfcTriggersList = new ArrayList<NfcTrigger>();
             triggers = nfcTriggersList;
         }
         /*
@@ -659,7 +794,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
         int position = 0;
         for (TaskEntry t : data) {
-            if(t.type.equals("task") && t.locationTrigger != null && t.locationTrigger.trim().length() > 0
+            if (t.type.equals("task") && t.locationTrigger != null && t.locationTrigger.trim().length() > 0
                     && t.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
                 triggers.add(new NfcTrigger(t.id, t.locationTrigger, position));
             }
@@ -669,6 +804,37 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         /*
          * TODO set geofence triggers
          */
+    }
+
+    protected class MainTaskListener extends BroadcastReceiver {
+
+        private MainTabsActivity mActivity = null;
+
+        public MainTaskListener(MainTabsActivity activity) {
+            mActivity = activity;
+        }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Timber.i("Intent received: " + intent.getAction());
+
+            if (intent.getAction().equals("startTask")) {
+
+                int position =  intent.getIntExtra("position", -1);
+                if(position >= 0) {
+                    TaskEntry entry = (TaskEntry) mTasks.get(position);
+
+                    mActivity.completeTask(entry);
+                }
+            } else if (intent.getAction().equals("startMapTask")) {
+
+                int position =  intent.getIntExtra("position", -1);
+                if(position >= 0) {
+                    TaskEntry entry = (TaskEntry) mMapTasks.get(position);
+                    mActivity.completeTask(entry);
+                }
+            }
+        }
     }
 
 }
