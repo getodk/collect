@@ -20,6 +20,7 @@ import android.content.Intent;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
+import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 
 import timber.log.Timber;
@@ -40,7 +41,8 @@ public class NotificationService extends IntentService {
 
         InstanceID instanceID = InstanceID.getInstance(this);
         try {
-            String token = instanceID.getToken("40117648624",
+            Timber.i("Sender Id: " + BuildConfig.SENDER_ID);
+            String token = instanceID.getToken(BuildConfig.SENDER_ID,
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Timber.i("Registration Token: " + token);
         } catch (Exception e) {

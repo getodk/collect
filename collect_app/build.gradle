@@ -78,6 +78,12 @@ android {
         }
     }
 
+    // smap add properties
+    buildTypes.each {
+        it.buildConfigField "String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\""
+    }
+    // end smap
+
     packagingOptions {
         // Pick first occurrence of any files that cause conflicts, as defined
         // in common.gradle
