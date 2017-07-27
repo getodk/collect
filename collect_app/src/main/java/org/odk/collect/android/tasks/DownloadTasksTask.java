@@ -153,7 +153,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
 
     @Override
-    protected HashMap<String, String> doInBackground(Void... values) {
+    public HashMap<String, String> doInBackground(Void... values) {
 	
 		results = new HashMap<String,String>();
         sharedPreferences = PreferenceManager

@@ -14,43 +14,30 @@
 
 package org.odk.collect.android.services;
 
-import android.app.IntentService;
-import android.content.Intent;
+import android.os.Bundle;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.android.gms.gcm.GcmListenerService;
 
-import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
+import org.odk.collect.android.tasks.DownloadTasksTask;
 
 import timber.log.Timber;
 
 /**
- * Created by neilpenman on 25/07/2017.
+ * Created by neilpenman on 27/07/2017.
  */
 
-public class NotificationService extends IntentService {
-    // ...
+public class NotificationService extends GcmListenerService {
 
-    public NotificationService() {
-        super("notifications");
+    @Override
+    public void onDeletedMessages() {
+        // TODO refresh
     }
 
     @Override
-    public void onHandleIntent(Intent intent) {
+    public void onMessageReceived(final String from, Bundle data) {
+        Timber.i("Message received beginning refresh");
+        DownloadTasksTask dt = new DownloadTasksTask();
+        dt.doInBackground();
 
-        InstanceID instanceID = InstanceID.getInstance(this);
-        try {
-            Timber.i("Sender Id: " + BuildConfig.SENDER_ID);
-            String token = instanceID.getToken(BuildConfig.SENDER_ID,
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            Timber.i("Registration Token: " + token);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
-
-        // ...
     }
 }
-

@@ -55,11 +55,13 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\"")    // smap
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             testCoverageEnabled false    // smap
         }
         debug {
+            buildConfigField("String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\"")    // smap
             debuggable(true)
             // Allows AndroidTest JaCoCo reports to be generated
             //testCoverageEnabled(true)  // smap
@@ -77,12 +79,6 @@ android {
             output.outputFile = new File(file.parent, file.name.replace("_app","").replace(".apk", "-" + defaultConfig.versionName + ".apk"))
         }
     }
-
-    // smap add properties
-    buildTypes.each {
-        it.buildConfigField "String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\""
-    }
-    // end smap
 
     packagingOptions {
         // Pick first occurrence of any files that cause conflicts, as defined

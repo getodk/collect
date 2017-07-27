@@ -53,9 +53,8 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.services.NotificationService;
+import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.taskModel.NfcTrigger;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -137,7 +136,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         slidingTabLayout.setViewPager(viewPager);
 
         // TODO - Temporary get notification registration token
-        Intent intent = new Intent(this, NotificationService.class);
+        Intent intent = new Intent(this, NotificationRegistrationService.class);
         startService(intent);
 
         File f = new File(Collect.ODK_ROOT + "/collect.settings");
