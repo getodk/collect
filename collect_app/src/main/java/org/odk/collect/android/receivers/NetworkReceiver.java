@@ -57,18 +57,17 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
-                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
+                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED
+                    && isFormAutoSendOptionEnabled(currentNetworkInfo)) {
+                uploadForms(context);
             }
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (ni == null || !ni.isConnected()) {
-                // not connected, do nothing
-            } else {
-                uploadForms(context, isFormAutoSendOptionEnabled(ni));
+            if (ni != null && ni.isConnected() && isFormAutoSendOptionEnabled(ni)) {
+                uploadForms(context);
             }
         }
     }
@@ -88,7 +87,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
-    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
+    private void uploadForms(Context context) {
         if (!running) {
             running = true;
 
@@ -99,10 +98,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
                     while (c.moveToNext()) {
-                        if (isFormAutoSendOptionEnabled) {
-                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                            toUpload.add(l);
-                        }
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
                     }
                 }
             } finally {
