@@ -907,7 +907,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         Integer maxPixels = null;
         for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
             if ("max-pixels".equals(attrs.getName())) {
-                maxPixels = Integer.parseInt(attrs.getAttributeValue());
+                try {
+                    maxPixels = Integer.parseInt(attrs.getAttributeValue());
+                } catch (NumberFormatException e) {
+                    Timber.i(e);
+                }
             }
         }
         return maxPixels;
