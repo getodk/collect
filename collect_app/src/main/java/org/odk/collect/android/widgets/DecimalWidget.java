@@ -81,8 +81,7 @@ public class DecimalWidget extends StringWidget {
             // truncate to 15 digits max...
             String string = nf.format(d);
             d = Double.parseDouble(string.replace(',', '.'));
-            //answer.setText(d.toString());
-            answer.setText(String.format(Locale.ENGLISH, "%f", d));
+            answer.setText(String.valueOf(d));
             Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 

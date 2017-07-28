@@ -30,8 +30,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.text.NumberFormat;
-import java.util.Locale;
-
 
 /**
  * Launch an external app to supply a decimal value. If the app
@@ -84,8 +82,7 @@ public class ExDecimalWidget extends ExStringWidget {
             // truncate to 15 digits max...
             String string = nf.format(d);
             d = Double.parseDouble(string.replace(',', '.')); // in case , is decimal pt
-            //answer.setText(d.toString());
-            answer.setText(String.format(Locale.ENGLISH, "%f", d));
+            answer.setText(String.valueOf(d));
         }
     }
 
