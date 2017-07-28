@@ -67,7 +67,7 @@ public class SmapInterfacePreferences extends BasePreferenceFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar.setTitle(R.string.client);
+        toolbar.setTitle(R.string.app_name);
     }
 
     @Override
