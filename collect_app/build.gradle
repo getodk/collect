@@ -56,12 +56,24 @@ android {
     buildTypes {
         release {
             buildConfigField("String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\"")    // smap
+            buildConfigField("String", "AWS_MOBILEHUB_USER_AGENT", "\""+secrets['AWS_MOBILEHUB_USER_AGENT']+"\"")    // smap
+            buildConfigField("String", "AMAZON_COGNITO_REGION", "\""+secrets['AMAZON_COGNITO_REGION']+"\"")    // smap
+            buildConfigField("String", "AMAZON_COGNITO_IDENTITY_POOL_ID", "\""+secrets['AMAZON_COGNITO_IDENTITY_POOL_ID']+"\"")    // smap
+            buildConfigField("String", "AMAZON_DYNAMODB_REGION", "\""+secrets['AMAZON_DYNAMODB_REGION']+"\"")    // smap
+
+
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             testCoverageEnabled false    // smap
         }
         debug {
             buildConfigField("String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\"")    // smap
+            buildConfigField("String", "AWS_MOBILEHUB_USER_AGENT", "\""+secrets['AWS_MOBILEHUB_USER_AGENT']+"\"")    // smap
+            buildConfigField("String", "AMAZON_COGNITO_REGION", "\""+secrets['AMAZON_COGNITO_REGION']+"\"")    // smap
+            buildConfigField("String", "AMAZON_COGNITO_IDENTITY_POOL_ID", "\""+secrets['AMAZON_COGNITO_IDENTITY_POOL_ID']+"\"")    // smap
+            buildConfigField("String", "AMAZON_DYNAMODB_REGION", "\""+secrets['AMAZON_DYNAMODB_REGION']+"\"")    // smap
+
+
             debuggable(true)
             // Allows AndroidTest JaCoCo reports to be generated
             //testCoverageEnabled(true)  // smap
@@ -172,6 +184,13 @@ dependencies {
     compile group: 'com.google.zxing', name: 'core', version: '3.2.0'
     compile group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
     compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
+
+    // smap aws
+    compile 'com.amazonaws:aws-android-sdk-core:2.4.2'
+    // add the DynamoDB SDK and DynamoDB Object Mapper dependency
+    compile 'com.amazonaws:aws-android-sdk-ddb:2.4.2'
+    compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.4.2'
+    compile project(':AWSMobileHelper')
 
     // Testing-only dependencies
     //testCompile group: 'junit', name: 'junit', version: '4.12'

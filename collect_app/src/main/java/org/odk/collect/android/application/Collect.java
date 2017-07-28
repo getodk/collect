@@ -34,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
+import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
@@ -289,6 +290,13 @@ public class Collect extends Application {
 
     public Location getLocation() {
         return location;
+    }
+
+    // Initialise AWS
+    private void initializeApplication() {
+        AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
+
+        // ...Put any application-specific initialization logic here...
     }
     // End Smap
 

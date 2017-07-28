@@ -1,1 +1,1 @@
-include ':collect_app'
+include ':collect_app', ':AWSMobileHelper'
