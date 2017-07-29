@@ -19,17 +19,17 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -47,18 +47,17 @@ import java.util.List;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListFragment extends ListFragment {
-    private static final int MENU_SORT = Menu.FIRST;
-    private static final int MENU_FILTER = MENU_SORT + 1;
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
-    protected LinearLayout searchBoxLayout;
+    View rootView;
+
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected EditText inputSearch;
-    View rootView;
+
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
+    private String filterText;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -103,31 +102,48 @@ abstract class AppListFragment extends ListFragment {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu, inflater);
 
-        menu
-                .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort_black_36dp)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        inflater.inflate(R.menu.list_menu, menu);
 
-        menu
-                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
-                .setIcon(R.drawable.ic_search)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        // hides the sort item when the search is in focus
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    sortItem.setVisible(false);
+                } else {
+                    sortItem.setVisible(true);
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SORT:
-                Collect.getInstance().hideKeyboard(inputSearch);
+            case R.id.menu_sort:
                 bottomSheetDialog.show();
-                return true;
-
-            case MENU_FILTER:
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -193,17 +209,6 @@ abstract class AppListFragment extends ListFragment {
         for (int position : selectedPositions) {
             getListView().setItemChecked(position, true);
         }
-    }
-
-    private void hideSearchBox() {
-        inputSearch.setText("");
-        searchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(inputSearch);
-    }
-
-    private void showSearchBox() {
-        searchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(inputSearch);
     }
 
     protected abstract void updateAdapter();
@@ -278,6 +283,6 @@ abstract class AppListFragment extends ListFragment {
     }
 
     protected CharSequence getFilterText() {
-        return inputSearch != null ? inputSearch.getText() : "";
+        return filterText != null ? filterText : "";
     }
 }

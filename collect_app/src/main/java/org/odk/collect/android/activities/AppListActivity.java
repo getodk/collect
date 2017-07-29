@@ -21,20 +21,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -54,9 +53,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class AppListActivity extends AppCompatActivity {
     private static final String SELECTED_INSTANCES = "selectedInstances";
-    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
-    private BottomSheetDialog bottomSheetDialog;
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
@@ -64,10 +61,9 @@ abstract class AppListActivity extends AppCompatActivity {
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
-    private LinearLayout searchBoxLayout;
-    private EditText inputSearch;
-    private boolean isSearchBoxShown;
+    private BottomSheetDialog bottomSheetDialog;
     private boolean isBottomDialogShown;
+    private String filterText;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -129,9 +125,7 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
-        setupSearchBox();
         setupBottomSheet();
     }
 
@@ -139,7 +133,6 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
-        outState.putBoolean(IS_SEARCH_BOX_SHOWN, searchBoxLayout.getVisibility() == View.VISIBLE);
         outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
 
         if (bottomSheetDialog.isShowing()) {
@@ -151,72 +144,58 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
-        isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
         isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
-        getMenuInflater().inflate(R.menu.list_menu, menu);
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_menu, menu);
 
-        super.onCreateOptionsMenu(menu);
-        return true;
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        // hides the sort item when the search is in focus
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    sortItem.setVisible(false);
+                } else {
+                    sortItem.setVisible(true);
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_sort:
-                Collect.getInstance().hideKeyboard(inputSearch);
                 bottomSheetDialog.show();
                 isBottomDialogShown = true;
                 return true;
-
-            case R.id.menu_filter:
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
-                return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupSearchBox() {
-        inputSearch = (EditText) findViewById(R.id.inputSearch);
-        inputSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter();
-            }
-        });
-
-        if (isSearchBoxShown) {
-            showSearchBox();
-            updateAdapter();
-        }
-    }
-
-    private void hideSearchBox() {
-        inputSearch.setText("");
-        searchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(inputSearch);
-    }
-
-    private void showSearchBox() {
-        searchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(inputSearch);
     }
 
     private void performSelectedSearch(int position) {
@@ -256,6 +235,11 @@ abstract class AppListActivity extends AppCompatActivity {
         return listView.getCheckedItemCount();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void saveSelectedSortingOrder(int selectedStringOrder) {
         selectedSortingOrder = selectedStringOrder;
         PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
@@ -278,7 +262,7 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     protected CharSequence getFilterText() {
-        return inputSearch != null ? inputSearch.getText() : "";
+        return filterText != null ? filterText : "";
     }
 
     private void setupBottomSheet() {
