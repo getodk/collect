@@ -22,13 +22,14 @@ import java.util.List;
 public class CustomTabHelper {
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
-    public CustomTabsSession customTabsSession;
+    private CustomTabsSession customTabsSession;
+    private CustomTabsServiceConnection serviceConnection;
 
     public void bindCustomTabsService(final Activity activity, final Uri url) {
         if (customTabsClient != null) {
             return;
         }
-        final CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
+        serviceConnection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
                 CustomTabHelper.this.customTabsClient = customTabsClient;
@@ -42,7 +43,7 @@ public class CustomTabHelper {
                 customTabsClient = null;
             }
         };
-        CustomTabsClient.bindCustomTabsService(activity, CUSTOM_TAB_PACKAGE_NAME, mConnection);
+        CustomTabsClient.bindCustomTabsService(activity, CUSTOM_TAB_PACKAGE_NAME, serviceConnection);
     }
 
     /**
@@ -74,5 +75,9 @@ public class CustomTabHelper {
     // https://github.com/opendatakit/collect/issues/1221
     private Uri getNonNullUri(Uri url) {
         return url != null ? url : Uri.parse("");
+    }
+
+    public CustomTabsServiceConnection getServiceConnection() {
+        return serviceConnection;
     }
 }

@@ -69,6 +69,13 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
     }
 
     @Override
+    public void onDestroy() {
+        getActivity().unbindService(websiteTabHelper.getServiceConnection());
+        getActivity().unbindService(forumTabHelper.getServiceConnection());
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onPreferenceClick(Preference preference) {
         final String APP_PACKAGE_NAME = getActivity().getPackageName();
 
