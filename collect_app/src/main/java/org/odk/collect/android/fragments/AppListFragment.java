@@ -35,8 +35,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -61,10 +59,8 @@ abstract class AppListFragment extends ListFragment {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
-    protected LinearLayout searchBoxLayout;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected EditText inputSearch;
 
     private Integer selectedSortingOrder;
     private String filterText;
@@ -132,6 +128,19 @@ abstract class AppListFragment extends ListFragment {
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        // hides the sort item when the search is in focus
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    sortItem.setVisible(false);
+                } else {
+                    sortItem.setVisible(true);
+                }
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -158,7 +167,6 @@ abstract class AppListFragment extends ListFragment {
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
                     drawerLayout.openDrawer(Gravity.END);
                 }
                 return true;
