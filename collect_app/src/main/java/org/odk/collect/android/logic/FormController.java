@@ -599,12 +599,12 @@ public class FormController {
             }
         } else if (getEvent() == FormEntryController.EVENT_GROUP) {
             FormIndex currentIndex = getFormIndex();
-            while (isWithinGroup(currentIndex, index)) {
-                currentIndex = stepIndexOut(currentIndex);
-                if (currentIndex == null) {
-                    return FormIndex.createBeginningOfFormIndex();
-                }
+            currentIndex = stepIndexOut(currentIndex);
+
+            if (currentIndex == null) {
+                return FormIndex.createBeginningOfFormIndex();
             }
+
             jumpToIndex(currentIndex);
         }
         return getFormIndex();

@@ -60,6 +60,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private FormIndex currentIndex;
     private ListView listView;
     private boolean isJumpToPrevious = false;
+    private boolean stepToFirstRepeat = false;
 
 
     @Override
@@ -98,6 +99,22 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     FormIndex currentIndex = itemsAtCurrentLevel.get(0).getFormIndex();
                     formController.jumpToIndex(formController.getPreviousHierarchyScreen(currentIndex));
                     isJumpToPrevious = true;
+
+                    /* there are two cases when the formController can be at repeat:
+                     *  Either we are jumping up from an inner question of the repeat's child,
+                     *  or we are jumping up from the children of the repeat
+                     *
+                     *  In the first case, we want to display the children of the repeat
+                     *  In the second case, we want to display the repeat-group ITEMS
+                     */
+                    if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+                        FormIndex index = formController.stepIndexOut(currentIndex);
+
+                        if (index.getDepth() == formController.getFormIndex().getDepth()) {
+                            stepToFirstRepeat = true;
+                        }
+                    }
+
                     refreshView(null);
                 } else {
                     goUpLevel(itemsAtCurrentLevel.get(0).getParent());
@@ -270,20 +287,22 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 int event = formController.getEvent();
                 switch (event) {
                     case FormEntryController.EVENT_REPEAT:
-                        contextGroupRef = currentIndex;
                         if (isJumpToPrevious) {
-                            int multiplicity = formController.getCaptionPrompt().getMultiplicity();
+                            if (stepToFirstRepeat) {
+                                int multiplicity = formController.getCaptionPrompt().getMultiplicity();
 
-                            // if multiplicity is 0 then we are already at the first repeat
-                            while (multiplicity != 0) {
-                                event = formController.stepToPreviousEvent();
+                                // if multiplicity is 0 then we are already at the first repeat
+                                while (multiplicity != 0) {
+                                    event = formController.stepToPreviousEvent();
 
-                                if (event == FormEntryController.EVENT_REPEAT) {
-                                    multiplicity = formController.getCaptionPrompt().getMultiplicity();
+                                    if (event == FormEntryController.EVENT_REPEAT) {
+                                        multiplicity = formController.getCaptionPrompt().getMultiplicity();
+                                    }
                                 }
+                                repeatGroupRef = formController.getFormIndex();
+                            } else {
+                                formController.stepToNextEvent();
                             }
-
-                            repeatGroupRef = formController.getFormIndex();
                         } else {
                             formController.stepToNextEvent();
                         }
@@ -370,8 +389,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     } else if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                         break event_search;
                     } else {
-                        formController.stepToNextScreenEvent();
                         repeatGroupRef = null;
+                        break;
                     }
                 }
 
