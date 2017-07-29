@@ -41,7 +41,7 @@ public class IntegerWidget extends StringWidget {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
                 if (dataValue instanceof Double) {
-                    d = Integer.valueOf(((Double) dataValue).intValue());
+                    d = ((Double) dataValue).intValue();
                 } else {
                     d = (Integer) dataValue;
                 }

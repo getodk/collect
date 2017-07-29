@@ -130,7 +130,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
                 r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(searchedItems.get(i))));
 
                 if (tagList == null) {
-                    r.setTag(Integer.valueOf(i));
+                    r.setTag(i);
                 } else {
                     r.setTag(tagList.get(i));
                 }

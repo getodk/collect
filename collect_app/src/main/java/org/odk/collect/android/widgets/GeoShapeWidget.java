@@ -193,10 +193,10 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 for (int i = 0; i < sa.length; i++) {
                     String[] sp = sa[i].trim().split(" ");
                     double[] gp = new double[4];
-                    gp[0] = Double.valueOf(sp[0]).doubleValue();
-                    gp[1] = Double.valueOf(sp[1]).doubleValue();
-                    gp[2] = Double.valueOf(sp[2]).doubleValue();
-                    gp[3] = Double.valueOf(sp[3]).doubleValue();
+                    gp[0] = Double.valueOf(sp[0]);
+                    gp[1] = Double.valueOf(sp[1]);
+                    gp[2] = Double.valueOf(sp[2]);
+                    gp[3] = Double.valueOf(sp[3]);
                     list.add(gp);
                 }
                 GeoShape shape = new GeoShape(list);
