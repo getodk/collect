@@ -499,8 +499,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             // see if any of these savepoints are for a
                             // filled-in form that has never been
                             // explicitly saved by the user...
-                            for (int i = 0; i < files.length; ++i) {
-                                File candidate = files[i];
+                            for (File candidate : files) {
                                 String instanceDirName = candidate.getName()
                                         .substring(
                                                 0,

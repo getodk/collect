@@ -596,10 +596,10 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         return getFileTask;
     }
 
-    private Stack<String> buildPath(String[] path) {
+    private Stack<String> buildPath(String[] paths) {
         Stack<String> pathStack = new Stack<String>();
-        for (int i = 0; i < path.length; i++) {
-            pathStack.push(path[i]);
+        for (String path : paths) {
+            pathStack.push(path);
         }
         return pathStack;
     }
