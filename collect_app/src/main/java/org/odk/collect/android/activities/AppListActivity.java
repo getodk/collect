@@ -39,7 +39,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -63,7 +62,6 @@ abstract class AppListActivity extends AppCompatActivity {
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private LinearLayout searchBoxLayout;
 
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
@@ -95,7 +93,6 @@ abstract class AppListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
         setupDrawer();
         setupDrawerItems();
