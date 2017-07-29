@@ -24,21 +24,21 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -59,23 +59,20 @@ abstract class AppListActivity extends AppCompatActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
     private static final String SELECTED_INSTANCES = "selectedInstances";
-    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
 
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private LinearLayout searchBoxLayout;
-    private EditText inputSearch;
 
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected String[] sortingOptions;
 
-    private boolean isSearchBoxShown;
-
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
+    private String filterText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +97,6 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onResume();
         searchBoxLayout = (LinearLayout) findViewById(R.id.searchBoxLayout);
         restoreSelectedSortingOrder();
-        setupSearchBox();
         setupDrawer();
         setupDrawerItems();
     }
@@ -109,23 +105,39 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
-        outState.putBoolean(IS_SEARCH_BOX_SHOWN, searchBoxLayout.getVisibility() == View.VISIBLE);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
-        isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
-        getMenuInflater().inflate(R.menu.list_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_menu, menu);
 
-        super.onCreateOptionsMenu(menu);
-        return true;
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -135,20 +147,10 @@ abstract class AppListActivity extends AppCompatActivity {
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
                     drawerLayout.openDrawer(Gravity.END);
                 }
                 return true;
-
-            case R.id.menu_filter:
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
-                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -166,40 +168,6 @@ abstract class AppListActivity extends AppCompatActivity {
         if (drawerToggle != null) {
             drawerToggle.onConfigurationChanged(newConfig);
         }
-    }
-
-    private void setupSearchBox() {
-        inputSearch = (EditText) findViewById(R.id.inputSearch);
-        inputSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter();
-            }
-        });
-
-        if (isSearchBoxShown) {
-            showSearchBox();
-            updateAdapter();
-        }
-    }
-
-    private void hideSearchBox() {
-        inputSearch.setText("");
-        searchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(inputSearch);
-    }
-
-    private void showSearchBox() {
-        searchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(inputSearch);
     }
 
     private void setupDrawerItems() {
@@ -356,6 +324,6 @@ abstract class AppListActivity extends AppCompatActivity {
     }
 
     protected CharSequence getFilterText() {
-        return inputSearch != null ? inputSearch.getText() : "";
+        return filterText != null ? filterText : "";
     }
 }

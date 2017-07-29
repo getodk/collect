@@ -21,8 +21,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -51,8 +53,6 @@ import java.util.List;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListFragment extends ListFragment {
-    private static final int MENU_SORT = Menu.FIRST;
-    private static final int MENU_FILTER = MENU_SORT + 1;
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
@@ -67,6 +67,7 @@ abstract class AppListFragment extends ListFragment {
     protected EditText inputSearch;
 
     private Integer selectedSortingOrder;
+    private String filterText;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -126,34 +127,39 @@ abstract class AppListFragment extends ListFragment {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
         super.onCreateOptionsMenu(menu, inflater);
 
-        menu
-                .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        inflater.inflate(R.menu.list_menu, menu);
 
-        menu
-                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
-                .setIcon(R.drawable.ic_search)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SORT:
+            case R.id.menu_sort:
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
                     Collect.getInstance().hideKeyboard(inputSearch);
                     drawerLayout.openDrawer(Gravity.END);
-                }
-                return true;
-
-            case MENU_FILTER:
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
                 }
                 return true;
         }
@@ -259,17 +265,6 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
-    private void hideSearchBox() {
-        inputSearch.setText("");
-        searchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(inputSearch);
-    }
-
-    private void showSearchBox() {
-        searchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(inputSearch);
-    }
-
     protected abstract void updateAdapter();
 
     protected abstract String getSortingOrderKey();
@@ -342,6 +337,6 @@ abstract class AppListFragment extends ListFragment {
     }
 
     protected CharSequence getFilterText() {
-        return inputSearch != null ? inputSearch.getText() : "";
+        return filterText != null ? filterText : "";
     }
 }

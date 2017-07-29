@@ -138,6 +138,7 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.InstanceChooserList"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
 
         <intent-filter>
@@ -164,6 +165,7 @@ the specific language governing permissions and limitations under the License.
         </activity>
         <activity
             android:name=".activities.FormDownloadList"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.FileManagerTabs"
