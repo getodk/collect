@@ -387,7 +387,7 @@ public class EncryptionUtils {
             } else {
                 msg = "No BouncyCastle provider for padding implementation of symmetric algorithm!";
             }
-            Timber.e(e, msg);
+            Timber.e(msg);
             return null;
         }
 
