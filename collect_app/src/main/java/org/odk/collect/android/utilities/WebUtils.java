@@ -121,7 +121,6 @@ public final class WebUtils {
             Credentials c = credsProvider.getCredentials(a);
             if (c == null) {
                 hasCreds = false;
-                continue;
             }
         }
         return hasCreds;

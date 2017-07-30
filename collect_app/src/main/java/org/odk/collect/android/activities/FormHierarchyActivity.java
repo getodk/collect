@@ -306,7 +306,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                     // We have left the current group
                     if (repeatGroupRef == null) {
                         // We are done.
-                        break event_search;
+                        break;
                     } else {
                         // exit the inner repeat group
                         repeatGroupRef = null;
