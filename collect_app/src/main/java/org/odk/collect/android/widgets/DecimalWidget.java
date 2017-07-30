@@ -25,6 +25,8 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -82,8 +84,11 @@ public class DecimalWidget extends StringWidget {
             String string = nf.format(d);
             d = Double.parseDouble(string.replace(',', '.'));
             //answer.setText(d.toString());
-            answer.setText(String.format(Locale.ENGLISH, "%f", d));
-            Selection.setSelection(answer.getText(), answer.getText().toString().length());
+            //answer.setText(String.format(Locale.ENGLISH, "%f", d));
+
+            answer.setText(string);
+
+            Selection.setSelection(answer.getText(), string.length());
         }
 
         // disable if read only
