@@ -53,7 +53,6 @@ import org.odk.collect.android.widgets.WidgetFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -250,13 +249,11 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      */
     public LinkedHashMap<FormIndex, IAnswerData> getAnswers() {
         LinkedHashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<FormIndex, IAnswerData>();
-        Iterator<QuestionWidget> i = widgets.iterator();
-        while (i.hasNext()) {
+        for (QuestionWidget q : widgets) {
             /*
              * The FormEntryPrompt has the FormIndex, which is where the answer gets stored. The
              * QuestionWidget has the answer the user has entered.
              */
-            QuestionWidget q = i.next();
             FormEntryPrompt p = q.getPrompt();
             answers.put(p.getIndex(), q.getAnswer());
         }

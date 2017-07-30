@@ -350,10 +350,9 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         Collections.addAll(workingSet, instancesToSend);
         if (doneSoFar != null) {
             Set<String> uploadedInstances = doneSoFar.keySet();
-            Iterator<String> itr = uploadedInstances.iterator();
 
-            while (itr.hasNext()) {
-                Long removeMe = Long.valueOf(itr.next());
+            for (String uploadedInstance : uploadedInstances) {
+                Long removeMe = Long.valueOf(uploadedInstance);
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
                     Timber.i("%d was already sent, removing from queue before restarting task",
