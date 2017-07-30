@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">%s teostamiseks ei leidu toimingut</string>
   <string name="add_another">Lisa grupp</string>
   <string name="add_another_repeat">Lisa veel üks \"%s\" grupp?</string>

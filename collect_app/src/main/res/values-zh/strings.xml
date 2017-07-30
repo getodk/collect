@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="add_another">添加</string>
   <string name="add_another_repeat">继续添加 \"%s\"?</string>

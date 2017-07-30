@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Hindi mapangasiwaan: %s</string>
   <string name="add_another">Mag-dagdag ng Pangkat</string>
   <string name="add_another_repeat">I-dagdag ang \"%s\" sa pangkat?</string>
