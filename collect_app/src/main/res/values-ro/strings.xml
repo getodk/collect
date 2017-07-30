@@ -268,8 +268,7 @@
   <string name="change_server_url">URL server</string>
   <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
   <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
+    <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
   <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>

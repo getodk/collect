@@ -190,8 +190,7 @@
   <string name="launch_printer">প্রিন্টার চালু</string>
   <string name="no_printer">প্রিন্টার নেই</string>
   <string name="constraint_behavior">constraint_behavior</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="terrain">ভূখণ্ড</string>
   <string name="hybrid">হাইব্রিড</string>
   <string name="satellite">উপগ্রহ</string>

@@ -227,8 +227,7 @@
   <string name="survey_saving_finalizing_message">Tamatisho la takwimu kwa kadi ya SD…</string>
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

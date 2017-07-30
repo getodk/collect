@@ -278,7 +278,6 @@
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="no_blank_search">Hakukenttä ei voi olla tyhjä.</string>
   <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>

@@ -279,8 +279,7 @@
   <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour parcourir des formulaires.</string>
   <string name="no_blank_search">Le champ de recherche ne peut pas être vide.</string>
   <string name="google_sheets_url">URL de secours pour soumission de données</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
+    <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="google_sheets_access_denied">Accès refusé. Assurez-vous que le propriétaire de la feuille de calcul vous a accordé la permission de modification.</string>

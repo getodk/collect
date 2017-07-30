@@ -259,8 +259,7 @@
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="change_server_url">सर्भर URL</string>
   <string name="no_blank_search">सर्च क्षेत्र रिक्त हुनु हुदैन।</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="streets">टोलहरु</string>
   <string name="satellite">उपग्रह</string>
   <string name="start">सुरु</string>

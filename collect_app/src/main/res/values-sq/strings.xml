@@ -181,8 +181,7 @@
   <string name="delete_after_send">Fshi formularët pasi të nisen</string>
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
   <string name="change_server_url">URL e serverit</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="about_preferences">Rreth</string>
+    <string name="about_preferences">Rreth</string>
   <string name="tell_your_friends_msg">Shkarko aplikacionin ODK Collect!</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="save_point">Ruaj vendndodhjen gjeografike</string>

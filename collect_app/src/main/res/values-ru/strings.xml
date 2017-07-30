@@ -259,7 +259,6 @@
   <string name="delete_after_send_summary">Удаляет завершённые формы и их медиа после отправки данных на сервер</string>
   <string name="change_server_url">URL сервера</string>
   <string name="no_blank_search">Поле поиска не может быть пустым.</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

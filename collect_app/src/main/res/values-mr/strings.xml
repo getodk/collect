@@ -280,8 +280,7 @@
   <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
   <string name="no_blank_search">शोध फील्ड रिक्त असू शकत नाही.</string>
   <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
+    <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
   <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  1 %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
   <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
   <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>

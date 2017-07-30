@@ -280,8 +280,7 @@
   <string name="google_search_browse">फ़ॉर्म के लिए खोजें या ब्राउज़ करने के लिए नीचे \'मेरा ड्राइव\' चुनें।</string>
   <string name="no_blank_search">खोज फ़ील्ड रिक्त नहीं हो सकता</string>
   <string name="google_sheets_url">फ़ॉलबैक सबमिशन यूआरएल</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">पृष्ठभूमि में भेजना जारी, कृपया शीघ्र पुनः प्रयास करें</string>
+    <string name="send_in_progress">पृष्ठभूमि में भेजना जारी, कृपया शीघ्र पुनः प्रयास करें</string>
   <string name="sheets_max_columns">कॉलम की अधिकतम संख्या 255 है, आपके फॉर्म में%sहैं. स्प्रैडशीट पर अपलोड करने में असमर्थ</string>
   <string name="invalid_sheet_id">अमान्य पत्र आईडी: %1$s</string>
   <string name="google_sheets_access_denied">पहुंच अस्वीकृत। कृपया सुनिश्चित करें कि स्प्रैडशीट स्वामी ने आपको अनुमति संपादित कर दिया है।</string>

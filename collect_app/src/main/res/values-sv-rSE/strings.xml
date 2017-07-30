@@ -279,8 +279,7 @@
   <string name="google_search_browse">Sök efter formulär eller välj \'My Drive\' nedan för att bläddra.</string>
   <string name="no_blank_search">Sökfältet kan inte vara tomt.</string>
   <string name="google_sheets_url">Reserv-URL för uppladdning</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
+    <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
   <string name="sheets_max_columns">Max tillåtet antal kolumner är 255, ditt formulär har %s. Uppladdning till kalkylark är inte möjligt.</string>
   <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
   <string name="google_sheets_access_denied">Åtkomst nekad. Vänligen se till att kalkylarkets ägare har gett dig åtkomsträttigheter.</string>
