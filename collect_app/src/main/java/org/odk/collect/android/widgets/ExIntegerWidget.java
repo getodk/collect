@@ -31,7 +31,6 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.util.Locale;
 
-
 /**
  * Launch an external app to supply an integer value. If the app
  * does not launch, enable the text area for regular data entry.
@@ -74,7 +73,7 @@ public class ExIntegerWidget extends ExStringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            answer.setText(String.format(Locale.getDefault(), "%d", i.toString()));
+            answer.setText(String.format(Locale.US, "%d", i));
         }
     }
 
