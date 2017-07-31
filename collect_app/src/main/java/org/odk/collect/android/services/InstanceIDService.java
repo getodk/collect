@@ -14,11 +14,17 @@
 
 package org.odk.collect.android.services;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.util.ArrayList;
 
@@ -35,15 +41,14 @@ public class InstanceIDService extends InstanceIDListenerService {
 
     private void refreshAllTokens() {
 
+        // Clear the existing token
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_ID, null);
 
-        InstanceID iid = InstanceID.getInstance(this);
-        try {
-            String token = iid.getToken(BuildConfig.SENDER_ID,
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            Timber.i("Registration Token: " + token);
-            // send this tokenItem.token to the server
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+        // Request and register a new token
+        Intent intent = new Intent(this, NotificationRegistrationService.class);
+        startService(intent);
+        Timber.i("Refresh tokens");
     }
 };

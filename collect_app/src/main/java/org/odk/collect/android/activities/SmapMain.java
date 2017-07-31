@@ -149,7 +149,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         slidingTabLayout.setBackgroundColor(Color.DKGRAY);
         slidingTabLayout.setViewPager(viewPager);
 
-        // TODO - Temporary get notification registration token
+        // get notification registration token
         Intent intent = new Intent(this, NotificationRegistrationService.class);
         startService(intent);
 

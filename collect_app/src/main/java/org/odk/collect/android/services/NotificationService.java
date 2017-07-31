@@ -26,6 +26,9 @@ import timber.log.Timber;
  * Created by neilpenman on 27/07/2017.
  */
 
+/*
+ * Respond to a notification from the server
+ */
 public class NotificationService extends GcmListenerService {
 
     @Override
@@ -38,6 +41,5 @@ public class NotificationService extends GcmListenerService {
         Timber.i("Message received beginning refresh");
         DownloadTasksTask dt = new DownloadTasksTask();
         dt.doInBackground();
-
     }
 }

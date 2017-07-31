@@ -79,7 +79,10 @@ public final class PreferenceKeys {
     public static final String KEY_SMAP_LOCATION_TRIGGER = "location_trigger";  // Enable triggering of forms by location
     public static final String KEY_SMAP_ODK_STYLE_MENUS = "odk_style_menus";  // Show ODK style menus as well as refresh
     public static final String KEY_SMAP_AUTOSEND_WIFI = "server_autosend_wifi";  // Show ODK style menus as well as refresh
-    public static final String KEY_SMAP_AUTOSEND_WIFI_CELL = "server_autosend_wifi_cell";  // Show ODK style menus as well as refres
+    public static final String KEY_SMAP_AUTOSEND_WIFI_CELL = "server_autosend_wifi_cell";  // Show ODK style menus as well as refresh
+    public static final String KEY_SMAP_REGISTRATION_ID = "registration_id";  // Android notifications id
+    public static final String KEY_SMAP_REGISTRATION_SERVER = "registration_server";  // Server name that has been registered
+    public static final String KEY_SMAP_REGISTRATION_USER = "registration_user";  // User name that has been registered
 
     // END smap specific
     private static HashMap<String, Object> getHashMap() {
@@ -116,6 +119,9 @@ public final class PreferenceKeys {
         hashMap.put(KEY_SMAP_ODK_STYLE_MENUS, true);
         hashMap.put(KEY_SMAP_AUTOSEND_WIFI, true);
         hashMap.put(KEY_SMAP_AUTOSEND_WIFI_CELL, true);
+        hashMap.put(KEY_SMAP_REGISTRATION_ID, "");
+        hashMap.put(KEY_SMAP_REGISTRATION_SERVER, "");
+        hashMap.put(KEY_SMAP_REGISTRATION_USER, "");
         // smap end
         return hashMap;
     }

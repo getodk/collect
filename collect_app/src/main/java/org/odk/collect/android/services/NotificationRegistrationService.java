@@ -16,6 +16,8 @@ package org.odk.collect.android.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -26,6 +28,9 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.amazonaws.mobile.AWSMobileClient;
 import org.odk.collect.android.amazonaws.models.nosql.DevicesDO;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.utilities.Utilities;
 
 import timber.log.Timber;
 
@@ -36,6 +41,8 @@ import timber.log.Timber;
 public class NotificationRegistrationService extends IntentService {
     // ...
 
+    InstanceID instanceID = null;
+
     public NotificationRegistrationService() {
         super("notifications");
     }
@@ -43,22 +50,52 @@ public class NotificationRegistrationService extends IntentService {
     @Override
     public void onHandleIntent(Intent intent) {
 
-        InstanceID instanceID = InstanceID.getInstance(this);
+        if(instanceID == null) {
+            instanceID = InstanceID.getInstance(this);
+        }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
         try {
-            Timber.i("Sender Id: " + BuildConfig.SENDER_ID);
-            String token = instanceID.getToken(BuildConfig.SENDER_ID,
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+
+            boolean notifyServer = false;
+            // Get the token
+            String token = sharedPreferences.getString(PreferenceKeys.KEY_SMAP_REGISTRATION_ID, null);
+            if(token == null || token.trim().length() == 0) {
+                token = instanceID.getToken(BuildConfig.SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_ID, token);
+                notifyServer = true;
+            }
             Timber.i("Registration Token: " + token);
 
-            // Associate registration token with logged in user
-            // TODO - should only happen on sucessful login
-            AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
-            final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-            DevicesDO devices = new DevicesDO();
-            devices.setRegistrationId(token);
-            devices.setSmapServer("Samuel Server");
-            devices.setUserIdent("johnson");
-            mapper.save(devices);
+            String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
+            String server = Utilities.getSource();
+
+            if(username != null && server != null && token != null) {
+
+                String registeredServer = sharedPreferences.getString(PreferenceKeys.KEY_SMAP_REGISTRATION_SERVER, null);
+                String registeredUser = sharedPreferences.getString(PreferenceKeys.KEY_SMAP_REGISTRATION_USER, null);
+
+                // We can notify the server if we need to
+                // Update the server if the registrationId is new or the server or username's have changed
+                if(notifyServer || registeredServer == null || registeredUser == null ||
+                        !username.equals(registeredUser) || !server.equals(registeredServer)) {
+
+                    AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
+                    final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+                    DevicesDO devices = new DevicesDO();
+                    devices.setRegistrationId(token);
+                    devices.setSmapServer(server);
+                    devices.setUserIdent(username);
+                    mapper.save(devices);
+
+                    editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_SERVER, server);
+                    editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_USER, username);
+                }
+
+
+            }
         } catch (Exception e) {
             Timber.e(e);
         }

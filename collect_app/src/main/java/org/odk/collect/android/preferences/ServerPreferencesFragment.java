@@ -19,6 +19,7 @@ package org.odk.collect.android.preferences;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.EditTextPreference;
@@ -41,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
+import org.odk.collect.android.services.NotificationRegistrationService;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.UrlUtils;
@@ -258,6 +260,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                         addUrlToPreferencesList(url, prefs);
                         setupUrlDropdownAdapter();
                     }
+
+                    // Re-register with the server
+                    Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);
+                    getActivity().startService(intent);
                 } else {
                     ToastUtils.showShortToast(R.string.url_error);
                     return false;
@@ -272,6 +278,10 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                     ToastUtils.showShortToast(R.string.username_error_whitespace);
                     return false;
                 }
+
+                // Re-register with the server
+                Intent intent = new Intent(getActivity(), NotificationRegistrationService.class);
+                getActivity().startService(intent);
 
                 preference.setSummary(username);
                 clearCachedCrendentials();

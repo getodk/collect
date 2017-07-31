@@ -287,7 +287,6 @@ public class Collect extends Application {
     public void setLocation(Location l) {
         location = l;
     }
-
     public Location getLocation() {
         return location;
     }
