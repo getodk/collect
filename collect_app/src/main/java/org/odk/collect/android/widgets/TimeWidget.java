@@ -33,14 +33,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.TimeData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Date;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -80,9 +80,8 @@ public class TimeWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        // use picker time, convert to today's date, store as utc
-        DateTime dt = (new DateTime()).withTime(hourOfDay, minuteOfHour, 0, 0);
-        return nullAnswer ? null : new TimeData(dt.toDate());
+        return nullAnswer ? null : new StringData(String.format(Locale.getDefault(),
+                "%02d:%02d", hourOfDay, minuteOfHour));
     }
 
     @Override
@@ -167,9 +166,17 @@ public class TimeWidget extends QuestionWidget {
         if (formEntryPrompt.getAnswerValue() == null) {
             clearAnswer();
         } else {
-            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
-            hourOfDay = dt.getHourOfDay();
-            minuteOfHour = dt.getMinuteOfHour();
+            String[] timeParts = formEntryPrompt.getAnswerValue().getDisplayText().split(":");
+            hourOfDay = 0;
+            minuteOfHour = 0;
+            if (timeParts.length == 2) {
+                try {
+                    hourOfDay = Integer.parseInt(timeParts[0]);
+                    minuteOfHour = Integer.parseInt(timeParts[1]);
+                } catch (NumberFormatException e) {
+                    // Leave the values 0
+                }
+            }
             setTimeLabel();
             timePickerDialog.updateTime(hourOfDay, minuteOfHour);
         }
