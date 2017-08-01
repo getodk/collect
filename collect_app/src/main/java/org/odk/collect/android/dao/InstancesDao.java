@@ -292,16 +292,16 @@ public class InstancesDao {
                     int deletedDateColumnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
 
                     Instance instance = new Instance.Builder()
-                            .displayName(cursor.getString(displayNameColumnIndex))
-                            .submissionUri(cursor.getString(submissionUriColumnIndex))
-                            .canEditWhenComplete(cursor.getString(canEditWhenCompleteIndex))
-                            .instanceFilePath(cursor.getString(instanceFilePathIndex))
-                            .jrFormId(cursor.getString(jrFormIdColumnIndex))
-                            .jrVersion(cursor.getString(jrVersionColumnIndex))
-                            .status(cursor.getString(statusColumnIndex))
-                            .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-                            .displaySubtext(cursor.getString(displaySubtextColumnIndex))
-                            .deletedDate(cursor.getLong(deletedDateColumnIndex))
+                            .displayName(displayNameColumnIndex != -1 ? cursor.getString(displayNameColumnIndex) : null)
+                            .submissionUri(submissionUriColumnIndex != -1 ? cursor.getString(submissionUriColumnIndex) : null)
+                            .canEditWhenComplete(canEditWhenCompleteIndex != -1 ? cursor.getString(canEditWhenCompleteIndex) : null)
+                            .instanceFilePath(instanceFilePathIndex != -1 ? cursor.getString(instanceFilePathIndex) : null)
+                            .jrFormId(jrFormIdColumnIndex != -1 ? cursor.getString(jrFormIdColumnIndex) : null)
+                            .jrVersion(jrVersionColumnIndex != -1 ? cursor.getString(jrVersionColumnIndex) : null)
+                            .status(statusColumnIndex != -1 ? cursor.getString(statusColumnIndex) : null)
+                            .lastStatusChangeDate(lastStatusChangeDateColumnIndex != -1 ? cursor.getLong(lastStatusChangeDateColumnIndex) : null)
+                            .displaySubtext(displaySubtextColumnIndex != -1 ? cursor.getString(displaySubtextColumnIndex) : null)
+                            .deletedDate(deletedDateColumnIndex != -1 ? cursor.getLong(deletedDateColumnIndex) : null)
                             .build();
 
                     instances.add(instance);

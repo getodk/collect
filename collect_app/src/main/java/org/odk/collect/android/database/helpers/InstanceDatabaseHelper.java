@@ -43,13 +43,15 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
  * This class helps open, create, and upgrade the database file.
  */
 public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
+    public static final String DATABASE_NAME = "instances.db";
+
     private String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
             INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
 
     private static final int DATABASE_VERSION = 4;
 
-    public InstanceDatabaseHelper(String databaseName) {
-        super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+    public InstanceDatabaseHelper() {
+        super(Collect.METADATA_PATH, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

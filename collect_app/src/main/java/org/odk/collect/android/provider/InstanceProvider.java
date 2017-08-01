@@ -41,7 +41,6 @@ import java.util.Locale;
 import timber.log.Timber;
 
 public class InstanceProvider extends ContentProvider {
-    private static final String DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -65,7 +64,7 @@ public class InstanceProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new InstanceDatabaseHelper(DATABASE_NAME);
+        databaseHelper = new InstanceDatabaseHelper();
         return databaseHelper;
     }
 
