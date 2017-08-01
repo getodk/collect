@@ -15,13 +15,10 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -33,8 +30,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -48,7 +49,6 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * Version of the GeoPointMapActivity that uses the new OSMDDroid
@@ -56,7 +56,9 @@ import java.util.List;
  * @author jonnordling@gmail.com
  */
 public class GeoPointOsmMapActivity extends FragmentActivity implements LocationListener,
-        Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver {
+        Marker.OnMarkerDragListener, MapEventsReceiver, IRegisterReceiver,
+        LocationClient.LocationClientListener {
+
     private static final String LOCATION_COUNT = "locationCount";
 
     //private GoogleMap map;
@@ -69,7 +71,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     private TextView locationStatus;
 
-    private LocationManager locationManager;
+    private LocationClient locationClient;
 
     private Location location;
     private ImageButton reloadLocationButton;
@@ -78,9 +80,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private boolean setClear = false;
     private boolean isDragged = false;
     private ImageButton showLocationButton;
-
-    private boolean gpsOn = false;
-    private boolean networkOn = false;
 
     private int locationCount = 0;
 
@@ -137,8 +136,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         locationStatus = (TextView) findViewById(R.id.location_status);
         TextView locationInfo = (TextView) findViewById(R.id.location_info);
 
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
 
         ImageButton saveLocationButton = (ImageButton) findViewById(R.id.accept_location);
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
@@ -291,43 +290,41 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
-    }
+    protected void onStart() {
+        super.onStart();
+        Collect.getInstance().getActivityLogger().logOnStart(this);
 
+        locationClient.start();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         if (map != null) {
             helper.setBasemap();
         }
-        if (locationManager != null) {
-            upMyLocationOverlayLayers();
-        }
+
     }
 
-    private void upMyLocationOverlayLayers() {
-        // make sure we have a good location provider before continuing
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            } else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                networkOn = true;
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                        this);
-            }
-        }
+    @Override
+    protected void onStop() {
+        locationClient.stop();
 
+        Collect.getInstance().getActivityLogger().logOnStop(this);
+        super.onStop();
+    }
+
+
+    private void upMyLocationOverlayLayers() {
         showLocationButton.setClickable(marker != null);
 
-        if (!gpsOn && !networkOn) {
+        // make sure we have a good location provider before continuing
+        locationClient.requestLocationUpdates(this);
+
+        if (!locationClient.isLocationAvailable()) {
             showGPSDisabledAlertToUser();
+
         } else {
             overlayMyLocationLayers();
         }
@@ -340,6 +337,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 marker.setOnMarkerDragListener(this);
                 marker.setDraggable(true);
             }
+
             MapEventsOverlay overlayEvents = new MapEventsOverlay(this);
             map.getOverlays().add(overlayEvents);
         }
@@ -359,18 +357,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }, 200);
         }
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
     }
 
     /**
@@ -458,12 +444,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }
     }
 
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
     @Override
     public void onMarkerDrag(Marker arg0) {
 
@@ -483,18 +463,6 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     public void onMarkerDragStart(Marker arg0) {
         //stopGeolocating();
     }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
@@ -600,6 +568,21 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     @Override
     public void destroy() {
+
+    }
+
+    @Override
+    public void onClientStart() {
+        upMyLocationOverlayLayers();
+    }
+
+    @Override
+    public void onClientStartFailure() {
+
+    }
+
+    @Override
+    public void onClientStop() {
 
     }
 }

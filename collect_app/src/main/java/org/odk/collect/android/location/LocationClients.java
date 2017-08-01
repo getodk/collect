@@ -19,7 +19,7 @@ public class LocationClients {
      * @param context The Context the LocationClient will be used within.
      * @return An implementation of LocationClient.
      */
-    public static LocationClient client(@NonNull Context context) {
+    public static LocationClient clientForContext(@NonNull Context context) {
         return areGooglePlayServicesAvailable(context)
                 ? new GoogleLocationClient(context)
                 : new AndroidLocationClient(context);

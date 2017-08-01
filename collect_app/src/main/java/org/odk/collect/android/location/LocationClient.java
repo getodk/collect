@@ -69,8 +69,17 @@ public interface LocationClient {
     @Nullable Location getLastLocation();
 
     /**
+     * Provides a way to tell if the LocationClient can access the User's Location based
+     * on the current Priority settings. Must be called <b>after</b> Location updates have been requested.
+     *
+     * @return Whether or not the User's Location is currently available.
+     *
+     */
+    boolean isLocationAvailable();
+
+    /**
      * Provides a way to tell if the LocationClient is currently monitoring the User's Location.
-     * @return Whether or not the client is currently monitoring the User's Location.
+     * @return Whether or not the clientForContext is currently monitoring the User's Location.
      */
     boolean isMonitoringLocation();
 
@@ -81,18 +90,18 @@ public interface LocationClient {
         /**
          * Called after the LocationClient has been successfully started.
          */
-        void onStart();
+        void onClientStart();
 
         /**
          * Called if any issue ocurred during LocationClient start-up.
          */
-        void onStartFailure();
+        void onClientStartFailure();
 
         /**
          * Called after the LocationClient has been stopped, either by calling
          * {@link LocationClient#stop()} or because it was stopped by another process.
          */
-        void onStop();
+        void onClientStop();
     }
 
     /**

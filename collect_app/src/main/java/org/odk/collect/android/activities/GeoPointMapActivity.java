@@ -15,13 +15,10 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -44,6 +42,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -61,8 +61,8 @@ import timber.log.Timber;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends FragmentActivity implements LocationListener,
-        OnMarkerDragListener, OnMapLongClickListener {
+public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDragListener, OnMapLongClickListener,
+        LocationClient.LocationClientListener, LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
 
@@ -74,15 +74,13 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private TextView locationStatus;
     private TextView locationInfo;
 
-    private LocationManager locationManager;
+    private LocationClient locationClient;
 
     private Location location;
     private ImageButton reloadLocation;
 
     private boolean isDragged = false;
     private ImageButton showLocation;
-    private boolean gpsOn = false;
-    private boolean networkOn = false;
 
     private int locationCount = 0;
 
@@ -98,12 +96,12 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private boolean setClear = false;
     private boolean captureLocation = false;
     private Boolean foundFirstLocation = false;
-    private int locationCountNum = 0;
-    private int locationCountFoundLimit = 1;
     private Boolean readOnly = false;
     private Boolean draggable = false;
     private Boolean intentDraggable = false;
     private Boolean locationFromIntent = false;
+
+    private boolean isMapReady = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +114,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         try {
             setContentView(R.layout.geopoint_layout);
+
         } catch (NoClassDefFoundError e) {
             Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
@@ -123,6 +122,10 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             return;
         }
 
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
+
+        isMapReady = false;
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -135,14 +138,17 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     protected void onStart() {
         super.onStart();
         Collect.getInstance().getActivityLogger().logOnStart(this);
+
+        locationClient.start();
     }
 
     @Override
     protected void onStop() {
+        locationClient.stop();
+
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
-
 
     private void returnLocation() {
         Intent i = new Intent();
@@ -174,14 +180,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         return new DecimalFormat("#.##").format(f);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
-    }
-
     private void setupMap(GoogleMap googleMap) {
         map = googleMap;
         if (map == null) {
@@ -198,11 +196,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         markerOptions = new MarkerOptions();
         helper = new MapHelper(this, map);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationStatus = (TextView) findViewById(R.id.location_status);
         locationInfo = (TextView) findViewById(R.id.location_info);
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
 
@@ -345,33 +340,20 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         }
 
         helper.setBasemap();
+
+        isMapReady = true;
         upMyLocationOverlayLayers();
     }
 
     private void upMyLocationOverlayLayers() {
-        // make sure we have a good location provider before continuing
-        locationCountNum = 0;
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                locationCountFoundLimit = 0;
-            } else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                // Only if GPS Provider is not available use network location. bug (well know
-                // android bug) http://stackoverflow
-                // .com/questions/6719207/locationmanager-returns-old-cached-wifi-location-with
-                // -current-timestamp
-                networkOn = true;
-                locationCountFoundLimit =
-                        1; // increase count due to network location bug (well know android bug)
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                        this);
-            }
+        if (!locationClient.isMonitoringLocation() || !isMapReady) {
+            return;
         }
-        //showLocation.setClickable(marker != null);
-        if (!gpsOn && !networkOn) {
+
+        // Make sure we can access Location:
+        if (!locationClient.isLocationAvailable()) {
             showGPSDisabledAlertToUser();
+
         } else {
             overlayMyLocationLayers();
         }
@@ -381,11 +363,11 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         if (draggable & !readOnly) {
             map.setOnMarkerDragListener(this);
             map.setOnMapLongClickListener(this);
+
             if (marker != null) {
                 marker.setDraggable(true);
             }
         }
-
     }
 
     @Override
@@ -394,51 +376,38 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         if (setClear) {
             reloadLocation.setEnabled(true);
         }
-        if (this.location != null) {
 
-            if (locationCountNum >= locationCountFoundLimit) {
+        Location previousLocation = this.location;
+        this.location = location;
+
+        if (location != null) {
+            if (previousLocation != null) {
                 showLocation.setEnabled(true);
+
                 if (!captureLocation & !setClear) {
-                    latLng = new LatLng(this.location.getLatitude(), this.location.getLongitude());
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     markerOptions.position(latLng);
                     marker = map.addMarker(markerOptions);
                     captureLocation = true;
                     reloadLocation.setEnabled(true);
                 }
+
                 if (!foundFirstLocation) {
                     //zoomToPoint();
                     showZoomDialog();
                     foundFirstLocation = true;
                 }
+
                 locationStatus.setText(
-                        getString(R.string.location_provider_accuracy, this.location.getProvider(),
-                                truncateFloat(this.location.getAccuracy())));
-            } else {
-                // Prevent from forever increasing
-                if (locationCountNum <= 100) {
-                    locationCountNum++;
-                }
+                        getString(R.string.location_provider_accuracy, location.getProvider(),
+                                truncateFloat(location.getAccuracy())));
             }
+
         } else {
             InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") null location");
         }
 
-    }
-
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
     @Override
@@ -556,5 +525,21 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    public void onClientStart() {
+        locationClient.requestLocationUpdates(this);
+        upMyLocationOverlayLayers();
+    }
+
+    @Override
+    public void onClientStartFailure() {
+
+    }
+
+    @Override
+    public void onClientStop() {
+
     }
 }

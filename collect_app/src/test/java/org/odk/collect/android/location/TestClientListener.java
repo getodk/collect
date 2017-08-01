@@ -25,17 +25,17 @@ class TestClientListener implements LocationClient.LocationClientListener {
     }
 
     @Override
-    public void onStart() {
+    public void onClientStart() {
         wasStartCalled = true;
     }
 
     @Override
-    public void onStartFailure() {
+    public void onClientStartFailure() {
         wasStartFailureCalled = true;
     }
 
     @Override
-    public void onStop() {
+    public void onClientStop() {
         wasStopCalled = true;
     }
 }

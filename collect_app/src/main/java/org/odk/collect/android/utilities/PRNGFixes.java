@@ -200,7 +200,7 @@ public final class PRNGFixes {
 
         /**
          * Whether this engine instance has been seeded. This is needed because
-         * each instance needs to seed itself if the client does not explicitly
+         * each instance needs to seed itself if the clientForContext does not explicitly
          * seed it.
          */
         private boolean seeded;

@@ -18,17 +18,18 @@ import com.google.android.gms.location.LocationServices;
 /**
  * An implementation of {@link LocationClient} that uses Google Play
  * Services to retrieve the User's location.
- *
+ * <p>
  * Should be used whenever there Google Play Services is present.
- *
+ * <p>
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-class GoogleLocationClient implements LocationClient,
-        ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
+        OnConnectionFailedListener, LocationListener {
 
     @NonNull
     private final FusedLocationProviderApi fusedLocationProviderApi;
+
     @NonNull
     private final GoogleApiClient googleApiClient;
 
@@ -42,24 +43,23 @@ class GoogleLocationClient implements LocationClient,
 
     /**
      * Constructs a new GoogleLocationClient with the provided Context.
-     *
+     * <p>
      * This Constructor should be used normally.
      *
      * @param context The Context where the GoogleLocationClient will be running.
      */
-    public GoogleLocationClient(@NonNull Context context) {
+    GoogleLocationClient(@NonNull Context context) {
         this(locationServicesClientForContext(context), LocationServices.FusedLocationApi);
     }
 
     /**
      * Constructs a new AndroidLocationClient with the provided GoogleApiClient
      * and FusedLocationProviderApi.
-     *
+     * <p>
      * This Constructor should only be used for testing.
      *
-     * @param googleApiClient The GoogleApiClient for managing the LocationClient's connection
-     *                        to Play Services.
-     *
+     * @param googleApiClient          The GoogleApiClient for managing the LocationClient's connection
+     *                                 to Play Services.
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
@@ -130,6 +130,11 @@ class GoogleLocationClient implements LocationClient,
     }
 
     @Override
+    public boolean isLocationAvailable() {
+        return fusedLocationProviderApi.getLocationAvailability(googleApiClient).isLocationAvailable();
+    }
+
+    @Override
     public boolean isMonitoringLocation() {
         return locationListener != null;
     }
@@ -148,14 +153,14 @@ class GoogleLocationClient implements LocationClient,
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (locationClientListener != null) {
-            locationClientListener.onStart();
+            locationClientListener.onClientStart();
         }
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
         if (locationClientListener != null) {
-            locationClientListener.onStop();
+            locationClientListener.onClientStop();
         }
     }
 
@@ -164,7 +169,7 @@ class GoogleLocationClient implements LocationClient,
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if (locationClientListener != null) {
-            locationClientListener.onStartFailure();
+            locationClientListener.onClientStartFailure();
         }
     }
 
@@ -179,6 +184,7 @@ class GoogleLocationClient implements LocationClient,
 
     /**
      * Helper method for building a GoogleApiClient with the LocationServices API.
+     *
      * @param context The Context for building the GoogleApiClient.
      * @return A GoogleApiClient with the LocationServices API.
      */

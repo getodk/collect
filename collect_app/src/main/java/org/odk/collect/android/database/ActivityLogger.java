@@ -254,11 +254,11 @@ public final class ActivityLogger {
     // Convenience methods
 
     public void logOnStart(Activity a) {
-        log(a.getClass().getName(), "onStart", null, null, null, null, null);
+        log(a.getClass().getName(), "onClientStart", null, null, null, null, null);
     }
 
     public void logOnStop(Activity a) {
-        log(a.getClass().getName(), "onStop", null, null, null, null, null);
+        log(a.getClass().getName(), "onClientStop", null, null, null, null, null);
     }
 
     public void logAction(Object t, String context, String action) {

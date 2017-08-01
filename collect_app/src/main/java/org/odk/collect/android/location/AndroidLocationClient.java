@@ -15,14 +15,13 @@ import java.util.List;
  * An implementation of {@link LocationClient} that uses the existing
  * Android Location Services (LocationManager) to retrieve the User's
  * location.
- *
+ * <p>
  * Should be used whenever there Google Play Services is not present.
- *
+ * <p>
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-public class AndroidLocationClient implements LocationClient,
-        android.location.LocationListener {
+class AndroidLocationClient implements LocationClient, android.location.LocationListener {
 
     @NonNull
     private final LocationManager locationManager;
@@ -36,21 +35,22 @@ public class AndroidLocationClient implements LocationClient,
     @NonNull
     private Priority priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
-    private Location cachedLocation;
     private boolean isConnected;
 
     /**
      * Constructs a new AndroidLocationClient with the provided Context.
      * This Constructor should be used normally.
+     *
      * @param context The Context where the AndroidLocationClient will be running.
      */
-    public AndroidLocationClient(@NonNull Context context) {
+    AndroidLocationClient(@NonNull Context context) {
         this((LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
     }
 
     /**
      * Constructs a new AndroidLocationClient with the provided LocationManager.
      * This Constructor should only be used for testing.
+     *
      * @param locationManager The LocationManager to retrieve locations from.
      */
     AndroidLocationClient(@NonNull LocationManager locationManager) {
@@ -63,7 +63,7 @@ public class AndroidLocationClient implements LocationClient,
     public void start() {
         if (getProvider() == null) {
             if (locationClientListener != null) {
-                locationClientListener.onStartFailure();
+                locationClientListener.onClientStartFailure();
             }
 
             return;
@@ -71,7 +71,7 @@ public class AndroidLocationClient implements LocationClient,
 
         isConnected = true;
         if (locationClientListener != null) {
-            locationClientListener.onStart();
+            locationClientListener.onClientStart();
         }
     }
 
@@ -82,7 +82,7 @@ public class AndroidLocationClient implements LocationClient,
         isConnected = false;
 
         if (locationClientListener != null) {
-            locationClientListener.onStop();
+            locationClientListener.onClientStop();
         }
     }
 
@@ -128,6 +128,11 @@ public class AndroidLocationClient implements LocationClient,
         }
 
         return null;
+    }
+
+    @Override
+    public boolean isLocationAvailable() {
+        return getProvider() != null;
     }
 
     @Override
@@ -204,11 +209,17 @@ public class AndroidLocationClient implements LocationClient,
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) {
+
+    }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) {
+
+    }
 }

@@ -15,13 +15,10 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -31,6 +28,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,12 +45,13 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoShapeWidget;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Version of the GeoShapeGoogleMapActivity that uses the new Maps v2 API and Fragments to enable
@@ -62,12 +61,11 @@ import java.util.List;
  */
 
 public class GeoShapeGoogleMapActivity extends FragmentActivity implements LocationListener,
-        OnMarkerDragListener, OnMapLongClickListener {
+        OnMarkerDragListener, OnMapLongClickListener, LocationClient.LocationClientListener {
+
+    private LocationClient locationClient;
 
     private GoogleMap map;
-    private LocationManager locationManager;
-    private Boolean gpsOn = false;
-    private Boolean networkOn = false;
     private Location curLocation;
     private LatLng curlatLng;
     private PolygonOptions polygonOptions;
@@ -91,7 +89,9 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
         setContentView(R.layout.geoshape_google_layout);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
+
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gmap)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -100,13 +100,20 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Collect.getInstance().getActivityLogger().logOnStart(this);
+
+        locationClient.start();
+    }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
+    protected void onStop() {
+        locationClient.stop();
+
+        Collect.getInstance().getActivityLogger().logOnStop(this);
+        super.onStop();
     }
 
     private void setupMap(GoogleMap googleMap) {
@@ -127,23 +134,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         polygonOptions = new PolygonOptions();
         polygonOptions.strokeColor(Color.RED);
         polygonOptions.zIndex(1);
-
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                networkOn = true;
-                curLocation = locationManager.getLastKnownLocation(
-                        LocationManager.NETWORK_PROVIDER);
-            }
-        }
-
-        if (!gpsOn & !networkOn) {
-            showGPSDisabledAlertToUser();
-        }
 
         gpsButton = (ImageButton) findViewById(R.id.gps);
         gpsButton.setEnabled(false);
@@ -224,47 +214,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         }
 
         helper.setBasemap();
-        providers = locationManager.getProviders(true);
-
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                // gpsButton.setEnabled(true);
-            }
-            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                networkOn = true;
-                curLocation = locationManager.getLastKnownLocation(
-                        LocationManager.NETWORK_PROVIDER);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                        this);
-                // gpsButton.setEnabled(true);
-            }
-        }
-
-        if (gpsOn) {
-            // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            gpsButton.setEnabled(true);
-        }
-        if (networkOn) {
-            // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            gpsButton.setEnabled(true);
-        }
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Collect.getInstance().getActivityLogger().logOnStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Collect.getInstance().getActivityLogger().logOnStop(this);
-        super.onStop();
-    }
-
 
     private void returnLocation() {
         String finalReturnString = generateReturnString();
@@ -326,23 +276,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             showZoomDialog();
             foundFirstLocation = true;
         }
-
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     private void update_polygon() {
@@ -492,5 +425,25 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                 });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
+    }
+
+    @Override
+    public void onClientStart() {
+        locationClient.requestLocationUpdates(this);
+        if (!locationClient.isLocationAvailable()) {
+            showGPSDisabledAlertToUser();
+        } else {
+            gpsButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onClientStartFailure() {
+
+    }
+
+    @Override
+    public void onClientStop() {
+
     }
 }
