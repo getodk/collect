@@ -59,6 +59,7 @@ public class InstanceDatabaseHelper extends ODKSQLiteOpenHelper {
         createInstancesTableForVersion4(db, INSTANCES_TABLE_NAME);
     }
 
+    @SuppressWarnings({"checkstyle:FallThrough"})
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Upgrading database from version %d to %d" + ", which will destroy all old data", oldVersion, newVersion);
