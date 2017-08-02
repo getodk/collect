@@ -35,6 +35,7 @@ import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
 import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
@@ -50,6 +51,7 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -149,6 +151,13 @@ public class InstanceServerUploader extends InstanceUploader {
 
             Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
         } else {
+            if (u.getHost() == null) {
+                Timber.i("Host name may not be null");
+                outcome.results.put(id, fail + "Host name may not be null");
+                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                return true;
+            }
 
             // if https then enable preemptive basic auth...
             if (u.getScheme() != null && u.getScheme().equals("https")) {
@@ -231,10 +240,10 @@ public class InstanceServerUploader extends InstanceUploader {
                         return true;
                     }
                 }
-            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
+            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | NoHttpResponseException | SocketException e) {
                 if (e instanceof ClientProtocolException) {
                     outcome.results.put(id, fail + "Client Protocol Exception");
-                    Timber.e(e, "Client Protocol Exception");
+                    Timber.i(e, "Client Protocol Exception");
                 } else if (e instanceof ConnectTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
                     Timber.i(e, "Connection Timeout");
@@ -243,10 +252,10 @@ public class InstanceServerUploader extends InstanceUploader {
                     Timber.i(e, "Network Connection Failed");
                 } else if (e instanceof SocketTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
-                    Timber.e(e, "Connection timeout");
+                    Timber.i(e, "Connection timeout");
                 } else {
                     outcome.results.put(id, fail + "Network Connection Refused");
-                    Timber.e(e, "Network Connection Refused");
+                    Timber.i(e, "Network Connection Refused");
                 }
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -434,7 +443,9 @@ public class InstanceServerUploader extends InstanceUploader {
                     return true;
                 }
             } catch (IOException e) {
-                if (e instanceof UnknownHostException || e instanceof ConnectTimeoutException) {
+                if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
+                        || e instanceof SocketException || e instanceof NoHttpResponseException
+                        || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
                     Timber.i(e);
                 } else {
                     Timber.e(e);

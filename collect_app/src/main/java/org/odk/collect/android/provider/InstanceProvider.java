@@ -204,7 +204,7 @@ public class InstanceProvider extends ContentProvider {
             values = new ContentValues();
         }
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
         if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {

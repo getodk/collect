@@ -162,10 +162,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 if (s.length() != 0) {
                     String[] sa = s.split(" ");
                     double[] gp = new double[4];
-                    gp[0] = Double.valueOf(sa[0]).doubleValue();
-                    gp[1] = Double.valueOf(sa[1]).doubleValue();
-                    gp[2] = Double.valueOf(sa[2]).doubleValue();
-                    gp[3] = Double.valueOf(sa[3]).doubleValue();
+                    gp[0] = Double.valueOf(sa[0]);
+                    gp[1] = Double.valueOf(sa[1]);
+                    gp[2] = Double.valueOf(sa[2]);
+                    gp[3] = Double.valueOf(sa[3]);
                     i.putExtra(LOCATION, gp);
                 }
                 i.putExtra(READ_ONLY, readOnly);
@@ -257,10 +257,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 // segment lat and lon
                 String[] sa = s.split(" ");
                 double[] gp = new double[4];
-                gp[0] = Double.valueOf(sa[0]).doubleValue();
-                gp[1] = Double.valueOf(sa[1]).doubleValue();
-                gp[2] = Double.valueOf(sa[2]).doubleValue();
-                gp[3] = Double.valueOf(sa[3]).doubleValue();
+                gp[0] = Double.valueOf(sa[0]);
+                gp[1] = Double.valueOf(sa[1]);
+                gp[2] = Double.valueOf(sa[2]);
+                gp[3] = Double.valueOf(sa[3]);
 
                 return new GeoPointData(gp);
             } catch (Exception numberFormatException) {

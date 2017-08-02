@@ -22,12 +22,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 
@@ -46,7 +44,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
     @Override
     protected void onPostExecute(Outcome outcome) {
         synchronized (this) {
-            if (stateListener != null) {
+            if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
                     stateListener.authRequest(outcome.authRequestingServer, outcome.results);
                 } else {
@@ -94,10 +92,8 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
                                 results.moveToPosition(-1);
 
                                 boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_DELETE_AFTER_SEND);
-                                String formId;
                                 while (results.moveToNext()) {
-                                    formId = results.getString(results.getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
-                                    if (isFormAutoDeleteEnabled(formId, isFormAutoDeleteOptionEnabled)) {
+                                    if (isFormAutoDeleteOptionEnabled) {
                                         toDelete.add(results.getLong(results.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
                                     }
                                 }
@@ -137,22 +133,5 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
     public static class Outcome {
         Uri authRequestingServer = null;
         public HashMap<String, String> results = new HashMap<String, String>();
-    }
-
-    // If the form explicitly sets the auto-delete property, then it overrides the preferences.
-    private boolean isFormAutoDeleteEnabled(String jrFormId, boolean isFormAutoDeleteOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-
-        String autoDelete = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoDeleteColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_DELETE);
-                autoDelete = cursor.getString(autoDeleteColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return autoDelete == null ? isFormAutoDeleteOptionEnabled : Boolean.valueOf(autoDelete);
     }
 }

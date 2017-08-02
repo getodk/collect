@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -102,7 +103,9 @@ public class StringWidget extends QuestionWidget {
         }
 
         if (readOnly) {
+            answer.setBackground(null);
             answer.setEnabled(false);
+            answer.setTextColor(Color.BLACK);
             answer.setFocusable(false);
         }
 

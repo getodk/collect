@@ -42,7 +42,7 @@ public class DecimalWidget extends StringWidget {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
                 if (dataValue instanceof Integer) {
-                    d = Double.valueOf(((Integer) dataValue).intValue());
+                    d = (double) (Integer) dataValue;
                 } else {
                     d = (Double) dataValue;
                 }

@@ -13,8 +13,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
@@ -22,26 +20,20 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.WebUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-
-import timber.log.Timber;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
@@ -49,7 +41,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
     public static boolean running = false;
     InstanceServerUploader instanceServerUploader;
 
-    InstanceGoogleSheetsAutoUploadTask googleSheetsUploadTask;
+    InstanceGoogleSheetsUploader instanceGoogleSheetsUploader;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -65,18 +57,17 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
-                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
+                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED
+                    && isFormAutoSendOptionEnabled(currentNetworkInfo)) {
+                uploadForms(context);
             }
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (ni == null || !ni.isConnected()) {
-                // not connected, do nothing
-            } else {
-                uploadForms(context, isFormAutoSendOptionEnabled(ni));
+            if (ni != null && ni.isConnected() && isFormAutoSendOptionEnabled(ni)) {
+                uploadForms(context);
             }
         }
     }
@@ -96,24 +87,19 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
-
-    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
+    private void uploadForms(Context context) {
         if (!running) {
             running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<Long>();
+            ArrayList<Long> toUpload = new ArrayList<>();
             Cursor c = new InstancesDao().getFinalizedInstancesCursor();
 
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
-                    String formId;
                     while (c.moveToNext()) {
-                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
-                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                            toUpload.add(l);
-                        }
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
                     }
                 }
             } finally {
@@ -130,7 +116,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
-
             GoogleAccountCredential accountCredential;
             // Initialize credentials and service object.
             accountCredential = GoogleAccountCredential.usingOAuth2(
@@ -142,7 +127,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                googleSheetsUploadTask = new InstanceGoogleSheetsAutoUploadTask(context, accountCredential);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountCredential, context);
                 String googleUsername = (String) settings.get(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -151,8 +136,8 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     return;
                 }
                 accountCredential.setSelectedAccountName(googleUsername);
-                googleSheetsUploadTask.setUploaderListener(this);
-                googleSheetsUploadTask.execute(toSendArray);
+                instanceGoogleSheetsUploader.setUploaderListener(this);
+                instanceGoogleSheetsUploader.execute(toSendArray);
 
             } else {
                 // get the username, password, and server from preferences
@@ -173,41 +158,25 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
-    // If the form explicitly sets the auto-send property, then it overrides the preferences.
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-
-        String autoSubmit = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SUBMIT);
-                autoSubmit = cursor.getString(autoSubmitColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
-    }
-
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
         // task is done
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(null);
         }
-        if (googleSheetsUploadTask != null) {
-            googleSheetsUploadTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         running = false;
 
         StringBuilder message = new StringBuilder();
-        message.append(Collect.getInstance().getString(R.string.odk_auto_note) + " :: \n\n");
+        message
+                .append(Collect.getInstance().getString(R.string.odk_auto_note))
+                .append(" :: \n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
         } else {
-
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
             Iterator<String> it = keys.iterator();
@@ -223,24 +192,26 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            {
-                Cursor results = null;
-                try {
-                    results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                    if (results.getCount() > 0) {
-                        results.moveToPosition(-1);
-                        while (results.moveToNext()) {
-                            String name = results.getString(results
-                                    .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                            String id = results.getString(results
-                                    .getColumnIndex(InstanceColumns._ID));
-                            message.append(name + " - " + result.get(id) + "\n\n");
-                        }
+            Cursor results = null;
+            try {
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                if (results.getCount() > 0) {
+                    results.moveToPosition(-1);
+                    while (results.moveToNext()) {
+                        String name = results.getString(results
+                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                        String id = results.getString(results
+                                .getColumnIndex(InstanceColumns._ID));
+                        message
+                                .append(name)
+                                .append(" - ")
+                                .append(result.get(id))
+                                .append("\n\n");
                     }
-                } finally {
-                    if (results != null) {
-                        results.close();
-                    }
+                }
+            } finally {
+                if (results != null) {
+                    results.close();
                 }
             }
         }
@@ -267,12 +238,10 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         notificationManager.notify(1328974928, builder.build());
     }
 
-
     @Override
     public void progressUpdate(int progress, int total) {
         // do nothing
     }
-
 
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
@@ -280,56 +249,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(null);
         }
-        if (googleSheetsUploadTask != null) {
-            googleSheetsUploadTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         running = false;
-    }
-
-    private class InstanceGoogleSheetsAutoUploadTask extends InstanceGoogleSheetsUploader {
-        private Context context;
-
-        InstanceGoogleSheetsAutoUploadTask(Context context, GoogleAccountCredential credential) {
-            super(credential);
-            this.context = context;
-        }
-
-        @Override
-        protected Outcome doInBackground(Long... values) {
-            outcome = new Outcome();
-
-            String selection = InstanceColumns._ID + "=?";
-            String[] selectionArgs = new String[(values == null) ? 0 : values.length];
-            if (values != null) {
-                for (int i = 0; i < values.length; i++) {
-                    if (i != values.length - 1) {
-                        selection += " or " + InstanceColumns._ID + "=?";
-                    }
-                    selectionArgs[i] = values[i].toString();
-                }
-            }
-
-            String token;
-            try {
-                token = credential.getToken();
-                GoogleAuthUtil.invalidateToken(context, token);
-
-                getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
-
-
-            } catch (IOException | GoogleAuthException | MultipleFoldersFoundException e) {
-                Timber.e(e);
-                return null;
-            }
-            context = null;
-
-            if (token == null) {
-                // failed, so just return
-                return null;
-            }
-
-            uploadInstances(selection, selectionArgs, token);
-            return outcome;
-        }
     }
 }
