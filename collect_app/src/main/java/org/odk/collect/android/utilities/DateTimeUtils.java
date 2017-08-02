@@ -11,12 +11,9 @@ import java.util.Locale;
 
 public class DateTimeUtils {
 
-    private static final boolean JELLY_BEAN_MR2_OR_NEWER =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
-
     public static String getDateTimeBasedOnUserLocale(Date date, String appearance, boolean containsTime) {
         final DateFormat dateFormatter;
-        if (JELLY_BEAN_MR2_OR_NEWER) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), getDateTimePattern(containsTime, appearance));
             dateFormatter = new SimpleDateFormat(format, Locale.getDefault());
         } else {
@@ -42,7 +39,7 @@ public class DateTimeUtils {
 
     public static String getTimeBasedOnUserLocale(Date date) {
         final DateFormat dateFormatter;
-        if (JELLY_BEAN_MR2_OR_NEWER) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             String format = android.text.format.DateFormat.getBestDateTimePattern(
                     Locale.getDefault(), "HHmm");
             dateFormatter = new SimpleDateFormat(format, Locale.getDefault());
