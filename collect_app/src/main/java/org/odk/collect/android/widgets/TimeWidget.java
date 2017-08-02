@@ -44,6 +44,8 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.DateTimeUtils.correctForTimezoneOffsetDifference;
+
 /**
  * Displays a TimePicker widget.
  *
@@ -167,7 +169,8 @@ public class TimeWidget extends QuestionWidget {
         if (formEntryPrompt.getAnswerValue() == null) {
             clearAnswer();
         } else {
-            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
+            Date date = (Date) formEntryPrompt.getAnswerValue().getValue();
+            DateTime dt = correctForTimezoneOffsetDifference(date);
             hourOfDay = dt.getHourOfDay();
             minuteOfHour = dt.getMinuteOfHour();
             setTimeLabel();
