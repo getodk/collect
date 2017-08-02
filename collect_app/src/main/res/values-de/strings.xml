@@ -271,7 +271,7 @@
   <string name="invalid_oauth">Ungültiger OAuth2-Token</string>
   <string name="google_repeat_error">Wiederholungen werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="media_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK Auto-Send Authentifizierungsfehler, bitte überprüfen Sie ihre Einstellungen</string>
+  <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
   <string name="odk_auto_note">ODK Auto-Send Benachrichtigung</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
   <string name="delete_after_send">Löschen nach dem Senden</string>
@@ -480,7 +480,7 @@
   <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
   <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>
   <string name="user_access_control">Benutzerzugriffskontrolle</string>
-  <string name="autosend_selector_title">Autosend</string>
+  <string name="autosend_selector_title">Auto-Send</string>
   <string name="off">Aus</string>
   <string name="wifi_autosend">Nur WLAN</string>
   <string name="cellular_autosend">Nur Mobilfunk</string>
@@ -498,4 +498,5 @@
   <string name="type">Typ</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
+  <string name="not_supported_offline_layer_format">Das ausgewählte Offline-Layer benutzt das PBF-Format, das nicht unterstützt wird.</string>
 </resources>

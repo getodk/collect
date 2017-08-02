@@ -191,7 +191,6 @@
   <string name="admin_password_disabled">ລະ​ຫັດ​ຜ່ານ​ຂອງ​ຜູ້​ຄວບ​ຄຸມ​ລະ​ບົບ​ບໍ່​ໄດ້​ເປີດ​ນຳ​ໃຊ້</string>
   <string name="admin_password_incorrect">ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ!</string>
   <string name="enter_admin_password">ປ້ອນລະຫັດຜ່ານຜູ້ຄວບຄຸມລະບົບ</string>
-  <string name="autosend">ສົ່ງຂໍ້ມູນແບບອັດຕະໂນມັດ</string>
   <string name="found_in_main">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກເມນູຫລັກ</string>
   <string name="found_in_settings">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກການຕັ້ງຄ່າທົ່ວໄປ</string>
   <string name="no_account">ບໍ່ມີບັນຊີຜູ້ໃຊ້ງານ</string>
@@ -253,8 +252,6 @@
   <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <string name="invalid_oauth">OAuth 2 token ບໍ່ຖືກຕ້ອງ</string>
-  <string name="odk_auth_auth_fail">ການກວດສອບ ODK Autosend ຜິດພາດ, ກະລຸນາກວດສອບການຕັ້ງຄ່າວ່າຖືກຕ້ອງບໍ່</string>
-  <string name="odk_auto_note">ສົ່ງການແຈ້ງເຕືອນແບບໂອໂຕຂອງ ODK</string>
   <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
