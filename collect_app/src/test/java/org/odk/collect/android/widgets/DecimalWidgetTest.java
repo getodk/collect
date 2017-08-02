@@ -66,7 +66,9 @@ public class DecimalWidgetTest {
     @Test
     // Fails when double is turned to string using String.format(Locale.US, "%f", d)
     // because default precision for %f is 6
-    public void decimalValueShouldMaintainPrecision() {
+    // NOTE: in the case of a decimal value with trailing 0s, it's probably not possible to maintain
+    // that precision. For example, 9.00 becomes 9
+    public void decimalValueShouldNotAddPrecision() {
         Double twoDecimalDouble = 9.99;
         String twoDecimalString = "9.99";
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
