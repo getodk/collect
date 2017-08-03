@@ -80,7 +80,7 @@ android {
             testCoverageEnabled(false)    // smap
             //minifyEnabled(true)
             minifyEnabled(false)
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 
@@ -116,6 +116,7 @@ android {
     }
 
     lintOptions {
+        disable 'MissingTranslation', 'ExtraTranslation'    // smap
         abortOnError true
     }
 }

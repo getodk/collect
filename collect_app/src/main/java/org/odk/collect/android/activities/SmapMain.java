@@ -182,6 +182,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         }
 
         // NFC
+        listener = new MainTaskListener(this);
         boolean authorised = false;
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
@@ -808,9 +809,9 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
     protected class MainTaskListener extends BroadcastReceiver {
 
-        private MainTabsActivity mActivity = null;
+        private SmapMain mActivity = null;
 
-        public MainTaskListener(MainTabsActivity activity) {
+        public MainTaskListener(SmapMain activity) {
             mActivity = activity;
         }
         @Override

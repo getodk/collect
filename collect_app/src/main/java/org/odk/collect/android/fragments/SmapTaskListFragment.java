@@ -207,11 +207,8 @@ public class SmapTaskListFragment extends ListFragment
     @Override
     public void onLoadFinished(Loader<List<TaskEntry>> loader, List<TaskEntry> data) {
 
-        // smap
         mAdapter.setData(data);
-
-        // TODO Smap
-        //tabsActivity.setLocationTriggers(data, false);      // NFC and geofence triggers
+        ((SmapMain) getActivity()).setLocationTriggers(data, false);      // NFC and geofence triggers
 
     }
 
