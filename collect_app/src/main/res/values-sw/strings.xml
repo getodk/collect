@@ -102,6 +102,8 @@
   <string name="send_data">Tuma Fomu Zilizokamilika</string>
   <string name="send_data_button">Tuma Fomu Zilizokamilika (%s)</string>
   <string name="send_selected_data">Tuma zilizochaguliwa</string>
+  <string name="view_sent_forms">Angalia Fomu Iliyotumwa</string>
+  <string name="view_sent_forms_button">Angalia Fomu Iliyotumwa (%s)</string>
   <string name="server_requires_auth">Seva Inahitaji Uthibitishaji</string>
   <string name="server_url">URL</string>
   <string name="server_preferences">Seva</string>
@@ -184,11 +186,12 @@
   <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Enter new password</string>
+  <string name="admin_password">Nywila ya Msimamizi</string>
   <string name="admin_password_changed">Admin password successfully changed</string>
   <string name="admin_password_disabled">Admin password disabled</string>
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
-  <string name="autosend">Auto Send</string>
+  <string name="change_admin_password">Badili Nywila ya Msimamizi</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="no_account">No account</string>
@@ -215,6 +218,7 @@
   <string name="survey_saving_validating_message">Inathibitisha majibu</string>
   <string name="survey_saving_collecting_message">Inakusanya taarifa</string>
   <string name="high_resolution_summary">Ruhusu rekodi za video za high-resolution</string>
+  <string name="go_shared">Imeshirikishwa na Mimi</string>
   <string name="no_google_account">Hakuna Google Account Iliyochaguliwa!</string>
   <string name="google_set_account">Umechagua Google Sheets kama seva yako, tafadhali chagua Google akaunti zake katika General Settings kabla ya kuendelea</string>
   <string name="delete_after_send">Ondoa baada ya kutuma</string>
@@ -222,10 +226,16 @@
   <string name="change_server_url">URL ya Seva</string>
   <string name="google_search_browse">Tafuta fomu. Au chagua \'My Drive\' hapa chini kuzipekua</string>
   <string name="default_google_sheets_url"></string>
+  <string name="about_preferences">Kuhusu</string>
+  <string name="tell_your_friends">Shirikisha ODK Collect na washirika wako</string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="analytics_preferences">Taarifa ya matumizi</string>
+  <string name="analytics">Kusanya taarifa ya matumizi ya wasiojulikana</string>
+  <string name="select_all">Chagua Zote</string>
+  <string name="reset_settings_dialog_title">Chagua kipi cha kurekebisha</string>
 </resources>

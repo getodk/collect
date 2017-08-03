@@ -182,7 +182,6 @@
   <string name="admin_password_disabled">منتظم کا شناختے لفظ غیر موءثر کیا گیا۔</string>
   <string name="admin_password_incorrect">معافی، شناختی لفظ ٹھیک نہیں ہے</string>
   <string name="enter_admin_password">منتظم کا شناختی لفظ درج کریں</string>
-  <string name="autosend">خودبخود بھیجو</string>
   <string name="found_in_main">غیر نشان شدہ کرکے مرکزی فہرست میں چھپا لیں</string>
   <string name="found_in_settings">نشانی ہٹاکر عمومی سیٹنگز سے ہٹا دیں۔</string>
   <string name="no_account">اکاونٹ نہیں ہے</string>
