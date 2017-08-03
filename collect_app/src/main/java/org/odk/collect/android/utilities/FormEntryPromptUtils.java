@@ -19,21 +19,27 @@ package org.odk.collect.android.utilities;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.Date;
 
+import static org.odk.collect.android.utilities.DateTimeUtils.correctForTimezoneOffsetDifference;
+
 public class FormEntryPromptUtils {
 
     public static String getAnswerText(FormEntryPrompt fep) {
-        IAnswerData data = fep.getAnswerValue();
-        String text;
+        final IAnswerData data = fep.getAnswerValue();
+        final String text;
         if (data instanceof DateTimeData) {
             text = DateTimeUtils.getDateTimeBasedOnUserLocale((Date) data.getValue(),
                     fep.getQuestion().getAppearanceAttr(), true);
         } else if (data instanceof DateData) {
             text = DateTimeUtils.getDateTimeBasedOnUserLocale((Date) data.getValue(),
                     fep.getQuestion().getAppearanceAttr(), false);
+        } else if (data instanceof TimeData) {
+            Date date = correctForTimezoneOffsetDifference((Date) data.getValue()).toDate();
+            text = DateTimeUtils.getTimeBasedOnUserLocale(date);
         } else {
             text = fep.getAnswerText();
         }
