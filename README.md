@@ -112,5 +112,6 @@ When cloning the project from Android Studio, click "No" when prompted to open t
 If you build the app on your own using Android Studio `(Build -> Build APK)` and then install it (from an `.apk` file) you might notice this strange behaviour.
 The problem is described:
 [#1280](https://github.com/opendatakit/collect/issues/1280) and [#1142](https://github.com/opendatakit/collect/issues/1142).
+
 This problem occurs building other apps as well.
 
