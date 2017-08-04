@@ -36,11 +36,13 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.odk.collect.android.R;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.TimeZone;
 
 import timber.log.Timber;
 
@@ -188,7 +190,9 @@ public class TimeWidget extends QuestionWidget {
     }
 
     public void setTimeToCurrent() {
-        DateTime dt = new DateTime();
+        // https://github.com/opendatakit/collect/issues/1309
+        DateTimeZone dateTimeZone = DateTimeZone.forTimeZone(TimeZone.getDefault());
+        DateTime dt = new DateTime().withZone(dateTimeZone);
         hourOfDay = dt.getHourOfDay();
         minuteOfHour = dt.getMinuteOfHour();
         timePickerDialog.updateTime(hourOfDay, minuteOfHour);
