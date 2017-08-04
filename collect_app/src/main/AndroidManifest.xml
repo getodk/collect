@@ -139,7 +139,6 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.InstanceChooserList"
             android:label="@string/app_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -149,7 +148,6 @@ the specific language governing permissions and limitations under the License.
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
             </intent-filter>
         </activity>
-     
         <activity
             android:name=".activities.FormChooserList"
             android:label="@string/app_name">
