@@ -107,3 +107,11 @@ To generate official signed releases, you'll need the keystore file, the keystor
 
 #### Android Studio Error: `SDK location not found. Define location with sdk.dir in the local.properties file or with an ANDROID_HOME environment variable.`
 When cloning the project from Android Studio, click "No" when prompted to open the `build.gradle` file and then open project.
+
+#### Moving to the main view if user minimizes the app
+Moving to the main view if user minimizes the app.
+If you build the app on your own using Android Studio `(Build -> Build APK)` and then install it (from an `.apk` file) you might notice this strange behaviour.
+The problem is described:
+[#1280](https://github.com/opendatakit/collect/issues/1280) and [#1142](https://github.com/opendatakit/collect/issues/1142)
+This problem occurs building other apps as well.
+
