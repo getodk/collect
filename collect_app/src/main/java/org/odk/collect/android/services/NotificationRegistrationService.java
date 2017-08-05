@@ -50,6 +50,8 @@ public class NotificationRegistrationService extends IntentService {
     @Override
     public void onHandleIntent(Intent intent) {
 
+        Timber.i("================================================== Registration Service");
+
         if(instanceID == null) {
             instanceID = InstanceID.getInstance(this);
         }
@@ -82,6 +84,7 @@ public class NotificationRegistrationService extends IntentService {
                 if(notifyServer || registeredServer == null || registeredUser == null ||
                         !username.equals(registeredUser) || !server.equals(registeredServer)) {
 
+                    Timber.i("================================================== Notifying server of update");
                     AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
                     final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
                     DevicesDO devices = new DevicesDO();
@@ -92,6 +95,8 @@ public class NotificationRegistrationService extends IntentService {
 
                     editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_SERVER, server);
                     editor.putString(PreferenceKeys.KEY_SMAP_REGISTRATION_USER, username);
+                } else {
+                    Timber.i("================================================== Notification not required");
                 }
 
 
