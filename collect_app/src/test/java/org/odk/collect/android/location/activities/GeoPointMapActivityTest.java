@@ -1,9 +1,5 @@
 package org.odk.collect.android.location.activities;
 
-/**
- * Created by jamesknight on 06/08/2017.
- */
-
 import android.content.Intent;
 import android.location.Location;
 import android.widget.Button;
@@ -38,9 +34,6 @@ import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESU
 import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 import static org.robolectric.Shadows.shadowOf;
 
-/**
- * Unit test for checking {@link Button}'s behaviour  in {@link MainMenuActivity}
- */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class GeoPointMapActivityTest {

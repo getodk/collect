@@ -37,9 +37,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESULT;
 import static org.robolectric.Shadows.shadowOf;
 
-/**
- * Unit test for checking {@link Button}'s behaviour  in {@link MainMenuActivity}
- */
+
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
 public class GeoPointActivityTest {
