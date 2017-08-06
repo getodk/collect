@@ -87,6 +87,8 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     private MapHelper helper;
     //private KmlLayer kk;
 
+    private AlertDialog errorDialog;
+
     private AlertDialog zoomDialog;
     private View zoomDialogView;
 
@@ -108,6 +110,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+
         if (savedInstanceState != null) {
             locationCount = savedInstanceState.getInt(LOCATION_COUNT);
         }
@@ -121,6 +124,11 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             finish();
             return;
         }
+
+        locationStatus = (TextView) findViewById(R.id.location_status);
+        locationInfo = (TextView) findViewById(R.id.location_info);
+        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
+        showLocation = (ImageButton) findViewById(R.id.show_location);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -150,7 +158,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         super.onStop();
     }
 
-    private void returnLocation() {
+    public void returnLocation() {
         Intent i = new Intent();
         if (setClear || (readOnly && latLng == null)) {
             i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
@@ -168,13 +176,17 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
-                    location.getLatitude() + " " + location.getLongitude() + " "
-                            + location.getAltitude() + " " + location.getAccuracy());
+                    getResultString(location)
+            );
             setResult(RESULT_OK, i);
         }
         finish();
     }
 
+
+    public String getResultString(Location location) {
+        return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
+    }
 
     private String truncateFloat(float f) {
         return new DecimalFormat("#.##").format(f);
@@ -196,8 +208,6 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         markerOptions = new MarkerOptions();
         helper = new MapHelper(this, map);
 
-        locationStatus = (TextView) findViewById(R.id.location_status);
-        locationInfo = (TextView) findViewById(R.id.location_info);
 
         ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
 
@@ -210,7 +220,6 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
         });
 
-        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
         reloadLocation.setEnabled(false);
         reloadLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,7 +245,6 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         });
 
         // Focuses on marked location
-        showLocation = (ImageButton) findViewById(R.id.show_location);
         //showLocation.setClickable(false);
         showLocation.setEnabled(false);
         showLocation.setOnClickListener(new OnClickListener() {
@@ -372,7 +380,6 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
     @Override
     public void onLocationChanged(Location location) {
-        this.location = location;
         if (setClear) {
             reloadLocation.setEnabled(true);
         }
@@ -382,9 +389,9 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
         if (location != null) {
             if (previousLocation != null) {
-                showLocation.setEnabled(true);
+                enableShowLocation(true);
 
-                if (!captureLocation & !setClear) {
+                if (!captureLocation && !setClear) {
                     latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     markerOptions.position(latLng);
                     marker = map.addMarker(markerOptions);
@@ -398,16 +405,14 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
                     foundFirstLocation = true;
                 }
 
-                locationStatus.setText(
-                        getString(R.string.location_provider_accuracy, location.getProvider(),
-                                truncateFloat(location.getAccuracy())));
+                String locationString = getAccuracyStringForLocation(location);
+                locationStatus.setText(locationString);
             }
 
         } else {
             InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") null location");
         }
-
     }
 
     @Override
@@ -440,11 +445,17 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         } else {
             marker.setPosition(latLng);
         }
-        showLocation.setEnabled(true);
+        enableShowLocation(true);
         marker.setDraggable(true);
         isDragged = true;
         setClear = false;
         captureLocation = true;
+    }
+
+    private void enableShowLocation(boolean shouldEnable) {
+        if (showLocation != null) {
+            showLocation.setEnabled(shouldEnable);
+        }
     }
 
     private void zoomToLocation() {
@@ -482,32 +493,34 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             zoomDialog = builder.create();
         }
         //If feature enable zoom to button else disable
-        if (location != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
-        }
+        if (zoomLocationButton != null) {
+            if (location != null) {
+                zoomLocationButton.setEnabled(true);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomLocationButton.setEnabled(false);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+            }
 
-        if (latLng != null & !setClear) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+            if (latLng != null & !setClear) {
+                zoomPointButton.setEnabled(true);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomPointButton.setEnabled(false);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+            }
         }
 
         zoomDialog.show();
-
     }
 
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
         alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.enable_gps),
@@ -515,16 +528,20 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
                             public void onClick(DialogInterface dialog, int id) {
                                 startActivityForResult(
                                         new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+                                errorDialog = null;
                             }
                         });
+
         alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        errorDialog = null;
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+
+        errorDialog = alertDialogBuilder.create();
+        errorDialog.show();
     }
 
     @Override
@@ -541,5 +558,34 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     @Override
     public void onClientStop() {
 
+    }
+
+    /**
+     * For testing purposes only.
+     * @param mapReady
+     */
+    public void setMapReady(boolean mapReady) {
+        isMapReady = mapReady;
+    }
+
+    public void setCaptureLocation(boolean captureLocation) {
+        this.captureLocation = captureLocation;
+    }
+
+    public AlertDialog getErrorDialog() {
+        return errorDialog;
+    }
+
+    public String getLocationStatus() {
+        return locationStatus.getText().toString();
+    }
+
+    public String getAccuracyStringForLocation(Location location) {
+        return getString(R.string.location_provider_accuracy, location.getProvider(),
+                truncateFloat(location.getAccuracy()));
+    }
+
+    public AlertDialog getZoomDialog() {
+        return zoomDialog;
     }
 }

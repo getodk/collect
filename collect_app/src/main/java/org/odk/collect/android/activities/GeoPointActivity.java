@@ -70,11 +70,9 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
         setTitle(getString(R.string.get_location));
 
-        if (locationClient == null) {
-            locationClient = LocationClients.clientForContext(this);
-        }
-
+        locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
+
         setupLocationDialog();
     }
 
@@ -268,14 +266,6 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     private String truncateDouble(float number) {
         DecimalFormat df = new DecimalFormat("#.##");
         return df.format(number);
-    }
-
-    public void setLocationClient(LocationClient locationClient) {
-        this.locationClient = locationClient;
-    }
-
-    public LocationClient getLocationClient() {
-        return locationClient;
     }
 
     public ProgressDialog getLocationDialog() {

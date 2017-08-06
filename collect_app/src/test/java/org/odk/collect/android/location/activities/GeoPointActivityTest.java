@@ -1,4 +1,4 @@
-package org.odk.collect.android.location;
+package org.odk.collect.android.location.activities;
 
 
 import android.app.ProgressDialog;
@@ -16,6 +16,8 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -50,7 +52,8 @@ public class GeoPointActivityTest {
     private GeoPointActivity activity;
     private ShadowActivity shadowActivity;
 
-    @Mock LocationClient locationClient;
+    @Mock
+    LocationClient locationClient;
 
     /**
      * Runs {@link Before} each test.
@@ -61,7 +64,7 @@ public class GeoPointActivityTest {
         activity = activityController.get();
         shadowActivity = shadowOf(activity);
 
-        activity.setLocationClient(locationClient);
+        LocationClients.setTestClient(locationClient);
     }
 
     @Test
@@ -173,7 +176,7 @@ public class GeoPointActivityTest {
         return ReflectionHelpers.getField(progressDialog, "mMessage");
     }
 
-    private static Location newMockLocation() {
+    public static Location newMockLocation() {
         return mock(Location.class);
     }
 }

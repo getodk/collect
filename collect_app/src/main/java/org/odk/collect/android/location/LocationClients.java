@@ -2,6 +2,7 @@ package org.odk.collect.android.location;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -12,6 +13,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
  */
 public class LocationClients {
 
+    @Nullable
+    private static LocationClient testClient = null;
+
     /**
      * Checks and returns a {@link LocationClient} based on whether or not Google Play Services
      * are available.
@@ -20,9 +24,19 @@ public class LocationClients {
      * @return An implementation of LocationClient.
      */
     public static LocationClient clientForContext(@NonNull Context context) {
-        return areGooglePlayServicesAvailable(context)
-                ? new GoogleLocationClient(context)
-                : new AndroidLocationClient(context);
+        return testClient != null
+                ? testClient
+                : areGooglePlayServicesAvailable(context)
+                    ? new GoogleLocationClient(context)
+                    : new AndroidLocationClient(context);
+    }
+
+    /**
+     * For testing purposes only. A poorman's Dependency Injection.
+     * @param testClient
+     */
+    public static void setTestClient(@NonNull LocationClient testClient) {
+        LocationClients.testClient = testClient;
     }
 
     private static boolean areGooglePlayServicesAvailable(@NonNull Context context) {
