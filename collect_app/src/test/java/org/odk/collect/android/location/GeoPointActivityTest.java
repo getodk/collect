@@ -22,15 +22,17 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowProgressDialog;
+import org.robolectric.util.ReflectionHelpers;
 
+import static android.app.Activity.RESULT_OK;
+import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESULT;
 import static org.robolectric.Shadows.shadowOf;
 
 /**
@@ -65,34 +67,31 @@ public class GeoPointActivityTest {
     @Test
     public void testLocationClientLifecycle() {
 
-        // Make sure our Mock didn't get overriden:
         activityController.create();
-        assertSame(activity.getLocationClient(), locationClient);
-
-        ShadowProgressDialog shadowProgressDialog =
-                shadowOf(activity.getLocationDialog());
 
         // Activity.onStart() should call LocationClient.start().
         activityController.start();
         verify(locationClient).start();
 
         when(locationClient.isLocationAvailable()).thenReturn(true);
+        when(locationClient.getLastLocation()).thenReturn(newMockLocation());
 
         // Make sure we're requesting updates and logging our previous location:
         activity.onClientStart();
         verify(locationClient).requestLocationUpdates(activity);
-        verify(locationClient.getLastLocation());
+        verify(locationClient).getLastLocation();
 
         // Simulate the location updating:
         Location firstLocation = newMockLocation();
         when(firstLocation.getAccuracy()).thenReturn(0.0f);
 
         activity.onLocationChanged(firstLocation);
+        ProgressDialog locationDialog = activity.getLocationDialog();
 
         // First update should only change dialog message (to avoid network location bug):
         assertFalse(shadowActivity.isFinishing());
         assertEquals(
-                shadowProgressDialog.getMessage(),
+                getDialogMessage(locationDialog),
                 activity.getAccuracyMessage(firstLocation)
         );
 
@@ -106,7 +105,7 @@ public class GeoPointActivityTest {
 
         assertFalse(shadowActivity.isFinishing());
         assertEquals(
-                shadowProgressDialog.getMessage(),
+                getDialogMessage(locationDialog),
                 activity.getProviderAccuracyMessage(secondLocation)
         );
 
@@ -116,16 +115,62 @@ public class GeoPointActivityTest {
         Location thirdLocation = newMockLocation();
         when(thirdLocation.getAccuracy()).thenReturn(goodAccuracy);
 
-        activity.onLocationChanged(secondLocation);
+        activity.onLocationChanged(thirdLocation);
 
         assertTrue(shadowActivity.isFinishing());
         assertEquals(
-                shadowProgressDialog.getMessage(),
+                getDialogMessage(locationDialog),
                 activity.getProviderAccuracyMessage(thirdLocation)
         );
 
+        assertEquals(shadowActivity.getResultCode(), RESULT_OK);
+
         Intent resultIntent = shadowActivity.getResultIntent();
-        assertEquals(shadowActivity.getResultCode(), RESULT_O);
+        String resultString = resultIntent.getStringExtra(LOCATION_RESULT);
+
+        assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));
+    }
+
+    @Test
+    public void activityShouldOpenSettingsIfLocationUnavailable() {
+        activityController.create();
+        activityController.start();
+
+        when(locationClient.isLocationAvailable()).thenReturn(false);
+
+        activity.onClientStart();
+        assertTrue(shadowActivity.isFinishing());
+
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
+    }
+
+    @Test
+    public void activityShouldOpenSettingsIfLocationClientCantConnect() {
+        activityController.create();
+        activityController.start();
+
+        activity.onClientStartFailure();
+        assertTrue(shadowActivity.isFinishing());
+
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
+    }
+
+    @Test
+    public void activityShouldShutOffLocationClientWhenItStops() {
+        activityController.create();
+        activityController.start();
+
+        verify(locationClient).start();
+
+        activityController.stop();
+
+        verify(locationClient).stop();
+    }
+
+    private static String getDialogMessage(ProgressDialog progressDialog) {
+        return ReflectionHelpers.getField(progressDialog, "mMessage");
     }
 
     private static Location newMockLocation() {
