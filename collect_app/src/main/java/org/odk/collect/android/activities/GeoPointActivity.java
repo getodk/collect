@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
@@ -69,9 +70,11 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
         setTitle(getString(R.string.get_location));
 
-        locationClient = LocationClients.clientForContext(this);
-        locationClient.setListener(this);
+        if (locationClient == null) {
+            locationClient = LocationClients.clientForContext(this);
+        }
 
+        locationClient.setListener(this);
         setupLocationDialog();
     }
 
@@ -125,7 +128,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         locationClient.requestLocationUpdates(this);
 
         if (locationClient.isLocationAvailable()) {
-            logLostLocation();
+            logLastLocation();
 
         } else {
             finishOnError();
@@ -184,7 +187,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 geoPointButtonListener);
     }
 
-    private void logLostLocation() {
+    private void logLastLocation() {
         Location loc = locationClient.getLastLocation();
 
         if (loc != null) {
@@ -203,8 +206,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         if (location != null) {
             Intent i = new Intent();
 
-            String result = String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
-            i.putExtra(FormEntryActivity.LOCATION_RESULT, result);
+            i.putExtra(FormEntryActivity.LOCATION_RESULT, getResultStringForLocation(location));
 
             setResult(RESULT_OK, i);
         }
@@ -235,16 +237,14 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                     + location.getAccuracy());
 
             if (locationCount > 1) {
-                locationDialog.setMessage(getString(R.string.location_provider_accuracy,
-                        this.location.getProvider(), truncateDouble(location.getAccuracy())));
+                locationDialog.setMessage(getProviderAccuracyMessage(location));
 
                 if (location.getAccuracy() <= locationAccuracy) {
                     returnLocation();
                 }
 
             } else {
-                locationDialog.setMessage(getString(R.string.location_accuracy,
-                        location.getAccuracy()));
+                locationDialog.setMessage(getAccuracyMessage(location));
             }
 
         } else {
@@ -253,8 +253,32 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         }
     }
 
+    public String getAccuracyMessage(@NonNull Location location) {
+        return getString(R.string.location_accuracy, location.getAccuracy());
+    }
+
+    public String getProviderAccuracyMessage(@NonNull Location location) {
+        return getString(R.string.location_provider_accuracy, location.getProvider(), truncateDouble(location.getAccuracy()));
+    }
+
+    public String getResultStringForLocation(@NonNull Location location) {
+        return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
+    }
+
     private String truncateDouble(float number) {
         DecimalFormat df = new DecimalFormat("#.##");
         return df.format(number);
+    }
+
+    public void setLocationClient(LocationClient locationClient) {
+        this.locationClient = locationClient;
+    }
+
+    public LocationClient getLocationClient() {
+        return locationClient;
+    }
+
+    public ProgressDialog getLocationDialog() {
+        return locationDialog;
     }
 }

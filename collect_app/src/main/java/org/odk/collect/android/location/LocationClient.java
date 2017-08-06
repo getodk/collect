@@ -83,6 +83,9 @@ public interface LocationClient {
      */
     boolean isMonitoringLocation();
 
+
+
+
     /**
      * An interface for listening to status changes on a LocaitonClient.
      */
