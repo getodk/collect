@@ -48,7 +48,10 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
+
+import timber.log.Timber;
 
 /**
  * Version of the GeoPointMapActivity that uses the new OSMDDroid
@@ -118,9 +121,14 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         }
 
         map = (MapView) findViewById(R.id.omap);
-        helper = new MapHelper(this, map, GeoPointOsmMapActivity.this);
-        map.setMultiTouchControls(true);
-        map.setBuiltInZoomControls(true);
+        if (helper == null) {
+            // For testing:
+            helper = new MapHelper(this, map, GeoPointOsmMapActivity.this);
+
+            map.setMultiTouchControls(true);
+            map.setBuiltInZoomControls(true);
+        }
+
         marker = new Marker(map);
         marker.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_place_black_36dp));
         myLocationOverlay = new MyLocationNewOverlay(map);
@@ -362,8 +370,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
-
-    private void returnLocation() {
+    public void returnLocation() {
         Intent i = new Intent();
         if (setClear || (readOnly && latLng == null)) {
             i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
@@ -378,8 +385,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         } else if (location != null) {
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
-                    location.getLatitude() + " " + location.getLongitude() + " "
-                            + location.getAltitude() + " " + location.getAccuracy());
+                    getResultString(location));
             setResult(RESULT_OK, i);
         } else {
             i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
@@ -392,6 +398,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
         return new DecimalFormat("#.##").format(f);
     }
 
+    public String getResultString(Location location) {
+        return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
+    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -578,11 +587,23 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     @Override
     public void onClientStartFailure() {
-
+        showGPSDisabledAlertToUser();
     }
 
     @Override
     public void onClientStop() {
 
+    }
+
+    public AlertDialog getZoomDialog() {
+        return zoomDialog;
+    }
+
+    /**
+     * For testing purposes.
+     * @param helper
+     */
+    public void setHelper(MapHelper helper) {
+        this.helper = helper;
     }
 }

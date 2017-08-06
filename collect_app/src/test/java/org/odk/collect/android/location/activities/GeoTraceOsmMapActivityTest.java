@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.location.LocationClient;
 import org.odk.collect.android.location.LocationClients;
