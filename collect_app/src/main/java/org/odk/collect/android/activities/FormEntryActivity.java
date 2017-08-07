@@ -2516,6 +2516,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
+        setTimerLogger(formController);
         supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2594,13 +2595,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 formController.setInstancePath(instanceFile);
             }
 
-            setTimerLogger(formController);
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            setTimerLogger(formController);
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {
