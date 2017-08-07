@@ -19,7 +19,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -109,6 +111,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
+        answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
