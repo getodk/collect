@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.helpers.ODKSQLiteOpenHelper;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -66,6 +67,10 @@ public class ItemsetDbAdapter {
             // then drop the table tracking itemsets itself
             db.execSQL("DROP TABLE IF EXISTS " + ITEMSET_TABLE);
             onCreate(db);
+        }
+
+        @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         }
     }
 

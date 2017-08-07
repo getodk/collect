@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.database;
+package org.odk.collect.android.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -119,7 +119,7 @@ public abstract class ODKSQLiteOpenHelper {
             }
 
             int version = db.getVersion();
-            if (version != newVersion) {
+            if (version < newVersion) {
                 db.beginTransaction();
                 try {
                     if (version == 0) {
@@ -127,6 +127,15 @@ public abstract class ODKSQLiteOpenHelper {
                     } else {
                         onUpgrade(db, version, newVersion);
                     }
+                    db.setVersion(newVersion);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            } else if (version > newVersion) {
+                db.beginTransaction();
+                try {
+                    onDowngrade(db, version, newVersion);
                     db.setVersion(newVersion);
                     db.setTransactionSuccessful();
                 } finally {
@@ -265,6 +274,7 @@ public abstract class ODKSQLiteOpenHelper {
      */
     public abstract void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion);
 
+    public abstract void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion);
 
     /**
      * Called when the database has been opened. Override method should check

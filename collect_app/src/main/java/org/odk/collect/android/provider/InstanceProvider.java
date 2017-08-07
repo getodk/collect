@@ -23,11 +23,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.helpers.InstanceDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -39,15 +40,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-/**
- *
- */
 public class InstanceProvider extends ContentProvider {
-
-
-    private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 4;
-    private static final String INSTANCES_TABLE_NAME = "instances";
+    public static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
 
@@ -56,69 +50,9 @@ public class InstanceProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher;
 
-    /**
-     * This class helps open, create, and upgrade the database file.
-     */
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+    private InstanceDatabaseHelper databaseHelper;
 
-        DatabaseHelper(String databaseName) {
-            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
-        }
-
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-                    + InstanceColumns._ID + " integer primary key, "
-                    + InstanceColumns.DISPLAY_NAME + " text not null, "
-                    + InstanceColumns.SUBMISSION_URI + " text, "
-                    + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                    + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                    + InstanceColumns.JR_FORM_ID + " text not null, "
-                    + InstanceColumns.JR_VERSION + " text, "
-                    + InstanceColumns.STATUS + " text not null, "
-                    + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                    + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                    + InstanceColumns.DELETED_DATE + " date );");
-        }
-
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            final int initialVersion = oldVersion;
-            if (oldVersion == 1) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
-                db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
-                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
-                        + "'");
-                oldVersion = 2;
-            }
-            if (oldVersion == 2) {
-                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.JR_VERSION + " text;");
-            }
-            if (oldVersion == 3) {
-                Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-                int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
-                cursor.close();
-
-                // Only add the column if it doesn't already exist
-                if (columnIndex == -1) {
-                    db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                            + InstanceColumns.DELETED_DATE + " date;");
-                }
-            }
-            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
-                    initialVersion, newVersion);
-        }
-    }
-
-    private DatabaseHelper databaseHelper;
-
-    private DatabaseHelper getDbHelper() {
+    private InstanceDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
             Collect.createODKDirs();
@@ -130,23 +64,18 @@ public class InstanceProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        databaseHelper = new InstanceDatabaseHelper();
         return databaseHelper;
     }
 
     @Override
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
-        DatabaseHelper h = getDbHelper();
-        if (h == null) {
-            return false;
-        }
-        return true;
+        return getDbHelper() != null;
     }
 
-
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
@@ -174,9 +103,8 @@ public class InstanceProvider extends ContentProvider {
         return c;
     }
 
-
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:
                 return InstanceColumns.CONTENT_TYPE;
@@ -189,9 +117,8 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-
     @Override
-    public Uri insert(Uri uri, ContentValues initialValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != INSTANCES) {
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -284,14 +211,13 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-
     /**
      * This method removes the entry from the content provider, and also removes any associated
      * files.
      * files:  form.xml, [formmd5].formdef, formname-media {directory}
      */
     @Override
-    public int delete(Uri uri, String where, String[] whereArgs) {
+    public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
         int count;
 
@@ -300,7 +226,7 @@ public class InstanceProvider extends ContentProvider {
                 Cursor del = null;
                 try {
                     del = this.query(uri, null, where, whereArgs, null);
-                    if (del.getCount() > 0) {
+                    if (del != null && del.getCount() > 0) {
                         del.moveToFirst();
                         do {
                             String instanceFile = del.getString(
@@ -326,7 +252,7 @@ public class InstanceProvider extends ContentProvider {
                 String status = null;
                 try {
                     c = this.query(uri, null, where, whereArgs, null);
-                    if (c.getCount() > 0) {
+                    if (c != null && c.getCount() > 0) {
                         c.moveToFirst();
                         status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                         do {
@@ -369,7 +295,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     @Override
-    public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
         SQLiteDatabase db = getDbHelper().getWritableDatabase();
 
         Long now = System.currentTimeMillis();
@@ -380,7 +306,7 @@ public class InstanceProvider extends ContentProvider {
         }
 
         int count;
-        String status = null;
+        String status;
         switch (sUriMatcher.match(uri)) {
             case INSTANCES:
                 if (values.containsKey(InstanceColumns.STATUS)) {
@@ -429,7 +355,7 @@ public class InstanceProvider extends ContentProvider {
         sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
         sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
-        sInstancesProjectionMap = new HashMap<String, String>();
+        sInstancesProjectionMap = new HashMap<>();
         sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
         sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
@@ -446,5 +372,4 @@ public class InstanceProvider extends ContentProvider {
                 InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
     }
-
 }

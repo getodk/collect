@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.helpers.ODKSQLiteOpenHelper;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
 
@@ -255,6 +255,10 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
     private void onProgress(String message) {
