@@ -15,7 +15,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Selection;
