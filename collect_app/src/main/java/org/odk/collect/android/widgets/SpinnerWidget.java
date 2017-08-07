@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -204,7 +205,7 @@ public class SpinnerWidget extends QuestionWidget {
             } else if (spinner.getSelectedItemPosition() == position) {
                 tv.setTextColor(getContext().getResources().getColor(R.color.tintColor));
             } else {
-                tv.setTextColor(Color.BLACK);
+                tv.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
             }
 
             return convertView;

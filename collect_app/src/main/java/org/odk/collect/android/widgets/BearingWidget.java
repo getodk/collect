@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -70,7 +71,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay = new TextView(getContext());
         answerDisplay.setId(QuestionWidget.newUniqueId());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answerDisplay.setTextColor(Color.BLACK);
+        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         answerDisplay.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
