@@ -112,7 +112,7 @@ public class FormsProvider extends ContentProvider {
                     success &= upgradeToVersion4(db, oldVersion);
                     break;
                 default:
-                    Timber.i("Unknown version " + newVersion);
+                    Timber.i("Unknown version " + oldVersion);
             }
 
             if (success) {
