@@ -97,7 +97,7 @@ public class InstanceProvider extends ContentProvider {
                     success &= upgradeToVersion4(db);
                     break;
                 default:
-                    Timber.i("Unknown version " + newVersion);
+                    Timber.i("Unknown version " + oldVersion);
             }
 
             if (success) {
@@ -118,7 +118,7 @@ public class InstanceProvider extends ContentProvider {
                         + InstanceProviderAPI.InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                         + "'");
             } catch (SQLiteException e) {
-                Timber.i(e);
+                Timber.e(e);
                 success = false;
             }
             return success;
@@ -130,7 +130,7 @@ public class InstanceProvider extends ContentProvider {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                         + InstanceProviderAPI.InstanceColumns.JR_VERSION + " text;");
             } catch (SQLiteException e) {
-                Timber.i(e);
+                Timber.e(e);
                 success = false;
             }
             return success;
@@ -149,7 +149,7 @@ public class InstanceProvider extends ContentProvider {
                             + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " date;");
                 }
             } catch (SQLiteException e) {
-                Timber.i(e);
+                Timber.e(e);
                 success = false;
             }
             return success;
