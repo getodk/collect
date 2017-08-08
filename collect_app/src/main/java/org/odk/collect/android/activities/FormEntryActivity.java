@@ -1346,8 +1346,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void showNextView() {
         try {
-            FormController formController = Collect.getInstance()
-                    .getFormController();
+            FormController formController = Collect.getInstance().getFormController();
+            if (formController == null) {
+                return;
+            }
 
             // get constraint behavior preference value with appropriate default
             String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
