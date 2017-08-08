@@ -184,7 +184,6 @@
   <string name="admin_password_disabled">Administratoriaus slaptažodis išjungtas</string>
   <string name="admin_password_incorrect">Neteisingas slaptažodis!</string>
   <string name="enter_admin_password">Įveskite administratoriaus slaptažodį</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="no_account">No account</string>

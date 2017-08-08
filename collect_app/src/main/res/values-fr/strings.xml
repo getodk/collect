@@ -121,6 +121,7 @@
   <string name="username">Nom d\'utilisateur</string>
   <string name="view_hierarchy">Aller à la ligne de saisie</string>
   <string name="general_preferences">Modifier les Paramètres</string>
+  <string name="client">Interface utilisateur</string>
   <string name="show_splash_summary">Montrer lors du démarrage</string>
   <string name="splash_path">Image sélectionnée</string>
   <string name="default_splash_path">Défaut d\'ODK</string>
@@ -202,7 +203,7 @@
   <string name="admin_password_incorrect">Désolé, le mot de passe n\'est pas correct !</string>
   <string name="enter_admin_password">Saisissez le mot de passe administrateur</string>
   <string name="change_admin_password">Modifier le mot de passe de l\'administrateur</string>
-  <string name="autosend">Envoi Automatique</string>
+  <string name="autosend">Envoi automatique</string>
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="no_account">Pas de compte</string>
@@ -270,8 +271,8 @@
   <string name="invalid_oauth">OAuth 2 token non valable</string>
   <string name="google_repeat_error">Les répétitions ne sont pas prises en charge par les Google Sheets en ce moment.</string>
   <string name="media_upload_error">Impossible de télécharger une photo qui n\'existe pas: %1$s</string>
-  <string name="odk_auth_auth_fail">Échec d\'authentification d\'ODK Auto-envoi. Merci de vous assurez que vos paramètres sont corrects.</string>
-  <string name="odk_auto_note">Notification d\'ODK Auto-envoi</string>
+  <string name="odk_auth_auth_fail">Erreur d\'authentification d\'envoi automatique ODK, assurez-vous que vos paramètres sont corrects</string>
+  <string name="odk_auto_note">Notification d\'envoi automatique ODK</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <string name="delete_after_send">Supprimer après l\'envoi</string>
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
@@ -288,7 +289,9 @@
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom d\'utilisateur</string>
   <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>
   <string name="about_preferences">À propos</string>
+  <string name="tell_your_friends">Partagez ODK Collect avec vos collègues</string>
   <string name="tell_your_friends_msg">Télécharges l\'application ODK Collect!</string>
+  <string name="leave_a_review">Laisser un avis sur Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">Cartographie</string>
   <string name="map_sdk_selector_title">Moteur cartographique - SDK</string>
@@ -366,6 +369,11 @@
   <string name="parser_exception">Exception XPathParser: \\"%s\\"</string>
   <string name="selected_answer">Sélectionné: %s</string>
   <string name="version_number">Version: %s</string>
+  <string name="odk_website">Visiter le site web de Open Data Kit</string>
+  <string name="odk_website_summary">Open Data Kit (ODK) est utilisé pour collecter des données dans des environnements difficiles.</string>
+  <string name="odk_forum">Rejoindre le Forum ODK</string>
+  <string name="odk_forum_summary">Rejoignez le Forum pour obtenir de l\'aide, demander des fonctionnalités, contribuer au code / traductions !</string>
+  <string name="all_open_source_licenses">Librairies et licences Open source</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -463,4 +471,31 @@
   <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
   <string name="request_permission">Cette application nécessite les droits d\'utilisation de votre appareil photo.</string>
   <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
+  <string name="invalid_range_widget">Les paramètres de ce widget sont invalides!</string>
+  <string name="form_entry_setting">Paramètres d\'entrée du formulaire</string>
+  <string name="form_entry_settings_summary">Appuyez pour gérer les éléments du formulaire</string>
+  <string name="user_settings">Paramètres utilisateurs</string>
+  <string name="user_setting_summary">Appuyez pour gérer les paramètres généraux</string>
+  <string name="main_menu_settings">Paramètres du Menu principal</string>
+  <string name="main_menu_settings_summary">Appuyez pour gérer les éléments du Menu Principal</string>
+  <string name="user_access_control">Contrôle d\'Accès Utilisateur</string>
+  <string name="autosend_selector_title">Envoi automatique</string>
+  <string name="off">Off</string>
+  <string name="wifi_autosend">Seulement Wifi</string>
+  <string name="cellular_autosend">Seulement Cellulaire</string>
+  <string name="wifi_cellular_autosend">Wifi ou Cellulaire</string>
+  <string name="map_basemap_behavior_title">Fonds de carte</string>
+  <string name="form_management_preferences">Gestion de formulaire</string>
+  <string name="form_submission_category">Soumission de formulaire</string>
+  <string name="form_filling_category">Remplissage de formulaire</string>
+  <string name="high_resolution_title">Vidéo Haute Définition</string>
+  <string name="form_import_category">Import de formulaire</string>
+  <string name="user_and_device_identity_title">Identité de l\'utilisateur et de l\'appareil</string>
+  <string name="constraint_behavior_title">Traitement de contraintes</string>
+  <string name="show_splash_title">Ecran d\'accueil</string>
+  <string name="server_settings_title">Serveur</string>
+  <string name="type">Type</string>
+  <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
+  <string name="use_device_language">Utiliser la langue de l\'appareil</string>
+  <string name="not_supported_offline_layer_format">Les fonds cartographiques hors ligne sélectionnés utilisent le format PBF qui n\'est pas pris en charge!</string>
 </resources>

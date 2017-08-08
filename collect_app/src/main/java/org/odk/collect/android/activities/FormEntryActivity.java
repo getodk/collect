@@ -364,8 +364,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
+                String uriMimeType = getContentResolver().getType(uri);
 
-                if (uri != null && getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
@@ -374,7 +375,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         try {
                             instanceCursor = getContentResolver().query(uri,
                                     null, null, null, null);
-                            if (instanceCursor.getCount() != 1) {
+                            if (instanceCursor == null || instanceCursor.getCount() != 1) {
                                 this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                                 return;
                             } else {
@@ -457,13 +458,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             }
                         }
                     }
-                } else if (uri != null && getContentResolver().getType(uri).equals(
-                        FormsColumns.CONTENT_ITEM_TYPE)) {
+                } else if (uriMimeType != null
+                        && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
                     try {
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
-                        if (c.getCount() != 1) {
+                        if (c == null || c.getCount() != 1) {
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
@@ -1132,14 +1133,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
-                    if (saveName == null && getContentResolver().getType(getIntent().getData())
-                            == InstanceColumns.CONTENT_ITEM_TYPE) {
+                    String uriMimeType = getContentResolver().getType(getIntent().getData());
+                    if (saveName == null && uriMimeType != null
+                            && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                         Uri instanceUri = getIntent().getData();
                         Cursor instance = null;
                         try {
                             instance = getContentResolver().query(instanceUri,
                                     null, null, null, null);
-                            if (instance.getCount() == 1) {
+                            if (instance != null && instance.getCount() == 1) {
                                 instance.moveToFirst();
                                 saveName = instance
                                         .getString(instance

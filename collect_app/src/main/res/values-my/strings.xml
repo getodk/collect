@@ -184,7 +184,6 @@
   <string name="admin_password_disabled">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) မေဆာင္ရြက္ႏိုင္ပါ</string>
   <string name="admin_password_incorrect">လ်ိဳ့၀ွက္နံပါတ္ မမွန္ကန္ပါ!</string>
   <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="no_account">No account</string>
