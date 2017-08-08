@@ -92,6 +92,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
+    private AlertDialog errorDialog;
+
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
@@ -107,12 +109,22 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
 
-        mapView = (MapView) findViewById(R.id.geotrace_mapview);
-        helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+        // For testing purposes:
+        if (mapView == null) {
+            mapView = (MapView) findViewById(R.id.geotrace_mapview);
+        }
+
+        if (helper == null) {
+            helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+        }
+
+        if (myLocationOverlay == null) {
+            myLocationOverlay = new MyLocationNewOverlay(mapView);
+        }
+
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(zoomLevel);
-        myLocationOverlay = new MyLocationNewOverlay(mapView);
 
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
@@ -481,8 +493,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+        errorDialog = alertDialogBuilder.create();
+        errorDialog.show();
     }
 
     //This happens on click of the play button
@@ -857,11 +869,31 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     public void onClientStartFailure() {
-
+        showGPSDisabledAlertToUser();
     }
 
     @Override
     public void onClientStop() {
         disableMyLocation();
+    }
+
+    public void setModeActive(Boolean modeActive) {
+        this.modeActive = modeActive;
+    }
+
+    public void setMapView(MapView mapView) {
+        this.mapView = mapView;
+    }
+
+    public void setHelper(MapHelper helper) {
+        this.helper = helper;
+    }
+
+    public void setMyLocationOverlay(MyLocationNewOverlay myLocationOverlay) {
+        this.myLocationOverlay = myLocationOverlay;
+    }
+
+    public AlertDialog getErrorDialog() {
+        return errorDialog;
     }
 }

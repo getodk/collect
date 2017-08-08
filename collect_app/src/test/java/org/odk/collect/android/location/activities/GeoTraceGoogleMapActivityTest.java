@@ -1,5 +1,9 @@
 package org.odk.collect.android.location.activities;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +22,15 @@ import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 import static org.robolectric.Shadows.shadowOf;
 
 
@@ -50,6 +63,68 @@ public class GeoTraceGoogleMapActivityTest {
 
     @Test
     public void testLocationClientLifecycle() {
+        activityController.create();
+        activityController.start();
 
+        verify(locationClient).start();
+
+        when(locationClient.isLocationAvailable()).thenReturn(true);
+
+        Location location = newMockLocation();
+        when(locationClient.getLastLocation()).thenReturn(location);
+
+        assertNull(activity.getCurLocation());
+
+        activity.onClientStart();
+
+        verify(locationClient).requestLocationUpdates(activity);
+        verify(locationClient).getLastLocation();
+
+        assertSame(activity.getCurLocation(), location);
+
+        Location newLocation = newMockLocation();
+        when(newLocation.getLatitude()).thenReturn(1.0);
+        when(newLocation.getLongitude()).thenReturn(2.0);
+
+        activity.setModeActive(false);
+        activity.getPlayButton().setEnabled(false);
+
+        activity.onLocationChanged(newLocation);
+
+        assertTrue(activity.getPlayButton().isEnabled());
+        assertSame(newLocation, activity.getCurLocation());
+        assertEquals(new LatLng(location.getLatitude(), location.getLongitude()), activity.getCurlatLng());
+
+        activityController.stop();
+        verify(locationClient).stop();
+    }
+
+
+    @Test
+    public void activityShouldShowErrorDialogOnClientError() {
+        activityController.create();
+        activityController.start();
+
+        assertNull(activity.getErrorDialog());
+
+        activity.onClientStartFailure();
+
+        assertNotNull(activity.getErrorDialog());
+        assertTrue(activity.getErrorDialog().isShowing());
+    }
+
+    @Test
+    public void activityShouldShowErrorDialogIfLocationUnavailable() {
+        activityController.create();
+        activityController.start();
+
+        when(locationClient.isLocationAvailable()).thenReturn(false);
+
+        assertNull(activity.getErrorDialog());
+
+        activity.onClientStart();
+
+        assertNotNull(activity.getErrorDialog());
+        assertTrue(activity.getErrorDialog().isShowing());
     }
 }

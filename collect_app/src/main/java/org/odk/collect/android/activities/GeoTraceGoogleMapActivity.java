@@ -103,6 +103,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
+    private AlertDialog errorDialog;
 
     private View zoomDialogView;
 
@@ -118,6 +119,12 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geotrace_google_layout);
+
+        clearButton = (ImageButton) findViewById(R.id.clear);
+        playButton = (ImageButton) findViewById(R.id.play);
+        layersButton = (ImageButton) findViewById(R.id.layers);
+        manualButton = (Button) findViewById(R.id.manual_button);
+        layersButton = (ImageButton) findViewById(R.id.layers);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -149,7 +156,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.RED);
 
-        clearButton = (ImageButton) findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,7 +190,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        layersButton = (ImageButton) findViewById(R.id.layers);
 
 
         ImageButton saveButton = (ImageButton) findViewById(R.id.geotrace_save);
@@ -198,7 +203,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                 }
             }
         });
-        playButton = (ImageButton) findViewById(R.id.play);
         playButton.setEnabled(false);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,7 +236,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             clearButton.setEnabled(false);
         }
 
-        manualButton = (Button) findViewById(R.id.manual_button);
         manualButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,7 +268,6 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
         buildDialogs();
 
-        layersButton = (ImageButton) findViewById(R.id.layers);
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -712,8 +714,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+        errorDialog = alertDialogBuilder.create();
+        errorDialog.show();
     }
 
     private void zoomToBounds() {
@@ -779,6 +781,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         locationClient.requestLocationUpdates(this);
         if (!locationClient.isLocationAvailable()) {
             showGPSDisabledAlertToUser();
+            return;
         }
 
         curLocation = locationClient.getLastLocation();
@@ -786,11 +789,31 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
     @Override
     public void onClientStartFailure() {
-
+        showGPSDisabledAlertToUser();
     }
 
     @Override
     public void onClientStop() {
 
+    }
+
+    public void setModeActive(Boolean modeActive) {
+        this.modeActive = modeActive;
+    }
+
+    public ImageButton getPlayButton() {
+        return playButton;
+    }
+
+    public Location getCurLocation() {
+        return curLocation;
+    }
+
+    public LatLng getCurlatLng() {
+        return curlatLng;
+    }
+
+    public AlertDialog getErrorDialog() {
+        return errorDialog;
     }
 }

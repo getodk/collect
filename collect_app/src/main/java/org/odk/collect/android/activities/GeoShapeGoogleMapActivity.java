@@ -76,6 +76,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     private MapHelper helper;
     private AlertDialog zoomDialog;
+    private AlertDialog errorDialog;
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
@@ -88,6 +89,12 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geoshape_google_layout);
+
+        // Do this here so we can test it:
+        gpsButton = (ImageButton) findViewById(R.id.gps);
+        gpsButton.setEnabled(false);
+
+        clearButton = (ImageButton) findViewById(R.id.clear);
 
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
@@ -135,8 +142,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         polygonOptions.strokeColor(Color.RED);
         polygonOptions.zIndex(1);
 
-        gpsButton = (ImageButton) findViewById(R.id.gps);
-        gpsButton.setEnabled(false);
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +152,6 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         });
 
-        clearButton = (ImageButton) findViewById(R.id.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,8 +274,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         // If there is a location allow for user to be able to fly there
         gpsButton.setEnabled(true);
         curLocation = location;
-        curLocation = location;
         curlatLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
+
         if (!foundFirstLocation) {
             showZoomDialog();
             foundFirstLocation = true;
@@ -384,25 +388,28 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             zoomDialog = builder.create();
         }
 
-        if (curLocation != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+        if (zoomLocationButton != null) {
+            if (curLocation != null) {
+                zoomLocationButton.setEnabled(true);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomLocationButton.setEnabled(false);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+            }
+
+            if (markerArray.size() != 0) {
+                zoomPointButton.setEnabled(true);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomPointButton.setEnabled(false);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+            }
         }
 
-        if (markerArray.size() != 0) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
-        }
         zoomDialog.show();
     }
 
@@ -423,8 +430,8 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+        errorDialog = alertDialogBuilder.create();
+        errorDialog.show();
     }
 
     @Override
@@ -439,11 +446,23 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
     @Override
     public void onClientStartFailure() {
-
+        showGPSDisabledAlertToUser();
     }
 
     @Override
     public void onClientStop() {
 
+    }
+
+    public ImageButton getGpsButton() {
+        return gpsButton;
+    }
+
+    public AlertDialog getZoomDialog() {
+        return zoomDialog;
+    }
+
+    public AlertDialog getErrorDialog() {
+        return errorDialog;
     }
 }
