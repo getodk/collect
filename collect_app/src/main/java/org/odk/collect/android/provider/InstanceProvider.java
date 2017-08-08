@@ -21,6 +21,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -65,7 +66,6 @@ public class InstanceProvider extends ContentProvider {
             super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
         }
 
-
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
@@ -82,37 +82,77 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.DELETED_DATE + " date );");
         }
 
-
+        @SuppressWarnings({"checkstyle:FallThrough"})
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            final int initialVersion = oldVersion;
-            if (oldVersion == 1) {
+            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+
+            boolean success = true;
+            switch (oldVersion) {
+                case 1:
+                    success = upgradeToVersion2(db);
+                case 2:
+                    success &= upgradeToVersion3(db);
+                case 3:
+                    success &= upgradeToVersion4(db);
+                    break;
+                default:
+                    Timber.i("Unknown version " + newVersion);
+            }
+
+            if (success) {
+                Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
+            } else {
+                Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+            }
+        }
+
+        private boolean upgradeToVersion2(SQLiteDatabase db) {
+            boolean success = true;
+            try {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+                        + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
                 db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                        + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                        + "' WHERE " + InstanceColumns.STATUS + " IS NOT NULL AND "
-                        + InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                        + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                        + "' WHERE " + InstanceProviderAPI.InstanceColumns.STATUS + " IS NOT NULL AND "
+                        + InstanceProviderAPI.InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                         + "'");
-                oldVersion = 2;
+            } catch (SQLiteException e) {
+                Timber.i(e);
+                success = false;
             }
-            if (oldVersion == 2) {
+            return success;
+        }
+
+        private boolean upgradeToVersion3(SQLiteDatabase db) {
+            boolean success = true;
+            try {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceColumns.JR_VERSION + " text;");
+                        + InstanceProviderAPI.InstanceColumns.JR_VERSION + " text;");
+            } catch (SQLiteException e) {
+                Timber.i(e);
+                success = false;
             }
-            if (oldVersion == 3) {
+            return success;
+        }
+
+        private boolean upgradeToVersion4(SQLiteDatabase db) {
+            boolean success = true;
+            try {
                 Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-                int columnIndex = cursor.getColumnIndex(InstanceColumns.DELETED_DATE);
+                int columnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
                 cursor.close();
 
                 // Only add the column if it doesn't already exist
                 if (columnIndex == -1) {
                     db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                            + InstanceColumns.DELETED_DATE + " date;");
+                            + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " date;");
                 }
+            } catch (SQLiteException e) {
+                Timber.i(e);
+                success = false;
             }
-            Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
-                    initialVersion, newVersion);
+            return success;
         }
     }
 
