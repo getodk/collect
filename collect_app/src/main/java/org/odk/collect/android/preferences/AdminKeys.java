@@ -38,7 +38,7 @@ public final class AdminKeys {
     public static final String KEY_CHANGE_SERVER               = "change_server";
     public static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
-    // clientForContext
+    // client
     public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     public static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     public static final String KEY_HIGH_RESOLUTION             = "high_resolution";

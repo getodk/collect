@@ -308,7 +308,7 @@ public final class WebUtils {
 
     /**
      * Common method for returning a parsed xml document given a url and the
-     * http context and clientForContext objects involved in the web connection.
+     * http context and client objects involved in the web connection.
      */
     public static DocumentFetchResult getXmlDocument(String urlString,
             HttpContext localContext, HttpClient httpclient) {

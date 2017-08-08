@@ -120,7 +120,7 @@ public class InstanceServerUploader extends InstanceUploader {
      *
      * @param urlString    destination URL
      * @param toUpdate     - Instance URL for recording status update.
-     * @param localContext - context (e.g., credentials, cookies) for clientForContext connection
+     * @param localContext - context (e.g., credentials, cookies) for client connection
      * @param uriRemap     - mapping of Uris to avoid redirects on subsequent invocations
      * @return false if credentials are required and we should terminate immediately.
      */
