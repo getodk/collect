@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -30,6 +31,7 @@ import android.widget.TableLayout;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import timber.log.Timber;
@@ -102,7 +104,9 @@ public class StringWidget extends QuestionWidget {
         }
 
         if (readOnly) {
+            answer.setBackground(null);
             answer.setEnabled(false);
+            answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
             answer.setFocusable(false);
         }
 

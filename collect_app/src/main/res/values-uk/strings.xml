@@ -271,8 +271,8 @@
   <string name="invalid_oauth">Невірна OAuth 2 мітка</string>
   <string name="google_repeat_error">Повтори наразі Google Сторінками не підтримуються.</string>
   <string name="media_upload_error">Невдалося завантажити неіснуюче фото: %1$s</string>
-  <string name="odk_auth_auth_fail">Невдалось увійти в ODK Autosend, будь ласка, перевірте налаштування</string>
-  <string name="odk_auto_note">Повідомлення ODK Autosend</string>
+  <string name="odk_auth_auth_fail">Помилка авторизації під час автоматичного надсилання, будь ласка, перевірте налаштування</string>
+  <string name="odk_auto_note">Сповіщення автоматичного надсилання ODK</string>
   <string name="notification_error">Помилка відображення тексту оповіщення</string>
   <string name="delete_after_send">Видалити після надсилання</string>
   <string name="delete_after_send_summary">Видаляє завершені анкети та медіа файли після надсилання на сервер</string>
@@ -480,7 +480,7 @@
   <string name="main_menu_settings">Налаштування Головного Меню</string>
   <string name="main_menu_settings_summary">Натисніть для управління пунктами головного меню</string>
   <string name="user_access_control">Контроль Доступу Користувачів</string>
-  <string name="autosend_selector_title">Автовідправка</string>
+  <string name="autosend_selector_title">Автоматичне надсилання</string>
   <string name="off">Вимкнена</string>
   <string name="wifi_autosend">Тільки Wi-Fi</string>
   <string name="cellular_autosend">Тільки мобільна мережа</string>
@@ -498,4 +498,5 @@
   <string name="type">Тип</string>
   <string name="form_entry">Зніміть позначку аби прибрати з Заповнити Анкету</string>
   <string name="use_device_language">Використовувати мову пристрою</string>
+  <string name="not_supported_offline_layer_format">Обраний локальний файл використовує формат PBF, що не підтримується!</string>
 </resources>

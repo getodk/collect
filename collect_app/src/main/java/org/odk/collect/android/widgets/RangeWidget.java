@@ -18,6 +18,7 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
@@ -32,6 +33,9 @@ import org.odk.collect.android.utilities.ToastUtils;
 import java.math.BigDecimal;
 
 public abstract class RangeWidget extends QuestionWidget {
+
+    private static final String VERTICAL_APPEARANCE = "vertical";
+    private static final String NO_TICKS_APPEARANCE = "no-ticks";
 
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
@@ -62,8 +66,8 @@ public abstract class RangeWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         if (seekBar.isEnabled()) {
+            seekBar.setProgress(0);
             setUpDefaultValues();
-            seekBar.setProgress(progress);
             setUpActualValueLabel();
         }
     }
@@ -76,13 +80,11 @@ public abstract class RangeWidget extends QuestionWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
     }
 
-    private void setUpLayoutElements(View view) {
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-
-        TextView minValue = (TextView) view.findViewById(R.id.minValue);
+    private void setUpLayoutElements() {
+        TextView minValue = (TextView) view.findViewById(R.id.min_value);
         minValue.setText(String.valueOf(rangeStart));
 
-        TextView maxValue = (TextView) view.findViewById(R.id.maxValue);
+        TextView maxValue = (TextView) view.findViewById(R.id.max_value);
         maxValue.setText(String.valueOf(rangeEnd));
 
         if (isWidgetValid()) {
@@ -93,19 +95,18 @@ public abstract class RangeWidget extends QuestionWidget {
                 setUpDefaultValues();
             }
 
-            currentValue = (TextView) view.findViewById(R.id.currentValue);
+            currentValue = (TextView) view.findViewById(R.id.current_value);
             setUpActualValueLabel();
             setUpSeekBar();
         }
     }
 
     private void setUpDefaultValues() {
-        progress = rangeEnd.subtract(rangeStart).abs().divide(rangeStep.multiply(new BigDecimal(2))).intValue();
-        if (rangeStart.compareTo(rangeEnd) == -1) {
-            actualValue = rangeStart.add(new BigDecimal(progress).multiply(rangeStep));
-        } else {
-            actualValue = rangeStart.subtract(new BigDecimal(progress).multiply(rangeStep));
+        actualValue = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            seekBar.setSplitTrack(false);
         }
+        seekBar.getThumb().mutate().setAlpha(0);
     }
 
     private void setUpWidgetParameters() {
@@ -146,6 +147,7 @@ public abstract class RangeWidget extends QuestionWidget {
         seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                seekBar.getThumb().mutate().setAlpha(255);
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
@@ -176,12 +178,30 @@ public abstract class RangeWidget extends QuestionWidget {
     }
 
     private void setUpAppearance() {
-        if ("vertical".equals(getPrompt().getQuestion().getAppearanceAttr())) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_vertical, null);
+        String appearance = getPrompt().getQuestion().getAppearanceAttr();
+        if (appearance != null && appearance.contains(NO_TICKS_APPEARANCE)) {
+            if (appearance.contains(VERTICAL_APPEARANCE)) {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+                view.findViewById(R.id.seek_bar).setVisibility(GONE);
+            } else {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
+                view.findViewById(R.id.seek_bar).setVisibility(GONE);
+            }
         } else {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.seek_bar_horizontal, null);
+            if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+                view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            } else {
+                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
+                view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
+            }
         }
-        setUpLayoutElements(view);
+
+        setUpLayoutElements();
     }
 
     protected abstract void setUpActualValueLabel();

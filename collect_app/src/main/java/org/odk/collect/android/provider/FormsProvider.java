@@ -94,7 +94,7 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.LANGUAGE + " text, "
                     + FormsColumns.SUBMISSION_URI + " text, "
                     + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                    + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null);");
         }
 
         @Override
@@ -330,7 +330,7 @@ public class FormsProvider extends ContentProvider {
         filePath = form.getAbsolutePath(); // normalized
         values.put(FormsColumns.FORM_FILE_PATH, filePath);
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the necessary fields are all set
         if (!values.containsKey(FormsColumns.DATE)) {
@@ -721,5 +721,4 @@ public class FormsProvider extends ContentProvider {
                 FormsColumns.JRCACHE_FILE_PATH);
         sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
     }
-
 }

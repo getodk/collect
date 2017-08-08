@@ -374,7 +374,7 @@ public class FileUtils {
             try {
                 Element submission = model.getElement(xforms, "submission");
                 String submissionUri = submission.getAttributeValue(null, "action");
-                fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
+                fields.put(SUBMISSIONURI, submissionUri);
                 String base64RsaPublicKey = submission.getAttributeValue(null,
                         "base64RsaPublicKey");
                 fields.put(BASE64_RSA_PUBLIC_KEY,

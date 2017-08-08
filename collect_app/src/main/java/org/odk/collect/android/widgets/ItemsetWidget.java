@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
 import android.view.View;
@@ -56,6 +57,8 @@ import timber.log.Timber;
  */
 public class ItemsetWidget extends QuestionWidget implements
         CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+
+    private static final String QUOTATION_MARK = "\"";
 
     boolean readOnly;
     private boolean autoAdvanceToNext;
@@ -118,7 +121,11 @@ public class ItemsetWidget extends QuestionWidget implements
                 String subString = queryString.substring(0, andIndex);
                 String[] pair = subString.split("=");
                 if (pair.length == 2) {
-                    selection.append(pair[0].trim() + "=? and ");
+                    selection
+                            .append(QUOTATION_MARK)
+                            .append(pair[0].trim())
+                            .append(QUOTATION_MARK)
+                            .append("=? and ");
                     arguments.add(pair[1].trim());
                 } else {
                     // parse error
@@ -130,7 +137,11 @@ public class ItemsetWidget extends QuestionWidget implements
                 String subString = queryString.substring(0, orIndex);
                 String[] pair = subString.split("=");
                 if (pair.length == 2) {
-                    selection.append(pair[0].trim() + "=? or ");
+                    selection
+                            .append(QUOTATION_MARK)
+                            .append(pair[0].trim())
+                            .append(QUOTATION_MARK)
+                            .append("=? or ");
                     arguments.add(pair[1].trim());
                 } else {
                     // parse error
@@ -146,7 +157,11 @@ public class ItemsetWidget extends QuestionWidget implements
         // clauses
         String[] pair = queryString.split("=");
         if (pair.length == 2) {
-            selection.append(pair[0].trim() + "=?");
+            selection
+                    .append(QUOTATION_MARK)
+                    .append(pair[0].trim())
+                    .append(QUOTATION_MARK)
+                    .append("=?");
             arguments.add(pair[1].trim());
         }
         if (pair.length == 1) {
@@ -308,6 +323,8 @@ public class ItemsetWidget extends QuestionWidget implements
                     allOptionsLayout.setOrientation(LinearLayout.VERTICAL);
                     c.close();
                 }
+            } catch (SQLiteException e) {
+                Timber.i(e);
             } finally {
                 ida.close();
             }

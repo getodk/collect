@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -87,6 +88,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay.setId(QuestionWidget.newUniqueId());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answerDisplay.setGravity(Gravity.CENTER);
+        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         createShapeButton = new Button(getContext());
         createShapeButton.setId(QuestionWidget.newUniqueId());
@@ -103,6 +105,10 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 startGeoShapeActivity();
             }
         });
+
+        if (prompt.isReadOnly()) {
+            createShapeButton.setEnabled(false);
+        }
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -189,10 +195,10 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
                 for (int i = 0; i < sa.length; i++) {
                     String[] sp = sa[i].trim().split(" ");
                     double[] gp = new double[4];
-                    gp[0] = Double.valueOf(sp[0]).doubleValue();
-                    gp[1] = Double.valueOf(sp[1]).doubleValue();
-                    gp[2] = Double.valueOf(sp[2]).doubleValue();
-                    gp[3] = Double.valueOf(sp[3]).doubleValue();
+                    gp[0] = Double.valueOf(sp[0]);
+                    gp[1] = Double.valueOf(sp[1]);
+                    gp[2] = Double.valueOf(sp[2]);
+                    gp[3] = Double.valueOf(sp[3]);
                     list.add(gp);
                 }
                 GeoShape shape = new GeoShape(list);

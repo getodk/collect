@@ -271,7 +271,7 @@
   <string name="invalid_oauth">OAuth 2 トークンが正しくありません</string>
   <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
   <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
+  <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
   <string name="delete_after_send">送信後に削除</string>
@@ -498,4 +498,5 @@
   <string name="type">種類</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
+  <string name="not_supported_offline_layer_format">選択されたオフラインレイヤーファイルは、サポートされていない PBF フォーマットを使用しています!</string>
 </resources>
