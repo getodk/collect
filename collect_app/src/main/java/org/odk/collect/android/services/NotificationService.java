@@ -15,16 +15,24 @@
 package org.odk.collect.android.services;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 
 import timber.log.Timber;
@@ -47,6 +55,26 @@ public class NotificationService extends GcmListenerService {
     public void onMessageReceived(final String from, Bundle data) {
         Timber.i("Message received beginning refresh");
 
+        // make sure sd card is ready, if not don't try to send
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return;
+        }
+
+        ConnectivityManager manager = (ConnectivityManager) Collect.getInstance().getBaseContext().getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
+
+        if (currentNetworkInfo != null
+                && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+            if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
+                completeNotification();
+            }
+        }
+
+
+    }
+
+    private void completeNotification() {
         int mNotificationId = 001;
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -80,7 +108,22 @@ public class NotificationService extends GcmListenerService {
                         .setProgress(0,0,false)
                         .setContentText(getString(R.string.smap_refresh_finished));
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    }
 
+    private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
+        // make sure autosend is enabled on the given connected interface
+        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        boolean autosend_wifi_override = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);
+        boolean autosend_wifi_cell_override = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI_CELL);
+        boolean sendwifi = autosend.equals("wifi_only") || autosend_wifi_override || autosend_wifi_override;
+        boolean sendnetwork = autosend.equals("cellular_only") || autosend_wifi_cell_override;
+        if (autosend.equals("wifi_and_cellular")) {
+            sendwifi = true;
+            sendnetwork = true;
+        }
 
+        return (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
+                && sendwifi || currentNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                && sendnetwork);
     }
 }

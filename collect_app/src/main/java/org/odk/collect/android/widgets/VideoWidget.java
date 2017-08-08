@@ -235,6 +235,11 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             chooseButton.setVisibility(View.GONE);
         }
 
+        // smap hide the choose button if appearance is nochoose
+        if(nochoose(prompt)) {
+            chooseButton.setVisibility(View.GONE);
+        }
+
     }
 
     /*

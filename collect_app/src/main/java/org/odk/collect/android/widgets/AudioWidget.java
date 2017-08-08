@@ -199,6 +199,11 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
         }
+
+        // smap hide the choose button if appearance is nochoose
+        if(nochoose(prompt)) {
+            chooseButton.setVisibility(View.GONE);
+        }
     }
 
 

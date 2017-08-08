@@ -400,4 +400,15 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             }
         }
     }
+
+    // Smap added function
+    protected boolean nochoose(FormEntryPrompt prompt) {
+        boolean nochoose = false;
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+
+        if(appearance != null && appearance.contains("nochoose")) {
+            nochoose = true;
+        }
+        return nochoose;
+    }
 }

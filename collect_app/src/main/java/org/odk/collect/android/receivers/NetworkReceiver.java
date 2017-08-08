@@ -88,7 +88,6 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 && sendnetwork);
     }
 
-
     /*
      * Smap initiates a refresh
      * Uploading to google sheets is not supported
