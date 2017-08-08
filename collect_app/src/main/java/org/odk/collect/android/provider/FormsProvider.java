@@ -128,7 +128,7 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
                 onCreate(db);
             } catch (SQLiteException e) {
-                Timber.i(e);
+                Timber.e(e);
                 success = false;
             }
             return success;
@@ -255,7 +255,7 @@ public class FormsProvider extends ContentProvider {
                         + TEMP_FORMS_TABLE_NAME);
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
             } catch (SQLiteException e) {
-                Timber.i(e);
+                Timber.e(e);
                 success = false;
             }
 
