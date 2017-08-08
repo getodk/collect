@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -136,7 +137,7 @@ public class TimeWidget extends QuestionWidget {
         timeTextView.setId(QuestionWidget.newUniqueId());
         timeTextView.setPadding(20, 20, 20, 20);
         timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        timeTextView.setTextColor(Color.BLACK);
+        timeTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
     }
 
     private void addViews() {

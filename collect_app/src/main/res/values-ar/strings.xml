@@ -192,7 +192,6 @@
   <string name="admin_password_disabled">تعطيل كلمة السر للمدير</string>
   <string name="admin_password_incorrect">عذرًا، كلمة المرور غير صحيحة!</string>
   <string name="enter_admin_password">أدخل كلمة مرور المدير</string>
-  <string name="autosend">إرسال تلقائيا</string>
   <string name="found_in_main">الغاء القفل للاخفاء من القائمة الرئيسية</string>
   <string name="found_in_settings">الغاء القفل للاخفاء من الاعدادات الرئيسية</string>
   <string name="no_account">لا يوجد حساب</string>
@@ -258,8 +257,6 @@
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
   <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="odk_auth_auth_fail">فشل ارسال مصادقة المعلومات, رجاءا تأكد من أن جميع الاعدادات صحيحة</string>
-  <string name="odk_auto_note">ارسال الاشعارات تلقائيا</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>

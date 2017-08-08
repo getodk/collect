@@ -330,7 +330,7 @@ public class FormsProvider extends ContentProvider {
         filePath = form.getAbsolutePath(); // normalized
         values.put(FormsColumns.FORM_FILE_PATH, filePath);
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the necessary fields are all set
         if (!values.containsKey(FormsColumns.DATE)) {
