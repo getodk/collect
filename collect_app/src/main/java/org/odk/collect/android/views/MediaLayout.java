@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -113,7 +114,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void resetTextFormatting() {
         // first set it to defaults
-        viewText.setTextColor(Color.BLACK);
+        viewText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
     }

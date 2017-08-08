@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -179,7 +180,7 @@ public class DateWidget extends QuestionWidget {
     private void createDateTextView() {
         dateTextView = new TextView(getContext());
         dateTextView.setId(QuestionWidget.newUniqueId());
-        dateTextView.setTextColor(Color.BLACK);
+        dateTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         dateTextView.setPadding(20, 20, 20, 20);
         dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
@@ -366,7 +367,7 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    // For testing only.
+    // Exposed for testing purposes to avoid reflection.
     public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
         this.datePickerDialog = datePickerDialog;
     }
