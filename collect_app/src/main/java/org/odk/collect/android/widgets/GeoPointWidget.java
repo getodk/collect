@@ -20,8 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -112,12 +112,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextColor(Color.BLACK);
+        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         answerDisplay = new TextView(getContext());
         answerDisplay.setId(QuestionWidget.newUniqueId());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answerDisplay.setGravity(Gravity.CENTER);
-        answerDisplay.setTextColor(Color.BLACK);
+        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // setup play button
         viewButton = new Button(getContext());

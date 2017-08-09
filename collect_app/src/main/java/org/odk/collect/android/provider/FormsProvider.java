@@ -21,6 +21,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -97,15 +98,45 @@ public class FormsProvider extends ContentProvider {
                     + FormsColumns.JRCACHE_FILE_PATH + " text not null);");
         }
 
+        @SuppressWarnings({"checkstyle:FallThrough"})
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            if (oldVersion < 2) {
-                Timber.w("Upgrading database from version %d to %d"
-                        + ", which will destroy all old data", oldVersion, newVersion);
+            Timber.i("Upgrading database from version %d to %d", oldVersion, newVersion);
+
+            boolean success = true;
+            switch (oldVersion) {
+                case 1:
+                    success = upgradeToVersion2(db);
+                case 2:
+                case 3:
+                    success &= upgradeToVersion4(db, oldVersion);
+                    break;
+                default:
+                    Timber.i("Unknown version " + oldVersion);
+            }
+
+            if (success) {
+                Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " completed with success.");
+            } else {
+                Timber.i("Upgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+            }
+        }
+
+        private boolean upgradeToVersion2(SQLiteDatabase db) {
+            boolean success = true;
+            try {
                 db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
                 onCreate(db);
-                return;
-            } else {
+            } catch (SQLiteException e) {
+                Timber.e(e);
+                success = false;
+            }
+            return success;
+        }
+
+        private boolean upgradeToVersion4(SQLiteDatabase db, int oldVersion) {
+            boolean success = true;
+            try {
                 // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
                 // integer MODEL_VERSION to text VERSION
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
@@ -113,55 +144,55 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("INSERT INTO "
                         + TEMP_FORMS_TABLE_NAME
                         + " ("
-                        + FormsColumns._ID
+                        + FormsProviderAPI.FormsColumns._ID
                         + ", "
-                        + FormsColumns.DISPLAY_NAME
+                        + FormsProviderAPI.FormsColumns.DISPLAY_NAME
                         + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
+                        + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
                         + ", "
-                        + FormsColumns.DESCRIPTION
+                        + FormsProviderAPI.FormsColumns.DESCRIPTION
                         + ", "
-                        + FormsColumns.JR_FORM_ID
+                        + FormsProviderAPI.FormsColumns.JR_FORM_ID
                         + ", "
-                        + FormsColumns.MD5_HASH
+                        + FormsProviderAPI.FormsColumns.MD5_HASH
                         + ", "
-                        + FormsColumns.DATE
+                        + FormsProviderAPI.FormsColumns.DATE
                         + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH
+                        + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH
                         + ", "
-                        + FormsColumns.FORM_FILE_PATH
+                        + FormsProviderAPI.FormsColumns.FORM_FILE_PATH
                         + ", "
-                        + FormsColumns.LANGUAGE
+                        + FormsProviderAPI.FormsColumns.LANGUAGE
                         + ", "
-                        + FormsColumns.SUBMISSION_URI
+                        + FormsProviderAPI.FormsColumns.SUBMISSION_URI
                         + ", "
-                        + FormsColumns.JR_VERSION
+                        + FormsProviderAPI.FormsColumns.JR_VERSION
                         + ", "
                         + ((oldVersion != 3) ? ""
-                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH
+                        : (FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                        + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH
                         + ") SELECT "
-                        + FormsColumns._ID
+                        + FormsProviderAPI.FormsColumns._ID
                         + ", "
-                        + FormsColumns.DISPLAY_NAME
+                        + FormsProviderAPI.FormsColumns.DISPLAY_NAME
                         + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
+                        + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
                         + ", "
-                        + FormsColumns.DESCRIPTION
+                        + FormsProviderAPI.FormsColumns.DESCRIPTION
                         + ", "
-                        + FormsColumns.JR_FORM_ID
+                        + FormsProviderAPI.FormsColumns.JR_FORM_ID
                         + ", "
-                        + FormsColumns.MD5_HASH
+                        + FormsProviderAPI.FormsColumns.MD5_HASH
                         + ", "
-                        + FormsColumns.DATE
+                        + FormsProviderAPI.FormsColumns.DATE
                         + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH
+                        + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH
                         + ", "
-                        + FormsColumns.FORM_FILE_PATH
+                        + FormsProviderAPI.FormsColumns.FORM_FILE_PATH
                         + ", "
-                        + FormsColumns.LANGUAGE
+                        + FormsProviderAPI.FormsColumns.LANGUAGE
                         + ", "
-                        + FormsColumns.SUBMISSION_URI
+                        + FormsProviderAPI.FormsColumns.SUBMISSION_URI
                         + ", "
                         + "CASE WHEN "
                         + MODEL_VERSION
@@ -170,8 +201,8 @@ public class FormsProvider extends ContentProvider {
                         + MODEL_VERSION
                         + " AS TEXT) ELSE NULL END, "
                         + ((oldVersion != 3) ? ""
-                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
+                        : (FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                        + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
                         + FORMS_TABLE_NAME);
 
                 // risky failures here...
@@ -180,53 +211,55 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("INSERT INTO "
                         + FORMS_TABLE_NAME
                         + " ("
-                        + FormsColumns._ID
+                        + FormsProviderAPI.FormsColumns._ID
                         + ", "
-                        + FormsColumns.DISPLAY_NAME
+                        + FormsProviderAPI.FormsColumns.DISPLAY_NAME
                         + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
+                        + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
                         + ", "
-                        + FormsColumns.DESCRIPTION
+                        + FormsProviderAPI.FormsColumns.DESCRIPTION
                         + ", "
-                        + FormsColumns.JR_FORM_ID
+                        + FormsProviderAPI.FormsColumns.JR_FORM_ID
                         + ", "
-                        + FormsColumns.MD5_HASH
+                        + FormsProviderAPI.FormsColumns.MD5_HASH
                         + ", "
-                        + FormsColumns.DATE
+                        + FormsProviderAPI.FormsColumns.DATE
                         + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", "
-                        + FormsColumns.LANGUAGE + ", "
-                        + FormsColumns.SUBMISSION_URI + ", "
-                        + FormsColumns.JR_VERSION + ", "
-                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-                        + FormsColumns._ID + ", "
-                        + FormsColumns.DISPLAY_NAME
+                        + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + ", "
+                        + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsProviderAPI.FormsColumns.LANGUAGE + ", "
+                        + FormsProviderAPI.FormsColumns.SUBMISSION_URI + ", "
+                        + FormsProviderAPI.FormsColumns.JR_VERSION + ", "
+                        + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
+                        + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
+                        + FormsProviderAPI.FormsColumns._ID + ", "
+                        + FormsProviderAPI.FormsColumns.DISPLAY_NAME
                         + ", "
-                        + FormsColumns.DISPLAY_SUBTEXT
+                        + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
                         + ", "
-                        + FormsColumns.DESCRIPTION
+                        + FormsProviderAPI.FormsColumns.DESCRIPTION
                         + ", "
-                        + FormsColumns.JR_FORM_ID
+                        + FormsProviderAPI.FormsColumns.JR_FORM_ID
                         + ", "
-                        + FormsColumns.MD5_HASH
+                        + FormsProviderAPI.FormsColumns.MD5_HASH
                         + ", "
-                        + FormsColumns.DATE
+                        + FormsProviderAPI.FormsColumns.DATE
                         + ", " // milliseconds
-                        + FormsColumns.FORM_MEDIA_PATH + ", "
-                        + FormsColumns.FORM_FILE_PATH + ", "
-                        + FormsColumns.LANGUAGE + ", "
-                        + FormsColumns.SUBMISSION_URI + ", "
-                        + FormsColumns.JR_VERSION + ", "
-                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
+                        + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + ", "
+                        + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsProviderAPI.FormsColumns.LANGUAGE + ", "
+                        + FormsProviderAPI.FormsColumns.SUBMISSION_URI + ", "
+                        + FormsProviderAPI.FormsColumns.JR_VERSION + ", "
+                        + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
+                        + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
                         + TEMP_FORMS_TABLE_NAME);
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-
-                Timber.w("Successfully upgraded database from version %d to %d"
-                        + ", without destroying all the old data", oldVersion, newVersion);
+            } catch (SQLiteException e) {
+                Timber.e(e);
+                success = false;
             }
+
+            return success;
         }
     }
 
@@ -252,10 +285,7 @@ public class FormsProvider extends ContentProvider {
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
         DatabaseHelper h = getDbHelper();
-        if (h == null) {
-            return false;
-        }
-        return true;
+        return h != null;
     }
 
     @Override

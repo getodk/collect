@@ -70,20 +70,19 @@ public class DecimalWidget extends StringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         answer.setFilters(fa);
 
-        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-        nf.setMaximumFractionDigits(15);
-        nf.setMaximumIntegerDigits(15);
-        nf.setGroupingUsed(false);
-
         Double d = getDoubleAnswerValue();
 
         if (d != null) {
-            // truncate to 15 digits max...
-            String string = nf.format(d);
-            d = Double.parseDouble(string.replace(',', '.'));
-            //answer.setText(d.toString());
-            answer.setText(String.format(Locale.ENGLISH, "%f", d));
-            Selection.setSelection(answer.getText(), answer.getText().toString().length());
+            // truncate to 15 digits max in US locale
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+            nf.setMaximumFractionDigits(15);
+            nf.setMaximumIntegerDigits(15);
+            nf.setGroupingUsed(false);
+
+            String formattedValue = nf.format(d);
+            answer.setText(formattedValue);
+
+            Selection.setSelection(answer.getText(), answer.getText().length());
         }
 
         // disable if read only

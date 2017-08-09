@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Geen programma gevonden voor: %s</string>
   <string name="add_another">Groep toevoegen</string>
   <string name="add_another_repeat">Nog een \"%s\" groep toevoegen?</string>
@@ -190,7 +190,6 @@
   <string name="admin_password_disabled">Admin wachtwoord uitgeschakeld</string>
   <string name="admin_password_incorrect">Wachtwoord onjuist!</string>
   <string name="enter_admin_password">Geef admin wachtwoord</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uitvinken om te verbergen in hoofdmenu</string>
   <string name="found_in_settings">Uitvinken om te verbergen in algemene instellingen</string>
   <string name="no_account">Geen account</string>
@@ -251,7 +250,6 @@
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
   <string name="change_server_url">Server URL</string>
   <string name="no_blank_search">Zoekveld mag niet leeg zijn.</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

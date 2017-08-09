@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
   <string name="add_another">Adicionar Grupo</string>
   <string name="add_another_repeat">Adicionar outro \"%s\" grupo?</string>
@@ -187,7 +187,6 @@ Escolher Imagem</string>
   <string name="admin_password_disabled">Senha administrativa desabilitada</string>
   <string name="admin_password_incorrect">Lamento, senha incorreta!</string>
   <string name="enter_admin_password">Digite a senha administrativa</string>
-  <string name="autosend">Enviar automaticamente</string>
   <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
   <string name="found_in_settings">Desmarque para não exibir nas Configurações Gerais  </string>
   <string name="no_account">Sem conta</string>
@@ -249,14 +248,11 @@ Escolher Imagem</string>
   <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
   <string name="invalid_oauth">Modo OAuth 2 inválido</string>
-  <string name="odk_auth_auth_fail">Falhar de envio automático do ODK, por favor certifique-se de que suas configurações estão corretas.</string>
-  <string name="odk_auto_note">Notificação de envio automático do ODK</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="change_server_url">Servidor URL</string>
   <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

@@ -287,7 +287,6 @@
     <string name="google_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
     <string name="no_blank_search">Search field cannot be blank.</string>
     <string name="google_sheets_url">Fallback submission URL</string>
-    <string name="default_google_sheets_url"></string>
     <string name="send_in_progress">Background send running, please try again shortly</string>
     <string name="sheets_max_columns">Max number of columns is 255, your form has %s. Unable to upload to spreadsheet.</string>
     <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
@@ -432,14 +431,12 @@
     <string name="instance_scan_count">%1$d forms added.</string>
     <string name="instance_sync">Import saved forms as finalized</string>
     <string name="instance_sync_summary">Imports saved forms from instances folder</string>
-    <string name="sort_by_name_asc">By name, A-Z</string>
-    <string name="sort_by_name_desc">By name, Z-A</string>
-    <string name="sort_by_date_asc">By date, newest first</string>
-    <string name="sort_by_date_desc">By date, oldest first</string>
-    <string name="sort_by_status_asc">By status, finalized first</string>
-    <string name="sort_by_status_desc">By status, unfinalized first</string>
-    <string name="sorting_menu_open">Open sorting menu</string>
-    <string name="sorting_menu_close">Close sorting menu</string>
+    <string name="sort_by_name_asc">Name, A-Z</string>
+    <string name="sort_by_name_desc">Name, Z-A</string>
+    <string name="sort_by_date_asc">Date, newest first</string>
+    <string name="sort_by_date_desc">Date, oldest first</string>
+    <string name="sort_by_status_asc">Status, finalized first</string>
+    <string name="sort_by_status_desc">Status, unfinalized first</string>
     <string name="sort_the_list">Sort the list</string>
     <string name="request_permissions_google_account">ODK Collect needs access to your Google account to get blank forms and submit filled forms.</string>
     <string name="filter_the_list">Filter the list</string>
@@ -509,4 +506,5 @@
     <string name="form_entry">Uncheck to hide from Form Entry</string>
     <string name="use_device_language">Use device language</string>
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
+    <string name="sort_by">Sort by</string>
 </resources>

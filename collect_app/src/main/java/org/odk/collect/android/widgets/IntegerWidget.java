@@ -77,7 +77,7 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            answer.setText(String.format(Locale.ENGLISH, "%d", i));
+            answer.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 

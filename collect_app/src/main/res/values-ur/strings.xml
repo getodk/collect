@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">‎%s‏  کو کر نے کیلیے کوئی سرگرمی نہی پا ئ گئ</string>
   <string name="add_another">گروپ شامل کر یں</string>
   <string name="add_another_repeat">ایک اور \"‎%s‏\" گروپ شامل کریں</string>
@@ -182,7 +182,6 @@
   <string name="admin_password_disabled">منتظم کا شناختے لفظ غیر موءثر کیا گیا۔</string>
   <string name="admin_password_incorrect">معافی، شناختی لفظ ٹھیک نہیں ہے</string>
   <string name="enter_admin_password">منتظم کا شناختی لفظ درج کریں</string>
-  <string name="autosend">خودبخود بھیجو</string>
   <string name="found_in_main">غیر نشان شدہ کرکے مرکزی فہرست میں چھپا لیں</string>
   <string name="found_in_settings">نشانی ہٹاکر عمومی سیٹنگز سے ہٹا دیں۔</string>
   <string name="no_account">اکاونٹ نہیں ہے</string>
@@ -200,8 +199,7 @@
   <string name="constraint_behavior_on_finalize">توثیق کو حتمی ہونے تک موءخر کردیں</string>
   <string name="view_change_location">مقام کو ملاحظہ کریں یا تبدیلکریں۔</string>
   <string name="change_server_url">یو آر ایل (URL)</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">အေကာင္အထည္ေဖာ္ေဆာင္ရြက္ရန္မရိွပါ: %s</string>
   <string name="add_another">အုပ္စုထည့္ရန္</string>
   <string name="add_another_repeat"> အျခားအုပ္စုထည့္ရန္\"%s\" အုပ္စု?</string>
@@ -184,7 +184,6 @@
   <string name="admin_password_disabled">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) မေဆာင္ရြက္ႏိုင္ပါ</string>
   <string name="admin_password_incorrect">လ်ိဳ့၀ွက္နံပါတ္ မမွန္ကန္ပါ!</string>
   <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="no_account">No account</string>
@@ -197,7 +196,6 @@
   <string name="swipe_buttons_navigation">Use swipes and buttons</string>
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

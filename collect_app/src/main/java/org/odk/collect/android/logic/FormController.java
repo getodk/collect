@@ -47,7 +47,6 @@ import org.odk.collect.android.views.ODKView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -707,9 +706,7 @@ public class FormController {
     public FailedConstraint saveAllScreenAnswers(LinkedHashMap<FormIndex, IAnswerData> answers,
             boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
-            Iterator<FormIndex> it = answers.keySet().iterator();
-            while (it.hasNext()) {
-                FormIndex index = it.next();
+            for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
                 if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
                     int saveStatus;
@@ -724,7 +721,7 @@ public class FormController {
                     }
                 } else {
                     Timber.w("Attempted to save an index referencing something other than a question: %s",
-                                    index.getReference().toString());
+                            index.getReference().toString());
                 }
             }
         }

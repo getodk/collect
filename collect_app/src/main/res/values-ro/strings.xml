@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nu s-a găsit nicio activitate care să se ocupe de : %s</string>
   <string name="add_another">Adăugați grup</string>
   <string name="add_another_repeat">Adăugați încă un grup \"%s\"?</string>
@@ -194,7 +194,6 @@
   <string name="admin_password_incorrect">Ne pare rău, parola este incorectă!</string>
   <string name="enter_admin_password">Introduceți parola de administrator</string>
   <string name="change_admin_password">Schimbați parola administratorului</string>
-  <string name="autosend">Auto-trimitere</string>
   <string name="found_in_main">Deselectați pentru a ascunde din Meniul principal</string>
   <string name="found_in_settings">Deselectați pentru a ascunde din Setări generale</string>
   <string name="no_account">Niciun cont</string>
@@ -260,16 +259,13 @@
   <string name="google_set_account">Ați selectat Google Sheets ca server, vă rugăm să selectați un cont Google asociat în Setări generale înainte de a continua</string>
   <string name="invalid_oauth">Token OAuth 2 invalid</string>
   <string name="google_repeat_error">Repetările nu sunt suportate de Google Sheets în acest moment.</string>
-  <string name="odk_auth_auth_fail">Eroare la autentificare ODK Autosend authentication, vă rugăm să vă asigurați că setările sunt corecte</string>
-  <string name="odk_auto_note">Notificare ODK Autosend</string>
   <string name="notification_error">Eroare la afișarea textului notificării</string>
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
   <string name="change_server_url">URL server</string>
   <string name="google_search_browse">Căutați formulare. Sau selectați mai jos \'Discul meu\' pentru a naviga. </string>
   <string name="no_blank_search">Câmpul căutare nu poate fi gol.</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
+    <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
   <string name="sheets_max_columns">Numărul maxim de coloane este 255, formularul dumneavoastră are %s. Nu am putut încărca datele în tabel.</string>
   <string name="invalid_sheet_id">ID foaie invalid: %1$s</string>
   <string name="google_sheets_missing_columns">Din foaia de calcul lipsesc următoarele coloane: %1$s</string>

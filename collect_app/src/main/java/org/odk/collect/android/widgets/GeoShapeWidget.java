@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -87,6 +88,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay.setId(QuestionWidget.newUniqueId());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answerDisplay.setGravity(Gravity.CENTER);
+        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         createShapeButton = new Button(getContext());
         createShapeButton.setId(QuestionWidget.newUniqueId());
@@ -189,9 +191,8 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
             return null;
         } else {
             try {
-                String[] sa = s.split(";");
-                for (int i = 0; i < sa.length; i++) {
-                    String[] sp = sa[i].trim().split(" ");
+                for (String sa :  s.split(";")) {
+                    String[] sp = sa.trim().split(" ");
                     double[] gp = new double[4];
                     gp[0] = Double.valueOf(sp[0]);
                     gp[1] = Double.valueOf(sp[1]);
