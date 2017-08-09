@@ -138,10 +138,7 @@ public class InstanceProvider extends ContentProvider {
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
         DatabaseHelper h = getDbHelper();
-        if (h == null) {
-            return false;
-        }
-        return true;
+        return h != null;
     }
 
 
