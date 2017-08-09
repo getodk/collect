@@ -29,7 +29,9 @@
         <ignore regexp="ga_trackingId|google_crash_reporting_api_key" />
     </issue>
     <issue id="IconLocation" severity="error" />
-    <issue id="UnusedNamespace" severity="error" />
+    <issue id="UnusedNamespace" severity="error">
+        <ignore path="res/values*" />
+    </issue>
 
     <issue id="TimberExceptionLogging" severity="error" />
 
