@@ -1241,15 +1241,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
                 } catch (RuntimeException e) {
-                    Timber.e(e);
+                    Timber.i(e);
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
-                        createErrorDialog(e.getMessage(), DO_NOT_EXIT);
+                        createErrorDialog(e.getMessage(), EXIT);
                     } catch (JavaRosaException e1) {
-                        Timber.e(e1);
-                        createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
-                                DO_NOT_EXIT);
+                        Timber.i(e1);
+                        createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(), EXIT);
                     }
                     return createView(event, advancingPage);
                 }
