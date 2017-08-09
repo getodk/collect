@@ -138,10 +138,7 @@ public class InstanceProvider extends ContentProvider {
     public boolean onCreate() {
         // must be at the beginning of any activity that can be called from an external intent
         DatabaseHelper h = getDbHelper();
-        if (h == null) {
-            return false;
-        }
-        return true;
+        return h != null;
     }
 
 
@@ -204,7 +201,7 @@ public class InstanceProvider extends ContentProvider {
             values = new ContentValues();
         }
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the fields are all set
         if (!values.containsKey(InstanceColumns.LAST_STATUS_CHANGE_DATE)) {

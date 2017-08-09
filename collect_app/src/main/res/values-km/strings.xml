@@ -121,6 +121,7 @@
   <string name="username">អ្នក​ប្រើប្រាស់</string>
   <string name="view_hierarchy">ទៅ Prompt</string>
   <string name="general_preferences">ការកំណត់ទូទៅ</string>
+  <string name="client">ចំណុច​ប្រទាក់​អ្នក​ប្រើប្រាស់​</string>
   <string name="show_splash_summary">បង្ហាញពេលកម្មវិធីចាប់ផ្តើម</string>
   <string name="splash_path">ជ្រើសរើសរូបស្វាគមន៍</string>
   <string name="default_splash_path">ODK លំនាំដើម</string>
@@ -202,7 +203,7 @@
   <string name="admin_password_incorrect">សោកស្តាយផង, ពាក្យសម្ងាត់នេះមិនត្រឹមត្រូវ!</string>
   <string name="enter_admin_password">បញ្ចូលពាក្យសម្ងាត់របស់ Admin</string>
   <string name="change_admin_password">ផ្លាស់​ប្តូរ​ពាក្យ​សម្ងាត់​ Admin</string>
-  <string name="autosend">បញ្ជូនចេញដោយស្វ័យប្រវត្តិ</string>
+  <string name="autosend">ផ្ញើរ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
   <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
   <string name="no_account">គ្មាន​គណនី</string>
@@ -270,9 +271,8 @@
   <string name="invalid_oauth">មិនត្រឹមត្រូវសញ្ញាសម្ងាត់ OAuth 2</string>
   <string name="google_repeat_error">សំនួរម្តង​ទៀត​មិនត្រូវបានគាំទ្រដោយសន្លឹក Google ទេនៅពេលនេះ</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឡើងរូបថតដែលមិនមាន: %1$s</string>
-  <string name="odk_auth_auth_fail">
-បរាជ័យក្នុងការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ ODK នៃការផ្ញើដោយស្វ័យ​ប្រវត្តិ, សូមធ្វើឱ្យប្រាកដថាការកំណត់របស់អ្នកគឺត្រឹមត្រូវ</string>
-  <string name="odk_auto_note">ការជូនដំណឹង ODK ដោយស្វ័យប្រវត្តិ</string>
+  <string name="odk_auth_auth_fail">​ការផ្ទៀង​ផ្ទាត់​បរាជ័យដើម្បីឲ្យ ODK ផ្ញើរចេញដោយស្វ័យប្រវត្តិ សូមធ្វើឲ្យប្រាកដថា​ការកំណត់របស់​អ្នក​ត្រឹម​ត្រូវ</string>
+  <string name="odk_auto_note">ការជូនដំណឹងពីការផ្ញើរចេញដោយ​ស្វ័យ​ប្រវត្តិរបស់​ ODK </string>
   <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
   <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
   <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
@@ -280,8 +280,7 @@
   <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="no_blank_search">field ដែលស្វែងរកមិនត្រូវទទេ។</string>
   <string name="google_sheets_url">URL ដែលបានដាក់ស្នើ Fallback</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
+    <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
   <string name="sheets_max_columns">ចំនួន​​អតិបរមា​​នៃ​​ជួរ​​ឈរ​​គឺ 255, សំណុំ​​​បែប​​​បទ​​របស់​​អ្នក​​មាន​ %s​ ។ មិន​អាច​ផ្ទុក​ ទៅ​សៀវ​ភៅ​បញ្ជី​បាន​ទេ។</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
@@ -290,7 +289,9 @@
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <string name="about_preferences">អំពី</string>
+  <string name="tell_your_friends">ចែក​រំលែក​ ODK Collect ជាមួយសហការីរបស់អ្នក</string>
   <string name="tell_your_friends_msg">ទាញយកកម្មវិធី ODK Collect</string>
+  <string name="leave_a_review">ផ្ញើរមតិនៅលើហាងកម្មវិធី Google</string>
   <!--Geo string added in feature-geofeatures branch-->
   <string name="map_preferences">ដៅផែនទី</string>
   <string name="map_sdk_selector_title">ផែនទី SDK</string>
@@ -368,6 +369,11 @@
   <string name="parser_exception">XPathParser Exception: \"%s\"</string>
   <string name="selected_answer">បានជ្រើសរើស៖ %s</string>
   <string name="version_number">ជំនាន់: %s</string>
+  <string name="odk_website">ចូលទៅកាន់គេហទំព័រ ODK</string>
+  <string name="odk_website_summary">Open Data Kit (ODK) បាន​ប្រើ​ប្រាស់​ដើម្បី​ប្រមូល​ទិន្នន័យសម្រាប់ភាពប្រសើរ​របស់​សង្គមនៅក្នុងបរិយាកាស​ប្រកួត​ប្រជែង​។</string>
+  <string name="odk_forum">ចូល​រួម​ជា​មួយ​វេទិកា ODK</string>
+  <string name="odk_forum_summary">ចូល​រួម​វេទិកា​ដើម្បី​ទទួល​បាន​ការ​គាំ​ទ្រ, សំណូមពរលក្ខណៈពិសេស, រួម​ចំណែក​អភិវឌ្ឍកូដ/បកប្រែភាសា!</string>
+  <string name="all_open_source_licenses">បណ្ណាល័យ​កូដ​ចំហ និងអាជ្ញាប័ណ្ណ</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ខាងលិច %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -463,4 +469,31 @@
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
   <string name="request_permission">កម្មវិធី​នេះ​ត្រូវ​ការ​សិទ្ធិ​ក្នុង​ការប្រើ​ប្រាស់​កាម៉េរ៉ាលើឧបករណ៍</string>
   <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>
+  <string name="invalid_range_widget">ធាតុក្រាហ្វិកនេះមានប៉ារ៉ាម៉ែត្រមិនត្រឹមត្រូវ!</string>
+  <string name="form_entry_setting">ការ​កំណត់​នៃ​ទម្រង់​បញ្ជូល</string>
+  <string name="form_entry_settings_summary">ប៉ះ​ដើម្បី​គ្រប់​គ្រង​ធាតុនៃទម្រង់បញ្ជូលទិន្នន័យ</string>
+  <string name="user_settings">ការកំណត់របស់អ្នកប្រើប្រាស់</string>
+  <string name="user_setting_summary">ប៉ះ​ដើម្បី​គ្រប់​គ្រងធាតុ​នៃ​ការ​កំណត់​ទូទៅ</string>
+  <string name="main_menu_settings">ការកំណត់ផ្ទាំងមេមីនុយ</string>
+  <string name="main_menu_settings_summary">ប៉ះ​ដើម្បី​គ្រប់គ្រង​ធាតុ​នៃផ្ទាំងមេមីនុយ</string>
+  <string name="user_access_control">ការត្រួតពិនិត្យការចូលប្រើរបស់អ្នកប្រើ</string>
+  <string name="autosend_selector_title">ផ្ញើរ​ចេញ​ដោយ​ស្វ័យ​ប្រវត្តិ</string>
+  <string name="off">បិទ</string>
+  <string name="wifi_autosend">តែ Wifi ប៉ុណ្ណោះ</string>
+  <string name="cellular_autosend">តែ Cellular ប៉ុណ្ណោះ</string>
+  <string name="wifi_cellular_autosend">Wifi ឬ Cellular</string>
+  <string name="map_basemap_behavior_title">ផែនទីមូលដ្ឋាន</string>
+  <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
+  <string name="form_submission_category">ការដាក់ស្នើរទម្រង់</string>
+  <string name="form_filling_category">ការបំពេញទម្រង់</string>
+  <string name="high_resolution_title">កំរិតច្បាស់វីដេអូ</string>
+  <string name="form_import_category">នាំចូលទម្រង់</string>
+  <string name="user_and_device_identity_title">អត្តសញ្ញាណ​អ្នក​ប្រើ​ប្រាស់ និងឧបករណ៍</string>
+  <string name="constraint_behavior_title">ដំណើរការនៃការរឹតបន្តឹង</string>
+  <string name="show_splash_title">ស្វាគមន៍អេក្រង់</string>
+  <string name="server_settings_title">ម៉ាស៊ីនមេ</string>
+  <string name="type">ប្រភេទ</string>
+  <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
+  <string name="use_device_language">ប្រើ​ប្រាស់​ភាសារបស់​ឧបករណ៍</string>
+  <string name="not_supported_offline_layer_format">បានជ្រើសរើសយក​ឯកសារស្រទាប់​ក្រៅ​បណ្តាញដើម្បីប្រើប្រាស់ទ្រង់ទ្រាយ PBF ដែល​មិនត្រូវ​បាន​គាំ​ទ្រ</string>
 </resources>

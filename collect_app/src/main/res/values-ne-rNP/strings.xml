@@ -190,7 +190,6 @@
   <string name="admin_password_disabled">प्रशासक पासवर्ड निष्क्रिय गरिएको छ </string>
   <string name="admin_password_incorrect">माफ गर्नुहोला, पासवर्ड गलत छ !</string>
   <string name="enter_admin_password">प्रशासक पासवर्ड हाल्नुहोस् </string>
-  <string name="autosend">स्वत: प्रेषण</string>
   <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
   <string name="found_in_settings">जेनेरल सेटिंग मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
   <string name="no_account">खाता छैन </string>
@@ -252,15 +251,12 @@
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
   <string name="invalid_oauth">अमान्य OAuth 2 टोकन</string>
-  <string name="odk_auth_auth_fail">ODK स्वत: प्रेषण प्रमाणीकरण असफल , कृपया आफ्नो सेटिङ्स सही छ छैन चेक गर्नुहोस्</string>
-  <string name="odk_auto_note">ODK स्वत: प्रेषण सूचना</string>
   <string name="notification_error">सूचना देखाउन गल्ती भयो </string>
   <string name="delete_after_send">पठाए पछि डिलिट गर्नुहोस् </string>
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="change_server_url">सर्भर URL</string>
   <string name="no_blank_search">सर्च क्षेत्र रिक्त हुनु हुदैन।</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <string name="streets">टोलहरु</string>
   <string name="satellite">उपग्रह</string>
   <string name="start">सुरु</string>

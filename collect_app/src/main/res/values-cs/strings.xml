@@ -80,8 +80,7 @@
   <string name="no_connection">Není k dispozici připojení k internetu!</string>
   <string name="no_items_display">Není co zobrazit.</string>
   <string name="no_items_display_forms">Není co zobrazit.\n\nZkuste stáhnout a vyplnit dotazník.</string>
-  <string name="no_items_display_instances">
-Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokončené.</string>
+  <string name="no_items_display_instances">Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokončené.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Dotazník nejde načíst.</string>
   <string name="parse_legacy_formlist_failed">Server neposkytnul seznam dostupných dotazníků kompatibilní s Aggregate 0.9.x. : %s</string>
@@ -191,7 +190,6 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="admin_password_disabled">Administrátorské heslo vypnuto</string>
   <string name="admin_password_incorrect">Heslo není správné!</string>
   <string name="enter_admin_password">Zadejte administrátorské heslo</string>
-  <string name="autosend">Odeslat automaticky</string>
   <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
   <string name="no_account">Žádný účet</string>
@@ -253,15 +251,12 @@ Není co zobrazit.\n\nZkuste před odesláním označit dotazníky jako dokonče
   <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="invalid_oauth">Neplatný kód OAuth 2</string>
-  <string name="odk_auth_auth_fail">Chyba autorizace ODK pro automatické odesílání dat, ujistěte se, že Vaše nastavení je správné</string>
-  <string name="odk_auto_note">ODK - výsledek automatického odeslání</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
   <string name="delete_after_send">Vymazat po odeslání</string>
   <string name="delete_after_send_summary">Vymaže dokončené dotazníky a média po odeslání na server</string>
   <string name="change_server_url">URL Serveru</string>
   <string name="no_blank_search">Vyhledávací pole nemůže být prázdné</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

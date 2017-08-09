@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="show_password">Visa lösenord</string>
+<resources
+  <string name="show_password">Visa lösenordet</string>
   <string name="activity_not_found">Ingen aktivitet finns för att hantera: %s</string>
   <string name="add_another">Lägg till grupp</string>
   <string name="add_another_repeat">Lägga till ytterligare en \"%s\" grupp?</string>
@@ -121,6 +121,7 @@
   <string name="username">Användarnamn</string>
   <string name="view_hierarchy">Gå till inmatningsrad</string>
   <string name="general_preferences">Allmäna inställningar</string>
+  <string name="client">Användargränssnitt</string>
   <string name="show_splash_summary">Visas när programmet startas</string>
   <string name="splash_path">Vald välkomstbild</string>
   <string name="default_splash_path">ODK standard</string>
@@ -270,7 +271,7 @@
   <string name="invalid_oauth">Ogiltigt OAuth 2 token</string>
   <string name="google_repeat_error">Repeterande grupper stöds inte av Google Sheets för närvarande.</string>
   <string name="media_upload_error">Misslyckades med att ladda upp bild som inte finns: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK autentiseringsfel vid automatisk sändning, vänligen se till att dina inställningar är korrekta</string>
+  <string name="odk_auth_auth_fail">ODK autentiseringsfel vid automatisk sändning. Kontrollera att inställningarna är korrekta.</string>
   <string name="odk_auto_note">ODK notifiering vid automatisk sändning</string>
   <string name="notification_error">Fel vid visning av notifikationstext</string>
   <string name="delete_after_send">Radera efter sändning</string>
@@ -279,8 +280,7 @@
   <string name="google_search_browse">Sök efter formulär eller välj \'My Drive\' nedan för att bläddra.</string>
   <string name="no_blank_search">Sökfältet kan inte vara tomt.</string>
   <string name="google_sheets_url">Reserv-URL för uppladdning</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
+    <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
   <string name="sheets_max_columns">Max tillåtet antal kolumner är 255, ditt formulär har %s. Uppladdning till kalkylark är inte möjligt.</string>
   <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
   <string name="google_sheets_access_denied">Åtkomst nekad. Vänligen se till att kalkylarkets ägare har gett dig åtkomsträttigheter.</string>
@@ -289,11 +289,13 @@
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
   <string name="about_preferences">Om</string>
+  <string name="tell_your_friends">Dela ODK Collect med dina kollegor</string>
   <string name="tell_your_friends_msg">Ladda ner ODK Collect appen!</string>
+  <string name="leave_a_review">Lämna ett omdöme på Google Play Store</string>
   <!--Geo string added in feature-geofeatures branch-->
-  <string name="map_preferences">Kartering</string>
-  <string name="map_sdk_selector_title">Kartering SDK</string>
-  <string name="map_sdk_behavior">Kartering SDK</string>
+  <string name="map_preferences">Kartor</string>
+  <string name="map_sdk_selector_title">SDK för kartor</string>
+  <string name="map_sdk_behavior">SDK för kartor</string>
   <string name="google_maps_sdk">Google Maps SDK</string>
   <string name="openstreetmap_sdk">OpenStreetMap SDK</string>
   <string name="show_map_sdk">Visa Map SDK alternativ</string>
@@ -367,6 +369,11 @@
   <string name="parser_exception">XPathParser undantag: \"%s\"</string>
   <string name="selected_answer">Vald: %s</string>
   <string name="version_number">Version: %s</string>
+  <string name="odk_website">Besök ODKs hemsida</string>
+  <string name="odk_website_summary">Open Data Kit (ODK) används för att samla in data för socialt arbete i utmanande miljöer</string>
+  <string name="odk_forum">Gå med i ODK forumet</string>
+  <string name="odk_forum_summary">Gå med i forumet för att få hjälp, föreslå funktioner eller bidra med kod/översättningar!</string>
+  <string name="all_open_source_licenses">Bibliotek och licenser för öppen källkod</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -462,4 +469,31 @@
   <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
   <string name="request_permission">Programmet behöver behörighet till kameran.</string>
   <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>
+  <string name="invalid_range_widget">Ogiltiga parametrar för widget!</string>
+  <string name="form_entry_setting">Formulärs inmatningsinställningar</string>
+  <string name="form_entry_settings_summary">Klicka för att hantera formulärs inmatningsposter</string>
+  <string name="user_settings">Användarinställningar</string>
+  <string name="user_setting_summary">Klicka för att hantera allmänna inställningar</string>
+  <string name="main_menu_settings">Inställningar för huvudmenyn</string>
+  <string name="main_menu_settings_summary">Klicka för att hantera val i huvudmenyn</string>
+  <string name="user_access_control">Åtkomstkontroll för användare</string>
+  <string name="autosend_selector_title">Skicka automatiskt</string>
+  <string name="off">Av</string>
+  <string name="wifi_autosend">Endast WiFi</string>
+  <string name="cellular_autosend">Endast mobilt nätverk</string>
+  <string name="wifi_cellular_autosend">WiFi eller mobilt nätverk</string>
+  <string name="map_basemap_behavior_title">Grundkarta</string>
+  <string name="form_management_preferences">Formulärhantering</string>
+  <string name="form_submission_category">Formulärinskickning</string>
+  <string name="form_filling_category">Formulärifyllnad</string>
+  <string name="high_resolution_title">Högupplöst video</string>
+  <string name="form_import_category">Importera formulär</string>
+  <string name="user_and_device_identity_title">Användar- och enhetsidentitet</string>
+  <string name="constraint_behavior_title">Hantering av restriktioner</string>
+  <string name="show_splash_title">Startskärm</string>
+  <string name="server_settings_title">Server</string>
+  <string name="type">Typ</string>
+  <string name="form_entry">Avmarkera för att dölja i formulärinmatning</string>
+  <string name="use_device_language">Använd enhetens språk</string>
+  <string name="not_supported_offline_layer_format">Det valda offline-lagret använder PBF-formatet som inte stöds!</string>
 </resources>

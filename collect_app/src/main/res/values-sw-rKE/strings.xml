@@ -186,7 +186,6 @@
   <string name="admin_password_disabled">Password ya msimamizi imefungwa</string>
   <string name="admin_password_incorrect">Samahani, password si sawa</string>
   <string name="enter_admin_password">Weka password ya msimamizi</string>
-  <string name="autosend">Tuma moja kwa moja</string>
   <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
   <string name="no_account">Hakuna akaunti</string>
   <string name="save_preferences">Hifadhi mazingira kwa diski</string>
@@ -227,8 +226,7 @@
   <string name="survey_saving_finalizing_message">Tamatisho la takwimu kwa kadi ya SD…</string>
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

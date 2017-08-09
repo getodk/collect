@@ -192,7 +192,6 @@
   <string name="admin_password_disabled">Admin password disabled</string>
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="no_account">No account</string>
@@ -258,16 +257,13 @@
   <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="invalid_oauth">Ugyldig OAuth2 token.</string>
   <string name="google_repeat_error">Google Sheets støtter ikke gjentagelser. </string>
-  <string name="odk_auth_auth_fail">Feil ved autentisering av ODK Autosend. Sjekk innstillingene dine.</string>
-  <string name="odk_auto_note">ODK Autosend kvittering</string>
   <string name="notification_error">Feil ved visning av kvitteringstekst</string>
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
   <string name="change_server_url">Server URL</string>
   <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="no_blank_search">Søkefeltet kan ikke være tomt.</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
+    <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
   <string name="sheets_max_columns">Maks antall kolonner er 255, ditt skjema har %s. Det er ikke mulig å laste opp dette regnearket.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>

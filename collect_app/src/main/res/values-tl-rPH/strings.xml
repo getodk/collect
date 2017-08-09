@@ -165,8 +165,7 @@
   <string name="set_color">I-set ang Kulay</string>
   <string name="select_drawing_color">Piliian ang Kulay ng pang-guhit</string>
     <string name="save_mid">Impukin ang mga sagot sa Form</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

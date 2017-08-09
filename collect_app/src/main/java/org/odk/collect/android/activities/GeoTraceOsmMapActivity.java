@@ -385,9 +385,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     public void overlayIntentTrace(String str) {
         String s = str.replace("; ", ";");
-        String[] sa = s.split(";");
-        for (int i = 0; i < (sa.length); i++) {
-            String[] sp = sa[i].split(" ");
+        for (String sa : s.split(";")) {
+            String[] sp = sa.split(" ");
             double[] gp = new double[4];
             String lat = sp[0].replace(" ", "");
             String lng = sp[1].replace(" ", "");
