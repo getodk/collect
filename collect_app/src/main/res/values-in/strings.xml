@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Tunjukan sandi</string>
   <string name="activity_not_found">Tidak ditemukan aktifitas untuk diselesaikan: %s</string>
   <string name="add_another">Tambah grup</string>

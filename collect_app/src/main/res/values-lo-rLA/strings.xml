@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">ບໍ່ມີກິດຈະກຳໃຫ້ດຳເນີນການ: %s</string>
   <string name="add_another">ເພີ່ມກຸ່ມ</string>
   <string name="add_another_repeat">ຕ້ອງການເພີ່ມກຸ່ມໃໝ່ \"%s\" ​ອີກບໍ່?</string>
