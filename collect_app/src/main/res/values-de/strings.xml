@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Passwort anzeigen</string>
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="add_another">Gruppe hinzufügen</string>
@@ -427,9 +427,7 @@
   <string name="sort_by_date_desc">Nach Datum, ältestes zuerst</string>
   <string name="sort_by_status_asc">Nach Status, vollständig zuerst</string>
   <string name="sort_by_status_desc">Nach Status, unvollständig zuerst</string>
-  <string name="sorting_menu_open">Sortier-Menü öffnen</string>
-  <string name="sorting_menu_close">Sortier-Menü schließen</string>
-  <string name="sort_the_list">Die Liste sortieren</string>
+    <string name="sort_the_list">Die Liste sortieren</string>
   <string name="request_permissions_google_account">ODK Collect benötigt Zugriff auf Ihr Google-Konto um leere Formulare zu laden und ausgefüllte Formulare hochzuladen.</string>
   <string name="filter_the_list">Liste filtern</string>
   <string name="language">Sprache</string>

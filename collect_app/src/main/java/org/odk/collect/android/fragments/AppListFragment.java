@@ -14,34 +14,30 @@ limitations under the License.
 
 package org.odk.collect.android.fragments;
 
-import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import java.util.ArrayList;
@@ -56,17 +52,13 @@ abstract class AppListFragment extends ListFragment {
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
-    View rootView;
-    private ListView drawerList;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-
     protected LinearLayout searchBoxLayout;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected EditText inputSearch;
-
+    View rootView;
     private Integer selectedSortingOrder;
+    private BottomSheetDialog bottomSheetDialog;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -106,21 +98,6 @@ abstract class AppListFragment extends ListFragment {
         }
     }
 
-    //to get present drawer status
-    public Boolean getDrawerStatus() {
-        return drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.END);
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (!isVisibleToUser) {
-            // close the drawer if open
-            if (drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.END)) {
-                drawerLayout.closeDrawer(Gravity.END);
-            }
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
@@ -128,7 +105,7 @@ abstract class AppListFragment extends ListFragment {
 
         menu
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
+                .setIcon(R.drawable.ic_sort_black_36dp)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menu
@@ -141,12 +118,8 @@ abstract class AppListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_SORT:
-                if (drawerLayout.isDrawerOpen(Gravity.END)) {
-                    drawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
-                    drawerLayout.openDrawer(Gravity.END);
-                }
+                Collect.getInstance().hideKeyboard(inputSearch);
+                bottomSheetDialog.show();
                 return true;
 
             case MENU_FILTER:
@@ -160,39 +133,6 @@ abstract class AppListFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (drawerToggle != null) {
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
-
-    private void setupDrawerItems() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, sortingOptions) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (position == getSelectedSortingOrder()) {
-                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tintColor));
-                }
-                textView.setPadding(50, 0, 0, 0);
-                return textView;
-            }
-        };
-        drawerList.setAdapter(adapter);
-        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
-                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tintColor));
-                performSelectedSearch(position);
-                drawerLayout.closeDrawer(Gravity.END);
-            }
-        });
-    }
-
     private void performSelectedSearch(int position) {
         saveSelectedSortingOrder(position);
         updateAdapter();
@@ -201,11 +141,6 @@ abstract class AppListFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupDrawer(view);
-        setupDrawerItems();
-        if (drawerToggle != null) {
-            drawerToggle.syncState();
-        }
     }
 
     @Override
@@ -213,30 +148,31 @@ abstract class AppListFragment extends ListFragment {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.notes);
+
+        if (bottomSheetDialog == null) {
+            setupBottomSheet();
+        }
     }
 
-    private void setupDrawer(View rootView) {
-        drawerList = (ListView) rootView.findViewById(R.id.sortingMenu);
-        drawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        drawerToggle = new ActionBarDrawerToggle(
-                getActivity(), drawerLayout,
-                        R.string.sorting_menu_open, R.string.sorting_menu_close) {
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu();
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            }
+    private void setupBottomSheet() {
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.MaterialDialogSheet);
+        View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
 
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActivity().invalidateOptionsMenu();
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+            @Override
+            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
+                holder.updateItemColor(selectedSortingOrder);
+                performSelectedSearch(position);
+                bottomSheetDialog.dismiss();
             }
-        };
+        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.addDrawerListener(drawerToggle);
+        bottomSheetDialog.setContentView(sheetView);
     }
 
     protected void checkPreviouslyCheckedItems() {

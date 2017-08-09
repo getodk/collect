@@ -16,6 +16,11 @@
 
 package org.odk.collect.android.utilities;
 
+import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+
+import java.util.HashMap;
+
 public class ApplicationConstants {
 
     // based on http://www.sqlite.org/limits.html
@@ -27,6 +32,17 @@ public class ApplicationConstants {
             "my", "nb", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "so",
             "sq", "sw", "sw_KE", "ta", "th_TH", "tl", "tr", "uk", "ur",
             "ur_PK", "vi", "zh", "zu"};
+
+    public static HashMap<String, Integer> getSortLabelToIconMap() {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_asc), R.drawable.ic_sort_by_alpha_black_24dp);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_name_desc), R.drawable.ic_sort_by_alpha_black_24dp_2);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_asc), R.drawable.ic_access_time_black_24dp);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_date_desc), R.drawable.ic_access_time_black_24dp_2);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_asc), R.drawable.ic_assignment_turned_in_black_24dp);
+        hashMap.put(Collect.getInstance().getString(R.string.sort_by_status_desc), R.drawable.ic_assignment_late_black_24dp);
+        return hashMap;
+    }
 
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";

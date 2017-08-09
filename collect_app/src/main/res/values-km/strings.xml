@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">បង្ហាញ​ពាក្យសម្ងាត់</string>
   <string name="activity_not_found">គ្មានសកម្មភាពដើម្បីដោះស្រាយបាន : %s</string>
   <string name="add_another">បន្ថែម​ក្រុម</string>
@@ -427,9 +427,7 @@
   <string name="sort_by_date_desc">តាមរយះថ្ងៃខែឆ្នាំ, ថ្ងៃចាស់បំផុតមុន</string>
   <string name="sort_by_status_asc">តាមរយះស្ថានភាពបានបញ្ចប់មុនដំបូង</string>
   <string name="sort_by_status_desc">តាមរយះស្ថានភាពមិនបានបញ្ចប់មុនដំបូង</string>
-  <string name="sorting_menu_open">បើកមីនុយតម្រៀប</string>
-  <string name="sorting_menu_close">បិទមីនុយតម្រៀប</string>
-  <string name="sort_the_list">តម្រៀបបញ្ជី</string>
+    <string name="sort_the_list">តម្រៀបបញ្ជី</string>
   <string name="request_permissions_google_account">កម្មវិធី ODK Collect ត្រូវ​ការ​ចូល​ទៅ​កាន់​គណនី​ Google របស់​អ្នក​ដើម្បី​ទាញ​យក​ទម្រង់​ទទេរ​ និង​បញ្ជូន​ទម្រង់​ដែល​បាន​បំពេញ​ហើយ។</string>
   <string name="filter_the_list">តម្រងបញ្ជី</string>
   <string name="language">ភាសា</string>

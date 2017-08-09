@@ -427,9 +427,7 @@
   <string name="sort_by_date_desc">तारखेनुसार, सर्वात आधी जुने</string>
   <string name="sort_by_status_asc">स्थितीनुसार, प्रथम अंतिम रूप दिले</string>
   <string name="sort_by_status_desc">स्थितीनुसार, अंतिम रूप नाही दिलेला फॉर्म </string>
-  <string name="sorting_menu_open">खुल्या क्रमवारी मेनू</string>
-  <string name="sorting_menu_close">क्रमवारी मेनू बंद करा</string>
-  <string name="sort_the_list">सूची क्रमवारी लावा</string>
+    <string name="sort_the_list">सूची क्रमवारी लावा</string>
   <string name="request_permissions_google_account">ओडीके ची संकल्पना रिक्त फॉर्म प्राप्त करण्यासाठी आणि भरलेल्या फॉर्म सबमिट करण्यासाठी आपल्या गूगल खात्यात प्रवेश करण्याची आवश्यकता आहे.</string>
   <string name="filter_the_list">सूची फिल्टर करा</string>
   <string name="language">भाषा</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Показати пароль</string>
   <string name="activity_not_found">Не знайдено жодного процесу для: %s</string>
   <string name="add_another">Додати групу</string>
@@ -427,9 +427,7 @@
   <string name="sort_by_date_desc">За датою, найстарший перший</string>
   <string name="sort_by_status_asc">За статусом, завершені перші</string>
   <string name="sort_by_status_desc">За статусом, незавершені перші</string>
-  <string name="sorting_menu_open">Відкрити меню сортування</string>
-  <string name="sorting_menu_close">Закрити меню сортування</string>
-  <string name="sort_the_list">Відсортувати список</string>
+    <string name="sort_the_list">Відсортувати список</string>
   <string name="request_permissions_google_account">ODK Collect потрібен доступ до Вашого Облікового запису Google щоб отримувати чисті і надсилати заповнені анкети.</string>
   <string name="filter_the_list">Фільтрувати список</string>
   <string name="language">Мова</string>

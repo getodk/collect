@@ -427,8 +427,6 @@
   <string name="sort_by_date_desc">По дате, сначала старые</string>
   <string name="sort_by_status_asc">По статусу, сначала завёршенные.</string>
   <string name="sort_by_status_desc">По статуса, сначала незавершённые.</string>
-  <string name="sorting_menu_open">Открыть меню сортировки</string>
-  <string name="sorting_menu_close">Закрыть меню сортировки</string>
   <string name="sort_the_list">Сортировать список</string>
   <string name="request_permissions_google_account">ODK Collect требуется доступ к Вашему аккаунту Google, чтобы получать пустые формы и отправлять заполненные формы.</string>
   <string name="filter_the_list">Фильтровать список</string>
