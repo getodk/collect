@@ -82,7 +82,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -596,10 +595,10 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         return getFileTask;
     }
 
-    private Stack<String> buildPath(String[] path) {
+    private Stack<String> buildPath(String[] paths) {
         Stack<String> pathStack = new Stack<String>();
-        for (int i = 0; i < path.length; i++) {
-            pathStack.push(path[i]);
+        for (String path : paths) {
+            pathStack.push(path);
         }
         return pathStack;
     }
@@ -675,10 +674,8 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
 
         StringBuilder sb = new StringBuilder();
-        Iterator<String> it = results.keySet().iterator();
 
-        while (it.hasNext()) {
-            String id = it.next();
+        for (String id : results.keySet()) {
             sb.append(id + " :: " + results.get(id) + "\n\n");
         }
         if (sb.length() > 1) {
