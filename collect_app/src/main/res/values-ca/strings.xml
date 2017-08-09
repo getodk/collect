@@ -271,7 +271,6 @@
   <string name="change_server_url">URL Servidor</string>
   <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="no_blank_search">Camp de cerca no pot ser blanc.</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
   <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>

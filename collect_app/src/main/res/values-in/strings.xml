@@ -280,7 +280,6 @@
   <string name="google_search_browse">Mencari formulir. Atau memilih \'My Drive\' di bawah ini untuk browse.</string>
   <string name="no_blank_search">Kolom pencarian tidak boleh kosong.</string>
   <string name="google_sheets_url">URL kembali setelah pengiriman</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Pengiriman sedang berlangsung, cobalah beberapa saat lagi</string>
   <string name="sheets_max_columns">Jumlah kolom maksimum adalah 255, formulir anda memiliki %s. Tidak dapat mengunggah pada spreadsheet.</string>
   <string name="invalid_sheet_id">id sheet tidak valid: %1$s</string>

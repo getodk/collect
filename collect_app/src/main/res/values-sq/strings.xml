@@ -261,7 +261,6 @@
   <string name="change_server_url">URL e serverit</string>
   <string name="google_search_browse">Kërko për formularë. Ose përzgjidh \'My Drive\' më poshtë dhe kërkoni manualisht.</string>
   <string name="no_blank_search">Fusha e kërkimit nuk mund të jetë bosh.</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
   <string name="sheets_max_columns">Numri maksimal i kolonave është 255, formulari juaj ka %s. Spreadsheet nuk mund të ngarkohet.</string>
   <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
