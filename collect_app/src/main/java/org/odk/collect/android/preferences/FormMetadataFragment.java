@@ -84,7 +84,7 @@ public class FormMetadataFragment extends BasePreferenceFragment {
                 String newValueString = newValue.toString();
 
                 if (KEY_METADATA_EMAIL.equals(key)) {
-                    if (!Validator.isEmailAddressValid(newValueString)) {
+                    if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
                         ToastUtils.showLongToast(R.string.invalid_email_address);
                         return false;
                     }
