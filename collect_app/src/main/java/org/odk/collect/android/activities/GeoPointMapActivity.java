@@ -15,13 +15,10 @@
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -44,13 +42,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -61,8 +60,8 @@ import timber.log.Timber;
  * @author guisalmon@gmail.com
  * @author jonnordling@gmail.com
  */
-public class GeoPointMapActivity extends FragmentActivity implements LocationListener,
-        OnMarkerDragListener, OnMapLongClickListener {
+public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDragListener, OnMapLongClickListener,
+        LocationClient.LocationClientListener, LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
 
@@ -74,20 +73,20 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private TextView locationStatus;
     private TextView locationInfo;
 
-    private LocationManager locationManager;
+    private LocationClient locationClient;
 
     private Location location;
     private ImageButton reloadLocation;
 
     private boolean isDragged = false;
     private ImageButton showLocation;
-    private boolean gpsOn = false;
-    private boolean networkOn = false;
 
     private int locationCount = 0;
 
     private MapHelper helper;
     //private KmlLayer kk;
+
+    private AlertDialog errorDialog;
 
     private AlertDialog zoomDialog;
     private View zoomDialogView;
@@ -98,17 +97,18 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private boolean setClear = false;
     private boolean captureLocation = false;
     private Boolean foundFirstLocation = false;
-    private int locationCountNum = 0;
-    private int locationCountFoundLimit = 1;
     private Boolean readOnly = false;
     private Boolean draggable = false;
     private Boolean intentDraggable = false;
     private Boolean locationFromIntent = false;
 
+    private boolean isMapReady = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 
         if (savedInstanceState != null) {
             locationCount = savedInstanceState.getInt(LOCATION_COUNT);
@@ -116,6 +116,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
         try {
             setContentView(R.layout.geopoint_layout);
+
         } catch (NoClassDefFoundError e) {
             Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
             ToastUtils.showShortToast(R.string.google_play_services_error_occured);
@@ -123,6 +124,15 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             return;
         }
 
+        locationStatus = (TextView) findViewById(R.id.location_status);
+        locationInfo = (TextView) findViewById(R.id.location_info);
+        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
+        showLocation = (ImageButton) findViewById(R.id.show_location);
+
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
+
+        isMapReady = false;
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -135,16 +145,19 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     protected void onStart() {
         super.onStart();
         Collect.getInstance().getActivityLogger().logOnStart(this);
+
+        locationClient.start();
     }
 
     @Override
     protected void onStop() {
+        locationClient.stop();
+
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
 
-
-    private void returnLocation() {
+    public void returnLocation() {
         Intent i = new Intent();
         if (setClear || (readOnly && latLng == null)) {
             i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
@@ -162,24 +175,20 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 
             i.putExtra(
                     FormEntryActivity.LOCATION_RESULT,
-                    location.getLatitude() + " " + location.getLongitude() + " "
-                            + location.getAltitude() + " " + location.getAccuracy());
+                    getResultString(location)
+            );
             setResult(RESULT_OK, i);
         }
         finish();
     }
 
 
-    private String truncateFloat(float f) {
-        return new DecimalFormat("#.##").format(f);
+    public String getResultString(Location location) {
+        return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
+    private String truncateFloat(float f) {
+        return new DecimalFormat("#.##").format(f);
     }
 
     private void setupMap(GoogleMap googleMap) {
@@ -198,11 +207,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         markerOptions = new MarkerOptions();
         helper = new MapHelper(this, map);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationStatus = (TextView) findViewById(R.id.location_status);
-        locationInfo = (TextView) findViewById(R.id.location_info);
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
 
@@ -215,7 +219,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             }
         });
 
-        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
         reloadLocation.setEnabled(false);
         reloadLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,7 +244,6 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         });
 
         // Focuses on marked location
-        showLocation = (ImageButton) findViewById(R.id.show_location);
         //showLocation.setClickable(false);
         showLocation.setEnabled(false);
         showLocation.setOnClickListener(new OnClickListener() {
@@ -345,33 +347,20 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         }
 
         helper.setBasemap();
+
+        isMapReady = true;
         upMyLocationOverlayLayers();
     }
 
     private void upMyLocationOverlayLayers() {
-        // make sure we have a good location provider before continuing
-        locationCountNum = 0;
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                gpsOn = true;
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                locationCountFoundLimit = 0;
-            } else if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                // Only if GPS Provider is not available use network location. bug (well know
-                // android bug) http://stackoverflow
-                // .com/questions/6719207/locationmanager-returns-old-cached-wifi-location-with
-                // -current-timestamp
-                networkOn = true;
-                locationCountFoundLimit =
-                        1; // increase count due to network location bug (well know android bug)
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                        this);
-            }
+        if (!locationClient.isMonitoringLocation() || !isMapReady) {
+            return;
         }
-        //showLocation.setClickable(marker != null);
-        if (!gpsOn && !networkOn) {
+
+        // Make sure we can access Location:
+        if (!locationClient.isLocationAvailable()) {
             showGPSDisabledAlertToUser();
+
         } else {
             overlayMyLocationLayers();
         }
@@ -381,64 +370,48 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         if (draggable & !readOnly) {
             map.setOnMarkerDragListener(this);
             map.setOnMapLongClickListener(this);
+
             if (marker != null) {
                 marker.setDraggable(true);
             }
         }
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        this.location = location;
         if (setClear) {
             reloadLocation.setEnabled(true);
         }
-        if (this.location != null) {
 
-            if (locationCountNum >= locationCountFoundLimit) {
-                showLocation.setEnabled(true);
-                if (!captureLocation & !setClear) {
-                    latLng = new LatLng(this.location.getLatitude(), this.location.getLongitude());
+        Location previousLocation = this.location;
+        this.location = location;
+
+        if (location != null) {
+            if (previousLocation != null) {
+                enableShowLocation(true);
+
+                if (!captureLocation && !setClear) {
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     markerOptions.position(latLng);
                     marker = map.addMarker(markerOptions);
                     captureLocation = true;
                     reloadLocation.setEnabled(true);
                 }
+
                 if (!foundFirstLocation) {
                     //zoomToPoint();
                     showZoomDialog();
                     foundFirstLocation = true;
                 }
-                locationStatus.setText(
-                        getString(R.string.location_provider_accuracy, this.location.getProvider(),
-                                truncateFloat(this.location.getAccuracy())));
-            } else {
-                // Prevent from forever increasing
-                if (locationCountNum <= 100) {
-                    locationCountNum++;
-                }
+
+                String locationString = getAccuracyStringForLocation(location);
+                locationStatus.setText(locationString);
             }
+
         } else {
             InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") null location");
         }
-
-    }
-
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
     @Override
@@ -471,11 +444,17 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         } else {
             marker.setPosition(latLng);
         }
-        showLocation.setEnabled(true);
+        enableShowLocation(true);
         marker.setDraggable(true);
         isDragged = true;
         setClear = false;
         captureLocation = true;
+    }
+
+    private void enableShowLocation(boolean shouldEnable) {
+        if (showLocation != null) {
+            showLocation.setEnabled(shouldEnable);
+        }
     }
 
     private void zoomToLocation() {
@@ -513,32 +492,34 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             zoomDialog = builder.create();
         }
         //If feature enable zoom to button else disable
-        if (location != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
-        }
+        if (zoomLocationButton != null) {
+            if (location != null) {
+                zoomLocationButton.setEnabled(true);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomLocationButton.setEnabled(false);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+            }
 
-        if (latLng != null & !setClear) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+            if (latLng != null & !setClear) {
+                zoomPointButton.setEnabled(true);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomPointButton.setEnabled(false);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+            }
         }
 
         zoomDialog.show();
-
     }
 
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
         alertDialogBuilder.setMessage(getString(R.string.gps_enable_message))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.enable_gps),
@@ -546,15 +527,66 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                             public void onClick(DialogInterface dialog, int id) {
                                 startActivityForResult(
                                         new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+                                errorDialog = null;
                             }
                         });
+
         alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        errorDialog = null;
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+
+        errorDialog = alertDialogBuilder.create();
+        errorDialog.show();
     }
+
+    @Override
+    public void onClientStart() {
+        locationClient.requestLocationUpdates(this);
+        upMyLocationOverlayLayers();
+    }
+
+    @Override
+    public void onClientStartFailure() {
+
+    }
+
+    @Override
+    public void onClientStop() {
+
+    }
+
+    /**
+     * For testing purposes only.
+     *
+     * @param mapReady Whether or not the Google Map is ready.
+     */
+    public void setMapReady(boolean mapReady) {
+        isMapReady = mapReady;
+    }
+
+    public void setCaptureLocation(boolean captureLocation) {
+        this.captureLocation = captureLocation;
+    }
+
+    public AlertDialog getErrorDialog() {
+        return errorDialog;
+    }
+
+    public String getLocationStatus() {
+        return locationStatus.getText().toString();
+    }
+
+    public String getAccuracyStringForLocation(Location location) {
+        return getString(R.string.location_provider_accuracy, location.getProvider(),
+                truncateFloat(location.getAccuracy()));
+    }
+
+    public AlertDialog getZoomDialog() {
+        return zoomDialog;
+    }
+
 }
