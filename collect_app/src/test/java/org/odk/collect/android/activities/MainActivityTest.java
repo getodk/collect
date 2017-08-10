@@ -48,15 +48,6 @@ public class MainActivityTest {
     }
 
     /**
-     * {@link Test} to assert layout of {@link MainMenuActivity} for layout test.
-     */
-    @Test
-    public void layoutTest() throws Exception {
-        //testing layout with layout id
-        assertEquals(R.id.rl, shadowOf(mainMenuActivity).getContentView().getId());
-    }
-
-    /**
      * {@link Test} to assert title of {@link MainMenuActivity} for not null.
      */
     @Test

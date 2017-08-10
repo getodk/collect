@@ -2,12 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
-        android:id="@+id/app_language"
         android:dialogTitle="@string/language"
         android:key="app_language"
         android:title="@string/language" />
     <ListPreference
-        android:id="@+id/font_size"
         android:defaultValue="21"
         android:dialogTitle="@string/change_font_size"
         android:entries="@array/font_size_entries"
@@ -15,7 +13,6 @@
         android:key="font_size"
         android:title="@string/font_size" />
     <ListPreference
-        android:id="@+id/navigation"
         android:defaultValue="swipe"
         android:dialogTitle="@string/navigation"
         android:entries="@array/navigation_entries"
@@ -23,13 +20,11 @@
         android:key="navigation"
         android:title="@string/navigation" />
     <CheckBoxPreference
-        android:id="@+id/show_splash"
         android:defaultValue="false"
         android:key="showSplash"
         android:summary="@string/show_splash_summary"
         android:title="@string/show_splash_title" />
     <PreferenceScreen
-        android:id="@+id/splash_path"
         android:defaultValue="@string/default_splash_path"
         android:dependency="showSplash"
         android:key="splashPath"
@@ -40,7 +35,6 @@
         android:key="@string/map_preferences"
         android:title="@string/map_preferences">
         <ListPreference
-            android:id="@+id/map_sdk_behavior"
             android:defaultValue="google_maps"
             android:dialogTitle="@string/map_sdk_selector_title"
             android:entries="@array/map_sdk_selector_entries"
@@ -48,7 +42,6 @@
             android:key="map_sdk_behavior"
             android:title="@string/map_sdk_behavior" />
         <ListPreference
-            android:id="@+id/map_basemap_behavior"
             android:defaultValue="streets"
             android:dialogTitle="@string/map_basemap_selector_title"
             android:entries="@array/map_google_basemap_selector_entries"

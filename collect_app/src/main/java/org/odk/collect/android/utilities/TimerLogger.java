@@ -203,7 +203,7 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
-            Timber.i("Event recorded: " + eventType + " : " + fecType);
+            Timber.i("Event recorded: %s : %s", eventType, fecType);
             // Calculate the time and add the event to the events array
             long start = getEventTime();
 

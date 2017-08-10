@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -44,7 +45,6 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import java.util.Map;
 
 import timber.log.Timber;
-
 
 /**
  * <p>Launch an external app to supply a string value. If the app
@@ -109,6 +109,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
+        answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));

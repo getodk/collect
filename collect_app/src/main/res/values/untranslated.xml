@@ -15,5 +15,4 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_server_url" translatable="false">https://opendatakit.appspot.com</string>
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
-    <item name="mapview" type="id" />
 </resources>
