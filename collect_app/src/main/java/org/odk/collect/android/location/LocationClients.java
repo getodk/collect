@@ -24,6 +24,7 @@ public class LocationClients {
      * @return An implementation of LocationClient.
      */
     public static LocationClient clientForContext(@NonNull Context context) {
+
         return testClient != null
                 ? testClient
                 : areGooglePlayServicesAvailable(context)

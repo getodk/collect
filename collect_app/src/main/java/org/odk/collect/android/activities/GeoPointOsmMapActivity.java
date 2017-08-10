@@ -37,7 +37,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.LocationClient;
 import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.osmdroid.events.MapEventsReceiver;
@@ -49,6 +48,8 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.text.DecimalFormat;
+
+import timber.log.Timber;
 
 /**
  * Version of the GeoPointMapActivity that uses the new OSMDDroid
@@ -445,8 +446,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             //}
 
         } else {
-            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
-                    + " onLocationChanged(" + locationCount + ") null location");
+            Timber.i("onLocationChanged(%d) null location", locationCount);
         }
     }
 

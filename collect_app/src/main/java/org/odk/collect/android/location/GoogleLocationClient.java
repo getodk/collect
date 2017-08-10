@@ -29,6 +29,17 @@ import timber.log.Timber;
 class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
         OnConnectionFailedListener, LocationListener {
 
+    /**
+     * The default requested time between location updates, in milliseconds.
+     */
+    private static final long DEFAULT_UPDATE_INTERVAL = 5000;
+
+    /**
+     * The default maximum rate at which location updates can arrive (other updates will be throttled),
+     * in milliseconds.
+     */
+    private static final long DEFAULT_FASTEST_UPDATE_INTERVAL = 2500;
+
     @NonNull
     private final FusedLocationProviderApi fusedLocationProviderApi;
 
@@ -43,8 +54,8 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
 
     private Priority priority = Priority.PRIORITY_HIGH_ACCURACY;
 
-    private long updateInterval = -1;
-    private long fastestUpdateInterval = -1;
+    private long updateInterval = DEFAULT_UPDATE_INTERVAL;
+    private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
 
     /**
      * Constructs a new GoogleLocationClient with the provided Context.
@@ -161,8 +172,8 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
     public void resetUpdateIntervals() {
         Timber.i("GoogleLocationClient resetting update intervals.");
 
-        this.updateInterval = -1;
-        this.fastestUpdateInterval = -1;
+        this.updateInterval = DEFAULT_UPDATE_INTERVAL;
+        this.fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
     }
 
     // GoogleLocationClient:
@@ -171,13 +182,8 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setPriority(priority.getValue());
 
-        if (updateInterval != -1) {
-            locationRequest.setInterval(updateInterval);
-        }
-
-        if (fastestUpdateInterval != -1) {
-            locationRequest.setInterval(fastestUpdateInterval);
-        }
+        locationRequest.setInterval(updateInterval);
+        locationRequest.setInterval(fastestUpdateInterval);
 
         return locationRequest;
     }

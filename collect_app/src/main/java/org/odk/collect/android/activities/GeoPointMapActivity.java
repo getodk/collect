@@ -45,7 +45,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.LocationClient;
 import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
-import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -387,6 +386,8 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         this.location = location;
 
         if (location != null) {
+            Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
+
             if (previousLocation != null) {
                 enableShowLocation(true);
 
@@ -409,8 +410,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             }
 
         } else {
-            InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
-                    + " onLocationChanged(" + locationCount + ") null location");
+            Timber.i("onLocationChanged(%d) null location", locationCount);
         }
     }
 

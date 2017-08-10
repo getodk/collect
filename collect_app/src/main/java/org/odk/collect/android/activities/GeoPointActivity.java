@@ -229,7 +229,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             // Bug report: cached GeoPoint is being returned as the first value.
             // Wait for the 2nd value to be returned, which is hopefully not cached?
             ++locationCount;
-            Timber.i("onLocationChanged(%d) lat: %f, long: %f, acc: %f", locationCount, location.getLatitude(), location.getLongitude(), location.getAccuracy());
+            Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
 
             if (locationCount > 1) {
                 locationDialog.setMessage(getProviderAccuracyMessage(location));
