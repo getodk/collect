@@ -50,7 +50,6 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -562,7 +561,8 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
     /**
      * For testing purposes only.
-     * @param mapReady
+     *
+     * @param mapReady Whether or not the Google Map is ready.
      */
     public void setMapReady(boolean mapReady) {
         isMapReady = mapReady;
@@ -588,4 +588,5 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     public AlertDialog getZoomDialog() {
         return zoomDialog;
     }
+
 }

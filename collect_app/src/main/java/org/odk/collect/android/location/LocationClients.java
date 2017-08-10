@@ -33,7 +33,7 @@ public class LocationClients {
 
     /**
      * For testing purposes only. A poorman's Dependency Injection.
-     * @param testClient
+     * @param testClient The test or mock LocationClient to use.
      */
     public static void setTestClient(@NonNull LocationClient testClient) {
         LocationClients.testClient = testClient;

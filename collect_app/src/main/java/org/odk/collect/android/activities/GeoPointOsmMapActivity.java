@@ -48,10 +48,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
-
-import timber.log.Timber;
 
 /**
  * Version of the GeoPointMapActivity that uses the new OSMDDroid
@@ -436,16 +433,16 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
 
 
-        //if (location.getLatitude() != marker.getPosition().getLatitude() & location
-        // .getLongitude() != marker.getPosition().getLongitude()) {
-        //reloadLocationButton.setEnabled(true);
-        //}
-        //
-        //If location is accurate enough, stop updating position and make the marker
-        // draggable
-        //if (location.getAccuracy() <= mLocationAccuracy) {
-        //stopGeolocating();
-        //}
+            //if (location.getLatitude() != marker.getPosition().getLatitude() & location
+            // .getLongitude() != marker.getPosition().getLongitude()) {
+            //reloadLocationButton.setEnabled(true);
+            //}
+            //
+            //If location is accurate enough, stop updating position and make the marker
+            // draggable
+            //if (location.getAccuracy() <= mLocationAccuracy) {
+            //stopGeolocating();
+            //}
 
         } else {
             InfoLogger.geolog("GeoPointMapActivity: " + System.currentTimeMillis()
@@ -601,7 +598,8 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     /**
      * For testing purposes.
-     * @param helper
+     *
+     * @param helper The MapHelper to set.
      */
     public void setHelper(MapHelper helper) {
         this.helper = helper;

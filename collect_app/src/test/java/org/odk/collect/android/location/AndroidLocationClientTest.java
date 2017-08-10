@@ -13,8 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
 import static android.location.LocationManager.GPS_PROVIDER;
 import static android.location.LocationManager.NETWORK_PROVIDER;
 import static android.location.LocationManager.PASSIVE_PROVIDER;

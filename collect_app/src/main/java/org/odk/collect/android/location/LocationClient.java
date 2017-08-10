@@ -24,7 +24,7 @@ public interface LocationClient {
     /**
      * Stops the LocationClient, ending any current connections and allowing
      * resources to be reclaimed.
-     *
+     * <p>
      * Implementations should call {@link LocationClient#stopLocationUpdates()} if
      * they have been previously requested.
      */
@@ -32,6 +32,7 @@ public interface LocationClient {
 
     /**
      * Begins requesting Location updates with the provided {@link LocationListener}
+     *
      * @param locationListener The LocationListener to pass location updates to.
      */
     void requestLocationUpdates(@NonNull LocationListener locationListener);
@@ -53,7 +54,7 @@ public interface LocationClient {
     /**
      * Sets the LocationClient's {@link Priority} which will be used to determine
      * which Provider (GPS, Network, etc.) will be used to retrieve the User's location.
-     *
+     * <p>
      * If the LocationClient is already receiving updates, the new Priority will not
      * take effect until the next time Location updates are requested.
      *
@@ -64,21 +65,23 @@ public interface LocationClient {
     /**
      * Retrieves the most recent known Location, or null if none is available.
      * This method may block if start was not called before hand.
+     *
      * @return The most recent Location.
      */
-    @Nullable Location getLastLocation();
+    @Nullable
+    Location getLastLocation();
 
     /**
      * Provides a way to tell if the LocationClient can access the User's Location based
      * on the current Priority settings. Must be called <b>after</b> Location updates have been requested.
      *
      * @return Whether or not the User's Location is currently available.
-     *
      */
     boolean isLocationAvailable();
 
     /**
      * Provides a way to tell if the LocationClient is currently monitoring the User's Location.
+     *
      * @return Whether or not the clientForContext is currently monitoring the User's Location.
      */
     boolean isMonitoringLocation();
@@ -86,6 +89,7 @@ public interface LocationClient {
     /**
      * Provides a way to tell if the underlying LocationClient allows the updateInterval to be set.
      * Currently only the GoogleLocationClient can handle updateInterval changes.
+     *
      * @return Whether or the LocationClient's updateInterval can be set.
      */
     boolean canSetUpdateIntervals();
@@ -93,17 +97,17 @@ public interface LocationClient {
     /**
      * Sets the LocationClient's updateInterval (how often we would like updates) and fastestUpdateInterval
      * (for throttling updates that come at a faster interval).
-     *
+     * <p>
      * Implementations that don't offer this feature should do nothing here.
      *
-     * @param updateInterval How often we would like updates from the LocationClient (inexact).
+     * @param updateInterval        How often we would like updates from the LocationClient (inexact).
      * @param fastestUpdateInterval The minimum interval between updates (exact).
      */
     void setUpdateIntervals(long updateInterval, long fastestUpdateInterval);
 
     /**
      * Resets the LocationClient's updateInterval and fastestUpdateInterval.
-     *
+     * <p>
      * Implementations that don't offer this feature should do nothing here.
      */
     void resetUpdateIntervals();
@@ -169,7 +173,6 @@ public interface LocationClient {
          * LocationServices uses integer constants.
          *
          * @return The integer constant value for the Priority.
-         *
          */
         public int getValue() {
             return value;

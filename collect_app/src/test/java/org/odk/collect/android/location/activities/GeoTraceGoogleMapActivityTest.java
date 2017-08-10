@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.activities.GeoShapeOsmMapActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.location.LocationClient;
 import org.odk.collect.android.location.LocationClients;
@@ -23,7 +22,6 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;

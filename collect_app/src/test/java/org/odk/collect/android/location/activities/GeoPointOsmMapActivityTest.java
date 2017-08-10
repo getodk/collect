@@ -1,6 +1,5 @@
 package org.odk.collect.android.location.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Location;
 
@@ -21,7 +20,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowIntent;
 
 import static android.app.Activity.RESULT_OK;
 import static org.junit.Assert.assertEquals;

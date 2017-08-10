@@ -4,7 +4,6 @@ package org.odk.collect.android.location.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
-import android.widget.Button;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,7 +14,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.location.LocationClient;
 import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.widgets.GeoPointWidget;
