@@ -2,17 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/user_defined">
         <EditTextPreference
-            android:id="@+id/metadata_username"
             android:inputType="textNoSuggestions"
             android:key="metadata_username"
             android:title="@string/username" />
         <EditTextPreference
-            android:id="@+id/metadata_phonenumber"
             android:inputType="phone"
             android:key="metadata_phonenumber"
             android:title="@string/phone_number" />
         <EditTextPreference
-            android:id="@+id/metadata_email"
             android:inputType="textEmailAddress"
             android:key="metadata_email"
             android:title="@string/email" />
@@ -20,17 +17,14 @@
 
     <PreferenceCategory android:title="@string/device_defined">
         <EditTextPreference
-            android:id="@+id/device_id"
             android:selectable="false"
             android:key="deviceid"
             android:title="@string/device_id" />
         <EditTextPreference
-            android:id="@+id/subscriber_id"
             android:selectable="false"
             android:key="subscriberid"
             android:title="@string/subscriber_id" />
         <EditTextPreference
-            android:id="@+id/sim_serial_id"
             android:selectable="false"
             android:key="simserial"
             android:title="@string/sim_serial_id" />

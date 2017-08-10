@@ -2,77 +2,62 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/found_in_settings">
         <CheckBoxPreference
-            android:id="@+id/change_server"
             android:defaultValue="true"
             android:key="change_server"
             android:title="@string/type" />
         <CheckBoxPreference
-            android:id="@+id/change_form_metadata"
             android:defaultValue="true"
             android:key="change_form_metadata"
             android:title="@string/form_metadata" />
         <CheckBoxPreference
-            android:id="@+id/autosend"
             android:defaultValue="true"
             android:key="change_autosend"
             android:title="@string/autosend" />
         <CheckBoxPreference
-            android:id="@+id/navigation"
             android:defaultValue="true"
             android:key="change_navigation"
             android:title="@string/navigation" />
         <CheckBoxPreference
-            android:id="@+id/constraint_behavior"
             android:defaultValue="true"
             android:key="change_constraint_behavior"
             android:title="@string/constraint_behavior_title" />
         <CheckBoxPreference
-            android:id="@+id/change_font_size"
             android:defaultValue="true"
             android:key="change_font_size"
             android:title="@string/font_size" />
         <CheckBoxPreference
-            android:id="@+id/app_language"
             android:defaultValue="true"
             android:key="change_app_language"
             android:title="@string/language" />
         <CheckBoxPreference
-            android:id="@+id/instance_sync"
             android:defaultValue="true"
             android:key="instance_form_sync"
             android:title="@string/instance_sync" />
         <CheckBoxPreference
-            android:id="@+id/default_to_finalized"
             android:defaultValue="true"
             android:key="default_to_finalized"
             android:title="@string/default_completed" />
         <CheckBoxPreference
-            android:id="@+id/admin_delete_after_send"
             android:defaultValue="true"
             android:key="delete_after_send"
             android:title="@string/delete_after_send" />
         <CheckBoxPreference
-            android:id="@+id/high_resolution"
             android:defaultValue="true"
             android:key="high_resolution"
             android:title="@string/high_resolution_title" />
         <CheckBoxPreference
-            android:id="@+id/show_splash_screen"
             android:defaultValue="true"
             android:key="show_splash_screen"
             android:title="@string/show_splash_title" />
         <CheckBoxPreference
-            android:id="@+id/show_map_sdk"
             android:defaultValue="true"
             android:key="show_map_sdk"
             android:title="@string/show_map_sdk" />
         <CheckBoxPreference
-            android:id="@+id/show_map_basemap"
             android:defaultValue="true"
             android:key="show_map_basemap"
             android:title="@string/show_map_basemap" />
         <CheckBoxPreference
-            android:id="@+id/analytics"
             android:defaultValue="true"
             android:key="analytics"
             android:title="@string/analytics" />

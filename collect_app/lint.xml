@@ -35,6 +35,8 @@
 
     <issue id="TimberExceptionLogging" severity="error" />
 
+    <issue id="UnusedIds" severity="error" />
+
     <issue id="ContentDescription" severity="ignore" />
     <issue id="HardwareIds" severity="ignore" />
 </lint>

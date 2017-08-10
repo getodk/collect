@@ -1,13 +1,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceScreen
-        android:id="@+id/odk_website"
         android:key="odk_website"
         android:summary="@string/odk_website_summary"
         android:title="@string/odk_website"/>
 
     <PreferenceScreen
-        android:id="@+id/odk_forum"
         android:key="odk_forum"
         android:summary="@string/odk_forum_summary"
         android:title="@string/odk_forum"/>
