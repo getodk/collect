@@ -15,6 +15,8 @@
 package org.odk.collect.android.logic;
 
 
+import android.preference.PreferenceManager;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -196,6 +198,9 @@ public class FormController {
     }
 
     public TimerLogger getTimerLogger() {
+        if (timerLogger == null) {
+            setTimerLogger(new TimerLogger(getInstancePath(), this));
+        }
         return timerLogger;
     }
 
