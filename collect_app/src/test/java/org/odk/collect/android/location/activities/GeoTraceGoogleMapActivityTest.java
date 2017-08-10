@@ -93,7 +93,7 @@ public class GeoTraceGoogleMapActivityTest {
 
         assertTrue(activity.getPlayButton().isEnabled());
         assertSame(newLocation, activity.getCurLocation());
-        assertEquals(new LatLng(location.getLatitude(), location.getLongitude()), activity.getCurlatLng());
+        assertEquals(new LatLng(newLocation.getLatitude(), newLocation.getLongitude()), activity.getCurlatLng());
 
         activityController.stop();
         verify(locationClient).stop();
