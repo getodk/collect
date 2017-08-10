@@ -204,7 +204,7 @@ public class FormController {
         return timerLogger;
     }
 
-    public void setTimerLogger(TimerLogger logger) {
+    private void setTimerLogger(TimerLogger logger) {
         timerLogger = logger;
     }
 
