@@ -11,6 +11,8 @@ import com.google.android.gms.location.LocationListener;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * An implementation of {@link LocationClient} that uses the existing
  * Android Location Services (LocationManager) to retrieve the User's
@@ -138,6 +140,23 @@ class AndroidLocationClient implements LocationClient, android.location.Location
     @Override
     public boolean isMonitoringLocation() {
         return locationListener != null;
+    }
+
+    @Override
+    public boolean canSetUpdateIntervals() {
+        return false;
+    }
+
+    @Override
+    public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) {
+        // Do nothing.
+        Timber.e("Can't set updateInterval on AndroidLocationClient. You should check canSetUpdateIntervals before calling this method.");
+    }
+
+    @Override
+    public void resetUpdateIntervals() {
+        // Do nothing.
+        Timber.e("Can't set updateInterval on AndroidLocationClient. You should check canSetUpdateIntervals before calling this method.");
     }
 
     // AndroidLocationClient:

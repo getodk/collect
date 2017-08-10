@@ -30,11 +30,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.LocationClient;
 import org.odk.collect.android.location.LocationClients;
-import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
 import java.text.DecimalFormat;
+
+import timber.log.Timber;
 
 public class GeoPointActivity extends AppCompatActivity implements LocationListener,
         LocationClient.LocationClientListener {
@@ -71,6 +72,10 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         setTitle(getString(R.string.get_location));
 
         locationClient = LocationClients.clientForContext(this);
+        if (locationClient.canSetUpdateIntervals()) {
+            locationClient.setUpdateIntervals(100, 50);
+        }
+
         locationClient.setListener(this);
 
         setupLocationDialog();
@@ -189,14 +194,10 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         Location loc = locationClient.getLastLocation();
 
         if (loc != null) {
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
-                    + " lastKnownLocation() lat: "
-                    + loc.getLatitude() + " long: "
-                    + loc.getLongitude() + " acc: "
-                    + loc.getAccuracy());
+            Timber.i("lastKnownLocation() lat: %f long: %f acc: %f", loc.getLatitude(), loc.getLongitude(), loc.getAccuracy());
+
         } else {
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
-                    + " lastKnownLocation() null location");
+            Timber.i("lastKnownLocation() null location");
         }
     }
 
@@ -228,11 +229,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             // Bug report: cached GeoPoint is being returned as the first value.
             // Wait for the 2nd value to be returned, which is hopefully not cached?
             ++locationCount;
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
-                    + " onLocationChanged(" + locationCount + ") lat: "
-                    + location.getLatitude() + " long: "
-                    + location.getLongitude() + " acc: "
-                    + location.getAccuracy());
+            Timber.i("onLocationChanged(%d) lat: %f, long: %f, acc: %f", locationCount, location.getLatitude(), location.getLongitude(), location.getAccuracy());
 
             if (locationCount > 1) {
                 locationDialog.setMessage(getProviderAccuracyMessage(location));
@@ -246,8 +243,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             }
 
         } else {
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
-                    + " onLocationChanged(" + locationCount + ") null location");
+            Timber.i("onLocationChanged(%d)", locationCount);
         }
     }
 

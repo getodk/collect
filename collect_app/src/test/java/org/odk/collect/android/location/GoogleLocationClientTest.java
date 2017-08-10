@@ -158,7 +158,10 @@ public class GoogleLocationClientTest {
         verify(googleApiClient).blockingConnect(); // 'verify' checks if called *once*.
     }
 
-
+    @Test
+    public void canSetUpdateIntervalsShouldReturnTrue() {
+        assertTrue(googleLocationClient.canSetUpdateIntervals());
+    }
 
     private static Location newMockLocation() {
         return mock(Location.class);

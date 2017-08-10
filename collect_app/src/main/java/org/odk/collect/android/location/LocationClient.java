@@ -83,8 +83,30 @@ public interface LocationClient {
      */
     boolean isMonitoringLocation();
 
+    /**
+     * Provides a way to tell if the underlying LocationClient allows the updateInterval to be set.
+     * Currently only the GoogleLocationClient can handle updateInterval changes.
+     * @return Whether or the LocationClient's updateInterval can be set.
+     */
+    boolean canSetUpdateIntervals();
 
+    /**
+     * Sets the LocationClient's updateInterval (how often we would like updates) and fastestUpdateInterval
+     * (for throttling updates that come at a faster interval).
+     *
+     * Implementations that don't offer this feature should do nothing here.
+     *
+     * @param updateInterval How often we would like updates from the LocationClient (inexact).
+     * @param fastestUpdateInterval The minimum interval between updates (exact).
+     */
+    void setUpdateIntervals(long updateInterval, long fastestUpdateInterval);
 
+    /**
+     * Resets the LocationClient's updateInterval and fastestUpdateInterval.
+     *
+     * Implementations that don't offer this feature should do nothing here.
+     */
+    void resetUpdateIntervals();
 
     /**
      * An interface for listening to status changes on a LocaitonClient.
@@ -111,6 +133,7 @@ public interface LocationClient {
      * Enumerates the options for preferring certain Location Providers over others.
      */
     enum Priority {
+
         /**
          * Preferred: GPS
          * Backup: Network

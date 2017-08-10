@@ -363,6 +363,11 @@ public class AndroidLocationClientTest {
         assertNull(androidLocationClient.getLastLocation());
     }
 
+    @Test
+    public void canSetUpdateIntervalsShouldReturnFalse() {
+        assertFalse(androidLocationClient.canSetUpdateIntervals());
+    }
+
     private static Location newMockLocation() {
         return mock(Location.class);
     }
