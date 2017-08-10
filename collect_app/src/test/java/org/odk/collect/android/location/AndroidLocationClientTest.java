@@ -301,10 +301,6 @@ public class AndroidLocationClientTest {
         when(locationManager.getLastKnownLocation(PASSIVE_PROVIDER))
                 .thenReturn(passiveLocation);
 
-        when(locationManager.getLastKnownLocation(null))
-                .thenReturn(null);
-
-
         // High Accuracy: -------------------------------------------------------------- //
 
         androidLocationClient.setPriority(PRIORITY_HIGH_ACCURACY);

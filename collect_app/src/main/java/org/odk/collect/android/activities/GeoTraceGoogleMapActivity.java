@@ -755,24 +755,27 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             zoomDialog = builder.create();
         }
 
-        if (curLocation != null) {
-            zoomLocationButton.setEnabled(true);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomLocationButton.setEnabled(false);
-            zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+        if (zoomLocationButton != null) {
+            if (curLocation != null) {
+                zoomLocationButton.setEnabled(true);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomLocationButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomLocationButton.setEnabled(false);
+                zoomLocationButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomLocationButton.setTextColor(Color.parseColor("#FF979797"));
+            }
+            if (markerArray.size() != 0) {
+                zoomPointButton.setEnabled(true);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
+                zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
+            } else {
+                zoomPointButton.setEnabled(false);
+                zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
+                zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
+            }
         }
-        if (markerArray.size() != 0) {
-            zoomPointButton.setEnabled(true);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50cccccc"));
-            zoomPointButton.setTextColor(Color.parseColor("#ff333333"));
-        } else {
-            zoomPointButton.setEnabled(false);
-            zoomPointButton.setBackgroundColor(Color.parseColor("#50e2e2e2"));
-            zoomPointButton.setTextColor(Color.parseColor("#FF979797"));
-        }
+
         zoomDialog.show();
     }
 
