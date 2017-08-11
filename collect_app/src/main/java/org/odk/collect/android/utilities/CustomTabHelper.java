@@ -59,7 +59,7 @@ public class CustomTabHelper {
      * https://medium.com/google-developers/best-practices-for-custom-tabs-5700e55143ee
      */
 
-    public List<String> getPackageName(Context context) {
+    private List<String> getPackageName(Context context) {
         // Get default VIEW intent handler that can view a web url.
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.test-url.com"));
 
