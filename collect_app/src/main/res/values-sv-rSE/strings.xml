@@ -128,7 +128,6 @@
   <string name="select_another_image">Välj en annan bild</string>
   <string name="use_odk_default">Använd standardbild</string>
   <string name="change_splash_path">Byt bild</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Spara ändringar</string>
   <string name="change_formlist_url">Sökväg till formulärlista (tillagd till URL)</string>
   <string name="change_protocol">Plattform</string>
