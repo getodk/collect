@@ -27,17 +27,21 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
 
         FileWriter fw = null;
         try {
-            boolean newFile = !file.exists();
-            fw = new FileWriter(file, true);
-            if (newFile) {
-                fw.write(TIMING_CSV_HEADER + "\n");
-            }
-            if (params.length > 0) {
-                //for (int i = 0; i < params.length; i++) {
-                for (TimerLogger.Event ev : params) {
-                    fw.write(ev.toString() + "\n");
-                    Timber.i("Log audit Event: %s", ev.toString());
+            if (file != null) {
+                boolean newFile = !file.exists();
+                fw = new FileWriter(file, true);
+                if (newFile) {
+                    fw.write(TIMING_CSV_HEADER + "\n");
                 }
+                if (params.length > 0) {
+                    //for (int i = 0; i < params.length; i++) {
+                    for (TimerLogger.Event ev : params) {
+                        fw.write(ev.toString() + "\n");
+                        Timber.i("Log audit Event: %s", ev.toString());
+                    }
+                }
+            } else {
+                Timber.e("Attempt to build FileWriter on null TimerLogger file.");
             }
         } catch (IOException e) {
             Timber.e(e);
