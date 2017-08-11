@@ -43,7 +43,11 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
             Timber.e(e);
         } finally {
             try {
-                fw.close();
+                if (fw != null) {
+                    fw.close();
+                } else {
+                    Timber.e("Attempt to close null FileWriter for TimerLogger.");
+                }
             } catch (Exception e) {
                 Timber.e(e);
             }
