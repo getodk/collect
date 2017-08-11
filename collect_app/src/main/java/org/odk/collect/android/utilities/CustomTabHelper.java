@@ -24,6 +24,11 @@ public class CustomTabHelper {
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient customTabsClient;
     private CustomTabsSession customTabsSession;
+
+    /*
+     * unbind 'serviceConnection' after the context in which it was run is destroyed to
+     * prevent the leakage of service
+     */
     private CustomTabsServiceConnection serviceConnection;
 
     public void bindCustomTabsService(final Activity activity, final Uri url) {
