@@ -82,7 +82,6 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -95,8 +94,10 @@ import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.CustomTabHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -237,6 +238,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private FormsDao formsDao;
 
+    public CustomTabHelper customTabHelper;
+
     /**
      * Called when the activity is first created.
      */
@@ -272,6 +275,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         initToolbar();
+
+        customTabHelper = new CustomTabHelper();
 
         nextButton = (ImageButton) findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(new OnClickListener() {
@@ -2418,6 +2423,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     protected void onDestroy() {
+        unbindService(customTabHelper.getServiceConnection());
+
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it
@@ -2922,6 +2929,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     protected void onStart() {
         super.onStart();
         Collect.getInstance().getActivityLogger().logOnStart(this);
+        customTabHelper.bindCustomTabsService(this, null);
     }
 
     @Override

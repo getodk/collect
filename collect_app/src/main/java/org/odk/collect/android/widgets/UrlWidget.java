@@ -18,7 +18,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,8 +29,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.CustomTabHelper;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -39,13 +38,13 @@ import org.odk.collect.android.utilities.CustomTabHelper;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class UrlWidget extends QuestionWidget {
-    private CustomTabHelper customTabHelper;
+
     private Uri uri;
 
     private Button openUrlButton;
     private TextView stringAnswer;
 
-    public UrlWidget(Context context, FormEntryPrompt prompt) {
+    public UrlWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         View answerLayout = inflate(context, R.layout.url_widget_layout, null);
@@ -66,7 +65,7 @@ public class UrlWidget extends QuestionWidget {
                 if (stringAnswer != null & stringAnswer.getText() != null
                         && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
 
-                    openUrl();
+                    openUrl(context);
                 } else {
                     Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
                 }
@@ -85,15 +84,12 @@ public class UrlWidget extends QuestionWidget {
 
         // finish complex layout
         addAnswerView(answerLayout);
-
-        customTabHelper = new CustomTabHelper();
-        customTabHelper.bindCustomTabsService((AppCompatActivity) context, null);
     }
 
-    private void openUrl() {
-        if (customTabHelper.getPackageName(getContext()).size() != 0) {
+    private void openUrl(Context context) {
+        if (((FormEntryActivity) context).customTabHelper.getPackageName(getContext()).size() != 0) {
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-            customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getContext()).get(0));
+            customTabsIntent.intent.setPackage(((FormEntryActivity) context).customTabHelper.getPackageName(getContext()).get(0));
             customTabsIntent.launchUrl(getContext(), uri);
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW);
