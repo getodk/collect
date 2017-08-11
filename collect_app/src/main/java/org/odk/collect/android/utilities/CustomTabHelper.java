@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsService;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
@@ -79,5 +80,17 @@ public class CustomTabHelper {
 
     public CustomTabsServiceConnection getServiceConnection() {
         return serviceConnection;
+    }
+
+    public void openUri(Context context, Uri uri) {
+        if (getPackageName(context).size() != 0) {
+            //open in chrome custom tab
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+            customTabsIntent.intent.setPackage(getPackageName(context).get(0));
+            customTabsIntent.launchUrl(context, uri);
+        } else {
+            //open in an external browser
+            context.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        }
     }
 }
