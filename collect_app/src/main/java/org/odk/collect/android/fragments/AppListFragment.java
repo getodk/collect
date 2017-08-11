@@ -212,7 +212,7 @@ abstract class AppListFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.notes);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher);
     }
 
     private void setupDrawer(View rootView) {

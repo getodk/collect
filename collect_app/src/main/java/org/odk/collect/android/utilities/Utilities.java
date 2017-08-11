@@ -494,7 +494,7 @@ public class Utilities {
         String[] selectArgs = new String[nIds + 1];
         selectArgs[0] = Utilities.getSource();
 
-        StringBuffer selectClause = new StringBuffer(InstanceColumns.T_REPEAT + " = 0 and " + InstanceColumns.SOURCE + " = ?");
+        StringBuffer selectClause = new StringBuffer(/*InstanceColumns.T_REPEAT + " = 0 and " + */InstanceColumns.SOURCE + " = ?");
 
         if (nIds > 0) {
             selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");

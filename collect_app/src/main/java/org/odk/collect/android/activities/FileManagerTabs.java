@@ -73,7 +73,7 @@ public class FileManagerTabs extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.notes);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher);
     }
 
     @Override
