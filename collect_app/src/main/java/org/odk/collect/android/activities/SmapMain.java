@@ -191,23 +191,23 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
             authorised = true;
         } else {
-            Toast.makeText(
-                    this,
-                    getString(R.string.smap_nfc_not_authorised),
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(
+            //        this,
+            //        getString(R.string.smap_nfc_not_authorised),
+            //        Toast.LENGTH_SHORT).show();
         }
 
         if (authorised) {
             if (mNfcAdapter == null) {
-                Toast.makeText(
-                        this,
-                        getString(R.string.smap_nfc_not_available),
-                        Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(
+            //            this,
+            //            getString(R.string.smap_nfc_not_available),
+            //            Toast.LENGTH_SHORT).show();
             } else if (!mNfcAdapter.isEnabled()) {
-                Toast.makeText(
-                        this,
-                        getString(R.string.smap_nfc_not_enabled),
-                        Toast.LENGTH_LONG).show();
+            //    Toast.makeText(
+            //            this,
+            //            getString(R.string.smap_nfc_not_enabled),
+            //            Toast.LENGTH_LONG).show();
             } else {
                 /*
                  * Set up NFC adapter
@@ -225,10 +225,10 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                 };
 
 
-                Toast.makeText(
-                        this,
-                        getString(R.string.smap_nfc_is_available),
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(
+                //        this,
+                //        getString(R.string.smap_nfc_is_available),
+                //        Toast.LENGTH_LONG).show();
 
             }
         }

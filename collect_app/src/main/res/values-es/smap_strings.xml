@@ -39,8 +39,8 @@
   <string name="smap_read_nfc">Leer chip NFC</string>
   <string name="smap_reading_nfc">Leyendo chip NFC</string>
   <string name="smap_replace_nfc">Reemplazar NFC</string>
-  <string name="smap_nfc_not_available">El dispositivo no cuenta con tecnología NFC.</string>
-  <string name="smap_nfc_is_available">Este equipo cuenta con tecnología NFC</string>
+  <string name="smap_nfc_not_available">El dispositivo NO tiene NFC. Podrá usar todas las funcionalidades de la aplicación excepto el uso de Chips de proximidad</string>
+  <string name="smap_nfc_is_available">Este equipo tiene NFC. Podrá usar todas las funcionalidades de la aplicación incluyendo el uso de Chips de proximidad para activar tareas.</string>
   <string name="smap_nfc_not_enabled">NFC NO activado - Habilite en Ajustes del dispositivo</string>
   <string name="smap_swipe_nfc">Acerque el teléfono (parte de atrás) al chip NFC</string>
   <string name="read_only">Tarea completa. Sólo se pueden cambiar sus comentarios</string>
@@ -60,4 +60,7 @@
   <string name="smap_created">Creada</string>
   <string name="smap_error">Error</string>
   <string name="smap_unauth">No Autorizado. Revise los datos de usuario/contraseña</string>
+  <string name="smap_no_server">No se ha especificado el servidor en Configuración</string>
+  <string name="smap_refresh_started">Actualización Iniciada</string>
+  <string name="smap_refresh_finished">Actualización Terminada</string>
 </resources>
