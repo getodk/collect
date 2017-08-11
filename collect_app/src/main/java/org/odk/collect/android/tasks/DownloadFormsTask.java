@@ -137,8 +137,7 @@ public class DownloadFormsTask extends
                     Timber.i("No Manifest for: %s", fd.formName);
                 }
             } catch (TaskCancelledException e) {
-                Timber.e(e);
-
+                Timber.i(e);
                 cleanUp(fileResult, e.getFile(), tempMediaPath);
 
                 // do not download additional forms.
@@ -191,8 +190,7 @@ public class DownloadFormsTask extends
 
                     cleanUp(fileResult, null, tempMediaPath);
                 } catch (TaskCancelledException e) {
-                    Timber.e(e);
-
+                    Timber.i(e);
                     cleanUp(fileResult, e.getFile(), tempMediaPath);
                 }
             } else {

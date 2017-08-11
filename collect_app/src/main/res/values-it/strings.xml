@@ -202,7 +202,6 @@
   <string name="admin_password_incorrect">Attenzione, la password è sbagliata!</string>
   <string name="enter_admin_password">Inserire Password Amministratore</string>
   <string name="change_admin_password">Cambia la password di amministratore</string>
-  <string name="autosend">Invio automatico</string>
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
   <string name="no_account">Nessun account</string>
@@ -270,8 +269,6 @@
   <string name="invalid_oauth">Token OAuth 2 non valido</string>
   <string name="google_repeat_error">Le ripetizioni non sono ancora supportate da Google Sheets.</string>
   <string name="media_upload_error">Impossibile fare l\'upload di una foto inesistente: %1$s</string>
-  <string name="odk_auth_auth_fail">Autenticazione ODK Autosend fallira, per favore assicurati che le tue impostazioni siano corrette</string>
-  <string name="odk_auto_note">Notifica ODK Autosend</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>

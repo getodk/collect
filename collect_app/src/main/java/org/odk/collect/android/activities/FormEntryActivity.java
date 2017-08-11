@@ -36,8 +36,10 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -180,6 +182,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private long mTaskId;                                               // SMAP
     private String mSurveyNotes = null;                                 // SMAP
     private boolean mCanUpdate = true;                                  // SMAP
+    private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -204,12 +207,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean autoSaved;
     private boolean doSwipe = true;
 
-    private TimerLogger timerLogger;
-
     // Random ID
     private static final int DELETE_REPEAT = 654321;
 
     private String formPath;
+    private String saveName;
+
     private GestureDetector gestureDetector;
 
     private Animation inAnimation;
@@ -329,6 +332,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (savedInstanceState.containsKey(KEY_ERROR)) {
                 errorMessage = savedInstanceState.getString(KEY_ERROR);
             }
+            saveName = savedInstanceState.getString(KEY_SAVE_NAME);
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
@@ -379,8 +383,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
+                String uriMimeType = getContentResolver().getType(uri);
 
-                if (uri != null && getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
@@ -389,7 +394,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         try {
                             instanceCursor = getContentResolver().query(uri,
                                     null, null, null, null);
-                            if (instanceCursor.getCount() != 1) {
+                            if (instanceCursor == null || instanceCursor.getCount() != 1) {
                                 this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                                 return;
                             } else {
@@ -472,13 +477,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             }
                         }
                     }
-                } else if (uri != null && getContentResolver().getType(uri).equals(
-                        FormsColumns.CONTENT_ITEM_TYPE)) {
+                } else if (uriMimeType != null
+                        && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
                     try {
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
-                        if (c.getCount() != 1) {
+                        if (c == null || c.getCount() != 1) {
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
@@ -599,6 +604,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
+        outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putLong(KEY_TASK, mTaskId);	    // SMAP
     }
@@ -880,10 +886,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // repeat events, and indexes in field-lists that is not the containing
         // group.
 
-        if (timerLogger == null) {
-            setTimerLogger(formController);
-        }
-
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
     }
@@ -968,7 +970,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -1135,7 +1137,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         setTitle(formController.getFormTitle());
 
-        timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
+        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
@@ -1159,8 +1161,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView
-                        .findViewById(R.id.save_name);
+                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1176,18 +1177,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 };
                 saveAs.setFilters(new InputFilter[]{returnFilter});
 
-                String saveName = formController.getSubmissionMetadata().instanceName;
-                if (saveName == null) {
+                if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
-                    if (getContentResolver().getType(getIntent().getData())
-                            == InstanceColumns.CONTENT_ITEM_TYPE) {
+                    String uriMimeType = getContentResolver().getType(getIntent().getData());
+                    if (saveName == null && uriMimeType != null
+                            && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                         Uri instanceUri = getIntent().getData();
                         Cursor instance = null;
                         try {
                             instance = getContentResolver().query(instanceUri,
                                     null, null, null, null);
-                            if (instance.getCount() == 1) {
+                            if (instance != null && instance.getCount() == 1) {
                                 instance.moveToFirst();
                                 saveName = instance
                                         .getString(instance
@@ -1204,18 +1205,33 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView
-                            .findViewById(R.id.save_form_as);
                     // sa.setVisibility(View.VISIBLE);   // smap
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
                     // saveAs.setVisibility(View.VISIBLE);  // smap
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    saveAs.setText(saveName);
+                    saveAs.setEnabled(true);
+                    saveAs.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            saveName = String.valueOf(s);
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+                    });
                 } else {
                     // if instanceName is defined in form, this is the name -- no
                     // revisions
                     // display only the name, not the prompt, and disable edits
-                    TextView sa = (TextView) endView
-                            .findViewById(R.id.save_form_as);
+                    saveName = formController.getSubmissionMetadata().instanceName;
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
@@ -1416,7 +1432,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return;
             }
 
-            timerLogger.exitView();    // Close timer events waiting for an end time
+            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1486,7 +1502,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         nonblockingCreateSavePointData();
                     }
                 }
-                timerLogger.exitView();    // Close timer events
+                formController.getTimerLogger().exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -1871,7 +1887,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
-                        timerLogger.logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
@@ -2007,7 +2023,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                             .logInstanceAction(this,
                                                     "createQuitDialog",
                                                     "discardAndExit");
-                                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                    FormController formController = Collect.getInstance().getFormController();
+                                    if (formController != null) {
+                                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                    }
                                     removeTempInstance();
                                     finishReturnInstance();
                                 }
@@ -2023,7 +2042,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 // close all open databases of external data.
                                 Collect.getInstance().getExternalDataManager().close();
 
-                                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                FormController formController = Collect.getInstance().getFormController();
+                                if (formController != null) {
+                                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                                }
                                 removeTempInstance();
                                 finishReturnInstance();
                                 break;
@@ -2502,7 +2524,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2521,7 +2543,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
@@ -2529,7 +2551,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
@@ -2553,6 +2575,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
+        setTimerLogger(formController);
         supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2634,14 +2657,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 formController.setInstancePath(instanceFile);
             }
 
-            setTimerLogger(formController);
-            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            setTimerLogger(formController);
-            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
@@ -2687,27 +2708,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
 	mTaskId = taskId;				// smap
         int saveStatus = saveResult.getSaveResult();
+        FormController formController = Collect.getInstance()
+                .getFormController();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 if (saveResult.getComplete()) {
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2717,14 +2740,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2759,10 +2782,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void setTimerLogger(FormController formController) {
 
-        // Create the timer logger and then log the resume event
-        timerLogger = new TimerLogger(formController.getInstancePath(),
-                PreferenceManager.getDefaultSharedPreferences(this),
-                formController);
+        if (formController.getTimerLogger() == null) {
+
+            // Create a new timerLogger object if there is no saved timer logger
+            formController.setTimerLogger(new TimerLogger(formController.getInstancePath(),
+                    PreferenceManager.getDefaultSharedPreferences(this),
+                    formController));
+        }
     }
 
     /**

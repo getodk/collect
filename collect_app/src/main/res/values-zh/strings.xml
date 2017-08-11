@@ -183,7 +183,6 @@
   <string name="admin_password_disabled">管理员密码已禁用</string>
   <string name="admin_password_incorrect">对不起, 密码不正确!</string>
   <string name="enter_admin_password">输入管理员密码</string>
-  <string name="autosend">自动发送</string>
   <string name="found_in_main">不选中以从主菜单中隐藏</string>
   <string name="found_in_settings">不选中以从设置中隐藏</string>
   <string name="no_account">没有账户</string>

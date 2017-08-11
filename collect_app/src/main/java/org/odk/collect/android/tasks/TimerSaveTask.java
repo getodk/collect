@@ -25,6 +25,10 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
     @Override
     protected Void doInBackground(TimerLogger.Event... params) {
 
+        if(file == null) {
+            return null;
+        }
+
         FileWriter fw = null;
         try {
             boolean newFile = !file.exists();
@@ -42,10 +46,12 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
         } catch (IOException e) {
             Timber.e(e);
         } finally {
-            try {
-                fw.close();
-            } catch (Exception e) {
-                Timber.e(e);
+            if(fw != null) {
+                try {
+                    fw.close();
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
             }
         }
         return null;

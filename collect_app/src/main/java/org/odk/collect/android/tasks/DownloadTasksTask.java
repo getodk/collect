@@ -41,7 +41,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
-import org.odk.collect.android.tasks.InstanceUploaderTask.Outcome;
+import org.odk.collect.android.tasks.InstanceUploader.Outcome;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -433,7 +433,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
 
             if(toUpload.size() > 0) {
-                InstanceUploaderTask instanceUploaderTask = new InstanceUploaderTask();
+                InstanceServerUploader instanceUploaderTask = new InstanceServerUploader();
                 publishProgress(Collect.getInstance().getString(R.string.smap_submitting, toUpload.size()));
                 instanceUploaderTask.setUploaderListener((InstanceUploaderListener) mStateListener);
 

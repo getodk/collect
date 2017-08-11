@@ -27,7 +27,7 @@
   <string name="data">जतन केलेले फॉर्म</string>
   <string name="data_saved_error">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
   <string name="data_saved_ok">फॉर्म यशस्वीरित्या जतन केला!</string>
-  <string name="save_point_error">Error saving recovery point: %s</string>
+  <string name="save_point_error">पुनर्प्राप्ती बिंदू जतन करताना त्रुटी: %s</string>
   <string name="default_completed">अंतिम रूप ला डिफॉल्ट करा </string>
   <string name="default_completed_summary">डीफॉल्टनुसार अंतिम रूप दिलेला फॉर्म चिन्हांकित करा</string>
   <string name="delete_confirm">फॉर्म(स)  %s हटवायचे का?</string>
@@ -52,7 +52,7 @@
   <string name="enter_data_button">रिक्त फॉर्म भरा</string>
   <string name="error_occured">त्रुटी झाले</string>
   <string name="error_attaching_binary_file">मिडिया संलग्न करताना त्रुटी आली: 1%s</string>
-  <string name="fetching_file"> %1$s  मिळवत आहे. \n \n %2$s फॉर्म %3$s फॉर्म(स) </string>
+  <string name="fetching_file"> %1$s  मिळवत आहे. \n\nफॉर्म %2$s च्या%3$s फॉर्म(स) </string>
   <string name="file_deleted_error">क्षमस्व, %1$s पैकी फॉर्म(स) %2$s नी हटविण्यात अयशस्वी!</string>
   <string name="file_deleted_ok">%s फॉर्म(स) यशस्वीरित्या हटविले!</string>
   <string name="file_delete_in_progress">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
@@ -83,9 +83,9 @@
   <string name="noselect_error">क्षमस्व, आपण कोणतेही फॉर्म निवडलेले नाहीत!</string>
   <string name="no_connection">कोणतेही नेटवर्क कनेक्शन उपलब्ध नाही</string>
   <string name="no_items_display">प्रदर्शनासाठी काहीही उपलब्ध नाही.</string>
-  <string name="no_items_display_forms">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \ n \ n रिक्त फॉर्म मिळविणे आणि भरणे करण्याचा प्रयत्न करा.</string>
-  <string name="no_items_display_sent_forms">प्रदर्शनासाठी काहीही उपलब्ध नाही. \ n \ n पाहण्यासाठी करण्यापूर्वी अंतिम स्वरूप पाठविण्याचा प्रयत्न करा.</string>
-  <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \ n \ n पाठवण्यापूर्वी जतन केलेले फॉर्म अंतिम रूपाने वापरून पहा.</string>
+  <string name="no_items_display_forms">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \n\nरिक्त फॉर्म मिळविणे आणि भरण्याचा प्रयत्न करा.</string>
+  <string name="no_items_display_sent_forms">प्रदर्शनासाठी काहीही उपलब्ध नाही.\n\n पाहण्या पूर्वी अंतिम स्वरूप पाठविण्याचा प्रयत्न करा.</string>
+  <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही.\n\nपाठविण्यापूर्वी जतन केलेले फॉर्म्स ला अंतिम रूप देण्याचा प्रयत्न करा</string>
   <string name="ok">ठीक आहे</string>
   <string name="parse_error">क्षमस्व, फॉर्म विश्लेषित करण्यास अक्षम</string>
   <string name="parse_legacy_formlist_failed">सर्व्हरने एकूण 0.9.x. सह सुसंगत एक उपलब्ध-फॉर्म दस्तऐवज प्रदान केलेला नाही. : %s</string>
@@ -149,7 +149,7 @@
   <string name="success">यश</string>
   <string name="no_forms_uploaded">क्षमस्व, कोणताही फॉर्म अपलोड करण्यात आला नाही</string>
   <string name="upload_results">परिणाम अपलोड करा</string>
-  <string name="xform_parse_error">1%1$s साठी XForm parse त्रुटी: 2%2$s गहाळ आहे किंवा अवैध आहे</string>
+  <string name="xform_parse_error">%1$s साठी XForm parse त्रुटी: %2$s गहाळ आहे किंवा अवैध आहे</string>
   <string name="choose_sound">ध्वनी निवडा</string>
   <string name="choose_video">व्हिडिओ निवडा</string>
   <string name="choose_image">प्रतिमा निवडा</string>
@@ -181,7 +181,7 @@
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'EEE वर हटविले\', \'एमएमएम डीडी, याय\' \'एचएच: एमएम\'</string>
   <string name="version">आवृत्ती:</string>
-  <string name="parent_form_not_present">हा जतन केलेला फॉर्म संपादित करण्यास अक्षम कारण संबंधीत रिक्त फॉर्म उपलब्ध नाही किंवा हटविला गेला नाही. \ n \ n फॉर्म %1$s</string>
+  <string name="parent_form_not_present">हा जतन केलेला फॉर्म संपादित करण्यास अक्षम कारण संबंधीत रिक्त फॉर्म उपलब्ध नाही किंवा हटविला गेला नाही. \ n \ n फॉर्म ID %1$s</string>
   <string name="launch_app">लाँच करा</string>
   <string name="no_app">विनंती केलेले अनुप्रयोग गहाळ आहे. कृपया स्वतः वाचन प्रविष्ट करा.</string>
   <string name="select_one">एक उत्तर निवडा</string>
@@ -235,7 +235,7 @@
   <string name="ext_search_return_error">शोध हँडलरने \'1%s\' प्रकारचे ऑब्जेक्ट परत केले.</string>
   <string name="ext_import_generic_error"> %1$sवरून डेटा आयात करू शकले नाही . कारण: %2$s</string>
   <string name="ext_import_progress_message"> \'%1$s\' वरून डेटा पूर्व लोड होत आहे, कृपया प्रतीक्षा करा, %2$s</string>
-  <string name="ext_import_cancelled_message">वाचन डेटा रद्द!</string>
+  <string name="ext_import_cancelled_message">डेटा वाचन रद्द!</string>
   <string name="ext_import_finalizing_message">पूर्व लोड केलेल्या डेटाला अंतिम रूप देत आहे …</string>
   <string name="ext_import_completed_message">डेटा वाचन पूर्ण!</string>
   <string name="ext_not_initialized_error">बाह्यडेटा व्यवस्थापक प्रारंभ झाला नाही.</string>
@@ -271,8 +271,8 @@
   <string name="invalid_oauth">अवैध OAuth 2 टोकन</string>
   <string name="google_repeat_error">पुनरावृत्ती गूगल पत्रके द्वारे यावेळी समर्थित नाहीत.</string>
   <string name="media_upload_error">अस्तित्वात नाही असा फोटो अपलोड करण्यात अयशस्वी:  %1$s</string>
-  <string name="odk_auth_auth_fail">ओडीक ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा</string>
-  <string name="odk_auto_note">ओडीक ऑटोसॅन्ड सूचना</string>
+  <string name="odk_auth_auth_fail">ओडीके ऑटोसॅन्ड प्रमाणीकरण अयशस्वी, कृपया आपली सेटिंग्ज योग्य असल्याची खात्री करा.</string>
+  <string name="odk_auto_note">ओडीके ऑटोसॅन्ड सूचना.</string>
   <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
   <string name="delete_after_send">पाठवानंतर हटवा</string>
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
@@ -282,7 +282,7 @@
   <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
   <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
-  <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  1 %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
+  <string name="sheets_max_columns">स्तंभांची कमाल संख्या 255 आहे, आपल्या फॉर्ममध्ये  %s आहे. स्प्रेडशीटवर अपलोड करण्यास अक्षम</string>
   <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
   <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमध्ये खालील स्तंभ गहाळ आहेत:%1$s</string>
@@ -345,8 +345,8 @@
   <string name="zoom_to_where">झूम टु …</string>
   <string name="zoom_to_location">वर्तमान स्थानावर झूम</string>
   <string name="zoom_to_feature">जतन केलेल्या वैशिष्ट्य पर्यंत झूम करा</string>
-  <string name="google_sheets_invalid_column_form">आपल्या फॉर्ममध्ये  \'n%1$s\'  एक अवैध स्तंभ नाव Saveआहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात.</string>
-  <string name="google_sheets_invalid_column_instance">\'n%1$s\' is an invalid column name in your saved instance. Google Sheets only allows alphanumeric characters and hyphens in column names</string>
+  <string name="google_sheets_invalid_column_form">आपल्या फॉर्ममध्ये  \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात.</string>
+  <string name="google_sheets_invalid_column_instance">आपल्या जतन केलेल्या घटनेमध्ये \'n%1$s\'  एक अवैध स्तंभ नाव आहे. गूगल पत्रक केवळ स्तंभ नावांमध्ये अल्फान्यूमेरिक वर्ण आणि हायफनला अनुमती देतात</string>
   <string name="geoshape_view_change_location">जिओ शेप पहा किंवा बदला</string>
   <string name="geotrace_view_change_location">जिओ ट्रेस पहा किंवा बदला</string>
   <string name="bearing">असणारा:%.3f</string>
@@ -366,7 +366,7 @@
   <string name="go_back">परत जा</string>
   <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
   <string name="record_geopoint">जिओ पॉईंट रेकॉर्ड करा</string>
-  <string name="gps_result">अक्षांश: %1$s \nरेखांश: %2$s \nअल्टिट्यूड: %3$sm \nअॅक्चुसीसी: %4$sm</string>
+  <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <string name="parser_exception">एक्स पाथ पार्सर अपवादः  \"%s\"</string>
   <string name="selected_answer">निवडलेले: %s</string>
   <string name="version_number">आवृत्ती: %s</string>
@@ -471,7 +471,7 @@
   <string name="share_qrcode">क्यूआर कोड सामायिक करा</string>
   <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
   <string name="request_permission">या अनुप्रयोगास कॅमेराचा परवानगीची आवश्यकता आहे.</string>
-  <string name="camera_error">हे साधन कॅमेरॅ २ API ला समर्थन देत नाही.</string>
+  <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
   <string name="invalid_range_widget">या विजेटमध्ये अवैध मापदंड आहेत!</string>
   <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>
   <string name="form_entry_settings_summary">फॉर्म प्रविष्टी आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
@@ -480,7 +480,7 @@
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्ज</string>
   <string name="main_menu_settings_summary">मुख्य मेनू आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
   <string name="user_access_control">वापरकर्ता प्रवेश नियंत्रण</string>
-  <string name="autosend_selector_title">ऑटोशेन्ड</string>
+  <string name="autosend_selector_title">स्वयं पाठवा</string>
   <string name="off">बंद</string>
   <string name="wifi_autosend">केवळ Wifi</string>
   <string name="cellular_autosend">केवळ सेल्यूलर</string>
@@ -498,4 +498,5 @@
   <string name="type">प्रकार</string>
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
+  <string name="not_supported_offline_layer_format">निवडलेली ऑफलाइन स्तर फाइल PBF स्वरूपन वापरते जी समर्थित नाही!</string>
 </resources>

@@ -20,8 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -112,12 +112,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextColor(Color.BLACK);
+        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         answerDisplay = new TextView(getContext());
         answerDisplay.setId(QuestionWidget.newUniqueId());
         answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answerDisplay.setGravity(Gravity.CENTER);
-        answerDisplay.setTextColor(Color.BLACK);
+        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // setup play button
         viewButton = new Button(getContext());
@@ -162,10 +162,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 if (s.length() != 0) {
                     String[] sa = s.split(" ");
                     double[] gp = new double[4];
-                    gp[0] = Double.valueOf(sa[0]).doubleValue();
-                    gp[1] = Double.valueOf(sa[1]).doubleValue();
-                    gp[2] = Double.valueOf(sa[2]).doubleValue();
-                    gp[3] = Double.valueOf(sa[3]).doubleValue();
+                    gp[0] = Double.valueOf(sa[0]);
+                    gp[1] = Double.valueOf(sa[1]);
+                    gp[2] = Double.valueOf(sa[2]);
+                    gp[3] = Double.valueOf(sa[3]);
                     i.putExtra(LOCATION, gp);
                 }
                 i.putExtra(READ_ONLY, readOnly);
@@ -257,10 +257,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 // segment lat and lon
                 String[] sa = s.split(" ");
                 double[] gp = new double[4];
-                gp[0] = Double.valueOf(sa[0]).doubleValue();
-                gp[1] = Double.valueOf(sa[1]).doubleValue();
-                gp[2] = Double.valueOf(sa[2]).doubleValue();
-                gp[3] = Double.valueOf(sa[3]).doubleValue();
+                gp[0] = Double.valueOf(sa[0]);
+                gp[1] = Double.valueOf(sa[1]);
+                gp[2] = Double.valueOf(sa[2]);
+                gp[3] = Double.valueOf(sa[3]);
 
                 return new GeoPointData(gp);
             } catch (Exception numberFormatException) {

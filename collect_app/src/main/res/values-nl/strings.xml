@@ -189,7 +189,6 @@
   <string name="admin_password_disabled">Admin wachtwoord uitgeschakeld</string>
   <string name="admin_password_incorrect">Wachtwoord onjuist!</string>
   <string name="enter_admin_password">Geef admin wachtwoord</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uitvinken om te verbergen in hoofdmenu</string>
   <string name="found_in_settings">Uitvinken om te verbergen in algemene instellingen</string>
   <string name="no_account">Geen account</string>

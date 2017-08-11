@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -117,7 +119,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setTextColor(Color.BLACK);
+        questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
         questionText.setText(promptText == null ? "" : TextUtils.textToHtml(promptText));
         questionText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -300,7 +302,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             helpText.setHorizontallyScrolling(false);
             helpText.setTypeface(null, Typeface.ITALIC);
             helpText.setText(TextUtils.textToHtml(s));
-            helpText.setTextColor(Color.BLACK);
+            helpText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
             helpText.setMovementMethod(LinkMovementMethod.getInstance());
             return helpText;
         } else {

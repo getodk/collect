@@ -35,6 +35,7 @@ public class RangeDecimalWidget extends RangeWidget {
 
     @Override
     protected void setUpActualValueLabel() {
-        currentValue.setText(String.valueOf(actualValue.doubleValue()));
+        String value = actualValue != null ? String.valueOf(actualValue.doubleValue()) : "";
+        currentValue.setText(value);
     }
 }

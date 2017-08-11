@@ -200,7 +200,6 @@
   <string name="admin_password_incorrect">Pahoittelen, väärä salasana!</string>
   <string name="enter_admin_password">Syötä pääkäyttäjätunnus</string>
   <string name="change_admin_password">Vaihda pääkäyttäjän salasana</string>
-  <string name="autosend">Automaattinen lähetys</string>
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="no_account">Ei tiliä</string>
@@ -268,8 +267,6 @@
   <string name="invalid_oauth">OAuth 2 token ei kelpaa</string>
   <string name="google_repeat_error">Google Sheets ei tällä hetkellä tue toistoja.</string>
   <string name="media_upload_error">Olematonta valokuvaa ei voitu lähettää: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK Autosend autentikointivirhe, varmista että asetukset ovat oikein</string>
-  <string name="odk_auto_note">ODK Autosend -ilmoitus</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
   <string name="delete_after_send">Poista lähettämisen jälkeen</string>
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>

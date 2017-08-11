@@ -90,7 +90,7 @@ public class SelectMultiWidget extends QuestionWidget {
                 }
                 // no checkbox group so id by answer + offset
                 CheckBox c = new CheckBox(getContext());
-                c.setTag(Integer.valueOf(i));
+                c.setTag(i);
                 c.setId(QuestionWidget.newUniqueId());
                 c.setText(choiceDisplayName);
                 c.setMovementMethod(LinkMovementMethod.getInstance());

@@ -21,6 +21,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -370,7 +371,7 @@ public class FormsProvider extends ContentProvider {
         filePath = form.getAbsolutePath(); // normalized
         values.put(FormsColumns.FORM_FILE_PATH, filePath);
 
-        Long now = Long.valueOf(System.currentTimeMillis());
+        Long now = System.currentTimeMillis();
 
         // Make sure that the necessary fields are all set
         if (!values.containsKey(FormsColumns.DATE)) {

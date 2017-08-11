@@ -198,7 +198,6 @@
   <string name="admin_password_incorrect">Vabandust, salasõna on vale!</string>
   <string name="enter_admin_password">Sisestage administraatori salasõna</string>
   <string name="change_admin_password">Muuda administraatori salasõna</string>
-  <string name="autosend">Automaatne saatmine</string>
   <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
   <string name="no_account">Konto puudub</string>
@@ -264,8 +263,6 @@
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
   <string name="invalid_oauth">Vale OAuth 2 token</string>
   <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
-  <string name="odk_auth_auth_fail">ODK automaatse saatmise autentimine ebaõnnestus. Veendu, et seaded oleksid õiged. </string>
-  <string name="odk_auto_note">ODK automaatse saatmise teated</string>
   <string name="notification_error">Viga teate näitamisel </string>
   <string name="delete_after_send">Kustuta peale saatmist</string>
   <string name="delete_after_send_summary">Peale serverisse saatmist kustutab lõpetatud vormid ja meedia</string>

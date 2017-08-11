@@ -119,7 +119,7 @@ public abstract class ODKSQLiteOpenHelper {
             }
 
             int version = db.getVersion();
-            if (version != newVersion) {
+            if (version < newVersion) {
                 db.beginTransaction();
                 try {
                     if (version == 0) {

@@ -41,6 +41,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
@@ -79,6 +80,11 @@ public class FormController {
      * Non OpenRosa metadata tag names
      */
     private static final String AUDIT = "audit";
+
+    /*
+     * Store the timerLogger object with the form controller state
+     */
+    private TimerLogger timerLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -191,6 +197,14 @@ public class FormController {
 
     public FormIndex getIndexWaitingForData() {
         return indexWaitingForData;
+    }
+
+    public TimerLogger getTimerLogger() {
+        return timerLogger;
+    }
+
+    public void setTimerLogger(TimerLogger logger) {
+        timerLogger = logger;
     }
 
     /**

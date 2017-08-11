@@ -17,16 +17,13 @@ package org.odk.collect.android.tasks;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.webkit.MimeTypeMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -38,6 +35,7 @@ import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.HttpStatus;
+import org.opendatakit.httpclientandroidlib.NoHttpResponseException;
 import org.opendatakit.httpclientandroidlib.client.ClientProtocolException;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpHead;
@@ -53,6 +51,7 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -60,11 +59,9 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -73,7 +70,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
+public class InstanceServerUploader extends InstanceUploader {
 
     private static enum ContentTypeMapping {
         XML("xml", ContentType.TEXT_XML),
@@ -117,13 +114,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
     private static final String URL_PATH_SEP = "/";
-
-    private InstanceUploaderListener stateListener;
-
-    public static class Outcome {
-        public Uri authRequestingServer = null;
-        public HashMap<String, String> results = new HashMap<String, String>();
-    }
 
     /**
      * Uploads to urlString the submission identified by id with filepath of instance
@@ -171,6 +161,13 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
             Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
         } else {
+            if (u.getHost() == null) {
+                Timber.i("Host name may not be null");
+                outcome.results.put(id, fail + "Host name may not be null");
+                cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+                Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
+                return true;
+            }
 
             // if https then enable preemptive basic auth...
             //if ( u.getScheme() != null && u.getScheme().equals("https") ) { smap
@@ -270,10 +267,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                         return true;
                     }
                 }
-            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | HttpHostConnectException e) {
+            } catch (ClientProtocolException | ConnectTimeoutException | UnknownHostException | SocketTimeoutException | NoHttpResponseException | SocketException e) {
                 if (e instanceof ClientProtocolException) {
                     outcome.results.put(id, fail + "Client Protocol Exception");
-                    Timber.e(e, "Client Protocol Exception");
+                    Timber.i(e, "Client Protocol Exception");
                 } else if (e instanceof ConnectTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
                     Timber.i(e, "Connection Timeout");
@@ -282,10 +279,10 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     Timber.i(e, "Network Connection Failed");
                 } else if (e instanceof SocketTimeoutException) {
                     outcome.results.put(id, fail + "Connection Timeout");
-                    Timber.e(e, "Connection timeout");
+                    Timber.i(e, "Connection timeout");
                 } else {
                     outcome.results.put(id, fail + "Network Connection Refused");
-                    Timber.e(e, "Network Connection Refused");
+                    Timber.i(e, "Network Connection Refused");
                 }
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
                 Collect.getInstance().getContentResolver().update(toUpdate, cv, null, null);
@@ -493,7 +490,9 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
                     return true;
                 }
             } catch (IOException e) {
-                if (e instanceof UnknownHostException || e instanceof ConnectTimeoutException) {
+                if (e instanceof UnknownHostException || e instanceof HttpHostConnectException
+                        || e instanceof SocketException || e instanceof NoHttpResponseException
+                        || e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException) {
                     Timber.i(e);
                 } else {
                     Timber.e(e);
@@ -662,105 +661,6 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
         }
 
         return serverBase + submissionPath;
-    }
-
-    @Override
-    protected void onPostExecute(Outcome outcome) {
-        synchronized (this) {
-            if (stateListener != null) {
-                if (outcome.authRequestingServer != null) {
-                    stateListener.authRequest(outcome.authRequestingServer, outcome.results);
-                } else {
-                    stateListener.uploadingComplete(outcome.results);
-
-                    Set<String> keys = outcome.results.keySet();
-                    Iterator<String> it = keys.iterator();
-                    int count = keys.size();
-                    while (count > 0) {
-                        String[] selectionArgs = null;
-                        if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
-                            selectionArgs = new String[
-                                    ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-                        } else {
-                            selectionArgs = new String[count + 1];
-                        }
-
-                        StringBuilder selection = new StringBuilder();
-
-                        selection.append(InstanceColumns._ID + " IN (");
-                        int i = 0;
-
-                        while (it.hasNext() && i < selectionArgs.length - 1) {
-                            selectionArgs[i] = it.next();
-                            selection.append("?");
-
-                            if (i != selectionArgs.length - 2) {
-                                selection.append(",");
-                            }
-                            i++;
-                        }
-
-                        count -= selectionArgs.length - 1;
-                        selection.append(")");
-                        selection.append(" and status=?");
-                        selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
-
-                        Cursor results = null;
-                        try {
-                            results =
-                                    new InstancesDao().getInstancesCursor(selection.toString(),
-                                            selectionArgs);
-                            if (results.getCount() > 0) {
-                                Long[] toDelete = new Long[results.getCount()];
-                                results.moveToPosition(-1);
-
-                                int cnt = 0;
-                                while (results.moveToNext()) {
-                                    toDelete[cnt] = results.getLong(results
-                                            .getColumnIndex(InstanceColumns._ID));
-                                    cnt++;
-                                }
-
-                                boolean deleteFlag = PreferenceManager.getDefaultSharedPreferences(
-                                        Collect.getInstance().getApplicationContext()).getBoolean(
-                                        PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
-                                if (deleteFlag) {
-                                    DeleteInstancesTask dit = new DeleteInstancesTask();
-                                    dit.setContentResolver(
-                                            Collect.getInstance().getContentResolver());
-                                    dit.execute(toDelete);
-                                }
-
-                            }
-                        } catch (SQLException e) {
-                            Timber.e(e);
-                        } finally {
-                            if (results != null) {
-                                results.close();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        synchronized (this) {
-            if (stateListener != null) {
-                // update progress and total
-                stateListener.progressUpdate(values[0].intValue(), values[1].intValue());
-            }
-        }
-    }
-
-
-    public void setUploaderListener(InstanceUploaderListener sl) {
-        synchronized (this) {
-            stateListener = sl;
-        }
     }
 
     private static String getFileExtension(String fileName) {

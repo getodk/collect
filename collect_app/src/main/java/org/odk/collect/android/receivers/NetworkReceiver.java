@@ -8,9 +8,17 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
-
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
+import android.support.v4.app.NotificationCompat;
+
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.NotificationActivity;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -18,6 +26,13 @@ import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 
+import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.utilities.WebUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import timber.log.Timber;
@@ -113,7 +128,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         if (!running) {
             running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<Long>();
+            ArrayList<Long> toUpload = new ArrayList<>();
             Cursor c = new InstancesDao().getFinalizedInstancesCursor();
 
             try {
@@ -138,7 +153,6 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
 
-
             GoogleAccountCredential accountCredential;
             // Initialize credentials and service object.
             accountCredential = GoogleAccountCredential.usingOAuth2(
@@ -150,7 +164,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 
             if (protocol.equals(context.getString(R.string.protocol_google_sheets))) {
-                googleSheetsUploadTask = new GoogleSheetsAutoUploadTask(context, accountCredential);
+                instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountCredential, context);
                 String googleUsername = (String) settings.get(
                         PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
                 if (googleUsername == null || googleUsername.equalsIgnoreCase("")) {
@@ -159,8 +173,8 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                     return;
                 }
                 accountCredential.setSelectedAccountName(googleUsername);
-                googleSheetsUploadTask.setUploaderListener(this);
-                googleSheetsUploadTask.execute(toSendArray);
+                instanceGoogleSheetsUploader.setUploaderListener(this);
+                instanceGoogleSheetsUploader.execute(toSendArray);
 
             } else {
                 // get the username, password, and server from preferences
@@ -173,8 +187,8 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 Uri u = Uri.parse(url);
                 WebUtils.addCredentials(storedUsername, storedPassword, u.getHost());
 
-                instanceUploaderTask = new InstanceUploaderTask();
-                instanceUploaderTask.setUploaderListener(this);
+                instanceServerUploader = new InstanceServerUploader();
+                instanceServerUploader.setUploaderListener(this);
 
                 instanceUploaderTask.execute(toSendArray);
 	                }
@@ -188,18 +202,19 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         if (instanceUploaderTask != null) {
             instanceUploaderTask.setUploaderListener(null);
         }
-        if (googleSheetsUploadTask != null) {
-            googleSheetsUploadTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         running = false;
 
         StringBuilder message = new StringBuilder();
-        message.append(Collect.getInstance().getString(R.string.odk_auto_note) + " :: \n\n");
+        message
+                .append(Collect.getInstance().getString(R.string.odk_auto_note))
+                .append(" :: \n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
         } else {
-
             StringBuilder selection = new StringBuilder();
             Set<String> keys = result.keySet();
             Iterator<String> it = keys.iterator();
@@ -215,24 +230,26 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     	}
     }
 
-            {
-                Cursor results = null;
-                try {
-                    results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                    if (results.getCount() > 0) {
-                        results.moveToPosition(-1);
-                        while (results.moveToNext()) {
-                            String name = results.getString(results
-                                    .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                            String id = results.getString(results
-                                    .getColumnIndex(InstanceColumns._ID));
-                            message.append(name + " - " + result.get(id) + "\n\n");
-                        }
+            Cursor results = null;
+            try {
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                if (results.getCount() > 0) {
+                    results.moveToPosition(-1);
+                    while (results.moveToNext()) {
+                        String name = results.getString(results
+                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                        String id = results.getString(results
+                                .getColumnIndex(InstanceColumns._ID));
+                        message
+                                .append(name)
+                                .append(" - ")
+                                .append(result.get(id))
+                                .append("\n\n");
                     }
-                } finally {
-                    if (results != null) {
-                        results.close();
-                    }
+                }
+            } finally {
+                if (results != null) {
+                    results.close();
                 }
             }
         }
@@ -285,12 +302,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         // do nothing
     }
 
-
     @Override
     public void progressUpdate(int progress, int total) {
         // do nothing
     }
-
 
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
@@ -302,8 +317,8 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         if (instanceUploaderTask != null) {
             instanceUploaderTask.setUploaderListener(null);
         }
-        if (googleSheetsUploadTask != null) {
-            googleSheetsUploadTask.setUploaderListener(null);
+        if (instanceGoogleSheetsUploader != null) {
+            instanceGoogleSheetsUploader.setUploaderListener(null);
         }
         */
         running = false;

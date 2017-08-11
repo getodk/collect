@@ -121,6 +121,7 @@
   <string name="username">Nombre del Usuario</string>
   <string name="view_hierarchy">Ir a la Pregunta</string>
   <string name="general_preferences">Cambiar la configuración</string>
+  <string name="client">Interfaz de usuario</string>
   <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
   <string name="splash_path">Seleccione la Imagen para la pantalla inicial</string>
   <string name="default_splash_path">Predeterminado por ODK</string>
@@ -201,7 +202,7 @@
   <string name="admin_password_incorrect">¡Contraseña incorrecta!</string>
   <string name="enter_admin_password">Entrar contraseña de Administrador</string>
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
-  <string name="autosend">Auto Envío</string>
+  <string name="autosend">Auto enviar</string>
   <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
   <string name="no_account">Sin cuenta</string>
@@ -270,8 +271,6 @@
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
   <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
-  <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
-  <string name="odk_auto_note">Notificación de ODK Autosend</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
@@ -368,6 +367,7 @@
   <string name="version_number">Versión: %s</string>
   <string name="odk_website">Visitar el sitio web de ODK</string>
   <string name="odk_forum">Unirse al foro de ODK</string>
+  <string name="all_open_source_licenses">Librerías y licencias de código abierto</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -458,4 +458,6 @@
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
+  <string name="autosend_selector_title">Auto enviar</string>
+  <string name="use_device_language">Usar el idioma del dispositivo</string>
 </resources>

@@ -21,6 +21,35 @@ limitations under the License.
     android:paddingTop="15dp"
     android:paddingBottom="15dp">
 
+    <TextView
+        android:id="@+id/current_value"
+        android:minWidth="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textSize="25sp" />
+
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="330dp">
+
+        <SeekBar
+            android:id="@+id/seek_bar_no_ticks"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:rotation="270"/>
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:theme="@style/Base.Widget.AppCompat.SeekBar.Discrete"
+            android:rotation="270"/>
+
+    </FrameLayout>
+
     <RelativeLayout
         android:minWidth="50dp"
         android:layout_width="wrap_content"
@@ -28,39 +57,18 @@ limitations under the License.
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/maxValue"
+            android:id="@+id/max_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/currentValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/minValue"
+            android:id="@+id/min_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:textSize="20sp" />
 
     </RelativeLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="250dp">
-
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:theme="@style/Base.Widget.AppCompat.SeekBar.Discrete"
-            android:rotation="270"/>
-
-    </FrameLayout>
 </LinearLayout>

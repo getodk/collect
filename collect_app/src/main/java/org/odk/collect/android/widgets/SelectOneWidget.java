@@ -93,7 +93,7 @@ public class SelectOneWidget extends QuestionWidget implements
                 r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
                 r.setText(choiceDisplayName);
                 r.setMovementMethod(LinkMovementMethod.getInstance());
-                r.setTag(Integer.valueOf(i));
+                r.setTag(i);
                 r.setId(QuestionWidget.newUniqueId());
                 r.setEnabled(!prompt.isReadOnly() && !readOnlyOverride);        // smap - add read only override
                 r.setFocusable(!prompt.isReadOnly());

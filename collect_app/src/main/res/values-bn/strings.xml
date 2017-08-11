@@ -178,7 +178,6 @@
   <string name="admin_password_disabled">অ্যাডমিনের পাসওয়ার্ড disabled</string>
   <string name="admin_password_incorrect">পাসওয়ার্ড সঠিক হয়নি।</string>
   <string name="enter_admin_password">এডমিন পাসওয়ার্ড দিন।</string>
-  <string name="autosend">অটো পাঠানো </string>
   <string name="found_in_main">প্রধান মেনু্তে পাবেন</string>
   <string name="form_forward">ফর্মের সামনের দিকে</string>
   <string name="form_backward">ফর্মের পিছনের দিকে</string>
