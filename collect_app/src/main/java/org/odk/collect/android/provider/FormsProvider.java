@@ -47,231 +47,231 @@ import timber.log.Timber;
  */
 public class FormsProvider extends ContentProvider {
 
-	private static final String t = "FormsProvider";
+    private static final String t = "FormsProvider";
 
-	private static final String DATABASE_NAME = "forms.db";
-	private static final int DATABASE_VERSION = 7;	// smap must be greater than 4
-	private static final String FORMS_TABLE_NAME = "forms";
+    private static final String DATABASE_NAME = "forms.db";
+    private static final int DATABASE_VERSION = 7;    // smap must be greater than 4
+    private static final String FORMS_TABLE_NAME = "forms";
 
-	private static HashMap<String, String> sFormsProjectionMap;
+    private static HashMap<String, String> sFormsProjectionMap;
 
-	private static final int FORMS = 1;
-	private static final int FORM_ID = 2;
+    private static final int FORMS = 1;
+    private static final int FORM_ID = 2;
 
-	private static final UriMatcher sUriMatcher;
+    private static final UriMatcher sUriMatcher;
 
-	/**
-	 * This class helps open, create, and upgrade the database file.
-	 */
-	private static class DatabaseHelper extends ODKSQLiteOpenHelper {
-		// These exist in database versions 2 and 3, but not in 4...
-		private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
-		private static final String MODEL_VERSION = "modelVersion";
+    /**
+     * This class helps open, create, and upgrade the database file.
+     */
+    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+        // These exist in database versions 2 and 3, but not in 4...
+        private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
+        private static final String MODEL_VERSION = "modelVersion";
 
-		DatabaseHelper(String databaseName) {
-			super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
-		}
+        DatabaseHelper(String databaseName) {
+            super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+        }
 
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			onCreateNamed(db, FORMS_TABLE_NAME);
-		}
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            onCreateNamed(db, FORMS_TABLE_NAME);
+        }
 
-		private void onCreateNamed(SQLiteDatabase db, String tableName) {
-			db.execSQL("CREATE TABLE " + tableName + " (" + FormsColumns._ID
-					+ " integer primary key, " + FormsColumns.DISPLAY_NAME
-					+ " text not null, " + FormsColumns.DISPLAY_SUBTEXT
-					+ " text not null, " + FormsColumns.DESCRIPTION
-					+ " text, "
-					+ FormsColumns.JR_FORM_ID
-					+ " text not null, "
-					+ FormsColumns.JR_VERSION
-					+ " text, "
-					+ FormsColumns.PROJECT		// smap
-					+ " text, "					// smap
-                    + FormsColumns.TASKS_ONLY	// smap
-                    + " text, "					// smap
-					+ FormsColumns.SOURCE		// smap
-					+ " text, "					// smap
-					+ FormsColumns.MD5_HASH
-					+ " text not null, "
-					+ FormsColumns.DATE
-					+ " integer not null, " // milliseconds
-					+ FormsColumns.FORM_MEDIA_PATH + " text not null, "
-					+ FormsColumns.FORM_FILE_PATH + " text not null, "
-					+ FormsColumns.LANGUAGE + " text, "
-					+ FormsColumns.SUBMISSION_URI + " text, "
-					+ FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-					+ FormsColumns.JRCACHE_FILE_PATH + " text not null );");
-		}
+        private void onCreateNamed(SQLiteDatabase db, String tableName) {
+            db.execSQL("CREATE TABLE " + tableName + " (" + FormsColumns._ID
+                    + " integer primary key, " + FormsColumns.DISPLAY_NAME
+                    + " text not null, " + FormsColumns.DISPLAY_SUBTEXT
+                    + " text not null, " + FormsColumns.DESCRIPTION
+                    + " text, "
+                    + FormsColumns.JR_FORM_ID
+                    + " text not null, "
+                    + FormsColumns.JR_VERSION
+                    + " text, "
+                    + FormsColumns.PROJECT        // smap
+                    + " text, "                    // smap
+                    + FormsColumns.TASKS_ONLY    // smap
+                    + " text, "                    // smap
+                    + FormsColumns.SOURCE        // smap
+                    + " text, "                    // smap
+                    + FormsColumns.MD5_HASH
+                    + " text not null, "
+                    + FormsColumns.DATE
+                    + " integer not null, " // milliseconds
+                    + FormsColumns.FORM_MEDIA_PATH + " text not null, "
+                    + FormsColumns.FORM_FILE_PATH + " text not null, "
+                    + FormsColumns.LANGUAGE + " text, "
+                    + FormsColumns.SUBMISSION_URI + " text, "
+                    + FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
+                    + FormsColumns.JRCACHE_FILE_PATH + " text not null );");
+        }
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			int initialVersion = oldVersion;
-			if (oldVersion < 2) {
-				Timber.w("Upgrading database from version " + oldVersion
-						+ " to " + newVersion
-						+ ", which will destroy all old data");
-				db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-				onCreate(db);
-				return;
-			} else if(oldVersion < 6) {
-				Timber.w("Upgrading database from version " + oldVersion		// smap
-						+ " to " + newVersion);
-				// adding BASE64_RSA_PUBLIC_KEY and changing type and name of
-				// integer MODEL_VERSION to text VERSION
-				db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-				onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
-				db.execSQL("INSERT INTO "
-						+ TEMP_FORMS_TABLE_NAME
-						+ " ("
-						+ FormsColumns._ID
-						+ ", "
-						+ FormsColumns.DISPLAY_NAME
-						+ ", "
-						+ FormsColumns.DISPLAY_SUBTEXT
-						+ ", "
-						+ FormsColumns.DESCRIPTION
-						+ ", "
-						+ FormsColumns.JR_FORM_ID
-						+ ", "
-						+ FormsColumns.MD5_HASH
-						+ ", "
-						+ FormsColumns.DATE
-						+ ", " // milliseconds
-						+ FormsColumns.FORM_MEDIA_PATH
-						+ ", "
-						+ FormsColumns.FORM_FILE_PATH
-						+ ", "
-						+ FormsColumns.LANGUAGE
-						+ ", "
-						+ FormsColumns.SUBMISSION_URI
-						+ ", "
-						+ ((oldVersion > 3) ? ""					// smap
-								: (FormsColumns.JR_VERSION + ", "))	// smap
-						+ ((oldVersion < 5) ? ""					// smap
-								: (FormsColumns.PROJECT + ", "))	// smap
-						+ ((oldVersion < 6) ? ""					// smap
-								: (FormsColumns.SOURCE + ", "))	// smap
-						+ ((oldVersion < 4) ? ""					// smap
-								: (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-						+ FormsColumns.JRCACHE_FILE_PATH
-						+ ") SELECT "
-						+ FormsColumns._ID
-						+ ", "
-						+ FormsColumns.DISPLAY_NAME
-						+ ", "
-						+ FormsColumns.DISPLAY_SUBTEXT
-						+ ", "
-						+ FormsColumns.DESCRIPTION
-						+ ", "
-						+ FormsColumns.JR_FORM_ID
-						+ ", "
-						+ FormsColumns.MD5_HASH
-						+ ", "
-						+ FormsColumns.DATE
-						+ ", " // milliseconds
-						+ FormsColumns.FORM_MEDIA_PATH
-						+ ", "
-						+ FormsColumns.FORM_FILE_PATH
-						+ ", "
-						+ FormsColumns.LANGUAGE
-						+ ", "
-						+ FormsColumns.SUBMISSION_URI
-						+ ", "
-						+ ((oldVersion > 3) ? ""							// smap
-								: (
-										"CASE WHEN "		// smap
-										+ MODEL_VERSION
-										+ " IS NOT NULL THEN "
-										+ "CAST("
-										+ MODEL_VERSION
-										+ " AS TEXT) ELSE NULL END, "
-								))
-						+ ((oldVersion < 5) ? ""						// smap
-								: (FormsColumns.PROJECT + ", "))		// smap
-						+ ((oldVersion < 6) ? ""						// smap
-								: (FormsColumns.SOURCE + ", "))			// smap
-						+ ((oldVersion < 4) ? ""						// smap
-								: (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
-						+ FormsColumns.JRCACHE_FILE_PATH + " FROM "
-						+ FORMS_TABLE_NAME);
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            int initialVersion = oldVersion;
+            if (oldVersion < 2) {
+                Timber.w("Upgrading database from version " + oldVersion
+                        + " to " + newVersion
+                        + ", which will destroy all old data");
+                db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+                onCreate(db);
+                return;
+            } else if (oldVersion < 6) {
+                Timber.w("Upgrading database from version " + oldVersion        // smap
+                        + " to " + newVersion);
+                // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
+                // integer MODEL_VERSION to text VERSION
+                db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+                onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
+                db.execSQL("INSERT INTO "
+                        + TEMP_FORMS_TABLE_NAME
+                        + " ("
+                        + FormsColumns._ID
+                        + ", "
+                        + FormsColumns.DISPLAY_NAME
+                        + ", "
+                        + FormsColumns.DISPLAY_SUBTEXT
+                        + ", "
+                        + FormsColumns.DESCRIPTION
+                        + ", "
+                        + FormsColumns.JR_FORM_ID
+                        + ", "
+                        + FormsColumns.MD5_HASH
+                        + ", "
+                        + FormsColumns.DATE
+                        + ", " // milliseconds
+                        + FormsColumns.FORM_MEDIA_PATH
+                        + ", "
+                        + FormsColumns.FORM_FILE_PATH
+                        + ", "
+                        + FormsColumns.LANGUAGE
+                        + ", "
+                        + FormsColumns.SUBMISSION_URI
+                        + ", "
+                        + ((oldVersion > 3) ? ""                    // smap
+                        : (FormsColumns.JR_VERSION + ", "))    // smap
+                        + ((oldVersion < 5) ? ""                    // smap
+                        : (FormsColumns.PROJECT + ", "))    // smap
+                        + ((oldVersion < 6) ? ""                    // smap
+                        : (FormsColumns.SOURCE + ", "))    // smap
+                        + ((oldVersion < 4) ? ""                    // smap
+                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                        + FormsColumns.JRCACHE_FILE_PATH
+                        + ") SELECT "
+                        + FormsColumns._ID
+                        + ", "
+                        + FormsColumns.DISPLAY_NAME
+                        + ", "
+                        + FormsColumns.DISPLAY_SUBTEXT
+                        + ", "
+                        + FormsColumns.DESCRIPTION
+                        + ", "
+                        + FormsColumns.JR_FORM_ID
+                        + ", "
+                        + FormsColumns.MD5_HASH
+                        + ", "
+                        + FormsColumns.DATE
+                        + ", " // milliseconds
+                        + FormsColumns.FORM_MEDIA_PATH
+                        + ", "
+                        + FormsColumns.FORM_FILE_PATH
+                        + ", "
+                        + FormsColumns.LANGUAGE
+                        + ", "
+                        + FormsColumns.SUBMISSION_URI
+                        + ", "
+                        + ((oldVersion > 3) ? ""                            // smap
+                        : (
+                        "CASE WHEN "        // smap
+                                + MODEL_VERSION
+                                + " IS NOT NULL THEN "
+                                + "CAST("
+                                + MODEL_VERSION
+                                + " AS TEXT) ELSE NULL END, "
+                ))
+                        + ((oldVersion < 5) ? ""                        // smap
+                        : (FormsColumns.PROJECT + ", "))        // smap
+                        + ((oldVersion < 6) ? ""                        // smap
+                        : (FormsColumns.SOURCE + ", "))            // smap
+                        + ((oldVersion < 4) ? ""                        // smap
+                        : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
+                        + FORMS_TABLE_NAME);
 
-				// risky failures here...
-				db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-				onCreateNamed(db, FORMS_TABLE_NAME);
-				db.execSQL("INSERT INTO "
-						+ FORMS_TABLE_NAME
-						+ " ("
-						+ FormsColumns._ID
-						+ ", "
-						+ FormsColumns.DISPLAY_NAME
-						+ ", "
-						+ FormsColumns.DISPLAY_SUBTEXT
-						+ ", "
-						+ FormsColumns.DESCRIPTION
-						+ ", "
-						+ FormsColumns.JR_FORM_ID
-						+ ", "
-						+ FormsColumns.MD5_HASH
-						+ ", "
-						+ FormsColumns.DATE
-						+ ", " // milliseconds
-						+ FormsColumns.FORM_MEDIA_PATH + ", "
-						+ FormsColumns.FORM_FILE_PATH + ", "
-						+ FormsColumns.LANGUAGE + ", "
-						+ FormsColumns.SUBMISSION_URI + ", "
-						+ FormsColumns.JR_VERSION + ", "
-						+ FormsColumns.PROJECT + ", "				// smap
-						+ FormsColumns.SOURCE + ", "				// smap
-						+ FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-						+ FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-						+ FormsColumns._ID + ", "
-						+ FormsColumns.DISPLAY_NAME
-						+ ", "
-						+ FormsColumns.DISPLAY_SUBTEXT
-						+ ", "
-						+ FormsColumns.DESCRIPTION
-						+ ", "
-						+ FormsColumns.JR_FORM_ID
-						+ ", "
-						+ FormsColumns.MD5_HASH
-						+ ", "
-						+ FormsColumns.DATE
-						+ ", " // milliseconds
-						+ FormsColumns.FORM_MEDIA_PATH + ", "
-						+ FormsColumns.FORM_FILE_PATH + ", "
-						+ FormsColumns.LANGUAGE + ", "
-						+ FormsColumns.SUBMISSION_URI + ", "
-						+ FormsColumns.JR_VERSION + ", "
-						+ FormsColumns.PROJECT + ", "				// smap
-						+ FormsColumns.SOURCE + ", "				// smap
-						+ FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
-						+ FormsColumns.JRCACHE_FILE_PATH + " FROM "
-						+ TEMP_FORMS_TABLE_NAME);
-				db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+                // risky failures here...
+                db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+                onCreateNamed(db, FORMS_TABLE_NAME);
+                db.execSQL("INSERT INTO "
+                        + FORMS_TABLE_NAME
+                        + " ("
+                        + FormsColumns._ID
+                        + ", "
+                        + FormsColumns.DISPLAY_NAME
+                        + ", "
+                        + FormsColumns.DISPLAY_SUBTEXT
+                        + ", "
+                        + FormsColumns.DESCRIPTION
+                        + ", "
+                        + FormsColumns.JR_FORM_ID
+                        + ", "
+                        + FormsColumns.MD5_HASH
+                        + ", "
+                        + FormsColumns.DATE
+                        + ", " // milliseconds
+                        + FormsColumns.FORM_MEDIA_PATH + ", "
+                        + FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsColumns.LANGUAGE + ", "
+                        + FormsColumns.SUBMISSION_URI + ", "
+                        + FormsColumns.JR_VERSION + ", "
+                        + FormsColumns.PROJECT + ", "                // smap
+                        + FormsColumns.SOURCE + ", "                // smap
+                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
+                        + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
+                        + FormsColumns._ID + ", "
+                        + FormsColumns.DISPLAY_NAME
+                        + ", "
+                        + FormsColumns.DISPLAY_SUBTEXT
+                        + ", "
+                        + FormsColumns.DESCRIPTION
+                        + ", "
+                        + FormsColumns.JR_FORM_ID
+                        + ", "
+                        + FormsColumns.MD5_HASH
+                        + ", "
+                        + FormsColumns.DATE
+                        + ", " // milliseconds
+                        + FormsColumns.FORM_MEDIA_PATH + ", "
+                        + FormsColumns.FORM_FILE_PATH + ", "
+                        + FormsColumns.LANGUAGE + ", "
+                        + FormsColumns.SUBMISSION_URI + ", "
+                        + FormsColumns.JR_VERSION + ", "
+                        + FormsColumns.PROJECT + ", "                // smap
+                        + FormsColumns.SOURCE + ", "                // smap
+                        + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
+                        + FormsColumns.JRCACHE_FILE_PATH + " FROM "
+                        + TEMP_FORMS_TABLE_NAME);
+                db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
 
-				Timber.w("Successfully upgraded database from version "
-						+ initialVersion + " to " + newVersion
-						+ ", without destroying all the old data");
-			}
+                Timber.w("Successfully upgraded database from version "
+                        + initialVersion + " to " + newVersion
+                        + ", without destroying all the old data");
+            }
 
-            if ( oldVersion < 7 ) {
+            if (oldVersion < 7) {
                 try {
                     db.execSQL("ALTER TABLE " + FORMS_TABLE_NAME + " ADD COLUMN " +
                             FormsColumns.TASKS_ONLY + " text;");
                     db.execSQL("update " + FORMS_TABLE_NAME + " set " +
-                            FormsColumns.TASKS_ONLY + " = 'no';" );
-                }catch(Exception e) {
+                            FormsColumns.TASKS_ONLY + " = 'no';");
+                } catch (Exception e) {
                     // Catch errors, its possible the user upgraded then downgraded
                     Timber.w("Error in upgrading to forms database version 7");
                     e.printStackTrace();
                 }
             }
-		}
-	}
+        }
+    }
 
-	private DatabaseHelper mDbHelper;
+    private DatabaseHelper mDbHelper;
 
     private DatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
@@ -301,7 +301,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
-            String[] selectionArgs, String sortOrder) {
+                        String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
 
@@ -546,227 +546,227 @@ public class FormsProvider extends ContentProvider {
                                 // so catch it and move on.
                             }
 
-					} while (c.moveToNext());
-				}
-			} finally {
-				if (c != null) {
-					c.close();
-				}
-			}
+                        } while (c.moveToNext());
+                    }
+                } finally {
+                    if (c != null) {
+                        c.close();
+                    }
+                }
 
-			count = db.delete(
-					FORMS_TABLE_NAME,
-					FormsColumns._ID
-							+ "="
-							+ formId
-							+ (!TextUtils.isEmpty(where) ? " AND (" + where
-									+ ')' : ""), whereArgs);
-			break;
+                count = db.delete(
+                        FORMS_TABLE_NAME,
+                        FormsColumns._ID
+                                + "="
+                                + formId
+                                + (!TextUtils.isEmpty(where) ? " AND (" + where
+                                + ')' : ""), whereArgs);
+                break;
 
-		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
-		}
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
 
-		getContext().getContentResolver().notifyChange(uri, null);
-		return count;
-	}
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
+    }
 
-	@Override
-	public int update(Uri uri, ContentValues values, String where,
-			String[] whereArgs) {
-		SQLiteDatabase db = getDbHelper().getWritableDatabase();
-		int count = 0;
-		switch (sUriMatcher.match(uri)) {
-		case FORMS:
-			// don't let users manually update md5
-			if (values.containsKey(FormsColumns.MD5_HASH)) {
-				values.remove(FormsColumns.MD5_HASH);
-			}
-			// if values contains path, then all filepaths and md5s will get
-			// updated
-			// this probably isn't a great thing to do.
-			if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-				String formFile = values
-						.getAsString(FormsColumns.FORM_FILE_PATH);
-				values.put(FormsColumns.MD5_HASH,
-						FileUtils.getMd5Hash(new File(formFile)));
-			}
+    @Override
+    public int update(Uri uri, ContentValues values, String where,
+                      String[] whereArgs) {
+        SQLiteDatabase db = getDbHelper().getWritableDatabase();
+        int count = 0;
+        switch (sUriMatcher.match(uri)) {
+            case FORMS:
+                // don't let users manually update md5
+                if (values.containsKey(FormsColumns.MD5_HASH)) {
+                    values.remove(FormsColumns.MD5_HASH);
+                }
+                // if values contains path, then all filepaths and md5s will get
+                // updated
+                // this probably isn't a great thing to do.
+                if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+                    String formFile = values
+                            .getAsString(FormsColumns.FORM_FILE_PATH);
+                    values.put(FormsColumns.MD5_HASH,
+                            FileUtils.getMd5Hash(new File(formFile)));
+                }
 
-			Cursor c = null;
-			try {
-				c = this.query(uri, null, where, whereArgs, null);
+                Cursor c = null;
+                try {
+                    c = this.query(uri, null, where, whereArgs, null);
 
-				if (c.getCount() > 0) {
-					c.moveToPosition(-1);
-					while (c.moveToNext()) {
-						// before updating the paths, delete all the files
-						if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-							String newFile = values
-									.getAsString(FormsColumns.FORM_FILE_PATH);
-							String delFile = c
-									.getString(c
-											.getColumnIndex(FormsColumns.FORM_FILE_PATH));
-							if (newFile.equalsIgnoreCase(delFile)) {
-								// same file, so don't delete anything
-							} else {
-								// different files, delete the old one
-								deleteFileOrDir(delFile);
-							}
+                    if (c.getCount() > 0) {
+                        c.moveToPosition(-1);
+                        while (c.moveToNext()) {
+                            // before updating the paths, delete all the files
+                            if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+                                String newFile = values
+                                        .getAsString(FormsColumns.FORM_FILE_PATH);
+                                String delFile = c
+                                        .getString(c
+                                                .getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                                if (newFile.equalsIgnoreCase(delFile)) {
+                                    // same file, so don't delete anything
+                                } else {
+                                    // different files, delete the old one
+                                    deleteFileOrDir(delFile);
+                                }
 
-							// either way, delete the old cache because we'll
-							// calculate a new one.
-							deleteFileOrDir(c
-									.getString(c
-											.getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-						}
-					}
-				}
-			} finally {
-				if (c != null) {
-					c.close();
-				}
-			}
+                                // either way, delete the old cache because we'll
+                                // calculate a new one.
+                                deleteFileOrDir(c
+                                        .getString(c
+                                                .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                            }
+                        }
+                    }
+                } finally {
+                    if (c != null) {
+                        c.close();
+                    }
+                }
 
-			// Make sure that the necessary fields are all set
-			if (values.containsKey(FormsColumns.DATE) == true) {
-				Date today = new Date();
-				String ts = new SimpleDateFormat(getContext().getString(
-						R.string.added_on_date_at_time), Locale.getDefault())
-						.format(today);
-				values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
-			}
+                // Make sure that the necessary fields are all set
+                if (values.containsKey(FormsColumns.DATE) == true) {
+                    Date today = new Date();
+                    String ts = new SimpleDateFormat(getContext().getString(
+                            R.string.added_on_date_at_time), Locale.getDefault())
+                            .format(today);
+                    values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
+                }
 
-			count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
-			break;
+                count = db.update(FORMS_TABLE_NAME, values, where, whereArgs);
+                break;
 
-		case FORM_ID:
-			String formId = uri.getPathSegments().get(1);
-			// Whenever file paths are updated, delete the old files.
+            case FORM_ID:
+                String formId = uri.getPathSegments().get(1);
+                // Whenever file paths are updated, delete the old files.
 
-			Cursor update = null;
-			try {
-				update = this.query(uri, null, where, whereArgs, null);
+                Cursor update = null;
+                try {
+                    update = this.query(uri, null, where, whereArgs, null);
 
-				// This should only ever return 1 record.
-				if (update.getCount() > 0) {
-					update.moveToFirst();
+                    // This should only ever return 1 record.
+                    if (update.getCount() > 0) {
+                        update.moveToFirst();
 
-					// don't let users manually update md5
-					if (values.containsKey(FormsColumns.MD5_HASH)) {
-						values.remove(FormsColumns.MD5_HASH);
-					}
+                        // don't let users manually update md5
+                        if (values.containsKey(FormsColumns.MD5_HASH)) {
+                            values.remove(FormsColumns.MD5_HASH);
+                        }
 
-					// the order here is important (jrcache needs to be before
-					// form file)
-					// because we update the jrcache file if there's a new form
-					// file
-					if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
-						deleteFileOrDir(update
-								.getString(update
-										.getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-					}
+                        // the order here is important (jrcache needs to be before
+                        // form file)
+                        // because we update the jrcache file if there's a new form
+                        // file
+                        if (values.containsKey(FormsColumns.JRCACHE_FILE_PATH)) {
+                            deleteFileOrDir(update
+                                    .getString(update
+                                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                        }
 
-					if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
-						String formFile = values
-								.getAsString(FormsColumns.FORM_FILE_PATH);
-						String oldFile = update.getString(update
-								.getColumnIndex(FormsColumns.FORM_FILE_PATH));
+                        if (values.containsKey(FormsColumns.FORM_FILE_PATH)) {
+                            String formFile = values
+                                    .getAsString(FormsColumns.FORM_FILE_PATH);
+                            String oldFile = update.getString(update
+                                    .getColumnIndex(FormsColumns.FORM_FILE_PATH));
 
-						if (formFile != null
-								&& formFile.equalsIgnoreCase(oldFile)) {
-							// Files are the same, so we may have just copied
-							// over something we had
-							// already
-						} else {
-							// New file name. This probably won't ever happen,
-							// though.
-							deleteFileOrDir(oldFile);
-						}
+                            if (formFile != null
+                                    && formFile.equalsIgnoreCase(oldFile)) {
+                                // Files are the same, so we may have just copied
+                                // over something we had
+                                // already
+                            } else {
+                                // New file name. This probably won't ever happen,
+                                // though.
+                                deleteFileOrDir(oldFile);
+                            }
 
-						// we're updating our file, so update the md5
-						// and get rid of the cache (doesn't harm anything)
-						deleteFileOrDir(update
-								.getString(update
-										.getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
-						String newMd5 = FileUtils
-								.getMd5Hash(new File(formFile));
-						values.put(FormsColumns.MD5_HASH, newMd5);
-						values.put(FormsColumns.JRCACHE_FILE_PATH,
-								Collect.CACHE_PATH + File.separator + newMd5
-										+ ".formdef");
-					}
+                            // we're updating our file, so update the md5
+                            // and get rid of the cache (doesn't harm anything)
+                            deleteFileOrDir(update
+                                    .getString(update
+                                            .getColumnIndex(FormsColumns.JRCACHE_FILE_PATH)));
+                            String newMd5 = FileUtils
+                                    .getMd5Hash(new File(formFile));
+                            values.put(FormsColumns.MD5_HASH, newMd5);
+                            values.put(FormsColumns.JRCACHE_FILE_PATH,
+                                    Collect.CACHE_PATH + File.separator + newMd5
+                                            + ".formdef");
+                        }
 
-					// Make sure that the necessary fields are all set
-					if (values.containsKey(FormsColumns.DATE) == true) {
-						Date today = new Date();
-						String ts = new SimpleDateFormat(getContext()
-								.getString(R.string.added_on_date_at_time),
-								Locale.getDefault()).format(today);
-						values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
-					}
+                        // Make sure that the necessary fields are all set
+                        if (values.containsKey(FormsColumns.DATE) == true) {
+                            Date today = new Date();
+                            String ts = new SimpleDateFormat(getContext()
+                                    .getString(R.string.added_on_date_at_time),
+                                    Locale.getDefault()).format(today);
+                            values.put(FormsColumns.DISPLAY_SUBTEXT, ts);
+                        }
 
-					count = db.update(
-							FORMS_TABLE_NAME,
-							values,
-							FormsColumns._ID
-									+ "="
-									+ formId
-									+ (!TextUtils.isEmpty(where) ? " AND ("
-											+ where + ')' : ""), whereArgs);
-				} else {
-					Timber.e("Attempting to update row that does not exist");
-				}
-			} finally {
-				if (update != null) {
-					update.close();
-				}
-			}
-			break;
+                        count = db.update(
+                                FORMS_TABLE_NAME,
+                                values,
+                                FormsColumns._ID
+                                        + "="
+                                        + formId
+                                        + (!TextUtils.isEmpty(where) ? " AND ("
+                                        + where + ')' : ""), whereArgs);
+                    } else {
+                        Timber.e("Attempting to update row that does not exist");
+                    }
+                } finally {
+                    if (update != null) {
+                        update.close();
+                    }
+                }
+                break;
 
-		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
-		}
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
 
-		getContext().getContentResolver().notifyChange(uri, null);
-		return count;
-	}
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
+    }
 
-	static {
-		sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
-		sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
+    static {
+        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
+        sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
 
-		sFormsProjectionMap = new HashMap<String, String>();
-		sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
-		sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME,
-				FormsColumns.DISPLAY_NAME);
-		sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT,
-				FormsColumns.DISPLAY_SUBTEXT);
-		sFormsProjectionMap.put(FormsColumns.DESCRIPTION,
-				FormsColumns.DESCRIPTION);
-		sFormsProjectionMap.put(FormsColumns.JR_FORM_ID,
-				FormsColumns.JR_FORM_ID);
-		sFormsProjectionMap.put(FormsColumns.JR_VERSION,
-				FormsColumns.JR_VERSION);
-		sFormsProjectionMap.put(FormsColumns.PROJECT,		// smap
-				FormsColumns.PROJECT);						// smap
-        sFormsProjectionMap.put(FormsColumns.TASKS_ONLY,	// smap
+        sFormsProjectionMap = new HashMap<String, String>();
+        sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
+        sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME,
+                FormsColumns.DISPLAY_NAME);
+        sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT,
+                FormsColumns.DISPLAY_SUBTEXT);
+        sFormsProjectionMap.put(FormsColumns.DESCRIPTION,
+                FormsColumns.DESCRIPTION);
+        sFormsProjectionMap.put(FormsColumns.JR_FORM_ID,
+                FormsColumns.JR_FORM_ID);
+        sFormsProjectionMap.put(FormsColumns.JR_VERSION,
+                FormsColumns.JR_VERSION);
+        sFormsProjectionMap.put(FormsColumns.PROJECT,        // smap
+                FormsColumns.PROJECT);                        // smap
+        sFormsProjectionMap.put(FormsColumns.TASKS_ONLY,    // smap
                 FormsColumns.TASKS_ONLY);                   // smap
-        sFormsProjectionMap.put(FormsColumns.SOURCE,		// smap
-				FormsColumns.SOURCE);						// smap
-		sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI,
-				FormsColumns.SUBMISSION_URI);
-		sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
-				FormsColumns.BASE64_RSA_PUBLIC_KEY);
-		sFormsProjectionMap.put(FormsColumns.MD5_HASH, FormsColumns.MD5_HASH);
-		sFormsProjectionMap.put(FormsColumns.DATE, FormsColumns.DATE);
-		sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH,
-				FormsColumns.FORM_MEDIA_PATH);
-		sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH,
-				FormsColumns.FORM_FILE_PATH);
-		sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH,
-				FormsColumns.JRCACHE_FILE_PATH);
-		sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
-	}
+        sFormsProjectionMap.put(FormsColumns.SOURCE,        // smap
+                FormsColumns.SOURCE);                        // smap
+        sFormsProjectionMap.put(FormsColumns.SUBMISSION_URI,
+                FormsColumns.SUBMISSION_URI);
+        sFormsProjectionMap.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
+                FormsColumns.BASE64_RSA_PUBLIC_KEY);
+        sFormsProjectionMap.put(FormsColumns.MD5_HASH, FormsColumns.MD5_HASH);
+        sFormsProjectionMap.put(FormsColumns.DATE, FormsColumns.DATE);
+        sFormsProjectionMap.put(FormsColumns.FORM_MEDIA_PATH,
+                FormsColumns.FORM_MEDIA_PATH);
+        sFormsProjectionMap.put(FormsColumns.FORM_FILE_PATH,
+                FormsColumns.FORM_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.JRCACHE_FILE_PATH,
+                FormsColumns.JRCACHE_FILE_PATH);
+        sFormsProjectionMap.put(FormsColumns.LANGUAGE, FormsColumns.LANGUAGE);
+    }
 
 }

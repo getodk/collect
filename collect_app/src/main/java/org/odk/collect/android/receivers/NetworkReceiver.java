@@ -8,7 +8,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
+
 import org.odk.collect.android.listeners.FormDownloaderListener;
+
 import android.support.v4.app.NotificationCompat;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -310,7 +312,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // if we get an auth request, just fail
-        if(mDownloadTasks != null) {    // smap
+        if (mDownloadTasks != null) {    // smap
             mDownloadTasks.setDownloaderListener(null, mContext);
         }
         /* smap
