@@ -121,7 +121,6 @@
   <string name="select_another_image">Velg annet bilde</string>
   <string name="use_odk_default">Bruk standard bilde</string>
   <string name="change_splash_path">Endre bilde</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Lagre endringer</string>
   <string name="change_formlist_url">Sti</string>
   <string name="change_protocol">Server platform</string>

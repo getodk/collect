@@ -124,7 +124,6 @@
   <string name="select_another_image">Zgjidh një imazh tjetër</string>
   <string name="use_odk_default">Përdor imazhin e parapërcaktuar</string>
   <string name="change_splash_path">Ndrysho imazhin</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Ruaj ndryshimet</string>
   <string name="change_formlist_url">Adresa për listën e formularëve (në fund të URL)</string>
   <string name="change_protocol">Platforma</string>

@@ -140,7 +140,6 @@
     <string name="select_another_image">Select another image</string>
     <string name="use_odk_default">Use default image</string>
     <string name="change_splash_path">Change image</string>
-    <string name="app_url">http://opendatakit.org</string>
     <string name="keep_changes">Save Changes</string>
     <string name="change_formlist_url">Form list path (appended to URL)</string>
     <string name="change_protocol">Platform</string>

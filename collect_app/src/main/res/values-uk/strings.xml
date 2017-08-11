@@ -128,7 +128,6 @@
   <string name="select_another_image">Обрати інше зображення</string>
   <string name="use_odk_default">Використати стандартне</string>
   <string name="change_splash_path">Змінити зображення</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Зберегти зміни</string>
   <string name="change_formlist_url">Шлях до списку анкет (додається до URL)</string>
   <string name="change_protocol">Платформа</string>
