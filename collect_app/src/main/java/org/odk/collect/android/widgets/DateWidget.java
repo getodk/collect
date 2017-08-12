@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -64,6 +65,7 @@ public class DateWidget extends QuestionWidget {
     private boolean hideMonth;
     private boolean showCalendar;
 
+
     private int year;
     private int month;
     private int dayOfMonth;
@@ -95,11 +97,14 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void hideDayFieldIfNotInFormat() {
         if (hideDay) {
-            datePickerDialog.getDatePicker().findViewById(
-                    Resources.getSystem().getIdentifier("day", "id", "android"))
-                    .setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                datePickerDialog.getDatePicker().findViewById(
+                        Resources.getSystem().getIdentifier("day", "id", "android"))
+                        .setVisibility(View.GONE);
+            }
         }
         if (hideMonth) {
             datePickerDialog.getDatePicker().findViewById(
@@ -113,6 +118,7 @@ public class DateWidget extends QuestionWidget {
         nullAnswer = true;
         dateTextView.setText(R.string.no_date_selected);
     }
+
 
     @Override
     public IAnswerData getAnswer() {
@@ -131,6 +137,7 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     @Override
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
@@ -269,6 +276,7 @@ public class DateWidget extends QuestionWidget {
         int theme;
         private String dialogTitle = getContext().getString(R.string.select_date);
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, theme, listener, year, month, dayOfMonth);
             this.theme = theme;
@@ -353,7 +361,7 @@ public class DateWidget extends QuestionWidget {
                 field.setAccessible(true);
                 return field;
             } catch (NoSuchFieldException e) {
-                Timber.i(e); // ignore
+               // Timber.i(e); // ignore
             }
 
             // search for it if it wasn't found under the expected ivar name
@@ -370,5 +378,21 @@ public class DateWidget extends QuestionWidget {
     // Exposed for testing purposes to avoid reflection.
     public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
         this.datePickerDialog = datePickerDialog;
+    }
+
+    private class DateTime {
+        private int mMonthOfYear;
+
+        public int getYear() {
+            return 0;
+        }
+
+        public int getMonthOfYear() {
+            return mMonthOfYear;
+        }
+
+        public int getDayOfMonth() {
+            return 0;
+        }
     }
 }
