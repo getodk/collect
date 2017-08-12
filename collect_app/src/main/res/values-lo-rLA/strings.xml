@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">ບໍ່ມີກິດຈະກຳໃຫ້ດຳເນີນການ: %s</string>
   <string name="add_another">ເພີ່ມກຸ່ມ</string>
   <string name="add_another_repeat">ຕ້ອງການເພີ່ມກຸ່ມໃໝ່ \"%s\" ​ອີກບໍ່?</string>
@@ -119,7 +119,6 @@
   <string name="select_another_image">ເລືອກພາບອື່ນ</string>
   <string name="use_odk_default">ເລືອກພາບທີ່ກຳນົດໄວ້</string>
   <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
   <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>
   <string name="change_protocol">ແພຼັດຟອມ (Platform)</string>
@@ -257,8 +256,7 @@
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
   <string name="change_server_url">URL ຂອງເສີບເວີ</string>
   <string name="no_blank_search">ຫ້ອງຊອກຫາບໍ່ຄວນຫວ່າງເປົ່າ</string>
-  <string name="default_google_sheets_url"></string>
-  <!--Geo string added in feature-geofeatures branch-->
+    <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

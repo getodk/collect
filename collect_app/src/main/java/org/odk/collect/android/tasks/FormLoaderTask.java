@@ -550,7 +550,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     public boolean hasUsedSavepoint() {
-        return (data != null) ? data.hasUsedSavepoint() : false;
+        return (data != null) && data.hasUsedSavepoint();
     }
 
     public void destroy() {

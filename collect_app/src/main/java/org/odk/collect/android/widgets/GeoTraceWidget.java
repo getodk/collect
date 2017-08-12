@@ -186,9 +186,8 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
             return null;
         } else {
             try {
-                String[] sa = s.split(";");
-                for (int i = 0; i < sa.length; i++) {
-                    String[] sp = sa[i].trim().split(" ");
+                for (String sa :  s.split(";")) {
+                    String[] sp = sa.trim().split(" ");
                     double[] gp = new double[4];
                     gp[0] = Double.valueOf(sp[0]);
                     gp[1] = Double.valueOf(sp[1]);

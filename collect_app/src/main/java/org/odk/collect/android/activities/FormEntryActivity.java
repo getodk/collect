@@ -499,8 +499,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             // see if any of these savepoints are for a
                             // filled-in form that has never been
                             // explicitly saved by the user...
-                            for (int i = 0; i < files.length; ++i) {
-                                File candidate = files[i];
+                            for (File candidate : files) {
                                 String instanceDirName = candidate.getName()
                                         .substring(
                                                 0,
@@ -2518,6 +2517,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
+        setTimerLogger(formController);
         supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2596,13 +2596,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 formController.setInstancePath(instanceFile);
             }
 
-            setTimerLogger(formController);
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            setTimerLogger(formController);
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {

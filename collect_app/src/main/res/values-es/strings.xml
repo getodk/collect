@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
@@ -128,7 +128,6 @@
   <string name="select_another_image">Seleccione otra imagen</string>
   <string name="use_odk_default">Usar la imagen por defecto</string>
   <string name="change_splash_path">Cambiar la imagen</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
   <string name="change_protocol">Protocolo</string>
@@ -278,8 +277,7 @@
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
+    <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>

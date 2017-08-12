@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Näytä salasana</string>
   <string name="activity_not_found">Ei toimintoa tunnuksella: %s</string>
   <string name="add_another">Lisää ryhmä</string>
@@ -127,7 +127,6 @@
   <string name="select_another_image">Valitse toinen kuva</string>
   <string name="use_odk_default">Käytä oletuskuvaa</string>
   <string name="change_splash_path">Vaihda kuva</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="change_formlist_url">Lomakkeiden listan polku (lisätään URL:ään)</string>
   <string name="change_protocol">Alusta (platform)</string>
@@ -275,7 +274,6 @@
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="no_blank_search">Hakukenttä ei voi olla tyhjä.</string>
   <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="sheets_max_columns">Maksimimäärä sarakkeita on 255, lomakkeessasi on %s, eikä sitä voida lähettää työkirjaan. </string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
@@ -416,9 +414,7 @@
   <string name="sort_by_date_desc">Päivämäärän mukaan, vanhin ensin</string>
   <string name="sort_by_status_asc">Tilan mukaan, viimeistellyt ensin</string>
   <string name="sort_by_status_desc">Tilan mukaan, viimeistelemättömät ensin</string>
-  <string name="sorting_menu_open">Avaa lajitteluvalikko</string>
-  <string name="sorting_menu_close">Sulje lajitteluvalikko</string>
-  <string name="sort_the_list">Lajittele lista</string>
+    <string name="sort_the_list">Lajittele lista</string>
   <string name="request_permissions_google_account">ODK Collect tarvitsee pääsyn Google-tilillesi hakeakseen tyhjiä lomakkeita ja lähettääkseen täytettyjä lomakkeita.</string>
   <string name="filter_the_list">Suodata listaa</string>
 </resources>

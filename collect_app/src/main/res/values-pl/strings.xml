@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="activity_not_found">Nie znaleziono aktywności do obsługi: %s</string>
   <string name="add_another">Dodaj Grupę</string>
   <string name="add_another_repeat">Czy dodać kolejną grupę \"%s\"?</string>
@@ -125,7 +125,6 @@
   <string name="select_another_image">Wybierz inny obraz</string>
   <string name="use_odk_default">Użyj obraz domyślny</string>
   <string name="change_splash_path">Zmień obraz</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>
   <string name="change_protocol">Platforma</string>
@@ -270,7 +269,6 @@
   <string name="change_server_url">Serwer URL</string>
   <string name="google_search_browse">Wyszukaj formularze. Lub wybierz poniżej \'Mój Dysk\' by przejrzeć</string>
   <string name="no_blank_search">Pole wyszukiwania nie może być puste.</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="sheets_max_columns">Maksymalna liczba kolumn wynosi 255, twój formularz posiada %s. Nie można załadować do arkusza kalkulacyjnego.</string>
   <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>

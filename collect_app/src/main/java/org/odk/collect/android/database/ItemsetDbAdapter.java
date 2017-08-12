@@ -99,12 +99,12 @@ public class ItemsetDbAdapter {
 
         sb.append("create table " + DATABASE_TABLE + pathHash
                 + " (_id integer primary key autoincrement ");
-        for (int j = 0; j < columns.length; j++) {
-            if (!columns[j].isEmpty()) {
+        for (String column : columns) {
+            if (!column.isEmpty()) {
                 // add double quotes in case the column is of label:lang
                 sb
                         .append(" , \"")
-                        .append(columns[j])
+                        .append(column)
                         .append("\" text ");
                 // create database with first line
             }

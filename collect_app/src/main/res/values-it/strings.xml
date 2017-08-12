@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">Mostra password</string>
   <string name="activity_not_found">Nessuna attività trovata per gestire: %s</string>
   <string name="add_another">Aggiungi gruppo</string>
@@ -128,7 +128,6 @@
   <string name="select_another_image">Selezionare un\'altra immagine</string>
   <string name="use_odk_default">Usa immagine di default</string>
   <string name="change_splash_path">Cambiare immagine</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
   <string name="change_protocol">Piattaforma server</string>
@@ -277,8 +276,7 @@
   <string name="google_search_browse">Ricerca per form o seleziona \'My Drive\' in basso.</string>
   <string name="no_blank_search">Il campo ricerca non può essere vuoto.</string>
   <string name="google_sheets_url">URL di destinazione predefinito</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
+    <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="sheets_max_columns">Numero massimo di colonne ammesse è 255, la tua form ha %s. Impossibile caricare il foglio.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="google_sheets_access_denied">Accesso negato. Per favore, verifica che il proprietario del documento ti abbia dato i permessi di modifica.</string>
@@ -418,9 +416,7 @@
   <string name="sort_by_date_desc">Per data, prima i meno recenti</string>
   <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
   <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
-  <string name="sorting_menu_open">Apri il menù di ordinamento</string>
-  <string name="sorting_menu_close">Chiudi il menù di ordinamento</string>
-  <string name="sort_the_list">Ordina la lista</string>
+    <string name="sort_the_list">Ordina la lista</string>
   <string name="request_permissions_google_account">ODK Collect richiede l\'accesso al tuo account Google per utilizzare i moduli vuoti ed inviare i moduli compilati.</string>
   <string name="filter_the_list">Filtra la lista</string>
   <string name="language">Lingua</string>
