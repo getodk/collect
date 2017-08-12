@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       android:layout_marginBottom="10dp"
+       android:layout_marginTop="30dp"
+       android:gravity="center" >
+
+       <Button
+           android:id="@+id/dayupbtn"
+           android:layout_width="30sp"
+           android:layout_height="25sp"
+           android:background="@drawable/date_button_top"
+           android:text="+"
+           android:textSize="21sp"
+           android:padding="2dp"
+           android:textColor="#666"/>
+
+       <TextView
+           android:id="@+id/daytxt"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/dayupbtn"
+           android:background="@drawable/date_edit"
+           android:gravity="center"
+           android:padding="3dp"
+           android:textSize="21sp" />
+
+       <Button
+           android:id="@+id/daydownbtn"
+           android:layout_width="30sp"
+           android:layout_height="25sp"
+           android:layout_below="@id/daytxt"
+           android:background="@drawable/date_button_bottom"
+           android:text="-"
+           android:padding="2dp"
+           android:textSize="21sp"
+           android:textColor="#666" />
+
+       <Button
+           android:id="@+id/monthupbtn"
+           android:layout_width="100sp"
+           android:layout_height="25sp"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/dayupbtn"
+           android:background="@drawable/date_button_top"
+           android:text="+"
+           android:padding="2dp"
+           android:textSize="21sp"
+           android:textColor="#666" />
+
+       <TextView
+           android:id="@+id/monthtxt"
+           android:layout_width="100sp"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/monthupbtn"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/daytxt"
+           android:background="@drawable/date_edit"
+           android:gravity="center"
+           android:padding="3dp"
+           android:textSize="21sp" />
+
+       <Button
+           android:id="@+id/monthdownbtn"
+           android:layout_width="100sp"
+           android:layout_height="25sp"
+           android:layout_below="@id/monthtxt"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/daydownbtn"
+           android:background="@drawable/date_button_bottom"
+           android:text="-"
+           android:padding="2dp"
+           android:textSize="21sp"
+           android:textColor="#666" />
+
+       <Button
+           android:id="@+id/yearupbtn"
+           android:layout_width="55sp"
+           android:layout_height="25sp"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/monthupbtn"
+           android:background="@drawable/date_button_top"
+           android:text="+"
+           android:padding="2dp"
+           android:textSize="21sp"
+           android:textColor="#666"/>
+
+       <TextView
+           android:id="@+id/yeartxt"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/yearupbtn"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/monthtxt"
+           android:background="@drawable/date_edit"
+           android:gravity="center"
+           android:padding="3dp"
+           android:textSize="21sp" />
+
+       <Button
+           android:id="@+id/yeardownbtn"
+           android:layout_width="55sp"
+           android:layout_height="25sp"
+           android:layout_below="@id/yeartxt"
+           android:layout_marginLeft="5dp"
+           android:layout_toRightOf="@id/monthdownbtn"
+           android:background="@drawable/date_button_bottom"
+           android:text="-"
+           android:padding="2dp"
+           android:textSize="21sp"
+           android:textColor="#666" />
+   </RelativeLayout>
+
+   <TextView
+       android:id="@+id/dateGregorian"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_margin="5dp"
+       android:gravity="center"
+       android:textSize="15sp" />
+
+</LinearLayout>
