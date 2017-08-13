@@ -51,6 +51,12 @@ test:
         - mkdir -p $CIRCLE_TEST_REPORTS/lint
         - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
 
+        - mkdir -p $CIRCLE_TEST_REPORTS/findbugs
+        - find . -type f -regex ".*/collect_app/build/reports/findbugs/findbugs.*" -exec cp {} $CIRCLE_TEST_REPORTS/findbugs/ \;
+
+        - mkdir -p $CIRCLE_TEST_REPORTS/pmd
+        - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
+
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
         - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
 
