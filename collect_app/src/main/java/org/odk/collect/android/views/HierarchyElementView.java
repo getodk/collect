@@ -15,6 +15,7 @@
 package org.odk.collect.android.views;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,7 +29,7 @@ public class HierarchyElementView extends RelativeLayout {
 
     private TextView primaryTextView;
     private TextView secondaryTextView;
-    private ImageView icon;
+    private ImageView imageView;
 
     public HierarchyElementView(Context context) {
         super(context);
@@ -40,8 +41,9 @@ public class HierarchyElementView extends RelativeLayout {
         setColor(it.getColor());
 
         View view = View.inflate(context, R.layout.hierarchy_item_element, null);
-        icon = (ImageView) view.findViewById(R.id.icon);
-        setIconVisibility(it.getDisplayIcon() == 1 ? View.VISIBLE : View.GONE);
+
+        imageView = (ImageView) view.findViewById(R.id.icon);
+        setIcon(it.getIcon());
 
         primaryTextView = (TextView) view.findViewById(R.id.primaryText);
         setPrimaryText(it.getPrimaryText());
@@ -54,7 +56,6 @@ public class HierarchyElementView extends RelativeLayout {
     public void setPrimaryText(String text) {
         primaryTextView.setText(TextUtils.textToHtml(text));
     }
-
 
     public void setSecondaryText(String text) {
         secondaryTextView.setText(TextUtils.textToHtml(text));
@@ -80,7 +81,7 @@ public class HierarchyElementView extends RelativeLayout {
         return (int) (dip * getResources().getDisplayMetrics().density + 0.5f);
     }
 
-    public void setIconVisibility(int visibility) {
-        icon.setVisibility(visibility);
+    public void setIcon(Drawable icon) {
+        this.imageView.setImageDrawable(icon);
     }
 }

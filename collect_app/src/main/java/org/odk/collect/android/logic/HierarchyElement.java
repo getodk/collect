@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.logic;
 
+import android.graphics.drawable.Drawable;
+
 import org.javarosa.core.model.FormIndex;
 
 import java.io.Serializable;
@@ -27,19 +29,15 @@ public class HierarchyElement implements Serializable {
     private HierarchyElement parent;
     private String primaryText = "";
     private String secondaryText = "";
-    private int displayIcon;
+    private Drawable icon;
     private int color;
 
-    public HierarchyElement(String text1, String text2, int showIcon, int color, int type,
-                            FormIndex f, HierarchyElement parent, ArrayList<HierarchyElement> list) {
-        displayIcon = showIcon;
-        primaryText = text1;
-        secondaryText = text2;
-        this.color = color;
-        formIndex = f;
-        this.type = type;
-        this.parent = parent;
-        this.itemsAtLevel = list;
+    public Drawable getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
     }
 
     public ArrayList<HierarchyElement> getItemsAtLevel() {
@@ -62,16 +60,24 @@ public class HierarchyElement implements Serializable {
         return primaryText;
     }
 
+    public void setPrimaryText(String primaryText) {
+        this.primaryText = primaryText;
+    }
+
     public String getSecondaryText() {
         return secondaryText;
     }
 
-    public int getDisplayIcon() {
-        return displayIcon;
+    public void setSecondaryText(String secondaryText) {
+        this.secondaryText = secondaryText;
     }
 
     public FormIndex getFormIndex() {
         return formIndex;
+    }
+
+    public void setFormIndex(FormIndex formIndex) {
+        this.formIndex = formIndex;
     }
 
     public int getType() {

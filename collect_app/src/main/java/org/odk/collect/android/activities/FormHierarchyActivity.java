@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -52,10 +53,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private static final int GROUP = 2;
     private static final int QUESTION = 3;
     private static final String FORM_LIST = "formlist";
-    private ArrayList<HierarchyElement> itemsAtCurrentLevel;
     TextView path;
-
     FormIndex startIndex;
+    private ArrayList<HierarchyElement> itemsAtCurrentLevel;
     private Button jumpPreviousButton;
     private FormIndex currentIndex;
     private ListView listView;
@@ -381,9 +381,16 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 while (repeatGroupRef != null) {
                     if (event == FormEntryController.EVENT_REPEAT) {
                         FormEntryCaption fc = formController.getCaptionPrompt();
-                        HierarchyElement item = new HierarchyElement(fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, 1, Color.WHITE, ITEM,
-                                fc.getIndex(), parent, itemsInGroup);
+
+                        HierarchyElement item = new HierarchyElement();
+                        item.setPrimaryText(fc.getLongText() + " " + (fc.getMultiplicity() + 1));
+                        item.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_folder_open_black_24dp));
+                        item.setColor(Color.WHITE);
+                        item.setType(ITEM);
+                        item.setFormIndex(fc.getIndex());
+                        item.setParent(parent);
+                        item.setItemsAtLevel(itemsInGroup);
+
                         itemsInGroup.add(item);
                         event = formController.stepOverGroupInHierarchy();
                     } else if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
@@ -402,16 +409,34 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
                             String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
-                            itemsInGroup.add(new HierarchyElement(fp.getLongText(), answerDisplay, 0,
-                                    Color.WHITE, QUESTION, fp.getIndex(), parent, itemsInGroup));
+
+                            HierarchyElement question = new HierarchyElement();
+                            question.setPrimaryText(fp.getLongText());
+                            question.setSecondaryText(answerDisplay);
+                            question.setColor(Color.WHITE);
+                            question.setType(QUESTION);
+                            question.setFormIndex(fp.getIndex());
+                            question.setParent(parent);
+                            question.setItemsAtLevel(itemsInGroup);
+
+                            itemsInGroup.add(question);
                         }
                         break;
                     case FormEntryController.EVENT_GROUP:
                         FormEntryCaption fc = formController.getCaptionPrompt();
                         label = fc.getLongText();
                         if (label != null && !label.trim().equals("")) {
-                            itemsInGroup.add(new HierarchyElement(label, null, 1,
-                                    Color.WHITE, GROUP, fc.getIndex(), parent, itemsInGroup));
+
+                            HierarchyElement group = new HierarchyElement();
+                            group.setPrimaryText(label);
+                            group.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_folder_open_black_24dp));
+                            group.setColor(Color.WHITE);
+                            group.setType(GROUP);
+                            group.setFormIndex(fc.getIndex());
+                            group.setParent(parent);
+                            group.setItemsAtLevel(itemsInGroup);
+
+                            itemsInGroup.add(group);
                             event = formController.stepOverGroupInHierarchy();
                             continue event_search;
                         }
@@ -434,10 +459,17 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
                         if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
-                            HierarchyElement group =
-                                    new HierarchyElement(fc.getLongText(), null, 1,
-                                            Color.WHITE, GROUP, fc.getIndex(), parent, itemsInGroup);
-                            itemsInGroup.add(group);
+
+                            HierarchyElement repeat = new HierarchyElement();
+                            repeat.setPrimaryText(fc.getLongText());
+                            repeat.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_repeat_black_24dp));
+                            repeat.setColor(Color.WHITE);
+                            repeat.setType(GROUP);
+                            repeat.setFormIndex(fc.getIndex());
+                            repeat.setParent(parent);
+                            repeat.setItemsAtLevel(itemsInGroup);
+
+                            itemsInGroup.add(repeat);
                         }
                         event = formController.stepOverGroupInHierarchy();
                         continue event_search;
