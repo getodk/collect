@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'checkstyle'
+apply from: '../config/quality.gradle'
 
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)
@@ -131,20 +131,6 @@ android {
     dexOptions {
         javaMaxHeapSize '2048M'
     }
-
-    lintOptions {
-        abortOnError true
-    }
-}
-
-// Required to use fileExtensions property in checkstyle file
-checkstyle.toolVersion = '7.6.1'
-
-// The normal check task reports nothing probably because Android uses its own sourceSets
-task checkstyle(type: Checkstyle) {
-    source 'src'
-    // empty classpath because we don't want to check compiled classes
-    classpath = files()
 }
 
 configurations.all {
