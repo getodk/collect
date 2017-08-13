@@ -32,9 +32,8 @@ test:
     override:
         # Disable incremental dexing on all gradle commands to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
-        - ./gradlew checkstyle -Pandroid.useDexArchive=false
-        - ./gradlew lintDebug -Pandroid.useDexArchive=false
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
+        - ./gradlew check -Pandroid.useDexArchive=false
 
         # Instrumented tests take time, so only run them on master
         # SD card needed for circleci-android22 image
