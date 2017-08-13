@@ -32,67 +32,101 @@ public class HierarchyElement implements Serializable {
     private Drawable icon;
     private int color;
 
-    public Drawable getIcon() {
-        return icon;
+    private HierarchyElement(HierarchyElementBuilder builder) {
+        type = builder.type;
+        formIndex = builder.formIndex;
+        itemsAtLevel = builder.itemsAtLevel;
+        parent = builder.parent;
+        primaryText = builder.primaryText;
+        secondaryText = builder.secondaryText;
+        icon = builder.icon;
+        color = builder.color;
     }
 
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public Drawable getIcon() {
+        return icon;
     }
 
     public ArrayList<HierarchyElement> getItemsAtLevel() {
         return itemsAtLevel;
     }
 
-    public void setItemsAtLevel(ArrayList<HierarchyElement> itemsAtLevel) {
-        this.itemsAtLevel = itemsAtLevel;
-    }
-
     public HierarchyElement getParent() {
         return parent;
-    }
-
-    public void setParent(HierarchyElement parent) {
-        this.parent = parent;
     }
 
     public String getPrimaryText() {
         return primaryText;
     }
 
-    public void setPrimaryText(String primaryText) {
-        this.primaryText = primaryText;
-    }
-
     public String getSecondaryText() {
         return secondaryText;
-    }
-
-    public void setSecondaryText(String secondaryText) {
-        this.secondaryText = secondaryText;
     }
 
     public FormIndex getFormIndex() {
         return formIndex;
     }
 
-    public void setFormIndex(FormIndex formIndex) {
-        this.formIndex = formIndex;
-    }
-
     public int getType() {
         return type;
-    }
-
-    public void setType(int newType) {
-        type = newType;
     }
 
     public int getColor() {
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public static class HierarchyElementBuilder {
+        private int type;
+        private FormIndex formIndex;
+        private ArrayList<HierarchyElement> itemsAtLevel;
+        private HierarchyElement parent;
+        private String primaryText = "";
+        private String secondaryText = "";
+        private Drawable icon;
+        private int color;
+
+        public HierarchyElementBuilder setParent(HierarchyElement parent) {
+            this.parent = parent;
+            return this;
+        }
+
+        public HierarchyElementBuilder setType(int newType) {
+            type = newType;
+            return this;
+        }
+
+        public HierarchyElementBuilder setFormIndex(FormIndex formIndex) {
+            this.formIndex = formIndex;
+            return this;
+        }
+
+        public HierarchyElementBuilder setItemsAtLevel(ArrayList<HierarchyElement> itemsAtLevel) {
+            this.itemsAtLevel = itemsAtLevel;
+            return this;
+        }
+
+        public HierarchyElementBuilder setPrimaryText(String primaryText) {
+            this.primaryText = primaryText;
+            return this;
+        }
+
+        public HierarchyElementBuilder setSecondaryText(String secondaryText) {
+            this.secondaryText = secondaryText;
+            return this;
+        }
+
+        public HierarchyElementBuilder setIcon(Drawable icon) {
+            this.icon = icon;
+            return this;
+        }
+
+        public HierarchyElementBuilder setColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        public HierarchyElement build() {
+            return new HierarchyElement(this);
+        }
     }
 }
