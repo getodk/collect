@@ -506,4 +506,5 @@
     <string name="use_device_language">Use device language</string>
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
     <string name="sort_by">Sort by</string>
+    <string name="server">Server</string>
 </resources>
