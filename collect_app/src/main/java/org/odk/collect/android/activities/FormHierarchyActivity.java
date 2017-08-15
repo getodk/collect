@@ -459,7 +459,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
                             itemsInGroup.add(new HierarchyElement.HierarchyElementBuilder()
                                     .setPrimaryText(fc.getLongText())
-                                    .setIcon(ContextCompat.getDrawable(this, R.drawable.ic_repeat_black_24dp))
+                                    .setIcon(ContextCompat.getDrawable(this, R.drawable.ic_folder_repeat))
                                     .setColor(Color.WHITE)
                                     .setType(GROUP)
                                     .setFormIndex(fc.getIndex())
