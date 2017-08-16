@@ -2517,7 +2517,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
-        setTimerLogger(formController);
         supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2712,20 +2711,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         this.stepMessage = stepMessage;
         if (progressDialog != null) {
             progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
-        }
-    }
-
-    /*
-     * Create the timer logger object
-     */
-    private void setTimerLogger(FormController formController) {
-
-        if (formController.getTimerLogger() == null) {
-
-            // Create a new timerLogger object if there is no saved timer logger
-            formController.setTimerLogger(new TimerLogger(formController.getInstancePath(),
-                    PreferenceManager.getDefaultSharedPreferences(this),
-                    formController));
         }
     }
 
