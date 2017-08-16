@@ -57,10 +57,10 @@ public class DataManagerList extends InstanceListFragment
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
+
     public static DataManagerList newInstance() {
         return new DataManagerList();
     }
-
 
     @Nullable
     @Override
