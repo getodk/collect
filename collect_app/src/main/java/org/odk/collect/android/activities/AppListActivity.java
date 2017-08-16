@@ -53,8 +53,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class AppListActivity extends AppCompatActivity {
     private static final String SELECTED_INSTANCES = "selectedInstances";
-    private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
+    private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
     private static final String SEARCH_TEXT = "searchText";
 
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
@@ -141,8 +141,8 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
-        outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
         outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+        outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
         outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
 
         if (bottomSheetDialog.isShowing()) {
@@ -154,8 +154,8 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
-        isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
         isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
+        isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
         savedFilterText = state.getString(SEARCH_TEXT);
 
     }
@@ -253,11 +253,6 @@ abstract class AppListActivity extends AppCompatActivity {
 
     protected int getCheckedCount() {
         return listView.getCheckedItemCount();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {

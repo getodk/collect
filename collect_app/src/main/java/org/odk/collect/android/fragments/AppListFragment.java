@@ -15,7 +15,6 @@ limitations under the License.
 package org.odk.collect.android.fragments;
 
 import android.database.Cursor;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
@@ -24,7 +23,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -155,16 +153,8 @@ abstract class AppListFragment extends ListFragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.notes);
-
         if (bottomSheetDialog == null) {
             setupBottomSheet();
         }
