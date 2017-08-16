@@ -54,6 +54,9 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 abstract class AppListActivity extends AppCompatActivity {
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_BOTTOM_DIALOG_SHOWN = "isBottomDialogShown";
+    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
+    private static final String SEARCH_TEXT = "searchText";
+
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
@@ -63,7 +66,12 @@ abstract class AppListActivity extends AppCompatActivity {
     protected ListView listView;
     private BottomSheetDialog bottomSheetDialog;
     private boolean isBottomDialogShown;
+
     private String filterText;
+    private String savedFilterText;
+    private boolean isSearchBoxShown;
+
+    private SearchView searchView;
 
     // toggles to all checked or all unchecked
     // returns:
@@ -134,6 +142,8 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
         outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
+        outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+        outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
 
         if (bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();
@@ -145,6 +155,9 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onRestoreInstanceState(state);
         selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
         isBottomDialogShown = state.getBoolean(IS_BOTTOM_DIALOG_SHOWN);
+        isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
+        savedFilterText = state.getString(SEARCH_TEXT);
+
     }
 
     @Override
@@ -154,19 +167,7 @@ abstract class AppListActivity extends AppCompatActivity {
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // hides the sort item when the search is in focus
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    sortItem.setVisible(false);
-                } else {
-                    sortItem.setVisible(true);
-                }
-            }
-        });
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -184,6 +185,25 @@ abstract class AppListActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                sortItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                sortItem.setVisible(true);
+                return true;
+            }
+        });
+
+        if (isSearchBoxShown) {
+            searchItem.expandActionView();
+            searchView.setQuery(savedFilterText, false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
