@@ -58,6 +58,8 @@ abstract class AppListActivity extends AppCompatActivity {
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
 
     private static final String SELECTED_INSTANCES = "selectedInstances";
+    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
+    private static final String SEARCH_TEXT = "searchText";
 
     private ListView drawerList;
     private DrawerLayout drawerLayout;
@@ -67,10 +69,16 @@ abstract class AppListActivity extends AppCompatActivity {
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected String[] sortingOptions;
 
+    private boolean isSearchBoxShown;
+
     protected Integer selectedSortingOrder;
     protected Toolbar toolbar;
     protected ListView listView;
+
+    private String savedFilterText;
     private String filterText;
+
+    private SearchView searchView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,12 +110,16 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
+        outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+        outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         selectedInstances = (LinkedHashSet<Long>) state.getSerializable(SELECTED_INSTANCES);
+        isSearchBoxShown = state.getBoolean(IS_SEARCH_BOX_SHOWN);
+        savedFilterText = state.getString(SEARCH_TEXT);
     }
 
     @Override
@@ -117,7 +129,7 @@ abstract class AppListActivity extends AppCompatActivity {
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         // hides the sort item when the search is in focus
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -147,6 +159,11 @@ abstract class AppListActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        if (isSearchBoxShown) {
+            searchItem.expandActionView();
+            searchView.setQuery(savedFilterText, false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
