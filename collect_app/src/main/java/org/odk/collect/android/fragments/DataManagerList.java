@@ -15,6 +15,7 @@
 package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -55,7 +56,7 @@ public class DataManagerList extends InstanceListFragment
     DeleteInstancesTask deleteInstancesTask = null;
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
-
+    private ProgressDialog progressDialog;
     public static DataManagerList newInstance() {
         return new DataManagerList();
     }
@@ -199,6 +200,17 @@ public class DataManagerList extends InstanceListFragment
      */
     private void deleteSelectedInstances() {
         if (deleteInstancesTask == null) {
+
+            /*
+            * For solving #1258.
+            * Create the progress dialog before starting the background task.
+            * Could have been done in the DeleteInstancesTask's onPreExecute() but was unable to get the context correctly.
+            * */
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Deleting selected forms...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
             deleteInstancesTask = new DeleteInstancesTask();
             deleteInstancesTask.setContentResolver(getActivity().getContentResolver());
             deleteInstancesTask.setDeleteListener(this);
@@ -230,12 +242,16 @@ public class DataManagerList extends InstanceListFragment
                     String.valueOf(toDeleteCount - deletedInstances),
                     String.valueOf(toDeleteCount)));
         }
+
         deleteInstancesTask = null;
         getListView().clearChoices(); // doesn't unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
         }
         deleteButton.setEnabled(false);
+
+        //Dismiss the progress dialog.
+        progressDialog.dismiss();
     }
 
     @Override
