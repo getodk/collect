@@ -105,6 +105,7 @@ abstract class AppListFragment extends ListFragment {
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.search));
 
         // hides the sort item when the search is in focus
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
