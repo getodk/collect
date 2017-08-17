@@ -31,27 +31,28 @@ public class ValidatorTest {
 
     @Test
     public void emailValidationTestCase() {
-        assertTrue(Validator.isEmailAddressValid("email@domain.com"));
-        assertTrue(Validator.isEmailAddressValid("firstname.lastname@domain.com"));
-        assertTrue(Validator.isEmailAddressValid("email@subdomain.domain.com"));
-        assertTrue(Validator.isEmailAddressValid("firstname+lastname@domain.com"));
-        assertTrue(Validator.isEmailAddressValid("femail@123.123.123.123"));
-        assertTrue(Validator.isEmailAddressValid("email@[123.123.123.123]"));
-        assertTrue(Validator.isEmailAddressValid("\"email\"@domain.com"));
-        assertTrue(Validator.isEmailAddressValid("1234567890@domain.com"));
-        assertTrue(Validator.isEmailAddressValid("email@domain-one.com"));
-        assertTrue(Validator.isEmailAddressValid("emailX@domain-one.com"));
-        assertTrue(Validator.isEmailAddressValid("_______@domain.com"));
-        assertTrue(Validator.isEmailAddressValid("email@domain.name"));
-        assertTrue(Validator.isEmailAddressValid("email@domain.co.jp"));
-        assertTrue(Validator.isEmailAddressValid("irstname-lastname@domain.com"));
+        // https://en.wikipedia.org/wiki/Email_address
+        assertTrue(Validator.isEmailAddressValid("prettyandsimple@example.com"));
+        assertTrue(Validator.isEmailAddressValid("very.common@example.com"));
+        assertTrue(Validator.isEmailAddressValid("disposable.style.email.with+symbol@example.com"));
+        assertTrue(Validator.isEmailAddressValid("other.email-with-dash@example.com"));
+        assertTrue(Validator.isEmailAddressValid("fully-qualified-domain@example.com."));
+        assertTrue(Validator.isEmailAddressValid("x@example.com"));
+        assertTrue(Validator.isEmailAddressValid("\"very.unusual.@.unusual.com\"@example.com"));
+        assertTrue(Validator.isEmailAddressValid("\"very.(),:;<>[]\\\".VERY.\\\"very@\\\\ \\\"very\\\".unusual\"@strange.example.com"));
+        assertTrue(Validator.isEmailAddressValid("example-indeed@strange-example.com"));
+        assertTrue(Validator.isEmailAddressValid("admin@mailserver1"));
+        assertTrue(Validator.isEmailAddressValid("#!$%&'*+-/=?^_`{}|~@example.org"));
+        assertTrue(Validator.isEmailAddressValid("\"()<>[]:,;@\\\\\\\"!#$%&'-/=?^_`{}| ~.a\"@example.org"));
+        assertTrue(Validator.isEmailAddressValid("\" \"@example.org"));
+        assertTrue(Validator.isEmailAddressValid("example@s.solutions"));
+        assertTrue(Validator.isEmailAddressValid("user@localserver"));
+        assertTrue(Validator.isEmailAddressValid("user@[IPv6:2001:DB8::1"));
 
         assertFalse(Validator.isEmailAddressValid("plainaddress"));
         assertFalse(Validator.isEmailAddressValid("@domain.com"));
         assertFalse(Validator.isEmailAddressValid("@"));
         assertFalse(Validator.isEmailAddressValid("email@"));
-        assertFalse(Validator.isEmailAddressValid("email@com"));
         assertFalse(Validator.isEmailAddressValid("email.domain.com"));
-        assertFalse(Validator.isEmailAddressValid("email@domain"));
     }
 }

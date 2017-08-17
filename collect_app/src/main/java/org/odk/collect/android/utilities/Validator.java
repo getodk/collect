@@ -24,11 +24,11 @@ public class Validator {
     That's why we use here a very simple approach just to confirm that passed string contains:
         *any number of characters before @ (at least one)
         *one @ char
-        *any number of characters after @ and at least one dot (between them)
+        *any number of characters after @ (at least one)
      */
     public static boolean isEmailAddressValid(String emailAddress) {
         return Pattern
-                .compile(".+\\@.+\\..+")
+                .compile(".+@.+")
                 .matcher(emailAddress)
                 .matches();
     }
