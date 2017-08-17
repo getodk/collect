@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,20 +195,20 @@ public class DataManagerList extends InstanceListFragment
         alertDialog.show();
     }
 
+    @Override
+    public void progressUpdate(int progress, int total) {
+        progressDialog.setMessage(getResources().getString(R.string.deleting_form_dialog_first) + String.valueOf(progress) + getResources().getString(R.string.deleting_form_dialog_second) + String.valueOf(total));
+    }
+
     /**
      * Deletes the selected files. Content provider handles removing the files
      * from the filesystem.
      */
     private void deleteSelectedInstances() {
         if (deleteInstancesTask == null) {
-
-            /*
-            * For solving #1258.
-            * Create the progress dialog before starting the background task.
-            * Could have been done in the DeleteInstancesTask's onPreExecute() but was unable to get the context correctly.
-            * */
             progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage("Deleting selected forms...");
+            progressDialog.setMessage(getResources().getString(R.string.form_delete_message));
+            progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
 
@@ -250,7 +251,6 @@ public class DataManagerList extends InstanceListFragment
         }
         deleteButton.setEnabled(false);
 
-        //Dismiss the progress dialog.
         progressDialog.dismiss();
     }
 

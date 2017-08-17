@@ -507,4 +507,7 @@
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+    <string name="form_delete_message">Deleting selected forms</string>
+    <string name="deleting_form_dialog_first">Deleting form:\u0020</string>
+    <string name="deleting_form_dialog_second">\u0020out of\u0020</string>
 </resources>
