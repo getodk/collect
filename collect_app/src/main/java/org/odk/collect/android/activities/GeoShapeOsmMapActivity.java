@@ -210,14 +210,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     protected void onPause() {
-        super.onPause();
         disableMyLocation();
+        super.onPause();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
         disableMyLocation();
+        super.onStop();
     }
 
 
