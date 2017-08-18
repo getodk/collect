@@ -448,7 +448,7 @@ public class FormsProvider extends ContentProvider {
                             String oldFile = update.getString(update
                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH));
 
-                            if (formFile == null || formFile.equalsIgnoreCase(oldFile)) {
+                            if (formFile == null || !formFile.equalsIgnoreCase(oldFile)) {
                                 deleteFileOrDir(oldFile);
                             }
 
