@@ -134,10 +134,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         addAggregatePreferences();
         addPreferencesFromResource(R.xml.other_preferences);
 
-        formListUrlPreference = (EditTextPreference) findPreference(
-                PreferenceKeys.KEY_FORMLIST_URL);
-        submissionUrlPreference = (EditTextPreference) findPreference(
-                PreferenceKeys.KEY_SUBMISSION_URL);
+        formListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
+        submissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
 
         InputFilter[] filters = {new ControlCharacterFilter(), new WhitespaceFilter()};
 
