@@ -279,7 +279,6 @@
   <string name="google_search_browse">Поиск форм. Или выберите \'Мой диск\' ниже для просмотра.</string>
   <string name="no_blank_search">Поле поиска не может быть пустым.</string>
   <string name="google_sheets_url">Резервный URL отправки</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
   <string name="sheets_max_columns">Наибольшее допустимое количество колонок 255, на Вашей форме их %s. Не удалось загрузить в таблицу.</string>
   <string name="invalid_sheet_id">Неверный идентификатор листа: %1$s</string>
@@ -427,8 +426,6 @@
   <string name="sort_by_date_desc">По дате, сначала старые</string>
   <string name="sort_by_status_asc">По статусу, сначала завёршенные.</string>
   <string name="sort_by_status_desc">По статуса, сначала незавершённые.</string>
-  <string name="sorting_menu_open">Открыть меню сортировки</string>
-  <string name="sorting_menu_close">Закрыть меню сортировки</string>
   <string name="sort_the_list">Сортировать список</string>
   <string name="request_permissions_google_account">ODK Collect требуется доступ к Вашему аккаунту Google, чтобы получать пустые формы и отправлять заполненные формы.</string>
   <string name="filter_the_list">Фильтровать список</string>

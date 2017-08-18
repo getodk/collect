@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="activity_not_found">ไม่มีกิจกรรมให้ดำเนินการ: %s</string>
   <string name="add_another">เพิ่มกลุ่ม</string>
@@ -261,8 +261,7 @@
   <string name="change_server_url">URL ของเซิร์ฟเวอร์</string>
   <string name="google_search_browse">ค้นหาแบบฟอร์ม หรือเลือก \'My Drive\' ด้านล่างเพื่อค้นหา</string>
   <string name="no_blank_search">ช่องค้นหาปล่อยว่างไม่ได้</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
+    <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
   <string name="sheets_max_columns">จำนวนคอลัมน์สูงสุดคือ 255 แบบฟอร์มของคุณมี %s ไม่สามารถอัพโหลดไปที่  spreadsheet ได้</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
   <string name="google_sheets_missing_columns">ไม่มี Spreadsheet ของคอลัมภ์: %1$s</string>
@@ -368,9 +367,7 @@
   <string name="encrypted_form">แบบสำรวจเข้ารหัส</string>
   <string name="deleted_form">แบบสำรวจที่ถูกลบ</string>
   <string name="instance_scan_completed">สแกนเสร็จสิ้น</string>
-  <string name="sorting_menu_open">เปิดเมนูการจัดเรียง</string>
-  <string name="sorting_menu_close">ปิดเมนูการจัดเรียง</string>
-  <string name="sort_the_list">จัดเรียงรายการ</string>
+    <string name="sort_the_list">จัดเรียงรายการ</string>
   <string name="request_permissions_google_account">ODK Collect ต้องการเชื่อมต่อกับบัญชี Google เพื่อนำเข้าแบบสำรวจเปล่าและส่งข้อมูลที่เก็บแล้ว</string>
   <string name="language">ภาษา</string>
   <string name="form_metadata_title">Metadata ของแบบสำรวจ</string>

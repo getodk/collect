@@ -122,7 +122,6 @@ public final class WebUtils {
             Credentials c = credsProvider.getCredentials(a);
             if (c == null) {
                 hasCreds = false;
-                continue;
             }
         }
         return hasCreds;
@@ -429,7 +428,7 @@ public final class WebUtils {
             } catch (Exception e) {
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
-                Timber.e(e, error);
+                Timber.e(error);
                 return new DocumentFetchResult(error, 0);
             }
 
@@ -467,7 +466,7 @@ public final class WebUtils {
             String error = "Error: " + cause + " while accessing "
                     + u.toString();
 
-            Timber.w(e, error);
+            Timber.w(error);
             return new DocumentFetchResult(error, 0);
         }
     }

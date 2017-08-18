@@ -2,7 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- smap not type selection
     <ListPreference
-        android:id="@+id/protocol"
         android:defaultValue="odk_default"
         android:dialogTitle="@string/change_protocol"
         android:entries="@array/protocol_entries"

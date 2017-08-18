@@ -243,6 +243,8 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
+        super.onCreate();
+
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
         singleton = this;
@@ -250,7 +252,6 @@ public class Collect extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
-        super.onCreate();
 
         PropertyManager mgr = new PropertyManager(this);
 

@@ -93,7 +93,7 @@ public class AudioButton extends AppCompatImageButton {
                 mediaPlayer.start();
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
-                Timber.e(e, errorMsg);
+                Timber.e(errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }
 

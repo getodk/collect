@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'checkstyle'
+apply from: '../config/quality.gradle'
 
 
 import com.android.ddmlib.DdmPreferences
@@ -122,14 +122,14 @@ android {
 }
 
 // Required to use fileExtensions property in checkstyle file
-checkstyle.toolVersion = '7.6.1'
+//checkstyle.toolVersion = '7.6.1'  smap
 
 // The normal check task reports nothing probably because Android uses its own sourceSets
-task checkstyle(type: Checkstyle) {
-    source 'src'
+//task checkstyle(type: Checkstyle) {
+//    source 'src'
     // empty classpath because we don't want to check compiled classes
-    classpath = files()
-}
+//    classpath = files()
+//}
 
 configurations.all {
     resolutionStrategy {
@@ -172,7 +172,7 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.4.0'
+    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.0-SNAPSHOT'
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     compile group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
@@ -194,14 +194,14 @@ dependencies {
     compile project(':AWSMobileHelper')
 
     // Testing-only dependencies
-    //testCompile group: 'junit', name: 'junit', version: '4.12'
-    //testCompile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
-    //testCompile group: 'org.robolectric', name: 'robolectric', version: '3.1.2'
-    //testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.0'
-    //androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.3.1'
-    //androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
-    //androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
-    //androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
+    // testCompile group: 'junit', name: 'junit', version: '4.12'
+    // testCompile group: 'org.mockito', name: 'mockito-core', version: '2.8.47'
+    // testCompile group: 'org.robolectric', name: 'robolectric', version: '3.4'
+    // testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.3.2'
+    // androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.3.1'
+    // androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
+    // androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
+    // androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
 }
 
 // Must be at bottom to prevent dependency collisions

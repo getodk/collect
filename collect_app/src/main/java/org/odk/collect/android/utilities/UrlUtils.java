@@ -14,14 +14,13 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
@@ -54,12 +53,8 @@ public class UrlUtils {
                     // if we didn't find one in the content provider,
                     // try to get from settings
                     if (urlString == null) {
-                        SharedPreferences settings = PreferenceManager
-                                .getDefaultSharedPreferences(Collect.getInstance());
-                        urlString = settings
-                                .getString(PreferenceKeys.KEY_GOOGLE_SHEETS_URL, Collect
-                                        .getInstance()
-                                        .getString(R.string.default_google_sheets_url));
+                        urlString = (String) GeneralSharedPreferences.getInstance()
+                                .get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
                     }
                 }
             }

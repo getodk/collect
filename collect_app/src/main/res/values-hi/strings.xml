@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">पासवर्ड दिखायें </string>
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई क्रिया नहीं मिली</string>
   <string name="add_another"> समूह जोड़ें</string>
@@ -128,7 +128,6 @@
   <string name="select_another_image">दूसरा इमेज चयनित करे</string>
   <string name="use_odk_default">डिफ़ॉल्ट इमेज प्रयोग करें</string>
   <string name="change_splash_path">इमेज बदले</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
   <string name="change_protocol">प्लेटफोर्म</string>
@@ -280,7 +279,6 @@
   <string name="google_search_browse">फ़ॉर्म के लिए खोजें. या ब्राउज़ करने के लिए नीचे \'माय ड्राइव\' चुनें।</string>
   <string name="no_blank_search">खोज फ़ील्ड रिक्त नहीं हो सकता</string>
   <string name="google_sheets_url">फ़ॉलबैक सबमिशन URL</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">पृष्ठभूमि में भेजना जारी, कृपया शीघ्र पुनः प्रयास करें</string>
   <string name="sheets_max_columns">कॉलम की अधिकतम संख्या 255 है, आपके फॉर्म में%sहैं. स्प्रैडशीट पर अपलोड करने में असमर्थ</string>
   <string name="invalid_sheet_id">अमान्य शीट आईडी: %1$s</string>
@@ -428,8 +426,6 @@
   <string name="sort_by_date_desc">तिथि के अनुसार, सबसे पुराना पहले</string>
   <string name="sort_by_status_asc">स्टेटस से, फाइनल हुआ पहले</string>
   <string name="sort_by_status_desc">स्टेटस से, बिना फाइनल किया हुआ पहले</string>
-  <string name="sorting_menu_open">सॉर्टिंग मेनू खोलें</string>
-  <string name="sorting_menu_close">सॉर्टिंग मेनू बंद करें</string>
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
   <string name="request_permissions_google_account">ODK कलेक्ट को रिक्त फॉर्म प्राप्त करने के लिए, और भरे गए फॉर्म सबमिट करने के लिए, आपके गूगल अकाउंट तक पहुंच की आवश्यकता है।</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>

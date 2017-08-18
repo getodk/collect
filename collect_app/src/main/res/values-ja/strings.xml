@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="show_password">パスワードを表示</string>
   <string name="activity_not_found">取り扱うアクティビティがありません: %s</string>
   <string name="add_another">グループを追加</string>
@@ -279,8 +279,7 @@
   <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="no_blank_search">検索フィールドは空にできません。</string>
   <string name="google_sheets_url">フォールバック送信 URL</string>
-  <string name="default_google_sheets_url"></string>
-  <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
+    <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
@@ -427,9 +426,7 @@
   <string name="sort_by_date_desc">日付順、古いものが最初</string>
   <string name="sort_by_status_asc">ステータス順、確定済が最初</string>
   <string name="sort_by_status_desc">ステータス順、未確定が最初</string>
-  <string name="sorting_menu_open">並び替えメニューを開く</string>
-  <string name="sorting_menu_close">並び替えメニューを閉じる</string>
-  <string name="sort_the_list">一覧の並び替え</string>
+    <string name="sort_the_list">一覧の並び替え</string>
   <string name="request_permissions_google_account">ODK Collect は、空白のフォームを取得して、入力フォームを送信するために、Google アカウントへのアクセスが必要です。</string>
   <string name="filter_the_list">一覧をフィルター</string>
   <string name="language">言語</string>

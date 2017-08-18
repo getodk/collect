@@ -4,13 +4,9 @@
         android:key="@string/google_preferences"
         android:title="@string/google_preferences">
         <ListPreference
-            android:id="@+id/selected_google_account"
-            android:defaultValue=""
             android:key="selected_google_account"
             android:title="@string/selected_google_account_text" />
         <EditTextPreference
-            android:id="@+id/google_sheets_url"
-            android:defaultValue="@string/default_google_sheets_url"
             android:dialogTitle="@string/google_sheets_url"
             android:inputType="textNoSuggestions"
             android:key="google_sheets_url"

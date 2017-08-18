@@ -1,14 +1,12 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
@@ -162,18 +160,13 @@ public class TimerLogger {
     private boolean timerEnabled = false;              // Set true of the timer logger is enabled
 
 
-    public TimerLogger(File instanceFile, SharedPreferences sharedPreferences, FormController formController) {
+    public TimerLogger(File instanceFile, FormController formController) {
 
         /*
-         * The timer logger is enabled if:
-         *  1) The meta section of the form contains a logging entry
+         * The timer logger is enabled if the meta section of the form contains a logging entry
          *      <orx:audit />
-         *  2) And logging has been enabled in the device preferences
          */
-        boolean loggingEnabledInForm = formController.getSubmissionMetadata().audit;
-        boolean loggingEnabledInPref = sharedPreferences.getBoolean(
-                AdminKeys.KEY_TIMER_LOG_ENABLED, true);
-        timerEnabled = loggingEnabledInForm && loggingEnabledInPref;
+        timerEnabled = formController.getSubmissionMetadata().audit;
 
         if (timerEnabled) {
             filename = "audit.csv";
@@ -203,7 +196,7 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
-            Timber.i("Event recorded: " + eventType + " : " + fecType);
+            Timber.i("Event recorded: %s : %s", eventType, fecType);
             // Calculate the time and add the event to the events array
             long start = getEventTime();
 

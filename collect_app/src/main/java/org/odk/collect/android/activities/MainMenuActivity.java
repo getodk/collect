@@ -550,7 +550,6 @@ public class MainMenuActivity extends AppCompatActivity {
                                         .logAction(this, "adminPasswordDialog",
                                                 "cancel");
                                 input.setText("");
-                                return;
                             }
                         });
 

@@ -10,6 +10,8 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.Validator;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_EMAIL;
@@ -20,7 +22,6 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
-
 
 public class FormMetadataFragment extends BasePreferenceFragment {
     @Override
@@ -80,8 +81,16 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         return new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                EditTextPreference changedTextPref = (EditTextPreference) preference;
                 String newValueString = newValue.toString();
+
+                if (KEY_METADATA_EMAIL.equals(key)) {
+                    if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
+                        ToastUtils.showLongToast(R.string.invalid_email_address);
+                        return false;
+                    }
+                }
+
+                EditTextPreference changedTextPref = (EditTextPreference) preference;
                 changedTextPref.setSummary(newValueString);
                 changedTextPref.setText(newValueString);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
