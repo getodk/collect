@@ -196,7 +196,8 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void progressUpdate(int progress, int total) {
-        progressDialog.setMessage(getResources().getString(R.string.deleting_form_dialog_first) + String.valueOf(progress) + getResources().getString(R.string.deleting_form_dialog_second) + String.valueOf(total));
+        String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message),progress,total);
+        progressDialog.setMessage(message);
     }
 
     /**
