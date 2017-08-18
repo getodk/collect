@@ -507,4 +507,6 @@
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+    <string name="select_value">Select value</string>
+    <string name="no_value_selected">No value selected</string>
 </resources>
