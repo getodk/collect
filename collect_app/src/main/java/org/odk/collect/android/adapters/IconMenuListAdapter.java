@@ -1,0 +1,68 @@
+package org.odk.collect.android.adapters;
+
+import android.content.Context;
+import android.os.Build;
+import android.support.v4.view.ViewCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.model.IconMenuItem;
+
+/**
+ * Adapter for List of options with icons
+ */
+public class IconMenuListAdapter extends BaseAdapter {
+
+    private final Context context;
+    private final IconMenuItem[] items;
+
+    public IconMenuListAdapter(Context context, IconMenuItem[] items) {
+        this.context = context;
+        this.items = items;
+    }
+
+    @Override
+    public int getCount() {
+        return items.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return items[position];
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = createView(parent);
+        }
+        refreshView((IconMenuItem) getItem(position), (TextView) convertView);
+        return convertView;
+    }
+
+    private View createView(ViewGroup parent) {
+        return LayoutInflater.from(context).inflate(R.layout.item_view_option, parent, false);
+    }
+
+    private void refreshView(IconMenuItem item, TextView convertView) {
+        convertView.setText(item.getTextResId());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            convertView.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
+        } else {
+            if (ViewCompat.getLayoutDirection(convertView) == ViewCompat.LAYOUT_DIRECTION_LTR) {
+                convertView.setCompoundDrawablesWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
+            } else {
+                convertView.setCompoundDrawablesWithIntrinsicBounds(0, 0, item.getImageResId(), 0);
+            }
+        }
+    }
+}

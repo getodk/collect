@@ -71,6 +71,8 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.IconMenuListAdapter;
+import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -1909,13 +1911,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
-        String[] items;
+        IconMenuItem[] items;
         if (adminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
-            items = new String[]{getString(R.string.keep_changes),
-                    getString(R.string.do_not_save)};
+            items = new IconMenuItem[]{new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save)};
         } else {
-            items = new String[]{getString(R.string.do_not_save)};
+            items = new IconMenuItem[]{new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save)};
         }
 
         Collect.getInstance().getActivityLogger()
@@ -1936,7 +1938,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                             }
                         })
-                .setItems(items, new DialogInterface.OnClickListener() {
+                .setAdapter(new IconMenuListAdapter(this, items), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
