@@ -44,7 +44,7 @@ public class AdminPreferencesActivityTest {
         for (String adminKey : AdminKeys.ALL_KEYS) {
             Preference preference = adminPreferencesFragment.findPreference(adminKey);
             if (preference instanceof CheckBoxPreference) {
-                Timber.d("Testing " + adminKey);
+                Timber.d("Testing %s", adminKey);
                 CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
 
                 assertNotNull("Preference not found: " + adminKey, checkBoxPreference);
