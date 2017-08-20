@@ -24,7 +24,7 @@ class ExportedActivitiesUtils {
             File dir = new File(dirName);
             if (dir.exists()) {
                 if (dir.delete()) {
-                    Timber.d("Directory was not deleted");
+                    Timber.i("Directory was not deleted");
                 }
             }
         }
