@@ -124,6 +124,7 @@ public abstract class RangeWidget extends QuestionWidget {
             } else {
                 setUpDisplayedValuesForNumberPicker();
                 answerTextView.setText(getPrompt().getAnswerValue() != null ? String.valueOf(actualValue) : getContext().getString(R.string.no_value_selected));
+                pickerButton.setText(getPrompt().getAnswerValue() != null ? getContext().getString(R.string.edit_value) : getContext().getString(R.string.select_value));
             }
         }
     }
@@ -133,6 +134,7 @@ public abstract class RangeWidget extends QuestionWidget {
         if (isPickerAppearance) {
             actualValue = null;
             answerTextView.setText(R.string.no_value_selected);
+            pickerButton.setText(R.string.select_value);
         } else {
             seekBar.setProgress(progress);
             actualValue = null;
@@ -227,8 +229,10 @@ public abstract class RangeWidget extends QuestionWidget {
             });
             pickerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
             pickerButton.setText(getContext().getString(R.string.select_value));
+            pickerButton.setPadding(20, 20, 20, 20);
             answerTextView = (TextView) view.findViewById(R.id.answer_text_view);
             answerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+            answerTextView.setPadding(20, 20, 20, 20);
             isPickerAppearance = true;
         } else if (appearance != null && appearance.contains(NO_TICKS_APPEARANCE)) {
             if (appearance.contains(VERTICAL_APPEARANCE)) {
@@ -265,6 +269,7 @@ public abstract class RangeWidget extends QuestionWidget {
         progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
 
         answerTextView.setText(String.valueOf(actualValue));
+        pickerButton.setText(R.string.edit_value);
     }
 
     private void showNumberPickerDialog() {

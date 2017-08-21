@@ -13,7 +13,8 @@ limitations under the License.
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
 
     <include layout="@layout/trigger_button" />
 
@@ -21,6 +22,6 @@ limitations under the License.
         android:id="@+id/answer_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
 
 </LinearLayout>
