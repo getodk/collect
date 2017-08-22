@@ -508,5 +508,7 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+    <string name="form_delete_message">Deleting selected forms</string>
+    <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
 </resources>

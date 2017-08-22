@@ -30,7 +30,7 @@ import timber.log.Timber;
  * @author norman86@gmail.com
  * @author mitchellsundt@gmail.com
  */
-public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
+public class DeleteInstancesTask extends AsyncTask<Long, Integer, Integer> {
 
 
     private ContentResolver contentResolver;
@@ -65,12 +65,25 @@ public class DeleteInstancesTask extends AsyncTask<Long, Void, Integer> {
                 if (wasDeleted > 0) {
                     Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
                 }
+
+                successCount++;
+                publishProgress(successCount,toDeleteCount);
+
             } catch (Exception ex) {
                 Timber.e("Exception during delete of: %s exception: %s", param.toString(), ex.toString());
             }
         }
         successCount = deleted;
         return deleted;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        synchronized (this) {
+            if (deleteInstancesListener != null) {
+                deleteInstancesListener.progressUpdate(values[0],values[1]);
+            }
+        }
     }
 
     @Override
