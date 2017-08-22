@@ -32,13 +32,11 @@ the License.
         android:layout_below="@id/toolbar"
         android:orientation="vertical">
 
-        <include layout="@layout/search_box_layout" />
-
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@android:id/empty"

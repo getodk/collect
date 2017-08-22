@@ -32,10 +32,12 @@ test:
     override:
         # Disable incremental dexing on all gradle commands to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
+        - ./gradlew pmd -Pandroid.useDexArchive=false
+        - ./gradlew findbugs -Pandroid.useDexArchive=false
+        - ./gradlew lint -Pandroid.useDexArchive=false
         - ./gradlew checkstyle -Pandroid.useDexArchive=false
-        - ./gradlew lintDebug -Pandroid.useDexArchive=false
         - ./gradlew testDebugUnitTest -Pandroid.useDexArchive=false
-
+        
         # Instrumented tests take time, so only run them on master
         # SD card needed for circleci-android22 image
         # https://circleci.com/docs/1.0/android/
@@ -51,6 +53,12 @@ test:
 
         - mkdir -p $CIRCLE_TEST_REPORTS/lint
         - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
+
+        - mkdir -p $CIRCLE_TEST_REPORTS/findbugs
+        - find . -type f -regex ".*/collect_app/build/reports/findbugs/findbugs.*" -exec cp {} $CIRCLE_TEST_REPORTS/findbugs/ \;
+
+        - mkdir -p $CIRCLE_TEST_REPORTS/pmd
+        - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
         - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;

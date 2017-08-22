@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'checkstyle'
+apply from: '../config/quality.gradle'
 
 import com.android.ddmlib.DdmPreferences
 DdmPreferences.setTimeOut(60000)
@@ -131,20 +131,6 @@ android {
     dexOptions {
         javaMaxHeapSize '2048M'
     }
-
-    lintOptions {
-        abortOnError true
-    }
-}
-
-// Required to use fileExtensions property in checkstyle file
-checkstyle.toolVersion = '7.6.1'
-
-// The normal check task reports nothing probably because Android uses its own sourceSets
-task checkstyle(type: Checkstyle) {
-    source 'src'
-    // empty classpath because we don't want to check compiled classes
-    classpath = files()
 }
 
 configurations.all {
@@ -186,7 +172,7 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.4.0'
+    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.0-SNAPSHOT'
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     compile group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
