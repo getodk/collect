@@ -508,4 +508,5 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+    <string name="search">Search</string>
 </resources>
