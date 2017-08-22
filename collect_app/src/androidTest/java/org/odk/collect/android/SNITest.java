@@ -33,7 +33,7 @@ import static org.odk.collect.android.utilities.WebUtils.createOpenRosaHttpGet;
 @RunWith(AndroidJUnit4.class)
 public class SNITest {
 
-    public static final URI SNI_URI = java.net.URI.create("https://sni.velox.ch/");
+    public static final URI SNI_URI = URI.create("https://sni.velox.ch/");
     public static final String SUCCESS_SENTINEL = "sent the following TLS server name indication extension";
 
     @Test
