@@ -50,6 +50,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static android.os.Build.MODEL;
+
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
  * form.
@@ -105,8 +107,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
                 // Have it saving to an intermediate location instead of final destination
                 // to allow the current location to catch issues with the intermediate file
-                Timber.i("The build of this device is %s", android.os.Build.MODEL);
-                if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+                Timber.i("The build of this device is %s", MODEL);
+                if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
                     nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
                 } else {
@@ -353,7 +355,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // Need to have this ugly code to account for
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
-        if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+        if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
             Uri mediaUri = (Uri) binaryuri;
             File fileToDelete = new File(mediaUri.getPath());
             int delCount = fileToDelete.delete() ? 1 : 0;

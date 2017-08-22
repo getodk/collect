@@ -27,15 +27,14 @@
     <exclude-pattern>.*/gen/.*</exclude-pattern>
 
     <rule ref="rulesets/java/android.xml"/>
-    <!--<rule ref="rulesets/java/clone.xml"/>
+    <rule ref="rulesets/java/clone.xml"/>
     <rule ref="rulesets/java/finalizers.xml"/>
     <rule ref="rulesets/java/imports.xml">
-        &lt;!&ndash; Espresso is designed this way !&ndash;&gt;
         <exclude name="TooManyStaticImports"/>
     </rule>
     <rule ref="rulesets/java/logging-java.xml"/>
     <rule ref="rulesets/java/braces.xml"/>
-    <rule ref="rulesets/java/strings.xml"/>
+    <!--<rule ref="rulesets/java/strings.xml"/>
     <rule ref="rulesets/java/basic.xml"/>
     <rule ref="rulesets/java/naming.xml">
         <exclude name="AbstractNaming"/>

@@ -12,6 +12,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import timber.log.Timber;
+
 import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -42,7 +44,7 @@ public class AdminPreferencesActivityTest {
         for (String adminKey : AdminKeys.ALL_KEYS) {
             Preference preference = adminPreferencesFragment.findPreference(adminKey);
             if (preference instanceof CheckBoxPreference) {
-                System.out.println("Testing " + adminKey);
+                Timber.d("Testing %s", adminKey);
                 CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
 
                 assertNotNull("Preference not found: " + adminKey, checkBoxPreference);
