@@ -586,8 +586,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    final Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -609,6 +608,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (requestCode != HIERARCHY_ACTIVITY) {
                 ((ODKView) currentView).cancelWaitingForBinaryData();
             }
+            return;
+        }
+
+        if (intent == null) {
+            Timber.i("The intent has a null value for requestCode: " + requestCode);
             return;
         }
 
