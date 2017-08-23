@@ -612,7 +612,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         if (intent == null) {
-            Timber.i("The intent has a null value for requestCode: " + requestCode);
+            Timber.w("The intent has a null value for requestCode: " + requestCode);
             return;
         }
 
