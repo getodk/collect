@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.GeoPointData;
@@ -107,9 +106,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         readOnly = prompt.isReadOnly();
 
         // assemble the widget...
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
         stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
@@ -120,19 +116,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // setup play button
-        viewButton = new Button(getContext());
-        viewButton.setId(QuestionWidget.newUniqueId());
-        viewButton.setText(getContext().getString(R.string.get_point));
-        viewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        viewButton.setPadding(20, 20, 20, 20);
-        viewButton.setLayoutParams(params);
+        viewButton = getSimpleButton(getContext().getString(R.string.get_point));
 
-        getLocationButton = new Button(getContext());
-        getLocationButton.setId(QuestionWidget.newUniqueId());
-        getLocationButton.setPadding(20, 20, 20, 20);
-        getLocationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        getLocationButton = getSimpleButton(null);
         getLocationButton.setEnabled(!prompt.isReadOnly());
-        getLocationButton.setLayoutParams(params);
 
         // when you press the button
         getLocationButton.setOnClickListener(new View.OnClickListener() {
