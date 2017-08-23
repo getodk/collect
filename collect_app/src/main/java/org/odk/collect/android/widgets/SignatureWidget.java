@@ -22,14 +22,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,21 +64,13 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder =
                 Collect.getInstance().getFormController().getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         errorTextView = new TextView(context);
         errorTextView.setId(QuestionWidget.newUniqueId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         // setup Blank Image Button
-        signButton = new Button(getContext());
-        signButton.setId(QuestionWidget.newUniqueId());
-        signButton.setText(getContext().getString(R.string.sign_button));
-        signButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        signButton.setPadding(20, 20, 20, 20);
+        signButton = getSimpleButton(getContext().getString(R.string.sign_button));
         signButton.setEnabled(!prompt.isReadOnly());
-        signButton.setLayoutParams(params);
         // launch capture intent on click
         signButton.setOnClickListener(new View.OnClickListener() {
             @Override
