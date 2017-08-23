@@ -193,7 +193,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
-    private boolean doSwipe = true;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -2814,7 +2813,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 PreferenceKeys.KEY_NAVIGATION,
                 PreferenceKeys.NAVIGATION_SWIPE);
 
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 
@@ -2949,9 +2948,5 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         public EmptyView(Context context) {
             super(context);
         }
-    }
-
-    public void allowSwiping(boolean doSwipe) {
-        this.doSwipe = doSwipe;
     }
 }
