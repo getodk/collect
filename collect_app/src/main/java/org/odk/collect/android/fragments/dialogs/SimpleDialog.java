@@ -22,6 +22,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+
+import timber.log.Timber;
 
 /**
  * This class might be used as an universal simple dialog. You can use it if you just need to
@@ -48,6 +51,18 @@ public class SimpleDialog extends DialogFragment {
         SimpleDialog dialogFragment = new SimpleDialog();
         dialogFragment.setArguments(bundle);
         return dialogFragment;
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            manager
+                    .beginTransaction()
+                    .add(this, tag)
+                    .commitAllowingStateLoss();
+        } catch (IllegalStateException e) {
+            Timber.w(e);
+        }
     }
 
     @Override
