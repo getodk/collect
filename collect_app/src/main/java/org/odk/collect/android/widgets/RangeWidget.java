@@ -60,6 +60,7 @@ public abstract class RangeWidget extends QuestionWidget {
     private View view;
 
     private boolean isPickerAppearance;
+    private boolean suppressFlingGesture;
 
     private Button pickerButton;
     private TextView answerTextView;
@@ -96,6 +97,11 @@ public abstract class RangeWidget extends QuestionWidget {
             pickerButton.setOnLongClickListener(l);
             answerTextView.setOnLongClickListener(l);
         }
+    }
+
+    @Override
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return suppressFlingGesture;
     }
 
     private void setUpLayoutElements() {
@@ -160,12 +166,12 @@ public abstract class RangeWidget extends QuestionWidget {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                ((FormEntryActivity) getContext()).allowSwiping(true);
+                suppressFlingGesture = false;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                ((FormEntryActivity) getContext()).allowSwiping(false);
+                suppressFlingGesture = true;
             }
 
             @Override
