@@ -45,11 +45,8 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     public BarcodeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        // set button formatting
         getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
         getBarcodeButton.setEnabled(!prompt.isReadOnly());
-
-        // launch barcode capture intent on click
         getBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,5 +143,4 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         getBarcodeButton.cancelLongPress();
         stringAnswer.cancelLongPress();
     }
-
 }

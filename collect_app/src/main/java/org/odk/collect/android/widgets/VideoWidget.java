@@ -77,11 +77,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        // setup capture button
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video));
         captureButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,11 +131,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup capture button
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_video));
         chooseButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,10 +163,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup play button
         playButton = getSimpleButton(getContext().getString(R.string.play_video));
-
-        // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,5 +368,4 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         chooseButton.cancelLongPress();
         playButton.cancelLongPress();
     }
-
 }

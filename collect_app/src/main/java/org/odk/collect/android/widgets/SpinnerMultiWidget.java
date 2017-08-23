@@ -67,8 +67,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     // Displays the current selections below the button
     TextView selectionText;
-
-
+    
     @SuppressWarnings("unchecked")
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -100,11 +99,8 @@ public class SpinnerMultiWidget extends QuestionWidget {
         selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         selectionText.setVisibility(View.GONE);
 
-        // Give the button a click listener. This defines the alert as well. All the
-        // click and selection behavior is defined here.
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 alertBuilder.setTitle(formEntryPrompt.getQuestionText()).setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -172,7 +168,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
         addAnswerView(answerLayout);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
@@ -191,7 +186,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void clearAnswer() {
         selectionText.setText(R.string.selected);
@@ -200,7 +194,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
             selections[i] = false;
         }
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -211,17 +204,14 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         button.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         button.cancelLongPress();
     }
-
 }

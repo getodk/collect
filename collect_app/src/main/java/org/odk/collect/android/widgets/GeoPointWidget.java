@@ -115,13 +115,10 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay.setGravity(Gravity.CENTER);
         answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
-        // setup play button
         viewButton = getSimpleButton(getContext().getString(R.string.get_point));
 
         getLocationButton = getSimpleButton(null);
         getLocationButton.setEnabled(!prompt.isReadOnly());
-
-        // when you press the button
         getLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

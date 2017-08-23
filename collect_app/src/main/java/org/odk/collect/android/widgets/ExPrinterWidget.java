@@ -131,7 +131,6 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         v = formEntryPrompt.getSpecialFormQuestionText("noPrinterErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_printer);
 
-        // set button formatting
         launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override

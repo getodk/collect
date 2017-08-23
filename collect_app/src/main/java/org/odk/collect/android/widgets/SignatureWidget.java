@@ -68,10 +68,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         errorTextView.setId(QuestionWidget.newUniqueId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup Blank Image Button
         signButton = getSimpleButton(getContext().getString(R.string.sign_button));
         signButton.setEnabled(!prompt.isReadOnly());
-        // launch capture intent on click
         signButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +80,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 launchSignatureActivity();
             }
         });
-
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -171,7 +168,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
-
     @Override
     public void clearAnswer() {
         // remove the file
@@ -183,7 +179,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         signButton.setText(getContext().getString(R.string.sign_button));
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         if (binaryName != null) {
@@ -192,7 +187,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             return null;
         }
     }
-
 
     @Override
     public void setBinaryData(Object answer) {
@@ -234,7 +228,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
-
     @Override
     public boolean isWaitingForBinaryData() {
         return formEntryPrompt.getIndex().equals(
@@ -254,7 +247,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
@@ -263,5 +255,4 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             imageView.cancelLongPress();
         }
     }
-
 }

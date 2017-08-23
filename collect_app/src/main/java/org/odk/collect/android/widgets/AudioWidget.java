@@ -63,11 +63,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        // setup capture button
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
         captureButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,11 +96,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup capture button
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound));
         chooseButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,10 +124,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup play button
         playButton = getSimpleButton(getContext().getString(R.string.play_audio));
-
-        // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +170,6 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
             chooseButton.setVisibility(View.GONE);
         }
     }
-
 
     private void deleteMedia() {
         // get the file path and delete the file
@@ -282,5 +272,4 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         chooseButton.cancelLongPress();
         playButton.cancelLongPress();
     }
-
 }

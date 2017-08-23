@@ -69,10 +69,8 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        // setup Blank Image Button
         drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
         drawButton.setEnabled(!prompt.isReadOnly());
-        // launch capture intent on click
         drawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,5 +262,4 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
             imageView.cancelLongPress();
         }
     }
-
 }

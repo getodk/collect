@@ -137,7 +137,6 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
-        // set button formatting
         launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
         launchIntentButton.setOnClickListener(new View.OnClickListener() {

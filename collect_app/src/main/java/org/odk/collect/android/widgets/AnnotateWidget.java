@@ -76,11 +76,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         errorTextView.setId(QuestionWidget.newUniqueId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup capture button
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
         captureButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,11 +118,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup chooser button
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
         chooseButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,10 +148,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup Blank Image Button
         annotateButton = getSimpleButton(getContext().getString(R.string.markup_image));
         annotateButton.setEnabled(false);
-        // launch capture intent on click
         annotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -364,5 +356,4 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             imageView.cancelLongPress();
         }
     }
-
 }

@@ -103,11 +103,8 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         errorTextView.setId(QuestionWidget.newUniqueId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup capture button
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
         captureButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,11 +145,8 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             }
         });
 
-        // setup chooser button
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
         chooseButton.setEnabled(!prompt.isReadOnly());
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,7 +238,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         addAnswerView(answerLayout);
     }
 
-
     private void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
@@ -255,7 +248,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
-
 
     @Override
     public void clearAnswer() {
@@ -268,7 +260,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         captureButton.setText(getContext().getString(R.string.capture_image));
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         if (binaryName != null) {
@@ -277,7 +268,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             return null;
         }
     }
-
 
     @Override
     public void setBinaryData(Object newImageObj) {
@@ -326,12 +316,10 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 Collect.getInstance().getFormController().getIndexWaitingForData());
     }
 
-
     @Override
     public void cancelWaitingForBinaryData() {
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
-
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
@@ -342,7 +330,6 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         }
     }
 
-
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
@@ -352,5 +339,4 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             imageView.cancelLongPress();
         }
     }
-
 }
