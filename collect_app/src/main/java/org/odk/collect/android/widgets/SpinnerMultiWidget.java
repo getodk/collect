@@ -87,7 +87,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
         selections = new boolean[items.size()];
         answerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
-        button = new Button(context);
+        button = getSimpleButton(context.getString(R.string.select_answer));
         selectionText = new TextView(getContext());
 
         // Build View
@@ -99,10 +99,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
         selectionText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
         selectionText.setVisibility(View.GONE);
-
-        button.setText(context.getString(R.string.select_answer));
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
-        button.setPadding(0, 0, 0, 7);
 
         // Give the button a click listener. This defines the alert as well. All the
         // click and selection behavior is defined here.
