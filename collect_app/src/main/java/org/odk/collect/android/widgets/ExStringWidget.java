@@ -89,7 +89,6 @@ import timber.log.Timber;
  */
 public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
-
     private boolean hasExApp = true;
     private Button launchIntentButton;
     private Drawable textBackground;
@@ -139,14 +138,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
         // set button formatting
-        launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(QuestionWidget.newUniqueId());
-        launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
-        launchIntentButton.setLayoutParams(params);
-
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
