@@ -67,7 +67,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     // Displays the current selections below the button
     TextView selectionText;
-    
+
     @SuppressWarnings("unchecked")
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
