@@ -2,6 +2,7 @@ package org.odk.collect.android.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -22,6 +23,8 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USE_SERVER_USERNAME;
 
 public class FormMetadataFragment extends BasePreferenceFragment {
     @Override
@@ -31,6 +34,20 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         addPreferencesFromResource(R.xml.form_metadata_preferences);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         PropertyManager pm = new PropertyManager(getActivity());
+
+        final CheckBoxPreference useServerUsername = (CheckBoxPreference) findPreference(KEY_USE_SERVER_USERNAME);
+        useServerUsername.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!useServerUsername.isChecked()) {
+                    String username = (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME);
+                    GeneralSharedPreferences.getInstance().save(KEY_METADATA_USERNAME, username);
+                    findPreference(KEY_METADATA_USERNAME).setSummary(username);
+                }
+                return true;
+            }
+        });
+
         initPrefFromProp(pm, prefs, PROPMGR_USERNAME, KEY_METADATA_USERNAME);
         initPrefFromProp(pm, prefs, PROPMGR_PHONE_NUMBER, KEY_METADATA_PHONENUMBER);
         initPrefFromProp(pm, prefs, PROPMGR_EMAIL, KEY_METADATA_EMAIL);

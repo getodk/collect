@@ -14,7 +14,7 @@
 
     <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/tintColor</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@drawable/settings_color</item>
         <item name="android:textSize">18sp</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="android:listDivider">@null</item>

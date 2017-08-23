@@ -50,8 +50,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
@@ -272,6 +272,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 }
 
                 preference.setSummary(username);
+                GeneralSharedPreferences.getInstance().save(KEY_METADATA_USERNAME, username);
                 clearCachedCrendentials();
 
                 // To ensure we update current credentials in CredentialsProvider

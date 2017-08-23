@@ -28,6 +28,7 @@ public final class PreferenceKeys {
     static final String KEY_FORM_METADATA                   = "form_metadata";
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
+    public static final String KEY_USE_SERVER_USERNAME      = "use_server_username";
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
@@ -84,6 +85,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_PROTOCOL,                   Collect.getInstance().getString(R.string.protocol_odk_default));
         hashMap.put(KEY_SELECTED_GOOGLE_ACCOUNT,    "");
         hashMap.put(KEY_USERNAME,                   "");
+        hashMap.put(KEY_USE_SERVER_USERNAME,        true);
         hashMap.put(KEY_METADATA_USERNAME,          "");
         hashMap.put(KEY_METADATA_PHONENUMBER,       "");
         hashMap.put(KEY_METADATA_EMAIL,             "");
