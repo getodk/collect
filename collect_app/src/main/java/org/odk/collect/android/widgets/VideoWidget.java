@@ -25,12 +25,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -79,17 +77,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
         // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_video));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_video));
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
 
         // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
@@ -145,13 +135,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup capture button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_video));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_video));
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
 
         // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
@@ -185,12 +170,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         // setup play button
-        playButton = new Button(getContext());
-        playButton.setId(QuestionWidget.newUniqueId());
-        playButton.setText(getContext().getString(R.string.play_video));
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        playButton.setPadding(20, 20, 20, 20);
-        playButton.setLayoutParams(params);
+        playButton = getSimpleButton(getContext().getString(R.string.play_video));
 
         // on play, launch the appropriate viewer
         playButton.setOnClickListener(new View.OnClickListener() {
