@@ -22,14 +22,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,16 +69,9 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
         // setup Blank Image Button
-        drawButton = new Button(getContext());
-        drawButton.setId(QuestionWidget.newUniqueId());
-        drawButton.setText(getContext().getString(R.string.draw_image));
-        drawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        drawButton.setPadding(20, 20, 20, 20);
+        drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
         drawButton.setEnabled(!prompt.isReadOnly());
-        drawButton.setLayoutParams(params);
         // launch capture intent on click
         drawButton.setOnClickListener(new View.OnClickListener() {
             @Override
