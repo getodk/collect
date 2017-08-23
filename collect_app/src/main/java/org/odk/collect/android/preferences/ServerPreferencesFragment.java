@@ -119,7 +119,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         googleSheetsUrlPreference.setOnPreferenceChangeListener(this);
 
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
-        if (currentGoogleSheetsURL.length() > 0) {
+        if (currentGoogleSheetsURL != null && currentGoogleSheetsURL.length() > 0) {
             googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
                     + getString(R.string.google_sheets_url_hint));
         }
