@@ -30,7 +30,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.DateData;
@@ -153,17 +152,8 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void createDateButton() {
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        dateButton = new Button(getContext());
-        dateButton.setId(QuestionWidget.newUniqueId());
-        dateButton.setText(R.string.select_date);
-        dateButton.setPadding(20, 20, 20, 20);
-        dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        dateButton.setLayoutParams(params);
+        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
         dateButton.setEnabled(!formEntryPrompt.isReadOnly());
-
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
