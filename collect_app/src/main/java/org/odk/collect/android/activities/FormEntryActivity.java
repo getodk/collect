@@ -365,7 +365,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
-                String uriMimeType = getContentResolver().getType(uri);
+                String uriMimeType =null;
+                //Check if uri is not null
+                if(uri!=null) {
+                    uriMimeType = getContentResolver().getType(uri);
+                }
+                else
+                {
+                    //uri is null. So, toast an error.
+                    showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                }
 
                 if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
