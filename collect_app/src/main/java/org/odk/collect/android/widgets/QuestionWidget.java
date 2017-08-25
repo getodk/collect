@@ -51,6 +51,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static android.view.Gravity.CENTER;
+
 public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
 
     @SuppressWarnings("unused")
@@ -395,6 +397,21 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
 
         button.setLayoutParams(params);
         return button;
+    }
+
+    protected TextView getCenteredAnswerTextView() {
+        TextView textView = getAnswerTextView();
+        textView.setGravity(CENTER);
+        return textView;
+    }
+
+    protected TextView getAnswerTextView() {
+        TextView textView = new TextView(getContext());
+        textView.setId(QuestionWidget.newUniqueId());
+        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        textView.setPadding(20, 20, 20, 20);
+        return textView;
     }
 
     /**
