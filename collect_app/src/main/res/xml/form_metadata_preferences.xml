@@ -4,7 +4,6 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="use_server_username"
-            android:summary="@string/use_server_username"
             android:title="@string/use_server_username"
             android:disableDependentsState="true" />
         <EditTextPreference
