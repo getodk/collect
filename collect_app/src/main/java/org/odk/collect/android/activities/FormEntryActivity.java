@@ -53,10 +53,12 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,6 +99,7 @@ import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
@@ -1900,7 +1903,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Create a dialog with options to save and exit, save, or quit without
+     * Create a dialog with options to save and exit or quit without
      * saving
      */
     private void createQuitDialog() {
@@ -1924,6 +1927,33 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createQuitDialog", "show");
+
+        ListView listView = DialogUtils.createActionListView(this);
+
+        final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+                if (item.getTextResId() == R.string.keep_changes) {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createQuitDialog", "saveAndExit");
+                    saveDataToDisk(EXIT, isInstanceComplete(false),
+                            null);
+                } else {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createQuitDialog", "discardAndExit");
+                    FormController formController = Collect.getInstance().getFormController();
+                    if (formController != null) {
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                    }
+                    removeTempInstance();
+                    finishReturnInstance();
+                }
+                alertDialog.dismiss();
+            }
+        });
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(
                         getString(R.string.quit_application, title))
@@ -1932,78 +1962,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
 
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog", "cancel");
+                                Collect.getInstance().getActivityLogger()
+                                        .logInstanceAction(this, "createQuitDialog", "cancel");
                                 dialog.cancel();
 
                             }
                         })
-                .setAdapter(new IconMenuListAdapter(this, items), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-
-                            case 0: // save and exit
-                                // this is slightly complicated because if the
-                                // option is disabled in
-                                // the admin menu, then case 0 actually becomes
-                                // 'discard and exit'
-                                // whereas if it's enabled it's 'save and exit'
-                                if (adminPreferences
-                                        .getBoolean(
-                                                AdminKeys.KEY_SAVE_MID,
-                                                true)) {
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logInstanceAction(this,
-                                                    "createQuitDialog",
-                                                    "saveAndExit");
-                                    saveDataToDisk(EXIT, isInstanceComplete(false),
-                                            null);
-                                } else {
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logInstanceAction(this,
-                                                    "createQuitDialog",
-                                                    "discardAndExit");
-                                    FormController formController = Collect.getInstance().getFormController();
-                                    if (formController != null) {
-                                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-                                    }
-                                    removeTempInstance();
-                                    finishReturnInstance();
-                                }
-                                break;
-
-                            case 1: // discard changes and exit
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog",
-                                                "discardAndExit");
-
-                                // close all open databases of external data.
-                                Collect.getInstance().getExternalDataManager().close();
-
-                                FormController formController = Collect.getInstance().getFormController();
-                                if (formController != null) {
-                                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-                                }
-                                removeTempInstance();
-                                finishReturnInstance();
-                                break;
-
-                            case 2:// do nothing
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog", "cancel");
-                                break;
-                        }
-                    }
-                }).create();
+                .setView(listView).create();
         alertDialog.show();
     }
 

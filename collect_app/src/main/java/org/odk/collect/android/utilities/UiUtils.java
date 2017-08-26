@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.adapters.model;
+package org.odk.collect.android.utilities;
+
+import android.support.annotation.DimenRes;
+
+import org.odk.collect.android.application.Collect;
 
 /**
- * Icon Menu Item representation
+ * Created by laguta.yurii@gmail.com on 26/8/17.
+ * <p>
+ * Collection of utils related to Android UI components
+ * ViewUtils name already taken by support library
  */
+public class UiUtils {
 
-public class IconMenuItem {
-
-    private int imageResId;
-    private int textResId;
-
-    public IconMenuItem(int imageResId, int textResId) {
-        this.imageResId = imageResId;
-        this.textResId = textResId;
-    }
-
-    public int getImageResId() {
-        return imageResId;
-    }
-
-    public int getTextResId() {
-        return textResId;
+    public static int getDimen(@DimenRes int dimenResId) {
+        return Collect.getInstance().getResources().getDimensionPixelSize(dimenResId);
     }
 }
