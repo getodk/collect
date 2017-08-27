@@ -25,12 +25,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,10 +57,12 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormDownloadList;
 import org.odk.collect.android.activities.SmapMain;
+import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ActivityLogger;
+import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
@@ -115,6 +121,7 @@ public class SmapTaskListFragment extends ListFragment
     protected EditText inputSearch;
 
     private Integer selectedSortingOrder;
+    private BottomSheetDialog bottomSheetDialog;
 
     private static final String TASK_MANAGER_LIST_SORTING_ORDER = "taskManagerListSortingOrder";
 
@@ -129,6 +136,14 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     public SmapTaskListFragment() {
+    }
+
+    // this method is only called once for this fragment
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
     }
 
     @Nullable
@@ -147,6 +162,7 @@ public class SmapTaskListFragment extends ListFragment
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
+        Timber.i("############### onActivityCreated: " + mAdapter);
         mAdapter = new TaskListArrayAdapter(getActivity());
         setListAdapter(mAdapter);
         getLoaderManager().initLoader(TASK_LOADER_ID, null, this);
@@ -155,12 +171,6 @@ public class SmapTaskListFragment extends ListFragment
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
-
-        setupDrawer(rootView);
-        setupDrawerItems();
-        if (drawerToggle != null) {
-            drawerToggle.syncState();
-        }
     }
 
     @Override
@@ -181,6 +191,31 @@ public class SmapTaskListFragment extends ListFragment
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_launcher);
+
+        if (bottomSheetDialog == null) {
+            setupBottomSheet();
+        }
+    }
+
+    private void setupBottomSheet() {
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.MaterialDialogSheet);
+        View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
+
+        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+            @Override
+            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
+                holder.updateItemColor(selectedSortingOrder);
+                performSelectedSearch(position);
+                bottomSheetDialog.dismiss();
+            }
+        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        bottomSheetDialog.setContentView(sheetView);
     }
 
     @Override
@@ -190,12 +225,14 @@ public class SmapTaskListFragment extends ListFragment
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        /*
         if (!isVisibleToUser) {
             // close the drawer if open
             if (drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.END)) {
                 drawerLayout.closeDrawer(Gravity.END);
             }
         }
+        */
     }
 
     @Override
@@ -282,7 +319,7 @@ public class SmapTaskListFragment extends ListFragment
 
         menu
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
+                .setIcon(R.drawable.ic_sort_black_36dp)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menu
@@ -355,12 +392,17 @@ public class SmapTaskListFragment extends ListFragment
                 processManageFiles();
                 return true;
             case MENU_SORT:
+                /*
                 if (drawerLayout.isDrawerOpen(Gravity.END)) {
                     drawerLayout.closeDrawer(Gravity.END);
                 } else {
                     Collect.getInstance().hideKeyboard(inputSearch);
                     drawerLayout.openDrawer(Gravity.END);
                 }
+                return true;
+                */
+                Collect.getInstance().hideKeyboard(inputSearch);
+                bottomSheetDialog.show();
                 return true;
 
             case MENU_FILTER:
@@ -374,14 +416,20 @@ public class SmapTaskListFragment extends ListFragment
         return super.onOptionsItemSelected(item);
     }
 
+    private void performSelectedSearch(int position) {
+        saveSelectedSortingOrder(position);
+        updateAdapter();
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (drawerToggle != null) {
-            drawerToggle.onConfigurationChanged(newConfig);
-        }
+        //if (drawerToggle != null) {
+        //    drawerToggle.onConfigurationChanged(newConfig);
+        //}
     }
 
+    /*
     private void setupDrawerItems() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, sortingOptions) {
@@ -413,7 +461,7 @@ public class SmapTaskListFragment extends ListFragment
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         drawerToggle = new ActionBarDrawerToggle(
                 getActivity(), drawerLayout,
-                R.string.sorting_menu_open, R.string.sorting_menu_close) {
+                R.string.clear_answer_ask, R.string.clear_answer_no) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getActivity().invalidateOptionsMenu();
@@ -430,6 +478,7 @@ public class SmapTaskListFragment extends ListFragment
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(drawerToggle);
     }
+    */
 
     private void hideSearchBox() {
         inputSearch.setText("");
@@ -522,9 +571,12 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     protected void updateAdapter() {
-        mTaskLoader.updateSortOrder(getSortingOrder());
-        mTaskLoader.updateFilter(getFilterText());
-        mTaskLoader.forceLoad();
+        Timber.i("################ update adapter");
+        if(mTaskLoader != null) {
+            mTaskLoader.updateSortOrder(getSortingOrder());
+            mTaskLoader.updateFilter(getFilterText());
+            mTaskLoader.forceLoad();
+        }
     }
 
     private void processEnterData() {

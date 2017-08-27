@@ -267,6 +267,10 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     @Override
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
+        if(listener != null) {
+            unregisterReceiver(listener);
+        }
+        listenerRegistered = false;
         super.onStop();
     }
 
