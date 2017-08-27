@@ -128,7 +128,6 @@
   <string name="select_another_image">別の画像を選択</string>
   <string name="use_odk_default">デフォルト画像を使用</string>
   <string name="change_splash_path">画像を変更</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
   <string name="change_protocol">プラットフォーム</string>

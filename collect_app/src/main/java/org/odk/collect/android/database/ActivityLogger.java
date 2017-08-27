@@ -29,6 +29,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.LinkedList;
 
+import timber.log.Timber;
+
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
  *
@@ -128,7 +130,7 @@ public final class ActivityLogger {
             database = databaseHelper.getWritableDatabase();
             isOpen = true;
         } catch (SQLiteException e) {
-            System.err.println("Error: " + e.getMessage());
+            Timber.e(e);
             isOpen = false;
         }
     }
@@ -246,7 +248,7 @@ public final class ActivityLogger {
                     database.insert(DATABASE_TABLE, null, cv);
                 }
             } catch (SQLiteConstraintException e) {
-                System.err.println("Error: " + e.getMessage());
+                Timber.e(e);
             }
         }
     }

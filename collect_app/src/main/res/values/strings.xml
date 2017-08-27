@@ -140,7 +140,6 @@
     <string name="select_another_image">Select another image</string>
     <string name="use_odk_default">Use default image</string>
     <string name="change_splash_path">Change image</string>
-    <string name="app_url">http://opendatakit.org</string>
     <string name="keep_changes">Save Changes</string>
     <string name="change_formlist_url">Form list path (appended to URL)</string>
     <string name="change_protocol">Platform</string>
@@ -506,5 +505,13 @@
     <string name="form_entry">Uncheck to hide from Form Entry</string>
     <string name="use_device_language">Use device language</string>
     <string name="not_supported_offline_layer_format">Selected offline layer file uses the PBF format which is not supported!</string>
+    <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
+    <string name="server">Server</string>
+    <string name="select_value">Select value</string>
+    <string name="edit_value">Edit value</string>
+    <string name="no_value_selected">No value selected</string>
+    <string name="form_delete_message">Deleting selected forms</string>
+    <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
+    <string name="search">Search</string>
 </resources>

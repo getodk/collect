@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -72,8 +71,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         super(context, prompt);
         LinearLayout layout = new LinearLayout(getContext());
         layout.setOrientation(LinearLayout.VERTICAL);
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
         readOnly = prompt.isReadOnly();
@@ -87,13 +85,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay.setGravity(Gravity.CENTER);
         answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
-        createTraceButton = new Button(getContext());
-        createTraceButton.setId(QuestionWidget.newUniqueId());
-        createTraceButton.setText(getContext().getString(R.string.get_trace));
-        createTraceButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        createTraceButton.setPadding(20, 20, 20, 20);
-        createTraceButton.setLayoutParams(params);
-
+        createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
         createTraceButton.setOnClickListener(new OnClickListener() {
 
             @Override

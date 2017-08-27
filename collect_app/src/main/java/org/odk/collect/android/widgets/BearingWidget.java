@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -48,18 +47,8 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        getBearingButton = new Button(getContext());
-        getBearingButton.setId(QuestionWidget.newUniqueId());
-        getBearingButton.setPadding(20, 20, 20, 20);
-        getBearingButton.setText(getContext()
-                .getString(R.string.get_bearing));
-        getBearingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                answerFontsize);
+        getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
         getBearingButton.setEnabled(!prompt.isReadOnly());
-        getBearingButton.setLayoutParams(params);
         if (prompt.isReadOnly()) {
             getBearingButton.setVisibility(View.GONE);
         }

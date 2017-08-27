@@ -12,6 +12,7 @@
         <EditTextPreference
             android:inputType="textEmailAddress"
             android:key="metadata_email"
+            android:maxLength="254"
             android:title="@string/email" />
     </PreferenceCategory>
 
