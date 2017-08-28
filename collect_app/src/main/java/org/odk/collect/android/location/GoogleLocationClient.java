@@ -2,9 +2,11 @@ package org.odk.collect.android.location;
 
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,8 +28,9 @@ import timber.log.Timber;
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
-        OnConnectionFailedListener, LocationListener {
+class GoogleLocationClient
+        extends BaseLocationClient
+        implements LocationClient, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     /**
      * The default requested time between location updates, in milliseconds.
@@ -52,8 +55,6 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
     @Nullable
     private LocationListener locationListener = null;
 
-    private Priority priority = Priority.PRIORITY_HIGH_ACCURACY;
-
     private long updateInterval = DEFAULT_UPDATE_INTERVAL;
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
 
@@ -65,7 +66,8 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
      * @param context The Context where the GoogleLocationClient will be running.
      */
     GoogleLocationClient(@NonNull Context context) {
-        this(locationServicesClientForContext(context), LocationServices.FusedLocationApi);
+        this(locationServicesClientForContext(context), LocationServices.FusedLocationApi,
+                (LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
     }
 
     /**
@@ -80,7 +82,9 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
      *                                 location.
      */
     GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
-                         @NonNull FusedLocationProviderApi fusedLocationProviderApi) {
+                         @NonNull FusedLocationProviderApi fusedLocationProviderApi,
+                         @NonNull LocationManager locationManager) {
+        super(locationManager);
 
         this.googleApiClient = googleApiClient;
         this.fusedLocationProviderApi = fusedLocationProviderApi;
@@ -131,10 +135,6 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
         this.locationClientListener = locationClientListener;
     }
 
-    public void setPriority(@NonNull Priority priority) {
-        this.priority = priority;
-    }
-
     @Override
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
@@ -143,11 +143,6 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
         }
 
         return fusedLocationProviderApi.getLastLocation(googleApiClient);
-    }
-
-    @Override
-    public boolean isLocationAvailable() {
-        return fusedLocationProviderApi.getLocationAvailability(googleApiClient).isLocationAvailable();
     }
 
     @Override
@@ -180,7 +175,7 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
 
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setPriority(priority.getValue());
+        locationRequest.setPriority(getPriority().getValue());
 
         locationRequest.setInterval(updateInterval);
         locationRequest.setInterval(fastestUpdateInterval);
@@ -217,6 +212,8 @@ class GoogleLocationClient implements LocationClient, ConnectionCallbacks,
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.i("Location changed: %s", location.toString());
+
         if (locationListener != null) {
             locationListener.onLocationChanged(location);
         }

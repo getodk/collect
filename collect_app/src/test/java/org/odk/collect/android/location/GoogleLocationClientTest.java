@@ -2,6 +2,7 @@ package org.odk.collect.android.location;
 
 
 import android.location.Location;
+import android.location.LocationManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,12 +29,13 @@ public class GoogleLocationClientTest {
 
     @Mock FusedLocationProviderApi fusedLocationProviderApi;
     @Mock GoogleApiClient googleApiClient;
+    @Mock LocationManager locationManager;
 
     private GoogleLocationClient googleLocationClient;
 
     @Before
     public void setUp() {
-        googleLocationClient = new GoogleLocationClient(googleApiClient, fusedLocationProviderApi);
+        googleLocationClient = new GoogleLocationClient(googleApiClient, fusedLocationProviderApi, locationManager);
     }
 
     @Test

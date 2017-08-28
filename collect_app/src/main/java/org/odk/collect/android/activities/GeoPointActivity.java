@@ -40,6 +40,10 @@ import timber.log.Timber;
 public class GeoPointActivity extends AppCompatActivity implements LocationListener,
         LocationClient.LocationClientListener {
 
+    // Default values for requesting Location updates.
+    private static final long LOCATION_UPDATE_INTERVAL = 100;
+    private static final long LOCATION_FASTEST_UPDATE_INTERVAL = 50;
+
     private static final String LOCATION_COUNT = "locationCount";
 
     private ProgressDialog locationDialog;
@@ -73,7 +77,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
         locationClient = LocationClients.clientForContext(this);
         if (locationClient.canSetUpdateIntervals()) {
-            locationClient.setUpdateIntervals(100, 50);
+            locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
         }
 
         locationClient.setListener(this);

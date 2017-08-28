@@ -6,10 +6,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
-
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -23,19 +22,15 @@ import timber.log.Timber;
  * Package-private, use {@link LocationClients} to retrieve the correct
  * {@link LocationClient}.
  */
-class AndroidLocationClient implements LocationClient, android.location.LocationListener {
-
-    @NonNull
-    private final LocationManager locationManager;
+class AndroidLocationClient
+        extends BaseLocationClient
+        implements android.location.LocationListener {
 
     @Nullable
     private LocationClientListener locationClientListener;
 
     @Nullable
     private LocationListener locationListener;
-
-    @NonNull
-    private Priority priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
     private boolean isConnected;
 
@@ -56,7 +51,7 @@ class AndroidLocationClient implements LocationClient, android.location.Location
      * @param locationManager The LocationManager to retrieve locations from.
      */
     AndroidLocationClient(@NonNull LocationManager locationManager) {
-        this.locationManager = locationManager;
+        super(locationManager);
     }
 
     // LocationClient:
@@ -96,7 +91,7 @@ class AndroidLocationClient implements LocationClient, android.location.Location
         }
 
         if (!isMonitoringLocation()) {
-            locationManager.requestLocationUpdates(getProvider(), 0, 0, this);
+            getLocationManager().requestLocationUpdates(getProvider(), 0, 0, this);
         }
 
         this.locationListener = locationListener;
@@ -108,7 +103,7 @@ class AndroidLocationClient implements LocationClient, android.location.Location
             return;
         }
 
-        locationManager.removeUpdates(this);
+        getLocationManager().removeUpdates(this);
         this.locationListener = null;
     }
 
@@ -118,23 +113,13 @@ class AndroidLocationClient implements LocationClient, android.location.Location
     }
 
     @Override
-    public void setPriority(@NonNull Priority priority) {
-        this.priority = priority;
-    }
-
-    @Override
     public Location getLastLocation() {
         String provider = getProvider();
         if (provider != null) {
-            return locationManager.getLastKnownLocation(provider);
+            return getLocationManager().getLastKnownLocation(provider);
         }
 
         return null;
-    }
-
-    @Override
-    public boolean isLocationAvailable() {
-        return getProvider() != null;
     }
 
     @Override
@@ -159,69 +144,13 @@ class AndroidLocationClient implements LocationClient, android.location.Location
         Timber.e("Can't set updateInterval on AndroidLocationClient. You should check canSetUpdateIntervals before calling this method.");
     }
 
-    // AndroidLocationClient:
-
-    private String getProvider() {
-        String provider = LocationManager.PASSIVE_PROVIDER;
-        String backupProvider = null;
-
-        switch (priority) {
-
-            case PRIORITY_HIGH_ACCURACY:
-                provider = LocationManager.GPS_PROVIDER;
-                backupProvider = LocationManager.NETWORK_PROVIDER;
-                break;
-
-            case PRIORITY_BALANCED_POWER_ACCURACY:
-                provider = LocationManager.NETWORK_PROVIDER;
-                backupProvider = LocationManager.GPS_PROVIDER;
-                break;
-
-            case PRIORITY_LOW_POWER:
-                provider = LocationManager.NETWORK_PROVIDER;
-                backupProvider = LocationManager.PASSIVE_PROVIDER;
-                break;
-
-            case PRIORITY_NO_POWER:
-                provider = LocationManager.PASSIVE_PROVIDER;
-                backupProvider = null;
-                break;
-        }
-
-        return getProviderIfEnabled(provider, backupProvider);
-    }
-
-    @Nullable
-    private String getProviderIfEnabled(@NonNull String provider, @Nullable String backupProvider) {
-        if (hasProvider(provider)) {
-            return provider;
-
-        } else if (hasProvider(backupProvider)) {
-            return backupProvider;
-        }
-
-        return null;
-    }
-
-    private boolean hasProvider(@Nullable String provider) {
-        if (provider == null) {
-            return false;
-        }
-
-        List<String> enabledProviders = locationManager.getProviders(true);
-        for (String enabledProvider : enabledProviders) {
-            if (enabledProvider.equalsIgnoreCase(provider)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     // LocationListener:
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.i("Location changed: %s", location.toString());
+
         if (locationListener != null) {
             locationListener.onLocationChanged(location);
         }
