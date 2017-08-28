@@ -20,6 +20,7 @@ collect_app/src/pop/
 # gradle env props
 gradle.properties
 secrets.properties
+google-services.json
 
 # built application files
 *.apk
