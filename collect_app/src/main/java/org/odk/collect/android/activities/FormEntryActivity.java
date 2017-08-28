@@ -115,6 +115,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
@@ -906,7 +908,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
         Integer maxPixels = null;
         for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
-            if ("max-pixels".equals(attrs.getName())) {
+            if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
                 try {
                     maxPixels = Integer.parseInt(attrs.getAttributeValue());
                 } catch (NumberFormatException e) {
@@ -917,6 +919,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         return maxPixels;
     }
 
+    /*
+    This method is used to reduce an original picture size.
+    maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
+     */
     private void scaleDownImage(String path, int maxPixels) {
         Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
 

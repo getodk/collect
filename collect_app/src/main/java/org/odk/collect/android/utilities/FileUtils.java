@@ -488,6 +488,10 @@ public class FileUtils {
         }
     }
 
+    /*
+    This method is used to avoid OutOfMemoryError exception during loading an image.
+    If the exception occurs we catch it and try to load a smaller image.
+     */
     public static Bitmap getBitmap(String path, BitmapFactory.Options originalOptions) {
         BitmapFactory.Options newOptions = new BitmapFactory.Options();
         newOptions.inSampleSize = originalOptions.inSampleSize;

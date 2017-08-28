@@ -18,6 +18,8 @@ package org.odk.collect.android.utilities;
 
 public class ApplicationConstants {
 
+    public static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
+
     // based on http://www.sqlite.org/limits.html
     public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
 
