@@ -23,6 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -100,6 +102,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -113,6 +116,8 @@ import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -673,6 +678,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
+                scaleDownImageIfNeeded(Collect.TMPFILE_PATH);
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
@@ -794,6 +800,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (chosenImage != null) {
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
+                scaleDownImageIfNeeded(newImage.getPath());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -822,6 +829,66 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
+        }
+    }
+
+    private void scaleDownImageIfNeeded(String path) {
+        QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
+        if (questionWidget != null) {
+            Integer maxPixels = getMaxPixelsForImageIfDefined(questionWidget);
+            if (maxPixels != null) {
+                scaleDownImage(path, maxPixels);
+            }
+        }
+    }
+
+    private QuestionWidget getWidgetWaitingForBinaryData() {
+        QuestionWidget questionWidget = null;
+        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+            if (((IBinaryWidget) qw).isWaitingForBinaryData()) {
+                questionWidget = qw;
+            }
+        }
+
+        return questionWidget;
+    }
+
+    private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
+        Integer maxPixels = null;
+        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
+            if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
+                try {
+                    maxPixels = Integer.parseInt(attrs.getAttributeValue());
+                } catch (NumberFormatException e) {
+                    Timber.i(e);
+                }
+            }
+        }
+        return maxPixels;
+    }
+
+    /*
+    This method is used to reduce an original picture size.
+    maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
+     */
+    private void scaleDownImage(String path, int maxPixels) {
+        Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
+
+        if (originalImage != null) {
+            double originalWidth = originalImage.getWidth();
+            double originalHeight = originalImage.getHeight();
+
+            if (originalWidth > originalHeight && originalWidth > maxPixels) {
+                int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
+
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, maxPixels, newHeight, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            } else if (originalHeight > maxPixels) {
+                int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
+
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, newWidth, maxPixels, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            }
         }
     }
 
