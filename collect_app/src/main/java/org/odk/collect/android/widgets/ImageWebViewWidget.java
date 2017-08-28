@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -134,17 +133,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         errorTextView.setId(QuestionWidget.newUniqueId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_image));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,16 +175,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
             }
         });
 
-        // setup chooser button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_image));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -366,5 +348,4 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
     }
-
 }

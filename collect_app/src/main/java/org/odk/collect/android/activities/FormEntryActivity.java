@@ -76,6 +76,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -100,6 +101,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
@@ -122,7 +124,7 @@ import timber.log.Timber;
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener {
+        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -191,7 +193,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
-    private boolean doSwipe = true;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -586,8 +587,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    final Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -609,6 +609,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (requestCode != HIERARCHY_ACTIVITY) {
                 ((ODKView) currentView).cancelWaitingForBinaryData();
             }
+            return;
+        }
+
+        if (intent == null) {
+            Timber.w("The intent has a null value for requestCode: " + requestCode);
             return;
         }
 
@@ -2812,7 +2817,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 PreferenceKeys.KEY_NAVIGATION,
                 PreferenceKeys.NAVIGATION_SWIPE);
 
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 
@@ -2928,6 +2933,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    @Override
+    public void onNumberPickerValueSelected(int widgetId, int value) {
+        if (currentView != null) {
+            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+                if (qw instanceof RangeWidget && widgetId == qw.getId()) {
+                    ((RangeWidget) qw).setNumberPickerValue(value);
+                }
+            }
+        }
+    }
+
     /**
      * Used whenever we need to show empty view and be able to recognize it from the code
      */
@@ -2936,9 +2952,5 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         public EmptyView(Context context) {
             super(context);
         }
-    }
-
-    public void allowSwiping(boolean doSwipe) {
-        this.doSwipe = doSwipe;
     }
 }

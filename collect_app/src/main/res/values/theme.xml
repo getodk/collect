@@ -10,6 +10,7 @@
         <item name="colorAccent">@color/tintColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
+        <item name="searchViewStyle">@style/SearchViewTheme</item>
     </style>
 
     <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,5 +20,9 @@
         <item name="android:panelBackground">@android:color/white</item>
         <item name="android:listDivider">@null</item>
         <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="Widget.AppCompat.Light.SearchView">
+        <item name="searchHintIcon">@null</item>
     </style>
 </resources>

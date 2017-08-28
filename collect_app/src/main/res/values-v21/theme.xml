@@ -10,6 +10,7 @@
         <item name="colorAccent">@color/tintColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
+        <item name="searchViewStyle">@style/SearchViewTheme</item>
     </style>
 
     <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">

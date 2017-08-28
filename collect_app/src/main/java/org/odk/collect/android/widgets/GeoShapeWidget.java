@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.GeoShapeData;
@@ -75,8 +74,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         super(context, prompt);
         // assemble the widget...
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
         readOnly = prompt.isReadOnly();
@@ -90,13 +87,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         answerDisplay.setGravity(Gravity.CENTER);
         answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
-        createShapeButton = new Button(getContext());
-        createShapeButton.setId(QuestionWidget.newUniqueId());
-        createShapeButton.setText(getContext().getString(R.string.get_shape));
-        createShapeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        createShapeButton.setPadding(20, 20, 20, 20);
-        createShapeButton.setLayoutParams(params);
-
+        createShapeButton = getSimpleButton(getContext().getString(R.string.get_shape));
         createShapeButton.setOnClickListener(new OnClickListener() {
 
             @Override
