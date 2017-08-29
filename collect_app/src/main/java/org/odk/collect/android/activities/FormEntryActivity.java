@@ -370,7 +370,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
-                String uriMimeType = getContentResolver().getType(uri);
+                String uriMimeType = null;
+
+                if (uri != null) {
+                    uriMimeType = getContentResolver().getType(uri);
+                }
 
                 if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
