@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
+
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
  * Notes:
@@ -169,7 +171,7 @@ public class TimerLogger {
         timerEnabled = formController.getSubmissionMetadata().audit;
 
         if (timerEnabled) {
-            filename = "audit.csv";
+            filename = AUDIT_FILE_NAME;
             if (instanceFile != null) {
                 File instanceFolder = instanceFile.getParentFile();
                 timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
