@@ -367,7 +367,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Uri uri = intent.getData();
                 String uriMimeType = null;
 
-                if(uri!=null) {
+                if(uri != null) {
                     uriMimeType = getContentResolver().getType(uri);
                 }
 
