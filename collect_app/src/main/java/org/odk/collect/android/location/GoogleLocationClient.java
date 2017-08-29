@@ -212,7 +212,7 @@ class GoogleLocationClient
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i("Location changed: %s", location.toString());
+        Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
             locationListener.onLocationChanged(location);
