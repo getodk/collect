@@ -61,7 +61,6 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
                 new IntentIntegrator((Activity) getContext())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
-                        .setBeepEnabled(true)
                         .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
                         .setOrientationLocked(false)
                         .setPrompt(getContext().getString(R.string.qrcode_scanner_prompt))
