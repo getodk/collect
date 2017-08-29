@@ -617,8 +617,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return;
         }
 
-        if (intent == null) {
+        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
+        if (intent == null && requestCode != DRAW_IMAGE && requestCode != ANNOTATE_IMAGE
+                && requestCode != SIGNATURE_CAPTURE && requestCode != IMAGE_CAPTURE
+                && requestCode != HIERARCHY_ACTIVITY) {
             Timber.w("The intent has a null value for requestCode: " + requestCode);
+            ToastUtils.showLongToast(getString(R.string.null_intent_value));
             return;
         }
 
