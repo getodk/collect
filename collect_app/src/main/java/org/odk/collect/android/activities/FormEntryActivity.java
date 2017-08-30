@@ -2314,18 +2314,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
                                 "show");
                 progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener cancelSavingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "onCreateDialog.SAVING_DIALOG", "cancel");
-                                dialog.dismiss();
-                                cancelSaveToDiskTask();
-                            }
-                        };
                 progressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 progressDialog.setTitle(getString(R.string.saving_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
