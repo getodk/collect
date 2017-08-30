@@ -119,6 +119,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final boolean DO_NOT_EXIT = false;
     private boolean shouldExit;
     private static final String SHOULD_EXIT = "shouldexit";
+    private static final String SHOW = "show";
 
 
     @SuppressWarnings("unchecked")
@@ -355,7 +356,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
+        Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", SHOW);
         super.onCreateOptionsMenu(menu);
 
         menu
@@ -384,7 +385,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         switch (id) {
             case PROGRESS_DIALOG:
                 Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.PROGRESS_DIALOG", "show");
+                        "onCreateDialog.PROGRESS_DIALOG", SHOW);
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
@@ -416,7 +417,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 return progressDialog;
             case AUTH_DIALOG:
                 Collect.getInstance().getActivityLogger().logAction(this,
-                        "onCreateDialog.AUTH_DIALOG", "show");
+                        "onCreateDialog.AUTH_DIALOG", SHOW);
 
                 alertShowing = false;
 
@@ -698,7 +699,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
      * activity will exit when the user clicks "ok".
      */
     private void createAlertDialog(String title, String message, final boolean shouldExit) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
+        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", SHOW);
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
