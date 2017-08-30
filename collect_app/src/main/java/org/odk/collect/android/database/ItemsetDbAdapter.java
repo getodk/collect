@@ -17,6 +17,8 @@ public class ItemsetDbAdapter {
 
     public static final String KEY_ID = "_id";
 
+    private static final String DROP_TABLE_QUERY = "DROP TABLE IF EXISTS ";
+
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -58,13 +60,13 @@ public class ItemsetDbAdapter {
                 c.move(-1);
                 while (c.moveToNext()) {
                     String table = c.getString(c.getColumnIndex(KEY_ITEMSET_HASH));
-                    db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
+                    db.execSQL(DROP_TABLE_QUERY + DATABASE_TABLE + table);
                 }
                 c.close();
             }
 
             // then drop the table tracking itemsets itself
-            db.execSQL("DROP TABLE IF EXISTS " + ITEMSET_TABLE);
+            db.execSQL(DROP_TABLE_QUERY + ITEMSET_TABLE);
             onCreate(db);
         }
     }
@@ -97,8 +99,12 @@ public class ItemsetDbAdapter {
         // get md5 of the path to itemset.csv, which is unique per form
         // the md5 is easier to use because it doesn't have chars like '/'
 
-        sb.append("create table " + DATABASE_TABLE + pathHash
-                + " (_id integer primary key autoincrement ");
+        sb
+                .append("create table ")
+                .append(DATABASE_TABLE)
+                .append(pathHash)
+                .append(" (_id integer primary key autoincrement ");
+
         for (String column : columns) {
             if (!column.isEmpty()) {
                 // add double quotes in case the column is of label:lang
@@ -169,7 +175,7 @@ public class ItemsetDbAdapter {
 
     public void dropTable(String pathHash, String path) {
         // drop the table
-        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + pathHash);
+        db.execSQL(DROP_TABLE_QUERY + DATABASE_TABLE + pathHash);
 
         // and remove the entry from the itemsets table
         String where = KEY_PATH + "=?";
@@ -193,7 +199,7 @@ public class ItemsetDbAdapter {
             if (c.getCount() == 1) {
                 c.moveToFirst();
                 String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
-                db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
+                db.execSQL(DROP_TABLE_QUERY + DATABASE_TABLE + table);
             }
             c.close();
         }
