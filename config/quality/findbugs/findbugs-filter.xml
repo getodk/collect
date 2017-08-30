@@ -31,5 +31,8 @@
         </Not>
     </Match>
 
+    <Match>
+        <Bug pattern="DM_DEFAULT_ENCODING" />
+    </Match>
 
 </FindBugsFilter>
