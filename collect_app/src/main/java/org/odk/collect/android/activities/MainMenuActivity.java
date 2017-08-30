@@ -80,6 +80,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private static final int PASSWORD_DIALOG = 1;
 
+    private static final String CLICK = "click";
+
     private static final boolean EXIT = true;
     // buttons
     private Button enterDataButton;
@@ -116,7 +118,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, "fillBlankForm", "click");
+                        .logAction(this, "fillBlankForm", CLICK);
                 Intent i = new Intent(getApplicationContext(),
                         FormChooserList.class);
                 startActivity(i);
@@ -130,7 +132,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, "click");
+                        .logAction(this, ApplicationConstants.FormModes.EDIT_SAVED, CLICK);
                 Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                         ApplicationConstants.FormModes.EDIT_SAVED);
@@ -145,7 +147,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, "uploadForms", "click");
+                        .logAction(this, "uploadForms", CLICK);
                 Intent i = new Intent(getApplicationContext(),
                         InstanceUploaderList.class);
                 startActivity(i);
@@ -158,7 +160,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logAction(this,
-                        ApplicationConstants.FormModes.VIEW_SENT, "click");
+                        ApplicationConstants.FormModes.VIEW_SENT, CLICK);
                 Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
                         ApplicationConstants.FormModes.VIEW_SENT);
@@ -173,7 +175,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, "downloadBlankForms", "click");
+                        .logAction(this, "downloadBlankForms", CLICK);
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(MainMenuActivity.this);
                 String protocol = sharedPreferences.getString(
@@ -203,7 +205,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger()
-                        .logAction(this, "deleteSavedForms", "click");
+                        .logAction(this, "deleteSavedForms", CLICK);
                 Intent i = new Intent(getApplicationContext(),
                         FileManagerTabs.class);
                 startActivity(i);
