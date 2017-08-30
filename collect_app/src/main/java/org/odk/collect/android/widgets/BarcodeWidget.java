@@ -63,7 +63,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
                         .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
                         .setOrientationLocked(false)
-                        .setPrompt(getContext().getString(R.string.qrcode_scanner_prompt))
+                        .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
                         .initiateScan();
             }
         });
