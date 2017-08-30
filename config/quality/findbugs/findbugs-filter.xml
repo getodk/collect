@@ -39,4 +39,8 @@
         <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
     </Match>
 
+    <Match>
+        <Bug pattern="INT_BAD_REM_BY_1" />
+    </Match>
+
 </FindBugsFilter>
