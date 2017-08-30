@@ -56,6 +56,8 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
     private static final int QUESTION = 4;
 
     private static final String mIndent = "     ";
+    private static final String CLICK = "click";
+    private static final String ON_LIST_ITEM_CLICK = "onListItemClick";
 
     private Button jumpPreviousButton;
 
@@ -98,7 +100,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton",
-                        "click");
+                        CLICK);
                 goUpLevel();
             }
         });
@@ -108,7 +110,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning",
-                        "click");
+                        CLICK);
                 Collect.getInstance().getFormController().jumpToIndex(FormIndex
                         .createBeginningOfFormIndex());
                 setResult(RESULT_OK);
@@ -121,7 +123,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd",
-                        "click");
+                        CLICK);
                 Collect.getInstance().getFormController().jumpToIndex(
                         FormIndex.createEndOfFormIndex());
                 setResult(RESULT_OK);
@@ -138,7 +140,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this, "exit",
-                            "click");
+                            CLICK);
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -429,7 +431,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         switch (h.getType()) {
             case EXPANDED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, ON_LIST_ITEM_CLICK,
                         "COLLAPSED", h.getFormIndex());
                 h.setType(COLLAPSED);
                 ArrayList<HierarchyElement> children = h.getChildren();
@@ -439,7 +441,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_minimized));
                 break;
             case COLLAPSED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, ON_LIST_ITEM_CLICK,
                         "EXPANDED", h.getFormIndex());
                 h.setType(EXPANDED);
                 ArrayList<HierarchyElement> children1 = h.getChildren();
@@ -451,7 +453,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 h.setIcon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.expander_ic_maximized));
                 break;
             case QUESTION:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, ON_LIST_ITEM_CLICK,
                         "QUESTION-JUMP", index);
                 Collect.getInstance().getFormController().jumpToIndex(index);
                 if (Collect.getInstance().getFormController().indexIsInFieldList()) {
@@ -470,7 +472,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                 }
                 return;
             case CHILD:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick",
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, ON_LIST_ITEM_CLICK,
                         "REPEAT-JUMP", h.getFormIndex());
                 Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
                 setResult(RESULT_OK);
