@@ -28,10 +28,12 @@ public final class PreferenceKeys {
     static final String KEY_FORM_METADATA                   = "form_metadata";
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
-    public static final String KEY_USE_SERVER_USERNAME      = "use_server_username";
     public static final String KEY_METADATA_USERNAME        = "metadata_username";
     public static final String KEY_METADATA_PHONENUMBER     = "metadata_phonenumber";
     public static final String KEY_METADATA_EMAIL           = "metadata_email";
+
+    public static final String KEY_USE_SERVER_USERNAME      = "use_server_username";
+    public static final String KEY_USERNAME_FOR_METADATA    = "username_for_metadata";
 
     // AGGREGATE SPECIFIC
     public static final String KEY_SERVER_URL               = "server_url";

@@ -21,6 +21,7 @@ import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SIM_SERIAL;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_SUBSCRIBER_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME_FOR_METADATA;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_PHONENUMBER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_METADATA_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
@@ -39,11 +40,14 @@ public class FormMetadataFragment extends BasePreferenceFragment {
         useServerUsername.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String username;
                 if (!useServerUsername.isChecked()) {
-                    String username = (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME);
-                    GeneralSharedPreferences.getInstance().save(KEY_METADATA_USERNAME, username);
-                    findPreference(KEY_METADATA_USERNAME).setSummary(username);
+                    username = (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME);
+                } else {
+                    username = (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME_FOR_METADATA);
                 }
+                GeneralSharedPreferences.getInstance().save(KEY_METADATA_USERNAME, username);
+                findPreference(KEY_METADATA_USERNAME).setSummary(username);
                 return true;
             }
         });
@@ -105,6 +109,8 @@ public class FormMetadataFragment extends BasePreferenceFragment {
                         ToastUtils.showLongToast(R.string.invalid_email_address);
                         return false;
                     }
+                } else if (KEY_METADATA_USERNAME.equals(key)) {
+                    GeneralSharedPreferences.getInstance().save(KEY_USERNAME_FOR_METADATA, newValueString);
                 }
 
                 EditTextPreference changedTextPref = (EditTextPreference) preference;
