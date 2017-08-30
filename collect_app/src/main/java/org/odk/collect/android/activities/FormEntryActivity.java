@@ -65,6 +65,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -122,10 +123,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
-
 import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
 
 
@@ -1996,13 +1995,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
-        IconMenuItem[] items;
+        List<IconMenuItem> items;
         if (adminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
-            items = new IconMenuItem[]{new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save)};
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         } else {
-            items = new IconMenuItem[]{new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save)};
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         }
 
         Collect.getInstance().getActivityLogger()

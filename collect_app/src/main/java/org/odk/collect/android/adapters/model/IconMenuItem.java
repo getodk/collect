@@ -22,8 +22,8 @@ package org.odk.collect.android.adapters.model;
 
 public class IconMenuItem {
 
-    private int imageResId;
-    private int textResId;
+    private final int imageResId;
+    private final int textResId;
 
     public IconMenuItem(int imageResId, int textResId) {
         this.imageResId = imageResId;

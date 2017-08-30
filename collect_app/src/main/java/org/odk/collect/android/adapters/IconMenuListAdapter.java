@@ -28,27 +28,29 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 
+import java.util.List;
+
 /**
  * Adapter for List of options with icons
  */
 public class IconMenuListAdapter extends BaseAdapter {
 
     private final Context context;
-    private final IconMenuItem[] items;
+    private final List<IconMenuItem> items;
 
-    public IconMenuListAdapter(Context context, IconMenuItem[] items) {
+    public IconMenuListAdapter(Context context, List<IconMenuItem> items) {
         this.context = context;
         this.items = items;
     }
 
     @Override
     public int getCount() {
-        return items.length;
+        return items.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return items[position];
+        return items.get(position);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class IconMenuListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
+        if (convertView == null || !(convertView instanceof TextView)) {
             convertView = createView(parent);
         }
         refreshView((IconMenuItem) getItem(position), (TextView) convertView);
