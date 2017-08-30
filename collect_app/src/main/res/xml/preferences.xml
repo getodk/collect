@@ -79,6 +79,7 @@
                 android:title="@string/delete_after_send" />
         </PreferenceCategory>
 
+        <!-- smap set high resolution video to false by default -->
         <PreferenceCategory
             android:key="form_filling"
             android:title="@string/form_filling_category">
@@ -95,7 +96,7 @@
                 android:key="constraint_behavior"
                 android:title="@string/constraint_behavior_title" />
             <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="high_resolution"
                 android:summary="@string/high_resolution_summary"
                 android:title="@string/high_resolution_title" />

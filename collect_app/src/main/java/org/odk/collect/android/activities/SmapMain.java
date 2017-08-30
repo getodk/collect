@@ -268,7 +268,13 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         if(listener != null) {
-            unregisterReceiver(listener);
+            try {
+                unregisterReceiver(listener);
+                listener = null;
+            } catch (Exception e){
+                Timber.e("Error on unregister: " + e.getMessage());
+                // Ignore - preumably already unregistered
+            }
         }
         listenerRegistered = false;
         super.onStop();
