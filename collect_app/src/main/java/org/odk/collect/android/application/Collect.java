@@ -101,7 +101,7 @@ public class Collect extends Application {
                 .getInstance());
         String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        return Integer.valueOf(questionFont);
+        return Integer.parseInt(questionFont);
     }
 
     /**
