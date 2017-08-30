@@ -398,7 +398,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             int i = 0;
             while (it.hasNext()) {
                 String id = it.next();
-                selection.append(InstanceColumns._ID + "=?");
+                selection.append(InstanceColumns._ID).append("=?");
                 selectionArgs[i++] = id;
                 if (i != keys.size()) {
                     selection.append(" or ");
