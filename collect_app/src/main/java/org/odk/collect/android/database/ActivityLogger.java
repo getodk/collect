@@ -88,18 +88,23 @@ public final class ActivityLogger {
     private static final String PARAM1 = "param1";
     private static final String PARAM2 = "param2";
 
+    private static final String TEXT = " text";
+    private static final String INTEGER = " integer";
+    private static final String NOT_NULL = " not null";
+    private static final String COMMA = ", ";
+
     private static final String DATABASE_CREATE =
             "create table " + DATABASE_TABLE + " ("
-                    + ID + " integer primary key autoincrement, "
-                    + TIMESTAMP + " integer not null, "
-                    + DEVICEID + " text not null, "
-                    + CLASS + " text not null, "
-                    + CONTEXT + " text not null, "
-                    + ACTION + " text, "
-                    + INSTANCE_PATH + " text, "
-                    + QUESTION + " text, "
-                    + PARAM1 + " text, "
-                    + PARAM2 + " text);";
+                    + ID + INTEGER + " primary key autoincrement, "
+                    + TIMESTAMP + INTEGER + NOT_NULL + COMMA
+                    + DEVICEID + TEXT + NOT_NULL + COMMA
+                    + CLASS + TEXT + NOT_NULL + COMMA
+                    + CONTEXT + TEXT + NOT_NULL + COMMA
+                    + ACTION + TEXT + COMMA
+                    + INSTANCE_PATH + TEXT + COMMA
+                    + QUESTION + TEXT + COMMA
+                    + PARAM1 + TEXT + COMMA
+                    + PARAM2 + TEXT + ");";
 
     private final boolean loggingEnabled;
     private final String deviceId;
