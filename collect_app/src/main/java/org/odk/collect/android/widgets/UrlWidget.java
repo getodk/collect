@@ -63,7 +63,7 @@ public class UrlWidget extends QuestionWidget {
                         .logInstanceAction(this, "openUrl", "click",
                                 formEntryPrompt.getIndex());
 
-                if (stringAnswer != null & stringAnswer.getText() != null
+                if (stringAnswer != null && stringAnswer.getText() != null
                         && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
 
                     openUrl();

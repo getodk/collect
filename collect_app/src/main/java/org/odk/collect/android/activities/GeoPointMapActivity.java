@@ -378,14 +378,13 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     }
 
     private void overlayMyLocationLayers() {
-        if (draggable & !readOnly) {
+        if (draggable && !readOnly) {
             map.setOnMarkerDragListener(this);
             map.setOnMapLongClickListener(this);
             if (marker != null) {
                 marker.setDraggable(true);
             }
         }
-
     }
 
     @Override

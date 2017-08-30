@@ -141,7 +141,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             }
         }
 
-        if (!gpsOn & !networkOn) {
+        if (!gpsOn && !networkOn) {
             showGPSDisabledAlertToUser();
         }
 

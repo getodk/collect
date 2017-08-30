@@ -320,7 +320,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
                     GeoTraceGoogleMapActivity.this);
         }
 
-        if (!gpsOn & !networkOn) {
+        if (!gpsOn && !networkOn) {
             showGPSDisabledAlertToUser();
         }
         Intent intent = getIntent();
