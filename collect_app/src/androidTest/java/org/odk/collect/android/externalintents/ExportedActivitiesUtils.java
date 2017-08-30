@@ -22,13 +22,10 @@ class ExportedActivitiesUtils {
     static void clearDirectories() {
         for (String dirName : DIRS) {
             File dir = new File(dirName);
-            if (dir.exists()) {
-                if (dir.delete()) {
+            if (dir.exists() && dir.delete()) {
                     Timber.i("Directory was not deleted");
                 }
             }
-        }
-
     }
 
     static void testDirectories() {

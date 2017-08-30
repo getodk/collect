@@ -574,22 +574,21 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             String answer = "";
             if (path.equals(" ") || !columnNames.contains(path)) {
                 //ignores the blank fields and extra fields
-            } else if (columnNames.contains(path)) { // if column present in sheet
-                if (answersToUpload.containsKey(path)) {
-                    answer = answersToUpload.get(path);
-                    // Check to see if answer is a location, if so, get rid of accuracy
-                    // and altitude
-                    // try to match a fairly specific pattern to determine
-                    // if it's a location
-                    // [-]#.# [-]#.# #.# #.#
+            } else if (columnNames.contains(path) && answersToUpload.containsKey(path)) {
+                // if column present in sheet
+                answer = answersToUpload.get(path);
+                // Check to see if answer is a location, if so, get rid of accuracy
+                // and altitude
+                // try to match a fairly specific pattern to determine
+                // if it's a location
+                // [-]#.# [-]#.# #.# #.#
 
-                    if (isValidLocation(answer)) {
-                        // get rid of everything after the second space
-                        int firstSpace = answer.indexOf(" ");
-                        int secondSpace = answer.indexOf(" ", firstSpace + 1);
-                        answer = answer.substring(0, secondSpace);
-                        answer = answer.replace(' ', ',');
-                    }
+                if (isValidLocation(answer)) {
+                    // get rid of everything after the second space
+                    int firstSpace = answer.indexOf(" ");
+                    int secondSpace = answer.indexOf(" ", firstSpace + 1);
+                    answer = answer.substring(0, secondSpace);
+                    answer = answer.replace(' ', ',');
                 }
             }
             // https://github.com/opendatakit/collect/issues/931

@@ -307,18 +307,16 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void setBinaryData(Object answer) {
         boolean set = false;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
-                    try {
-                        ((IBinaryWidget) q).setBinaryData(answer);
-                    } catch (Exception e) {
-                        Timber.e(e);
-                        ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
-                                        e.getMessage()));
-                    }
-                    set = true;
-                    break;
+            if (q instanceof IBinaryWidget && ((IBinaryWidget) q).isWaitingForBinaryData()) {
+                try {
+                    ((IBinaryWidget) q).setBinaryData(answer);
+                } catch (Exception e) {
+                    Timber.e(e);
+                    ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
+                            e.getMessage()));
                 }
+                set = true;
+                break;
             }
         }
 
@@ -368,11 +366,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void cancelWaitingForBinaryData() {
         int count = 0;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
-                    ((IBinaryWidget) q).cancelWaitingForBinaryData();
-                    ++count;
-                }
+            if (q instanceof IBinaryWidget && ((IBinaryWidget) q).isWaitingForBinaryData()) {
+                ((IBinaryWidget) q).cancelWaitingForBinaryData();
+                ++count;
             }
         }
 

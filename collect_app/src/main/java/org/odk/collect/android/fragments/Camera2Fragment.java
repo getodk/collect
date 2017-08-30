@@ -548,7 +548,7 @@ public class Camera2Fragment extends Fragment
 
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-                flashSupported = available == null ? false : available;
+                flashSupported = (available != null) && available;
 
                 this.cameraId = cameraId;
                 return;

@@ -83,11 +83,9 @@ public class FormMetadataFragment extends BasePreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String newValueString = newValue.toString();
 
-                if (KEY_METADATA_EMAIL.equals(key)) {
-                    if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
-                        ToastUtils.showLongToast(R.string.invalid_email_address);
-                        return false;
-                    }
+                if (KEY_METADATA_EMAIL.equals(key) && !Validator.isEmailAddressValid(newValueString)) {
+                    ToastUtils.showLongToast(R.string.invalid_email_address);
+                    return false;
                 }
 
                 EditTextPreference changedTextPref = (EditTextPreference) preference;

@@ -176,13 +176,11 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
 
 
         Intent intent = getIntent();
-        if (intent != null && intent.getExtras() != null) {
-            if (intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION)) {
+        if (intent != null && intent.getExtras() != null && intent.hasExtra(GeoShapeWidget.SHAPE_LOCATION)) {
                 clearButton.setEnabled(true);
                 String s = intent.getStringExtra(GeoShapeWidget.SHAPE_LOCATION);
                 gpsButton.setEnabled(true);
                 overlayIntentPolygon(s);
-            }
         }
 
         ImageButton layersButton = (ImageButton) findViewById(R.id.layers);

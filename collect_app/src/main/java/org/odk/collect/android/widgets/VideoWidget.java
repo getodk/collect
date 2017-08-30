@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2009 University of Washington
  *
@@ -234,11 +235,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Timber.d("failed to create directory");
-                return null;
-            }
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+            Timber.d("failed to create directory");
+            return null;
         }
 
         // Create a media file name

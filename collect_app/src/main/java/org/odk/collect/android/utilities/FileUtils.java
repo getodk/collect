@@ -394,10 +394,8 @@ public class FileUtils {
         int c = parent.getChildCount();
         int i = 0;
         for (i = 0; i < c; i++) {
-            if (parent.getType(i) == Node.ELEMENT) {
-                if (parent.getElement(i).getName().equalsIgnoreCase(childName)) {
+            if (parent.getType(i) == Node.ELEMENT && parent.getElement(i).getName().equalsIgnoreCase(childName)) {
                     return parent.getElement(i);
-                }
             }
         }
         return e;

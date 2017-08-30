@@ -85,7 +85,6 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -100,6 +99,7 @@ import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.IBinaryWidget;
@@ -1955,11 +1955,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
                                    boolean current) {
         // save current answer
-        if (current) {
-            if (!saveAnswersForCurrentScreen(complete)) {
+        if (current && !saveAnswersForCurrentScreen(complete)) {
                 ToastUtils.showShortToast(R.string.data_saved_error);
                 return false;
-            }
         }
 
         synchronized (saveDialogLock) {

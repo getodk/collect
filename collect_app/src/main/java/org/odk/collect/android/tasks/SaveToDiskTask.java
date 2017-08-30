@@ -351,10 +351,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
-            if (isEncrypted) {
-                if (!EncryptionUtils.deletePlaintextFiles(instanceXml)) {
+            if (isEncrypted && !EncryptionUtils.deletePlaintextFiles(instanceXml)) {
                     Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
-                }
             }
         }
     }
@@ -408,10 +406,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
 
-        if (savedListener != null && values != null) {
-            if (values.length == 1) {
+        if (savedListener != null && values != null && values.length == 1) {
                 savedListener.onProgressStep(values[0]);
-            }
         }
     }
 

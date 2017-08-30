@@ -60,11 +60,10 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         Intent intent = getIntent();
 
         locationAccuracy = GeoPointWidget.DEFAULT_LOCATION_ACCURACY;
-        if (intent != null && intent.getExtras() != null) {
-            if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
+        if (intent != null && intent.getExtras() != null
+                && intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
                 locationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD,
                         GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
-            }
         }
 
         setTitle(getString(R.string.get_location));
