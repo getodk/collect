@@ -34,7 +34,6 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
                     fw.write(TIMING_CSV_HEADER + "\n");
                 }
                 if (params.length > 0) {
-                    //for (int i = 0; i < params.length; i++) {
                     for (TimerLogger.Event ev : params) {
                         fw.write(ev.toString() + "\n");
                         Timber.i("Log audit Event: %s", ev.toString());
