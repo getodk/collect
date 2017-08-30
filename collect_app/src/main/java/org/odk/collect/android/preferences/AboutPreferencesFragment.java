@@ -69,8 +69,10 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
 
     @Override
     public void onDestroy() {
-        getActivity().unbindService(websiteTabHelper.getServiceConnection());
-        getActivity().unbindService(forumTabHelper.getServiceConnection());
+        if (getActivity() != null) {
+            getActivity().unbindService(websiteTabHelper.getServiceConnection());
+            getActivity().unbindService(forumTabHelper.getServiceConnection());
+        }
         super.onDestroy();
     }
 

@@ -47,7 +47,7 @@ public class UrlWidget extends QuestionWidget {
     private TextView stringAnswer;
     private CustomTabHelper customTabHelper;
 
-    public UrlWidget(final Context context, FormEntryPrompt prompt) {
+    public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         openUrlButton = getSimpleButton(context.getString(R.string.open_url));
@@ -94,7 +94,7 @@ public class UrlWidget extends QuestionWidget {
 
     private boolean isUrlEmpty(TextView stringAnswer) {
         return stringAnswer == null || stringAnswer.getText() == null
-                || "".equals(stringAnswer.getText().toString());
+                || stringAnswer.getText().toString().isEmpty();
     }
 
     @Override
