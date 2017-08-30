@@ -39,8 +39,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
-import java.util.ArrayList;
-
 import timber.log.Timber;
 
 /**
@@ -172,7 +170,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        ArrayList<double[]> list = new ArrayList<double[]>();
         String s = stringAnswer.getText().toString();
         if (s == null || s.equals("")) {
             return null;

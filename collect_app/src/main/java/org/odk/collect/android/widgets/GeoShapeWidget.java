@@ -33,7 +33,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.data.GeoShapeData;
 import org.javarosa.core.model.data.GeoShapeData.GeoShape;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -175,7 +174,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
     public IAnswerData getAnswer() {
         // TODO Auto-generated method stub
 
-        GeoShapeData data = new GeoShapeData();
         ArrayList<double[]> list = new ArrayList<double[]>();
         String s = stringAnswer.getText().toString();
         if (s == null || s.equals("")) {
