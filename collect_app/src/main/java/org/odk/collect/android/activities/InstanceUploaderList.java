@@ -62,6 +62,7 @@ import timber.log.Timber;
 public class InstanceUploaderList extends InstanceListActivity
         implements OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener {
     private static final String SHOW_ALL_MODE = "showAllMode";
+    private static final String CHANGE_VIEW = "changeView";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
     private static final int MENU_PREFERENCES = Menu.FIRST;
@@ -371,7 +372,7 @@ public class InstanceUploaderList extends InstanceListActivity
         String[] items = {getString(R.string.show_unsent_forms),
                 getString(R.string.show_sent_and_unsent_forms)};
 
-        logger.logAction(this, "changeView", "show");
+        logger.logAction(this, CHANGE_VIEW, "show");
 
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
@@ -380,7 +381,7 @@ public class InstanceUploaderList extends InstanceListActivity
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                logger.logAction(this, "changeView", "cancel");
+                                logger.logAction(this, CHANGE_VIEW, "cancel");
                                 dialog.cancel();
                             }
                         })
@@ -390,12 +391,12 @@ public class InstanceUploaderList extends InstanceListActivity
                         switch (which) {
 
                             case 0: // show unsent
-                                logger.logAction(this, "changeView", "showUnsent");
+                                logger.logAction(this, CHANGE_VIEW, "showUnsent");
                                 InstanceUploaderList.this.showUnsent();
                                 break;
 
                             case 1: // show all
-                                logger.logAction(this, "changeView", "showAll");
+                                logger.logAction(this, CHANGE_VIEW, "showAll");
                                 InstanceUploaderList.this.showAll();
                                 break;
 
