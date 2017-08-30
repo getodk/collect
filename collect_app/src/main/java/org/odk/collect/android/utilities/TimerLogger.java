@@ -282,7 +282,11 @@ public class TimerLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
             Event[] eventArray = events.toArray(new Event[events.size()]);
-            saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
+            if (timerlogFile != null) {
+                saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
+            } else {
+                Timber.e("timerlogFile null when attempting to write events.");
+            }
             events = new ArrayList<>();
 
         } else {
