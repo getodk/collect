@@ -1,16 +1,15 @@
 package org.odk.collect.android.utilities;
 
-import java.net.URI;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.test.MockedServerTest;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+
+import java.net.URI;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -21,6 +20,9 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class WebUtilsTest extends MockedServerTest {
+
+    private final String LIST_FORMS = "/list-forms";
+
     @Before
     public void setUp() throws Exception {
         // server hangs without a response queued:
@@ -41,7 +43,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_UserAgent() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url(LIST_FORMS), httpContext(), httpClient());
 
         // then
         assertMatches("Dalvik/.* org.odk.collect.android/.*",
@@ -51,7 +53,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_X_OpenRosa_Version() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url(LIST_FORMS), httpContext(), httpClient());
 
         // then
         assertEquals("1.0",
@@ -61,7 +63,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldSupplyHeader_AcceptEncoding_gzip() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url(LIST_FORMS), httpContext(), httpClient());
 
         // then
         assertEquals("gzip",
@@ -71,7 +73,7 @@ public class WebUtilsTest extends MockedServerTest {
     @Test
     public void getXmlDocument_request_shouldNotSupplyHeader_Authorization_forHttpRequest() throws Exception {
         // when
-        WebUtils.getXmlDocument(url("/list-forms"), httpContext(), httpClient());
+        WebUtils.getXmlDocument(url(LIST_FORMS), httpContext(), httpClient());
 
         // then
         assertNull(nextRequest().getHeader("Authorization"));
