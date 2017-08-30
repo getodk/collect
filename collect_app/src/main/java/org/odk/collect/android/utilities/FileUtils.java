@@ -122,7 +122,6 @@ public class FileUtils {
                 is.close();
             } catch (IOException e) {
                 Timber.e(e, "Cannot close input stream for file %s", file.getName());
-                return null;
             }
         }
     }

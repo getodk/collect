@@ -551,7 +551,6 @@ public class Camera2Fragment extends Fragment
                 flashSupported = (available != null) && available;
 
                 this.cameraId = cameraId;
-                return;
             }
         } catch (CameraAccessException e) {
             Timber.e(e);
