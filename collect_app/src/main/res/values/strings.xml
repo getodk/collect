@@ -514,4 +514,5 @@
     <string name="form_delete_message">Deleting selected forms</string>
     <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
+    <string name="null_intent_value">The external application did not provide expected information.</string>
 </resources>

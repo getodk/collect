@@ -186,7 +186,7 @@ public class FileUtils {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+        getBitmap(f.getAbsolutePath(), o);
 
         int heightScale = o.outHeight / screenHeight;
         int widthScale = o.outWidth / screenWidth;
@@ -200,7 +200,7 @@ public class FileUtils {
         options.inInputShareable = true;
         options.inPurgeable = true;
         options.inSampleSize = scale;
-        Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        Bitmap b = getBitmap(f.getAbsolutePath(), options);
         if (b != null) {
             Timber.i("Screen is %dx%d.  Image has been scaled down by %d to %dx%d",
                     screenHeight, screenWidth, scale, b.getHeight(), b.getWidth());
@@ -217,13 +217,13 @@ public class FileUtils {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+        getBitmap(f.getAbsolutePath(), o);
 
         // Load full size bitmap image
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        Bitmap bitmap = getBitmap(f.getAbsolutePath(), options);
 
         // Figure out scale
         double heightScale = ((double) (o.outHeight)) / screenHeight;
@@ -467,5 +467,45 @@ public class FileUtils {
             }
             deleteAndReport(tempMediaFolder);
         }
+    }
+
+    public static void saveBitmapToFile(Bitmap bitmap, String path) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(path);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                Timber.e(e);
+            }
+        }
+    }
+
+    /*
+    This method is used to avoid OutOfMemoryError exception during loading an image.
+    If the exception occurs we catch it and try to load a smaller image.
+     */
+    public static Bitmap getBitmap(String path, BitmapFactory.Options originalOptions) {
+        BitmapFactory.Options newOptions = new BitmapFactory.Options();
+        newOptions.inSampleSize = originalOptions.inSampleSize;
+        if (newOptions.inSampleSize <= 0) {
+            newOptions.inSampleSize = 1;
+        }
+        Bitmap bitmap;
+        try {
+            bitmap = BitmapFactory.decodeFile(path, originalOptions);
+        } catch (OutOfMemoryError e) {
+            Timber.i(e);
+            newOptions.inSampleSize++;
+            return getBitmap(path, newOptions);
+        }
+
+        return bitmap;
     }
 }

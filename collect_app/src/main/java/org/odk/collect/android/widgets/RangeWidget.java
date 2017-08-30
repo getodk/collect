@@ -19,10 +19,12 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -57,9 +59,10 @@ public abstract class RangeWidget extends QuestionWidget {
 
     protected TextView currentValue;
 
-    private View view;
+    private LinearLayout view;
 
     private boolean isPickerAppearance;
+    private boolean suppressFlingGesture;
 
     private Button pickerButton;
     private TextView answerTextView;
@@ -96,6 +99,11 @@ public abstract class RangeWidget extends QuestionWidget {
             pickerButton.setOnLongClickListener(l);
             answerTextView.setOnLongClickListener(l);
         }
+    }
+
+    @Override
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return suppressFlingGesture;
     }
 
     private void setUpLayoutElements() {
@@ -160,12 +168,12 @@ public abstract class RangeWidget extends QuestionWidget {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                ((FormEntryActivity) getContext()).allowSwiping(true);
+                suppressFlingGesture = false;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                ((FormEntryActivity) getContext()).allowSwiping(false);
+                suppressFlingGesture = true;
             }
 
             @Override
@@ -219,38 +227,40 @@ public abstract class RangeWidget extends QuestionWidget {
         String appearance = getPrompt().getQuestion().getAppearanceAttr();
 
         if (appearance != null && appearance.contains(PICKER_APPEARANCE)) {
-            view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.button_textview_layout, null);
-            pickerButton = (Button) view.findViewById(R.id.trigger_button);
+            pickerButton = getSimpleButton(getContext().getString(R.string.select_value));
             pickerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showNumberPickerDialog();
                 }
             });
-            pickerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-            pickerButton.setText(getContext().getString(R.string.select_value));
-            pickerButton.setPadding(20, 20, 20, 20);
-            answerTextView = (TextView) view.findViewById(R.id.answer_text_view);
+            answerTextView = new TextView(getContext());
             answerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
             answerTextView.setPadding(20, 20, 20, 20);
+            answerTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
             isPickerAppearance = true;
+
+            view = new LinearLayout(getContext());
+            view.setOrientation(LinearLayout.VERTICAL);
+            view.addView(pickerButton);
+            view.addView(answerTextView);
         } else if (appearance != null && appearance.contains(NO_TICKS_APPEARANCE)) {
             if (appearance.contains(VERTICAL_APPEARANCE)) {
-                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                view = (LinearLayout) ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
                 seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
                 view.findViewById(R.id.seek_bar).setVisibility(GONE);
             } else {
-                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                view = (LinearLayout) ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
                 seekBar = (SeekBar) view.findViewById(R.id.seek_bar_no_ticks);
                 view.findViewById(R.id.seek_bar).setVisibility(GONE);
             }
         } else {
             if (appearance != null && appearance.contains(VERTICAL_APPEARANCE)) {
-                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
+                view = (LinearLayout) ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_vertical, null);
                 seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
                 view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
             } else {
-                view = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
+                view = (LinearLayout) ((Activity) getContext()).getLayoutInflater().inflate(R.layout.range_widget_horizontal, null);
                 seekBar = (SeekBar) view.findViewById(R.id.seek_bar);
                 view.findViewById(R.id.seek_bar_no_ticks).setVisibility(GONE);
             }
