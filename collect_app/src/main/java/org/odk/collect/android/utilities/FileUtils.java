@@ -377,7 +377,7 @@ public class FileUtils {
                 String base64RsaPublicKey = submission.getAttributeValue(null,
                         "base64RsaPublicKey");
                 fields.put(BASE64_RSA_PUBLIC_KEY,
-                        (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
+                        (base64RsaPublicKey == null || base64RsaPublicKey.trim().isEmpty())
                                 ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
                 Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
@@ -416,7 +416,7 @@ public class FileUtils {
     }
 
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf("."));
+        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
         return pathNoExtension + "-media";
     }
 

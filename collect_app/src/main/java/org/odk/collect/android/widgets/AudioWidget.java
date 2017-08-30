@@ -206,7 +206,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         // get the file path and create a copy in the instance folder
         String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
                 Audio.Media.DATA);
-        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
+        String extension = binaryPath.substring(binaryPath.lastIndexOf('.'));
         String destAudioPath = instanceFolder + File.separator
                 + System.currentTimeMillis() + extension;
 

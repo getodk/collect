@@ -72,6 +72,8 @@ import timber.log.Timber;
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private static final String ITEMSETS_CSV = "itemsets.csv";
+    private static final String FORMS = "jr://file/forms/";
+    private static final String MEDIA = "-media/";
 
     private FormLoaderListener stateListener;
     private String errorMsg;
@@ -315,13 +317,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         // Set jr://... to point to /sdcard/odk/forms/filename-media/
         ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
+                new RootTranslator("jr://images/", FORMS + formFileName + MEDIA));
         ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
+                new RootTranslator("jr://image/", FORMS + formFileName + MEDIA));
         ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
+                new RootTranslator("jr://audio/", FORMS + formFileName + MEDIA));
         ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
+                new RootTranslator("jr://video/", FORMS + formFileName + MEDIA));
 
         // clean up vars
         fis = null;

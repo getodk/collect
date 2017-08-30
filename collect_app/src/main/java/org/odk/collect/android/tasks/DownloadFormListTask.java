@@ -51,6 +51,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     private FormListDownloaderListener stateListener;
 
+    private static final String  PARSING_OPENROSA_REPLY = "Parsing OpenRosa reply -- %s";
+
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList";
 
@@ -102,7 +104,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             Element xformsElement = result.doc.getRootElement();
             if (!xformsElement.getName().equals("xforms")) {
                 String error = "root element is not <xforms> : " + xformsElement.getName();
-                Timber.e("Parsing OpenRosa reply -- %s", error);
+                Timber.e(PARSING_OPENROSA_REPLY, error);
                 formList.put(
                         DL_ERROR_MSG,
                         new FormDetails(Collect.getInstance().getString(
@@ -112,7 +114,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             String namespace = xformsElement.getNamespace();
             if (!isXformsListNamespacedElement(xformsElement)) {
                 String error = "root element namespace is incorrect:" + namespace;
-                Timber.e("Parsing OpenRosa reply -- %s", error);
+                Timber.e(PARSING_OPENROSA_REPLY, error);
                 formList.put(
                         DL_ERROR_MSG,
                         new FormDetails(Collect.getInstance().getString(
@@ -206,7 +208,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                     String error =
                             "Forms list entry " + Integer.toString(i)
                                     + " is missing one or more tags: formId, name, or downloadUrl";
-                    Timber.e("Parsing OpenRosa reply -- %s", error);
+                    Timber.e(PARSING_OPENROSA_REPLY, error);
                     formList.clear();
                     formList.put(
                             DL_ERROR_MSG,
@@ -250,7 +252,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         String error =
                                 "Forms list entry " + Integer.toString(i)
                                         + " is missing form name or url attribute";
-                        Timber.e("Parsing OpenRosa reply -- %s", error);
+                        Timber.e(PARSING_OPENROSA_REPLY, error);
                         formList.clear();
                         formList.put(
                                 DL_ERROR_MSG,

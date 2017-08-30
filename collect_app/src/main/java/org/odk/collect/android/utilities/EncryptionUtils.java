@@ -70,6 +70,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROS
  *
  * @author mitchellsundt@gmail.com
  */
+@SuppressWarnings("PMD")
 public class EncryptionUtils {
     public static final String RSA_ALGORITHM = "RSA";
     // the symmetric key we are encrypting with RSA is only 256 bits... use SHA-256

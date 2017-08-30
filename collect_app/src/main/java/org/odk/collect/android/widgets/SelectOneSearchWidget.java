@@ -93,7 +93,7 @@ public class SelectOneSearchWidget extends QuestionWidget implements
     public void doSearch(String searchStr) {
 
         // First check if there is nothing on search
-        if (searchStr == null || searchStr.trim().length() == 0) {
+        if (searchStr == null || searchStr.trim().isEmpty()) {
             createOptions(items, null);
         } else { // Create a List with items that are relevant to the search text
             List<SelectChoice> searchedItems = new ArrayList<SelectChoice>();

@@ -585,8 +585,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
                     if (isValidLocation(answer)) {
                         // get rid of everything after the second space
-                        int firstSpace = answer.indexOf(" ");
-                        int secondSpace = answer.indexOf(" ", firstSpace + 1);
+                        int firstSpace = answer.indexOf(' ');
+                        int secondSpace = answer.indexOf(' ', firstSpace + 1);
                         answer = answer.substring(0, secondSpace);
                         answer = answer.replace(' ', ',');
                     }
@@ -939,17 +939,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     high = values.length;
                 }
 
-                StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID + " IN (");
+                StringBuilder selectionBuf = new StringBuilder(InstanceColumns._ID).append(" IN (");
                 String[] selectionArgs = new String[high - low];
                 for (int i = 0; i < (high - low); i++) {
                     if (i > 0) {
-                        selectionBuf.append(",");
+                        selectionBuf.append(',');
                     }
-                    selectionBuf.append("?");
+                    selectionBuf.append('?');
                     selectionArgs[i] = values[i + low].toString();
                 }
 
-                selectionBuf.append(")");
+                selectionBuf.append(')');
                 String selection = selectionBuf.toString();
 
                 String token = credential.getToken();
