@@ -128,7 +128,6 @@
   <string name="select_another_image">दूसरा इमेज चयनित करे</string>
   <string name="use_odk_default">डिफ़ॉल्ट इमेज प्रयोग करें</string>
   <string name="change_splash_path">इमेज बदले</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
   <string name="change_protocol">प्लेटफोर्म</string>

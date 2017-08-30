@@ -23,6 +23,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,6 +78,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -100,7 +103,9 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
@@ -113,6 +118,8 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
@@ -123,7 +130,7 @@ import timber.log.Timber;
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener {
+        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -192,7 +199,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
-    private boolean doSwipe = true;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -369,7 +375,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
-                String uriMimeType = getContentResolver().getType(uri);
+                String uriMimeType = null;
+
+                if (uri != null) {
+                    uriMimeType = getContentResolver().getType(uri);
+                }
 
                 if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
@@ -591,8 +601,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    final Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -614,6 +623,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (requestCode != HIERARCHY_ACTIVITY) {
                 ((ODKView) currentView).cancelWaitingForBinaryData();
             }
+            return;
+        }
+
+        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
+        if (intent == null && requestCode != DRAW_IMAGE && requestCode != ANNOTATE_IMAGE
+                && requestCode != SIGNATURE_CAPTURE && requestCode != IMAGE_CAPTURE
+                && requestCode != HIERARCHY_ACTIVITY) {
+            Timber.w("The intent has a null value for requestCode: " + requestCode);
+            ToastUtils.showLongToast(getString(R.string.null_intent_value));
             return;
         }
 
@@ -673,6 +691,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
+                scaleDownImageIfNeeded(Collect.TMPFILE_PATH);
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
@@ -794,6 +813,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (chosenImage != null) {
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
+                scaleDownImageIfNeeded(newImage.getPath());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -822,6 +842,66 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
+        }
+    }
+
+    private void scaleDownImageIfNeeded(String path) {
+        QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
+        if (questionWidget != null) {
+            Integer maxPixels = getMaxPixelsForImageIfDefined(questionWidget);
+            if (maxPixels != null) {
+                scaleDownImage(path, maxPixels);
+            }
+        }
+    }
+
+    private QuestionWidget getWidgetWaitingForBinaryData() {
+        QuestionWidget questionWidget = null;
+        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+            if (((IBinaryWidget) qw).isWaitingForBinaryData()) {
+                questionWidget = qw;
+            }
+        }
+
+        return questionWidget;
+    }
+
+    private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
+        Integer maxPixels = null;
+        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
+            if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
+                try {
+                    maxPixels = Integer.parseInt(attrs.getAttributeValue());
+                } catch (NumberFormatException e) {
+                    Timber.i(e);
+                }
+            }
+        }
+        return maxPixels;
+    }
+
+    /*
+    This method is used to reduce an original picture size.
+    maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
+     */
+    private void scaleDownImage(String path, int maxPixels) {
+        Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
+
+        if (originalImage != null) {
+            double originalWidth = originalImage.getWidth();
+            double originalHeight = originalImage.getHeight();
+
+            if (originalWidth > originalHeight && originalWidth > maxPixels) {
+                int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
+
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, maxPixels, newHeight, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            } else if (originalHeight > maxPixels) {
+                int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
+
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, newWidth, maxPixels, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            }
         }
     }
 
@@ -2524,7 +2604,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         t.cancel(true);
         t.destroy();
         Collect.getInstance().setFormController(formController);
-        setTimerLogger(formController);
         supportInvalidateOptionsMenu();
 
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2722,20 +2801,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
-    /*
-     * Create the timer logger object
-     */
-    private void setTimerLogger(FormController formController) {
-
-        if (formController.getTimerLogger() == null) {
-
-            // Create a new timerLogger object if there is no saved timer logger
-            formController.setTimerLogger(new TimerLogger(formController.getInstancePath(),
-                    PreferenceManager.getDefaultSharedPreferences(this),
-                    formController));
-        }
-    }
-
     /**
      * Checks the database to determine if the current instance being edited has
      * already been 'marked completed'. A form can be 'unmarked' complete and
@@ -2834,7 +2899,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 PreferenceKeys.KEY_NAVIGATION,
                 PreferenceKeys.NAVIGATION_SWIPE);
 
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 
@@ -2951,6 +3016,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    @Override
+    public void onNumberPickerValueSelected(int widgetId, int value) {
+        if (currentView != null) {
+            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+                if (qw instanceof RangeWidget && widgetId == qw.getId()) {
+                    ((RangeWidget) qw).setNumberPickerValue(value);
+                }
+            }
+        }
+    }
+
     /**
      * Used whenever we need to show empty view and be able to recognize it from the code
      */
@@ -2959,9 +3035,5 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         public EmptyView(Context context) {
             super(context);
         }
-    }
-
-    public void allowSwiping(boolean doSwipe) {
-        this.doSwipe = doSwipe;
     }
 }

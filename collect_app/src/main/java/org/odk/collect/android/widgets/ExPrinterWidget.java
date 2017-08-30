@@ -18,12 +18,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -122,9 +120,6 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
     public ExPrinterWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         String appearance = prompt.getAppearanceHint();
         String[] attrs = appearance.split(":");
         final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
@@ -136,14 +131,7 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         v = formEntryPrompt.getSpecialFormQuestionText("noPrinterErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_printer);
 
-        // set button formatting
-        launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(QuestionWidget.newUniqueId());
-        launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        launchIntentButton.setPadding(20, 20, 20, 20);
-        launchIntentButton.setLayoutParams(params);
-
+        launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -106,9 +106,8 @@ public class CaptureSelfieActivity extends Activity {
 
     @Override
     protected void onPause() {
-        super.onPause();
-
         camera = null;
+        super.onPause();
     }
 
     @Override

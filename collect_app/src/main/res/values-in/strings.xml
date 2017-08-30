@@ -128,7 +128,6 @@
   <string name="select_another_image">Pilih gambar lainnya</string>
   <string name="use_odk_default">Gunakan gambar bawaan</string>
   <string name="change_splash_path">Ubah gambar</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="change_formlist_url">Tautan formulir (appended to Server URL)</string>
   <string name="change_protocol">Platform</string>

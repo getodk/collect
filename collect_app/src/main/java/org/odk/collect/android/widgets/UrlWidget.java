@@ -16,10 +16,15 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +34,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+
+import static android.view.Gravity.CENTER;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -45,13 +52,8 @@ public class UrlWidget extends QuestionWidget {
     public UrlWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        View answerLayout = inflate(context, R.layout.url_widget_layout, null);
-
-        // set button formatting
-        openUrlButton = (Button) answerLayout.findViewById(R.id.openUrl);
-        openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        openUrlButton = getSimpleButton(context.getString(R.string.open_url));
         openUrlButton.setEnabled(!prompt.isReadOnly());
-
         openUrlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,8 +70,11 @@ public class UrlWidget extends QuestionWidget {
             }
         });
 
-        // set text formatting
-        stringAnswer = (TextView) answerLayout.findViewById(R.id.url);
+        stringAnswer = new AppCompatTextView(context);
+        stringAnswer.setId(QuestionWidget.newUniqueId());
+        stringAnswer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        stringAnswer.setGravity(CENTER);
+        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
 
         String s = prompt.getAnswerText();
@@ -79,6 +84,10 @@ public class UrlWidget extends QuestionWidget {
         }
 
         // finish complex layout
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(openUrlButton);
+        answerLayout.addView(stringAnswer);
         addAnswerView(answerLayout);
     }
 
@@ -120,5 +129,4 @@ public class UrlWidget extends QuestionWidget {
         openUrlButton.cancelLongPress();
         stringAnswer.cancelLongPress();
     }
-
 }

@@ -4,7 +4,7 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="change_server"
-            android:title="@string/type" />
+            android:title="@string/server" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="change_form_metadata"
