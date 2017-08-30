@@ -1,6 +1,5 @@
 package org.odk.collect.android.utilities;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,7 @@ public class CustomTabHelper {
      */
     private CustomTabsServiceConnection serviceConnection;
 
-    public void bindCustomTabsService(final Activity activity, final Uri url) {
+    public void bindCustomTabsService(final Context context, final Uri url) {
         if (customTabsClient != null) {
             return;
         }
@@ -49,7 +48,7 @@ public class CustomTabHelper {
                 customTabsClient = null;
             }
         };
-        CustomTabsClient.bindCustomTabsService(activity, CUSTOM_TAB_PACKAGE_NAME, serviceConnection);
+        CustomTabsClient.bindCustomTabsService(context, CUSTOM_TAB_PACKAGE_NAME, serviceConnection);
     }
 
     /**
