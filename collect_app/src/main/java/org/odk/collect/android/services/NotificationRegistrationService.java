@@ -85,6 +85,9 @@ public class NotificationRegistrationService extends IntentService {
                         !username.equals(registeredUser) || !server.equals(registeredServer)) {
 
                     Timber.i("================================================== Notifying server of update");
+                    Timber.i("    token: " + token);
+                    Timber.i("    server: " + server);
+                    Timber.i("    user: " + username);
                     AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
                     final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
                     DevicesDO devices = new DevicesDO();
@@ -100,6 +103,8 @@ public class NotificationRegistrationService extends IntentService {
                 }
 
 
+            } else {
+                Timber.i("Did not notify server user: " + username + " token: " + token);
             }
         } catch (Exception e) {
             Timber.e(e);

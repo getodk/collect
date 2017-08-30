@@ -60,24 +60,40 @@ public class NotificationService extends GcmListenerService {
             return;
         }
 
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        int mNotificationId = 001;
+
         ConnectivityManager manager = (ConnectivityManager) Collect.getInstance().getBaseContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
+        boolean automaticNofification = false;
         if (currentNetworkInfo != null
                 && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
             if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
-                completeNotification();
+                completeNotification(mNotifyMgr, mNotificationId);
+                automaticNofification = true;
             }
+        }
+
+        if(!automaticNofification) {
+            // Set refresh notification icon
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.notification_icon)
+                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                    R.drawable.ic_launcher))
+                            .setContentTitle(getString(R.string.app_name))
+                            .setContentText(getString(R.string.smap_server_changed));
+            mNotifyMgr.notify(mNotificationId, mBuilder.build());
         }
 
 
     }
 
-    private void completeNotification() {
-        int mNotificationId = 001;
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    private void completeNotification(NotificationManager mNotifyMgr, int mNotificationId) {
+
 
         // Set refresh notification icon
         NotificationCompat.Builder mBuilder =
