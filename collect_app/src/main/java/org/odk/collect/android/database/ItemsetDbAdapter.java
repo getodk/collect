@@ -94,7 +94,7 @@ public class ItemsetDbAdapter {
     }
 
     public boolean createTable(String formHash, String pathHash, String[] columns, String path) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(63);
 
         // get md5 of the path to itemset.csv, which is unique per form
         // the md5 is easier to use because it doesn't have chars like '/'
