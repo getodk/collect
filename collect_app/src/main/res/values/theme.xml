@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Collect" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeBase.Collect"/>
+
+    <style name="AppThemeBase" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
         <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
         <item name="android:scrollbarSize">1.75mm</item>
@@ -10,7 +12,13 @@
         <item name="colorAccent">@color/tintColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="searchViewStyle">@style/SearchViewTheme</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- color of the text of the buttons-->
+        <item name="colorAccent">@color/tintColor</item>
     </style>
 
     <style name="AppTheme.SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
