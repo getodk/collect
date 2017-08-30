@@ -36,9 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import timber.log.Timber;
-
 import au.com.bytecode.opencsv.CSVReader;
+import timber.log.Timber;
 
 /**
  * Author: Meletis Margaritis
@@ -127,13 +126,11 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
 
             Map<String, String> columnNamesCache = new HashMap<String, String>();
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(48);
 
             boolean sortColumnAlreadyPresent = false;
 
-            sb.append("CREATE TABLE ");
-            sb.append(tableName);
-            sb.append(" ( ");
+            sb.append("CREATE TABLE ").append(tableName).append(" ( ");
             for (int i = 0; i < headerRow.length; i++) {
                 String columnName = headerRow[i].trim();
                 if (columnName.length() == 0) {

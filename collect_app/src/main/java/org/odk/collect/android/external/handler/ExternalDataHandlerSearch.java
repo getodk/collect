@@ -117,7 +117,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
         boolean searchRows = false;
         boolean useFilter = false;
 
-        if (queriedColumnsParam != null && queriedColumnsParam.trim().length() > 0) {
+        if (queriedColumnsParam != null && queriedColumnsParam.trim().isEmpty()) {
             searchRows = true;
             queriedColumns = ExternalDataUtil.createListOfColumns(queriedColumnsParam);
         }
@@ -214,16 +214,16 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                     String label = buildLabel(c, selectColumnMap, columnsToExcludeFromLabels);
 
                     ExternalSelectChoice selectChoice;
-                    if (label.trim().length() == 0) {
+                    if (label.trim().isEmpty()) {
                         selectChoice = new ExternalSelectChoice(value, value, false);
                     } else {
                         selectChoice = new ExternalSelectChoice(label, value, false);
                     }
                     selectChoice.setIndex(index);
 
-                    if (safeImageColumn != null && safeImageColumn.trim().length() > 0) {
+                    if (safeImageColumn != null && safeImageColumn.trim().isEmpty()) {
                         String image = c.getString(c.getColumnIndex(safeImageColumn));
-                        if (image != null && image.trim().length() > 0) {
+                        if (image != null && image.trim().isEmpty()) {
                             selectChoice.setImage(ExternalDataUtil.JR_IMAGES_PREFIX + image);
                         }
                     }
@@ -277,13 +277,13 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 break;
             }
             if (columnIndex > 1) {
-                sb.append(" ");
+                sb.append(' ');
             }
-            sb.append("(");
+            sb.append('(');
             sb.append(selectColumnMap.get(columnName));
             sb.append(": ");
             sb.append(value);
-            sb.append(")");
+            sb.append(')');
         }
         return sb.toString();
     }
