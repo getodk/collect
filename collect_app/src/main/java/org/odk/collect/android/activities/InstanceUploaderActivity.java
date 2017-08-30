@@ -228,20 +228,20 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             }
 
             StringBuilder selection = new StringBuilder();
-            selection.append(InstanceColumns._ID + " IN (");
+            selection.append(InstanceColumns._ID).append(" IN (");
 
             int i = 0;
             while (it.hasNext() && i < selectionArgs.length) {
                 selectionArgs[i] = it.next();
-                selection.append("?");
+                selection.append('?');
 
                 if (i != selectionArgs.length - 1) {
-                    selection.append(",");
+                    selection.append(',');
                 }
                 i++;
             }
 
-            selection.append(")");
+            selection.append(')');
             count -= selectionArgs.length;
 
             StringBuilder queryMessage = new StringBuilder();
