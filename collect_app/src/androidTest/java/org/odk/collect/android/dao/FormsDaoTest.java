@@ -44,18 +44,18 @@ public class FormsDaoTest {
 
     private FormsDao formsDao;
 
-    private final String BIGGEST_N_OF_SET = "Biggest N of Set";
-    private final String BIRDS = "Birds";
-    private final String MIRAMARE = "Miramare";
-    private final String GEO_TAGGER_V2 = "Geo Tagger v2";
-    private final String WIDGETS = "Widgets";
-    private final String SAMPLE = "sample";
+    private static final String BIGGEST_N_OF_SET = "Biggest N of Set";
+    private static final String BIRDS = "Birds";
+    private static final String MIRAMARE = "Miramare";
+    private static final String GEO_TAGGER_V2 = "Geo Tagger v2";
+    private static final String WIDGETS = "Widgets";
+    private static final String SAMPLE = "sample";
 
-    private final String TIMESTAMP1 = "Added on Wed, Feb 22, 2017 at 15:21";
-    private final String TIMESTAMP2 = "Added on Wed, Feb 22, 2017 at 17:53";
-    private final String TIMESTAMP3 = "Added on Wed, Feb 22, 2017 at 17:55";
+    private static final String TIMESTAMP1 = "Added on Wed, Feb 22, 2017 at 15:21";
+    private static final String TIMESTAMP2 = "Added on Wed, Feb 22, 2017 at 17:53";
+    private static final String TIMESTAMP3 = "Added on Wed, Feb 22, 2017 at 17:55";
 
-    private final String WIDGETS_FORM = "/Widgets.xml";
+    private static final String WIDGETS_FORM = "/Widgets.xml";
 
     @Before
     public void setUp() throws IOException {

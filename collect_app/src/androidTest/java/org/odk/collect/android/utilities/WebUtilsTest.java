@@ -21,7 +21,7 @@ import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class WebUtilsTest extends MockedServerTest {
 
-    private final String LIST_FORMS = "/list-forms";
+    private static final String LIST_FORMS = "/list-forms";
 
     @Before
     public void setUp() throws Exception {

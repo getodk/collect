@@ -39,14 +39,14 @@ public class InstancesDaoTest {
 
     private InstancesDao instancesDao;
 
-    private final String CASCADING_SELECT = "Cascading Select Form";
-    private final String HYPERTENSION_SCREENING = "Hypertension Screening";
-    private final String SAMPLE = "sample";
-    private final String BIGGEST_N_OF_SET = "Biggest N of Set";
-    private final String WIDGETS = "Widgets";
+    private static final String CASCADING_SELECT = "Cascading Select Form";
+    private static final String HYPERTENSION_SCREENING = "Hypertension Screening";
+    private static final String SAMPLE = "sample";
+    private static final String BIGGEST_N_OF_SET = "Biggest N of Set";
+    private static final String WIDGETS = "Widgets";
 
-    private final String BIGGEST_N_OF_SET_PATH = "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
-    private final String HYPERTENSION_SCREENING_PATH = "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml";
+    private static final String BIGGEST_N_OF_SET_PATH = "/Biggest N of Set_2017-02-20_14-24-46/Biggest N of Set_2017-02-20_14-24-46.xml";
+    private static final String HYPERTENSION_SCREENING_PATH = "/Hypertension Screening_2017-02-20_14-03-53/Hypertension Screening_2017-02-20_14-03-53.xml";
 
     @Before
     public void setUp() {
