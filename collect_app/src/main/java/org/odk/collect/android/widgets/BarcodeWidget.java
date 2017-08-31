@@ -31,6 +31,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 
 /**
@@ -57,7 +58,13 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
                 Collect.getInstance().getFormController()
                         .setIndexWaitingForData(formEntryPrompt.getIndex());
-                new IntentIntegrator((Activity) getContext()).initiateScan();
+
+                new IntentIntegrator((Activity) getContext())
+                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
+                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                        .setOrientationLocked(false)
+                        .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
+                        .initiateScan();
             }
         });
 
