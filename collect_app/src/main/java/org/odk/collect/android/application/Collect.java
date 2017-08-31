@@ -23,6 +23,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -81,6 +82,7 @@ public class Collect extends Application {
 
     static {
         PRNGFixes.apply();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     // share all session cookies across all sessions...
