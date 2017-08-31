@@ -244,12 +244,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // Remove previous forms
-        ReferenceManager._().clearSession();
+        ReferenceManager.instance().clearSession();
 
         // for itemsets.csv, we only check to see if the itemset file has been
         // updated
         File csv = new File(formMediaDir.getAbsolutePath() + "/" + ITEMSETS_CSV);
-        String csvmd5 = null;
+        String csvmd5;
         if (csv.exists()) {
             csvmd5 = FileUtils.getMd5Hash(csv);
             boolean readFile = false;
@@ -284,27 +284,20 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // This should get moved to the Application Class
-        if (ReferenceManager._().getFactories().length == 0) {
+        if (ReferenceManager.instance().getFactories().length == 0) {
             // this is /sdcard/odk
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+            ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
         // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
-
-        // clean up vars
-        fis = null;
-        fd = null;
-        formBin = null;
-        formXml = null;
-        formPath = null;
 
         FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
                 : new File(instancePath));
@@ -352,7 +345,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
         });
 
-        Map<String, File> externalDataMap = new HashMap<String, File>();
+        Map<String, File> externalDataMap = new HashMap<>();
 
         if (csvFiles != null) {
 
@@ -604,7 +597,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     class FECWrapper {
         FormController controller;
-        boolean usedSavepoint;
+        final boolean usedSavepoint;
 
         FECWrapper(FormController controller, boolean usedSavepoint) {
             this.controller = controller;
