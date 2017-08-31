@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -30,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -55,14 +55,17 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -73,6 +76,8 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.IconMenuListAdapter;
+import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -97,6 +102,7 @@ import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
@@ -117,7 +123,10 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -1743,7 +1752,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -1751,7 +1759,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 FormController formController = Collect.getInstance()
                         .getFormController();
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes, repeat
+                    case BUTTON_POSITIVE: // yes, repeat
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createRepeatDialog",
@@ -1776,7 +1784,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             refreshCurrentView();
                         }
                         break;
-                    case DialogInterface.BUTTON_NEGATIVE: // no, no repeat
+                    case BUTTON_NEGATIVE: // no, no repeat
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createRepeatDialog",
@@ -1822,18 +1830,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             alertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             alertDialog.setMessage(getString(R.string.add_another_repeat,
                     formController.getLastGroupText()));
-            alertDialog.setButton(getString(R.string.add_another),
+            alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.add_another),
                     repeatListener);
-            alertDialog.setButton2(getString(R.string.leave_repeat_yes),
+            alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.leave_repeat_yes),
                     repeatListener);
 
         } else {
             alertDialog.setTitle(getString(R.string.entering_repeat_ask));
             alertDialog.setMessage(getString(R.string.add_repeat,
                     formController.getLastGroupText()));
-            alertDialog.setButton(getString(R.string.entering_repeat),
+            alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.entering_repeat),
                     repeatListener);
-            alertDialog.setButton2(getString(R.string.add_repeat_no),
+            alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.add_repeat_no),
                     repeatListener);
         }
         alertDialog.setCancelable(false);
@@ -1859,14 +1867,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             errorMessage = errorMsg;
         }
 
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setTitle(getString(R.string.error_occured));
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
+                    case BUTTON_POSITIVE:
                         Collect.getInstance().getActivityLogger()
                                 .logInstanceAction(this, "createErrorDialog", "OK");
                         if (shouldExit) {
@@ -1878,7 +1885,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         beenSwiped = false;
         alertDialog.show();
     }
@@ -1895,7 +1902,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getFormController();
 
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = formController.getLastRepeatedGroupName();
         int repeatcount = formController.getLastRepeatedGroupRepeatCount();
         if (repeatcount != -1) {
@@ -1910,7 +1916,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 FormController formController = Collect.getInstance()
                         .getFormController();
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes
+                    case BUTTON_POSITIVE: // yes
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
@@ -1920,7 +1926,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         showNextView();
                         break;
 
-                    case DialogInterface.BUTTON_NEGATIVE: // no
+                    case BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
@@ -1932,8 +1938,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.discard_group), quitListener);
-        alertDialog.setButton2(getString(R.string.delete_repeat_no),
+        alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.discard_group), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.delete_repeat_no),
                 quitListener);
         alertDialog.show();
     }
@@ -1972,7 +1978,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Create a dialog with options to save and exit, save, or quit without
+     * Create a dialog with options to save and exit or quit without
      * saving
      */
     private void createQuitDialog() {
@@ -1985,98 +1991,59 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
-        String[] items;
+        List<IconMenuItem> items;
         if (adminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
-            items = new String[]{getString(R.string.keep_changes),
-                    getString(R.string.do_not_save)};
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         } else {
-            items = new String[]{getString(R.string.do_not_save)};
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         }
 
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createQuitDialog", "show");
+
+        ListView listView = DialogUtils.createActionListView(this);
+
+        final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+                if (item.getTextResId() == R.string.keep_changes) {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createQuitDialog", "saveAndExit");
+                    saveDataToDisk(EXIT, isInstanceComplete(false),
+                            null);
+                } else {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createQuitDialog", "discardAndExit");
+                    FormController formController = Collect.getInstance().getFormController();
+                    if (formController != null) {
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                    }
+                    removeTempInstance();
+                    finishReturnInstance();
+                }
+                alertDialog.dismiss();
+            }
+        });
         alertDialog = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(
                         getString(R.string.quit_application, title))
-                .setNeutralButton(getString(R.string.do_not_exit),
+                .setPositiveButton(getString(R.string.do_not_exit),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
 
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog", "cancel");
+                                Collect.getInstance().getActivityLogger()
+                                        .logInstanceAction(this, "createQuitDialog", "cancel");
                                 dialog.cancel();
 
                             }
                         })
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-
-                            case 0: // save and exit
-                                // this is slightly complicated because if the
-                                // option is disabled in
-                                // the admin menu, then case 0 actually becomes
-                                // 'discard and exit'
-                                // whereas if it's enabled it's 'save and exit'
-                                if (adminPreferences
-                                        .getBoolean(
-                                                AdminKeys.KEY_SAVE_MID,
-                                                true)) {
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logInstanceAction(this,
-                                                    "createQuitDialog",
-                                                    "saveAndExit");
-                                    saveDataToDisk(EXIT, isInstanceComplete(false),
-                                            null);
-                                } else {
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logInstanceAction(this,
-                                                    "createQuitDialog",
-                                                    "discardAndExit");
-                                    FormController formController = Collect.getInstance().getFormController();
-                                    if (formController != null) {
-                                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-                                    }
-                                    removeTempInstance();
-                                    finishReturnInstance();
-                                }
-                                break;
-
-                            case 1: // discard changes and exit
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog",
-                                                "discardAndExit");
-
-                                // close all open databases of external data.
-                                Collect.getInstance().getExternalDataManager().close();
-
-                                FormController formController = Collect.getInstance().getFormController();
-                                if (formController != null) {
-                                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-                                }
-                                removeTempInstance();
-                                finishReturnInstance();
-                                break;
-
-                            case 2:// do nothing
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog", "cancel");
-                                break;
-                        }
-                    }
-                }).create();
+                .setView(listView).create();
         alertDialog.show();
     }
 
@@ -2147,7 +2114,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .logInstanceAction(this, "createClearDialog", "show",
                         qw.getPrompt().getIndex());
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
 
         alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
@@ -2167,7 +2133,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes
+                    case BUTTON_POSITIVE: // yes
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
@@ -2175,7 +2141,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         break;
-                    case DialogInterface.BUTTON_NEGATIVE: // no
+                    case BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
@@ -2186,8 +2152,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         };
         alertDialog.setCancelable(false);
         alertDialog
-                .setButton(getString(R.string.discard_answer), quitListener);
-        alertDialog.setButton2(getString(R.string.clear_answer_no),
+                .setButton(BUTTON_POSITIVE, getString(R.string.discard_answer), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.clear_answer_no),
                 quitListener);
         alertDialog.show();
     }
@@ -2295,7 +2261,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 finish();
                             }
                         };
-                progressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 progressDialog.setTitle(getString(R.string.loading_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.setIndeterminate(true);
@@ -2322,7 +2287,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 cancelSaveToDiskTask();
                             }
                         };
-                progressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 progressDialog.setTitle(getString(R.string.saving_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.setIndeterminate(true);
