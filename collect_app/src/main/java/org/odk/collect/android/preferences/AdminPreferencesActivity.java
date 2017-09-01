@@ -40,6 +40,8 @@ public class AdminPreferencesActivity extends AppCompatActivity {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
+    protected boolean instanceStateSaved;
+
     public static boolean saveSharedPreferencesToFile(File dst, Context context) {
         // this should be in a thread if it gets big, but for now it's tiny
         boolean res = false;
@@ -81,5 +83,17 @@ public class AdminPreferencesActivity extends AppCompatActivity {
                     .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        instanceStateSaved = true;
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        instanceStateSaved = false;
     }
 }

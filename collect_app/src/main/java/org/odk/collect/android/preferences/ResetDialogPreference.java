@@ -179,7 +179,9 @@ public class ResetDialogPreference extends DialogPreference {
                 resultMessage.append("\n\n");
             }
         }
-        showResultDialog(String.valueOf(resultMessage));
+        if (!((AdminPreferencesActivity) getContext()).instanceStateSaved) {
+            showResultDialog(String.valueOf(resultMessage));
+        }
     }
 
     private void showResultDialog(final String resultMessage) {
