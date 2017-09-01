@@ -71,6 +71,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     private HashMap<String, String> uploadedInstances;
     private String url;
 
+    private boolean instanceStateSaved;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +149,12 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     }
 
     @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        instanceStateSaved = false;
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, alertMsg);
@@ -157,6 +165,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             toSend[i] = instancesToSend[i];
         }
         outState.putLongArray(TO_SEND, toSend);
+        instanceStateSaved = true;
     }
 
     @Override
@@ -251,7 +260,12 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         if (message.length() == 0) {
             message.append(getString(R.string.no_forms_uploaded));
         }
-        createUploadInstancesResultDialog(message.toString().trim());
+
+        if (!instanceStateSaved) {
+            createUploadInstancesResultDialog(message.toString().trim());
+        } else {
+            finish();
+        }
     }
 
     private String localizeDefaultAggregateSuccessfulText(String text) {
