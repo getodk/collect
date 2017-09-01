@@ -191,6 +191,10 @@ public class DateWidget extends QuestionWidget {
 
     private int getTheme() {
         int theme = 0;
+        // https://github.com/opendatakit/collect/issues/1367
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            theme = android.R.style.Theme_Material_Light_Dialog;
+        }
         if (!showCalendar) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
@@ -256,13 +260,11 @@ public class DateWidget extends QuestionWidget {
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {
-        int theme;
         private String dialogTitle = getContext().getString(R.string.select_date);
 
         CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, theme, listener, year, month, dayOfMonth);
-            this.theme = theme;
-            if (theme != 0) {
+            if (!showCalendar) {
                 setTitle(dialogTitle);
                 fixSpinner(context, year, month, dayOfMonth);
                 getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -271,7 +273,7 @@ public class DateWidget extends QuestionWidget {
         }
 
         public void setTitle(CharSequence title) {
-            if (theme != 0) {
+            if (!showCalendar) {
                 super.setTitle(dialogTitle);
             }
         }
