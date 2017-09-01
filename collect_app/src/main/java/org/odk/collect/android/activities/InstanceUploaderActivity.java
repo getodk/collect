@@ -71,7 +71,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     private HashMap<String, String> uploadedInstances;
     private String url;
 
-    private boolean instanceStateSaved;
+    private boolean isInstanceStateSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +151,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        instanceStateSaved = false;
+        isInstanceStateSaved = false;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             toSend[i] = instancesToSend[i];
         }
         outState.putLongArray(TO_SEND, toSend);
-        instanceStateSaved = true;
+        isInstanceStateSaved = true;
     }
 
     @Override
@@ -261,7 +261,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             message.append(getString(R.string.no_forms_uploaded));
         }
 
-        if (!instanceStateSaved) {
+        if (!isInstanceStateSaved) {
             createUploadInstancesResultDialog(message.toString().trim());
         } else {
             finish();
