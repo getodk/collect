@@ -15,10 +15,10 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -39,11 +39,11 @@ import org.odk.collect.android.utilities.CustomTabHelper;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 public class UrlWidget extends QuestionWidget {
-    private CustomTabHelper customTabHelper;
-    private Uri uri;
 
+    private Uri uri;
     private Button openUrlButton;
     private TextView stringAnswer;
+    private CustomTabHelper customTabHelper;
 
     public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -58,10 +58,9 @@ public class UrlWidget extends QuestionWidget {
                         .logInstanceAction(this, "openUrl", "click",
                                 formEntryPrompt.getIndex());
 
-                if (stringAnswer != null & stringAnswer.getText() != null
-                        && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
-
-                    openUrl();
+                if (!isUrlEmpty(stringAnswer)) {
+                    customTabHelper.bindCustomTabsService(getContext(), null);
+                    customTabHelper.openUri(getContext(), uri);
                 } else {
                     Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
                 }
@@ -84,19 +83,11 @@ public class UrlWidget extends QuestionWidget {
         addAnswerView(answerLayout);
 
         customTabHelper = new CustomTabHelper();
-        customTabHelper.bindCustomTabsService((AppCompatActivity) context, null);
     }
 
-    private void openUrl() {
-        if (customTabHelper.getPackageName(getContext()).size() != 0) {
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-            customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getContext()).get(0));
-            customTabsIntent.launchUrl(getContext(), uri);
-        } else {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(uri);
-            getContext().startActivity(intent);
-        }
+    private boolean isUrlEmpty(TextView stringAnswer) {
+        return stringAnswer == null || stringAnswer.getText() == null
+                || stringAnswer.getText().toString().isEmpty();
     }
 
     @Override
@@ -131,5 +122,12 @@ public class UrlWidget extends QuestionWidget {
         super.cancelLongPress();
         openUrlButton.cancelLongPress();
         stringAnswer.cancelLongPress();
+    }
+
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (customTabHelper.getServiceConnection() != null) {
+            getContext().unbindService(customTabHelper.getServiceConnection());
+        }
     }
 }
