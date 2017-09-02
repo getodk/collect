@@ -24,7 +24,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -49,7 +48,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
+public class InstanceUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
@@ -70,8 +69,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     // maintain a list of what we've sent, in case we're interrupted by auth requests
     private HashMap<String, String> uploadedInstances;
     private String url;
-
-    private boolean isInstanceStateSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,12 +146,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        isInstanceStateSaved = false;
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, alertMsg);
@@ -165,7 +156,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             toSend[i] = instancesToSend[i];
         }
         outState.putLongArray(TO_SEND, toSend);
-        isInstanceStateSaved = true;
     }
 
     @Override
@@ -261,7 +251,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             message.append(getString(R.string.no_forms_uploaded));
         }
 
-        if (!isInstanceStateSaved) {
+        if (!isInstanceStateSaved()) {
             createUploadInstancesResultDialog(message.toString().trim());
         } else {
             finish();
