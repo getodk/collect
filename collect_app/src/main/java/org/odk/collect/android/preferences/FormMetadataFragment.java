@@ -104,11 +104,9 @@ public class FormMetadataFragment extends BasePreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String newValueString = newValue.toString();
 
-                if (KEY_METADATA_EMAIL.equals(key)) {
-                    if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
-                        ToastUtils.showLongToast(R.string.invalid_email_address);
-                        return false;
-                    }
+                if (KEY_METADATA_EMAIL.equals(key) && !Validator.isEmailAddressValid(newValueString)) {
+                    ToastUtils.showLongToast(R.string.invalid_email_address);
+                    return false;
                 } else if (KEY_METADATA_USERNAME.equals(key)) {
                     GeneralSharedPreferences.getInstance().save(KEY_USERNAME_FOR_METADATA, newValueString);
                 }

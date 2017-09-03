@@ -122,7 +122,6 @@ public class FileUtils {
                 is.close();
             } catch (IOException e) {
                 Timber.e(e, "Cannot close input stream for file %s", file.getName());
-                return null;
             }
         }
     }
@@ -394,10 +393,8 @@ public class FileUtils {
         int c = parent.getChildCount();
         int i = 0;
         for (i = 0; i < c; i++) {
-            if (parent.getType(i) == Node.ELEMENT) {
-                if (parent.getElement(i).getName().equalsIgnoreCase(childName)) {
+            if (parent.getType(i) == Node.ELEMENT && parent.getElement(i).getName().equalsIgnoreCase(childName)) {
                     return parent.getElement(i);
-                }
             }
         }
         return e;

@@ -78,7 +78,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
 
                         switch (questionDef.getControlType()) {
                             case Constants.CONTROL_SELECT_ONE: {
-                                if (selectChoiceValue.equals(textVal)) {
+                                if (selectChoiceValue.equals(textVal) && questionDef.getControlType()
+                                        == Constants.CONTROL_SELECT_ONE) {
                                     // This means that the user selected a static selection.
                                     //
                                     // Although (for select1 fields) the default implementation
@@ -86,11 +87,8 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                     // (if we call super.resolveAnswer(textVal, treeElement,
                                     // formDef))
                                     // we just need to make sure, so we will override that.
-                                    if (questionDef.getControlType()
-                                            == Constants.CONTROL_SELECT_ONE) {
-                                        // we don't need another, just return the static choice.
-                                        return new SelectOneData(selection);
-                                    }
+                                    // we don't need another, just return the static choice.
+                                    return new SelectOneData(selection);
                                 }
                                 break;
                             }

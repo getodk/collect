@@ -262,12 +262,10 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
                 return true;
             case R.id.menu_save_preferences:
                 File writeDir = new File(Collect.SETTINGS);
-                if (!writeDir.exists()) {
-                    if (!writeDir.mkdirs()) {
+                if (!writeDir.exists() && !writeDir.mkdirs()) {
                         ToastUtils.showShortToast("Error creating directory "
                                 + writeDir.getAbsolutePath());
                         return false;
-                    }
                 }
 
                 File dst = new File(writeDir.getAbsolutePath() + "/collect.settings");

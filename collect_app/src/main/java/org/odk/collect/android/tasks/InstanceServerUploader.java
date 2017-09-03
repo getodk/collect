@@ -383,9 +383,8 @@ public class InstanceServerUploader extends InstanceUploader {
                 Timber.i("added file of type '%s' %s", contentType, f.getName());
 
                 // we've added at least one attachment to the request...
-                if (j + 1 < files.size()) {
-                    if ((j - lastJ + 1 > 100) || (byteCount + files.get(j + 1).length()
-                            > 10000000L)) {
+                if (j + 1 < files.size() && (j - lastJ + 1 > 100
+                        || (byteCount + files.get(j + 1).length() > 10000000L))) {
                         // the next file would exceed the 10MB threshold...
                         Timber.i("Extremely long post is being split into multiple posts");
                         try {
@@ -397,7 +396,6 @@ public class InstanceServerUploader extends InstanceUploader {
                         }
                         ++j; // advance over the last attachment added...
                         break;
-                    }
                 }
             }
 

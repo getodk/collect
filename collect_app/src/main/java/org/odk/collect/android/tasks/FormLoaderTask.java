@@ -404,10 +404,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     @Override
     protected void onProgressUpdate(String... values) {
         synchronized (this) {
-            if (stateListener != null && values != null) {
-                if (values.length == 1) {
+            if (stateListener != null && values != null && values.length == 1) {
                     stateListener.onProgressStep(values[0]);
-                }
             }
         }
     }

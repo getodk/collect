@@ -368,11 +368,9 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
 
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility == INVISIBLE || visibility == GONE) {
-            if (player.isPlaying()) {
+        if ((visibility == INVISIBLE || visibility == GONE) && player.isPlaying()) {
                 player.stop();
                 player.reset();
-            }
         }
     }
 

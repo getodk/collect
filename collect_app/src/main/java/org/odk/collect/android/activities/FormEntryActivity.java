@@ -1534,12 +1534,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                 }
 
-                if (event == FormEntryController.EVENT_GROUP
-                        || event == FormEntryController.EVENT_QUESTION) {
+                if ((event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_QUESTION)
+                        && (++viewCount) % SAVEPOINT_INTERVAL == 0) {
                     // create savepoint
-                    if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        nonblockingCreateSavePointData();
-                    }
+                    nonblockingCreateSavePointData();
                 }
                 formController.getTimerLogger().exitView();    // Close timer events
                 View next = createView(event, false);
@@ -1961,11 +1959,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean saveDataToDisk(boolean exit, boolean complete, String updatedSaveName,
                                    boolean current) {
         // save current answer
-        if (current) {
-            if (!saveAnswersForCurrentScreen(complete)) {
+        if (current && !saveAnswersForCurrentScreen(complete)) {
                 ToastUtils.showShortToast(R.string.data_saved_error);
                 return false;
-            }
         }
 
         synchronized (saveDialogLock) {
@@ -2349,12 +2345,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         dismissDialogs();
         // make sure we're not already saving to disk. if we are, currentPrompt
         // is getting constantly updated
-        if (saveToDiskTask == null
-                || saveToDiskTask.getStatus() == AsyncTask.Status.FINISHED) {
-            if (currentView != null && formController != null
-                    && formController.currentPromptIsQuestion()) {
+        if ((saveToDiskTask == null || saveToDiskTask.getStatus() == AsyncTask.Status.FINISHED)
+                && currentView != null && formController != null
+                && formController.currentPromptIsQuestion()) {
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-            }
         }
         if (currentView != null && currentView instanceof ODKView) {
             // stop audio if it's playing
@@ -2872,11 +2866,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             int xpixellimit = (int) (dm.xdpi * .25);
             int ypixellimit = (int) (dm.ydpi * .25);
 
-            if (currentView != null && currentView instanceof ODKView) {
-                if (((ODKView) currentView).suppressFlingGesture(e1, e2,
-                        velocityX, velocityY)) {
-                    return false;
-                }
+            if (currentView != null && currentView instanceof ODKView
+                    && ((ODKView) currentView).suppressFlingGesture(e1, e2, velocityX, velocityY)) {
+                return false;
             }
 
             if (beenSwiped) {

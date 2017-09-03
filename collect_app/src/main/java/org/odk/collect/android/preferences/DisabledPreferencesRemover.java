@@ -101,14 +101,11 @@ class DisabledPreferencesRemover {
         for (int i = 0; i < pc.getPreferenceCount(); i++) {
             Preference preference = pc.getPreference(i);
 
-            if (preference instanceof PreferenceGroup) {
-
-                if (!removeEmptyPreference(pc, preference)) {
+            if (preference instanceof PreferenceGroup && !removeEmptyPreference(pc, preference)) {
                     removeEmptyCategories((PreferenceGroup) preference);
 
                     // try to remove preference group if it is empty now
                     removeEmptyPreference(pc, preference);
-                }
             }
         }
     }

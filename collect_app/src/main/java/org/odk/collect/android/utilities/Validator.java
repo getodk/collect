@@ -27,9 +27,6 @@ public class Validator {
         *any number of characters after @ (at least one)
      */
     public static boolean isEmailAddressValid(String emailAddress) {
-        return Pattern
-                .compile(".+@.+")
-                .matcher(emailAddress)
-                .matches();
+        return !emailAddress.isEmpty() && Pattern.compile(".+@.+").matcher(emailAddress).matches();
     }
 }
