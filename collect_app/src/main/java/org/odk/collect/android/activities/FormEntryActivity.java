@@ -2023,6 +2023,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 } else {
                     Collect.getInstance().getActivityLogger()
                             .logInstanceAction(this, "createQuitDialog", "discardAndExit");
+
+                    // close all open databases of external data.
+                    Collect.getInstance().getExternalDataManager().close();
+
                     FormController formController = Collect.getInstance().getFormController();
                     if (formController != null) {
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
