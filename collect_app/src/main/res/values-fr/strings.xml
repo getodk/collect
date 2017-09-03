@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Afficher le mot de passe</string>
   <string name="activity_not_found">Aucune activité à gérer: %s</string>
   <string name="add_another">Ajouter un groupe</string>
@@ -279,7 +279,7 @@
   <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour parcourir des formulaires.</string>
   <string name="no_blank_search">Le champ de recherche ne peut pas être vide.</string>
   <string name="google_sheets_url">URL de secours pour soumission de données</string>
-    <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
+  <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="sheets_max_columns">Il est impossible de télécharger votre feuille de calcul. Le nombre maximum de colonnes est de 255. Votre formulaire en a %s. </string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="google_sheets_access_denied">Accès refusé. Assurez-vous que le propriétaire de la feuille de calcul vous a accordé la permission de modification.</string>
@@ -420,13 +420,13 @@
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="instance_sync">Importer les formulaires enregistrés comme terminés</string>
   <string name="instance_sync_summary">Importe les formulaires enregistrés à partir du dossier instances</string>
-  <string name="sort_by_name_asc">Par nom, A-Z</string>
-  <string name="sort_by_name_desc">Par nom, Z-A</string>
-  <string name="sort_by_date_asc">Par date, la plus récente en premier</string>
-  <string name="sort_by_date_desc">Par date, la plus ancienne en premier</string>
-  <string name="sort_by_status_asc">Par statut, les finalisés en premier</string>
-  <string name="sort_by_status_desc">Par statut, les non finalisés en premier</string>
-    <string name="sort_the_list">Trier la liste</string>
+  <string name="sort_by_name_asc">Nom, A-Z</string>
+  <string name="sort_by_name_desc">Nom, Z-A</string>
+  <string name="sort_by_date_asc">Date, la plus récente en premier</string>
+  <string name="sort_by_date_desc">Date, la plus ancienne en premier</string>
+  <string name="sort_by_status_asc">Statut, les finalisés en premier</string>
+  <string name="sort_by_status_desc">Statut, les non finalisés en premier</string>
+  <string name="sort_the_list">Trier la liste</string>
   <string name="request_permissions_google_account">ODK Collect a besoin d\'accéder à votre compte Google pour obtenir des formulaires vierges et soumettre des formulaires complétés.</string>
   <string name="filter_the_list">Filtrer la liste</string>
   <string name="language">Langue</string>
@@ -460,6 +460,7 @@
   <string name="qrcode_with_server_password">Ce QR code inclut votre mot de passe serveur. Veuillez le conserver en sécurité. \n(Appuyez pour supprimer le mot de passe)</string>
   <string name="import_export_settings">Importer/Exporter les paramètres</string>
   <string name="qrcode_scanner_prompt">Placer le QR code à l\'intérieur du rectangle</string>
+  <string name="barcode_scanner_prompt">Mettre le code-barre dans le rectangle</string>
   <string name="server_password">Mot de passe serveur</string>
   <string name="include_password_dialog">Mots de passe inclus dans le Code</string>
   <string name="generate">Générer</string>
@@ -495,4 +496,11 @@
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
   <string name="not_supported_offline_layer_format">Les fonds cartographiques hors ligne sélectionnés utilisent le format PBF qui n\'est pas pris en charge!</string>
+  <string name="invalid_email_address">Adresse mail invalide!</string>
+  <string name="sort_by">Trier par</string>
+  <string name="server">Serveur</string>
+  <string name="select_value">Choisir valeur</string>
+  <string name="edit_value">Modifier valeur</string>
+  <string name="no_value_selected">Aucune valeur choisie</string>
+  <string name="search">Rechercher</string>
 </resources>
