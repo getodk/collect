@@ -243,6 +243,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private String stepMessage = "";
     private Toolbar toolbar;
 
+    private static final String CANCEL = "cancel";
+    private static final String CREATE_QUIT_DIALOG = "createQuitDialog";
+    private static final String CREATE_CLEAR_DIALOG = "createClearDialog";
+    private static final String CREATE_DELETE_REPEAT_CONFIRM_DIALOG = "createDeleteRepeatConfirmDialog";
+    private static final String DOUBLE_LINE_BREAK = "\n\n";
+    private static final String ON_FLING = "onFling";
+    private static final String ON_OPTIONS_ITEM_SELECTED = "onOptionsItemSelected";
+    private static final String SHOW = "show";
+    private static final String SHOW_NEXT = "showNext";
+
     enum AnimationType {
         LEFT, RIGHT, FADE
     }
@@ -946,7 +956,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "onCreateOptionsMenu", "show");
+                .logInstanceAction(this, "onCreateOptionsMenu", SHOW);
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.form_menu, menu);
 
@@ -1002,14 +1012,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case R.id.menu_languages:
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
+                        .logInstanceAction(this, ON_OPTIONS_ITEM_SELECTED,
                                 "MENU_LANGUAGES");
                 createLanguageDialog();
                 return true;
             case R.id.menu_save:
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
+                        .logInstanceAction(this, ON_OPTIONS_ITEM_SELECTED,
                                 "MENU_SAVE");
                 // don't exit
                 saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
@@ -1017,7 +1027,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case R.id.menu_goto:
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
+                        .logInstanceAction(this, ON_OPTIONS_ITEM_SELECTED,
                                 "MENU_HIERARCHY_VIEW");
                 if (formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
@@ -1032,7 +1042,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case R.id.menu_preferences:
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "onOptionsItemSelected",
+                        .logInstanceAction(this, ON_OPTIONS_ITEM_SELECTED,
                                 "MENU_PREFERENCES");
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
@@ -1087,7 +1097,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                     ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "onCreateContextMenu", "show");
+                .logInstanceAction(this, "onCreateContextMenu", SHOW);
         FormController formController = Collect.getInstance()
                 .getFormController();
 
@@ -1104,7 +1114,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Collect.getInstance()
                     .getActivityLogger()
                     .logInstanceAction(this, "onContextItemSelected",
-                            "createDeleteRepeatConfirmDialog");
+                            CREATE_DELETE_REPEAT_CONFIRM_DIALOG);
             createDeleteRepeatConfirmDialog();
         } else {
             /*
@@ -1130,7 +1140,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this, "onContextItemSelected",
-                                    "createClearDialog", qw.getPrompt().getIndex());
+                                    CREATE_CLEAR_DIALOG, qw.getPrompt().getIndex());
                     createClearDialog(qw);
                     break;
                 }
@@ -1337,7 +1347,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         createErrorDialog(e.getMessage(), DO_NOT_EXIT);
                     } catch (JavaRosaException e1) {
                         Timber.e(e1);
-                        createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
+                        createErrorDialog(e.getMessage() + DOUBLE_LINE_BREAK + e1.getCause().getMessage(),
                                 DO_NOT_EXIT);
                     }
                     return createView(event, advancingPage);
@@ -1411,7 +1421,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         } catch (JavaRosaException e) {
             Timber.e(e);
-            createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), DO_NOT_EXIT);
+            createErrorDialog(e.getMessage() + DOUBLE_LINE_BREAK + e.getCause().getMessage(), DO_NOT_EXIT);
         }
 
         return createView(event, advancingPage);
@@ -1683,7 +1693,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .getActivityLogger()
                         .logInstanceAction(this,
                                 "createConstraintToast.ANSWER_CONSTRAINT_VIOLATED",
-                                "show", index);
+                                SHOW, index);
                 constraintText = formController
                         .getQuestionPromptConstraintText(index);
                 if (constraintText == null) {
@@ -1699,7 +1709,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .getActivityLogger()
                         .logInstanceAction(this,
                                 "createConstraintToast.ANSWER_REQUIRED_BUT_EMPTY",
-                                "show", index);
+                                SHOW, index);
                 constraintText = formController
                         .getQuestionPromptRequiredText(index);
                 if (constraintText == null) {
@@ -1743,7 +1753,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void createRepeatDialog() {
         Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createRepeatDialog", "show");
+                .logInstanceAction(this, "createRepeatDialog", SHOW);
 
         // In some cases dialog might be present twice because refreshView() is being called
         // from onResume(). This ensures that we do not preset this modal dialog if it's already
@@ -1790,7 +1800,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createRepeatDialog",
-                                        "showNext");
+                                        SHOW_NEXT);
 
                         //
                         // Make sure the error dialog will not disappear.
@@ -1862,7 +1872,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         "show." + Boolean.toString(shouldExit));
 
         if (alertDialog != null && alertDialog.isShowing()) {
-            errorMsg = errorMessage + "\n\n" + errorMsg;
+            errorMsg = errorMessage + DOUBLE_LINE_BREAK + errorMsg;
             errorMessage = errorMsg;
         } else {
             alertDialog = new AlertDialog.Builder(this).create();
@@ -1898,8 +1908,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private void createDeleteRepeatConfirmDialog() {
         Collect.getInstance()
                 .getActivityLogger()
-                .logInstanceAction(this, "createDeleteRepeatConfirmDialog",
-                        "show");
+                .logInstanceAction(this, CREATE_DELETE_REPEAT_CONFIRM_DIALOG,
+                        SHOW);
         FormController formController = Collect.getInstance()
                 .getFormController();
 
@@ -1922,7 +1932,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
-                                        "createDeleteRepeatConfirmDialog", "OK");
+                                        CREATE_DELETE_REPEAT_CONFIRM_DIALOG, "OK");
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
@@ -1932,7 +1942,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
-                                        "createDeleteRepeatConfirmDialog", "cancel");
+                                        CREATE_DELETE_REPEAT_CONFIRM_DIALOG, CANCEL);
 
                         refreshCurrentView();
                         break;
@@ -2005,7 +2015,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createQuitDialog", "show");
+                .logInstanceAction(this, CREATE_QUIT_DIALOG, SHOW);
 
         ListView listView = DialogUtils.createActionListView(this);
 
@@ -2017,12 +2027,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 IconMenuItem item = (IconMenuItem) adapter.getItem(position);
                 if (item.getTextResId() == R.string.keep_changes) {
                     Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "createQuitDialog", "saveAndExit");
+                            .logInstanceAction(this, CREATE_QUIT_DIALOG, "saveAndExit");
                     saveDataToDisk(EXIT, isInstanceComplete(false),
                             null);
                 } else {
                     Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "createQuitDialog", "discardAndExit");
+                            .logInstanceAction(this, CREATE_QUIT_DIALOG, "discardAndExit");
                     FormController formController = Collect.getInstance().getFormController();
                     if (formController != null) {
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
@@ -2042,7 +2052,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             public void onClick(DialogInterface dialog, int id) {
 
                                 Collect.getInstance().getActivityLogger()
-                                        .logInstanceAction(this, "createQuitDialog", "cancel");
+                                        .logInstanceAction(this, CREATE_QUIT_DIALOG, CANCEL);
                                 dialog.cancel();
 
                             }
@@ -2115,7 +2125,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private void createClearDialog(final QuestionWidget qw) {
         Collect.getInstance()
                 .getActivityLogger()
-                .logInstanceAction(this, "createClearDialog", "show",
+                .logInstanceAction(this, CREATE_CLEAR_DIALOG, SHOW,
                         qw.getPrompt().getIndex());
         alertDialog = new AlertDialog.Builder(this).create();
 
@@ -2140,7 +2150,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     case BUTTON_POSITIVE: // yes
                         Collect.getInstance()
                                 .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
+                                .logInstanceAction(this, CREATE_CLEAR_DIALOG,
                                         "clearAnswer", qw.getPrompt().getIndex());
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
@@ -2148,8 +2158,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     case BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
-                                .logInstanceAction(this, "createClearDialog",
-                                        "cancel", qw.getPrompt().getIndex());
+                                .logInstanceAction(this, CREATE_CLEAR_DIALOG,
+                                        CANCEL, qw.getPrompt().getIndex());
                         break;
                 }
             }
@@ -2168,7 +2178,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void createLanguageDialog() {
         Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createLanguageDialog", "show");
+                .logInstanceAction(this, "createLanguageDialog", SHOW);
         FormController formController = Collect.getInstance()
                 .getFormController();
         final String[] languages = formController.getLanguages();
@@ -2229,7 +2239,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                         .getActivityLogger()
                                         .logInstanceAction(this,
                                                 "createLanguageDialog",
-                                                "cancel");
+                                                CANCEL);
                             }
                         }).create();
         alertDialog.show();
@@ -2246,7 +2256,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.PROGRESS_DIALOG",
-                                "show");
+                                SHOW);
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
@@ -2255,7 +2265,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
-                                                "onCreateDialog.PROGRESS_DIALOG", "cancel");
+                                                "onCreateDialog.PROGRESS_DIALOG", CANCEL);
                                 dialog.dismiss();
                                 formLoaderTask.setFormLoaderListener(null);
                                 FormLoaderTask t = formLoaderTask;
@@ -2277,7 +2287,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
-                                "show");
+                                SHOW);
                 progressDialog = new ProgressDialog(this);
                 DialogInterface.OnClickListener cancelSavingButtonListener =
                         new DialogInterface.OnClickListener() {
@@ -2286,7 +2296,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
-                                                "onCreateDialog.SAVING_DIALOG", "cancel");
+                                                "onCreateDialog.SAVING_DIALOG", CANCEL);
                                 dialog.dismiss();
                                 cancelSaveToDiskTask();
                             }
@@ -2440,7 +2450,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this,
-                                    "onKeyDown.KEYCODE_DPAD_RIGHT", "showNext");
+                                    "onKeyDown.KEYCODE_DPAD_RIGHT", SHOW_NEXT);
                     showNextView();
                     return true;
                 }
@@ -2754,7 +2764,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onProgressStep(String stepMessage) {
         this.stepMessage = stepMessage;
         if (progressDialog != null) {
-            progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+            progressDialog.setMessage(getString(R.string.please_wait) + DOUBLE_LINE_BREAK + stepMessage);
         }
     }
 
@@ -2887,12 +2897,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     if (e1.getX() > e2.getX()) {
                         Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
                         Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "onFling", "showNext");
+                                .logInstanceAction(this, ON_FLING, SHOW_NEXT);
                         showNextView();
                     } else {
                         Collect.getInstance()
                                 .getActivityLogger()
-                                .logInstanceAction(this, "onFling",
+                                .logInstanceAction(this, ON_FLING,
                                         "showPrevious");
                         showPreviousView();
                     }
@@ -2901,12 +2911,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
                         Collect.getInstance()
                                 .getActivityLogger()
-                                .logInstanceAction(this, "onFling",
+                                .logInstanceAction(this, ON_FLING,
                                         "showPrevious");
                         showPreviousView();
                     } else {
                         Collect.getInstance().getActivityLogger()
-                                .logInstanceAction(this, "onFling", "showNext");
+                                .logInstanceAction(this, ON_FLING, SHOW_NEXT);
                         showNextView();
                     }
                 }
@@ -2967,7 +2977,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onSavePointError(String errorMessage) {
-        if (errorMessage != null && errorMessage.trim().length() > 0) {
+        if (errorMessage != null && errorMessage.isEmpty()) {
             ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
         }
     }

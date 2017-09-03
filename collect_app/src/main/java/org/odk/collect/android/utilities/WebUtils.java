@@ -149,7 +149,7 @@ public final class WebUtils {
         // to ensure that this is the only authentication available for this
         // host...
         clearHostCredentials(host);
-        if (username != null && username.trim().length() != 0) {
+        if (username != null && username.trim().isEmpty()) {
             Timber.i("adding credential for host: %s username:%s", host, username);
             Credentials c = new UsernamePasswordCredentials(username, password);
             addCredentials(c, host);

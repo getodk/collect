@@ -95,15 +95,15 @@ public class ItemsetWidget extends QuestionWidget implements
         String nodesetStr = prompt.getQuestion().getAdditionalAttribute(null, "query");
 
         // isolate the string between between the [ ] characters
-        String queryString = nodesetStr.substring(nodesetStr.indexOf("[") + 1,
-                nodesetStr.lastIndexOf("]"));
+        String queryString = nodesetStr.substring(nodesetStr.indexOf('[') + 1,
+                nodesetStr.lastIndexOf(']'));
 
-        StringBuilder selection = new StringBuilder();
+        StringBuilder selection = new StringBuilder(24);
         // add the list name as the first argument, which will always be there
         selection.append("list_name=?");
 
         // check to see if there are any arguments
-        if (queryString.indexOf("=") != -1) {
+        if (queryString.indexOf('=') != -1) {
             selection.append(" and ");
         }
 
@@ -175,8 +175,8 @@ public class ItemsetWidget extends QuestionWidget implements
         String[] selectionArgs = new String[arguments.size() + 1];
 
         // parse out the list name, between the ''
-        String listName = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
-                nodesetStr.lastIndexOf("'"));
+        String listName = nodesetStr.substring(nodesetStr.indexOf('\'') + 1,
+                nodesetStr.lastIndexOf('\''));
 
 
         boolean nullArgs = false; // can't have any null arguments

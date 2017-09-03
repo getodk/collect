@@ -64,22 +64,21 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
 
                         StringBuilder selection = new StringBuilder();
 
-                        selection.append(InstanceProviderAPI.InstanceColumns._ID + " IN (");
+                        selection.append(InstanceProviderAPI.InstanceColumns._ID).append(" IN (");
                         int i = 0;
 
                         while (it.hasNext() && i < selectionArgs.length - 1) {
                             selectionArgs[i] = it.next();
-                            selection.append("?");
+                            selection.append('?');
 
                             if (i != selectionArgs.length - 2) {
-                                selection.append(",");
+                                selection.append(',');
                             }
                             i++;
                         }
 
                         count -= selectionArgs.length - 1;
-                        selection.append(")");
-                        selection.append(" and status=?");
+                        selection.append(") and status=?");
                         selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
                         Cursor results = null;

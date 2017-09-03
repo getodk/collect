@@ -39,6 +39,7 @@ import java.util.List;
 public class GeoPointActivity extends AppCompatActivity implements LocationListener {
 
     private static final String LOCATION_COUNT = "locationCount";
+    private static final String GEO_POINT_ACTIVITY = "GeoPointActivity: ";
 
     private ProgressDialog locationDialog;
     private LocationManager locationManager;
@@ -89,13 +90,13 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         if (gpsOn) {
             Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc != null) {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                InfoLogger.geolog(GEO_POINT_ACTIVITY + System.currentTimeMillis()
                         + " lastKnownLocation(GPS) lat: "
                         + loc.getLatitude() + " long: "
                         + loc.getLongitude() + " acc: "
                         + loc.getAccuracy());
             } else {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                InfoLogger.geolog(GEO_POINT_ACTIVITY + System.currentTimeMillis()
                         + " lastKnownLocation(GPS) null location");
             }
         }
@@ -103,13 +104,13 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         if (networkOn) {
             Location loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (loc != null) {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                InfoLogger.geolog(GEO_POINT_ACTIVITY + System.currentTimeMillis()
                         + " lastKnownLocation(Network) lat: "
                         + loc.getLatitude() + " long: "
                         + loc.getLongitude() + " acc: "
                         + loc.getAccuracy());
             } else {
-                InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+                InfoLogger.geolog(GEO_POINT_ACTIVITY + System.currentTimeMillis()
                         + " lastKnownLocation(Network) null location");
             }
         }
@@ -232,7 +233,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             // Bug report: cached GeoPoint is being returned as the first value.
             // Wait for the 2nd value to be returned, which is hopefully not cached?
             ++locationCount;
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+            InfoLogger.geolog(GEO_POINT_ACTIVITY + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") lat: "
                     + this.location.getLatitude() + " long: "
                     + this.location.getLongitude() + " acc: "
@@ -247,7 +248,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
                 }
             }
         } else {
-            InfoLogger.geolog("GeoPointActivity: " + System.currentTimeMillis()
+            InfoLogger.geolog(GEO_POINT_ACTIVITY + System.currentTimeMillis()
                     + " onLocationChanged(" + locationCount + ") null location");
         }
     }

@@ -32,6 +32,10 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
     public static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
+    public static final String DROP_IF_EXISTS = "DROP TABLE IF EXISTS ";
+    public static final String TEXT_NOT_NULL = " text not null, ";
+    public static final String TEXT = " text, ";
+
     private static final int DATABASE_VERSION = 4;
 
     // These exist in database versions 2 and 3, but not in 4...
@@ -50,22 +54,22 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
     private void onCreateNamed(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
                 + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
-                + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
-                + " text not null, " + FormsProviderAPI.FormsColumns.DESCRIPTION
-                + " text, "
+                + TEXT_NOT_NULL + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                + TEXT_NOT_NULL + FormsProviderAPI.FormsColumns.DESCRIPTION
+                + TEXT
                 + FormsProviderAPI.FormsColumns.JR_FORM_ID
-                + " text not null, "
+                + TEXT_NOT_NULL
                 + FormsProviderAPI.FormsColumns.JR_VERSION
-                + " text, "
+                + TEXT
                 + FormsProviderAPI.FormsColumns.MD5_HASH
-                + " text not null, "
+                + TEXT_NOT_NULL
                 + FormsProviderAPI.FormsColumns.DATE
                 + " integer not null, " // milliseconds
-                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.LANGUAGE + " text, "
-                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + " text, "
-                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
+                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + TEXT_NOT_NULL
+                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + TEXT_NOT_NULL
+                + FormsProviderAPI.FormsColumns.LANGUAGE + TEXT
+                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + TEXT
+                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + TEXT
                 + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " text not null);");
     }
 
@@ -96,7 +100,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
     private boolean upgradeToVersion2(SQLiteDatabase db) {
         boolean success = true;
         try {
-            db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+            db.execSQL(DROP_IF_EXISTS + FORMS_TABLE_NAME);
             onCreate(db);
         } catch (SQLiteException e) {
             Timber.e(e);
@@ -110,7 +114,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         try {
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
-            db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+            db.execSQL(DROP_IF_EXISTS + TEMP_FORMS_TABLE_NAME);
             onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + TEMP_FORMS_TABLE_NAME
@@ -177,7 +181,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
                     + FORMS_TABLE_NAME);
 
             // risky failures here...
-            db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
+            db.execSQL(DROP_IF_EXISTS + FORMS_TABLE_NAME);
             onCreateNamed(db, FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + FORMS_TABLE_NAME
@@ -224,7 +228,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
                     + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
                     + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
                     + TEMP_FORMS_TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
+            db.execSQL(DROP_IF_EXISTS + TEMP_FORMS_TABLE_NAME);
         } catch (SQLiteException e) {
             Timber.e(e);
             success = false;

@@ -48,15 +48,15 @@ public class TextUtils {
 
             String stylesText = attributes.replaceAll("style=[\"'](.*?)[\"']", "$1");
             String[] styles = stylesText.trim().split(";");
-            StringBuffer stylesOutput = new StringBuffer();
+            StringBuilder stylesOutput = new StringBuilder();
 
             for (String style : styles) {
                 String[] stylesAttributes = style.trim().split(":");
                 if (stylesAttributes[0].equals("color")) {
-                    stylesOutput.append(" color=\"" + stylesAttributes[1] + "\"");
+                    stylesOutput.append(" color=\"").append(stylesAttributes[1]).append('\"');
                 }
                 if (stylesAttributes[0].equals("font-family")) {
-                    stylesOutput.append(" face=\"" + stylesAttributes[1] + "\"");
+                    stylesOutput.append(" face=\"").append(stylesAttributes[1]).append('\"');
                 }
             }
 

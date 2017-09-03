@@ -56,6 +56,8 @@ import timber.log.Timber;
  */
 public class MediaUtils {
 
+    private static final String DELETE_MESSAGE = "attempting to delete: %s";
+
     private MediaUtils() {
         // static methods only
     }
@@ -124,7 +126,7 @@ public class MediaUtils {
                 } while (imageCursor.moveToNext());
 
                 for (Uri uri : imagesToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
+                    Timber.i(DELETE_MESSAGE, uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -169,7 +171,7 @@ public class MediaUtils {
                 } while (imageCursor.moveToNext());
 
                 for (Uri uri : imagesToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
+                    Timber.i(DELETE_MESSAGE, uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -239,7 +241,7 @@ public class MediaUtils {
                 } while (audioCursor.moveToNext());
 
                 for (Uri uri : audioToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
+                    Timber.i(DELETE_MESSAGE, uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -284,7 +286,7 @@ public class MediaUtils {
                 } while (audioCursor.moveToNext());
 
                 for (Uri uri : audioToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
+                    Timber.i(DELETE_MESSAGE, uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -354,7 +356,7 @@ public class MediaUtils {
                 } while (videoCursor.moveToNext());
 
                 for (Uri uri : videoToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
+                    Timber.i(DELETE_MESSAGE, uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }
@@ -399,7 +401,7 @@ public class MediaUtils {
                 } while (videoCursor.moveToNext());
 
                 for (Uri uri : videoToDelete) {
-                    Timber.i("attempting to delete: %s", uri.toString());
+                    Timber.i(DELETE_MESSAGE, uri.toString());
                     count += cr.delete(uri, null, null);
                 }
             }

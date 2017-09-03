@@ -55,6 +55,8 @@ public class FormsProvider extends ContentProvider {
 
     private FormsDatabaseHelper databaseHelper;
 
+    private static final String UNKNOWN_URI = "Unknown URI ";
+
     private FormsDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
@@ -96,7 +98,7 @@ public class FormsProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         // Get the database and run the query
@@ -120,7 +122,7 @@ public class FormsProvider extends ContentProvider {
                 return FormsColumns.CONTENT_ITEM_TYPE;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
     }
 
@@ -128,7 +130,7 @@ public class FormsProvider extends ContentProvider {
     public synchronized Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != FORMS) {
-            throw new IllegalArgumentException("Unknown URI " + uri);
+            throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         ContentValues values;
@@ -183,7 +185,7 @@ public class FormsProvider extends ContentProvider {
         }
         if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
             String pathNoExtension = filePath.substring(0,
-                    filePath.lastIndexOf("."));
+                    filePath.lastIndexOf('.'));
             String mediaPath = pathNoExtension + "-media";
             values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
         }
@@ -343,7 +345,7 @@ public class FormsProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
@@ -493,7 +495,7 @@ public class FormsProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);

@@ -23,26 +23,30 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 public abstract class InstanceListFragment extends FileManagerFragment {
+
+    private static final String ASC = " ASC";
+    private static final String DESC = " DESC";
+
     protected String getSortingOrder() {
-        String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+        String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + DESC;
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + DESC;
                 break;
             case BY_NAME_DESC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
+                sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceProviderAPI.InstanceColumns.STATUS + DESC;
                 break;
             case BY_DATE_ASC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + ASC;
                 break;
             case BY_DATE_DESC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + DESC;
                 break;
             case BY_STATUS_ASC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " ASC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " ASC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + ASC;
                 break;
             case BY_STATUS_DESC:
-                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC";
+                sortOrder = InstanceProviderAPI.InstanceColumns.STATUS + " DESC, " + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + ASC;
                 break;
         }
         return sortOrder;

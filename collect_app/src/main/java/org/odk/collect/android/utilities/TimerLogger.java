@@ -148,8 +148,8 @@ public class TimerLogger {
                     textValue = "Unknown Event Type: " + eventType;
                     break;
             }
-            return textValue + "," + node + "," + String.valueOf(start) + ","
-                    + (end != 0 ? String.valueOf(end) : "");
+            return textValue + ',' + node + ',' + start + ','
+                    + (end != 0 ? end : "");
         }
     }
 

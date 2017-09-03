@@ -44,6 +44,19 @@ public class FormsDaoTest {
 
     private FormsDao formsDao;
 
+    private static final String BIGGEST_N_OF_SET = "Biggest N of Set";
+    private static final String BIRDS = "Birds";
+    private static final String MIRAMARE = "Miramare";
+    private static final String GEO_TAGGER_V2 = "Geo Tagger v2";
+    private static final String WIDGETS = "Widgets";
+    private static final String SAMPLE = "sample";
+
+    private static final String TIMESTAMP1 = "Added on Wed, Feb 22, 2017 at 15:21";
+    private static final String TIMESTAMP2 = "Added on Wed, Feb 22, 2017 at 17:53";
+    private static final String TIMESTAMP3 = "Added on Wed, Feb 22, 2017 at 17:55";
+
+    private static final String WIDGETS_FORM = "/Widgets.xml";
+
     @Before
     public void setUp() throws IOException {
         formsDao = new FormsDao();
@@ -57,33 +70,33 @@ public class FormsDaoTest {
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(6, forms.size());
 
-        assertEquals("Biggest N of Set", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(0).getDisplaySubtext());
+        assertEquals(BIGGEST_N_OF_SET, forms.get(0).getDisplayName());
+        assertEquals(TIMESTAMP1, forms.get(0).getDisplaySubtext());
 
-        assertEquals("Birds", forms.get(1).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(1).getDisplaySubtext());
+        assertEquals(BIRDS, forms.get(1).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(1).getDisplaySubtext());
 
-        assertEquals("Miramare", forms.get(2).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(2).getDisplaySubtext());
+        assertEquals(MIRAMARE, forms.get(2).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(2).getDisplaySubtext());
 
-        assertEquals("Geo Tagger v2", forms.get(3).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(3).getDisplaySubtext());
+        assertEquals(GEO_TAGGER_V2, forms.get(3).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(3).getDisplaySubtext());
 
-        assertEquals("Widgets", forms.get(4).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(4).getDisplaySubtext());
+        assertEquals(WIDGETS, forms.get(4).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(4).getDisplaySubtext());
 
-        assertEquals("sample", forms.get(5).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(5).getDisplaySubtext());
+        assertEquals(SAMPLE, forms.get(5).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(5).getDisplaySubtext());
     }
 
     @Test
     public void getFormsCursorForFormIdTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormId("Birds");
+        Cursor cursor = formsDao.getFormsCursorForFormId(BIRDS);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
-        assertEquals("Birds", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(0).getDisplaySubtext());
+        assertEquals(BIRDS, forms.get(0).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(0).getDisplaySubtext());
     }
 
     @Test
@@ -92,23 +105,23 @@ public class FormsDaoTest {
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(6, forms.size());
 
-        assertEquals("Biggest N of Set", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(0).getDisplaySubtext());
+        assertEquals(BIGGEST_N_OF_SET, forms.get(0).getDisplayName());
+        assertEquals(TIMESTAMP1, forms.get(0).getDisplaySubtext());
 
-        assertEquals("Birds", forms.get(1).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(1).getDisplaySubtext());
+        assertEquals(BIRDS, forms.get(1).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(1).getDisplaySubtext());
 
-        assertEquals("Miramare", forms.get(2).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(2).getDisplaySubtext());
+        assertEquals(MIRAMARE, forms.get(2).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(2).getDisplaySubtext());
 
-        assertEquals("Geo Tagger v2", forms.get(3).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(3).getDisplaySubtext());
+        assertEquals(GEO_TAGGER_V2, forms.get(3).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(3).getDisplaySubtext());
 
-        assertEquals("Widgets", forms.get(4).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(4).getDisplaySubtext());
+        assertEquals(WIDGETS, forms.get(4).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(4).getDisplaySubtext());
 
-        assertEquals("sample", forms.get(5).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(5).getDisplaySubtext());
+        assertEquals(SAMPLE, forms.get(5).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(5).getDisplaySubtext());
 
         String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " DESC";
 
@@ -116,34 +129,34 @@ public class FormsDaoTest {
         forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(6, forms.size());
 
-        assertEquals("sample", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
+        assertEquals(SAMPLE, forms.get(0).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(0).getDisplaySubtext());
 
-        assertEquals("Widgets", forms.get(1).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(1).getDisplaySubtext());
+        assertEquals(WIDGETS, forms.get(1).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(1).getDisplaySubtext());
 
-        assertEquals("Miramare", forms.get(2).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(2).getDisplaySubtext());
+        assertEquals(MIRAMARE, forms.get(2).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(2).getDisplaySubtext());
 
-        assertEquals("Geo Tagger v2", forms.get(3).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(3).getDisplaySubtext());
+        assertEquals(GEO_TAGGER_V2, forms.get(3).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(3).getDisplaySubtext());
 
-        assertEquals("Birds", forms.get(4).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(4).getDisplaySubtext());
+        assertEquals(BIRDS, forms.get(4).getDisplayName());
+        assertEquals(TIMESTAMP2, forms.get(4).getDisplaySubtext());
 
-        assertEquals("Biggest N of Set", forms.get(5).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(5).getDisplaySubtext());
+        assertEquals(BIGGEST_N_OF_SET, forms.get(5).getDisplayName());
+        assertEquals(TIMESTAMP1, forms.get(5).getDisplaySubtext());
 
 
         String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
-        String[] selectionArgs = {"Miramare"};
+        String[] selectionArgs = {MIRAMARE};
 
         cursor = formsDao.getFormsCursor(null, selection, selectionArgs, null);
         forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
-        assertEquals("Miramare", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
+        assertEquals(MIRAMARE, forms.get(0).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(0).getDisplaySubtext());
     }
 
     @Test
@@ -152,46 +165,46 @@ public class FormsDaoTest {
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
-        assertEquals("Miramare", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
+        assertEquals(MIRAMARE, forms.get(0).getDisplayName());
+        assertEquals(TIMESTAMP3, forms.get(0).getDisplaySubtext());
     }
 
     @Test
     public void updateInstanceTest() {
-        Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Widgets.xml");
+        Cursor cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + WIDGETS_FORM);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
-        assertEquals("Widgets", forms.get(0).getDisplayName());
-        assertEquals("Widgets", forms.get(0).getJrFormId());
+        assertEquals(WIDGETS, forms.get(0).getDisplayName());
+        assertEquals(WIDGETS, forms.get(0).getJrFormId());
 
         Form form = new Form.Builder()
-                .displayName("Widgets")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
+                .displayName(WIDGETS)
+                .displaySubtext(TIMESTAMP3)
                 .jrFormId("Widgets2")
                 .date(1487782554846L)
                 .formMediaPath(Collect.FORMS_PATH + "/Widgets-media")
-                .formFilePath(Collect.FORMS_PATH + "/Widgets.xml")
+                .formFilePath(Collect.FORMS_PATH + WIDGETS_FORM)
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
         String where = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
-        String[] whereArgs = {"Widgets"};
+        String[] whereArgs = {WIDGETS};
         assertEquals(formsDao.updateForm(formsDao.getValuesFromFormObject(form), where, whereArgs), 1);
 
-        cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + "/Widgets.xml");
+        cursor = formsDao.getFormsCursorForFormFilePath(Collect.FORMS_PATH + WIDGETS_FORM);
         forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(1, forms.size());
 
-        assertEquals("Widgets", forms.get(0).getDisplayName());
+        assertEquals(WIDGETS, forms.get(0).getDisplayName());
         assertEquals("Widgets2", forms.get(0).getJrFormId());
     }
 
     private void fillDatabase() throws IOException {
         assertTrue(new File(Collect.FORMS_PATH + "/Biggest N of Set.xml").createNewFile());
         Form form1 = new Form.Builder()
-                .displayName("Biggest N of Set")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 15:21")
+                .displayName(BIGGEST_N_OF_SET)
+                .displaySubtext(TIMESTAMP1)
                 .jrFormId("N_Biggest")
                 .date(1487773315435L)
                 .formMediaPath(Collect.FORMS_PATH + "/Biggest N of Set-media")
@@ -203,9 +216,9 @@ public class FormsDaoTest {
 
         assertTrue(new File(Collect.FORMS_PATH + "/Birds.xml").createNewFile());
         Form form2 = new Form.Builder()
-                .displayName("Birds")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
-                .jrFormId("Birds")
+                .displayName(BIRDS)
+                .displaySubtext(TIMESTAMP2)
+                .jrFormId(BIRDS)
                 .date(1487782404899L)
                 .formMediaPath(Collect.FORMS_PATH + "/Birds-media")
                 .formFilePath(Collect.FORMS_PATH + "/Birds.xml")
@@ -216,9 +229,9 @@ public class FormsDaoTest {
 
         assertTrue(new File(Collect.FORMS_PATH + "/Miramare.xml").createNewFile());
         Form form3 = new Form.Builder()
-                .displayName("Miramare")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
-                .jrFormId("Miramare")
+                .displayName(MIRAMARE)
+                .displaySubtext(TIMESTAMP3)
+                .jrFormId(MIRAMARE)
                 .date(1487782545945L)
                 .formMediaPath(Collect.FORMS_PATH + "/Miramare-media")
                 .formFilePath(Collect.FORMS_PATH + "/Miramare.xml")
@@ -229,8 +242,8 @@ public class FormsDaoTest {
 
         assertTrue(new File(Collect.FORMS_PATH + "/Geo Tagger v2.xml").createNewFile());
         Form form4 = new Form.Builder()
-                .displayName("Geo Tagger v2")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
+                .displayName(GEO_TAGGER_V2)
+                .displaySubtext(TIMESTAMP2)
                 .jrFormId("geo_tagger_v2")
                 .date(1487782428992L)
                 .formMediaPath(Collect.FORMS_PATH + "/Geo Tagger v2-media")
@@ -240,14 +253,14 @@ public class FormsDaoTest {
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(form4));
 
-        assertTrue(new File(Collect.FORMS_PATH + "/Widgets.xml").createNewFile());
+        assertTrue(new File(Collect.FORMS_PATH + WIDGETS_FORM).createNewFile());
         Form form5 = new Form.Builder()
-                .displayName("Widgets")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
-                .jrFormId("Widgets")
+                .displayName(WIDGETS)
+                .displaySubtext(TIMESTAMP3)
+                .jrFormId(WIDGETS)
                 .date(1487782554846L)
                 .formMediaPath(Collect.FORMS_PATH + "/Widgets-media")
-                .formFilePath(Collect.FORMS_PATH + "/Widgets.xml")
+                .formFilePath(Collect.FORMS_PATH + WIDGETS_FORM)
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/0eacc6333449e66826326eb5fcc75749.formdef")
                 .build();
 
@@ -255,9 +268,9 @@ public class FormsDaoTest {
 
         assertTrue(new File(Collect.FORMS_PATH + "/sample.xml").createNewFile());
         Form form6 = new Form.Builder()
-                .displayName("sample")
-                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:55")
-                .jrFormId("sample")
+                .displayName(SAMPLE)
+                .displaySubtext(TIMESTAMP3)
+                .jrFormId(SAMPLE)
                 .date(1487782555840L)
                 .formMediaPath(Collect.FORMS_PATH + "/sample-media")
                 .formFilePath(Collect.FORMS_PATH + "/sample.xml")

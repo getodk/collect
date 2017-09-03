@@ -33,6 +33,8 @@ public class InstancesDatabaseHelper extends ODKSQLiteOpenHelper {
     public static final String DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
 
+    private static final String TEXT_NOT_NULL = " text not null, ";
+
     private static final int DATABASE_VERSION = 4;
 
     public InstancesDatabaseHelper(String databaseName) {
@@ -43,13 +45,13 @@ public class InstancesDatabaseHelper extends ODKSQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
                 + InstanceProviderAPI.InstanceColumns._ID + " integer primary key, "
-                + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " text not null, "
+                + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + TEXT_NOT_NULL
                 + InstanceProviderAPI.InstanceColumns.SUBMISSION_URI + " text, "
                 + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                + InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                + InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " text not null, "
+                + InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + TEXT_NOT_NULL
+                + InstanceProviderAPI.InstanceColumns.JR_FORM_ID + TEXT_NOT_NULL
                 + InstanceProviderAPI.InstanceColumns.JR_VERSION + " text, "
-                + InstanceProviderAPI.InstanceColumns.STATUS + " text not null, "
+                + InstanceProviderAPI.InstanceColumns.STATUS + TEXT_NOT_NULL
                 + InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                 + InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
                 + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " date );");

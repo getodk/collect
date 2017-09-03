@@ -83,7 +83,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         super(context, prompt);
 
         String appearance = prompt.getAppearanceHint();
-        String alignments = appearance.substring(appearance.indexOf(":") + 1);
+        String alignments = appearance.substring(appearance.indexOf(':') + 1);
         String[] splits = alignments.split(" ");
         if (splits.length != 6) {
             Timber.w("Only have %d alignment values", splits.length);

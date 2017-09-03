@@ -53,6 +53,8 @@ public class InstanceProvider extends ContentProvider {
 
     private InstancesDatabaseHelper databaseHelper;
 
+    private static final String UNKNOWN_URI = "Unknown URI ";
+
     private InstancesDatabaseHelper getDbHelper() {
         // wrapper to test and reset/set the dbHelper based upon the attachment state of the device.
         try {
@@ -93,7 +95,7 @@ public class InstanceProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         // Get the database and run the query
@@ -115,7 +117,7 @@ public class InstanceProvider extends ContentProvider {
                 return InstanceColumns.CONTENT_ITEM_TYPE;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
     }
 
@@ -123,7 +125,7 @@ public class InstanceProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         // Validate the requested uri
         if (sUriMatcher.match(uri) != INSTANCES) {
-            throw new IllegalArgumentException("Unknown URI " + uri);
+            throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         ContentValues values;
@@ -288,7 +290,7 @@ public class InstanceProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
@@ -344,7 +346,7 @@ public class InstanceProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException(UNKNOWN_URI + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);

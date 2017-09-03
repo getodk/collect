@@ -60,6 +60,7 @@ public class DrawActivity extends AppCompatActivity {
     public static final String REF_IMAGE = "refImage";
     public static final String EXTRA_OUTPUT = android.provider.MediaStore.EXTRA_OUTPUT;
     public static final String SAVEPOINT_IMAGE = "savepointImage"; // during
+    public static final String CREATE_QUIT_DIALOG = "createQuitDrawDialog";
     // restore
 
     private FloatingActionButton fabActions;
@@ -300,7 +301,7 @@ public class DrawActivity extends AppCompatActivity {
                 getString(R.string.do_not_save)};
 
         Collect.getInstance().getActivityLogger()
-                .logInstanceAction(this, "createQuitDrawDialog", "show");
+                .logInstanceAction(this, CREATE_QUIT_DIALOG, "show");
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(alertTitleString)
@@ -312,7 +313,7 @@ public class DrawActivity extends AppCompatActivity {
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
-                                                "createQuitDrawDialog",
+                                                CREATE_QUIT_DIALOG,
                                                 "cancel");
                                 dialog.cancel();
 
@@ -327,7 +328,7 @@ public class DrawActivity extends AppCompatActivity {
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
-                                                "createQuitDrawDialog",
+                                                CREATE_QUIT_DIALOG,
                                                 "saveAndExit");
                                 saveAndClose();
                                 break;
@@ -337,7 +338,7 @@ public class DrawActivity extends AppCompatActivity {
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
-                                                "createQuitDrawDialog",
+                                                CREATE_QUIT_DIALOG,
                                                 "discardAndExit");
                                 cancelAndClose();
                                 break;
@@ -346,7 +347,7 @@ public class DrawActivity extends AppCompatActivity {
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
-                                                "createQuitDrawDialog", "cancel");
+                                                CREATE_QUIT_DIALOG, "cancel");
                                 break;
                         }
                     }

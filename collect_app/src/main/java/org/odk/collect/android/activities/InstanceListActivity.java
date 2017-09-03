@@ -10,26 +10,30 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 abstract class InstanceListActivity extends AppListActivity {
+
+    private static final String ASC = " ASC";
+    private static final String DESC = " DESC";
+
     protected String getSortingOrder() {
-        String sortingOrder = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + " DESC";
+        String sortingOrder = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + DESC;
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortingOrder = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + " DESC";
+                sortingOrder = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.STATUS + DESC;
                 break;
             case BY_NAME_DESC:
-                sortingOrder = InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceColumns.STATUS + " DESC";
+                sortingOrder = InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceColumns.STATUS + DESC;
                 break;
             case BY_DATE_ASC:
-                sortingOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                sortingOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + ASC;
                 break;
             case BY_DATE_DESC:
-                sortingOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                sortingOrder = InstanceColumns.LAST_STATUS_CHANGE_DATE + DESC;
                 break;
             case BY_STATUS_ASC:
-                sortingOrder = InstanceColumns.STATUS + " ASC, " + InstanceColumns.DISPLAY_NAME + " ASC";
+                sortingOrder = InstanceColumns.STATUS + " ASC, " + InstanceColumns.DISPLAY_NAME + ASC;
                 break;
             case BY_STATUS_DESC:
-                sortingOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + " ASC";
+                sortingOrder = InstanceColumns.STATUS + " DESC, " + InstanceColumns.DISPLAY_NAME + ASC;
                 break;
         }
         return sortingOrder;

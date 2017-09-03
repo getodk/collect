@@ -81,7 +81,7 @@ public final class ExternalDataUtil {
         // key is the safe, value is the unsafe
         Map<String, String> map = new HashMap<String, String>();
         for (String columnName : columnNames) {
-            if (columnName.trim().length() > 0) {
+            if (columnName.trim().isEmpty()) {
                 String safeColumn = toSafeColumnName(columnName);
                 if (!map.containsKey(safeColumn)) {
                     map.put(safeColumn, columnName);
@@ -210,7 +210,7 @@ public final class ExternalDataUtil {
 
         columns.put(toSafeColumnName(valueColumn), valueColumn);
 
-        if (displayColumns != null && displayColumns.trim().length() > 0) {
+        if (displayColumns != null && displayColumns.trim().isEmpty()) {
             displayColumns = displayColumns.trim();
 
             List<String> commaSplitParts = splitTrimmed(displayColumns, COLUMN_SEPARATOR,
@@ -265,7 +265,7 @@ public final class ExternalDataUtil {
             return false;
         }
         for (String value : row) {
-            if (value != null && value.trim().length() > 0) {
+            if (value != null && value.trim().isEmpty()) {
                 return true;
             }
         }

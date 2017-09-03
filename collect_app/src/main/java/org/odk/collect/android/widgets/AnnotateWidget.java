@@ -54,6 +54,7 @@ import timber.log.Timber;
  */
 public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
     private static final String t = "AnnotateWidget";
+    private static final String CLICK = "click";
 
     private Button captureButton;
     private Button chooseButton;
@@ -83,7 +84,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "captureButton", "click",
+                        .logInstanceAction(this, "captureButton", CLICK,
                                 formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(
@@ -125,7 +126,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "chooseButton", "click",
+                        .logInstanceAction(this, "chooseButton", CLICK,
                                 formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
@@ -155,7 +156,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
-                        .logInstanceAction(this, "annotateButton", "click",
+                        .logInstanceAction(this, "annotateButton", CLICK,
                                 formEntryPrompt.getIndex());
                 launchAnnotateActivity();
             }
@@ -212,7 +213,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
                 public void onClick(View v) {
                     Collect.getInstance()
                             .getActivityLogger()
-                            .logInstanceAction(this, "viewImage", "click",
+                            .logInstanceAction(this, "viewImage", CLICK,
                                     formEntryPrompt.getIndex());
                     launchAnnotateActivity();
                 }
