@@ -1315,7 +1315,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkv = new ODKView(this, formController.getQuestionPrompts(),
+                    odkv = new ODKView(this, prompts,
                             groups, advancingPage);
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
