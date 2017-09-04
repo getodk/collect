@@ -258,20 +258,18 @@ public class Collect extends Application {
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
+        generalSharedPreferences = new GeneralSharedPreferences(getBaseContext());
+        adminSharedPreferences = new AdminSharedPreferences(getBaseContext());
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
+        FormMetadataMigrator.migrate((SharedPreferences) generalSharedPreferences);
         AutoSendPreferenceMigrator.migrate();
 
         PropertyManager mgr = new PropertyManager(this);
 
         FormController.initializeJavaRosa(mgr);
 
-        activityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
-
-        generalSharedPreferences = new GeneralSharedPreferences(getBaseContext());
-
-        adminSharedPreferences = new AdminSharedPreferences(getBaseContext());
+        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.DEBUG) {
