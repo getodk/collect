@@ -15,9 +15,9 @@
 package org.odk.collect.android.preferences;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import org.odk.collect.android.application.Collect;
 
 import timber.log.Timber;
 
@@ -25,19 +25,10 @@ import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 
 public class GeneralSharedPreferences {
 
-    private static GeneralSharedPreferences instance = null;
     private android.content.SharedPreferences sharedPreferences;
-    private android.content.SharedPreferences.Editor editor;
 
-    private GeneralSharedPreferences() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-    }
-
-    public static synchronized GeneralSharedPreferences getInstance() {
-        if (instance == null) {
-            instance = new GeneralSharedPreferences();
-        }
-        return instance;
+    public GeneralSharedPreferences(Context context) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public Object get(String key) {
@@ -70,7 +61,7 @@ public class GeneralSharedPreferences {
     }
 
     public void save(String key, Object value) {
-        editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         if (value == null || value == "" || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {

@@ -15,28 +15,19 @@
 package org.odk.collect.android.preferences;
 
 
-import org.odk.collect.android.application.Collect;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
 public class AdminSharedPreferences {
 
-    private static AdminSharedPreferences instance = null;
     private android.content.SharedPreferences sharedPreferences;
-    private android.content.SharedPreferences.Editor editor;
 
-    private AdminSharedPreferences() {
-        sharedPreferences = Collect.getInstance().getSharedPreferences(ADMIN_PREFERENCES, 0);
+    public AdminSharedPreferences(Context context) {
+        sharedPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
     }
-
-    public static synchronized AdminSharedPreferences getInstance() {
-        if (instance == null) {
-            instance = new AdminSharedPreferences();
-        }
-        return instance;
-    }
-
 
     public Object get(String key) {
         if (key.equals(KEY_ADMIN_PW)) {
@@ -46,7 +37,7 @@ public class AdminSharedPreferences {
         }
     }
 
-    public Object getDefault(String key) {
+    private Object getDefault(String key) {
         if (key.equals(KEY_ADMIN_PW)) {
             return "";
         } else {
@@ -60,7 +51,7 @@ public class AdminSharedPreferences {
     }
 
     public void save(String key, Object value) {
-        editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         if (value == null || value == "" || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
