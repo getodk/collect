@@ -15,33 +15,21 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSelectChoice;
+
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -49,31 +37,13 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectOneWidget extends QuestionWidget implements
-        OnCheckedChangeListener, AudioPlayListener {
+public class SelectOneWidget extends SelectWidget implements OnCheckedChangeListener, AudioPlayListener {
 
-    List<SelectChoice> items; // may take a while to compute
-    ArrayList<RadioButton> buttons;
-    ArrayList<MediaLayout> playList;
-    private int playcounter = 0;
-
+    private ArrayList<RadioButton> buttons;
 
     public SelectOneWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        playList = new ArrayList<MediaLayout>();
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
-        buttons = new ArrayList<RadioButton>();
-
-        // Layout holds the vertical list of buttons
-        LinearLayout buttonLayout = new LinearLayout(context);
+        buttons = new ArrayList<>();
 
         String s = null;
         if (prompt.getAnswerValue() != null) {
@@ -105,49 +75,10 @@ public class SelectOneWidget extends QuestionWidget implements
                 }
 
                 r.setOnCheckedChangeListener(this);
-
-                String audioURI = null;
-                audioURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
-                        FormEntryCaption.TEXT_FORM_AUDIO);
-
-                String imageURI;
-                if (items.get(i) instanceof ExternalSelectChoice) {
-                    imageURI = ((ExternalSelectChoice) items.get(i)).getImage();
-                } else {
-                    imageURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
-                            FormEntryCaption.TEXT_FORM_IMAGE);
-                }
-
-                String videoURI = null;
-                videoURI = prompt.getSpecialFormSelectChoiceText(items.get(i),
-                        "video");
-
-                String bigImageURI = null;
-                bigImageURI = prompt.getSpecialFormSelectChoiceText(
-                        items.get(i), "big-image");
-
-                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
-                mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, audioURI,
-                        imageURI,
-                        videoURI, bigImageURI);
-                mediaLayout.setAudioListener(this);
-                mediaLayout.setPlayTextColor(playColor);
-                mediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
-                playList.add(mediaLayout);
-
-                if (i != items.size() - 1) {
-                    // Last, add the dividing line (except for the last element)
-                    ImageView divider = new ImageView(getContext());
-                    divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-                    mediaLayout.addDivider(divider);
-                }
-                buttonLayout.addView(mediaLayout);
+                answerLayout.addView(createMediaLayout(i, r));
             }
         }
-        buttonLayout.setOrientation(LinearLayout.VERTICAL);
-
-        // The buttons take up the right half of the screen
-        addAnswerView(buttonLayout);
+        addAnswerView(answerLayout);
     }
 
     @Override
@@ -164,20 +95,7 @@ public class SelectOneWidget extends QuestionWidget implements
     @Override
     public IAnswerData getAnswer() {
         int i = getCheckedId();
-        if (i == -1) {
-            return null;
-        } else {
-            SelectChoice sc = items.get(i);
-            return new SelectOneData(new Selection(sc));
-        }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
+        return i == -1 ? null : new SelectOneData(new Selection(items.get(i)));
     }
 
     public int getCheckedId() {
@@ -192,26 +110,13 @@ public class SelectOneWidget extends QuestionWidget implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (!isChecked) {
-            // If it got unchecked, we don't care.
-            return;
-        }
-
-        for (RadioButton button : buttons) {
-            if (button.isChecked() && !(buttonView == button)) {
-                button.setChecked(false);
-                clearNextLevelsOfCascadingSelect();
+        if (isChecked) {
+            for (RadioButton button : buttons) {
+                if (button.isChecked() && !(buttonView == button)) {
+                    button.setChecked(false);
+                    clearNextLevelsOfCascadingSelect();
+                }
             }
-        }
-
-        SelectChoice choice = items.get((Integer) buttonView.getTag());
-
-        if (choice != null) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    choice.getValue(), formEntryPrompt.getIndex());
-        } else {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    "<no matching choice>", formEntryPrompt.getIndex());
         }
     }
 
@@ -229,58 +134,4 @@ public class SelectOneWidget extends QuestionWidget implements
             button.cancelLongPress();
         }
     }
-
-
-    public void playNextSelectItem() {
-        if (!this.isShown()) {
-            return;
-        }
-        // if there's more, set up to play the next item
-        if (playcounter < playList.size()) {
-            player.setOnCompletionListener(new OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    resetQuestionTextColor();
-                    mediaPlayer.reset();
-                    playNextSelectItem();
-                }
-            });
-            // play the current item
-            playList.get(playcounter).playAudio();
-            playcounter++;
-
-        } else {
-            playcounter = 0;
-            player.setOnCompletionListener(null);
-            player.reset();
-        }
-
-    }
-
-
-    @Override
-    public void playAllPromptText() {
-        // set up to play the items when the
-        // question text is finished
-        player.setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                resetQuestionTextColor();
-                mediaPlayer.reset();
-                playNextSelectItem();
-            }
-
-        });
-        // plays the question text
-        super.playAllPromptText();
-    }
-
-    @Override
-    public void resetQuestionTextColor() {
-        super.resetQuestionTextColor();
-        for (MediaLayout layout : playList) {
-            layout.resetTextFormatting();
-        }
-    }
-
 }
