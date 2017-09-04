@@ -168,11 +168,11 @@ public class Collect extends Application {
         return activityLogger;
     }
 
-    public GeneralSharedPreferences getGeneralSharedPreferences() {
+    public GeneralSharedPreferences getGeneralPrefs() {
         return generalSharedPreferences;
     }
 
-    public AdminSharedPreferences getAdminSharedPreferences() {
+    public AdminSharedPreferences getAdminPrefs() {
         return adminSharedPreferences;
     }
 

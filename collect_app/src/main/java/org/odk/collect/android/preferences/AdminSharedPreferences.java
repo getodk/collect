@@ -37,7 +37,7 @@ public class AdminSharedPreferences {
         }
     }
 
-    private Object getDefault(String key) {
+    public Object getDefault(String key) {
         if (key.equals(KEY_ADMIN_PW)) {
             return "";
         } else {
