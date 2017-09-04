@@ -66,4 +66,7 @@ public class AdminSharedPreferences {
         editor.apply();
     }
 
+    public boolean getBoolean(String key, boolean value) {
+        return sharedPreferences.getBoolean(key, value);
+    }
 }
