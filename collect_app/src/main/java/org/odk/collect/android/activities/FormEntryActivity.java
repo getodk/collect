@@ -862,7 +862,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
-            if (((IBinaryWidget) qw).isWaitingForBinaryData()) {
+            if (qw instanceof IBinaryWidget && ((IBinaryWidget) qw).isWaitingForBinaryData()) {
                 questionWidget = qw;
             }
         }
