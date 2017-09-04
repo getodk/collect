@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.Set;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
@@ -26,6 +28,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 public class GeneralSharedPreferences {
 
     private android.content.SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     public GeneralSharedPreferences(Context context) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -60,8 +63,13 @@ public class GeneralSharedPreferences {
         save(key, defaultValue);
     }
 
+    public void clearAll() {
+        editor.clear();
+        editor.apply();
+    }
+
     public void save(String key, Object value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor = sharedPreferences.edit();
         if (value == null || value == "" || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
@@ -72,6 +80,10 @@ public class GeneralSharedPreferences {
             editor.putInt(key, (Integer) value);
         } else if (value instanceof Float) {
             editor.putFloat(key, (Float) value);
+        } else if (value instanceof Set) {
+            editor.putStringSet(key, (Set<String>) value);
+        } else {
+            throw new RuntimeException("Unhandled preference value type: " + value);
         }
         editor.apply();
     }
