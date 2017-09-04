@@ -20,7 +20,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.BadUrlException;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
@@ -53,7 +52,7 @@ public class UrlUtils {
                     // if we didn't find one in the content provider,
                     // try to get from settings
                     if (urlString == null) {
-                        urlString = (String) GeneralSharedPreferences.getInstance()
+                        urlString = (String) Collect.getInstance().getGeneralPrefs()
                                 .get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
                     }
                 }
@@ -85,6 +84,4 @@ public class UrlUtils {
             return spreadsheetId;
         }
     }
-
-
 }
