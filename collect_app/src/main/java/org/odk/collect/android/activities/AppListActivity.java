@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 
 abstract class AppListActivity extends AppCompatActivity {
@@ -142,10 +144,12 @@ abstract class AppListActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
         outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
-        
+
         if (searchView != null) {
             outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
             outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
+        } else {
+            Timber.e("Unexpected null search view (issue #1412)");
         }
 
         if (bottomSheetDialog.isShowing()) {
