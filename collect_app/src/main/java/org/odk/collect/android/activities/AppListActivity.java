@@ -141,9 +141,12 @@ abstract class AppListActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(SELECTED_INSTANCES, selectedInstances);
-        outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
         outState.putBoolean(IS_BOTTOM_DIALOG_SHOWN, bottomSheetDialog.isShowing());
-        outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
+        
+        if (searchView != null) {
+            outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+            outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
+        }
 
         if (bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();
