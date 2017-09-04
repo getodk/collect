@@ -27,7 +27,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 
 public class GeneralSharedPreferences {
 
-    private android.content.SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     public GeneralSharedPreferences(Context context) {

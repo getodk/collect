@@ -23,7 +23,7 @@ import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN
 
 public class AdminSharedPreferences {
 
-    private android.content.SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     public AdminSharedPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences(ADMIN_PREFERENCES, 0);
