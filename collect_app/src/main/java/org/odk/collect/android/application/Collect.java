@@ -269,11 +269,11 @@ public class Collect extends Application {
         activityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
-        generalSharedPreferences = new GeneralSharedPreferences(this);
+        generalSharedPreferences = new GeneralSharedPreferences(getBaseContext());
 
-        adminSharedPreferences = new AdminSharedPreferences(this);
+        adminSharedPreferences = new AdminSharedPreferences(getBaseContext());
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {

@@ -36,7 +36,7 @@ public abstract class MockedServerTest {
     }
 
     private static void configAppFor(MockWebServer server) {
-        GeneralSharedPreferences preferences = Collect.getInstance().getGeneralPrefs();
+        GeneralSharedPreferences preferences = new GeneralSharedPreferences(Collect.getInstance().getBaseContext());
 
         String serverUrl = server.url("/").toString();
         preferences.save(PreferenceKeys.KEY_SERVER_URL, serverUrl);

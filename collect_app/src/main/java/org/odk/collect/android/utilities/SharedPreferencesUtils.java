@@ -119,7 +119,7 @@ public class SharedPreferencesUtils {
             }
         }
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(context);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         AutoSendPreferenceMigrator.migrate(generalPrefsJson);
 
         //settings import confirmation toast
