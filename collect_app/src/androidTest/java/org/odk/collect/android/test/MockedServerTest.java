@@ -1,15 +1,13 @@
 package org.odk.collect.android.test;
 
-import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
-
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.After;
 import org.junit.Before;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -19,9 +17,34 @@ import static org.odk.collect.android.test.TestUtils.backupPreferences;
 import static org.odk.collect.android.test.TestUtils.restorePreferences;
 
 public abstract class MockedServerTest {
+    protected MockWebServer server;
     private Map<String, ?> prefsBackup;
 
-    protected MockWebServer server;
+    protected static String join(String... strings) {
+        StringBuilder bob = new StringBuilder();
+        for (String s : strings) {
+            bob.append(s).append('\n');
+        }
+        return bob.toString();
+    }
+
+    private static MockWebServer mockWebServer() throws Exception {
+        MockWebServer server = new MockWebServer();
+        server.start();
+        configAppFor(server);
+        return server;
+    }
+
+    private static void configAppFor(MockWebServer server) {
+        GeneralSharedPreferences preferences = new GeneralSharedPreferences(Collect.getInstance().getBaseContext());
+
+        String serverUrl = server.url("/").toString();
+        preferences.save(PreferenceKeys.KEY_SERVER_URL, serverUrl);
+
+        if (preferences.get(PreferenceKeys.KEY_SERVER_URL).equals(serverUrl)) {
+            throw new RuntimeException("Failed to set up SharedPreferences for MockWebServer");
+        }
+    }
 
     @Before
     public void http_setUp() throws Exception {
@@ -64,28 +87,5 @@ public abstract class MockedServerTest {
 
     protected RecordedRequest nextRequest() throws Exception {
         return server.takeRequest(1, TimeUnit.MILLISECONDS);
-    }
-
-   protected static String join(String... strings) {
-        StringBuilder bob = new StringBuilder();
-        for (String s : strings) {
-            bob.append(s).append('\n');
-        }
-        return bob.toString();
-    }
-
-    private static MockWebServer mockWebServer() throws Exception {
-        MockWebServer server = new MockWebServer();
-        server.start();
-        configAppFor(server);
-        return server;
-    }
-
-    private static void configAppFor(MockWebServer server) {
-        Editor prefs = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext()).edit();
-        prefs.putString(PreferenceKeys.KEY_SERVER_URL, server.url("/").toString());
-        if (!prefs.commit()) {
-            throw new RuntimeException("Failed to set up SharedPreferences for MockWebServer");
-        }
     }
 }

@@ -20,9 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,7 +57,7 @@ public class SharedPreferencesUtils {
 
         //checking for admin password
         if (keys.contains(KEY_ADMIN_PW)) {
-            String password = (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
+            String password = (String) Collect.getInstance().getGeneralPrefs().get(KEY_ADMIN_PW);
             if (!password.equals("")) {
                 adminPrefs.put(KEY_ADMIN_PW, password);
             }
@@ -68,7 +66,7 @@ public class SharedPreferencesUtils {
 
         for (String key : keys) {
             Object defaultValue = GENERAL_KEYS.get(key);
-            Object value = GeneralSharedPreferences.getInstance().get(key);
+            Object value = Collect.getInstance().getGeneralPrefs().get(key);
 
             if (value == null) {
                 value = "";
@@ -85,8 +83,8 @@ public class SharedPreferencesUtils {
 
         for (String key : ALL_KEYS) {
 
-            Object defaultValue = AdminSharedPreferences.getInstance().getDefault(key);
-            Object value = AdminSharedPreferences.getInstance().get(key);
+            Object defaultValue = Collect.getInstance().getAdminPrefs().getDefault(key);
+            Object value = Collect.getInstance().getAdminPrefs().get(key);
             if (defaultValue != value) {
                 adminPrefs.put(key, value);
             }
@@ -105,9 +103,9 @@ public class SharedPreferencesUtils {
 
             if (generalPrefsJson.has(key)) {
                 Object value = generalPrefsJson.get(key);
-                GeneralSharedPreferences.getInstance().save(key, value);
+                Collect.getInstance().getAdminPrefs().save(key, value);
             } else {
-                GeneralSharedPreferences.getInstance().reset(key);
+                Collect.getInstance().getAdminPrefs().reset(key);
             }
         }
 
@@ -115,13 +113,13 @@ public class SharedPreferencesUtils {
 
             if (adminPrefsJson.has(key)) {
                 Object value = adminPrefsJson.get(key);
-                AdminSharedPreferences.getInstance().save(key, value);
+                Collect.getInstance().getAdminPrefs().save(key, value);
             } else {
-                AdminSharedPreferences.getInstance().reset(key);
+                Collect.getInstance().getAdminPrefs().reset(key);
             }
         }
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(context);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         AutoSendPreferenceMigrator.migrate(generalPrefsJson);
 
         //settings import confirmation toast

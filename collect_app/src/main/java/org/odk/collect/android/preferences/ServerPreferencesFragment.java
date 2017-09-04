@@ -203,7 +203,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onPause();
 
         if (credentialsHaveChanged) {
-            AuthDialogUtility.setWebCredentialsFromPreferences(getActivity().getBaseContext());
+            AuthDialogUtility.setWebCredentialsFromPreferences();
         }
     }
 
@@ -331,15 +331,15 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     private void clearCachedCrendentials() {
-        String server = (String) GeneralSharedPreferences
-                .getInstance().get(PreferenceKeys.KEY_SERVER_URL);
+        String server = (String) Collect.getInstance()
+                .getGeneralPrefs().get(PreferenceKeys.KEY_SERVER_URL);
         Uri u = Uri.parse(server);
         WebUtils.clearHostCredentials(u.getHost());
         Collect.getInstance().getCookieStore().clear();
     }
 
     protected void setDefaultAggregatePaths() {
-        GeneralSharedPreferences sharedPreferences = GeneralSharedPreferences.getInstance();
+        GeneralSharedPreferences sharedPreferences = Collect.getInstance().getGeneralPrefs();
         sharedPreferences.reset(KEY_FORMLIST_URL);
         sharedPreferences.reset(KEY_SUBMISSION_URL);
     }

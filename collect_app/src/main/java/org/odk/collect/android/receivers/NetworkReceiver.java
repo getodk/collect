@@ -74,7 +74,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
-        String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
+        String autosend = (String) Collect.getInstance().getGeneralPrefs().get(PreferenceKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {
@@ -122,7 +122,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     Collect.getInstance(), Collections.singleton(DriveScopes.DRIVE))
                     .setBackOff(new ExponentialBackOff());
 
-            GeneralSharedPreferences settings = GeneralSharedPreferences.getInstance();
+            GeneralSharedPreferences settings = Collect.getInstance().getGeneralPrefs();
 
             String protocol = (String) settings.get(PreferenceKeys.KEY_PROTOCOL);
 

@@ -20,6 +20,8 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 
+import org.odk.collect.android.application.Collect;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -42,7 +44,7 @@ class DisabledPreferencesRemover {
      */
     void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
-            boolean prefAllowed = (boolean) AdminSharedPreferences.getInstance().get(agKeys.adminKey);
+            boolean prefAllowed = (boolean) Collect.getInstance().getAdminPrefs().get(agKeys.adminKey);
 
             if (!prefAllowed) {
                 Preference preference = pf.findPreference(agKeys.generalKey);

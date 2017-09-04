@@ -38,8 +38,10 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -77,6 +79,7 @@ public class Collect extends Application {
     public static final String DEFAULT_FONTSIZE = "21";
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+    public static String defaultSysLanguage;
     private static Collect singleton = null;
 
     static {
@@ -93,7 +96,8 @@ public class Collect extends Application {
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
 
-    public static String defaultSysLanguage;
+    private GeneralSharedPreferences generalSharedPreferences;
+    private AdminSharedPreferences adminSharedPreferences;
 
     public static Collect getInstance() {
         return singleton;
@@ -162,6 +166,14 @@ public class Collect extends Application {
 
     public ActivityLogger getActivityLogger() {
         return activityLogger;
+    }
+
+    public GeneralSharedPreferences getGeneralPrefs() {
+        return generalSharedPreferences;
+    }
+
+    public AdminSharedPreferences getAdminPrefs() {
+        return adminSharedPreferences;
     }
 
     public FormController getFormController() {
@@ -246,18 +258,20 @@ public class Collect extends Application {
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
+        generalSharedPreferences = new GeneralSharedPreferences(getBaseContext());
+        adminSharedPreferences = new AdminSharedPreferences(getBaseContext());
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
+        FormMetadataMigrator.migrate((SharedPreferences) generalSharedPreferences);
         AutoSendPreferenceMigrator.migrate();
 
         PropertyManager mgr = new PropertyManager(this);
 
         FormController.initializeJavaRosa(mgr);
 
-        activityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {

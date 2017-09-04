@@ -15,9 +15,11 @@
 package org.odk.collect.android.preferences;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.odk.collect.android.application.Collect;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -25,19 +27,11 @@ import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 
 public class GeneralSharedPreferences {
 
-    private static GeneralSharedPreferences instance = null;
-    private android.content.SharedPreferences sharedPreferences;
-    private android.content.SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
-    private GeneralSharedPreferences() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-    }
-
-    public static synchronized GeneralSharedPreferences getInstance() {
-        if (instance == null) {
-            instance = new GeneralSharedPreferences();
-        }
-        return instance;
+    public GeneralSharedPreferences(Context context) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public Object get(String key) {
@@ -69,6 +63,11 @@ public class GeneralSharedPreferences {
         save(key, defaultValue);
     }
 
+    public void clearAll() {
+        editor.clear();
+        editor.apply();
+    }
+
     public void save(String key, Object value) {
         editor = sharedPreferences.edit();
         if (value == null || value == "" || value instanceof String) {
@@ -81,6 +80,10 @@ public class GeneralSharedPreferences {
             editor.putInt(key, (Integer) value);
         } else if (value instanceof Float) {
             editor.putFloat(key, (Float) value);
+        } else if (value instanceof Set) {
+            editor.putStringSet(key, (Set<String>) value);
+        } else {
+            throw new RuntimeException("Unhandled preference value type: " + value);
         }
         editor.apply();
     }

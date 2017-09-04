@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 
@@ -35,13 +36,9 @@ import java.util.List;
 public class PreferencesActivity extends PreferenceActivity {
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
 
-    private AdminSharedPreferences sharedPreferences;
-
     @Override
     public void onBuildHeaders(List<Header> target) {
         super.onBuildHeaders(target);
-
-        sharedPreferences = AdminSharedPreferences.getInstance();
 
         final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
 
@@ -82,7 +79,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
     private boolean hasAtleastOneSettingEnabled(Collection<String> keys) {
         for (String key : keys) {
-            boolean value = (boolean) sharedPreferences.get(key);
+            boolean value = (boolean) Collect.getInstance().getAdminPrefs().get(key);
             if (value) {
                 return true;
             }
