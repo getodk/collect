@@ -325,11 +325,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-
-                // Get the server, username, and password from the settings
-                SharedPreferences settings =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
                 return new AuthDialogUtility().createDialog(this, this);
         }
 
