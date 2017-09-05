@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class SelectWidget extends QuestionWidget {
+public abstract class SelectWidget extends QuestionWidget {
     protected List<SelectChoice> items;
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
@@ -169,7 +169,7 @@ public class SelectWidget extends QuestionWidget {
     protected void doSearch(String searchStr) {
         // First check if there is nothing on search
         if (searchStr == null || searchStr.trim().length() == 0) {
-            createOptions(items, null);
+            createFilteredOptions(items, null);
         } else { // Create a List with items that are relevant to the search text
             List<SelectChoice> searchedItems = new ArrayList<>();
             List<Integer> tagList = new ArrayList<>();
@@ -181,11 +181,11 @@ public class SelectWidget extends QuestionWidget {
                     tagList.add(i);
                 }
             }
-            createOptions(searchedItems, tagList);
+            createFilteredOptions(searchedItems, tagList);
         }
     }
 
-    protected void setupChangeListener() {
+    private void setupChangeListener() {
         searchStr.addTextChangedListener(new TextWatcher() {
             private String oldText = "";
 
@@ -221,7 +221,7 @@ public class SelectWidget extends QuestionWidget {
         doSearch("");
     }
 
-    private void createOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {
+    private void createFilteredOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {
         removeView(answerLayout);
         answerLayout.removeAllViews();
 
