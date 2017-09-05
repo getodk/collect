@@ -646,7 +646,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }
             prefEdit.apply();
-            AuthDialogUtility.setWebCredentialsFromPreferences(this);
+            AuthDialogUtility.setWebCredentialsFromPreferences();
 
             // second object is admin options
             Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,

@@ -257,7 +257,7 @@ public class Collect extends Application {
         activityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
