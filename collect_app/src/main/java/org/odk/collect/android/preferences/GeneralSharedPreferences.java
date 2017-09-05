@@ -19,6 +19,8 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
 
+import java.util.Set;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
@@ -81,11 +83,21 @@ public class GeneralSharedPreferences {
             editor.putInt(key, (Integer) value);
         } else if (value instanceof Float) {
             editor.putFloat(key, (Float) value);
+        } else if (value instanceof Set) {
+            editor.putStringSet(key, (Set<String>) value);
+        } else {
+            throw new RuntimeException("Unhandled preference value type: " + value);
         }
         editor.apply();
     }
 
     public boolean getBoolean(String key, boolean value) {
         return sharedPreferences.getBoolean(key, value);
+    }
+
+    public void clear() {
+        editor
+                .clear()
+                .apply();
     }
 }
