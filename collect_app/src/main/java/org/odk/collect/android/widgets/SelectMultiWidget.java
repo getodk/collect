@@ -25,7 +25,6 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.TextUtils;
 
 import java.util.ArrayList;
@@ -40,72 +39,19 @@ import java.util.List;
 public class SelectMultiWidget extends SelectWidget {
     private boolean checkboxInit = true;
 
-    private ArrayList<CheckBox> checkBoxes;
+    protected ArrayList<CheckBox> checkBoxes;
+
+    private List<Selection> ve;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         checkBoxes = new ArrayList<>();
-
-        List<Selection> ve = new ArrayList<>();
-        if (prompt.getAnswerValue() != null) {
-            ve = (List<Selection>) prompt.getAnswerValue().getValue();
+        ve = new ArrayList<>();
+        if (getPrompt().getAnswerValue() != null) {
+            ve = (List<Selection>) getPrompt().getAnswerValue().getValue();
         }
 
-        if (items != null) {
-            for (int i = 0; i < items.size(); i++) {
-                String choiceName = prompt.getSelectChoiceText(items.get(i));
-                CharSequence choiceDisplayName;
-                if (choiceName != null) {
-                    choiceDisplayName = TextUtils.textToHtml(choiceName);
-                } else {
-                    choiceDisplayName = "";
-                }
-                // no checkbox group so id by answer + offset
-                CheckBox c = new CheckBox(getContext());
-                c.setTag(i);
-                c.setId(QuestionWidget.newUniqueId());
-                c.setText(choiceDisplayName);
-                c.setMovementMethod(LinkMovementMethod.getInstance());
-                c.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-                c.setFocusable(!prompt.isReadOnly());
-                c.setEnabled(!prompt.isReadOnly());
-
-                for (int vi = 0; vi < ve.size(); vi++) {
-                    // match based on value, not key
-                    if (items.get(i).getValue().equals(ve.get(vi).getValue())) {
-                        c.setChecked(true);
-                        break;
-                    }
-
-                }
-                checkBoxes.add(c);
-                // when clicked, check for readonly before toggling
-                c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkboxInit && formEntryPrompt.isReadOnly()) {
-                            if (buttonView.isChecked()) {
-                                buttonView.setChecked(false);
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "onItemClick.deselect",
-                                        items.get((Integer) buttonView.getTag()).getValue(),
-                                        formEntryPrompt.getIndex());
-                            } else {
-                                buttonView.setChecked(true);
-                                Collect.getInstance().getActivityLogger().logInstanceAction(this,
-                                        "onItemClick.select",
-                                        items.get((Integer) buttonView.getTag()).getValue(),
-                                        formEntryPrompt.getIndex());
-                            }
-                        }
-                    }
-                });
-
-                answerLayout.addView(createMediaLayout(i, c));
-            }
-            addAnswerView(answerLayout);
-        }
-        checkboxInit = false;
+        createLayout();
     }
 
     @Override
@@ -143,5 +89,60 @@ public class SelectMultiWidget extends SelectWidget {
         for (CheckBox c : checkBoxes) {
             c.cancelLongPress();
         }
+    }
+
+    protected CheckBox createCheckBox(int index) {
+        String choiceName = getPrompt().getSelectChoiceText(items.get(index));
+        CharSequence choiceDisplayName;
+        if (choiceName != null) {
+            choiceDisplayName = TextUtils.textToHtml(choiceName);
+        } else {
+            choiceDisplayName = "";
+        }
+        // no checkbox group so id by answer + offset
+        CheckBox checkBox = new CheckBox(getContext());
+        checkBox.setTag(index);
+        checkBox.setId(QuestionWidget.newUniqueId());
+        checkBox.setText(choiceDisplayName);
+        checkBox.setMovementMethod(LinkMovementMethod.getInstance());
+        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        checkBox.setFocusable(!getPrompt().isReadOnly());
+        checkBox.setEnabled(!getPrompt().isReadOnly());
+
+        for (int vi = 0; vi < ve.size(); vi++) {
+            // match based on value, not key
+            if (items.get(index).getValue().equals(ve.get(vi).getValue())) {
+                checkBox.setChecked(true);
+                break;
+            }
+        }
+
+        // when clicked, check for readonly before toggling
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!checkboxInit && formEntryPrompt.isReadOnly()) {
+                    if (buttonView.isChecked()) {
+                        buttonView.setChecked(false);
+                    } else {
+                        buttonView.setChecked(true);
+                    }
+                }
+            }
+        });
+
+        return checkBox;
+    }
+
+    protected void createLayout() {
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                CheckBox checkBox = createCheckBox(i);
+                checkBoxes.add(checkBox);
+                answerLayout.addView(createMediaLayout(i, checkBox));
+            }
+            addAnswerView(answerLayout);
+        }
+        checkboxInit = false;
     }
 }
