@@ -20,14 +20,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -92,7 +90,8 @@ import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.preferences.AdminKeys;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -248,7 +247,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         LEFT, RIGHT, FADE
     }
 
-    private SharedPreferences adminPreferences;
     private boolean showNavigationButtons;
 
     private FormsDao formsDao;
@@ -282,10 +280,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
         questionHolder = (LinearLayout) findViewById(R.id.questionholder);
-
-        // get admin preference settings
-        adminPreferences = getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
         initToolbar();
 
@@ -958,19 +952,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        if (adminPreferences == null) {
-            return false;
-        }
-
         boolean useability;
 
-        useability = adminPreferences.getBoolean(
-                AdminKeys.KEY_SAVE_MID, true);
+        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID);
 
         menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-        useability = adminPreferences.getBoolean(
-                AdminKeys.KEY_JUMP_TO, true);
+        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_JUMP_TO);
 
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
@@ -978,8 +966,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
 
-        useability = adminPreferences.getBoolean(
-                AdminKeys.KEY_CHANGE_LANGUAGE, true)
+        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -987,8 +974,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = adminPreferences.getBoolean(
-                AdminKeys.KEY_ACCESS_SETTINGS, true);
+        useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_ACCESS_SETTINGS);
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
@@ -1197,8 +1183,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .findViewById(R.id.mark_finished));
                 instanceComplete.setChecked(isInstanceComplete(true));
 
-                if (!adminPreferences.getBoolean(
-                        AdminKeys.KEY_MARK_AS_FINALIZED, true)) {
+                if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
                     instanceComplete.setVisibility(View.GONE);
                 }
 
@@ -1279,8 +1264,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // override the visibility settings based upon admin preferences
-                if (!adminPreferences.getBoolean(
-                        AdminKeys.KEY_SAVE_AS, true)) {
+                if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
                     saveAs.setVisibility(View.GONE);
                     TextView sa = (TextView) endView
                             .findViewById(R.id.save_form_as);
@@ -1438,9 +1422,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     .getFormController();
 
             // get constraint behavior preference value with appropriate default
-            String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
-                            PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
+            String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                    .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
             if (formController.currentPromptIsQuestion()) {
 
@@ -1998,8 +1981,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         List<IconMenuItem> items;
-        if (adminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
-                true)) {
+        if ((boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_MID)) {
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
                     new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         } else {
@@ -2417,11 +2399,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         // only check the buttons if it's enabled in preferences
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        String navigation = sharedPreferences.getString(
-                PreferenceKeys.KEY_NAVIGATION,
-                PreferenceKeys.KEY_NAVIGATION);
+        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
         if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
             showNavigationButtons = true;
         }
@@ -2741,9 +2719,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
-                String constraintBehavior = PreferenceManager.getDefaultSharedPreferences(this)
-                        .getString(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR,
-                                PreferenceKeys.CONSTRAINT_BEHAVIOR_DEFAULT);
+                String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
+                        .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
@@ -2783,10 +2760,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             // if we're at the end of the form, then check the preferences
             if (end) {
                 // First get the value from the preferences
-                SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(this);
-                complete = sharedPreferences.getBoolean(
-                        PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
+                complete = (boolean) GeneralSharedPreferences
+                        .getInstance()
+                        .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);
             }
 
             // Then see if we've already marked this form as complete before
@@ -2862,11 +2838,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                            float velocityY) {
         // only check the swipe if it's enabled in preferences
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        String navigation = sharedPreferences.getString(
-                PreferenceKeys.KEY_NAVIGATION,
-                PreferenceKeys.NAVIGATION_SWIPE);
+        String navigation = (String) GeneralSharedPreferences.getInstance()
+                .get(PreferenceKeys.KEY_NAVIGATION);
 
         if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
             // Looks for user swipes. If the user has swiped, move to the
