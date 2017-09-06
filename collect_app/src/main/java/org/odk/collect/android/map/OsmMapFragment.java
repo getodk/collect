@@ -17,6 +17,7 @@ package org.odk.collect.android.map;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
@@ -39,6 +40,7 @@ import com.google.android.gms.location.LocationListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.utilities.IconUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -113,6 +115,10 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         map.getOverlays().add(new MapEventsOverlay(this));
         addMapLayoutChangeListener(map);
         myLocationOverlay = new MyLocationNewOverlay(map);
+        myLocationOverlay.setDrawAccuracyEnabled(true);
+        Bitmap crosshairs = IconUtils.getBitmap(getActivity(), R.drawable.ic_crosshairs);
+        myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
+
         locationClient = LocationClients.clientForContext(getActivity());
         locationClient.setListener(this);
         if (readyListener != null) {
@@ -410,8 +416,8 @@ public class OsmMapFragment extends Fragment implements MapFragment,
         marker.setPosition(toGeoPoint(point));
         marker.setSubDescription(Double.toString(point.sd));
         marker.setDraggable(feature != null);
-        marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_place_black));
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_red_point));
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
 
         marker.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
             @Override public void onMarkerDragStart(Marker marker) { }

@@ -16,7 +16,12 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import org.odk.collect.android.R;
 
@@ -28,5 +33,16 @@ public class IconUtils {
     public static int getNotificationAppIcon() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
                 R.drawable.ic_notes_white : R.drawable.ic_notes_white_png;
+    }
+
+    /** Renders a Drawable (such as a vector drawable) into a Bitmap. */
+    public static Bitmap getBitmap(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        Bitmap bitmap = Bitmap.createBitmap(
+            drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }

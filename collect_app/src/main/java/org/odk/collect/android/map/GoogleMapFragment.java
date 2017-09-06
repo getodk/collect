@@ -32,6 +32,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
+import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.ArrayList;
@@ -442,7 +444,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new LatLng(point.lat, point.lon);
     }
 
-    protected static Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
+    protected Marker createMarker(GoogleMap map, MapPoint point, boolean draggable) {
         if (map == null) {
             return null;
         }
@@ -453,6 +455,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)
             .draggable(draggable)
+            .icon(BitmapDescriptorFactory.fromBitmap(IconUtils.getBitmap(getActivity(), R.drawable.ic_red_point)))
+            .anchor(0.5f, 0.5f)  // center the icon on the position
         );
     }
 
@@ -477,7 +481,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         void dispose();
     }
 
-    protected static class MarkerFeature implements MapFeature {
+    protected class MarkerFeature implements MapFeature {
         Marker marker;
 
         public MarkerFeature(GoogleMap map, MapPoint point, boolean draggable) {
@@ -501,7 +505,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    protected static class PolyFeature implements MapFeature {
+    protected class PolyFeature implements MapFeature {
         final GoogleMap map;
         final List<Marker> markers = new ArrayList<>();
         final boolean closedPolygon;
