@@ -165,20 +165,6 @@ public class SmapTaskMapFragment extends Fragment
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.ft_map_layout, container, false);
 
-        userLocationIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_userlocation);
-        accepted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_open);
-        repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_repeat);
-        rejected = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_reject);
-        complete = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_done);
-        submitted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_submitted);
-        triggered = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered);
-        triggered_repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered_repeat);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        mo = new MapLocationObserver(getContext(), this);
-
         setHasOptionsMenu(true);
         return rootView;
     }
@@ -289,6 +275,20 @@ public class SmapTaskMapFragment extends Fragment
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mHelper = new MapHelper(getActivity(),mMap);
         mHelper.setBasemap();
+
+        userLocationIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_userlocation);
+        accepted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_open);
+        repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_repeat);
+        rejected = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_reject);
+        complete = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_done);
+        submitted = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_submitted);
+        triggered = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered);
+        triggered_repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered_repeat);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        mo = new MapLocationObserver(getContext(), this);
 
         location_button = (Button) getActivity().findViewById(R.id.show_location);
         location_button.setOnClickListener(new View.OnClickListener(){
