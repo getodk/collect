@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
 
+import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -99,5 +100,9 @@ public class GeneralSharedPreferences {
         editor
                 .clear()
                 .apply();
+    }
+
+    public Map<String, ?> getAll() {
+        return sharedPreferences.getAll();
     }
 }

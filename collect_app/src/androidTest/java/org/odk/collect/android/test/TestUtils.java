@@ -1,6 +1,5 @@
 package org.odk.collect.android.test;
 
-import android.content.SharedPreferences;
 import android.os.Environment;
 
 import org.odk.collect.android.application.Collect;
@@ -19,8 +18,7 @@ public final class TestUtils {
     }
 
     public static Map<String, ?> backupPreferences() {
-        SharedPreferences prefs = (SharedPreferences) GeneralSharedPreferences.getInstance();
-        return Collections.unmodifiableMap(prefs.getAll());
+        return Collections.unmodifiableMap(GeneralSharedPreferences.getInstance().getAll());
     }
 
     public static void restorePreferences(Map<String, ?> backup) {
