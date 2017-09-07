@@ -30,7 +30,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.DateData;
@@ -153,17 +152,8 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void createDateButton() {
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        dateButton = new Button(getContext());
-        dateButton.setId(QuestionWidget.newUniqueId());
-        dateButton.setText(R.string.select_date);
-        dateButton.setPadding(20, 20, 20, 20);
-        dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        dateButton.setLayoutParams(params);
+        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
         dateButton.setEnabled(!formEntryPrompt.isReadOnly());
-
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +191,10 @@ public class DateWidget extends QuestionWidget {
 
     private int getTheme() {
         int theme = 0;
+        // https://github.com/opendatakit/collect/issues/1367
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            theme = android.R.style.Theme_Material_Light_Dialog;
+        }
         if (!showCalendar) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
@@ -266,13 +260,11 @@ public class DateWidget extends QuestionWidget {
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {
-        int theme;
         private String dialogTitle = getContext().getString(R.string.select_date);
 
         CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, theme, listener, year, month, dayOfMonth);
-            this.theme = theme;
-            if (theme != 0) {
+            if (!showCalendar) {
                 setTitle(dialogTitle);
                 fixSpinner(context, year, month, dayOfMonth);
                 getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -281,7 +273,7 @@ public class DateWidget extends QuestionWidget {
         }
 
         public void setTitle(CharSequence title) {
-            if (theme != 0) {
+            if (!showCalendar) {
                 super.setTitle(dialogTitle);
             }
         }

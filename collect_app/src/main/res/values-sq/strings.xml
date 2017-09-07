@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Shfaq fjalëkalimin</string>
   <string name="activity_not_found">Nuk gjendet aktivitet për t\'u procesuar: %s</string>
   <string name="add_another">Shto grup</string>
@@ -124,7 +124,6 @@
   <string name="select_another_image">Zgjidh një imazh tjetër</string>
   <string name="use_odk_default">Përdor imazhin e parapërcaktuar</string>
   <string name="change_splash_path">Ndrysho imazhin</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Ruaj ndryshimet</string>
   <string name="change_formlist_url">Adresa për listën e formularëve (në fund të URL)</string>
   <string name="change_protocol">Platforma</string>
@@ -384,12 +383,6 @@
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
   <string name="instance_sync">Importo formularët e ruajtur si të finalizuar</string>
   <string name="instance_sync_summary">Importon formularët e ruajtur nga instances folder</string>
-  <string name="sort_by_name_asc">Sipas emrit, A-Z</string>
-  <string name="sort_by_name_desc">Sipas emrit, Z-A</string>
-  <string name="sort_by_date_asc">Sipas datës, më të rejat në fillim</string>
-  <string name="sort_by_date_desc">Sipas statusit, më të vjetrat në fillim</string>
-  <string name="sort_by_status_asc">Sipas statusit, të përfunduarat në fillim</string>
-  <string name="sort_by_status_desc">Sipas statusit, të papërfunduarat në fillim</string>
   <string name="sort_the_list">Rendit listën</string>
   <string name="request_permissions_google_account">ODK Collect ka nevojë të aksesojë loogarinë tuaj në Google në mënyrë që të marrë formularë bosh dhe të ngarkojë formularë të plotësuar</string>
   <string name="filter_the_list">Filtro listën</string>

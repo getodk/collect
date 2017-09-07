@@ -352,11 +352,10 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
         }
+        super.onDestroy();
     }
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {

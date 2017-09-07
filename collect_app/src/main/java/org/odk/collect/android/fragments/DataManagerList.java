@@ -15,6 +15,7 @@
 package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -55,11 +56,11 @@ public class DataManagerList extends InstanceListFragment
     DeleteInstancesTask deleteInstancesTask = null;
     private AlertDialog alertDialog;
     private InstanceSyncTask instanceSyncTask;
+    private ProgressDialog progressDialog;
 
     public static DataManagerList newInstance() {
         return new DataManagerList();
     }
-
 
     @Nullable
     @Override
@@ -193,12 +194,24 @@ public class DataManagerList extends InstanceListFragment
         alertDialog.show();
     }
 
+    @Override
+    public void progressUpdate(int progress, int total) {
+        String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message),progress,total);
+        progressDialog.setMessage(message);
+    }
+
     /**
      * Deletes the selected files. Content provider handles removing the files
      * from the filesystem.
      */
     private void deleteSelectedInstances() {
         if (deleteInstancesTask == null) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage(getResources().getString(R.string.form_delete_message));
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
             deleteInstancesTask = new DeleteInstancesTask();
             deleteInstancesTask.setContentResolver(getActivity().getContentResolver());
             deleteInstancesTask.setDeleteListener(this);
@@ -230,12 +243,15 @@ public class DataManagerList extends InstanceListFragment
                     String.valueOf(toDeleteCount - deletedInstances),
                     String.valueOf(toDeleteCount)));
         }
+
         deleteInstancesTask = null;
         getListView().clearChoices(); // doesn't unset the checkboxes
         for (int i = 0; i < getListView().getCount(); ++i) {
             getListView().setItemChecked(i, false);
         }
         deleteButton.setEnabled(false);
+
+        progressDialog.dismiss();
     }
 
     @Override

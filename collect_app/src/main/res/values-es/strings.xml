@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Mostrar contraseña</string>
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
@@ -128,7 +128,6 @@
   <string name="select_another_image">Seleccione otra imagen</string>
   <string name="use_odk_default">Usar la imagen por defecto</string>
   <string name="change_splash_path">Cambiar la imagen</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
   <string name="change_protocol">Protocolo</string>
@@ -278,7 +277,7 @@
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
-    <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
+  <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
@@ -411,12 +410,6 @@
   <string name="instance_scan_count">%1$d formularios añadidos.</string>
   <string name="instance_sync">Importar formularios guardados como finalizados</string>
   <string name="instance_sync_summary">Importa los formularios guardados de la carpeta de instancias</string>
-  <string name="sort_by_name_asc">Por nombre, A-Z</string>
-  <string name="sort_by_name_desc">Por nombre, Z-A</string>
-  <string name="sort_by_date_asc">Por fecha, el más reciente primero</string>
-  <string name="sort_by_date_desc">Por fecha, el más antiguo primero</string>
-  <string name="sort_by_status_asc">Por estado, finalizado primero</string>
-  <string name="sort_by_status_desc">Por estado, sin finalizar primero</string>
   <string name="sort_the_list">Ordenar la lista</string>
   <string name="request_permissions_google_account">ODK Collect necesita acceder a tu cuenta de Google para obtener formularios en blanco y enviar formularios terminados.</string>
   <string name="filter_the_list">Filtrar la lista</string>
@@ -458,6 +451,20 @@
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
+  <string name="user_settings">Ajustes de usuario</string>
+  <string name="main_menu_settings">Menú principal de ajustes</string>
+  <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
+  <string name="user_access_control">Control de acceso a usuario</string>
   <string name="autosend_selector_title">Auto enviar</string>
+  <string name="off">Off</string>
+  <string name="wifi_autosend">Solo con Wifi</string>
+  <string name="cellular_autosend">Solo con Datos Móviles</string>
+  <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
+  <string name="form_management_preferences">Gestión de formulario</string>
+  <string name="high_resolution_title">Video de alta resolución</string>
+  <string name="user_and_device_identity_title">Identidad de usuario y dispositivo</string>
+  <string name="constraint_behavior_title">Procesamiento de restricciones</string>
+  <string name="server_settings_title">Servidor</string>
+  <string name="form_entry">Desmarque para esconder del formulario</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
 </resources>

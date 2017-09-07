@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">प्रयोग गर्न कुनै पनि क्रियाकलाप भेटिएन: %s </string>
   <string name="add_another">समूह थप्नुहोस् </string>
   <string name="add_another_repeat">के अर्को \"%s\" समूह थप्नु हुन्छ ?</string>
@@ -119,7 +119,6 @@
   <string name="select_another_image">अर्को तस्विर छान्नुहोला</string>
   <string name="use_odk_default">डिफल्ट तस्विर प्रयोग गर्नुहोस् </string>
   <string name="change_splash_path">तस्विर बदल्नुहोस् </string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">परिवर्तनहरु संचित गर्नुहोस् </string>
   <string name="change_formlist_url">फारम सूचीको मार्ग (URL मा जोडिसकिएको छ )</string>
   <string name="change_protocol">मंच </string>
@@ -256,7 +255,7 @@
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="change_server_url">सर्भर URL</string>
   <string name="no_blank_search">सर्च क्षेत्र रिक्त हुनु हुदैन।</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <string name="streets">टोलहरु</string>
   <string name="satellite">उपग्रह</string>
   <string name="start">सुरु</string>

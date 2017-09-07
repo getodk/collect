@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">पासवर्ड दिखायें </string>
   <string name="activity_not_found">%s:के नियंत्रण के लिए कोई क्रिया नहीं मिली</string>
   <string name="add_another"> समूह जोड़ें</string>
@@ -128,7 +128,6 @@
   <string name="select_another_image">दूसरा इमेज चयनित करे</string>
   <string name="use_odk_default">डिफ़ॉल्ट इमेज प्रयोग करें</string>
   <string name="change_splash_path">इमेज बदले</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
   <string name="change_protocol">प्लेटफोर्म</string>
@@ -171,7 +170,7 @@
   <string name="show_unsent_forms">नहीं भेजे हुए फॉर्म दिखाएं</string>
   <string name="added_on_date_at_time">EEE, MMM dd, yyyy \'पर जोड़ा\' HH:mm \'पर\' </string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">EEE, MMM dd, yyyy \' पर संरक्षित\' HH:mm \'पर\'\' </string>
+  <string name="saved_on_date_at_time">EEE, MMM dd, yyyy \' पर संरक्षित\' HH:mm \'पर\' </string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">EEE, MMM dd, yyyy \'पर फाइनल हुआ\'  HH:mm \'पर\' </string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -365,7 +364,7 @@
   <string name="go_back">वापस जायें</string>
   <string name="download_selected">डाउनलोड चयनित</string>
   <string name="record_geopoint">रिकॉर्ड जिओपॉइंट</string>
-  <string name="gps_result">अक्षांश:%% %1$s\ n nदेशांतर:%2$s \ n ऊंचाई:%% %3$s \nशुद्धता:%4$sm</string>
+  <string name="gps_result">अक्षांश:%% %1$s\n nदेशांतर:%2$s \n ऊंचाई:%% %3$s \nशुद्धता:%4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
   <string name="selected_answer">चयनित :%s</string>
   <string name="version_number">संस्करण: %s</string>
@@ -421,12 +420,6 @@
   <string name="instance_scan_count">%1$dफॉर्म जोड दिया.</string>
   <string name="instance_sync">संरक्षित फॉर्म को फाइनल रूप में आयात करें</string>
   <string name="instance_sync_summary">संरक्षित फॉर्म इंस्टैंस फोल्डर से आयत करें  </string>
-  <string name="sort_by_name_asc">नाम से, A-Z</string>
-  <string name="sort_by_name_desc">नाम से, Z-A</string>
-  <string name="sort_by_date_asc">तिथि के अनुसार, सबसे नया पहले</string>
-  <string name="sort_by_date_desc">तिथि के अनुसार, सबसे पुराना पहले</string>
-  <string name="sort_by_status_asc">स्टेटस से, फाइनल हुआ पहले</string>
-  <string name="sort_by_status_desc">स्टेटस से, बिना फाइनल किया हुआ पहले</string>
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
   <string name="request_permissions_google_account">ODK कलेक्ट को रिक्त फॉर्म प्राप्त करने के लिए, और भरे गए फॉर्म सबमिट करने के लिए, आपके गूगल अकाउंट तक पहुंच की आवश्यकता है।</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>
