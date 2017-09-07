@@ -6,10 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.odk.collect.android.application.Collect;
-
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.odk.collect.android.utilities.TextUtils;
 
 import timber.log.Timber;
 
@@ -192,7 +189,7 @@ public class ItemsetDbAdapter {
         if (c != null) {
             if (c.getCount() == 1) {
                 c.moveToFirst();
-                String table = getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
+                String table = TextUtils.getMd5FromString(c.getString(c.getColumnIndex(KEY_PATH)));
                 db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE + table);
             }
             c.close();
@@ -204,18 +201,4 @@ public class ItemsetDbAdapter {
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
-
-    public static String getMd5FromString(String toEncode) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
-        }
-        md.update(toEncode.getBytes());
-        byte[] digest = md.digest();
-        BigInteger bigInt = new BigInteger(1, digest);
-        return bigInt.toString(16);
-    }
-
 }

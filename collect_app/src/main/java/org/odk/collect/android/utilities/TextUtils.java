@@ -16,7 +16,12 @@ package org.odk.collect.android.utilities;
 
 import android.text.Html;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.MatchResult;
+
+import timber.log.Timber;
 
 public class TextUtils {
     private static ReplaceCallback.Callback createHeader = new ReplaceCallback.Callback() {
@@ -96,5 +101,18 @@ public class TextUtils {
         }
 
         return Html.fromHtml(markdownToHtml(text));
+    }
+
+    public static String getMd5FromString(String toEncode) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
+        }
+        md.update(toEncode.getBytes());
+        byte[] digest = md.digest();
+        BigInteger bigInt = new BigInteger(1, digest);
+        return bigInt.toString(16);
     }
 } 

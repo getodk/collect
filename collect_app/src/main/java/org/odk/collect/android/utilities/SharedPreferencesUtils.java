@@ -24,10 +24,7 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -37,7 +34,6 @@ import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PASSWORD;
-
 
 public class SharedPreferencesUtils {
 
@@ -59,10 +55,12 @@ public class SharedPreferencesUtils {
 
         //checking for admin password
         if (keys.contains(KEY_ADMIN_PW)) {
-            String password = (String) AdminSharedPreferences.getInstance().get(KEY_ADMIN_PW);
-            if (!password.equals("")) {
-                adminPrefs.put(KEY_ADMIN_PW, password);
+            File adminPassFile = new File(Collect.ADMIN_PASSWORD_FILE_PATH);
+            String password = "";
+            if (adminPassFile.exists()) {
+                password = FileUtils.getFileContent(adminPassFile);
             }
+            adminPrefs.put(KEY_ADMIN_PW, password);
             keys.remove(KEY_ADMIN_PW);
         }
 
@@ -84,7 +82,6 @@ public class SharedPreferencesUtils {
         prefs.put("general", generalPrefs);
 
         for (String key : ALL_KEYS) {
-
             Object defaultValue = AdminSharedPreferences.getInstance().getDefault(key);
             Object value = AdminSharedPreferences.getInstance().get(key);
             if (defaultValue != value) {
@@ -97,7 +94,6 @@ public class SharedPreferencesUtils {
     }
 
     public void savePreferencesFromJSON(JSONObject settingsJson) throws JSONException {
-
         JSONObject generalPrefsJson = settingsJson.getJSONObject("general");
         JSONObject adminPrefsJson = settingsJson.getJSONObject("admin");
 
@@ -112,10 +108,16 @@ public class SharedPreferencesUtils {
         }
 
         for (String key : getAllAdminKeys()) {
-
             if (adminPrefsJson.has(key)) {
                 Object value = adminPrefsJson.get(key);
                 AdminSharedPreferences.getInstance().save(key, value);
+                if (KEY_ADMIN_PW.equals(key)) {
+                    if (!String.valueOf(value).isEmpty()) {
+                        FileUtils.createFileWithContent(String.valueOf(value), Collect.ADMIN_PASSWORD_FILE_PATH);
+                    } else {
+                        FileUtils.deleteAndReport(new File(Collect.ADMIN_PASSWORD_FILE_PATH));
+                    }
+                }
             } else {
                 AdminSharedPreferences.getInstance().reset(key);
             }
@@ -130,34 +132,14 @@ public class SharedPreferencesUtils {
 
     public boolean loadSharedPreferencesFromJSONFile(File src) {
         boolean res = false;
-        BufferedReader br = null;
 
         try {
-            String line = null;
-            StringBuilder builder = new StringBuilder();
-            br = new BufferedReader(new FileReader(src));
-
-            while ((line = br.readLine()) != null) {
-                builder.append(line);
-            }
-
-            JSONObject jo = new JSONObject(builder.toString());
-
+            JSONObject jo = new JSONObject(FileUtils.getFileContent(src));
             this.savePreferencesFromJSON(jo);
 
             res = true;
-        } catch (IOException e) {
-            Timber.e(e, "Exception while loading preferences from file due to : %s ", e.getMessage());
         } catch (JSONException e) {
             Timber.e(e, "Exception while converting file to JSON object due to : %s ", e.getMessage());
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException ex) {
-                Timber.e(ex, "Exception thrown while closing an input stream due to: %s ", ex.getMessage());
-            }
         }
 
         return res;

@@ -55,7 +55,9 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
 
@@ -68,6 +70,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -448,11 +452,9 @@ public class MainMenuActivity extends AppCompatActivity {
             case R.id.menu_admin_preferences:
                 Collect.getInstance().getActivityLogger()
                         .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-                String pw = adminPreferences.getString(
-                        AdminKeys.KEY_ADMIN_PW, "");
-                if ("".equalsIgnoreCase(pw)) {
-                    Intent i = new Intent(getApplicationContext(),
-                            AdminPreferencesActivity.class);
+
+                if (!new File(Collect.ADMIN_PASSWORD_FILE_PATH).exists()) {
+                    Intent i = new Intent(getApplicationContext(), AdminPreferencesActivity.class);
                     startActivity(i);
                 } else {
                     showDialog(PASSWORD_DIALOG);
@@ -517,12 +519,11 @@ public class MainMenuActivity extends AppCompatActivity {
                 passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                         getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                                String value = input.getText().toString();
-                                String pw = adminPreferences.getString(
-                                        AdminKeys.KEY_ADMIN_PW, "");
-                                if (pw.compareTo(value) == 0) {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String value = TextUtils.getMd5FromString(input.getText().toString());
+                                String pass = FileUtils.getFileContent(Collect.ADMIN_PASSWORD_FILE_PATH);
+
+                                if (pass.equals(value)) {
                                     Intent i = new Intent(getApplicationContext(),
                                             AdminPreferencesActivity.class);
                                     startActivity(i);
@@ -654,6 +655,12 @@ public class MainMenuActivity extends AppCompatActivity {
             adminEdit.clear();
             // first object is preferences
             Map<String, ?> adminEntries = (Map<String, ?>) input.readObject();
+            if (adminEntries.containsKey(KEY_ADMIN_PW)) {
+                FileUtils.createFileWithContent((String) adminEntries.get(KEY_ADMIN_PW), Collect.ADMIN_PASSWORD_FILE_PATH);
+                adminEntries.remove(KEY_ADMIN_PW);
+            } else {
+                FileUtils.deleteAndReport(new File(Collect.ADMIN_PASSWORD_FILE_PATH));
+            }
             for (Entry<String, ?> entry : adminEntries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
