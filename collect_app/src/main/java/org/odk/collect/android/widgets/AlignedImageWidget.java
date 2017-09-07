@@ -38,6 +38,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -96,8 +97,11 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             }
         }
 
-        instanceFolder =
-                Collect.getInstance().getFormController().getInstancePath().getParent();
+        final Collect collect = Collect.getInstance();
+        final FormController formController = collect.getFormController();
+
+        File instancePath = formController.getInstancePath();
+        instanceFolder = instancePath.getParent();
 
         errorTextView = new TextView(context);
         errorTextView.setId(QuestionWidget.newUniqueId());
@@ -108,7 +112,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
+                collect.getActivityLogger().logInstanceAction(this, "captureButton",
                         "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
 
@@ -130,7 +134,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                 // if this gets modified, the onActivityResult in
                 // FormEntyActivity will also need to be updated.
                 try {
-                    Collect.getInstance().getFormController().setIndexWaitingForData(
+                    formController.setIndexWaitingForData(
                             formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.ALIGNED_IMAGE);
@@ -139,7 +143,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                             getContext().getString(R.string.activity_not_found,
                                     "aligned image capture"),
                             Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                    formController.setIndexWaitingForData(null);
                 }
 
             }
@@ -150,14 +154,14 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
+                collect.getActivityLogger().logInstanceAction(this, "chooseButton",
                         "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
 
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.IMAGE_CHOOSER);
@@ -165,7 +169,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found, "choose image"),
                             Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                    formController.setIndexWaitingForData(null);
                 }
 
             }
@@ -213,7 +217,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton",
+                    collect.getActivityLogger().logInstanceAction(this, "viewButton",
                             "click", formEntryPrompt.getIndex());
                     Intent i = new Intent("android.intent.action.VIEW");
                     Uri uri = MediaUtils.getImageUriFromMediaProvider(
@@ -238,7 +242,8 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         addAnswerView(answerLayout);
     }
 
-    private void deleteMedia() {
+    // Package private for testing purposes:
+    void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
