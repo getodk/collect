@@ -344,19 +344,19 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     @Override
+    public void finish() {
+        ViewGroup view = (ViewGroup) getWindow().getDecorView();
+        view.removeAllViews();
+        super.finish();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
         }
-    }
-
-    @Override
-    public void finish() {
-        ViewGroup view = (ViewGroup) getWindow().getDecorView();
-        view.removeAllViews();
-        super.finish();
     }
 
     public void setGeoTraceScheduler(long delay, TimeUnit units) {
