@@ -16,7 +16,11 @@ package org.odk.collect.android.preferences;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -35,20 +39,28 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import static android.content.Context.DEVICE_POLICY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
-
+import static org.odk.collect.android.preferences.AdminKeys.KEY_PREVENT_UNINSTALLING;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
     public static final String ADMIN_PREFERENCES = "admin_prefs";
 
+    private ComponentName cn;
+    private DevicePolicyManager mgr;
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        cn = new ComponentName(getActivity(), DeviceAdminReceiver.class);
+        mgr = (DevicePolicyManager) getActivity().getSystemService(DEVICE_POLICY_SERVICE);
+
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(ADMIN_PREFERENCES);
         prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
@@ -57,9 +69,23 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
+        initPreventUninstallingPreference();
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+    }
+
+    private void initPreventUninstallingPreference() {
+        final Preference pref = findPreference(KEY_PREVENT_UNINSTALLING);
+
+        if (pref != null) {
+            if (mgr.isAdminActive(cn)) {
+                pref.setSummary(getString(R.string.enabled));
+            } else {
+                pref.setSummary(getString(R.string.disabled));
+            }
+            pref.setOnPreferenceClickListener(this);
+        }
     }
 
     @Override
@@ -136,6 +162,17 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
             case KEY_IMPORT_SETTINGS:
                 fragment = new ShowQRCodeFragment();
+                break;
+
+            case KEY_PREVENT_UNINSTALLING:
+                if (mgr.isAdminActive(cn)) {
+                    mgr.removeActiveAdmin(cn);
+                    preference.setSummary(getString(R.string.disabled));
+                } else {
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cn);
+                    startActivity(intent);
+                }
                 break;
 
             case "main_menu":

@@ -29,6 +29,10 @@
         android:key="import_settings"
         android:title="@string/import_settings" />
 
+    <Preference
+        android:key="prevent_uninstalling"
+        android:title="@string/prevent_uninstalling" />
+
     <PreferenceCategory android:title="@string/user_access_control">
 
         <PreferenceScreen
