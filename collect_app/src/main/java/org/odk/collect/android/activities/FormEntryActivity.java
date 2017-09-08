@@ -83,6 +83,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -2025,7 +2026,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             .logInstanceAction(this, "createQuitDialog", "discardAndExit");
 
                     // close all open databases of external data.
-                    Collect.getInstance().getExternalDataManager().close();
+                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                    if (manager != null) {
+                        manager.close();
+                    }
 
                     FormController formController = Collect.getInstance().getFormController();
                     if (formController != null) {
