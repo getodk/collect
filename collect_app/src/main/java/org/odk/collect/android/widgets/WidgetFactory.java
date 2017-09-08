@@ -206,7 +206,7 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
-                } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
+                } else if (appearance.contains("autocomplete")) {
                     questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
