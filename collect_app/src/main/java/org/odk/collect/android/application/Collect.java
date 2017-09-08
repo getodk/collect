@@ -22,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -89,6 +90,8 @@ public class Collect extends Application {
     // retain credentials for 7 minutes...
     private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
     private ActivityLogger activityLogger;
+
+    @Nullable
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
@@ -164,10 +167,12 @@ public class Collect extends Application {
         return activityLogger;
     }
 
+    @Nullable
     public FormController getFormController() {
         return formController;
     }
 
+    @Nullable
     public void setFormController(FormController controller) {
         formController = controller;
     }
