@@ -16,9 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
