@@ -339,8 +339,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     protected void onStop() {
-        super.onStop();
         locationClient.stop();
+        super.onStop();
     }
 
     @Override
