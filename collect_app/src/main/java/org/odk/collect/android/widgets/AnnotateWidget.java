@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -52,12 +54,14 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget {
-    private static final String t = "AnnotateWidget";
 
     private Button captureButton;
     private Button chooseButton;
     private Button annotateButton;
+
+    @Nullable
     private ImageView imageView;
 
     private String binaryName;
@@ -266,7 +270,10 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget 
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-        imageView.setImageBitmap(null);
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
         if (!formEntryPrompt.isReadOnly()) {
             annotateButton.setEnabled(false);
@@ -306,10 +313,14 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget 
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
+
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }

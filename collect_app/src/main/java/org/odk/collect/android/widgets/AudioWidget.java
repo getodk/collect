@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -34,6 +36,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.IMediaUtil;
+import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
@@ -188,6 +192,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
         // remove the file
         deleteMedia();
 
+
         // reset buttons
         playButton.setEnabled(false);
     }
@@ -205,8 +210,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
     public void setBinaryData(Object binaryuri) {
 
         // get the file path and create a copy in the instance folder
-        String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
-                Audio.Media.DATA);
+        String binaryPath = getMediaUtil().getPathFromUri(getContext(), (Uri) binaryuri, Audio.Media.DATA);
         String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
         String destAudioPath = instanceFolder + File.separator
                 + System.currentTimeMillis() + extension;
@@ -225,7 +229,11 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
 
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+
+            if (audioURI != null) {
+                Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+            }
+
             // when replacing an answer. remove the current media.
             if (binaryName != null && !binaryName.equals(newAudio.getName())) {
                 deleteMedia();
@@ -237,6 +245,22 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
         }
 
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
+    }
+
+    @Nullable
+    private IMediaUtil mediaUtil = null;
+
+    @NonNull
+    public IMediaUtil getMediaUtil() {
+        if (mediaUtil == null) {
+            mediaUtil = new MediaUtil();
+        }
+
+        return mediaUtil;
+    }
+
+    public void setMediaUtil(@Nullable IMediaUtil mediaUtil) {
+        this.mediaUtil = mediaUtil;
     }
 
     @Override

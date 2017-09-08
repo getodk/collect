@@ -4,15 +4,11 @@ import android.support.annotation.NonNull;
 
 import net.bytebuddy.utility.RandomString;
 
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -21,20 +17,28 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget, A extends IAnswerData> extends WidgetTest<W, A> {
+public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends WidgetTest<W, StringData> {
 
     @Mock
     File instancePath;
 
+    public BinaryNameWidgetTest(Class<W> clazz) {
+        super(clazz);
+    }
+
+    abstract Object createBinaryData(StringData answerData);
+
     @NonNull
-    public abstract W createWidget();
+    @Override
+    StringData createAnswer() {
+        return new StringData(RandomString.make());
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -45,29 +49,42 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget, A extend
     }
 
     @Test
+    public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
+        when(formEntryPrompt.getAnswerText()).thenReturn(null);
+
+        widget = createWidget();
+        assertNull(widget.getAnswer());
+
+        StringData answer = createAnswer();
+        Object binaryData = createBinaryData(answer);
+
+        widget.setBinaryData(binaryData);
+
+        StringData answerData = (StringData) widget.getAnswer();
+        assertEquals(answerData.getValue(), answer.getValue());
+    }
+
+    @Test
     public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        String answer = RandomString.make();
-        when(formEntryPrompt.getAnswerText()).thenReturn(answer);
+        StringData answer = createAnswer();
+        when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
         widget = createSpy();
 
-        File newImage = mock(File.class);
-        when(newImage.exists()).thenReturn(true);
+        StringData newAnswer = createAnswer();
+        Object binaryData = createBinaryData(newAnswer);
 
-        String newAnswer = RandomString.make();
-        when(newImage.getName()).thenReturn(newAnswer);
-
-        widget.setBinaryData(newImage);
+        widget.setBinaryData(binaryData);
         verify(widget).deleteMedia();
 
         StringData answerData = (StringData) widget.getAnswer();
-        assertEquals(answerData.getValue(), answer);
+        assertEquals(answerData.getValue(), newAnswer.getValue());
     }
 
     @Test
     public void callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
-        String answer = RandomString.make();
-        when(formEntryPrompt.getAnswerText()).thenReturn(answer);
+        StringData answer = createAnswer();
+        when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
         widget = createSpy();
         widget.clearAnswer();

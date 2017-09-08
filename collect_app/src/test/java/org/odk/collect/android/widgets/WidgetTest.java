@@ -35,8 +35,9 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
+    private final Class<W> clazz;
+
     W widget = null;
-    A answer = null;
 
     @Mock
     FormEntryPrompt formEntryPrompt;
@@ -49,6 +50,12 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
 
     @Mock
     FormController formController;
+
+    // Needs to be public for JUnit:
+    @SuppressWarnings("WeakerAccess")
+    public WidgetTest(Class<W> clazz) {
+        this.clazz = clazz;
+    }
 
     @NonNull
     abstract W createWidget();
@@ -69,11 +76,10 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
         Collect.getInstance().setFormController(formController);
 
         widget = null;
-        answer = null;
     }
 
     @Test
-    public final void getAnswerShouldReturnNullIfPromptDoesntHaveExistingAnswer() {
+    public final void getAnswerShouldReturnNullIfPromptDoesNotHaveExistingAnswer() {
         when(formEntryPrompt.getAnswerValue()).thenReturn(null);
 
         widget = createWidget();
@@ -82,8 +88,7 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
 
     @Test
     public final void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-
-        answer = createAnswer();
+        IAnswerData answer = createAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
         if (answer instanceof StringData) {
@@ -99,7 +104,7 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
         IAnswerData answer = createAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
-        if (answer instanceof StringData) {
+        if (clazz.isAssignableFrom(BinaryNameWidgetTest.class)) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         }
 

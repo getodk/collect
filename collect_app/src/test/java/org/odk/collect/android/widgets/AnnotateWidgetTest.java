@@ -15,22 +15,23 @@ import java.io.File;
 
 import static org.mockito.Mockito.when;
 
-
+/**
+ * @author James Knight
+ */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class AlignedImageWidgetTest extends BinaryNameWidgetTest<AlignedImageWidget> {
-
+public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
     @Mock
     File file;
 
-    public AlignedImageWidgetTest() {
-        super(AlignedImageWidget.class);
+    public AnnotateWidgetTest() {
+        super(AnnotateWidget.class);
     }
 
     @NonNull
     @Override
-    public AlignedImageWidget createWidget() {
-        return new AlignedImageWidget(RuntimeEnvironment.application, formEntryPrompt);
+    public AnnotateWidget createWidget() {
+        return new AnnotateWidget(RuntimeEnvironment.application, formEntryPrompt);
     }
 
     @Override
@@ -44,8 +45,6 @@ public class AlignedImageWidgetTest extends BinaryNameWidgetTest<AlignedImageWid
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
-        when(formEntryPrompt.getAppearanceHint()).thenReturn("0");
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
     }
 }
