@@ -56,7 +56,7 @@ import timber.log.Timber;
  * @author mitchellsundt@gmail.com
  * @author Mitchell Tyler Lee
  */
-public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget {
+public class AlignedImageWidget extends QuestionWidget implements IBinaryNameWidget {
     private static final String ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT =
             "org.opendatakit.camera.TakePicture";
 
@@ -242,8 +242,8 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryWidget 
         addAnswerView(answerLayout);
     }
 
-    // Package private for testing purposes:
-    void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables

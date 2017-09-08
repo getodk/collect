@@ -50,7 +50,7 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawWidget extends QuestionWidget implements IBinaryWidget {
+public class DrawWidget extends QuestionWidget implements IBinaryNameWidget {
     private static final String t = "DrawWidget";
 
     private Button drawButton;
@@ -163,7 +163,8 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables

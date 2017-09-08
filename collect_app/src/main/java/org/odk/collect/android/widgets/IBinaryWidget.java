@@ -19,7 +19,7 @@ package org.odk.collect.android.widgets;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface IBinaryWidget {
+public interface IBinaryWidget extends IQuestionWidget {
     void setBinaryData(Object answer);
 
     void cancelWaitingForBinaryData();

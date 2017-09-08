@@ -52,7 +52,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
+public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget {
     private static final String t = "AnnotateWidget";
 
     private Button captureButton;
@@ -250,7 +250,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables

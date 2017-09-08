@@ -36,7 +36,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -51,7 +50,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public abstract class QuestionWidget extends RelativeLayout implements AudioPlayListener {
+public abstract class QuestionWidget
+        extends RelativeLayout
+        implements IQuestionWidget, AudioPlayListener {
 
     @SuppressWarnings("unused")
     private static final String t = "QuestionWidget";
@@ -78,7 +79,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     protected int playColor = Color.BLUE;
     protected int playBackgroundColor = Color.WHITE;
 
-    public QuestionWidget(Context context, FormEntryPrompt p) {
+    public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
 
         player = new MediaPlayer();
@@ -103,20 +104,20 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         questionFontsize = Collect.getQuestionFontsize();
         answerFontsize = questionFontsize + 2;
 
-        formEntryPrompt = p;
+        formEntryPrompt = prompt;
 
         setGravity(Gravity.TOP);
         setPadding(0, 7, 0, 0);
 
-        questionMediaLayout = createQuestionMediaLayout(p);
-        helpTextView = createHelpText(p);
+        questionMediaLayout = createQuestionMediaLayout(prompt);
+        helpTextView = createHelpText(prompt);
 
         addQuestionMediaLayout(questionMediaLayout);
         addHelpTextView(helpTextView);
     }
 
-    private MediaLayout createQuestionMediaLayout(FormEntryPrompt p) {
-        String promptText = p.getLongText();
+    private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
+        String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
         questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
@@ -133,21 +134,21 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             questionText.setVisibility(GONE);
         }
 
-        String imageURI = p.getImageText();
-        String audioURI = p.getAudioText();
-        String videoURI = p.getSpecialFormQuestionText("video");
+        String imageURI = prompt.getImageText();
+        String audioURI = prompt.getAudioText();
+        String videoURI = prompt.getSpecialFormQuestionText("video");
 
         // shown when image is clicked
-        String bigImageURI = p.getSpecialFormQuestionText("big-image");
+        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext(), player);
         questionMediaLayout.setId(QuestionWidget.newUniqueId()); // assign random id
-        questionMediaLayout.setAVT(p.getIndex(), "", questionText, audioURI, imageURI, videoURI,
+        questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
                 bigImageURI);
         questionMediaLayout.setAudioListener(this);
 
-        String playColorString = p.getFormElement().getAdditionalAttribute(null, "playColor");
+        String playColorString = prompt.getFormElement().getAdditionalAttribute(null, "playColor");
         if (playColorString != null) {
             try {
                 playColor = Color.parseColor(playColorString);
@@ -157,7 +158,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         }
         questionMediaLayout.setPlayTextColor(playColor);
 
-        String playBackgroundColorString = p.getFormElement().getAdditionalAttribute(null,
+        String playBackgroundColorString = prompt.getFormElement().getAdditionalAttribute(null,
                 "playBackgroundColor");
         if (playBackgroundColorString != null) {
             try {
@@ -212,7 +213,7 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
 
     // http://code.google.com/p/android/issues/detail?id=8488
     public void recycleDrawables() {
-        List<ImageView> images = new ArrayList<ImageView>();
+        List<ImageView> images = new ArrayList<>();
         // collect all the image views
         recycleDrawablesRecursive(this, images);
         for (ImageView imageView : images) {
@@ -230,9 +231,6 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
     }
 
     // Abstract methods
-    public abstract IAnswerData getAnswer();
-
-    public abstract void clearAnswer();
 
     public abstract void setFocus(Context context);
 
@@ -248,13 +246,12 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         return false;
     }
 
-    /**
+    /*
      * Add a Views containing the question text, audio (if applicable), and image (if applicable).
      * To satisfy the RelativeLayout constraints, we add the audio first if it exists, then the
      * TextView to fit the rest of the space, then the image if applicable.
      */
-
-    /**
+    /*
      * Defaults to adding questionlayout to the top of the screen.
      * Overwrite to reposition.
      */
@@ -292,13 +289,14 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
         addView(v, params);
     }
 
-    private TextView createHelpText(FormEntryPrompt p) {
+    private TextView createHelpText(FormEntryPrompt prompt) {
         TextView helpText = new TextView(getContext());
-        String s = p.getHelpText();
+        String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
             helpText.setId(QuestionWidget.newUniqueId());
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 3);
+            //noinspection ResourceType
             helpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
             helpText.setHorizontallyScrolling(false);

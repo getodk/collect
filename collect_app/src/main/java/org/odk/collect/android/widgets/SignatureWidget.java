@@ -50,7 +50,7 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
+public class SignatureWidget extends QuestionWidget implements IBinaryNameWidget {
 
     private Button signButton;
     private String binaryName;
@@ -157,7 +157,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables

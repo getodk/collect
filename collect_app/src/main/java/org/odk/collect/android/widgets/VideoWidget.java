@@ -57,7 +57,7 @@ import static android.os.Build.MODEL;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class VideoWidget extends QuestionWidget implements IBinaryWidget {
+public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -258,7 +258,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         return mediaFile;
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables

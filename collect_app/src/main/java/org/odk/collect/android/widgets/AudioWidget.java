@@ -48,7 +48,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class AudioWidget extends QuestionWidget implements IBinaryWidget {
+public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
 
     private Button captureButton;
     private Button playButton;
@@ -171,7 +171,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables

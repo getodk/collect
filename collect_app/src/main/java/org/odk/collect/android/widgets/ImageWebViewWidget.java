@@ -54,7 +54,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget {
+public class ImageWebViewWidget extends QuestionWidget implements IBinaryNameWidget {
 
     private Button captureButton;
     private Button chooseButton;
@@ -243,7 +243,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         addAnswerView(answerLayout);
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
