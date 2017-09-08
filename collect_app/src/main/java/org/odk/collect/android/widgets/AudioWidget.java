@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -35,8 +36,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.IMediaUtil;
+import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -52,7 +52,14 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
+@SuppressLint("ViewConstructor")
 public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
+
+    @Nullable
+    private MediaUtil mediaUtil = null;
+
+    @Nullable
+    private FileUtil fileUtil = null;
 
     private Button captureButton;
     private Button playButton;
@@ -208,16 +215,23 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
 
     @Override
     public void setBinaryData(Object binaryuri) {
+        if (binaryuri == null || !(binaryuri instanceof Uri)) {
+            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
+            return;
+        }
+
+        Uri uri = (Uri) binaryuri;
 
         // get the file path and create a copy in the instance folder
-        String binaryPath = getMediaUtil().getPathFromUri(getContext(), (Uri) binaryuri, Audio.Media.DATA);
-        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
-        String destAudioPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
+        String sourcePath = getSourcePathFromUri(uri);
+        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 
-        File source = new File(binaryPath);
-        File newAudio = new File(destAudioPath);
-        FileUtils.copyFile(source, newAudio);
+        FileUtil fileUtil = getFileUtil();
+
+        File source = fileUtil.getFileAtPath(sourcePath);
+        File newAudio = fileUtil.getFileAtPath(destinationPath);
+
+        fileUtil.copyFile(source, newAudio);
 
         if (newAudio.exists()) {
             // Add the copy to the content provier
@@ -238,6 +252,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
             if (binaryName != null && !binaryName.equals(newAudio.getName())) {
                 deleteMedia();
             }
+
             binaryName = newAudio.getName();
             Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
@@ -247,11 +262,18 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
-    @Nullable
-    private IMediaUtil mediaUtil = null;
+    private String getSourcePathFromUri(@NonNull Uri uri) {
+        return getMediaUtil().getPathFromUri(getContext(), uri, Audio.Media.DATA);
+    }
+
+    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf("."));
+        return instanceFolder + File.separator
+                + getFileUtil().getRandomFilename() + extension;
+    }
 
     @NonNull
-    public IMediaUtil getMediaUtil() {
+    public MediaUtil getMediaUtil() {
         if (mediaUtil == null) {
             mediaUtil = new MediaUtil();
         }
@@ -259,8 +281,21 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
         return mediaUtil;
     }
 
-    public void setMediaUtil(@Nullable IMediaUtil mediaUtil) {
+    public void setMediaUtil(@Nullable MediaUtil mediaUtil) {
         this.mediaUtil = mediaUtil;
+    }
+
+    @NonNull
+    public FileUtil getFileUtil() {
+        if (fileUtil == null) {
+            fileUtil = new FileUtil();
+        }
+
+        return fileUtil;
+    }
+
+    public void setFileUtil(@Nullable FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 
     @Override

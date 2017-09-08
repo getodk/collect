@@ -37,7 +37,7 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
 
     private final Class<W> clazz;
 
-    W widget = null;
+    private W widget = null;
 
     @Mock
     FormEntryPrompt formEntryPrompt;
@@ -61,10 +61,17 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     abstract W createWidget();
 
     @NonNull
-    abstract A createAnswer();
+    abstract A getNextAnswer();
 
-    W createSpy() {
-        return spy(createWidget());
+    @NonNull
+    abstract A getInitialAnswer();
+
+    W getWidget() {
+        if (widget == null) {
+            widget = spy(createWidget());
+        }
+
+        return widget;
     }
 
     @Before
@@ -82,33 +89,33 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     public final void getAnswerShouldReturnNullIfPromptDoesNotHaveExistingAnswer() {
         when(formEntryPrompt.getAnswerValue()).thenReturn(null);
 
-        widget = createWidget();
+        widget = getWidget();
         assertNull(widget.getAnswer());
     }
 
     @Test
     public final void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        IAnswerData answer = createAnswer();
+        A answer = getNextAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
         if (answer instanceof StringData) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         }
 
-        widget = createWidget();
+        widget = getWidget();
         assertEquals(widget.getAnswer().getValue(), answer.getValue());
     }
 
     @Test
     public final void callingClearShouldRemoveTheExistingAnswer() {
-        IAnswerData answer = createAnswer();
+        A answer = getNextAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
         if (clazz.isAssignableFrom(BinaryNameWidgetTest.class)) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         }
 
-        widget = createWidget();
+        widget = getWidget();
         widget.clearAnswer();
 
         assertNull(widget.getAnswer());

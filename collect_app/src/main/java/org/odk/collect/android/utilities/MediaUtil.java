@@ -2,14 +2,14 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 /**
  * @author James Knight
  */
-public class MediaUtil implements IMediaUtil {
+public class MediaUtil {
 
-    @Override
-    public String getPathFromUri(Context ctxt, Uri uri, String pathKey) {
+    public String getPathFromUri(@NonNull Context ctxt, @NonNull Uri uri, @NonNull String pathKey) {
         return MediaUtils.getPathFromUri(ctxt, uri, pathKey);
     }
 }

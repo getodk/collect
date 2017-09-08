@@ -16,6 +16,7 @@ import org.robolectric.annotation.Config;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,7 +29,7 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
     @Mock
     File instancePath;
 
-    public BinaryNameWidgetTest(Class<W> clazz) {
+    BinaryNameWidgetTest(Class<W> clazz) {
         super(clazz);
     }
 
@@ -36,7 +37,7 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
 
     @NonNull
     @Override
-    StringData createAnswer() {
+    StringData getInitialAnswer() {
         return new StringData(RandomString.make());
     }
 
@@ -52,26 +53,27 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
     public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
         when(formEntryPrompt.getAnswerText()).thenReturn(null);
 
-        widget = createWidget();
+        W widget = getWidget();
         assertNull(widget.getAnswer());
 
-        StringData answer = createAnswer();
+        StringData answer = getNextAnswer();
         Object binaryData = createBinaryData(answer);
 
         widget.setBinaryData(binaryData);
 
         StringData answerData = (StringData) widget.getAnswer();
+        assertNotNull(answerData);
         assertEquals(answerData.getValue(), answer.getValue());
     }
 
     @Test
     public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
-        StringData answer = createAnswer();
+        StringData answer = getInitialAnswer();
         when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
-        widget = createSpy();
+        W widget = getWidget();
 
-        StringData newAnswer = createAnswer();
+        StringData newAnswer = getNextAnswer();
         Object binaryData = createBinaryData(newAnswer);
 
         widget.setBinaryData(binaryData);
@@ -83,10 +85,10 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
 
     @Test
     public void callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
-        StringData answer = createAnswer();
+        StringData answer = getNextAnswer();
         when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
-        widget = createSpy();
+        W widget = getWidget();
         widget.clearAnswer();
 
         verify(widget).deleteMedia();

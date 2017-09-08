@@ -2,6 +2,8 @@ package org.odk.collect.android.widgets;
 
 import android.support.annotation.NonNull;
 
+import net.bytebuddy.utility.RandomString;
+
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -32,6 +34,12 @@ public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
     @Override
     public AnnotateWidget createWidget() {
         return new AnnotateWidget(RuntimeEnvironment.application, formEntryPrompt);
+    }
+
+    @NonNull
+    @Override
+    StringData getNextAnswer() {
+        return new StringData(RandomString.make());
     }
 
     @Override
