@@ -37,6 +37,7 @@ task checkstyle(type: Checkstyle) {
 }
 
 task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
+    ignoreFailures = false
     effort = "max"
     reportLevel = "high"
     excludeFilter = new File("$configDir/findbugs/findbugs-filter.xml")
