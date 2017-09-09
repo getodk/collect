@@ -25,9 +25,11 @@ public class AboutPreferencesActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, new AboutPreferencesFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(android.R.id.content, new AboutPreferencesFragment())
+                    .commit();
+        }
     }
 }

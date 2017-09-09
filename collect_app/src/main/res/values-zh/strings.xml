@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="add_another">添加</string>
   <string name="add_another_repeat">继续添加 \"%s\"?</string>
@@ -204,7 +204,7 @@
   <string name="replace_bearing">替代方位</string>
   <string name="getting_bearing">加载方位</string>
   <string name="accept_bearing">记录方位</string>
-    <!--Geo string added in feature-geofeatures branch-->
+  <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

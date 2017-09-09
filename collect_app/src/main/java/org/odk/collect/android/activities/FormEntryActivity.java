@@ -83,6 +83,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -862,7 +863,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
-            if (((IBinaryWidget) qw).isWaitingForBinaryData()) {
+            if (qw instanceof IBinaryWidget && ((IBinaryWidget) qw).isWaitingForBinaryData()) {
                 questionWidget = qw;
             }
         }
@@ -1324,8 +1325,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkv = new ODKView(this, formController.getQuestionPrompts(),
-                            groups, advancingPage);
+                    odkv = new ODKView(this, prompts, groups, advancingPage);
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -2023,6 +2023,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 } else {
                     Collect.getInstance().getActivityLogger()
                             .logInstanceAction(this, "createQuitDialog", "discardAndExit");
+
+                    // close all open databases of external data.
+                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                    if (manager != null) {
+                        manager.close();
+                    }
+
                     FormController formController = Collect.getInstance().getFormController();
                     if (formController != null) {
                         formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);

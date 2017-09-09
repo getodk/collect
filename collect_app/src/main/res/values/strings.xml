@@ -509,7 +509,6 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
-    <string name="use_server_username">Use server username</string>
     <string name="select_value">Select value</string>
     <string name="edit_value">Edit value</string>
     <string name="no_value_selected">No value selected</string>

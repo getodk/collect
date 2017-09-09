@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Passwort anzeigen</string>
   <string name="activity_not_found">Folgende Applikation wurde nicht gefunden: %s</string>
   <string name="add_another">Gruppe hinzufügen</string>
@@ -420,13 +420,13 @@
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
   <string name="instance_sync">Gespeicherte Formulare als vollständig importieren</string>
   <string name="instance_sync_summary">Importiert gespeicherte Formulare aus dem Ordner instances</string>
-  <string name="sort_by_name_asc">Nach Name, A-Z</string>
-  <string name="sort_by_name_desc">Nach Name, Z-A</string>
-  <string name="sort_by_date_asc">Nach Datum, neuestes zuerst</string>
-  <string name="sort_by_date_desc">Nach Datum, ältestes zuerst</string>
-  <string name="sort_by_status_asc">Nach Status, vollständig zuerst</string>
-  <string name="sort_by_status_desc">Nach Status, unvollständig zuerst</string>
-    <string name="sort_the_list">Die Liste sortieren</string>
+  <string name="sort_by_name_asc">Name, A-Z</string>
+  <string name="sort_by_name_desc">Name, Z-A</string>
+  <string name="sort_by_date_asc">Datum, neuestes zuerst</string>
+  <string name="sort_by_date_desc">Datum, ältestes zuerst</string>
+  <string name="sort_by_status_asc">Status, vollständig zuerst</string>
+  <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
+  <string name="sort_the_list">Die Liste sortieren</string>
   <string name="request_permissions_google_account">ODK Collect benötigt Zugriff auf Ihr Google-Konto um leere Formulare zu laden und ausgefüllte Formulare hochzuladen.</string>
   <string name="filter_the_list">Liste filtern</string>
   <string name="language">Sprache</string>
@@ -460,6 +460,7 @@
   <string name="qrcode_with_server_password">Dieser QR-Code enthält ihr Server-Passwort. \n(Hier berühren um das Passwort zu entfernen)</string>
   <string name="import_export_settings">Import/Export Einstellungen</string>
   <string name="qrcode_scanner_prompt">Positionieren Sie den QR-Code innerhalb des Rechtecks</string>
+  <string name="barcode_scanner_prompt">Positionieren Sie den Barcode innerhalb des Rechtecks.</string>
   <string name="server_password">Server-Passwort</string>
   <string name="include_password_dialog">Passwörter im Code enthalten</string>
   <string name="generate">Generieren</string>
@@ -495,4 +496,14 @@
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
   <string name="not_supported_offline_layer_format">Das ausgewählte Offline-Layer benutzt das PBF-Format, das nicht unterstützt wird.</string>
+  <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
+  <string name="sort_by">Sortieren nach</string>
+  <string name="server">Server</string>
+  <string name="select_value">Wert auswählen</string>
+  <string name="edit_value">Wert bearbeiten</string>
+  <string name="no_value_selected">Kein Wert ausgewählt</string>
+  <string name="form_delete_message">Ausgewählte Formulare löschen</string>
+  <string name="deleting_form_dialog_update_message">Lösche Formular: %1$d von %2$d</string>
+  <string name="search">Suche</string>
+  <string name="null_intent_value">Die externe Applikation hat die erwartete Information nicht geliefert.</string>
 </resources>
