@@ -101,10 +101,7 @@ the specific language governing permissions and limitations under the License.
             android:name="org.odk.collect.android.provider.TraceProvider"
             android:authorities="org.smap.smapTask.android.provider.trace"
             android:exported="true" />
-        <activity
-            android:name=".activities.MainTabsActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name" />
+
         <activity
             android:name=".activities.SmapMain"
             android:configChanges="orientation"
@@ -350,14 +347,6 @@ the specific language governing permissions and limitations under the License.
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
-        <activity
-            android:name=".activities.MapsActivity"
-            android:label="@string/app_name" />
-
-        <activity
-            android:name=".activities.MainListActivity"
-            android:label="@string/app_name">
-        </activity>
 
     </application>
 

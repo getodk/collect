@@ -308,8 +308,10 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                mDownloadTasks.setDownloaderListener(null, SmapMain.this);
-                                mDownloadTasks.cancel(true);
+                                if(mDownloadTasks != null) {
+                                    mDownloadTasks.setDownloaderListener(null, SmapMain.this);
+                                    mDownloadTasks.cancel(true);
+                                }
                                 // Refresh the task list
                                 Intent intent = new Intent("org.smap.smapTask.refresh");
                                 LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);

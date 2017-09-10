@@ -165,6 +165,10 @@ public class SmapTaskMapFragment extends Fragment
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.ft_map_layout, container, false);
 
+        Timber.i("######## onCreateView");
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         setHasOptionsMenu(true);
         return rootView;
     }
@@ -172,6 +176,7 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
 
+        Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
 
     }
@@ -242,9 +247,6 @@ public class SmapTaskMapFragment extends Fragment
                 ((SmapMain) getActivity()).processGetTask();
                 return true;
 
-
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -270,6 +272,7 @@ public class SmapTaskMapFragment extends Fragment
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Timber.i("######## onMapReady");
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -285,9 +288,7 @@ public class SmapTaskMapFragment extends Fragment
         triggered = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered);
         triggered_repeat = BitmapDescriptorFactory.fromResource(R.drawable.ic_task_triggered_repeat);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
+        getLoaderManager().initLoader(MAP_LOADER_ID, null, this);       // Get the task locations
         mo = new MapLocationObserver(getContext(), this);
 
         location_button = (Button) getActivity().findViewById(R.id.show_location);
@@ -394,7 +395,6 @@ public class SmapTaskMapFragment extends Fragment
 
             }
         });
-        getLoaderManager().initLoader(MAP_LOADER_ID, null, this);       // Get the task locations
     }
 
 

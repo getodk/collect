@@ -7,8 +7,8 @@
   <string name="smap_cannot_complete">No es posible completar la tarea</string>
   <string name="smap_cannot_reject">No es posible rechazar la tarea</string>
   <string name="smap_complete_task">Completar Tarea</string>
-  <string name="smap_data_collection">Coleccion de Datos</string>
-  <string name="smap_destination_not_found">No se ha especificado un destino a la ruta</string>
+  <string name="smap_data_collection">Captura de Datos</string>
+  <string name="smap_destination_not_found">No se ha especificado la ruta de destino</string>
   <string name="smap_done">: realizado. </string>
   <string name="smap_finding_route">Enrutamiento</string>
   <string name="smap_found_route">Se ha encontrado una Ruta al destino!</string>
@@ -27,8 +27,8 @@
   <string name="smap_synchronising">Sincronizando con el Servidor</string>
   <string name="smap_task_preferences">Tareas</string>
   <string name="smap_tasks_not_enabled">Tareas no habilitadas - Habilite en la pantalla de ajustes</string>
-  <string name="smap_taskList">Tareas</string>
-  <string name="smap_taskMap">Mapa</string>
+  <string name="smap_taskList">TAREAS</string>
+  <string name="smap_taskMap">MAPA</string>
   <string name="smap_zoom_data">Zoom a Tareas</string>
   <string name="smap_project">Proyecto </string>
   <string name="smap_no_tasks_nfc">No hay tareas activadas con NFC</string>
@@ -63,4 +63,5 @@
   <string name="smap_no_server">No se ha especificado el servidor en Configuración</string>
   <string name="smap_refresh_started">Actualización Iniciada</string>
   <string name="smap_refresh_finished">Actualización Terminada</string>
+  <string name="smap_server_changed">Hay Cambios - Favor Actualizar</string>
 </resources>
