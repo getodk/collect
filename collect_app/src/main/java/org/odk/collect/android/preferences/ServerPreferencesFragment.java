@@ -51,6 +51,8 @@ import org.odk.collect.android.utilities.WebUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 
@@ -230,6 +232,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
+        Timber.i("############ Preference Change");
         switch (preference.getKey()) {
 
             case PreferenceKeys.KEY_SERVER_URL:

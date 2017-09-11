@@ -433,9 +433,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         selection = FormsColumns.JR_FORM_ID + "=? AND "
                                 + FormsColumns.JR_VERSION + " IS NULL";
                     } else {
-                        selectionArgs = new String[]{jrFormId, jrVersion};
-                        selection = FormsColumns.JR_FORM_ID + "=? AND "
-                                + FormsColumns.JR_VERSION + "=?";
+                        //selectionArgs = new String[]{jrFormId, jrVersion};  smap
+                        //selection = FormsColumns.JR_FORM_ID + "=? AND "     smap
+                        //        + FormsColumns.JR_VERSION + "=?";           smap
+                        selectionArgs = new String[]{jrFormId};         // smap
+                        selection = FormsColumns.JR_FORM_ID + "=?";     // smap always use the latest version
                     }
 
                     {

@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 public class ManageForm {
 	
 	public class ManageFormDetails {
@@ -78,7 +80,7 @@ public class ManageForm {
         		fd.exists = false;
         	}
 		 } catch (Throwable e) {
-       		 Log.e("ManageForm", e.getMessage());
+       		 Timber.e("ManageForm: " + e.getMessage());
     	 }
 		c.close();
 		
@@ -100,7 +102,7 @@ public class ManageForm {
 
 
         } catch (Throwable e) {
-            Log.e("ManageForm", e.getMessage());
+            Timber.e("ManageForm: " + e.getMessage());
         }
 
     }
@@ -152,7 +154,7 @@ public class ManageForm {
              
         	} 
 		 } catch (Exception e) {
-       		 Log.e("isIncompleteInstance", "Error: " + e.getMessage());
+       		 Timber.e("isIncompleteInstance Error: " + e.getMessage());
     	 }
 		c.close();
 		
@@ -186,17 +188,18 @@ public class ManageForm {
 		             String formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
 		             String version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
 
-                     Log.i("   Delete Check: ", "Found Form Id: " + formId + " : " + version);
+                     Timber.i("   Delete Check: Found Form Id: " + formId + " : " + version);
 
 		             // Check to see if this form was downloaded
 		             if(formMap.get(formId + "_v_" + version) == null) {
-		            	 Log.i("   Delete: ", "Candidate 1");
-		            	 if(!isIncompleteInstance(formId, version)) {
-		            		 Log.i("   Delete: ", "Candidate 2 !!!!!!!!!!!");
-		            		 formsToDelete.add(table_id);
-		            	 }
+		            	 Timber.i("   Delete: " + formId + "_v_" + version);
+                         formsToDelete.add(table_id);
+		            	 //if(!isIncompleteInstance(formId, version)) {
+		            	//	 Log.i("   Delete: ", "Candidate 2 !!!!!!!!!!!");
+		            	//	 formsToDelete.add(table_id);
+		            	 //}
 		             } else {
-		            	 Log.i("   Don't Delete: ", "Keep this one");
+		            	 Timber.i("   Don't Delete: Keep this one");
 		             }
 	        	 }
 	        	 if(formsToDelete.size() > 0) {
@@ -215,7 +218,7 @@ public class ManageForm {
 	        		            	Collect.getInstance().getActivityLogger().logAction(this, "delete", deleteForm.toString());
 	        		            }
 	        				} catch ( Exception ex ) {
-	        					Log.e("Error deleting forms: "," during delete of: " + formArray[i].toString() + " exception: "  + ex.toString());
+	        					Timber.e("Error deleting forms: during delete of: " + formArray[i].toString() + " exception: "  + ex.toString());
 	        					results.put("Error " + formArray[i].toString() + ": ", " during delete of form "  + " : " + ex.toString());
 	        				}
 	        		    } 
@@ -224,7 +227,7 @@ public class ManageForm {
              
         	} 
 		 } catch (Throwable e) {
-       		 Log.e("ManageForm", "Error: " + e.getMessage());
+       		 Timber.e("ManageForm Error: " + e.getMessage());
     	 }
 		c.close();
          
