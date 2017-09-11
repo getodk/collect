@@ -61,7 +61,7 @@ public class AdminSharedPreferences {
 
     public void save(String key, Object value) {
         editor = sharedPreferences.edit();
-        if (value == null || value == "" || value instanceof String) {
+        if (value == null || value.equals("") || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);
