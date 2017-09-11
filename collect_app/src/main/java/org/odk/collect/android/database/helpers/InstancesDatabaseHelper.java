@@ -24,8 +24,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.utilities.SQLiteQueryBuilder;
 
 import timber.log.Timber;
+
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DELETED_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.STATUS;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
 
 /**
  * This class helps open, create, and upgrade the database file.
@@ -36,24 +49,16 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 4;
 
+    private String[] instancesTableColumnsInVersion4 = new String[] {_ID, DISPLAY_NAME, SUBMISSION_URI, CAN_EDIT_WHEN_COMPLETE,
+            INSTANCE_FILE_PATH, JR_FORM_ID, JR_VERSION, STATUS, LAST_STATUS_CHANGE_DATE, DISPLAY_SUBTEXT, DELETED_DATE};
+
     public InstancesDatabaseHelper() {
         super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-                + InstanceProviderAPI.InstanceColumns._ID + " integer primary key, "
-                + InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " text not null, "
-                + InstanceProviderAPI.InstanceColumns.SUBMISSION_URI + " text, "
-                + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
-                + InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
-                + InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " text not null, "
-                + InstanceProviderAPI.InstanceColumns.JR_VERSION + " text, "
-                + InstanceProviderAPI.InstanceColumns.STATUS + " text not null, "
-                + InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
-                + InstanceProviderAPI.InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
-                + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " date );");
+        createInstancesTable(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -81,15 +86,34 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        boolean success = true;
+        switch (newVersion) {
+            case 4:
+                success = downgrade(db, instancesTableColumnsInVersion4);
+                break;
+
+            default:
+                Timber.i("Unknown version " + newVersion);
+        }
+
+        if (success) {
+            Timber.i("Downgrading database completed with success.");
+        } else {
+            Timber.i("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+        }
+    }
+
     private boolean upgradeToVersion2(SQLiteDatabase db) {
         boolean success = true;
         try {
             db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                    + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text;");
+                    + CAN_EDIT_WHEN_COMPLETE + " text;");
             db.execSQL("UPDATE " + INSTANCES_TABLE_NAME + " SET "
-                    + InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
-                    + "' WHERE " + InstanceProviderAPI.InstanceColumns.STATUS + " IS NOT NULL AND "
-                    + InstanceProviderAPI.InstanceColumns.STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
+                    + CAN_EDIT_WHEN_COMPLETE + " = '" + Boolean.toString(true)
+                    + "' WHERE " + STATUS + " IS NOT NULL AND "
+                    + STATUS + " != '" + InstanceProviderAPI.STATUS_INCOMPLETE
                     + "'");
         } catch (SQLiteException e) {
             Timber.e(e);
@@ -102,7 +126,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         boolean success = true;
         try {
             db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                    + InstanceProviderAPI.InstanceColumns.JR_VERSION + " text;");
+                    + JR_VERSION + " text;");
         } catch (SQLiteException e) {
             Timber.e(e);
             success = false;
@@ -114,18 +138,67 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         boolean success = true;
         try {
             Cursor cursor = db.rawQuery("SELECT * FROM " + INSTANCES_TABLE_NAME + " LIMIT 0", null);
-            int columnIndex = cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DELETED_DATE);
+            int columnIndex = cursor.getColumnIndex(DELETED_DATE);
             cursor.close();
 
             // Only add the column if it doesn't already exist
             if (columnIndex == -1) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
-                        + InstanceProviderAPI.InstanceColumns.DELETED_DATE + " date;");
+                        + DELETED_DATE + " date;");
             }
         } catch (SQLiteException e) {
             Timber.e(e);
             success = false;
         }
         return success;
+    }
+
+    private boolean downgrade(SQLiteDatabase db, String[] instancesTableColumns) {
+        boolean success = true;
+        String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
+
+        try {
+            SQLiteQueryBuilder
+                    .begin(db)
+                    .renameTable(INSTANCES_TABLE_NAME)
+                    .to(temporaryTable)
+                    .end();
+
+            createInstancesTable(db);
+
+            // Try to avoid renaming columns in the future since restoring data after downgrade might not work
+            SQLiteQueryBuilder
+                    .begin(db)
+                    .insertInto(INSTANCES_TABLE_NAME)
+                    .columnsForInsert(instancesTableColumns)
+                    .select()
+                    .columnsForSelect(instancesTableColumns)
+                    .from(temporaryTable)
+                    .end();
+
+            SQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(temporaryTable)
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.i(e);
+            success = false;
+        }
+        return success;
+    }
+
+    private void createInstancesTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + SUBMISSION_URI + " text, "
+                + CAN_EDIT_WHEN_COMPLETE + " text, "
+                + INSTANCE_FILE_PATH + " text not null, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + STATUS + " text not null, "
+                + LAST_STATUS_CHANGE_DATE + " date not null, "
+                + DISPLAY_SUBTEXT + " text not null,"
+                + DELETED_DATE + " date );");
     }
 }
