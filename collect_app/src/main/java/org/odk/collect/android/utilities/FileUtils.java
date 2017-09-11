@@ -416,7 +416,7 @@ public class FileUtils {
     }
 
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf("."));
+        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
         return pathNoExtension + "-media";
     }
 

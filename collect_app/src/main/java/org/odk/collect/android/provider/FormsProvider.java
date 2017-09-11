@@ -182,7 +182,7 @@ public class FormsProvider extends ContentProvider {
         }
         if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
             String pathNoExtension = filePath.substring(0,
-                    filePath.lastIndexOf("."));
+                    filePath.lastIndexOf('.'));
             String mediaPath = pathNoExtension + "-media";
             values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
         }

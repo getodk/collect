@@ -588,7 +588,7 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     private static String getFileExtension(String fileName) {
-        int dotIndex = fileName.lastIndexOf(".");
+        int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex == -1) {
             return "";
         }
