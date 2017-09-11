@@ -38,7 +38,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.utilities.MediaUtils;
 
 import java.io.File;
 
@@ -189,7 +188,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = MediaUtils.deleteAudioFileFromMediaProvider(
+        int del = getMediaUtil().deleteAudioFileFromMediaProvider(
                 instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }

@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.base;
 
 import android.support.annotation.NonNull;
 
@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.widgets.IQuestionWidget;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -36,20 +37,19 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     public MockitoRule rule = MockitoJUnit.rule();
 
     private final Class<W> clazz;
-
     private W widget = null;
 
     @Mock
-    FormEntryPrompt formEntryPrompt;
+    public FormEntryPrompt formEntryPrompt;
 
     @Mock
-    FormIndex formIndex;
+    public FormIndex formIndex;
 
     @Mock
-    IFormElement formElement;
+    public IFormElement formElement;
 
     @Mock
-    FormController formController;
+    public FormController formController;
 
     // Needs to be public for JUnit:
     @SuppressWarnings("WeakerAccess")
@@ -58,15 +58,15 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     }
 
     @NonNull
-    abstract W createWidget();
+    public abstract W createWidget();
 
     @NonNull
-    abstract A getNextAnswer();
+    public abstract A getNextAnswer();
 
     @NonNull
-    abstract A getInitialAnswer();
+    public abstract A getInitialAnswer();
 
-    W getWidget() {
+    public W getWidget() {
         if (widget == null) {
             widget = spy(createWidget());
         }

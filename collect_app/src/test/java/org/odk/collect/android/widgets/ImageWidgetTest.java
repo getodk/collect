@@ -23,31 +23,31 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
+public class ImageWidgetTest extends BinaryNameWidgetTest<ImageWidget> {
+
     @Mock
     File file;
 
-    public AnnotateWidgetTest() {
-        super(AnnotateWidget.class);
+    private String fileName = null;
+
+    public ImageWidgetTest() {
+        super(ImageWidget.class);
     }
 
     @NonNull
     @Override
-    public AnnotateWidget createWidget() {
-        return new AnnotateWidget(RuntimeEnvironment.application, formEntryPrompt);
+    public ImageWidget createWidget() {
+        return new ImageWidget(RuntimeEnvironment.application, formEntryPrompt, true);
     }
 
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(RandomString.make());
+        return new StringData(fileName);
     }
 
     @Override
     public Object createBinaryData(StringData answerData) {
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(answerData.getDisplayText());
-
         return file;
     }
 
@@ -55,5 +55,10 @@ public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
     public void setUp() throws Exception {
         super.setUp();
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
+
+        fileName = RandomString.make();
+
+        when(file.exists()).thenReturn(true);
+        when(file.getName()).thenReturn(fileName);
     }
 }

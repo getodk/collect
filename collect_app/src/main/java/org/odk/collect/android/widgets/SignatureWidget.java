@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -55,7 +56,10 @@ public class SignatureWidget extends QuestionWidget implements IBinaryNameWidget
     private Button signButton;
     private String binaryName;
     private String instanceFolder;
+
+    @Nullable
     private ImageView imageView;
+
     private TextView errorTextView;
 
     public SignatureWidget(Context context, FormEntryPrompt prompt) {
@@ -173,7 +177,10 @@ public class SignatureWidget extends QuestionWidget implements IBinaryNameWidget
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-        imageView.setImageBitmap(null);
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons
@@ -210,7 +217,10 @@ public class SignatureWidget extends QuestionWidget implements IBinaryNameWidget
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());

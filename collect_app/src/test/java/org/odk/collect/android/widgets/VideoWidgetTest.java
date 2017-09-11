@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class AudioWidgetTest extends BinaryNameWidgetTest<AudioWidget> {
+public class VideoWidgetTest extends BinaryNameWidgetTest<VideoWidget> {
 
     @Mock
     Uri uri;
@@ -42,19 +43,19 @@ public class AudioWidgetTest extends BinaryNameWidgetTest<AudioWidget> {
 
     private String destinationName = null;
 
-    public AudioWidgetTest() {
-        super(AudioWidget.class);
+    public VideoWidgetTest() {
+        super(VideoWidget.class);
     }
 
     @NonNull
     @Override
-    public AudioWidget createWidget() {
-        AudioWidget audioWidget = new AudioWidget(RuntimeEnvironment.application, formEntryPrompt);
+    public VideoWidget createWidget() {
+        VideoWidget videoWidget = new VideoWidget(RuntimeEnvironment.application, formEntryPrompt);
 
-        audioWidget.setMediaUtil(mediaUtil);
-        audioWidget.setFileUtil(fileUtil);
+        videoWidget.setMediaUtil(mediaUtil);
+        videoWidget.setFileUtil(fileUtil);
 
-        return audioWidget;
+        return videoWidget;
     }
 
     @NonNull

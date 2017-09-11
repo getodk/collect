@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -57,6 +58,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryNameWidget {
 
     private Button captureButton;
     private Button chooseButton;
+
+    @Nullable
     private ImageView imageView;
 
     private String binaryName;
@@ -230,7 +233,10 @@ public class ImageWidget extends QuestionWidget implements IBinaryNameWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-        imageView.setImageBitmap(null);
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons

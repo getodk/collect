@@ -95,7 +95,7 @@ public class FormController {
         public final String instanceName;
         public final boolean audit;
 
-        InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
             this.audit = audit;

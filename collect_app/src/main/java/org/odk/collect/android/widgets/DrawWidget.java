@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -50,13 +52,16 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
+@SuppressLint("ViewConstructor")
 public class DrawWidget extends QuestionWidget implements IBinaryNameWidget {
-    private static final String t = "DrawWidget";
 
     private Button drawButton;
     private String binaryName;
     private String instanceFolder;
+
+    @Nullable
     private ImageView imageView;
+
     private TextView errorTextView;
 
     public DrawWidget(Context context, FormEntryPrompt prompt) {
@@ -179,7 +184,10 @@ public class DrawWidget extends QuestionWidget implements IBinaryNameWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
-        imageView.setImageBitmap(null);
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons
@@ -216,7 +224,10 @@ public class DrawWidget extends QuestionWidget implements IBinaryNameWidget {
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());

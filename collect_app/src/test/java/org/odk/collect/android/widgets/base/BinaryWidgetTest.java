@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.base;
 
 import android.support.annotation.NonNull;
 
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.widgets.IBinaryWidget;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -18,26 +19,27 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
+/**
+ * @author James Knight
+ */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends WidgetTest<W, StringData> {
+public abstract class BinaryWidgetTest<W extends IBinaryWidget> extends WidgetTest<W, StringData> {
 
     @Mock
-    File instancePath;
+    public File instancePath;
 
-    BinaryNameWidgetTest(Class<W> clazz) {
+    public BinaryWidgetTest(Class<W> clazz) {
         super(clazz);
     }
 
-    abstract Object createBinaryData(StringData answerData);
+    public abstract Object createBinaryData(StringData answerData);
 
     @NonNull
     @Override
-    StringData getInitialAnswer() {
+    public StringData getInitialAnswer() {
         return new StringData(RandomString.make());
     }
 
@@ -67,7 +69,7 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
     }
 
     @Test
-    public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
+    public void settingANewAnswerShouldRemoveTheOldAnswer() {
         StringData answer = getInitialAnswer();
         when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
@@ -77,21 +79,9 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
         Object binaryData = createBinaryData(newAnswer);
 
         widget.setBinaryData(binaryData);
-        verify(widget).deleteMedia();
 
         StringData answerData = (StringData) widget.getAnswer();
+        assertNotNull(answerData);
         assertEquals(answerData.getValue(), newAnswer.getValue());
-    }
-
-    @Test
-    public void callingClearAnswerShouldCallDeleteMediaAndRemoveTheExistingAnswer() {
-        StringData answer = getNextAnswer();
-        when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
-
-        W widget = getWidget();
-        widget.clearAnswer();
-
-        verify(widget).deleteMedia();
-        assertNull(widget.getAnswer());
     }
 }

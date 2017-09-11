@@ -18,36 +18,37 @@ import java.io.File;
 
 import static org.mockito.Mockito.when;
 
+
 /**
  * @author James Knight
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
+public class DrawWidgetTest extends BinaryNameWidgetTest<DrawWidget> {
+
     @Mock
     File file;
 
-    public AnnotateWidgetTest() {
-        super(AnnotateWidget.class);
+    private String fileName = null;
+
+    public DrawWidgetTest() {
+        super(DrawWidget.class);
     }
 
     @NonNull
     @Override
-    public AnnotateWidget createWidget() {
-        return new AnnotateWidget(RuntimeEnvironment.application, formEntryPrompt);
+    public DrawWidget createWidget() {
+        return new DrawWidget(RuntimeEnvironment.application, formEntryPrompt);
     }
 
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(RandomString.make());
+        return new StringData(fileName);
     }
 
     @Override
     public Object createBinaryData(StringData answerData) {
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(answerData.getDisplayText());
-
         return file;
     }
 
@@ -55,5 +56,10 @@ public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
     public void setUp() throws Exception {
         super.setUp();
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
+
+        fileName = RandomString.make();
+
+        when(file.exists()).thenReturn(true);
+        when(file.getName()).thenReturn(fileName);
     }
 }

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.widgets.base.BinaryNameWidgetTest;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -37,12 +38,12 @@ public class AlignedImageWidgetTest extends BinaryNameWidgetTest<AlignedImageWid
 
     @NonNull
     @Override
-    StringData getNextAnswer() {
+    public StringData getNextAnswer() {
         return new StringData(RandomString.make());
     }
 
     @Override
-    Object createBinaryData(StringData answerData) {
+    public Object createBinaryData(StringData answerData) {
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(answerData.getDisplayText());
 
