@@ -43,7 +43,6 @@
         <exclude name="UseEqualsToCompareStrings" />
         <exclude name="ConsecutiveLiteralAppends" />
         <exclude name="InsufficientStringBufferDeclaration" />
-        <exclude name="UselessStringValueOf" />
         <exclude name="AvoidStringBufferField" />
     </rule>
     <rule ref="rulesets/java/basic.xml">
