@@ -48,7 +48,6 @@
         <exclude name="AvoidStringBufferField" />
     </rule>
     <rule ref="rulesets/java/basic.xml">
-        <exclude name="BigIntegerInstantiation" />
         <exclude name="DontUseFloatTypeForLoopIndices" />
         <exclude name="CollapsibleIfStatements" />
         <exclude name="SimplifiedTernary" />

@@ -216,7 +216,7 @@ public abstract class RangeWidget extends QuestionWidget {
 
     private boolean isWidgetValid() {
         boolean result = true;
-        if (rangeStep.compareTo(new BigDecimal(0)) == 0 || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(new BigDecimal(0)) != 0) {
+        if (rangeStep.compareTo(BigDecimal.ZERO) == 0 || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
             disableWidget();
             result = false;
         }
