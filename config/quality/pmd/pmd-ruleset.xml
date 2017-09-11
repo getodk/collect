@@ -63,6 +63,5 @@
         <exclude name="ShortClassName"/>
         <exclude name="MethodNamingConventions"/>
         <exclude name="AvoidFieldNameMatchingTypeName"/>
-        <exclude name="BooleanGetMethodName"/>
     </rule>
 </ruleset>
