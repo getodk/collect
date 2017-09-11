@@ -293,7 +293,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // get the file path and create a copy in the instance folder
         String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
                 Video.Media.DATA);
-        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
+        String extension = binaryPath.substring(binaryPath.lastIndexOf('.'));
         String destVideoPath = instanceFolder + File.separator
                 + System.currentTimeMillis() + extension;
 

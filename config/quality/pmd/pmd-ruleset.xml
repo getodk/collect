@@ -37,7 +37,6 @@
     <rule ref="rulesets/java/strings.xml">
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="InefficientEmptyStringCheck" />
-        <exclude name="UseIndexOfChar" />
         <exclude name="AppendCharacterWithChar" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="ConsecutiveAppendsShouldReuse" />
