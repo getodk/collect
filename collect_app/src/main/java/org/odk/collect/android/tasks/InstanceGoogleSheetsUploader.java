@@ -68,7 +68,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
@@ -81,7 +80,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
-    protected static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
+    private static final String GOOGLE_DRIVE_ROOT_FOLDER = "Open Data Kit";
     private static final String oauth_fail = "OAUTH Error: ";
     private static final String UPLOADED_MEDIA_URL = "https://drive.google.com/open?id=";
     private static final String GOOGLE_DRIVE_SUBFOLDER = "Submissions";
@@ -89,18 +88,18 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     // needed in case of rate limiting
     private static final int GOOGLE_SLEEP_TIME = 1000;
-    protected Outcome outcome;
+    private Outcome outcome;
     private String spreadsheetName;
     private String spreadsheetId;
-    protected com.google.api.services.sheets.v4.Sheets sheetsService = null;
-    protected com.google.api.services.drive.Drive driveService = null;
+    private com.google.api.services.sheets.v4.Sheets sheetsService = null;
+    private com.google.api.services.drive.Drive driveService = null;
     private boolean hasWritePermissonToSheet = false;
     private String spreadsheetFileName;
     private Integer sheetId;
 
-    protected GoogleAccountCredential credential;
+    private final GoogleAccountCredential credential;
 
-    private Context context;
+    private final Context context;
 
     private boolean authFailed;
 
@@ -120,7 +119,22 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 .build();
     }
 
-    protected void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
+    /**
+     * Google sheets currently only allows a-zA-Z0-9 and dash
+     */
+
+    public static boolean isValidGoogleSheetsString(String name) {
+        return Pattern
+                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
+    }
+
+    public static boolean isValidLocation(String answer) {
+        return Pattern
+                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
+                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
+    }
+
+    private void uploadInstances(String selection, String[] selectionArgs, String token, int low, int instanceCount) {
         Cursor c = null;
         try {
             c = new InstancesDao().getInstancesCursor(selection, selectionArgs);
@@ -232,7 +246,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         File instanceFile = new File(instanceFilePath);
 
         // first check to see how many columns we have:
-        ArrayList<String> columnNames = new ArrayList<String>();
+        ArrayList<String> columnNames = new ArrayList<>();
         try {
             getColumns(formFilePath, columnNames);
         } catch (XmlPullParserException | IOException | FormException e2) {
@@ -643,7 +657,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
     }
 
-    protected String getIDOfFolderWithName(String name, String inFolder)
+    private String getIDOfFolderWithName(String name, String inFolder)
             throws IOException, MultipleFoldersFoundException {
 
         com.google.api.services.drive.model.File folder = null;
@@ -765,7 +779,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void readFormFeed(XmlPullParser parser, ArrayList<String> columns)
             throws XmlPullParserException, IOException, FormException {
-        ArrayList<String> path = new ArrayList<String>();
+        ArrayList<String> path = new ArrayList<>();
 
         // we put path names in here as we go, and if we hit a duplicate we
         // blow up
@@ -840,10 +854,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void readInstanceFeed(XmlPullParser parser,
                                   HashMap<String, String> answersToUpload,
                                   HashMap<String, String> mediaToUpload, File instanceFolder)
-            throws XmlPullParserException, IOException,
-            FormException {
+            throws XmlPullParserException, IOException {
 
-        ArrayList<String> path = new ArrayList<String>();
+        ArrayList<String> path = new ArrayList<>();
 
         int event = parser.next();
         while (event != XmlPullParser.END_DOCUMENT) {
@@ -887,21 +900,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
         return currentPath;
-    }
-
-    /**
-     * Google sheets currently only allows a-zA-Z0-9 and dash
-     */
-
-    public static boolean isValidGoogleSheetsString(String name) {
-        return Pattern
-                .compile("^[a-zA-Z0-9\\-]+$").matcher(name).matches();
-    }
-
-    public static boolean isValidLocation(String answer) {
-        return Pattern
-                .compile("^-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\.[0-9]+\\s-?[0-9]+\\"
-                        + ".[0-9]+\\s[0-9]+\\.[0-9]+$").matcher(answer).matches();
     }
 
     /**

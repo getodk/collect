@@ -72,41 +72,17 @@ import timber.log.Timber;
  */
 public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
     private static final String ITEMSETS_CSV = "itemsets.csv";
-
+    private final String xpath;
+    private final String waitingXPath;
+    private FECWrapper data;
     private FormLoaderListener stateListener;
     private String errorMsg;
     private String instancePath;
-    private final String xpath;
-    private final String waitingXPath;
     private boolean pendingActivityResult = false;
     private int requestCode = 0;
     private int resultCode = 0;
     private Intent intent = null;
     private ExternalDataManager externalDataManager;
-
-    protected class FECWrapper {
-        FormController controller;
-        boolean usedSavepoint;
-
-        protected FECWrapper(FormController controller, boolean usedSavepoint) {
-            this.controller = controller;
-            this.usedSavepoint = usedSavepoint;
-        }
-
-        protected FormController getController() {
-            return controller;
-        }
-
-        protected boolean hasUsedSavepoint() {
-            return usedSavepoint;
-        }
-
-        protected void free() {
-            controller = null;
-        }
-    }
-
-    FECWrapper data;
 
     public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
         this.instancePath = instancePath;
@@ -260,7 +236,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // but we should give the option to the user to edit the form
                 // otherwise the survey will be TOTALLY inaccessible.
                 Timber.w("We have a syntactically correct instance, but the data threw an "
-                                + "exception inside JR. We should allow editing.");
+                        + "exception inside JR. We should allow editing.");
             } else {
                 errorMsg = e.getMessage();
                 return null;
@@ -268,12 +244,12 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // Remove previous forms
-        ReferenceManager._().clearSession();
+        ReferenceManager.instance().clearSession();
 
         // for itemsets.csv, we only check to see if the itemset file has been
         // updated
         File csv = new File(formMediaDir.getAbsolutePath() + "/" + ITEMSETS_CSV);
-        String csvmd5 = null;
+        String csvmd5;
         if (csv.exists()) {
             csvmd5 = FileUtils.getMd5Hash(csv);
             boolean readFile = false;
@@ -308,27 +284,20 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // This should get moved to the Application Class
-        if (ReferenceManager._().getFactories().length == 0) {
+        if (ReferenceManager.instance().getFactories().length == 0) {
             // this is /sdcard/odk
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+            ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
         // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
-
-        // clean up vars
-        fis = null;
-        fd = null;
-        formBin = null;
-        formXml = null;
-        formPath = null;
 
         FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
                 : new File(instancePath));
@@ -376,7 +345,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
         });
 
-        Map<String, File> externalDataMap = new HashMap<String, File>();
+        Map<String, File> externalDataMap = new HashMap<>();
 
         if (csvFiles != null) {
 
@@ -412,7 +381,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    public boolean importData(File instanceFile, FormEntryController fec) {
+    private boolean importData(File instanceFile, FormEntryController fec) {
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
 
@@ -461,11 +430,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * @param formDef serialized FormDef file
      * @return {@link FormDef} object
      */
-    public FormDef deserializeFormDef(File formDef) {
+    private FormDef deserializeFormDef(File formDef) {
 
         // TODO: any way to remove reliance on jrsp?
-        FileInputStream fis = null;
-        FormDef fd = null;
+        FileInputStream fis;
+        FormDef fd;
         try {
             // create new form def
             fd = new FormDef();
@@ -489,7 +458,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      *
      * @param filepath path to the form file
      */
-    public void serializeFormDef(FormDef fd, String filepath) {
+    private void serializeFormDef(FormDef fd, String filepath) {
         // calculate unique md5 identifier
         String hash = FileUtils.getMd5Hash(new File(filepath));
         File formDef = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");
@@ -623,6 +592,28 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 ida.commit();
             }
             ida.close();
+        }
+    }
+
+    class FECWrapper {
+        FormController controller;
+        final boolean usedSavepoint;
+
+        FECWrapper(FormController controller, boolean usedSavepoint) {
+            this.controller = controller;
+            this.usedSavepoint = usedSavepoint;
+        }
+
+        FormController getController() {
+            return controller;
+        }
+
+        boolean hasUsedSavepoint() {
+            return usedSavepoint;
+        }
+
+        void free() {
+            controller = null;
         }
     }
 }
