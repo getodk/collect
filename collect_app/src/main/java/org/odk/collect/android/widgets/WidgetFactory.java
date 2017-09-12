@@ -149,7 +149,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -187,7 +187,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -206,6 +206,8 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
+                } else if (appearance.contains("autocomplete")) {
+                    questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }

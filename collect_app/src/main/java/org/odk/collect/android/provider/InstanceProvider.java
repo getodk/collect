@@ -40,7 +40,6 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.DATABASE_NAME;
 import static org.odk.collect.android.database.helpers.InstancesDatabaseHelper.INSTANCES_TABLE_NAME;
 
 public class InstanceProvider extends ContentProvider {
@@ -65,7 +64,7 @@ public class InstanceProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new InstancesDatabaseHelper(DATABASE_NAME);
+        databaseHelper = new InstancesDatabaseHelper();
         return databaseHelper;
     }
 
