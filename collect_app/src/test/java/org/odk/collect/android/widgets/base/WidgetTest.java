@@ -24,6 +24,7 @@ import org.robolectric.annotation.Config;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -104,6 +105,7 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
         W widget = getWidget();
         IAnswerData newAnswer = widget.getAnswer();
 
+        assertNotNull(newAnswer);
         assertEquals(newAnswer.getDisplayText(), answer.getDisplayText());
     }
 

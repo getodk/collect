@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,8 +40,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
-import java.util.ArrayList;
-
 import timber.log.Timber;
 
 /**
@@ -52,14 +51,11 @@ import timber.log.Timber;
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 
+@SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
-    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
-    public static final String READ_ONLY = "readOnly";
-    private final boolean readOnly;
     public static final String TRACE_LOCATION = "gp";
     private Button createTraceButton;
-    private Button viewShapeButton;
     public static final String GOOGLE_MAP_KEY = "google_maps";
     public SharedPreferences sharedPreferences;
     public String mapSDK;
@@ -74,7 +70,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
-        readOnly = prompt.isReadOnly();
 
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
@@ -146,24 +141,22 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
+        Timber.i("Setting binary data: %s", answer);
         String s = answer.toString();
+
         stringAnswer.setText(s);
         answerDisplay.setText(s);
+
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        // TODO Auto-generated method stub
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
-        // TODO Auto-generated method stub
-        Boolean test = formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
         return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
@@ -172,32 +165,14 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        ArrayList<double[]> list = new ArrayList<double[]>();
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            try {
-                for (String sa :  s.split(";")) {
-                    String[] sp = sa.trim().split(" ");
-                    double[] gp = new double[4];
-                    gp[0] = Double.valueOf(sp[0]);
-                    gp[1] = Double.valueOf(sp[1]);
-                    gp[2] = Double.valueOf(sp[2]);
-                    gp[3] = Double.valueOf(sp[3]);
-                }
-                return new StringData(s);
-            } catch (NumberFormatException e) {
-                Timber.e(e);
-                return null;
-            }
-        }
-
+        return !s.equals("")
+                ? new StringData(s)
+                : null;
     }
 
     @Override
     public void clearAnswer() {
-        // TODO Auto-generated method stub
         stringAnswer.setText(null);
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
@@ -205,7 +180,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setFocus(Context context) {
-        // TODO Auto-generated method stub
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);

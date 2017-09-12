@@ -63,16 +63,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button getLocationButton;
     private Button viewButton;
-    private SharedPreferences sharedPreferences;
     private String mapSDK;
     private static final String GOOGLE_MAP_KEY = "google_maps";
-    private static final String OSM_MAP_KEY = "osmdroid";
+    //    private static final String OSM_MAP_KEY = "osmdroid";
     private TextView stringAnswer;
     private TextView answerDisplay;
     private final boolean readOnly;
     private final boolean useMapsV2;
     private boolean useMaps;
-    private String appearance;
     private double accuracyThreshold;
     private boolean draggable = true;
 
@@ -88,7 +86,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         // Determine whether or not to use the plain, maps, or mapsV2 activity
-        appearance = prompt.getAppearanceHint();
+        String appearance = prompt.getAppearanceHint();
+
         // use mapsV2 if it is available and was requested;
         useMapsV2 = useMapsV2(context);
         if (appearance != null && appearance.equalsIgnoreCase("placement-map") && useMapsV2) {
@@ -101,7 +100,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             useMaps = false;
         }
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
 

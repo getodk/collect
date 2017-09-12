@@ -11,14 +11,9 @@
  * the License.
  */
 
-/**
- * Widget for geoshape data type
- *
- * @author Jon Nordling (jonnordling@gmail.com)
- */
-
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +28,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.data.GeoShapeData;
-import org.javarosa.core.model.data.GeoShapeData.GeoShape;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -46,24 +39,17 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
-import java.util.ArrayList;
-
-import timber.log.Timber;
-
 /**
  * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
-
+@SuppressLint("ViewConstructor")
 public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
-    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
-    public static final String READ_ONLY = "readOnly";
-    private final boolean readOnly;
+
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";
     private Button createShapeButton;
-    private Button viewShapeButton;
     public SharedPreferences sharedPreferences;
     public String mapSDK;
 
@@ -76,7 +62,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
-        readOnly = prompt.isReadOnly();
 
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(QuestionWidget.newUniqueId());
@@ -147,25 +132,21 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        // TODO Auto-generated method stub
-        String s =  answer.toString();
+        String s = answer.toString();
+
         stringAnswer.setText(s);
         answerDisplay.setText(s);
+
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        // TODO Auto-generated method stub
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
-        Boolean test = formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-
         return formEntryPrompt.getIndex().equals(
                 Collect.getInstance().getFormController()
                         .getIndexWaitingForData());
@@ -173,48 +154,26 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        // TODO Auto-generated method stub
-
-        GeoShapeData data = new GeoShapeData();
-        ArrayList<double[]> list = new ArrayList<double[]>();
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            try {
-                for (String sa :  s.split(";")) {
-                    String[] sp = sa.trim().split(" ");
-                    double[] gp = new double[4];
-                    gp[0] = Double.valueOf(sp[0]);
-                    gp[1] = Double.valueOf(sp[1]);
-                    gp[2] = Double.valueOf(sp[2]);
-                    gp[3] = Double.valueOf(sp[3]);
-                    list.add(gp);
-                }
-                GeoShape shape = new GeoShape(list);
-                return new StringData(s);
-            } catch (NumberFormatException e) {
-                Timber.e(e);
-                return null;
-            }
-        }
+
+        return !s.equals("")
+                ? new StringData(s)
+                : null;
     }
 
     @Override
     public void clearAnswer() {
-        // TODO Auto-generated method stub
         stringAnswer.setText(null);
         answerDisplay.setText(null);
+
         updateButtonLabelsAndVisibility(false);
     }
 
     @Override
     public void setFocus(Context context) {
-        // TODO Auto-generated method stub
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
     @Override
