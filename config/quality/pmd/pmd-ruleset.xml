@@ -41,8 +41,8 @@
         <exclude name="InefficientStringBuffering" />
         <exclude name="ConsecutiveAppendsShouldReuse" />
         <exclude name="ConsecutiveLiteralAppends" />
+        <exclude name="UseEqualsToCompareStrings" />
         <exclude name="InsufficientStringBufferDeclaration" />
-        <exclude name="UselessStringValueOf" />
         <exclude name="AvoidStringBufferField" />
     </rule>
     <rule ref="rulesets/java/basic.xml">
@@ -62,6 +62,5 @@
         <exclude name="ShortClassName"/>
         <exclude name="MethodNamingConventions"/>
         <exclude name="AvoidFieldNameMatchingTypeName"/>
-        <exclude name="BooleanGetMethodName"/>
     </rule>
 </ruleset>
