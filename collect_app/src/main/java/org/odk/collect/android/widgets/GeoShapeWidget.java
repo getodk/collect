@@ -24,9 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -67,7 +64,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
     public SharedPreferences sharedPreferences;
     public String mapSDK;
 
-    private TextView stringAnswer;
     private TextView answerDisplay;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
@@ -78,14 +74,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
         readOnly = prompt.isReadOnly();
 
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-
-        answerDisplay = new TextView(getContext());
-        answerDisplay.setId(QuestionWidget.newUniqueId());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answerDisplay.setGravity(Gravity.CENTER);
-        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+        answerDisplay = getCenteredAnswerTextView();
 
         createShapeButton = getSimpleButton(getContext().getString(R.string.get_shape));
         createShapeButton.setOnClickListener(new OnClickListener() {
@@ -129,7 +118,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             i = new Intent(getContext(), GeoShapeOsmMapActivity.class);
         }
-        String s = stringAnswer.getText().toString();
+        String s = answerDisplay.getText().toString();
         if (s.length() != 0) {
             i.putExtra(SHAPE_LOCATION, s);
         }
@@ -149,7 +138,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
     public void setBinaryData(Object answer) {
         // TODO Auto-generated method stub
         String s =  answer.toString();
-        stringAnswer.setText(s);
         answerDisplay.setText(s);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
@@ -177,7 +165,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
         GeoShapeData data = new GeoShapeData();
         ArrayList<double[]> list = new ArrayList<double[]>();
-        String s = stringAnswer.getText().toString();
+        String s = answerDisplay.getText().toString();
         if (s == null || s.equals("")) {
             return null;
         } else {
@@ -203,7 +191,6 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         // TODO Auto-generated method stub
-        stringAnswer.setText(null);
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
     }
@@ -214,14 +201,11 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         createShapeButton.setOnLongClickListener(l);
-        stringAnswer.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
     }
-
 }

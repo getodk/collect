@@ -20,10 +20,8 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -66,7 +64,7 @@ public class TimeWidget extends QuestionWidget {
         setGravity(Gravity.START);
 
         createTimeButton();
-        createTimeTextView();
+        timeTextView = getAnswerTextView();
         createTimePickerDialog();
         addViews();
     }
@@ -120,14 +118,6 @@ public class TimeWidget extends QuestionWidget {
                 timePickerDialog.show();
             }
         });
-    }
-
-    private void createTimeTextView() {
-        timeTextView = new TextView(getContext());
-        timeTextView.setId(QuestionWidget.newUniqueId());
-        timeTextView.setPadding(20, 20, 20, 20);
-        timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        timeTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
     }
 
     private void addViews() {
