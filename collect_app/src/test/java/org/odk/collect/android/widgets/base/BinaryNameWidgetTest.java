@@ -1,5 +1,10 @@
 package org.odk.collect.android.widgets.base;
 
+import android.support.annotation.NonNull;
+
+import net.bytebuddy.utility.RandomString;
+
+import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
@@ -12,10 +17,16 @@ import static org.mockito.Mockito.verify;
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends BinaryWidgetTest<W> {
+public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends BinaryWidgetTest<W, StringData> {
 
     public BinaryNameWidgetTest(Class<W> clazz) {
         super(clazz);
+    }
+
+    @NonNull
+    @Override
+    public StringData getInitialAnswer() {
+        return new StringData(RandomString.make());
     }
 
     @Test

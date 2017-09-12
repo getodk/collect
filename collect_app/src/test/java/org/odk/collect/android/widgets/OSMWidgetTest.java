@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget> {
+public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget, StringData> {
 
     private String fileName = null;
 
@@ -59,8 +59,13 @@ public class OSMWidgetTest extends BinaryWidgetTest<OSMWidget> {
     }
 
     @Override
+    public StringData getInitialAnswer() {
+        return new StringData(RandomString.make());
+    }
+
+    @Override
     public Object createBinaryData(StringData answerData) {
-        return fileName;
+        return answerData.getValue();
     }
 
     @Before

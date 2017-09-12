@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -51,6 +52,7 @@ import java.text.DecimalFormat;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
@@ -126,7 +128,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "recordLocation", "click",
                                 formEntryPrompt.getIndex());
-                Intent i = null;
+                Intent i;
                 if (useMapsV2 && useMaps) {
                     if (mapSDK.equals(GOOGLE_MAP_KEY)) {
                         if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
@@ -234,7 +236,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
+        if (s.equals("")) {
             return null;
         } else {
             try {
@@ -303,7 +305,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String s = (String) answer;
-        if (!s.equals("") || s == null) {
+        if (s != null && !s.equals("")) {
             stringAnswer.setText(s);
             String[] sa = s.split(" ");
             answerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
@@ -313,8 +315,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             stringAnswer.setText(s);
             answerDisplay.setText("");
-
         }
+
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
         updateButtonLabelsAndVisibility(true);
     }

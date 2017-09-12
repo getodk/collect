@@ -1,10 +1,6 @@
 package org.odk.collect.android.widgets.base;
 
-import android.support.annotation.NonNull;
-
-import net.bytebuddy.utility.RandomString;
-
-import org.javarosa.core.model.data.StringData;
+import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +22,7 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public abstract class BinaryWidgetTest<W extends IBinaryWidget> extends WidgetTest<W, StringData> {
+public abstract class BinaryWidgetTest<W extends IBinaryWidget, A extends IAnswerData> extends WidgetTest<W, A> {
 
     @Mock
     public File instancePath;
@@ -35,13 +31,7 @@ public abstract class BinaryWidgetTest<W extends IBinaryWidget> extends WidgetTe
         super(clazz);
     }
 
-    public abstract Object createBinaryData(StringData answerData);
-
-    @NonNull
-    @Override
-    public StringData getInitialAnswer() {
-        return new StringData(RandomString.make());
-    }
+    public abstract Object createBinaryData(A answerData);
 
     @Before
     public void setUp() throws Exception {
@@ -58,30 +48,32 @@ public abstract class BinaryWidgetTest<W extends IBinaryWidget> extends WidgetTe
         W widget = getWidget();
         assertNull(widget.getAnswer());
 
-        StringData answer = getNextAnswer();
+        A answer = getNextAnswer();
         Object binaryData = createBinaryData(answer);
 
         widget.setBinaryData(binaryData);
 
-        StringData answerData = (StringData) widget.getAnswer();
+        IAnswerData answerData = widget.getAnswer();
+
         assertNotNull(answerData);
-        assertEquals(answerData.getValue(), answer.getValue());
+        assertEquals(answerData.getDisplayText(), answer.getDisplayText());
     }
 
     @Test
     public void settingANewAnswerShouldRemoveTheOldAnswer() {
-        StringData answer = getInitialAnswer();
+        A answer = getInitialAnswer();
         when(formEntryPrompt.getAnswerText()).thenReturn(answer.getDisplayText());
 
         W widget = getWidget();
 
-        StringData newAnswer = getNextAnswer();
+        A newAnswer = getNextAnswer();
         Object binaryData = createBinaryData(newAnswer);
 
         widget.setBinaryData(binaryData);
 
-        StringData answerData = (StringData) widget.getAnswer();
+        IAnswerData answerData = widget.getAnswer();
+
         assertNotNull(answerData);
-        assertEquals(answerData.getValue(), newAnswer.getValue());
+        assertEquals(answerData.getDisplayText(), newAnswer.getDisplayText());
     }
 }

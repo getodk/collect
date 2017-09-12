@@ -63,7 +63,6 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     @NonNull
     public abstract A getNextAnswer();
 
-    @NonNull
     public abstract A getInitialAnswer();
 
     public W getWidget() {
@@ -86,28 +85,30 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
     }
 
     @Test
-    public final void getAnswerShouldReturnNullIfPromptDoesNotHaveExistingAnswer() {
+    public void getAnswerShouldReturnNullIfPromptDoesNotHaveExistingAnswer() {
         when(formEntryPrompt.getAnswerValue()).thenReturn(null);
 
-        widget = getWidget();
+        W widget = getWidget();
         assertNull(widget.getAnswer());
     }
 
     @Test
-    public final void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
-        A answer = getNextAnswer();
+    public void getAnswerShouldReturnExistingAnswerIfPromptHasExistingAnswer() {
+        A answer = getInitialAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
         if (answer instanceof StringData) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         }
 
-        widget = getWidget();
-        assertEquals(widget.getAnswer().getValue(), answer.getValue());
+        W widget = getWidget();
+        IAnswerData newAnswer = widget.getAnswer();
+
+        assertEquals(newAnswer.getDisplayText(), answer.getDisplayText());
     }
 
     @Test
-    public final void callingClearShouldRemoveTheExistingAnswer() {
+    public void callingClearShouldRemoveTheExistingAnswer() {
         A answer = getNextAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
@@ -115,7 +116,7 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         }
 
-        widget = getWidget();
+        W widget = getWidget();
         widget.clearAnswer();
 
         assertNull(widget.getAnswer());

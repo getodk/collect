@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import org.odk.collect.android.application.Collect;
  *
  * @author Carl Hartung (chartung@nafundi.com)
  */
+@SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     private Button getBearingButton;
     private TextView stringAnswer;
@@ -77,7 +79,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBearing", "click",
                                 formEntryPrompt.getIndex());
-                Intent i = null;
+                Intent i;
                 i = new Intent(getContext(), BearingActivity.class);
 
                 Collect.getInstance().getFormController()
@@ -106,7 +108,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
+        if (s.equals("")) {
             return null;
         } else {
             return new StringData(s);
