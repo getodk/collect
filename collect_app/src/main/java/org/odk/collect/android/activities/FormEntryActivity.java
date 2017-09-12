@@ -2707,7 +2707,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                if (saveResult.getComplete()) {
+                if (saveResult.isComplete()) {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
