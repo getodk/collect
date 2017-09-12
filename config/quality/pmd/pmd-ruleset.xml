@@ -41,7 +41,6 @@
         <exclude name="InefficientStringBuffering" />
         <exclude name="ConsecutiveAppendsShouldReuse" />
         <exclude name="UseEqualsToCompareStrings" />
-        <exclude name="ConsecutiveLiteralAppends" />
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="UselessStringValueOf" />
         <exclude name="AvoidStringBufferField" />
