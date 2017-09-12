@@ -42,7 +42,6 @@
         <exclude name="ConsecutiveAppendsShouldReuse" />
         <exclude name="UseEqualsToCompareStrings" />
         <exclude name="InsufficientStringBufferDeclaration" />
-        <exclude name="UselessStringValueOf" />
         <exclude name="AvoidStringBufferField" />
     </rule>
     <rule ref="rulesets/java/basic.xml">
