@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -33,6 +34,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoShapeGoogleMapActivity;
 import org.odk.collect.android.activities.GeoShapeOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
@@ -66,7 +68,11 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+                }
+
                 startGeoShapeActivity();
             }
         });
@@ -124,19 +130,28 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
         String s =  answer.toString();
         answerDisplay.setText(s);
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return false;
+        }
+
+        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
+
         return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+                indexWaitingForData);
     }
 
     @Override

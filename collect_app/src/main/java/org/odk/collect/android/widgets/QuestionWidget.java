@@ -170,10 +170,6 @@ public abstract class QuestionWidget
         return questionMediaLayout;
     }
 
-    public MediaLayout getQuestionMediaLayout() {
-        return questionMediaLayout;
-    }
-
     public TextView getHelpTextView() {
         return helpTextView;
     }
@@ -188,10 +184,6 @@ public abstract class QuestionWidget
 
     public FormEntryPrompt getPrompt() {
         return formEntryPrompt;
-    }
-
-    public MediaLayout getQuestionMediaView() {
-        return questionMediaLayout;
     }
 
     // http://code.google.com/p/android/issues/detail?id=8488
@@ -354,10 +346,6 @@ public abstract class QuestionWidget
         questionMediaLayout.playAudio();
     }
 
-    public void setQuestionTextColor(int color) {
-        questionMediaLayout.setTextcolor(color);
-    }
-
     public void resetQuestionTextColor() {
         questionMediaLayout.resetTextFormatting();
     }
@@ -395,7 +383,7 @@ public abstract class QuestionWidget
 
     protected TextView getCenteredAnswerTextView() {
         TextView textView = getAnswerTextView();
-        textView.setGravity(CENTER);
+        textView.setGravity(Gravity.CENTER);
         return textView;
     }
 
@@ -414,6 +402,10 @@ public abstract class QuestionWidget
      */
     protected void clearNextLevelsOfCascadingSelect() {
         FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
+
         if (formController.currentCaptionPromptIsQuestion()) {
             try {
                 FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();

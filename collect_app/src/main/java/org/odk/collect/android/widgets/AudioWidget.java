@@ -36,6 +36,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 
@@ -70,8 +71,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        instanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
+        final FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.e("Started AudioWidget with null FormController.");
+            return;
+        }
+
+        instanceFolder = formController.getInstancePath().getParent();
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -89,7 +95,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
                         android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                                 .toString());
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CAPTURE);
@@ -99,7 +105,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
                             getContext().getString(R.string.activity_not_found,
                                     "audio capture"), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(null);
                 }
 
@@ -118,7 +124,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CHOOSER);
@@ -127,7 +133,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "choose audio"), Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(null);
                 }
 
@@ -258,7 +264,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
             Timber.e("Inserting Audio file FAILED");
         }
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
@@ -266,7 +272,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
     }
 
     private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf("."));
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return instanceFolder + File.separator
                 + getFileUtil().getRandomFilename() + extension;
     }
@@ -307,14 +313,21 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+
+        return formController != null
+                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
     }
 
     @Override

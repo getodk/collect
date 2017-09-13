@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -34,10 +35,9 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-
-import timber.log.Timber;
 
 /**
  * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
@@ -51,12 +51,13 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
-    public static final String TRACE_LOCATION = "gp";
-    private Button createTraceButton;
     public static final String GOOGLE_MAP_KEY = "google_maps";
+    public static final String TRACE_LOCATION = "gp";
+
     public SharedPreferences sharedPreferences;
     public String mapSDK;
 
+    private Button createTraceButton;
     private TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
@@ -74,7 +75,11 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
             @Override
             public void onClick(View v) {
-                Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+                }
+
                 startGeoTraceActivity();
 
             }
@@ -131,20 +136,28 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText(answer.toString());
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return false;
+        }
 
+        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
+
+        return formEntryPrompt.getIndex().equals(
+                indexWaitingForData);
     }
 
     @Override
@@ -152,7 +165,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         String s = answerDisplay.getText().toString();
         return !s.equals("")
                 ? new StringData(s)
-                : null
+                : null;
     }
 
     @Override

@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -37,6 +38,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
@@ -62,15 +64,14 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private Button viewButton;
     private String mapSDK;
     private static final String GOOGLE_MAP_KEY = "google_maps";
-    private static final String OSM_MAP_KEY = "osmdroid";
     private TextView answerDisplay;
     private final boolean readOnly;
     private final boolean useMapsV2;
     private boolean useMaps;
-    private String appearance;
-    private String stringAnswer;
     private double accuracyThreshold;
     private boolean draggable = true;
+
+    private String stringAnswer;
 
     public GeoPointWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -144,8 +145,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(READ_ONLY, readOnly);
                 i.putExtra(DRAGGABLE_ONLY, draggable);
                 i.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
-                Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+                }
+
                 ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.LOCATION_CAPTURE);
             }
@@ -304,20 +309,29 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             answerDisplay.setText("");
         }
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
         updateButtonLabelsAndVisibility(true);
+        cancelWaitingForBinaryData();
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return false;
+        }
+
+        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
+
         return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+                indexWaitingForData);
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
     }
 
     @Override

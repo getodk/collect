@@ -40,6 +40,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
@@ -86,8 +87,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
     public VideoWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        instanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
+        final FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.e("Started AudioWidget with null FormController.");
+            return;
+        }
+
+        instanceFolder = formController.getInstancePath().getParent();
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video));
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -126,7 +132,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
                     i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 }
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.VIDEO_CAPTURE);
@@ -136,7 +142,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
                             getContext().getString(R.string.activity_not_found,
                                     "capture video"), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(null);
                 }
 
@@ -158,7 +164,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
                 // new Intent(Intent.ACTION_PICK,
                 // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.VIDEO_CHOOSER);
@@ -168,7 +174,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
                             getContext().getString(R.string.activity_not_found,
                                     "choose video "), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(null);
                 }
 
@@ -344,7 +350,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
         }
 
         binaryName = newVideo.getName();
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
 
         // Need to have this ugly code to account for
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
@@ -362,7 +368,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
     }
 
     private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
-        String extension = sourcePath.substring(sourcePath.lastIndexOf("."));
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return instanceFolder + File.separator
                 + getFileUtil().getRandomFilename() + extension;
     }
@@ -403,14 +409,21 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+
+        return formController != null
+                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
     }
 
     @Override
