@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -21,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -33,8 +36,9 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.MediaUtil;
 
 import java.io.File;
 
@@ -48,7 +52,14 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class AudioWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
+
+    @Nullable
+    private MediaUtil mediaUtil = null;
+
+    @Nullable
+    private FileUtil fileUtil = null;
 
     private Button captureButton;
     private Button playButton;
@@ -60,8 +71,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        instanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
+        final FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.e("Started AudioWidget with null FormController.");
+            return;
+        }
+
+        instanceFolder = formController.getInstancePath().getParent();
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -79,7 +95,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                         android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                                 .toString());
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CAPTURE);
@@ -89,7 +105,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                             getContext().getString(R.string.activity_not_found,
                                     "audio capture"), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(null);
                 }
 
@@ -108,7 +124,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 try {
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.AUDIO_CHOOSER);
@@ -117,7 +133,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "choose audio"), Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController()
+                    formController
                             .setIndexWaitingForData(null);
                 }
 
@@ -171,13 +187,14 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteMedia() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = MediaUtils.deleteAudioFileFromMediaProvider(
+        int del = getMediaUtil().deleteAudioFileFromMediaProvider(
                 instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
@@ -186,6 +203,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
     public void clearAnswer() {
         // remove the file
         deleteMedia();
+
 
         // reset buttons
         playButton.setEnabled(false);
@@ -202,17 +220,23 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object binaryuri) {
+        if (binaryuri == null || !(binaryuri instanceof Uri)) {
+            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
+            return;
+        }
+
+        Uri uri = (Uri) binaryuri;
 
         // get the file path and create a copy in the instance folder
-        String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
-                Audio.Media.DATA);
-        String extension = binaryPath.substring(binaryPath.lastIndexOf('.'));
-        String destAudioPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
+        String sourcePath = getSourcePathFromUri(uri);
+        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 
-        File source = new File(binaryPath);
-        File newAudio = new File(destAudioPath);
-        FileUtils.copyFile(source, newAudio);
+        FileUtil fileUtil = getFileUtil();
+
+        File source = fileUtil.getFileAtPath(sourcePath);
+        File newAudio = fileUtil.getFileAtPath(destinationPath);
+
+        fileUtil.copyFile(source, newAudio);
 
         if (newAudio.exists()) {
             // Add the copy to the content provier
@@ -224,18 +248,59 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri audioURI = getContext().getContentResolver().insert(
                     Audio.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+
+            if (audioURI != null) {
+                Timber.i("Inserting AUDIO returned uri = %s", audioURI.toString());
+            }
+
             // when replacing an answer. remove the current media.
             if (binaryName != null && !binaryName.equals(newAudio.getName())) {
                 deleteMedia();
             }
+
             binaryName = newAudio.getName();
             Timber.i("Setting current answer to %s", newAudio.getName());
         } else {
             Timber.e("Inserting Audio file FAILED");
         }
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
+    }
+
+    private String getSourcePathFromUri(@NonNull Uri uri) {
+        return getMediaUtil().getPathFromUri(getContext(), uri, Audio.Media.DATA);
+    }
+
+    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        return instanceFolder + File.separator
+                + getFileUtil().getRandomFilename() + extension;
+    }
+
+    @NonNull
+    public MediaUtil getMediaUtil() {
+        if (mediaUtil == null) {
+            mediaUtil = new MediaUtil();
+        }
+
+        return mediaUtil;
+    }
+
+    public void setMediaUtil(@Nullable MediaUtil mediaUtil) {
+        this.mediaUtil = mediaUtil;
+    }
+
+    @NonNull
+    public FileUtil getFileUtil() {
+        if (fileUtil == null) {
+            fileUtil = new FileUtil();
+        }
+
+        return fileUtil;
+    }
+
+    public void setFileUtil(@Nullable FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 
     @Override
@@ -248,14 +313,21 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+
+        return formController != null
+                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
     }
 
     @Override

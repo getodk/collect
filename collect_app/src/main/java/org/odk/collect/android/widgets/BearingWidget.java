@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,12 +31,14 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
  *
  * @author Carl Hartung (chartung@nafundi.com)
  */
+@SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     private Button getBearingButton;
     private TextView answerDisplay;
@@ -66,11 +69,14 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBearing", "click",
                                 formEntryPrompt.getIndex());
-                Intent i = null;
+                Intent i;
                 i = new Intent(getContext(), BearingActivity.class);
 
-                Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+                }
+
                 ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.BEARING_CAPTURE);
             }
@@ -93,7 +99,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = answerDisplay.getText().toString();
-        if (s == null || s.equals("")) {
+        if (s.equals("")) {
             return null;
         } else {
             return new StringData(s);
@@ -111,19 +117,26 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText((String) answer);
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+
+        return formController != null
+                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
     }
 
     @Override

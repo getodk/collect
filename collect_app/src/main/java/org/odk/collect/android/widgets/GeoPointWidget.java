@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -36,6 +38,7 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
@@ -48,6 +51,7 @@ import java.text.DecimalFormat;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Jon Nordling (jonnordling@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
@@ -58,18 +62,16 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button getLocationButton;
     private Button viewButton;
-    private SharedPreferences sharedPreferences;
     private String mapSDK;
     private static final String GOOGLE_MAP_KEY = "google_maps";
-    private static final String OSM_MAP_KEY = "osmdroid";
     private TextView answerDisplay;
     private final boolean readOnly;
     private final boolean useMapsV2;
     private boolean useMaps;
-    private String appearance;
-    private String stringAnswer;
     private double accuracyThreshold;
     private boolean draggable = true;
+
+    private String stringAnswer;
 
     public GeoPointWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -83,7 +85,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         }
 
         // Determine whether or not to use the plain, maps, or mapsV2 activity
-        appearance = prompt.getAppearanceHint();
+        String appearance = prompt.getAppearanceHint();
+
         // use mapsV2 if it is available and was requested;
         useMapsV2 = useMapsV2(context);
         if (appearance != null && appearance.equalsIgnoreCase("placement-map") && useMapsV2) {
@@ -96,7 +99,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
             useMaps = false;
         }
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
         readOnly = prompt.isReadOnly();
@@ -114,7 +117,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                         .getActivityLogger()
                         .logInstanceAction(this, "recordLocation", "click",
                                 formEntryPrompt.getIndex());
-                Intent i = null;
+                Intent i;
                 if (useMapsV2 && useMaps) {
                     if (mapSDK.equals(GOOGLE_MAP_KEY)) {
                         if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
@@ -142,8 +145,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 i.putExtra(READ_ONLY, readOnly);
                 i.putExtra(DRAGGABLE_ONLY, draggable);
                 i.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
-                Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+                }
+
                 ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.LOCATION_CAPTURE);
             }
@@ -232,6 +239,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 gp[3] = Double.valueOf(sa[3]);
 
                 return new GeoPointData(gp);
+              
             } catch (Exception numberFormatException) {
                 return null;
             }
@@ -288,7 +296,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String s = (String) answer;
-        if (!s.equals("") || s == null) {
+      
+        if (s != null && !s.isEmpty()) {
             stringAnswer = s;
             String[] sa = s.split(" ");
             answerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
@@ -298,22 +307,31 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             stringAnswer = s;
             answerDisplay.setText("");
-
         }
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+
         updateButtonLabelsAndVisibility(true);
+        cancelWaitingForBinaryData();
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return false;
+        }
+
+        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
+
         return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+                indexWaitingForData);
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
     }
 
     @Override
