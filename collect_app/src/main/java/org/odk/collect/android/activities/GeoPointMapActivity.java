@@ -366,7 +366,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     }
 
     private void overlayMyLocationLayers() {
-        if (draggable & !readOnly) {
+        if (draggable && !readOnly) {
             map.setOnMarkerDragListener(this);
             map.setOnMapLongClickListener(this);
 
