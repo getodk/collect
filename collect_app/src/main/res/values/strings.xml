@@ -516,20 +516,17 @@
     <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
-	<string-array
-		name="ethiopian_months">
-		<item>Meskerem</item>
-		<item>Tikimt</item>
-		<item>Hidar</item>
-		<item>Tahsas</item>
-		<item>Tir</item>
-		<item>Yekatit</item>
-		<item>Megabit</item>
-		<item>Miazia</item>
-		<item>Ginbot</item>
-		<item>Senie</item>
-		<item>Hamlie</item>
-		<item>Nehasie</item>
-		<item>Pagumien</item>
-    </string-array>
+    <string name="meskerem">Meskerem</string>
+    <string name="tikimt">Tikimt</string>
+    <string name="hidar">Hidar</string>
+    <string name="tahsas">Tahsas</string>
+    <string name="tir">Tir</string>
+    <string name="yekatit">Yekatit</string>
+    <string name="megabit">Megabit</string>
+    <string name="miazia">Miazia</string>
+    <string name="ginbot">Ginbot</string>
+    <string name="senie">Senie</string>
+    <string name="hamlie">Hamlie</string>
+    <string name="nehasie">Nehasie</string>
+    <string name="pagumien">Pagumien</string>
 </resources>

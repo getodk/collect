@@ -128,17 +128,17 @@ public class EthiopianDateWidget extends QuestionWidget{
 			}
 		};
 
-		txtDay = (TextView) findViewById(R.id.daytxt);
-		txtMonth = (TextView) findViewById(R.id.monthtxt);
-		txtYear = (TextView) findViewById(R.id.yeartxt);
-		txtGregorian = (TextView) findViewById(R.id.dateGregorian);
+		txtDay = (TextView) findViewById(R.id.day_text);
+		txtMonth = (TextView) findViewById(R.id.month_txt);
+		txtYear = (TextView) findViewById(R.id.year_txt);
+		txtGregorian = (TextView) findViewById(R.id.date_gregorian);
 
-		Button btnDayUp = (Button) findViewById(R.id.dayupbtn);
-		Button btnMonthUp = (Button) findViewById(R.id.monthupbtn);
-		Button btnYearUp = (Button) findViewById(R.id.yearupbtn);
-		Button btnDayDown = (Button) findViewById(R.id.daydownbtn);
-		Button btnMonthDown = (Button) findViewById(R.id.monthdownbtn);
-		Button btnYearDown = (Button) findViewById(R.id.yeardownbtn);
+		Button btnDayUp = (Button) findViewById(R.id.day_up_button);
+		Button btnMonthUp = (Button) findViewById(R.id.month_up_button);
+		Button btnYearUp = (Button) findViewById(R.id.year_up_button);
+		Button btnDayDown = (Button) findViewById(R.id.day_down_button);
+		Button btnMonthDown = (Button) findViewById(R.id.month_down_button);
+		Button btnYearDown = (Button) findViewById(R.id.year_down_button);
 
 		btnDayUp.setOnClickListener(new OnClickListener() {
 			@Override

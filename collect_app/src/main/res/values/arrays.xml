@@ -114,4 +114,19 @@ the specific language governing permissions and limitations under the License. -
         <item>cellular_only</item>
         <item>wifi_and_cellular</item>
     </string-array>
+    <string-array name="ethiopian_months">
+        <item>@string/meskerem</item>
+        <item>@string/tikimt</item>
+        <item>@string/hidar</item>
+        <item>@string/tahsas</item>
+        <item>@string/tir</item>
+        <item>@string/yekatit</item>
+        <item>@string/megabit</item>
+        <item>@string/miazia</item>
+        <item>@string/ginbot</item>
+        <item>@string/senie</item>
+        <item>@string/hamlie</item>
+        <item>@string/nehasie</item>
+        <item>@string/pagumien</item>
+    </string-array>
 </resources>
