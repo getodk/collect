@@ -65,3 +65,4 @@ test:
 
         - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS; fi
         - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests; fi
+        - bash <(curl -s https://codecov.io/bash)
