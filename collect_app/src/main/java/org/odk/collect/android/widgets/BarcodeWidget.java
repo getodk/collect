@@ -16,9 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -68,12 +65,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // set text formatting
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        stringAnswer.setGravity(Gravity.CENTER);
+        stringAnswer = getCenteredAnswerTextView();
 
         String s = prompt.getAnswerText();
         if (s != null) {

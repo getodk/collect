@@ -22,9 +22,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ConfigurationInfo;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -65,12 +62,13 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     private Button viewButton;
     private String mapSDK;
     private static final String GOOGLE_MAP_KEY = "google_maps";
-    //    private static final String OSM_MAP_KEY = "osmdroid";
-    private TextView stringAnswer;
+    private static final String OSM_MAP_KEY = "osmdroid";
     private TextView answerDisplay;
     private final boolean readOnly;
     private final boolean useMapsV2;
     private boolean useMaps;
+    private String appearance;
+    private String stringAnswer;
     private double accuracyThreshold;
     private boolean draggable = true;
 
@@ -103,18 +101,9 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
-
         readOnly = prompt.isReadOnly();
 
-        // assemble the widget...
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        answerDisplay = new TextView(getContext());
-        answerDisplay.setId(QuestionWidget.newUniqueId());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answerDisplay.setGravity(Gravity.CENTER);
-        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+        answerDisplay = getCenteredAnswerTextView();
 
         viewButton = getSimpleButton(getContext().getString(R.string.get_point));
 
@@ -143,9 +132,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                     i = new Intent(getContext(), GeoPointActivity.class);
                 }
 
-                String s = stringAnswer.getText().toString();
-                if (s.length() != 0) {
-                    String[] sa = s.split(" ");
+                if (stringAnswer != null && !stringAnswer.isEmpty()) {
+                    String[] sa = stringAnswer.split(" ");
                     double[] gp = new double[4];
                     gp[0] = Double.valueOf(sa[0]);
                     gp[1] = Double.valueOf(sa[1]);
@@ -197,8 +185,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 getLocationButton.setText(
                         getContext().getString(R.string.geopoint_view_read_only));
             } else {
-                String s = stringAnswer.getText().toString();
-                if (s.length() != 0) {
+                if (stringAnswer != null && !stringAnswer.isEmpty()) {
                     getLocationButton.setText(
                             getContext().getString(R.string.view_change_location));
                 } else {
@@ -227,20 +214,19 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void clearAnswer() {
-        stringAnswer.setText(null);
+        stringAnswer = null;
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = stringAnswer.getText().toString();
-        if (s.equals("")) {
+        if (stringAnswer == null || stringAnswer.isEmpty()) {
             return null;
         } else {
             try {
                 // segment lat and lon
-                String[] sa = s.split(" ");
+                String[] sa = stringAnswer.split(" ");
                 double[] gp = new double[4];
                 gp[0] = Double.valueOf(sa[0]);
                 gp[1] = Double.valueOf(sa[1]);
@@ -248,6 +234,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
                 gp[3] = Double.valueOf(sa[3]);
 
                 return new GeoPointData(gp);
+              
             } catch (Exception numberFormatException) {
                 return null;
             }
@@ -304,15 +291,16 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String s = (String) answer;
-        if (s != null && !s.equals("")) {
-            stringAnswer.setText(s);
+      
+        if (s != null && !s.isEmpty()) {
+            stringAnswer = s;
             String[] sa = s.split(" ");
             answerDisplay.setText(String.format(getContext().getString(R.string.gps_result),
                     formatGps(Double.parseDouble(sa[0]), "lat"),
                     formatGps(Double.parseDouble(sa[1]), "lon"), truncateDouble(sa[2]),
                     truncateDouble(sa[3])));
         } else {
-            stringAnswer.setText(s);
+            stringAnswer = s;
             answerDisplay.setText("");
         }
 
@@ -336,7 +324,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         viewButton.setOnLongClickListener(l);
         getLocationButton.setOnLongClickListener(l);
-        stringAnswer.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
     }
 
@@ -345,7 +332,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
         super.cancelLongPress();
         viewButton.cancelLongPress();
         getLocationButton.cancelLongPress();
-        stringAnswer.cancelLongPress();
         answerDisplay.cancelLongPress();
     }
 

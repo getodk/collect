@@ -18,9 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -43,7 +40,6 @@ import org.odk.collect.android.application.Collect;
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     private Button getBearingButton;
-    private TextView stringAnswer;
     private TextView answerDisplay;
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
@@ -55,14 +51,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
             getBearingButton.setVisibility(View.GONE);
         }
 
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-
-        answerDisplay = new TextView(getContext());
-        answerDisplay.setId(QuestionWidget.newUniqueId());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        answerDisplay.setGravity(Gravity.CENTER);
+        answerDisplay = getCenteredAnswerTextView();
 
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
@@ -98,11 +87,9 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void clearAnswer() {
-        stringAnswer.setText(null);
         answerDisplay.setText(null);
         getBearingButton.setText(getContext()
                 .getString(R.string.get_bearing));
-
     }
 
     @Override
@@ -125,10 +112,7 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        String s = (String) answer;
-        stringAnswer.setText(s);
-
-        answerDisplay.setText(s);
+        answerDisplay.setText((String) answer);
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
@@ -147,7 +131,6 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         getBearingButton.setOnLongClickListener(l);
-        stringAnswer.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
     }
 
@@ -155,8 +138,6 @@ public class BearingWidget extends QuestionWidget implements IBinaryWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
         getBearingButton.cancelLongPress();
-        stringAnswer.cancelLongPress();
         answerDisplay.cancelLongPress();
     }
-
 }

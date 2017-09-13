@@ -20,9 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -60,7 +57,6 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
     public SharedPreferences sharedPreferences;
     public String mapSDK;
 
-    private TextView stringAnswer;
     private TextView answerDisplay;
 
     public GeoTraceWidget(Context context, FormEntryPrompt prompt) {
@@ -71,14 +67,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mapSDK = sharedPreferences.getString(PreferenceKeys.KEY_MAP_SDK, GOOGLE_MAP_KEY);
 
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-
-        answerDisplay = new TextView(getContext());
-        answerDisplay.setId(QuestionWidget.newUniqueId());
-        answerDisplay.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answerDisplay.setGravity(Gravity.CENTER);
-        answerDisplay.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
+        answerDisplay = getCenteredAnswerTextView();
 
         createTraceButton = getSimpleButton(getContext().getString(R.string.get_trace));
         createTraceButton.setOnClickListener(new OnClickListener() {
@@ -123,7 +112,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         } else {
             i = new Intent(getContext(), GeoTraceOsmMapActivity.class);
         }
-        String s = stringAnswer.getText().toString();
+        String s = answerDisplay.getText().toString();
         if (s.length() != 0) {
             i.putExtra(TRACE_LOCATION, s);
         }
@@ -141,12 +130,7 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        Timber.i("Setting binary data: %s", answer);
-        String s = answer.toString();
-
-        stringAnswer.setText(s);
-        answerDisplay.setText(s);
-
+        answerDisplay.setText(answer.toString());
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
@@ -165,15 +149,14 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        String s = stringAnswer.getText().toString();
+        String s = answerDisplay.getText().toString();
         return !s.equals("")
                 ? new StringData(s)
-                : null;
+                : null
     }
 
     @Override
     public void clearAnswer() {
-        stringAnswer.setText(null);
         answerDisplay.setText(null);
         updateButtonLabelsAndVisibility(false);
     }
@@ -183,14 +166,11 @@ public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         createTraceButton.setOnLongClickListener(l);
-        stringAnswer.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
     }
-
 }

@@ -54,8 +54,6 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements IQuestionWidget, AudioPlayListener {
 
-    @SuppressWarnings("unused")
-    private static final String t = "QuestionWidget";
     private static int idGenerator = 1211322;
 
     /**
@@ -393,6 +391,21 @@ public abstract class QuestionWidget
 
         button.setLayoutParams(params);
         return button;
+    }
+
+    protected TextView getCenteredAnswerTextView() {
+        TextView textView = getAnswerTextView();
+        textView.setGravity(CENTER);
+        return textView;
+    }
+
+    protected TextView getAnswerTextView() {
+        TextView textView = new TextView(getContext());
+        textView.setId(QuestionWidget.newUniqueId());
+        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        textView.setPadding(20, 20, 20, 20);
+        return textView;
     }
 
     /**
