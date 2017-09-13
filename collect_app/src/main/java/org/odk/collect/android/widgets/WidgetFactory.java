@@ -56,10 +56,7 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        String dateAppearance = null;
-                        dateAppearance = fep.getQuestion().getAppearanceAttr();
-                        // Detect whether to use Ethiopian date widget
-                        if(dateAppearance != null && dateAppearance.toLowerCase().equals("ethiopian")){
+                        if (appearance.equals("ethiopian")) {
                             questionWidget = new EthiopianDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
