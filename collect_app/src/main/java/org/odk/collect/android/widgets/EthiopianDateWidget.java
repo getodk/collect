@@ -81,7 +81,7 @@ public class EthiopianDateWidget extends QuestionWidget{
 
 		LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = vi.inflate(R.layout.ethiopian_date_widget, null);
-		addView(view);
+		addAnswerView(view);
 
 		Handler mDayHandler = new Handler() {
 			@Override
