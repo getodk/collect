@@ -19,8 +19,6 @@ package org.odk.collect.android.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -216,7 +214,7 @@ public abstract class RangeWidget extends QuestionWidget {
 
     private boolean isWidgetValid() {
         boolean result = true;
-        if (rangeStep.compareTo(new BigDecimal(0)) == 0 || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(new BigDecimal(0)) != 0) {
+        if (rangeStep.compareTo(BigDecimal.ZERO) == 0 || rangeEnd.subtract(rangeStart).remainder(rangeStep).compareTo(BigDecimal.ZERO) != 0) {
             disableWidget();
             result = false;
         }
@@ -234,10 +232,7 @@ public abstract class RangeWidget extends QuestionWidget {
                     showNumberPickerDialog();
                 }
             });
-            answerTextView = new TextView(getContext());
-            answerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-            answerTextView.setPadding(20, 20, 20, 20);
-            answerTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
+            answerTextView = getAnswerTextView();
             isPickerAppearance = true;
 
             view = new LinearLayout(getContext());

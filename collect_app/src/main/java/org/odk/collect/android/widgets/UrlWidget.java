@@ -16,9 +16,6 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -32,8 +29,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CustomTabHelper;
-
-import static android.view.Gravity.CENTER;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -69,12 +64,7 @@ public class UrlWidget extends QuestionWidget {
             }
         });
 
-        stringAnswer = new AppCompatTextView(context);
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        stringAnswer.setGravity(CENTER);
-        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        stringAnswer = getCenteredAnswerTextView();
 
         String s = prompt.getAnswerText();
         if (s != null) {

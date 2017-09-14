@@ -585,7 +585,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
                     if (isValidLocation(answer)) {
                         // get rid of everything after the second space
-                        int firstSpace = answer.indexOf(" ");
+                        int firstSpace = answer.indexOf(' ');
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
                         answer = answer.substring(0, secondSpace);
                         answer = answer.replace(' ', ',');

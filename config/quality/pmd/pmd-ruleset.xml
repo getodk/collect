@@ -34,13 +34,32 @@
     </rule>
     <rule ref="rulesets/java/logging-java.xml"/>
     <rule ref="rulesets/java/braces.xml"/>
-    <!--<rule ref="rulesets/java/strings.xml"/>
-    <rule ref="rulesets/java/basic.xml"/>
+    <rule ref="rulesets/java/strings.xml">
+        <exclude name="AvoidDuplicateLiterals" />
+        <exclude name="InefficientEmptyStringCheck" />
+        <exclude name="AppendCharacterWithChar" />
+        <exclude name="InefficientStringBuffering" />
+        <exclude name="ConsecutiveAppendsShouldReuse" />
+        <exclude name="UseEqualsToCompareStrings" />
+        <exclude name="InsufficientStringBufferDeclaration" />
+        <exclude name="AvoidStringBufferField" />
+    </rule>
+    <rule ref="rulesets/java/basic.xml">
+        <exclude name="DontUseFloatTypeForLoopIndices" />
+        <exclude name="CollapsibleIfStatements" />
+        <exclude name="SimplifiedTernary" />
+        <exclude name="AvoidBranchingStatementAsLastInLoop" />
+        <exclude name="ReturnFromFinallyBlock" />
+    </rule>
     <rule ref="rulesets/java/naming.xml">
         <exclude name="AbstractNaming"/>
         <exclude name="LongVariable"/>
         <exclude name="ShortMethodName"/>
         <exclude name="ShortVariable"/>
         <exclude name="VariableNamingConventions"/>
-    </rule>-->
+        <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <exclude name="ShortClassName"/>
+        <exclude name="MethodNamingConventions"/>
+        <exclude name="AvoidFieldNameMatchingTypeName"/>
+    </rule>
 </ruleset>

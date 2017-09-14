@@ -76,15 +76,11 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
+    public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
     public static String defaultSysLanguage;
     private static Collect singleton = null;
-
-    static {
-        PRNGFixes.apply();
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
@@ -102,10 +98,20 @@ public class Collect extends Application {
     }
 
     public static int getQuestionFontsize() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
+        // For testing:
+        Collect instance = Collect.getInstance();
+        if (instance == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(instance);
+        if (settings == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
         String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
+
         return Integer.parseInt(questionFont);
     }
 
@@ -245,6 +251,9 @@ public class Collect extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        PRNGFixes.apply();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);

@@ -21,9 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
@@ -79,7 +77,7 @@ public class DateWidget extends QuestionWidget {
 
         readAppearance();
         createDateButton();
-        createDateTextView();
+        dateTextView = getAnswerTextView();
         createDatePickerDialog();
         hideDayFieldIfNotInFormat();
         addViews();
@@ -168,14 +166,6 @@ public class DateWidget extends QuestionWidget {
                 datePickerDialog.show();
             }
         });
-    }
-
-    private void createDateTextView() {
-        dateTextView = new TextView(getContext());
-        dateTextView.setId(QuestionWidget.newUniqueId());
-        dateTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
-        dateTextView.setPadding(20, 20, 20, 20);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
 
     private void addViews() {
