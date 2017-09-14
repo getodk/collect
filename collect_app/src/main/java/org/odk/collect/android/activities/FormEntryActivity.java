@@ -88,6 +88,8 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
+import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.taskModel.FormDetail;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -176,12 +178,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
-    public static final String KEY_TASK = "task";                       // SMAP
-    public static final String KEY_SURVEY_NOTES = "surveyNotes";        // SMAP
-    public static final String KEY_CAN_UPDATE = "canUpdate";            // SMAP
-    private long mTaskId;                                               // SMAP
-    private String mSurveyNotes = null;                                 // SMAP
-    private boolean mCanUpdate = true;                                  // SMAP
+    public static final String KEY_TASK = "task";                       // smap
+    public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
+    public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
+    private long mTaskId;                                               // smap
+    private FormDetail mFormDetail;                                     // smap
+    private String mSurveyNotes = null;                                 // smap
+    private boolean mCanUpdate = true;                                  // smap
     private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
@@ -388,7 +391,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
-                    String jrVersion = null;
+                    //String jrVersion = null;   smap
                     {
                         Cursor instanceCursor = null;
                         try {
@@ -414,9 +417,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 int idxJrVersion = instanceCursor
                                         .getColumnIndex(InstanceColumns.JR_VERSION);
 
-                                jrVersion = instanceCursor.isNull(idxJrVersion) ? null
-                                        : instanceCursor
-                                        .getString(idxJrVersion);
+                                //jrVersion = instanceCursor.isNull(idxJrVersion) ? null    smap
+                                //        : instanceCursor
+                                //        .getString(idxJrVersion);
                             }
                         } finally {
                             if (instanceCursor != null) {
@@ -428,17 +431,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     String[] selectionArgs;
                     String selection;
 
-                    if (jrVersion == null) {
-                        selectionArgs = new String[]{jrFormId};
-                        selection = FormsColumns.JR_FORM_ID + "=? AND "
-                                + FormsColumns.JR_VERSION + " IS NULL";
-                    } else {
+                    // if (jrVersion == null) { smap
+                    //    selectionArgs = new String[]{jrFormId};
+                    //    selection = FormsColumns.JR_FORM_ID + "=? AND "
+                    //            + FormsColumns.JR_VERSION + " IS NULL";
+                    //} else {
                         //selectionArgs = new String[]{jrFormId, jrVersion};  smap
                         //selection = FormsColumns.JR_FORM_ID + "=? AND "     smap
                         //        + FormsColumns.JR_VERSION + "=?";           smap
                         selectionArgs = new String[]{jrFormId};         // smap
                         selection = FormsColumns.JR_FORM_ID + "=?";     // smap always use the latest version
-                    }
+                    //}
 
                     {
                         Cursor formCursor = null;
@@ -451,6 +454,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                                 .getColumnIndex(FormsColumns.FORM_FILE_PATH));
                             } else if (formCursor.getCount() < 1) {
                                 this.createErrorDialog(
+                                        /* smap
                                         getString(
                                                 R.string.parent_form_not_present,
                                                 jrFormId)
@@ -459,6 +463,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                                 + getString(R.string.version)
                                                 + " "
                                                 + jrVersion),
+                                                */
+                                        getString(
+                                                R.string.parent_form_not_present,
+                                                jrFormId),
                                         EXIT);
                                 return;
                             } else if (formCursor.getCount() > 1) {
@@ -489,7 +497,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
+                            mFormDetail = new FormDetail();           // smap
                             c.moveToFirst();
+                            mFormDetail.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));                    // smap
+                            mFormDetail.name = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));                // smap
+                            mFormDetail.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));     // smap
+                            mFormDetail.formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));     // smap
+                            mFormDetail.version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));     // smap
                             formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                             // This is the fill-blank-form code path.
                             // See if there is a savepoint for this form that
@@ -548,7 +562,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                 } else {
                     Timber.e("Unrecognized URI: %s", uri);
-                    this.createErrorDialog(getString(R.string.unrecognized_uri, uri), EXIT);
+                    this.createErrorDialog(getString(R.string.smap_version_changed), EXIT);   // smap change string
                     return;
                 }
 
@@ -1943,7 +1957,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         synchronized (saveDialogLock) {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate); 	// SMAP added mTaskId, mFormPath, surveyNotes
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail); 	// SMAP added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);

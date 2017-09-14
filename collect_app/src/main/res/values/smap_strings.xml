@@ -80,4 +80,5 @@
     <string name="smap_refresh_started">"Refresh started"</string>
     <string name="smap_refresh_finished">"Refresh finished"</string>
     <string name="smap_server_changed">"Changes on server - refresh to update"</string>
+    <string name="smap_version_changed">"The version of the form you are opening has just been updated. Please close and reopen."</string>
 </resources>

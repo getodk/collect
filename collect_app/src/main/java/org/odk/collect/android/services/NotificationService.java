@@ -19,8 +19,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
@@ -60,6 +62,7 @@ public class NotificationService extends GcmListenerService {
             return;
         }
 
+        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         int mNotificationId = 001;
@@ -72,18 +75,19 @@ public class NotificationService extends GcmListenerService {
         if (currentNetworkInfo != null
                 && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
             if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
-                completeNotification(mNotifyMgr, mNotificationId);
+                completeNotification(mNotifyMgr, mNotificationId, uri);
                 automaticNofification = true;
             }
         }
 
-        if(!automaticNofification) {
+        if (!automaticNofification) {
             // Set refresh notification icon
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.notification_icon)
                             .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
                                     R.drawable.ic_launcher))
+                            .setSound(uri)
                             .setContentTitle(getString(R.string.app_name))
                             .setContentText(getString(R.string.smap_server_changed));
             mNotifyMgr.notify(mNotificationId, mBuilder.build());
@@ -92,7 +96,7 @@ public class NotificationService extends GcmListenerService {
 
     }
 
-    private void completeNotification(NotificationManager mNotifyMgr, int mNotificationId) {
+    private void completeNotification(NotificationManager mNotifyMgr, int mNotificationId, Uri uri) {
 
 
         // Set refresh notification icon
@@ -122,6 +126,7 @@ public class NotificationService extends GcmListenerService {
                                 R.drawable.ic_launcher))
                         .setContentTitle(getString(R.string.app_name))
                         .setProgress(0,0,false)
+                        .setSound(uri)
                         .setContentText(getString(R.string.smap_refresh_finished));
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
