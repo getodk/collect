@@ -322,7 +322,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI, tr.settings.ft_send_wifi);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI_CELL, tr.settings.ft_send_wifi_cell);
 
-                    // update settings in phone app that are over ridden by the server
+                    // update settings in phone app that are over ridden by the server (Only overridden to be enabled
+                    // TODO allow the server to force auto send off
                     String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
                     if (tr.settings.ft_send_wifi_cell) {
                         autoSend = "wifi_and_cellular";
