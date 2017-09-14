@@ -50,7 +50,7 @@ public class GeneralSharedPreferences {
             Timber.e("Default for %s not found", key);
         }
 
-        if (defaultValue == null || defaultValue == "" || defaultValue instanceof String) {
+        if (defaultValue == null || defaultValue.equals("") || defaultValue instanceof String) {
             value = sharedPreferences.getString(key, (String) defaultValue);
         } else if (defaultValue instanceof Boolean) {
             value = sharedPreferences.getBoolean(key, (Boolean) defaultValue);
@@ -71,7 +71,7 @@ public class GeneralSharedPreferences {
 
     public void save(String key, Object value) {
         editor = sharedPreferences.edit();
-        if (value == null || value == "" || value instanceof String) {
+        if (value == null || value.equals("") || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);

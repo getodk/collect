@@ -40,6 +40,7 @@
         <exclude name="AppendCharacterWithChar" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="ConsecutiveAppendsShouldReuse" />
+        <exclude name="ConsecutiveLiteralAppends" />
         <exclude name="UseEqualsToCompareStrings" />
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="AvoidStringBufferField" />
