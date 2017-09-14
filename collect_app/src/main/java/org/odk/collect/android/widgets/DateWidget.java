@@ -59,18 +59,18 @@ import static android.content.Context.ACCESSIBILITY_SERVICE;
 public class DateWidget extends QuestionWidget {
     private DatePickerDialog datePickerDialog;
 
-    private Button dateButton;
-    private TextView dateTextView;
+    protected Button dateButton;
+    protected TextView dateTextView;
 
     private boolean hideDay;
     private boolean hideMonth;
     private boolean showCalendar;
 
-    private int year;
-    private int month;
-    private int dayOfMonth;
+    protected int year;
+    protected int month;
+    protected int dayOfMonth;
 
-    private boolean nullAnswer;
+    protected boolean nullAnswer;
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -97,7 +97,7 @@ public class DateWidget extends QuestionWidget {
         }
     }
 
-    private void hideDayFieldIfNotInFormat() {
+    protected void hideDayFieldIfNotInFormat() {
         if (hideDay) {
             datePickerDialog.getDatePicker().findViewById(
                     Resources.getSystem().getIdentifier("day", "id", "android"))
@@ -206,7 +206,7 @@ public class DateWidget extends QuestionWidget {
         return theme;
     }
 
-    private void createDatePickerDialog() {
+    protected void createDatePickerDialog() {
         datePickerDialog = new CustomDatePickerDialog(getContext(), getTheme(),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override

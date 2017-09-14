@@ -1,6 +1,11 @@
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
 import android.os.Build;
+
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
+import org.odk.collect.android.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,5 +38,13 @@ public class DateTimeUtils {
             datePattern = "yyyyMMM";
         }
         return datePattern;
+    }
+
+    public static String getEthiopianDate(DateTime dateTime, Context context) {
+        DateTime ethiopianDate = dateTime.withChronology(EthiopicChronology.getInstance());
+        return ethiopianDate.getDayOfMonth()
+                + " "
+                + context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1]
+                + " " + ethiopianDate.getYear();
     }
 }

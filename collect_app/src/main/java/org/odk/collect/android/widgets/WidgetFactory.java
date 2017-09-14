@@ -56,7 +56,7 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        if (appearance.equals("ethiopian")) {
+                        if (true) {
                             questionWidget = new EthiopianDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
