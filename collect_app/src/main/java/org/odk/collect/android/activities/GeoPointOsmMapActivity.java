@@ -94,12 +94,12 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     public MyLocationNewOverlay myLocationOverlay;
 
-    private Boolean readOnly = false;
-    private Boolean draggable = false;
-    private Boolean intentDraggable = false;
-    private Boolean locationFromIntent = false;
+    private boolean readOnly = false;
+    private boolean draggable = false;
+    private boolean intentDraggable = false;
+    private boolean locationFromIntent = false;
     private int locationCountNum = 0;
-    private Boolean foundFirstLocation = false;
+    private boolean foundFirstLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

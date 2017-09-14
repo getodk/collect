@@ -80,7 +80,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
-    private Boolean foundFirstLocation = false;
+    private boolean foundFirstLocation = false;
 
 
     @Override
