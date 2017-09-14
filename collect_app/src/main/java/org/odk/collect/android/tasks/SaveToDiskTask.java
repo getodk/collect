@@ -274,7 +274,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 	                }
 
                     // Smap Start
-                    values.put(InstanceColumns.SOURCE, source);
+                    values.put(InstanceColumns.SOURCE, mFormDetail.source);     // smap get source from form detail
                     if (instanceName != null) {
                         values.put(InstanceColumns.T_TITLE, instanceName);
                     } else {
