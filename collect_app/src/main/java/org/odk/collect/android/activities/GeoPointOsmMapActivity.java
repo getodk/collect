@@ -338,7 +338,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     private void overlayMyLocationLayers() {
         map.getOverlays().add(myLocationOverlay);
-        if (draggable & !readOnly) {
+        if (draggable && !readOnly) {
             if (marker != null) {
                 marker.setOnMarkerDragListener(this);
                 marker.setDraggable(true);
