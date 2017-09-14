@@ -38,6 +38,7 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -79,6 +80,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 
 /**
  * Background task for downloading tasks 
@@ -318,6 +321,19 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI, tr.settings.ft_send_wifi);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI_CELL, tr.settings.ft_send_wifi_cell);
+
+                    // update settings in phone app that are over ridden by the server
+                    String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
+                    if (tr.settings.ft_send_wifi_cell) {
+                        autoSend = "wifi_and_cellular";
+                    } else if (tr.settings.ft_send_wifi) {
+                        autoSend = "wifi_only";
+                    }
+                    GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_AUTOSEND, autoSend);
+
+                    // Update settings in phone for delete after submit
+                    editor.putBoolean(PreferenceKeys.KEY_DELETE_AFTER_SEND, tr.settings.ft_delete_submitted);
+
                     editor.apply();
                 }
 
