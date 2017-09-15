@@ -339,11 +339,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
-           //-------- SMAP Start ---------
-           if (savedInstanceState.containsKey(KEY_TASK)) {
-               mTaskId = savedInstanceState.getLong(KEY_TASK);
-           }
-           //-------- SMAP End ---------
+            //-------- SMAP Start ---------
+            if (savedInstanceState.containsKey(KEY_TASK)) {
+                mTaskId = savedInstanceState.getLong(KEY_TASK);
+            }
+            //-------- SMAP End ---------
         }
 
         // If a parse error message is showing then nothing else is loaded
@@ -436,11 +436,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     //    selection = FormsColumns.JR_FORM_ID + "=? AND "
                     //            + FormsColumns.JR_VERSION + " IS NULL";
                     //} else {
-                        //selectionArgs = new String[]{jrFormId, jrVersion};  smap
-                        //selection = FormsColumns.JR_FORM_ID + "=? AND "     smap
-                        //        + FormsColumns.JR_VERSION + "=?";           smap
-                        selectionArgs = new String[]{jrFormId};         // smap
-                        selection = FormsColumns.JR_FORM_ID + "=?";     // smap always use the latest version
+                    //selectionArgs = new String[]{jrFormId, jrVersion};  smap
+                    //selection = FormsColumns.JR_FORM_ID + "=? AND "     smap
+                    //        + FormsColumns.JR_VERSION + "=?";           smap
+                    selectionArgs = new String[]{jrFormId};         // smap
+                    selection = FormsColumns.JR_FORM_ID + "=?";     // smap always use the latest version
                     //}
 
                     {
@@ -621,7 +621,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outState.putString(KEY_ERROR, errorMessage);
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
-        outState.putLong(KEY_TASK, mTaskId);	    // SMAP
+        outState.putLong(KEY_TASK, mTaskId);        // SMAP
     }
 
     @Override
@@ -883,10 +883,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getFormController();
 
         // SMAP start - seems to be a bug onresume when edit is completed by different engine
-        if(formController == null) {
+        if (formController == null) {
             return;
-    	}
-    	// SMAP end
+        }
+        // SMAP end
 
         int event = formController.getEvent();
 
@@ -999,7 +999,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Intent pref = new Intent(this, PreferencesActivity.class);
                 startActivity(pref);
                 return true;
-             case R.id.menu_comment:              // smap
+            case R.id.menu_comment:              // smap
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -1950,14 +1950,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Smap start
         String surveyNotes = null;
         FormController formController = Collect.getInstance().getFormController();
-        if(formController != null) {
+        if (formController != null) {
             surveyNotes = formController.getSurveyNotes();
         }
         // Smap end
 
         synchronized (saveDialogLock) {
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail); 	// SMAP added mTaskId, mFormPath, surveyNotes
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail);    // SMAP added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);
@@ -2597,7 +2597,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
         formController.setSurveyNotes(mSurveyNotes);        // smap
-        formController.setCanUpdate(mCanUpdate);	    // smap
+        formController.setCanUpdate(mCanUpdate);        // smap
 
         // Set the language if one has already been set in the past
         String[] languageTest = formController.getLanguages();
@@ -2719,10 +2719,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Called by SavetoDiskTask if everything saves correctly.
      */
     @Override
-    public void savingComplete(SaveResult saveResult, long taskId) {		// smap added assignment_id
-        dismissDialog(SAVING_DIALOG);
+    public void savingComplete(SaveResult saveResult, long taskId) {        // smap added assignment_id
+        try {   // smap
+            dismissDialog(SAVING_DIALOG);
+        } catch (Exception e) {
 
-	mTaskId = taskId;				// smap
+        }
+
+        mTaskId = taskId;                // smap
         int saveStatus = saveResult.getSaveResult();
         FormController formController = Collect.getInstance()
                 .getFormController();
