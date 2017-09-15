@@ -943,7 +943,7 @@ public class FormController {
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                             treeElement.getRef());
                     Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (value != "") {
+                    if (!value.equals("")) {
                         return (String) value;
                     }
                     return null;
