@@ -97,6 +97,7 @@ public class Collect extends Application {
 
     private Location location = null;       // smap
     private boolean recordLocation = false; // smap
+    private boolean tasksDownloading = false;
 
     public static Collect getInstance() {
         return singleton;
@@ -292,6 +293,12 @@ public class Collect extends Application {
         return location;
     }
 
+    public void setDownloading(boolean v) {
+        tasksDownloading = v;
+    }
+    public boolean  isDownloading() {
+        return tasksDownloading;
+    }
     // Initialise AWS
     private void initializeApplication() {
         AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());

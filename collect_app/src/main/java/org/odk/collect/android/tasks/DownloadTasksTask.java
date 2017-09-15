@@ -21,7 +21,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -81,6 +80,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 
 /**
@@ -139,13 +140,13 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             sdfNew.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = null;
             try {
-                Log.i(TAG, "Date string primitive: " + json.getAsJsonPrimitive().getAsString());
+                Timber.i("Date string primitive: " + json.getAsJsonPrimitive().getAsString());
                 try {
                     date = sdfNew.parse(json.getAsJsonPrimitive().getAsString());
                 } catch (Exception e) {
                     date = sdfOld.parse(json.getAsJsonPrimitive().getAsString());
                 }
-                Log.i(TAG, "Parsed date: " + date.getTime());
+                Timber.i("Parsed date: " + date.getTime());
                 return date;
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -169,6 +170,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
         password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
 
+        // Should mostly work may be better to add a lock however any error is recoverable
+        if(Collect.getInstance().isDownloading()) {
+            return null;
+        } else {
+            Collect.getInstance().setDownloading(true);
+        }
         synchronise();      // Synchronise the phone with the server
 
         return results;
@@ -181,6 +188,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 mStateListener.taskDownloadingComplete(value);
             }
         }
+        Collect.getInstance().setDownloading(false);
     }
 
     /*
@@ -213,7 +221,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
      */
     private void synchronise() {
 
-    	Log.i("DownloadTasksTask", "Synchronise()");
+    	Timber.i("Synchronise()");
         
         if(source != null) {
 	        try {
@@ -279,7 +287,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 InputStream is = null;
                 if(statusCode != HttpStatus.SC_OK) {
-                    Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
+                    Timber.w("Error:" + statusCode + " for URL " + taskURL);
                     results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
                             Utilities.translateMsg(response.getStatusLine().getReasonPhrase()));
                     throw new Exception(response.getStatusLine().getReasonPhrase());
@@ -293,7 +301,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     gson = gb.create();
                     Reader isReader = new InputStreamReader(is);
                     tr = gson.fromJson(isReader, TaskResponse.class);
-                    Log.i(getClass().getSimpleName(), "Message:" + tr.message);
+                    Timber.i("Message:" + tr.message);
                 } finally {
                     if (is != null) {
                         try {
@@ -393,18 +401,18 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
 	        } catch(JsonSyntaxException e) {
 	        	
-	        	Log.e(getClass().getSimpleName(), "JSON Syntax Error:" + " for URL " + taskURL);
+	        	Timber.e("JSON Syntax Error:" + " for URL " + taskURL);
 	        	publishProgress(e.getMessage());
 	        	e.printStackTrace();
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", e.getMessage());
 	        	
 	        } catch (CancelException e) {	
 	        	
-	        	Log.i(getClass().getSimpleName(), "Info: Download cancelled by user."); 
+	        	Timber.i("Info: Download cancelled by user.");
 
 	        } catch (Exception e) {	
 	        	
-	        	Log.e(getClass().getSimpleName(), "Error:" + " for URL " + taskURL);
+	        	Timber.e("Error:" + " for URL " + taskURL);
 	        	e.printStackTrace();
 	        	publishProgress(e.getMessage());
                 String msg = Utilities.translateMsg(e.getMessage());
@@ -456,7 +464,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 Long[] toSendArray = new Long[toUpload.size()];
                 toUpload.toArray(toSendArray);
-                Log.i(getClass().getSimpleName(), "Submitting " + toUpload.size() + " finalised surveys");
+                Timber.i("Submitting " + toUpload.size() + " finalised surveys");
 
             	return instanceUploaderTask.doInBackground(toSendArray);	// Already running a background task so call direct
             } else {
@@ -573,7 +581,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
 
             if (statusCode != HttpStatus.SC_OK) {
-                Log.w(getClass().getSimpleName(), "Error:" + statusCode + " for URL " + taskURL);
+                Timber.e("Error:" + statusCode + " for URL " + taskURL);
                 results.put(Collect.getInstance().getString(R.string.smap_get_tasks),
                         Utilities.translateMsg(response.getStatusLine().getReasonPhrase()));
                 WebUtils.discardEntityBytes(response);
@@ -604,7 +612,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         		if(ta.task.type.equals("xform")) {
         			Assignment assignment = ta.assignment;
         			
-    				Log.i(getClass().getSimpleName(), "Task: " + assignment.assignment_id + " Status:" +
+    				Timber.i("Task: " + assignment.assignment_id + " Status:" +
     						assignment.assignment_status + " Mode:" + ta.task.assignment_mode +
     						" Address: " + ta.task.address +
                             " NFC: " + ta.task.location_trigger +
@@ -615,7 +623,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             		// Find out if this task is already on the phone
 	          	  	TaskStatus ts = taskMap.get(Long.valueOf((long) assignment.assignment_id));
 	          	  	if(ts == null) {
-	          	  		Log.i(getClass().getSimpleName(), "New task: " + assignment.assignment_id);
+	          	  		Timber.i("New task: " + assignment.assignment_id);
 	          	  		// New task
 	          	  		if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED)) {
 
@@ -629,7 +637,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                                     ta.task.initial_data = serverUrl + "/webForm/instance/" +
                                             ta.task.form_id + "/" + ta.task.update_id;
                                 }
-                                Log.i(getClass().getSimpleName(), "Instance url: " + ta.task.initial_data);
+                                Timber.i("Instance url: " + ta.task.initial_data);
                             } else {
                                 // Make sure the initial_data url is sensible (ie null or a URL
                                 if (ta.task.initial_data != null && !ta.task.initial_data.startsWith("http")) {
@@ -652,7 +660,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
 	          	  		}
 	          	  	} else {        	// Existing task
-	          	  		Log.i(getClass().getSimpleName(), "Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
+	          	  		Timber.i("Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
 
 	          	  		if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)) {
                             Utilities.setStatusForAssignment(assignment.assignment_id, assignment.assignment_status);
@@ -695,9 +703,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         	for(FormLocator form : forms) {
         		String formVersionString = String.valueOf(form.version);
         		ManageFormDetails mfd = mf.getFormDetails(form.ident, formVersionString, source);    // Get the form details
-                Log.i("DownloadTasksTask", "+++ Form: " + form.ident + ":" + formVersionString);
+                Timber.i("+++ Form: " + form.ident + ":" + formVersionString);
         		if(!mfd.exists || form.dirty) {
-                    Log.i("DownloadTasksTask", "+++ Form does not exist or is dirty: " + form.ident + ":" + formVersionString +
+                    Timber.i("+++ Form does not exist or is dirty: " + form.ident + ":" + formVersionString +
                             " dirty: " + form.dirty);
         			form.url = serverUrl + "/formXML?key=" + form.ident;	// Set the form url from the server address and form ident
         			if(form.hasManifest) {
@@ -720,7 +728,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 DownloadFormsTask downloadFormsTask = new DownloadFormsTask();
                 publishProgress(Collect.getInstance().getString(R.string.smap_downloading, toDownload.size()));
 
-                Log.i(getClass().getSimpleName(), "Downloading " + toDownload.size() + " forms");
+                Timber.i("Downloading " + toDownload.size() + " forms");
                 downloadFormsTask.setDownloaderListener((FormDownloaderListener) mStateListener);
                 dfResults = downloadFormsTask.doInBackground(toDownload);   // Not in background as called directly
             }
@@ -750,7 +758,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 		Cursor cInstanceProvider = cr.query(InstanceColumns.CONTENT_URI, 
 				null, where, whereArgs, null);
 		if(cInstanceProvider.getCount() != 1) {
-			Log.e("completeTask", "Unique instance not found: count is:" +
+			Timber.e("Unique instance not found: count is:" +
 					cInstanceProvider.getCount());
 			exists = false;
 		}
