@@ -36,7 +36,7 @@ test:
         - ./gradlew findbugs -Pandroid.useDexArchive=false
         - ./gradlew lint -Pandroid.useDexArchive=false
         - ./gradlew checkstyle -Pandroid.useDexArchive=false
-        - ./gradlew build jacocoTestReport testDebugUnitTest -Pandroid.useDexArchive=false
+        - ./gradlew jacocoTestDebugUnitTestReport -Pandroid.useDexArchive=false
         
         # Instrumented tests take time, so only run them on master
         # SD card needed for circleci-android22 image
