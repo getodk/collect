@@ -171,7 +171,19 @@ public class SmapTaskListFragment extends ListFragment
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc)
         };
+
+        // Handle long item clicks
+        ListView lv = getListView();
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
+                Timber.i("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                return onLongListItemClick(v,pos,id);
+            }
+        });
+
     }
+
 
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
@@ -225,14 +237,6 @@ public class SmapTaskListFragment extends ListFragment
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        /*
-        if (!isVisibleToUser) {
-            // close the drawer if open
-            if (drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.END)) {
-                drawerLayout.closeDrawer(Gravity.END);
-            }
-        }
-        */
     }
 
     @Override
@@ -253,24 +257,6 @@ public class SmapTaskListFragment extends ListFragment
     public void onLoaderReset(Loader<List<TaskEntry>> loader) {
         mAdapter.setData(null);
     }
-
-    //@Override
-    //public void syncComplete(String result) {
-    //    TextView textView = (TextView) rootView.findViewById(R.id.status_text);
-    //    textView.setText(result);
-    //}
-
-    /*
-    private void setupAdapter() {
-
-        String[] data = new String[]{InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_SUBTEXT};
-        int[] view = new int[]{R.id.text1, R.id.text2};
-
-        listAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.two_item_multiple_choice, getCursor(), data, view);
-        setListAdapter(listAdapter);
-    }
-    */
 
     protected String getSortingOrderKey() {
         return TASK_MANAGER_LIST_SORTING_ORDER;
@@ -424,61 +410,7 @@ public class SmapTaskListFragment extends ListFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //if (drawerToggle != null) {
-        //    drawerToggle.onConfigurationChanged(newConfig);
-        //}
     }
-
-    /*
-    private void setupDrawerItems() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, sortingOptions) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = (TextView) super.getView(position, convertView, parent);
-                if (position == getSelectedSortingOrder()) {
-                    textView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tintColor));
-                }
-                textView.setPadding(50, 0, 0, 0);
-                return textView;
-            }
-        };
-        drawerList.setAdapter(adapter);
-        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                parent.getChildAt(selectedSortingOrder).setBackgroundColor(Color.TRANSPARENT);
-                view.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.tintColor));
-                performSelectedSort(position);
-                drawerLayout.closeDrawer(Gravity.END);
-            }
-        });
-    }
-
-    private void setupDrawer(View rootView) {
-        drawerList = (ListView) rootView.findViewById(R.id.sortingMenu);
-        drawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        drawerToggle = new ActionBarDrawerToggle(
-                getActivity(), drawerLayout,
-                R.string.clear_answer_ask, R.string.clear_answer_no) {
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActivity().invalidateOptionsMenu();
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            }
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActivity().invalidateOptionsMenu();
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            }
-        };
-
-        drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.addDrawerListener(drawerToggle);
-    }
-    */
 
     private void hideSearchBox() {
         inputSearch.setText("");
@@ -503,24 +435,19 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     protected String getSortingOrder() {
-        //String sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
         String sortOrder = "BY_NAME_ASC";
         switch (getSelectedSortingOrder()) {
 
             case BY_NAME_ASC:
-                //sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
                 sortOrder = "BY_NAME_ASC";
                 break;
             case BY_NAME_DESC:
-                //sortOrder = InstanceProviderAPI.InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceProviderAPI.InstanceColumns.STATUS + " DESC";
                 sortOrder = "BY_NAME_DESC";
                 break;
             case BY_DATE_ASC:
-                //sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
                 sortOrder = "BY_DATE_ASC";
                 break;
             case BY_DATE_DESC:
-                //sortOrder = InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
                 sortOrder = "BY_DATE_DESC";
                 break;
         }
@@ -603,4 +530,19 @@ public class SmapTaskListFragment extends ListFragment
         startActivity(i);
     }
 
+    /*
+     * Handle a long click on a list item
+     */
+    protected boolean onLongListItemClick(View v, int position, long id) {
+
+        TaskEntry task = (TaskEntry) getListAdapter().getItem(position);
+
+        if(task.type.equals("task")) {
+            Intent i = new Intent(getActivity(), org.odk.collect.android.activities.TaskAddressActivity.class);
+            i.putExtra("id", task.id);
+
+            startActivity(i);
+        }
+        return true;
+    }
 }
