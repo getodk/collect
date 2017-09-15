@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.logic;
 
+import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -30,6 +31,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -102,38 +104,6 @@ public class FormController {
         }
     }
 
-    /**
-     * Classes needed to serialize objects. Need to put anything from JR in here.
-     */
-    private static final String[] SERIALIABLE_CLASSES = {
-            "org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
-            "org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
-            "org.javarosa.core.model.FormDef",
-            "org.javarosa.core.model.SubmissionProfile", // CoreModelModule
-            "org.javarosa.core.model.QuestionDef", // CoreModelModule
-            "org.javarosa.core.model.GroupDef", // CoreModelModule
-            "org.javarosa.core.model.instance.FormInstance", // CoreModelModule
-            "org.javarosa.core.model.data.BooleanData", // CoreModelModule
-            "org.javarosa.core.model.data.DateData", // CoreModelModule
-            "org.javarosa.core.model.data.DateTimeData", // CoreModelModule
-            "org.javarosa.core.model.data.DecimalData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoPointData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoShapeData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoTraceData", // CoreModelModule
-            "org.javarosa.core.model.data.IntegerData", // CoreModelModule
-            "org.javarosa.core.model.data.LongData", // CoreModelModule
-            "org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectOneData", // CoreModelModule
-            "org.javarosa.core.model.data.StringData", // CoreModelModule
-            "org.javarosa.core.model.data.TimeData", // CoreModelModule
-            "org.javarosa.core.model.data.UncastData", // CoreModelModule
-            "org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
-            "org.javarosa.core.model.Action", // CoreModelModule
-            "org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
-    };
-
     private static boolean isJavaRosaInitialized = false;
 
     /**
@@ -149,7 +119,9 @@ public class FormController {
             // new JavaRosaCoreModule().registerModule();
             // new CoreModelModule().registerModule();
             // replace with direct call to PrototypeManager
-            PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+
+            PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
+            PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
 
             isJavaRosaInitialized = true;
