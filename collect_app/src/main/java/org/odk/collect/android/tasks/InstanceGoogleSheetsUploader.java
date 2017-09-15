@@ -788,7 +788,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         depth++;
                         lastpush = depth;
                     }
-                    if (parser.getName().equals("instance") && parser.getAttributeCount() == 0) {
+                    if (parser.getName().equals("instance") && isMainInstance(parser)) {
                         getPaths = true;
                     }
                     break;
@@ -818,6 +818,16 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             event = parser.next();
         }
+    }
+
+    /**
+     * Primary instances do not have any attribute
+     * whereas secondary instances must have an "id" attribute
+     * <p>
+     * https://github.com/opendatakit/collect/issues/1444
+     */
+    private boolean isMainInstance(XmlPullParser parser) {
+        return parser.getAttributeCount() == 0;
     }
 
     private void processInstanceXML(File instanceFile,
