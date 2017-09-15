@@ -50,8 +50,8 @@ import timber.log.Timber;
 public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     private FormSavedListener savedListener;
-    private Boolean save;
-    private Boolean markCompleted;
+    private boolean save;
+    private boolean markCompleted;
     private Uri uri;
     private String instanceName;
 

@@ -69,10 +69,10 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private MapEventsOverlay overlayEvents;
     private boolean clearButtonTest = false;
     private ImageButton clearButton;
-    public Boolean gpsStatus = true;
+    public boolean gpsStatus = true;
     private ImageButton locationButton;
     public MyLocationNewOverlay myLocationOverlay;
-    public Boolean dataLoaded = false;
+    public boolean dataLoaded = false;
 
     private MapHelper helper;
 

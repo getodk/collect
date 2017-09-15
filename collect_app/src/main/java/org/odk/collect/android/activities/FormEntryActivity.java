@@ -310,7 +310,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String startingXPath = null;
         String waitingXPath = null;
         String instancePath = null;
-        Boolean newForm = true;
+        boolean newForm = true;
         autoSaved = false;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {

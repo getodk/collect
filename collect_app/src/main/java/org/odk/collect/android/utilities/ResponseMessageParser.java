@@ -23,7 +23,7 @@ import timber.log.Timber;
 public class ResponseMessageParser {
     private HttpEntity httpEntity;
     private static final String MESSAGE_XML_TAG = "message";
-    public Boolean isValid = false;
+    public boolean isValid = false;
     public String messageResponse;
 
     public ResponseMessageParser(HttpEntity httpEntity) {

@@ -95,11 +95,11 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
     private boolean setClear = false;
     private boolean captureLocation = false;
-    private Boolean foundFirstLocation = false;
-    private Boolean readOnly = false;
-    private Boolean draggable = false;
-    private Boolean intentDraggable = false;
-    private Boolean locationFromIntent = false;
+    private boolean foundFirstLocation = false;
+    private boolean readOnly = false;
+    private boolean draggable = false;
+    private boolean intentDraggable = false;
+    private boolean locationFromIntent = false;
 
     private boolean isMapReady = false;
 
