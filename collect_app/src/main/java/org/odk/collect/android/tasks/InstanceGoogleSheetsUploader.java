@@ -68,7 +68,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
@@ -789,7 +788,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         depth++;
                         lastpush = depth;
                     }
-                    if (parser.getName().equals("instance")) {
+                    if (parser.getName().equals("instance") && parser.getAttributeCount() == 0) {
                         getPaths = true;
                     }
                     break;
