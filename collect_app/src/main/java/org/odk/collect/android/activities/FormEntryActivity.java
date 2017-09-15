@@ -2420,12 +2420,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
                     // startActivity(new Intent(this, MainMenuActivity.class));     // smap
+                    startActivity(new Intent(this, SmapMain.class));                // smap
                 }
             }
         } else {
             if (formController == null) {
                 // there is no formController -- fire MainMenu activity?
-                startActivity(new Intent(this, MainMenuActivity.class));
+                //startActivity(new Intent(this, MainMenuActivity.class));  // smap
+                startActivity(new Intent(this, SmapMain.class));            // smap
                 return;
             } else {
                 refreshCurrentView();

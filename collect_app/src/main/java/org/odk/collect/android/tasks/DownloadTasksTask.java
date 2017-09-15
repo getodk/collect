@@ -177,6 +177,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             Collect.getInstance().setDownloading(true);
         }
         synchronise();      // Synchronise the phone with the server
+        Collect.getInstance().setDownloading(false);
 
         return results;
     }
@@ -188,7 +189,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 mStateListener.taskDownloadingComplete(value);
             }
         }
-        Collect.getInstance().setDownloading(false);
     }
 
     /*

@@ -28,6 +28,7 @@ import android.view.View;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -150,7 +151,9 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
 
                     localeHelper.updateLocale(getActivity());
 
-                    Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+                    // Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);  // smap
+                    Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);             // smap
+
                     getActivity().startActivity(intent);
                     getActivity().overridePendingTransition(0, 0);
                     getActivity().finishAffinity();

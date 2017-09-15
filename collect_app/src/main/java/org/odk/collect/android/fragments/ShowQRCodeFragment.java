@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
+import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.QRCodeListener;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -242,7 +243,8 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
         getActivity().finish();
         final LocaleHelper localeHelper = new LocaleHelper();
         localeHelper.updateLocale(getActivity());
-        Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);
+        // Intent intent = new Intent(getActivity().getBaseContext(), MainMenuActivity.class);  // smap
+        Intent intent = new Intent(getActivity().getBaseContext(), SmapMain.class);     // smap
         getActivity().startActivity(intent);
         getActivity().overridePendingTransition(0, 0);
         getActivity().finishAffinity();
