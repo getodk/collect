@@ -8,14 +8,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
@@ -39,8 +36,13 @@ public class EthiopianCalendarDialog extends DialogFragment {
     private static final String MONTH = "month";
     private static final String YEAR = "year";
 
-    private static final int MSG_INC = 0;
-    private static final int MSG_DEC = 1;
+    private static final int MSG_INC_DAY = 0;
+    private static final int MSG_INC_MONTH = 1;
+    private static final int MSG_INC_YEAR = 2;
+    private static final int MSG_DEC_DAY = 3;
+    private static final int MSG_DEC_MONTH = 4;
+    private static final int MSG_DEC_YEAR = 5;
+
     // Alter this to make the button more/less sensitive to an initial long press
     private static final int INITIAL_DELAY = 500;
     // Alter this to vary how rapidly the date increases/decreases on long press
@@ -53,19 +55,22 @@ public class EthiopianCalendarDialog extends DialogFragment {
 
     private int widgetId;
     private int ethiopianMonthArrayPointer;
+    private int day;
+    private int month;
+    private int year;
+
+    private boolean isValueSelected;
 
     private String[] monthsArray;
     private ScheduledExecutorService updater;
 
     public interface EthiopianCalendarDialogListener {
-        void onDateChanged(int widgetId, IAnswerData data);
+        void onDateChanged(int widgetId, int day, int month, int year);
     }
 
     private EthiopianCalendarDialogListener listener;
 
     public static EthiopianCalendarDialog newInstance(int widgetId, boolean isValueSelected, int day, int month, int year) {
-        EthiopianCalendarDialog dialog = new EthiopianCalendarDialog();
-
         Bundle args = new Bundle();
         args.putInt(WIDGET_ID, widgetId);
         args.putBoolean(IS_VALUE_SELECTED, isValueSelected);
@@ -73,6 +78,7 @@ public class EthiopianCalendarDialog extends DialogFragment {
         args.putInt(MONTH, month);
         args.putInt(YEAR, year);
 
+        EthiopianCalendarDialog dialog = new EthiopianCalendarDialog();
         dialog.setArguments(args);
 
         return dialog;
@@ -89,6 +95,22 @@ public class EthiopianCalendarDialog extends DialogFragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle savedInstanceStateToRead = savedInstanceState;
+        if (savedInstanceStateToRead == null) {
+            savedInstanceStateToRead = getArguments();
+        }
+
+        isValueSelected = savedInstanceStateToRead.getBoolean(IS_VALUE_SELECTED);
+        widgetId = savedInstanceStateToRead.getInt(WIDGET_ID);
+        day = savedInstanceStateToRead.getInt(DAY);
+        month = savedInstanceStateToRead.getInt(MONTH);
+        year = savedInstanceStateToRead.getInt(YEAR);
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.select_date))
@@ -96,7 +118,8 @@ public class EthiopianCalendarDialog extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onDateChanged(widgetId, new DateData(getDateAsGregorian().toDate()));
+                        DateTime dateTime = getDateAsGregorian();
+                        listener.onDateChanged(widgetId, dateTime.getDayOfMonth(), dateTime.getMonthOfYear(), dateTime.getYear());
                         dismiss();
                     }
                 })
@@ -119,32 +142,41 @@ public class EthiopianCalendarDialog extends DialogFragment {
         setUpValues();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        DateTime dateTime = getDateAsGregorian();
+        outState.putInt(WIDGET_ID, widgetId);
+        outState.putBoolean(IS_VALUE_SELECTED, true);
+        outState.putInt(DAY, dateTime.getDayOfMonth());
+        outState.putInt(MONTH, dateTime.getMonthOfYear());
+        outState.putInt(YEAR, dateTime.getYear());
+
+        super.onSaveInstanceState(outState);
+    }
+
     private void setUpValues() {
-        if (getArguments() != null) {
-            widgetId = getArguments().getInt(WIDGET_ID);
-            if (getArguments().getBoolean(IS_VALUE_SELECTED, false)) {
-                Date date = new LocalDateTime()
-                        .withYear(getArguments().getInt(YEAR))
-                        .withMonthOfYear(getArguments().getInt(MONTH))
-                        .withDayOfMonth(getArguments().getInt(DAY))
-                        .withHourOfDay(0)
-                        .withMinuteOfHour(0)
-                        .toDate();
+        if (isValueSelected) {
+            Date date = new LocalDateTime()
+                    .withYear(year)
+                    .withMonthOfYear(month)
+                    .withDayOfMonth(day)
+                    .withHourOfDay(0)
+                    .withMinuteOfHour(0)
+                    .toDate();
 
-                DateTime dtISO = new DateTime(date.getTime());
+            DateTime dtISO = new DateTime(date.getTime());
 
-                DateTime dtEthiopian = dtISO.withChronology(EthiopicChronology.getInstance());
+            DateTime dtEthiopian = dtISO.withChronology(EthiopicChronology.getInstance());
 
-                txtDay.setText(String.valueOf(dtEthiopian.getDayOfMonth()));
-                txtMonth.setText(monthsArray[dtEthiopian.getMonthOfYear() - 1]);
-                ethiopianMonthArrayPointer = dtEthiopian.getMonthOfYear() - 1;
-                txtYear.setText(String.valueOf(dtEthiopian.getYear()));
-                updateGregorianDateHelperDisplay();
-            } else {
-                DateTime dt = new DateTime();
-                updateEthiopianDateDisplay(dt);
-                updateGregorianDateHelperDisplay();
-            }
+            txtDay.setText(String.valueOf(dtEthiopian.getDayOfMonth()));
+            txtMonth.setText(monthsArray[dtEthiopian.getMonthOfYear() - 1]);
+            ethiopianMonthArrayPointer = dtEthiopian.getMonthOfYear() - 1;
+            txtYear.setText(String.valueOf(dtEthiopian.getYear()));
+            updateGregorianDateHelperDisplay();
+        } else {
+            DateTime dt = new DateTime();
+            updateEthiopianDateDisplay(dt);
+            updateGregorianDateHelperDisplay();
         }
     }
 
@@ -156,140 +188,49 @@ public class EthiopianCalendarDialog extends DialogFragment {
     }
 
     private void setUpButtons() {
-        Handler dayHandler = new Handler() {
+        final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_INC:
-                        incrementDay();
-                        return;
-                    case MSG_DEC:
-                        decrementDay();
-                        return;
-                }
-                super.handleMessage(msg);
-            }
-        };
-
-        Handler monthHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_INC:
-                        incrementMonth();
-                        return;
-                    case MSG_DEC:
-                        decrementMonth();
-                        return;
-                }
-                super.handleMessage(msg);
-            }
-        };
-
-        Handler yearHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_INC:
-                        incrementYear();
-                        return;
-                    case MSG_DEC:
-                        decrementYear();
-                        return;
-                }
+                performClick(msg.what);
                 super.handleMessage(msg);
             }
         };
 
         Button btnDayUp = (Button) getDialog().findViewById(R.id.day_up_button);
-        Button btnMonthUp = (Button) getDialog().findViewById(R.id.month_up_button);
-        Button btnYearUp = (Button) getDialog().findViewById(R.id.year_up_button);
+        btnDayUp.setOnClickListener(new ClickListener(MSG_INC_DAY));
         Button btnDayDown = (Button) getDialog().findViewById(R.id.day_down_button);
+        btnDayDown.setOnClickListener(new ClickListener(MSG_DEC_DAY));
+        Button btnMonthUp = (Button) getDialog().findViewById(R.id.month_up_button);
+        btnMonthUp.setOnClickListener(new ClickListener(MSG_INC_MONTH));
         Button btnMonthDown = (Button) getDialog().findViewById(R.id.month_down_button);
+        btnMonthDown.setOnClickListener(new ClickListener(MSG_DEC_MONTH));
+        Button btnYearUp = (Button) getDialog().findViewById(R.id.year_up_button);
+        btnYearUp.setOnClickListener(new ClickListener(MSG_INC_YEAR));
         Button btnYearDown = (Button) getDialog().findViewById(R.id.year_down_button);
+        btnYearDown.setOnClickListener(new ClickListener(MSG_DEC_YEAR));
 
-        btnDayUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (updater == null) {
-                    incrementDay();
-                }
-            }
-        });
-
-        btnMonthUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (updater == null) {
-                    incrementMonth();
-                }
-            }
-        });
-
-        btnYearUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (updater == null) {
-                    incrementYear();
-                }
-            }
-        });
-
-        btnDayDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (updater == null) {
-                    decrementDay();
-                }
-            }
-        });
-
-        btnMonthDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (updater == null) {
-                    decrementMonth();
-                }
-            }
-        });
-
-        btnYearDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (updater == null) {
-                    decrementYear();
-                }
-            }
-        });
-
-        btnDayUp.setOnTouchListener(new EDWTouchListener(btnDayUp, dayHandler));
-        btnDayDown.setOnTouchListener(new EDWTouchListener(btnDayUp, dayHandler));
-        btnMonthUp.setOnTouchListener(new EDWTouchListener(btnMonthUp, monthHandler));
-        btnMonthDown.setOnTouchListener(new EDWTouchListener(btnMonthUp, monthHandler));
-        btnYearUp.setOnTouchListener(new EDWTouchListener(btnYearUp, yearHandler));
-        btnYearDown.setOnTouchListener(new EDWTouchListener(btnYearUp, yearHandler));
-
-        btnDayUp.setOnKeyListener(new EDWKeyListener(btnDayUp, dayHandler));
-        btnDayDown.setOnKeyListener(new EDWKeyListener(btnDayUp, dayHandler));
-        btnMonthUp.setOnKeyListener(new EDWKeyListener(btnMonthUp, monthHandler));
-        btnMonthDown.setOnKeyListener(new EDWKeyListener(btnMonthUp, monthHandler));
-        btnYearUp.setOnKeyListener(new EDWKeyListener(btnYearUp, yearHandler));
-        btnYearDown.setOnKeyListener(new EDWKeyListener(btnYearUp, yearHandler));
+        btnDayUp.setOnTouchListener(new TouchListener(MSG_INC_DAY, handler));
+        btnDayDown.setOnTouchListener(new TouchListener(MSG_DEC_DAY, handler));
+        btnMonthUp.setOnTouchListener(new TouchListener(MSG_INC_MONTH, handler));
+        btnMonthDown.setOnTouchListener(new TouchListener(MSG_DEC_MONTH, handler));
+        btnYearUp.setOnTouchListener(new TouchListener(MSG_INC_YEAR, handler));
+        btnYearDown.setOnTouchListener(new TouchListener(MSG_DEC_YEAR, handler));
     }
 
-    private void startUpdating(boolean inc, Handler handler) {
+    private void startUpdating(int msg, Handler handler) {
         if (updater != null) {
             Timber.e("Another executor is still active");
             return;
         }
         updater = Executors.newSingleThreadScheduledExecutor();
-        updater.scheduleAtFixedRate(new UpdateTask(inc,handler), INITIAL_DELAY, PERIOD,
-                TimeUnit.MILLISECONDS);
+        updater.scheduleAtFixedRate(new UpdateTask(msg, handler), INITIAL_DELAY, PERIOD, TimeUnit.MILLISECONDS);
     }
 
     private void stopUpdating() {
-        updater.shutdownNow();
-        updater = null;
+        if (updater != null) {
+            updater.shutdownNow();
+            updater = null;
+        }
     }
 
     private void incrementDay() {
@@ -352,12 +293,12 @@ public class EthiopianCalendarDialog extends DialogFragment {
         txtGregorian.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(dtLMDGreg.toDate(), null, false));
     }
 
-    private class EDWTouchListener implements View.OnTouchListener {
-        private View view;
+    private class TouchListener implements View.OnTouchListener {
+        private int msg;
         private Handler handler;
 
-        EDWTouchListener(View view, Handler handler) {
-            this.view = view;
+        TouchListener(int msg, Handler handler) {
+            this.msg = msg;
             this.handler = handler;
         }
 
@@ -369,51 +310,58 @@ public class EthiopianCalendarDialog extends DialogFragment {
             if (isReleased) {
                 stopUpdating();
             } else if (isPressed) {
-                startUpdating(v == view, handler);
+                startUpdating(msg, handler);
             }
             return false;
         }
     }
 
-    private class EDWKeyListener implements View.OnKeyListener {
-        private View view;
-        private Handler handler;
+    private class ClickListener implements View.OnClickListener {
+        private int msg;
 
-        EDWKeyListener(View view, Handler handler) {
-            this.view = view;
-            this.handler = handler;
+        ClickListener(int msg) {
+            this.msg = msg;
         }
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            boolean isKeyOfInterest = keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER;
-            boolean isReleased = event.getAction() == KeyEvent.ACTION_UP;
-            boolean isPressed = event.getAction() == KeyEvent.ACTION_DOWN && event.getAction() != KeyEvent.ACTION_MULTIPLE;
-
-            if (isKeyOfInterest && isReleased) {
-                stopUpdating();
-            } else if (isKeyOfInterest && isPressed) {
-                startUpdating(v == view, handler);
-            }
-            return false;
+        public void onClick(View v) {
+            performClick(msg);
         }
     }
 
     private class UpdateTask implements Runnable {
-        private boolean inc;
+        private int msg;
         private Handler handler;
 
-        UpdateTask(boolean inc, Handler handler) {
-            this.inc = inc;
+        UpdateTask(int msg, Handler handler) {
+            this.msg = msg;
             this.handler = handler;
         }
 
         public void run() {
-            if (inc) {
-                handler.sendEmptyMessage(MSG_INC);
-            } else {
-                handler.sendEmptyMessage(MSG_DEC);
-            }
+            handler.sendEmptyMessage(msg);
+        }
+    }
+
+    private void performClick(int msg) {
+        switch (msg) {
+            case MSG_INC_DAY:
+                incrementDay();
+                break;
+            case MSG_INC_MONTH:
+                incrementMonth();
+                break;
+            case MSG_INC_YEAR:
+                incrementYear();
+                break;
+            case MSG_DEC_DAY:
+                decrementDay();
+                break;
+            case MSG_DEC_MONTH:
+                decrementMonth();
+                break;
+            case MSG_DEC_YEAR:
+                decrementYear();
         }
     }
 }

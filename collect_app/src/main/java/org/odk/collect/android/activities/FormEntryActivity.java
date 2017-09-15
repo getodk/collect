@@ -2994,11 +2994,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    public void onDateChanged(int widgetId, IAnswerData data) {
+    public void onDateChanged(int widgetId, int day, int month, int year) {
         if (currentView != null) {
             for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
                 if (qw instanceof EthiopianDateWidget && widgetId == qw.getId()) {
-                    ((EthiopianDateWidget) qw).onDateChanged(data);
+                    ((EthiopianDateWidget) qw).onDateChanged(day, month, year);
                 }
             }
         }

@@ -529,4 +529,5 @@
     <string name="hamlie">Hamlie</string>
     <string name="nehasie">Nehasie</string>
     <string name="pagumien">Pagumien</string>
+    <string name="ethiopian_date">%1$s (%2$s)</string>
 </resources>

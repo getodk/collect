@@ -21,23 +21,13 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
@@ -56,33 +46,13 @@ import static android.content.Context.ACCESSIBILITY_SERVICE;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DateWidget extends QuestionWidget {
+public class DateWidget extends DateWidgetAbstract {
     private DatePickerDialog datePickerDialog;
 
-    protected Button dateButton;
-    protected TextView dateTextView;
-
-    private boolean hideDay;
-    private boolean hideMonth;
     private boolean showCalendar;
-
-    protected int year;
-    protected int month;
-    protected int dayOfMonth;
-
-    protected boolean nullAnswer;
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        setGravity(Gravity.START);
-
-        readAppearance();
-        createDateButton();
-        createDateTextView();
-        createDatePickerDialog();
-        hideDayFieldIfNotInFormat();
-        addViews();
     }
 
     private void readAppearance() {
@@ -111,83 +81,29 @@ public class DateWidget extends QuestionWidget {
     }
 
     @Override
-    public void clearAnswer() {
-        nullAnswer = true;
-        dateTextView.setText(R.string.no_date_selected);
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        clearFocus();
-
-        if (nullAnswer) {
-            return null;
-        } else {
-            LocalDateTime ldt = new LocalDateTime()
-                    .withYear(year)
-                    .withMonthOfYear(hideMonth ? 1 : month)
-                    .withDayOfMonth((hideMonth || hideDay) ? 1 : dayOfMonth)
-                    .withHourOfDay(0)
-                    .withMinuteOfHour(0);
-            return new DateData(ldt.toDate());
-        }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        dateButton.setOnLongClickListener(l);
-        dateTextView.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        dateButton.cancelLongPress();
-        dateTextView.cancelLongPress();
-    }
-
-    private void createDateButton() {
-        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
-        dateButton.setEnabled(!formEntryPrompt.isReadOnly());
+    protected void createWidget() {
+        super.createWidget();
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (nullAnswer) {
                     setDateToCurrent();
                 } else {
-                    datePickerDialog.updateDate(year, month - 1, dayOfMonth);
+                    datePickerDialog.updateDate(year, month - 1, day);
                 }
                 datePickerDialog.show();
             }
         });
-    }
 
-    private void createDateTextView() {
-        dateTextView = new TextView(getContext());
-        dateTextView.setId(QuestionWidget.newUniqueId());
-        dateTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
-        dateTextView.setPadding(20, 20, 20, 20);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-    }
-
-    private void addViews() {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(dateButton);
-        linearLayout.addView(dateTextView);
-        addAnswerView(linearLayout);
+        readAppearance();
+        createDatePickerDialog();
+        hideDayFieldIfNotInFormat();
     }
 
     public void setDateLabel() {
         nullAnswer = false;
+        String test = DateTimeUtils.getDateTimeBasedOnUserLocale(
+                (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false);
         dateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
                 (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false));
     }
@@ -213,7 +129,7 @@ public class DateWidget extends QuestionWidget {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         DateWidget.this.year = year;
                         month = monthOfYear + 1;
-                        DateWidget.this.dayOfMonth = dayOfMonth;
+                        DateWidget.this.day = dayOfMonth;
                         setDateLabel();
                     }
                 }, 1971, 1, 1); // placeholder date that is valid
@@ -225,7 +141,7 @@ public class DateWidget extends QuestionWidget {
             DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
             year = dt.getYear();
             month = dt.getMonthOfYear();
-            dayOfMonth = dt.getDayOfMonth();
+            day = dt.getDayOfMonth();
             setDateLabel();
             datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
         }
@@ -271,8 +187,8 @@ public class DateWidget extends QuestionWidget {
         DateTime dt = new DateTime();
         year = dt.getYear();
         month = dt.getMonthOfYear();
-        dayOfMonth = dt.getDayOfMonth();
-        datePickerDialog.updateDate(year, month - 1, dayOfMonth);
+        day = dt.getDayOfMonth();
+        datePickerDialog.updateDate(year, month - 1, day);
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {

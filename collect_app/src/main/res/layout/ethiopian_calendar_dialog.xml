@@ -13,7 +13,7 @@
         <Button
             android:id="@+id/day_up_button"
             android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:background="@drawable/date_button_plus"
             android:text="@string/plus"
             android:textSize="21sp" />
@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/day_txt"
             android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_below="@id/day_up_button"
             android:background="@drawable/date_text"
             android:gravity="center"
@@ -31,7 +31,7 @@
         <Button
             android:id="@+id/day_down_button"
             android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_below="@id/day_txt"
             android:background="@drawable/date_button_minus"
             android:text="@string/minus"
@@ -40,7 +40,7 @@
         <Button
             android:id="@+id/month_up_button"
             android:layout_width="130dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:layout_toRightOf="@id/day_up_button"
@@ -52,7 +52,7 @@
         <TextView
             android:id="@+id/month_txt"
             android:layout_width="130dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_below="@id/month_up_button"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
@@ -66,7 +66,7 @@
         <Button
             android:id="@+id/month_down_button"
             android:layout_width="130dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_below="@id/month_txt"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
@@ -79,7 +79,7 @@
         <Button
             android:id="@+id/year_up_button"
             android:layout_width="70dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:layout_toRightOf="@id/month_up_button"
@@ -91,7 +91,7 @@
         <TextView
             android:id="@+id/year_txt"
             android:layout_width="70dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_below="@id/year_up_button"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
@@ -105,7 +105,7 @@
         <Button
             android:id="@+id/year_down_button"
             android:layout_width="70dp"
-            android:layout_height="60dp"
+            android:layout_height="45dp"
             android:layout_below="@id/year_txt"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
