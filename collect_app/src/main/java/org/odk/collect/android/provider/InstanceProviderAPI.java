@@ -87,6 +87,7 @@ public final class InstanceProviderAPI {
         public static final String T_UPDATEID = "tUpdateId";          // The unique identifier of the instance to be updated
         public static final String T_LOCATION_TRIGGER = "tLocationTrigger";  // An NFC UID or Geofence that will trigger the task
         public static final String T_SURVEY_NOTES = "tSurveyNotes";  // Any notes added to the assessment outside of the form itself
+        public static final String T_UPDATED = "tUpdated";          // Record the number of times the instance is updated
         public static final String UUID = "uuid";
         // Smap End
 

@@ -46,7 +46,7 @@ public class InstanceProvider extends ContentProvider {
 
 
     private static final String DATABASE_NAME = "instances.db";
-    private static final int DATABASE_VERSION = 9;		// smap
+    private static final int DATABASE_VERSION = 10;		// smap
     private static final String INSTANCES_TABLE_NAME = "instances";
 
     private static HashMap<String, String> sInstancesProjectionMap;
@@ -97,6 +97,7 @@ public class InstanceProvider extends ContentProvider {
                + InstanceColumns.T_LOCATION_TRIGGER + " text, " // smap
                + InstanceColumns.T_SURVEY_NOTES + " text, "     // smap
                + InstanceColumns.UUID + " text, "		        // smap
+               + InstanceColumns.T_UPDATED + " integer, "       // smap
                + InstanceColumns.STATUS + " text not null, "
                + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                + InstanceColumns.DISPLAY_SUBTEXT + " text not null, "
@@ -194,6 +195,10 @@ public class InstanceProvider extends ContentProvider {
             if (oldVersion < 9) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
                         InstanceColumns.DELETED_DATE + " date;");
+            }
+            if (oldVersion < 10) {
+                db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN " +
+                        InstanceColumns.T_UPDATED + " integer;");
             }
             Timber.w("Successfully upgraded database from version %d to %d, without destroying all the old data",
                     initialVersion, newVersion);
@@ -528,6 +533,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_UPDATEID, InstanceColumns.T_UPDATEID);
         sInstancesProjectionMap.put(InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_LOCATION_TRIGGER);
         sInstancesProjectionMap.put(InstanceColumns.T_SURVEY_NOTES, InstanceColumns.T_SURVEY_NOTES);
+        sInstancesProjectionMap.put(InstanceColumns.T_UPDATED, InstanceColumns.T_UPDATED);
         sInstancesProjectionMap.put(InstanceColumns.LAST_STATUS_CHANGE_DATE, InstanceColumns.LAST_STATUS_CHANGE_DATE);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT, InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.SOURCE, InstanceColumns.SOURCE);                // smap

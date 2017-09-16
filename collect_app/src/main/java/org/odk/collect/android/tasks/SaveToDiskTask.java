@@ -214,6 +214,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             values.put(InstanceColumns.T_IS_SYNC, InstanceProviderAPI.STATUS_SYNC_NO);
         }
         values.put(InstanceColumns.T_SURVEY_NOTES, mSurveyNotes);
+        values.put(InstanceColumns.T_UPDATED, 1);
         // Smap End
 
         // update this whether or not the status is complete...

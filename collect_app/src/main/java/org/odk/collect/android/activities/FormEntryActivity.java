@@ -185,6 +185,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private FormDetail mFormDetail;                                     // smap
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
+    private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
     private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
@@ -406,12 +407,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                         .getString(instanceCursor
                                                 .getColumnIndex(
                                                         InstanceColumns.INSTANCE_FILE_PATH));
+                                mUpdated = instanceCursor
+                                        .getInt(instanceCursor
+                                                .getColumnIndex(
+                                                        InstanceColumns.T_UPDATED));
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logAction(this, "instanceLoaded",
                                                 instancePath);
 
-                                jrFormId = instanceCursor
+                                jrFormId = instanceCursor           // smap
                                         .getString(instanceCursor
                                                 .getColumnIndex(InstanceColumns.JR_FORM_ID));
                                 int idxJrVersion = instanceCursor
@@ -2680,7 +2685,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
-            if (!showFirst) {
+            if (!showFirst && mUpdated > 0) {   // smap check that the instance was edited on the phone before showing hierarchy
                 // we've just loaded a saved form, so start in the hierarchy view
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
