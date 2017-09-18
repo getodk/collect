@@ -808,7 +808,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                          *  and represents the data structure of the record that will be created
                          *  and submitted with the form.
                          *  Additional instances are called <secondary instances>.
-                         *  So breaking the loop after discovering the <primary instance> so that
+                         *  So, we are breaking the loop after discovering the <primary instance> so that
                          *  <secondary instances> don't get counted as field columns.
                          *
                          *  For more info read [this](https://opendatakit.github.io/xforms-spec/#instance)
