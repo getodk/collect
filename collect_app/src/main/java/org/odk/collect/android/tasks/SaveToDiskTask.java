@@ -50,8 +50,8 @@ import timber.log.Timber;
 public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     private FormSavedListener savedListener;
-    private Boolean save;
-    private Boolean markCompleted;
+    private boolean save;
+    private boolean markCompleted;
     private Uri uri;
     private String instanceName;
 
@@ -63,7 +63,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int ENCRYPTION_ERROR = 505;
 
 
-    public SaveToDiskTask(Uri uri, Boolean saveAndExit, Boolean markCompleted, String updatedName) {
+    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName) {
         this.uri = uri;
         save = saveAndExit;
         this.markCompleted = markCompleted;
