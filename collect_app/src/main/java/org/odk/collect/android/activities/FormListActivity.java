@@ -10,13 +10,13 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 
 abstract class FormListActivity extends AppListActivity {
     protected String getSortingOrder() {
-        String sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
+        String sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
-                sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC";
+                sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
             case BY_NAME_DESC:
-                sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " DESC";
+                sortingOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
                 break;
             case BY_DATE_ASC:
                 sortingOrder = FormsProviderAPI.FormsColumns.DATE + " ASC";
