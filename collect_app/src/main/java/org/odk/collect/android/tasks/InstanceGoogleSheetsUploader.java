@@ -770,10 +770,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // blow up
         boolean getPaths = false;
         boolean inBody = false;
+        boolean isPrimaryInstanceIdentified = false;
         int event = parser.next();
         int depth = 0;
         int lastpush = 0;
-        while (event != XmlPullParser.END_DOCUMENT) {
+        while (event != XmlPullParser.END_DOCUMENT && !isPrimaryInstanceIdentified) {
             switch (event) {
                 case XmlPullParser.START_TAG:
                     if (parser.getName().equalsIgnoreCase("body")
@@ -788,7 +789,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         depth++;
                         lastpush = depth;
                     }
-                    if (parser.getName().equals("instance") && isMainInstance(parser)) {
+                    if (parser.getName().equals("instance")) {
                         getPaths = true;
                     }
                     break;
@@ -800,7 +801,23 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         inBody = false;
                     }
                     if (parser.getName().equals("instance")) {
-                        getPaths = false;
+
+                        /*
+                         *  A <model> can have multiple instances as <childnodes>.
+                         *  The first and required <instance> is called the <primary instance>
+                         *  and represents the data structure of the record that will be created
+                         *  and submitted with the form.
+                         *  Additional instances are called <secondary instances>.
+                         *  So breaking the loop after discovering the <primary instance> so that
+                         *  <secondary instances> don't get counted as field columns.
+                         *
+                         *  For more info read [this](https://opendatakit.github.io/xforms-spec/#instance)
+                         *
+                         *  https://github.com/opendatakit/collect/issues/1444
+                         */
+
+                        isPrimaryInstanceIdentified = true;
+                        break;
                     }
                     if (getPaths) {
                         if (depth == lastpush) {
@@ -818,16 +835,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             event = parser.next();
         }
-    }
-
-    /**
-     * Primary instances do not have any attribute
-     * whereas secondary instances must have an "id" attribute
-     * <p>
-     * https://github.com/opendatakit/collect/issues/1444
-     */
-    private boolean isMainInstance(XmlPullParser parser) {
-        return parser.getAttributeCount() == 0;
     }
 
     private void processInstanceXML(File instanceFile,
