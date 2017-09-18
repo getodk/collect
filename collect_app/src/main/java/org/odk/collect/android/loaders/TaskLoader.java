@@ -59,7 +59,7 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
 		// Create corresponding array of entries and load their labels.
 		ArrayList<TaskEntry> entries = new ArrayList<TaskEntry>(10);
 		getForms(entries);
-        Utilities.getTasks(entries, false, sortOrder, filter.toString());
+        Utilities.getTasks(entries, false, sortOrder, filter.toString(), false);
 
 		return entries;
 	}

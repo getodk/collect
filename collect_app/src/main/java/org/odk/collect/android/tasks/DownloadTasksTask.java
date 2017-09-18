@@ -254,9 +254,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 }
 
                 /*
-                 * Get an array of the existing tasks on the phone and create a hashmap indexed on the assignment id
+                 * Get an array of the existing server tasks on the phone and create a hashmap indexed on the assignment id
                  */
-                Utilities.getTasks(tasks, false, "", "");
+                Utilities.getTasks(tasks, false, "", "", true);
                 for(TaskEntry t : tasks) {
                     TaskStatus ts = new TaskStatus(t.assId, t.taskStatus);
                     taskMap.put(t.assId, ts);
@@ -490,7 +490,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         // Get tasks that have not been synchronised
         ArrayList<TaskEntry> nonSynchTasks = new ArrayList<TaskEntry>();
-        Utilities.getTasks(nonSynchTasks, true, "", "");
+        Utilities.getTasks(nonSynchTasks, true, "", "", true);
 
         /*
          * Set updates to task status

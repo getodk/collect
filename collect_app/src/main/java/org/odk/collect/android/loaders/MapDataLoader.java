@@ -54,7 +54,7 @@ public class MapDataLoader extends AsyncTaskLoader<MapEntry> {
 		data.points = new ArrayList<PointEntry>(100);
         data.tasks = new ArrayList<TaskEntry> (10);
         TraceUtilities.getPoints(data.points);
-        Utilities.getTasks(data.tasks, false, "", "");
+        Utilities.getTasks(data.tasks, false, "", "", false);
 
 		return data;
 	}

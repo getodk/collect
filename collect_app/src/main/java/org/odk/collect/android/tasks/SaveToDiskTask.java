@@ -40,6 +40,9 @@ import org.odk.collect.android.utilities.FileUtils;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
+
+import com.google.firebase.crash.FirebaseCrash;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,6 +87,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         mFormPath = formPath; // smap
         mSurveyNotes = surveyNotes; // smap
         this.canUpdate = canUpdate; // smap
+
+        FirebaseCrash.log("Created SaveToDisk object: " + formDetail);
     }
 
 
@@ -214,6 +219,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             values.put(InstanceColumns.T_IS_SYNC, InstanceProviderAPI.STATUS_SYNC_NO);
         }
         values.put(InstanceColumns.T_SURVEY_NOTES, mSurveyNotes);
+        values.put(InstanceColumns.T_REPEAT, 0);        // When saved it is no longer a repeat task
         values.put(InstanceColumns.T_UPDATED, 1);
         // Smap End
 
@@ -289,6 +295,8 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
                     // Smap End
 
+                } catch (Exception e) {   // smap
+                    FirebaseCrash.report(e);        // Report Crashes
                 } finally {
                     //if (c != null) { smap
                     //    c.close();
@@ -297,9 +305,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 uri = new InstancesDao().saveInstance(values);
             }
         }
-
-        Intent intent = new Intent("org.smap.smapTask.refresh");      // Smap
-        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // Smap
     }
 
     /**
@@ -333,6 +338,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
         // occurs during the packaging of the data for the server fails (e.g., encryption),
         // we can still reopen the filled-out form and re-save it at a later time.
+        FirebaseCrash.log("Update instance database: " + mFormDetail);
         updateInstanceDatabase(true, true, canUpdate);      // smap
 
         if ( markCompleted && canUpdate ) {     // smap
@@ -431,6 +437,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 }
             }
         }
+
+        Intent intent = new Intent("org.smap.smapTask.refresh");      // Smap
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent); // Smap
     }
 
 

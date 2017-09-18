@@ -45,6 +45,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
@@ -199,15 +201,15 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
         if (authorised) {
             if (mNfcAdapter == null) {
-            //    Toast.makeText(
-            //            this,
-            //            getString(R.string.smap_nfc_not_available),
-            //            Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(
+                //            this,
+                //            getString(R.string.smap_nfc_not_available),
+                //            Toast.LENGTH_SHORT).show();
             } else if (!mNfcAdapter.isEnabled()) {
-            //    Toast.makeText(
-            //            this,
-            //            getString(R.string.smap_nfc_not_enabled),
-            //            Toast.LENGTH_LONG).show();
+                //    Toast.makeText(
+                //            this,
+                //            getString(R.string.smap_nfc_not_enabled),
+                //            Toast.LENGTH_LONG).show();
             } else {
                 /*
                  * Set up NFC adapter
@@ -245,7 +247,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     protected void onResume() {
         super.onResume();
 
-        if(mNfcAdapter != null && mNfcAdapter.isEnabled()) {
+        if (mNfcAdapter != null && mNfcAdapter.isEnabled()) {
             setupNFCDispatch(this, mNfcAdapter);        // NFC
         }
 
@@ -267,11 +269,11 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     @Override
     protected void onStop() {
         Collect.getInstance().getActivityLogger().logOnStop(this);
-        if(listener != null) {
+        if (listener != null) {
             try {
                 unregisterReceiver(listener);
                 listener = null;
-            } catch (Exception e){
+            } catch (Exception e) {
                 Timber.e("Error on unregister: " + e.getMessage());
                 // Ignore - preumably already unregistered
             }
@@ -308,7 +310,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                if(mDownloadTasks != null) {
+                                if (mDownloadTasks != null) {
                                     mDownloadTasks.setDownloaderListener(null, SmapMain.this);
                                     mDownloadTasks.cancel(true);
                                 }
@@ -499,7 +501,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
     /**
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
      */
     public void setupNFCDispatch(final Activity activity, NfcAdapter adapter) {
 
@@ -512,7 +514,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
     /**
      * @param activity The corresponding {@link Activity} requesting to stop the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
      */
     public static void stopNFCDispatch(final Activity activity, NfcAdapter adapter) {
 
@@ -531,7 +533,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
      */
     private void handleNFCIntent(Intent intent) {
 
-        if(nfcTriggersList != null && nfcTriggersList.size() > 0) {
+        if (nfcTriggersList != null && nfcTriggersList.size() > 0) {
             Timber.i("tag discovered");
             String action = intent.getAction();
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -684,10 +686,6 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
         Timber.i("Complete task" + entry.id + " : " + entry.name + " : " + entry.taskStatus);
 
-        if (entry.repeat) {
-            entry.instancePath = duplicateInstance(formPath, entry.instancePath, entry);
-        }
-
         // set the adhoc location
         boolean canUpdate = false;
         try {
@@ -724,34 +722,45 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                     null, where, whereArgs, null);
 
-            if (cInstanceProvider.getCount() != 1) {
-                Timber.e("Unique instance not found: count is:" +
-                        cInstanceProvider.getCount());
-            } else {
-                cInstanceProvider.moveToFirst();
-                Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
-                        cInstanceProvider.getLong(
-                                cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
-                surveyNotes = cInstanceProvider.getString(
-                        cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
-                // Start activity to complete form
-
-                // Use an explicit intent
-                Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
-                i.setData(instanceUri);
-
-                //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
-
-                //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
-                i.putExtra(FormEntryActivity.KEY_TASK, taskId);
-                i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
-                i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                //if (instancePath != null) {    // TODO Don't think this is needed
-                //    i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
-                //}
-                startActivity(i);
+            if (entry.repeat) {
+                entry.instancePath = duplicateInstance(formPath, entry.instancePath, entry);
             }
+
+            cInstanceProvider.moveToFirst();
+            Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                    cInstanceProvider.getLong(
+                            cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
+            surveyNotes = cInstanceProvider.getString(
+                    cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
+            // Start activity to complete form
+
+            // Use an explicit intent
+            Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+            i.setData(instanceUri);
+
+
+
+
+
+            //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+
+            //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
+            i.putExtra(FormEntryActivity.KEY_TASK, taskId);
+            i.putExtra(FormEntryActivity.KEY_SURVEY_NOTES, surveyNotes);
+            i.putExtra(FormEntryActivity.KEY_CAN_UPDATE, canUpdate);
+            i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            if (instancePath != null) {    // TODO Don't think this is needed
+                i.putExtra(FormEntryActivity.KEY_INSTANCEPATH, instancePath);
+            }
+            startActivity(i);
+
+            // If More than one instance is found pointing towards a single file path then report the error
+            int instanceCount = cInstanceProvider.getCount();
+            if (instanceCount != 1) {
+                FirebaseCrash.report(new Exception("Unique instance not found: count is:" +
+                        cInstanceProvider.getCount()));
+            }
+
             cInstanceProvider.close();
         }
 
@@ -826,6 +835,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         public MainTaskListener(SmapMain activity) {
             mActivity = activity;
         }
+
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -833,16 +843,16 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
             if (intent.getAction().equals("startTask")) {
 
-                int position =  intent.getIntExtra("position", -1);
-                if(position >= 0) {
+                int position = intent.getIntExtra("position", -1);
+                if (position >= 0) {
                     TaskEntry entry = (TaskEntry) mTasks.get(position);
 
                     mActivity.completeTask(entry);
                 }
             } else if (intent.getAction().equals("startMapTask")) {
 
-                int position =  intent.getIntExtra("position", -1);
-                if(position >= 0) {
+                int position = intent.getIntExtra("position", -1);
+                if (position >= 0) {
                     TaskEntry entry = (TaskEntry) mMapTasks.get(position);
                     mActivity.completeTask(entry);
                 }

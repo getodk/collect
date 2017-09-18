@@ -40,6 +40,7 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
+import org.odk.collect.android.taskModel.FormDetail;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -97,6 +98,7 @@ public class Collect extends Application {
 
     private Location location = null;       // smap
     private boolean recordLocation = false; // smap
+    private FormDetail formDetail = null;   // smap
     private boolean tasksDownloading = false;
 
     public static Collect getInstance() {
@@ -286,6 +288,13 @@ public class Collect extends Application {
 
     // Begin Smap
     // start, set and get location
+    public void setFormDetail(FormDetail v) {
+        formDetail = v;
+    }
+    public FormDetail getFormDetail() {
+        return formDetail;
+    }
+
     public void setLocation(Location l) {
         location = l;
     }

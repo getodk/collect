@@ -67,6 +67,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -384,6 +385,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Collect.getInstance().setFormController(null);
             supportInvalidateOptionsMenu();
 
+            FirebaseCrash.log("on create");
+
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
@@ -391,6 +394,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
+                    FirebaseCrash.log("Opened Instance");
                     String jrFormId = null;
                     //String jrVersion = null;   smap
                     {
@@ -495,6 +499,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 } else if (uriMimeType != null
                         && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
+                    FirebaseCrash.log("Opened Form");
                     try {
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
@@ -502,6 +507,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
+                            FirebaseCrash.log("Creating form detail");
                             mFormDetail = new FormDetail();           // smap
                             c.moveToFirst();
                             mFormDetail.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));                    // smap
@@ -509,6 +515,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             mFormDetail.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));     // smap
                             mFormDetail.formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));     // smap
                             mFormDetail.version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));     // smap
+                            Collect.getInstance().setFormDetail(mFormDetail);    // smap
                             formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                             // This is the fill-blank-form code path.
                             // See if there is a savepoint for this form that
@@ -1961,8 +1968,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Smap end
 
         synchronized (saveDialogLock) {
+            FirebaseCrash.log("Call SaveToDiskTask: " + mFormDetail);
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
-                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail);    // SMAP added mTaskId, mFormPath, surveyNotes
+                    updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail);    // smap added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
             autoSaved = true;
             showDialog(SAVING_DIALOG);
@@ -2409,6 +2417,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         FormController formController = Collect.getInstance().getFormController();
         Collect.getInstance().getActivityLogger().open();
+        mFormDetail = Collect.getInstance().getFormDetail();    // smap
 
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);
@@ -2684,6 +2693,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
             formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+
 
             if (!showFirst && mUpdated > 0) {   // smap check that the instance was edited on the phone before showing hierarchy
                 // we've just loaded a saved form, so start in the hierarchy view

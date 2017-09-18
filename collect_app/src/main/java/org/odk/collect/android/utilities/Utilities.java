@@ -345,7 +345,7 @@ public class Utilities {
 
     }
 
-    public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised, String sortOrder, String filter) {
+    public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised, String sortOrder, String filter, boolean serverOnly) {
 
         // Get cursor
         String[] proj = {
@@ -382,6 +382,10 @@ public class Utilities {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
+        }
+
+        if(serverOnly) {
+            selectClause +=  "and " + InstanceColumns.T_ASS_ID + " is not null ";
         }
 
         ArrayList<String> selectArgsList = new ArrayList<> ();
@@ -494,7 +498,7 @@ public class Utilities {
         String[] selectArgs = new String[nIds + 1];
         selectArgs[0] = Utilities.getSource();
 
-        StringBuffer selectClause = new StringBuffer(/*InstanceColumns.T_REPEAT + " = 0 and " + */InstanceColumns.SOURCE + " = ?");
+        StringBuffer selectClause = new StringBuffer(InstanceColumns.T_ASS_ID + " is not null and " + InstanceColumns.SOURCE + " = ?");
 
         if (nIds > 0) {
             selectClause.append(" and " + InstanceColumns.T_ASS_ID + " not in (");
