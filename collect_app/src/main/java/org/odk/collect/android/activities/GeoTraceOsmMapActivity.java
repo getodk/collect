@@ -619,7 +619,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         String units = timeUnits.getSelectedItem().toString();
         Long timeDelay;
         TimeUnit timeUnitsValue;
-        if (units == getString(R.string.minutes)) {
+        if (units.equals(getString(R.string.minutes))) {
             timeDelay = Long.parseLong(delay) * (60); //Convert minutes to seconds
             timeUnitsValue = TimeUnit.SECONDS;
         } else {
