@@ -48,7 +48,10 @@ public final class ActivityLogger {
 
         DatabaseHelper() {
             super(new DatabaseContext(Collect.LOG_PATH), DATABASE_NAME, null, DATABASE_VERSION);
-            new File(Collect.LOG_PATH).mkdirs();
+            boolean success = new File(Collect.LOG_PATH).mkdirs();
+            if (!success) {
+                Timber.e("Failed to create the %s directories", Collect.LOG_PATH);
+            }
         }
 
         @Override
