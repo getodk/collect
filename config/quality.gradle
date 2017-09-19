@@ -2,6 +2,8 @@ apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
 
+apply plugin: 'jacoco-everywhere'
+
 /*
  * Copyright 2015 Vincent Brison.
  *
@@ -90,5 +92,26 @@ android {
         lintConfig file("$configDir/lint/lint.xml")
         htmlOutput file("$reportsDir/lint/lint-result.html")
         xmlOutput file("$reportsDir/lint/lint-result.xml")
+    }
+}
+
+connectedCheck.doLast {
+    // Add CLI report for Jacoco coverage
+    def slurper = new XmlSlurper()
+    slurper.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+    slurper.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+    def report = slurper.parse("./build/reports/coverage/debug/report.xml")
+
+    println "------ Code Coverage ------"
+    report.package.each { p ->
+        println "--> ${p.@name.toString().replaceAll('/', '.')}"
+        p.counter.each { c ->
+            def covered = c.@covered.toString() as int
+            def missed = c.@missed.toString() as int
+            def percent = ((100 * covered) / (covered + missed))
+            println String.format('    %-16s %.1f ', c.@type, percent) + '%'
+        }
+        println "----------------------------------"
     }
 }
