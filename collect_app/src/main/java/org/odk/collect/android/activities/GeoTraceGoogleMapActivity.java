@@ -85,9 +85,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     public AlertDialog.Builder dialogBuilder;
     private View polygonPolylineView;
     private AlertDialog alertDialog;
-    private Boolean beenPaused = false;
+    private boolean beenPaused;
     private Integer traceMode = 1; // 0 manual, 1 is automatic
-    private Boolean playCheck = false;
+    private boolean playCheck;
     private Spinner timeUnits;
     private Spinner timeDelay;
 
@@ -108,8 +108,8 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     private Button zoomPointButton;
     private Button zoomLocationButton;
 
-    private Boolean firstLocationFound = false;
-    private Boolean modeActive = false;
+    private boolean firstLocationFound;
+    private boolean modeActive;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -797,7 +797,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
 
     }
 
-    public void setModeActive(Boolean modeActive) {
+    public void setModeActive(boolean modeActive) {
         this.modeActive = modeActive;
     }
 

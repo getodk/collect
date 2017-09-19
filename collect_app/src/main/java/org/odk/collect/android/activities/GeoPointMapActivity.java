@@ -77,7 +77,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     private Location location;
     private ImageButton reloadLocation;
 
-    private boolean isDragged = false;
+    private boolean isDragged;
     private ImageButton showLocation;
 
     private int locationCount = 0;
@@ -93,15 +93,15 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     private Button zoomPointButton;
     private Button zoomLocationButton;
 
-    private boolean setClear = false;
-    private boolean captureLocation = false;
-    private Boolean foundFirstLocation = false;
-    private Boolean readOnly = false;
-    private Boolean draggable = false;
-    private Boolean intentDraggable = false;
-    private Boolean locationFromIntent = false;
+    private boolean setClear;
+    private boolean captureLocation;
+    private boolean foundFirstLocation;
+    private boolean readOnly;
+    private boolean draggable;
+    private boolean intentDraggable;
+    private boolean locationFromIntent;
 
-    private boolean isMapReady = false;
+    private boolean isMapReady;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
