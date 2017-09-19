@@ -2773,37 +2773,40 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * @return true if form has been marked completed, false otherwise.
      */
     private boolean isInstanceComplete(boolean end) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         // default to false if we're mid form
         boolean complete = false;
 
-        // if we're at the end of the form, then check the preferences
-        if (end) {
-            // First get the value from the preferences
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(this);
-            complete = sharedPreferences.getBoolean(
-                    PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
-        }
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            // if we're at the end of the form, then check the preferences
+            if (end) {
+                // First get the value from the preferences
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+                complete = sharedPreferences.getBoolean(
+                        PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
+            }
 
-        // Then see if we've already marked this form as complete before
-        Cursor c = null;
-        try {
-            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                    .getAbsolutePath());
-            if (c != null && c.getCount() > 0) {
-                c.moveToFirst();
-                String status = c.getString(c
-                        .getColumnIndex(InstanceColumns.STATUS));
-                if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
-                    complete = true;
+            // Then see if we've already marked this form as complete before
+            Cursor c = null;
+            try {
+                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                        .getAbsolutePath());
+                if (c != null && c.getCount() > 0) {
+                    c.moveToFirst();
+                    String status = c.getString(c
+                            .getColumnIndex(InstanceColumns.STATUS));
+                    if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
+                        complete = true;
+                    }
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
                 }
             }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
+        } else {
+            Timber.w("FormController has a null value");
         }
         return complete;
     }
