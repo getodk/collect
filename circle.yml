@@ -59,8 +59,6 @@ test:
         - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
-        - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
+        - find . -type f -regex ".*/collect_app/build/reports/coverage/debug/report.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
 
-        - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS; fi
-        - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests; fi
         - bash <(curl -s https://codecov.io/bash)

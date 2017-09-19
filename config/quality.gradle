@@ -101,7 +101,7 @@ connectedCheck.doLast {
     slurper.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
     slurper.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
-    def report = slurper.parse("./build/reports/coverage/debug/report.xml")
+    def report = slurper.parse("../collect_app/build/reports/coverage/debug/report.xml")
 
     println "------ Code Coverage ------"
     report.package.each { p ->
