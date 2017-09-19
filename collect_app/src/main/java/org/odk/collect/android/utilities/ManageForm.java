@@ -366,9 +366,9 @@ public class ManageForm {
 	                        .format(Calendar.getInstance().getTime());
             String file =
                 formPath.substring(formPath.lastIndexOf('/') + 1, formPath.lastIndexOf('.'));
-            String path = Collect.INSTANCES_PATH + "/" + file + "_" + time;
+            String path = Collect.INSTANCES_PATH + "/" + file + "_" + time + "_" + assignmentId;
             if (FileUtils.createFolder(path)) {
-                instancePath = path + "/" + file + "_" + time + ".xml";
+                instancePath = path + "/" + file + "_" + time + "_" + assignmentId + ".xml";
             }
         }
             

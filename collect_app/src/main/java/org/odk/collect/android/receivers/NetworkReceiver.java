@@ -1,8 +1,11 @@
 package org.odk.collect.android.receivers;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -38,6 +41,8 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import timber.log.Timber;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class NetworkReceiver extends BroadcastReceiver implements TaskDownloaderListener,
         InstanceUploaderListener,
@@ -285,6 +290,24 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         Timber.i("Send intent");
         Intent intent = new Intent("org.smap.smapTask.refresh");   // smap
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);  // smap
+
+        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationManager mNotifyMgr =
+                (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
+        int mNotificationId = 001;
+
+        StringBuffer content = new StringBuffer();
+        content.append(mContext.getString(R.string.smap_server_changed));
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext)
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                R.drawable.ic_launcher))
+                        .setSound(uri)
+                        .setContentTitle(mContext.getString(R.string.app_name))
+                        .setContentText(content);
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
     @Override

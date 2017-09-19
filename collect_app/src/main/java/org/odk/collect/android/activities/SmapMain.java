@@ -738,10 +738,6 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
             i.setData(instanceUri);
 
-
-
-
-
             //Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
 
             //i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);    // TODO Don't think this is needed
@@ -754,11 +750,22 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             }
             startActivity(i);
 
-            // If More than one instance is found pointing towards a single file path then report the error
+            // If More than one instance is found pointing towards a single file path then report the error and delete the extrat
             int instanceCount = cInstanceProvider.getCount();
-            if (instanceCount != 1) {
-                FirebaseCrash.report(new Exception("Unique instance not found: count is:" +
+            if (instanceCount > 1) {
+                FirebaseCrash.report(new Exception("Unique instance not found: deleting extra, count is:" +
                         cInstanceProvider.getCount()));
+                /*
+                cInstanceProvider.moveToNext();
+                while(!cInstanceProvider.isAfterLast()) {
+
+                    Long id = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    Uri taskUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, id.toString());
+                    Collect.getInstance().getContentResolver().delete(taskUri, null, null);
+
+                    cInstanceProvider.moveToNext();
+                }
+                */
             }
 
             cInstanceProvider.close();
