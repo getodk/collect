@@ -52,7 +52,7 @@ import java.text.DecimalFormat;
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
+public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     public static final String LOCATION = "gp";
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";

@@ -109,7 +109,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
-import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -863,7 +863,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
-            if (qw instanceof IBinaryWidget && ((IBinaryWidget) qw).isWaitingForBinaryData()) {
+            if (qw instanceof BinaryWidget && ((BinaryWidget) qw).isWaitingForBinaryData()) {
                 questionWidget = qw;
             }
         }

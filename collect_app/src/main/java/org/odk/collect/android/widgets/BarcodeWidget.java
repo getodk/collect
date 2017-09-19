@@ -36,7 +36,7 @@ import org.odk.collect.android.application.Collect;
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
+public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     private Button getBarcodeButton;
     private TextView stringAnswer;
 

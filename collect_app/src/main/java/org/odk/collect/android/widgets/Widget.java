@@ -5,7 +5,7 @@ import org.javarosa.core.model.data.IAnswerData;
 /**
  * @author James Knight
  */
-public interface IQuestionWidget {
+public interface Widget {
 
     IAnswerData getAnswer();
 

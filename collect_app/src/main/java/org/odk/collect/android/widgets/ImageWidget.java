@@ -54,7 +54,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends QuestionWidget implements IBinaryNameWidget {
+public class ImageWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
@@ -218,7 +218,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryNameWidget {
     }
 
     @Override
-    public void deleteMedia() {
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -232,7 +232,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryNameWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
         if (imageView != null) {
             imageView.setImageBitmap(null);
         }
@@ -257,7 +257,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryNameWidget {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;

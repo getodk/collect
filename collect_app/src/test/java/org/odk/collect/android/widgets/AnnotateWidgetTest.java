@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.widgets.base.BinaryNameWidgetTest;
+import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class AnnotateWidgetTest extends BinaryNameWidgetTest<AnnotateWidget> {
+public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @Mock
     File file;
 

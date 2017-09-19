@@ -87,7 +87,7 @@ import timber.log.Timber;
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
+public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     private boolean hasExApp = true;
     private Button launchIntentButton;

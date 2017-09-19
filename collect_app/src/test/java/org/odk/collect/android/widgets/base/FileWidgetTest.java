@@ -8,7 +8,7 @@ import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.widgets.IBinaryNameWidget;
+import org.odk.collect.android.widgets.FileWidget;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -17,9 +17,9 @@ import static org.mockito.Mockito.verify;
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends BinaryWidgetTest<W, StringData> {
+public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetTest<W, StringData> {
 
-    public BinaryNameWidgetTest(Class<W> clazz) {
+    public FileWidgetTest(Class<W> clazz) {
         super(clazz);
     }
 
@@ -34,7 +34,7 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
         super.settingANewAnswerShouldRemoveTheOldAnswer();
 
         W widget = getWidget();
-        verify(widget).deleteMedia();
+        verify(widget).deleteFile();
     }
 
     @Test
@@ -42,6 +42,6 @@ public abstract class BinaryNameWidgetTest<W extends IBinaryNameWidget> extends 
         super.callingClearShouldRemoveTheExistingAnswer();
 
         W widget = getWidget();
-        verify(widget).deleteMedia();
+        verify(widget).deleteFile();
     }
 }
