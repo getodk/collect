@@ -15,4 +15,8 @@ public class FileUtil {
     public String getRandomFilename() {
         return Long.toString(System.currentTimeMillis());
     }
+
+    public File getItemsetFile(String mediaFolderPath) {
+        return new File(mediaFolderPath + "/itemsets.csv");
+    }
 }
