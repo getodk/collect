@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.widgets.IQuestionWidget;
+import org.odk.collect.android.widgets.Widget;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerData> {
+public abstract class WidgetTest<W extends Widget, A extends IAnswerData> {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -114,7 +114,7 @@ public abstract class WidgetTest<W extends IQuestionWidget, A extends IAnswerDat
         A answer = getNextAnswer();
         when(formEntryPrompt.getAnswerValue()).thenReturn(answer);
 
-        if (clazz.isAssignableFrom(BinaryNameWidgetTest.class)) {
+        if (clazz.isAssignableFrom(FileWidgetTest.class)) {
             when(formEntryPrompt.getAnswerText()).thenReturn((String) answer.getValue());
         }
 

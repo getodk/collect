@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.widgets.base.BinaryNameWidgetTest;
+import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class VideoWidgetTest extends BinaryNameWidgetTest<VideoWidget> {
+public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
     @Mock
     Uri uri;

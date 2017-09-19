@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Nicholas Hallahan nhallahan@spatialdev.com
  */
-public class OSMWidget extends QuestionWidget implements IBinaryWidget {
+public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
     // button colors
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);

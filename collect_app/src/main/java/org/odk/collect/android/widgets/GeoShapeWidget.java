@@ -44,7 +44,7 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
+public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";

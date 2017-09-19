@@ -55,7 +55,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget {
+public class AnnotateWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
@@ -255,7 +255,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget 
     }
 
     @Override
-    public void deleteMedia() {
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -269,7 +269,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget 
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
         if (imageView != null) {
             imageView.setImageBitmap(null);
         }
@@ -297,7 +297,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryNameWidget 
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;
