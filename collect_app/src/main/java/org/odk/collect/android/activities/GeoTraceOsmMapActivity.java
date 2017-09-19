@@ -67,7 +67,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private ScheduledFuture schedulerHandler;
     public int zoomLevel = 3;
     public boolean gpsStatus = true;
-    private boolean playCheck = false;
+    private boolean playCheck;
     private MapView mapView;
     public MyLocationNewOverlay myLocationOverlay;
     private ImageButton locationButton;
@@ -97,7 +97,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
-    private boolean modeActive = false;
+    private boolean modeActive;
 
     private LocationClient locationClient;
 

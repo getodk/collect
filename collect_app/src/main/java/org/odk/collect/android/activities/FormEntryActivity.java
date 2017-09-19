@@ -230,7 +230,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean shownAlertDialogIsGroupRepeat;
 
     // used to limit forward/backward swipes to one per question
-    private boolean beenSwiped = false;
+    private boolean beenSwiped;
 
     private final Object saveDialogLock = new Object();
     private int viewCount = 0;
@@ -249,7 +249,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private SharedPreferences adminPreferences;
-    private boolean showNavigationButtons = false;
+    private boolean showNavigationButtons;
 
     private FormsDao formsDao;
 
