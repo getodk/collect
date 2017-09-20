@@ -297,7 +297,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         int mNotificationId = 001;
 
         StringBuffer content = new StringBuffer();
-        content.append(mContext.getString(R.string.smap_server_changed));
+        content.append(mContext.getString(R.string.smap_refresh_finished));
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)

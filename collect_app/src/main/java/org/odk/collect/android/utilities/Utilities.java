@@ -31,6 +31,7 @@ import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.FileUtils;
@@ -190,6 +191,14 @@ public class Utilities {
             final ContentResolver resolver = Collect.getInstance().getContentResolver();
             resolver.insert(InstanceColumns.CONTENT_URI, values);
 
+            // Update the existing task and set it to a non repeat in case the user exits out without saving
+            Uri initialUri =  Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, String.valueOf(entry.id));
+
+            values = new ContentValues();
+            values.put(InstanceColumns.T_REPEAT, 0);
+            values.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+
+            Collect.getInstance().getContentResolver().update(initialUri, values, null, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -602,7 +611,6 @@ public class Utilities {
         selectArgs[0] = Utilities.getSource();
 
         ContentValues values = new ContentValues();
-        values.put(InstanceColumns.T_REPEAT, ta.task.repeat ? 1 : 0);
         if (ta.task.scheduled_at != null) {
             values.put(InstanceColumns.T_SCHED_START, ta.task.scheduled_at.getTime());
         }

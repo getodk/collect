@@ -123,7 +123,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 InstancesDao instancesDao = new InstancesDao();
-                instancesDao.deleteInstancesFromIDs(filesToRemove);
+                //instancesDao.deleteInstancesFromIDs(filesToRemove);  smap - these could be tasks
 
                 final boolean instanceSyncFlag = PreferenceManager.getDefaultSharedPreferences(
                         Collect.getInstance().getApplicationContext()).getBoolean(

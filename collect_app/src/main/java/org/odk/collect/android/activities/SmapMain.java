@@ -783,7 +783,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
 
         // 1. Get a new instance path
         ManageForm mf = new ManageForm();
-        newPath = mf.getInstancePath(formPath, 0);
+        newPath = mf.getInstancePath(formPath, entry.assId);
 
         // 2. Duplicate the instance entry and get the new path
         Utilities.duplicateTask(originalPath, newPath, entry);
