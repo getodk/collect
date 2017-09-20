@@ -22,6 +22,8 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.math.BigDecimal;
+
 public class RangeDecimalWidget extends RangeWidget {
 
     public RangeDecimalWidget(Context context, FormEntryPrompt prompt) {
@@ -37,5 +39,23 @@ public class RangeDecimalWidget extends RangeWidget {
     protected void setUpActualValueLabel() {
         String value = actualValue != null ? String.valueOf(actualValue.doubleValue()) : "";
         currentValue.setText(value);
+    }
+
+    @Override
+    protected void setUpDisplayedValuesForNumberPicker() {
+        int index = 0;
+        displayedValuesForNumberPicker = new String[elementCount + 1];
+
+        if (rangeEnd.compareTo(rangeStart) > -1) {
+            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
+                displayedValuesForNumberPicker[index] = String.valueOf(i);
+                index++;
+            }
+        } else {
+            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
+                displayedValuesForNumberPicker[index] = String.valueOf(i);
+                index++;
+            }
+        }
     }
 }

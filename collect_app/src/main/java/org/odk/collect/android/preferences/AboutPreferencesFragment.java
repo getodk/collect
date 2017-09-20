@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 import android.view.View;
 
 import org.odk.collect.android.R;
@@ -69,32 +68,25 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
     }
 
     @Override
+    public void onDestroy() {
+        if (getActivity() != null) {
+            getActivity().unbindService(websiteTabHelper.getServiceConnection());
+            getActivity().unbindService(forumTabHelper.getServiceConnection());
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onPreferenceClick(Preference preference) {
         final String APP_PACKAGE_NAME = getActivity().getPackageName();
 
         switch (preference.getKey()) {
             case KEY_ODK_WEBSITE:
-                if (websiteTabHelper.getPackageName(getActivity()).size() != 0) {
-                    CustomTabsIntent customTabsIntent =
-                            new CustomTabsIntent.Builder()
-                                    .build();
-                    customTabsIntent.intent.setPackage(websiteTabHelper.getPackageName(getActivity()).get(0));
-                    customTabsIntent.launchUrl(getActivity(), websiteUri);
-                } else {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_WEBSITE)));
-                }
+                websiteTabHelper.openUri(getActivity(), websiteUri);
                 break;
 
             case KEY_ODK_FORUM:
-                if (forumTabHelper.getPackageName(getActivity()).size() != 0) {
-                    CustomTabsIntent customTabsIntent =
-                            new CustomTabsIntent.Builder()
-                                    .build();
-                    customTabsIntent.intent.setPackage(forumTabHelper.getPackageName(getActivity()).get(0));
-                    customTabsIntent.launchUrl(getActivity(), forumUri);
-                } else {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ODK_FORUM)));
-                }
+                forumTabHelper.openUri(getActivity(), forumUri);
                 break;
 
             case KEY_OPEN_SOURCE_LICENSES:
@@ -103,7 +95,7 @@ public class AboutPreferencesFragment extends BasePreferenceFragment implements 
                 break;
 
             case KEY_TELL_YOUR_FRIENDS:
-                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
                         getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL

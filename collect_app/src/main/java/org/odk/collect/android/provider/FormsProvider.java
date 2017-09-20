@@ -672,14 +672,7 @@ public class FormsProvider extends ContentProvider {
                             String oldFile = update.getString(update
                                     .getColumnIndex(FormsColumns.FORM_FILE_PATH));
 
-                            if (formFile != null
-                                    && formFile.equalsIgnoreCase(oldFile)) {
-                                // Files are the same, so we may have just copied
-                                // over something we had
-                                // already
-                            } else {
-                                // New file name. This probably won't ever happen,
-                                // though.
+                            if (formFile == null || !formFile.equalsIgnoreCase(oldFile)) {
                                 deleteFileOrDir(oldFile);
                             }
 

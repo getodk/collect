@@ -78,6 +78,7 @@ public class FormController {
      * Non OpenRosa metadata tag names
      */
     private static final String AUDIT = "audit";
+    public static final String AUDIT_FILE_NAME = "audit.csv";
 
     /*
      * Store the timerLogger object with the form controller state
@@ -1201,8 +1202,10 @@ public class FormController {
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
                 audit = true;
+                IAnswerData answerData = new StringData();
+                answerData.setValue(AUDIT_FILE_NAME);
+                v.get(0).setValue(answerData);
             }
-
         }
 
         return new InstanceMetadata(instanceId, instanceName, audit);

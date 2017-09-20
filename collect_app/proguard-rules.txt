@@ -5,6 +5,7 @@
 -dontwarn org.xmlpull.v1.**
 
 -keep class org.javarosa.**
+-keep class android.support.v7.widget.** { *; }
 
 -dontobfuscate
 

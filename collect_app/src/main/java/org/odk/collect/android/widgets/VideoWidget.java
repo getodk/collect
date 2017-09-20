@@ -25,12 +25,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -49,6 +47,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static android.os.Build.MODEL;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -77,19 +77,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-        // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_video));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_video));
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +94,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 // of the intent - using the MediaStore.EXTRA_OUTPUT to get the data
                 // Have it saving to an intermediate location instead of final destination
                 // to allow the current location to catch issues with the intermediate file
-                Timber.i("The build of this device is %s", android.os.Build.MODEL);
-                if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+                Timber.i("The build of this device is %s", MODEL);
+                if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
                     nexus7Uri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
                     i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, nexus7Uri);
                 } else {
@@ -142,16 +131,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup capture button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_video));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_video));
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,15 +163,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup play button
-        playButton = new Button(getContext());
-        playButton.setId(QuestionWidget.newUniqueId());
-        playButton.setText(getContext().getString(R.string.play_video));
-        playButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        playButton.setPadding(20, 20, 20, 20);
-        playButton.setLayoutParams(params);
-
-        // on play, launch the appropriate viewer
+        playButton = getSimpleButton(getContext().getString(R.string.play_video));
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,7 +331,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         // Need to have this ugly code to account for
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
-        if (NEXUS7.equals(android.os.Build.MODEL) && Build.VERSION.SDK_INT == 18) {
+        if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
             Uri mediaUri = (Uri) binaryuri;
             File fileToDelete = new File(mediaUri.getPath());
             int delCount = fileToDelete.delete() ? 1 : 0;
@@ -400,5 +373,4 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         chooseButton.cancelLongPress();
         playButton.cancelLongPress();
     }
-
 }

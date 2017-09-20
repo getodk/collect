@@ -22,4 +22,6 @@ package org.odk.collect.android.listeners;
  */
 public interface DeleteInstancesListener {
     void deleteComplete(int deletedInstances);
+
+    void progressUpdate(int progress, int total);
 }

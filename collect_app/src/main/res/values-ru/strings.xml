@@ -420,12 +420,6 @@
   <string name="instance_scan_count">Добавлено %1$d форм.</string>
   <string name="instance_sync">Импортировать сохранённые формы, как завершённые.</string>
   <string name="instance_sync_summary">Импортировать сохранённые формы из папки экземпляров</string>
-  <string name="sort_by_name_asc">По имени, А-Я</string>
-  <string name="sort_by_name_desc">По имени, Я-А</string>
-  <string name="sort_by_date_asc">По дате, сначала новые</string>
-  <string name="sort_by_date_desc">По дате, сначала старые</string>
-  <string name="sort_by_status_asc">По статусу, сначала завёршенные.</string>
-  <string name="sort_by_status_desc">По статуса, сначала незавершённые.</string>
   <string name="sort_the_list">Сортировать список</string>
   <string name="request_permissions_google_account">ODK Collect требуется доступ к Вашему аккаунту Google, чтобы получать пустые формы и отправлять заполненные формы.</string>
   <string name="filter_the_list">Фильтровать список</string>

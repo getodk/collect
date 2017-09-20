@@ -29,8 +29,10 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
@@ -379,6 +381,20 @@ public abstract class QuestionWidget extends RelativeLayout implements AudioPlay
             player.stop();
             player.reset();
         }
+    }
+
+    protected Button getSimpleButton(String text) {
+        Button button = new Button(getContext());
+        button.setId(QuestionWidget.newUniqueId());
+        button.setText(text);
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        button.setPadding(20, 20, 20, 20);
+
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(7, 5, 7, 5);
+
+        button.setLayoutParams(params);
+        return button;
     }
 
     /**

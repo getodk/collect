@@ -470,6 +470,7 @@
     <string name="qrcode_with_server_password">This QR code includes your server password. \n(Tap to remove the passwords)</string>
     <string name="import_export_settings">Import/Export Settings</string>
     <string name="qrcode_scanner_prompt">Place the QR code inside the rectangle</string>
+    <string name="barcode_scanner_prompt">Place the barcode inside the rectangle</string>
     <string name="server_password">Server Password</string>
     <string name="include_password_dialog">Passwords Included in Code</string>
     <string name="generate">Generate</string>
@@ -508,4 +509,11 @@
     <string name="invalid_email_address">Invalid email address!</string>
     <string name="sort_by">Sort by</string>
     <string name="server">Server</string>
+    <string name="select_value">Select value</string>
+    <string name="edit_value">Edit value</string>
+    <string name="no_value_selected">No value selected</string>
+    <string name="form_delete_message">Deleting selected forms</string>
+    <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
+    <string name="search">Search</string>
+    <string name="null_intent_value">The external application did not provide expected information.</string>
 </resources>
