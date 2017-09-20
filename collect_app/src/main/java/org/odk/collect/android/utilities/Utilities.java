@@ -407,7 +407,7 @@ public class Utilities {
         }
 
         if(filter.toString().trim().length() > 0 ) {
-            selectClause += " and " + InstanceColumns.DISPLAY_NAME + " LIKE ?";
+            selectClause += " and " + InstanceColumns.T_TITLE + " LIKE ?";
             selectArgsList.add("%" + filter + "%");
         }
         String [] selectArgs = new String[selectArgsList.size()];
@@ -725,16 +725,16 @@ public class Utilities {
 
     private static String getTaskSortOrderExpr(String sortOrder) {
 
-        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";;
+        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " COLLATE NOCASE ASC";;
 
         if(sortOrder.equals("BY_NAME_ASC")) {
-            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceColumns.T_SCHED_START + " ASC";
+            sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE ASC, " + InstanceColumns.T_SCHED_START + " ASC";
         } else if(sortOrder.equals("BY_NAME_DESC")) {
-            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + InstanceColumns.T_SCHED_START + " DESC";
+            sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE DESC, " + InstanceColumns.T_SCHED_START + " DESC";
         } else if(sortOrder.equals("BY_DATE_ASC")) {
-            sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " ASC";
+            sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " ASC";
         } else if(sortOrder.equals("BY_DATE_DESC")) {
-            sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.DISPLAY_NAME+ " DESC";
+            sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.T_TITLE + " DESC";
         }
         return sortOrderExpr;
     }
