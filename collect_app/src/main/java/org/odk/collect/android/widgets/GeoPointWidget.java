@@ -59,14 +59,13 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     public static final String DRAGGABLE_ONLY = "draggable";
 
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
-
+    private static final String GOOGLE_MAP_KEY = "google_maps";
+    private final boolean readOnly;
+    private final boolean useMapsV2;
     private Button getLocationButton;
     private Button viewButton;
     private String mapSDK;
-    private static final String GOOGLE_MAP_KEY = "google_maps";
     private TextView answerDisplay;
-    private final boolean readOnly;
-    private final boolean useMapsV2;
     private boolean useMaps;
     private double accuracyThreshold;
     private boolean draggable = true;
@@ -239,7 +238,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 gp[3] = Double.valueOf(sa[3]);
 
                 return new GeoPointData(gp);
-              
+
             } catch (Exception numberFormatException) {
                 return null;
             }
@@ -296,7 +295,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         String s = (String) answer;
-      
+
         if (s != null && !s.isEmpty()) {
             stringAnswer = s;
             String[] sa = s.split(" ");

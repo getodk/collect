@@ -32,31 +32,31 @@ import org.odk.collect.android.application.Collect;
 
 /**
  * <p>Use the ODK Sensors framework to print data to a connected printer.</p>
- *
+ * <p>
  * <p>The default button text is "Print Label"
- *
+ * <p>
  * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values. The
  * special itext form values are 'buttonText' and 'noPrinterErrorString',
  * respectively.</p>
- *
+ * <p>
  * <p>To use via XLSForm, specify a 'note' type with a 'calculation' that defines
  * the data to be printed and with an 'appearance' as described below.
- *
+ * <p>
  * <p>Within the XForms XML, to use this widget, define an appearance on the
  * &lt;input/&gt; tag that begins "printer:" and then contains the intent
  * action to launch. That intent starts the printer app. The data to print
  * is sent via a broadcast intent to intentname.data The printer then pops
  * a UI to initiate the actual printing (or change the destination printer).
  * </p>
- *
+ * <p>
  * <p>Implementation-wise, this widget is an ExStringWidget that is read-only.</p>
- *
+ * <p>
  * <p>The ODK Sensors Zebra printer uses this appearance (intent):</p>
  * <pre>
  * "printer:org.opendatakit.sensors.ZebraPrinter"
  * </pre>
- *
+ * <p>
  * <p>The data that is printed should be defined in the calculate attribute
  * of the bind. The structure of that string is a &lt;br&gt; separated list
  * of values consisting of:</p>
@@ -64,23 +64,23 @@ import org.odk.collect.android.application.Collect;
  * <li>string qrcode to emit (optional)</li>
  * <li>text line 1 (optional)</li>
  * <li>additional text line (repeat as needed)</li></ul>
- *
+ * <p>
  * <p>E.g., if you wanted to emit a barcode of 123, a qrcode of "mycode" and
  * two text lines of "line 1" and "line 2", you would define the calculate
  * as:</p>
- *
+ * <p>
  * <pre>
  *  &lt;bind nodeset="/printerForm/printme" type="string" readonly="true()"
  *     calculate="concat('123','&lt;br&gt;','mycode','&lt;br&gt;','line 1','&lt;br&gt;','line 2')"
  * /&gt;
  * </pre>
- *
+ * <p>
  * <p>Depending upon what you supply, the printer may print just a
  * barcode, just a qrcode, just text, or some combination of all 3.</p>
- *
+ * <p>
  * <p>Despite using &lt;br&gt; as a separator, the supplied Zebra
  * printer does not recognize html.</p>
- *
+ * <p>
  * <pre>
  * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/printerForm/printme" &gt;
  * </pre>

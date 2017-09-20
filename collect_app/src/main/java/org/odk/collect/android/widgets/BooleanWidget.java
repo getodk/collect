@@ -66,9 +66,9 @@ public class BooleanWidget extends QuestionWidget {
     }
 
     private void readSavedAnswer() {
-        if (prompt.getAnswerValue() != null
-                && prompt.getAnswerValue().getValue().equals(Boolean.TRUE)) {
-            booleanButton.setChecked(true);
+        Boolean value = (Boolean) prompt.getAnswerValue().getValue();
+        if (value != null) {
+            booleanButton.setChecked(value);
         }
     }
 
@@ -79,5 +79,13 @@ public class BooleanWidget extends QuestionWidget {
         booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         booleanButton.setEnabled(!prompt.isReadOnly());
         addAnswerView(booleanButton);
+    }
+
+    boolean isChecked() {
+        return booleanButton.isChecked();
+    }
+
+    void isChecked(boolean isChecked) {
+        booleanButton.setChecked(isChecked);
     }
 }

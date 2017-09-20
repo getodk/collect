@@ -6,29 +6,21 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import java.io.File;
 
 import static org.mockito.Mockito.when;
 
-
-@Config(constants = BuildConfig.class)
-@RunWith(RobolectricTestRunner.class)
+/**
+ * @author James Knight
+ */
 public class AlignedImageWidgetTest extends FileWidgetTest<AlignedImageWidget> {
 
     @Mock
     File file;
-
-    public AlignedImageWidgetTest() {
-        super(AlignedImageWidget.class);
-    }
 
     @NonNull
     @Override
@@ -55,6 +47,5 @@ public class AlignedImageWidgetTest extends FileWidgetTest<AlignedImageWidget> {
         super.setUp();
 
         when(formEntryPrompt.getAppearanceHint()).thenReturn("0");
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
     }
 }

@@ -14,9 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -36,18 +38,25 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
+@SuppressLint("ViewConstructor")
 public class SelectOneAutoAdvanceWidget extends SelectOneWidget implements OnCheckedChangeListener, View.OnClickListener {
+
+    @Nullable
     private AdvanceToNextListener listener;
 
     public SelectOneAutoAdvanceWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        listener = (AdvanceToNextListener) context;
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
+        }
     }
 
     @Override
     public void onClick(View v) {
-        listener.advance();
+        if (listener != null) {
+            listener.advance();
+        }
     }
 
     @Override
@@ -57,6 +66,7 @@ public class SelectOneAutoAdvanceWidget extends SelectOneWidget implements OnChe
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
+                @SuppressLint("InflateParams")
                 RelativeLayout thisParentLayout = (RelativeLayout) inflater.inflate(R.layout.quick_select_layout, null);
 
                 RadioButton radioButton = createRadioButton(i);

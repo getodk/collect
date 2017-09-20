@@ -16,10 +16,6 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
 
     private String barcodeData;
 
-    public BearingWidgetTest() {
-        super(BearingWidget.class);
-    }
-
     @NonNull
     @Override
     public BearingWidget createWidget() {

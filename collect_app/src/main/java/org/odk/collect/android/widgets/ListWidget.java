@@ -14,10 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,11 +63,8 @@ import timber.log.Timber;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-
-    // Holds the entire question and answers. It is a horizontally aligned linear layout
-    // needed because it is created in the super() constructor via addQuestionText() call.
-    LinearLayout questionLayout;
+@SuppressLint("ViewConstructor")
+public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnCheckedChangeListener {
 
     List<SelectChoice> items; // may take a while to compute
 
@@ -84,7 +82,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         } else {
             items = prompt.getSelectChoices();
         }
-        buttons = new ArrayList<RadioButton>();
+        buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -99,7 +97,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 RadioButton r = new RadioButton(getContext());
 
                 r.setId(QuestionWidget.newUniqueId());
-                r.setTag(Integer.valueOf(i));
+                r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
@@ -129,7 +127,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;
@@ -157,7 +155,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 errorMsg = getContext().getString(R.string.file_invalid, imageFile);
 
                             }
-                        } else if (errorMsg == null) {
+                        } else {
                             // An error hasn't been logged. We should have an image, but the file
                             // doesn't
                             // exist.
@@ -173,11 +171,10 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                             missingImage.setPadding(2, 2, 2, 2);
                             missingImage.setId(labelId);
                         }
+
                     } catch (InvalidReferenceException e) {
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
-                } else {
-                    // There's no imageURI listed, so just ignore it.
                 }
 
                 // build text label. Don't assign the text to the built in label to he
@@ -330,5 +327,18 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.LEFT_OF, center.getId());
         addView(v, params);
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return buttons.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        RadioButton button = buttons.get(choiceIndex);
+        button.setChecked(true);
+
+        onCheckedChanged(button, true);
     }
 }

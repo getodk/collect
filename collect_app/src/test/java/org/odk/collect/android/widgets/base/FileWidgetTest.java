@@ -6,22 +6,19 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
+import org.mockito.Mock;
 import org.odk.collect.android.widgets.FileWidget;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
+
+import java.io.File;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
-@Config(constants = BuildConfig.class)
-@RunWith(RobolectricTestRunner.class)
 public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetTest<W, StringData> {
 
-    public FileWidgetTest(Class<W> clazz) {
-        super(clazz);
-    }
+    @Mock
+    public File instancePath;
 
     @NonNull
     @Override
@@ -29,8 +26,18 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
         return new StringData(RandomString.make());
     }
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+
+        when(formController.getInstancePath()).thenReturn(instancePath);
+        when(instancePath.getParent()).thenReturn("");
+    }
+
     @Test
     public void settingANewAnswerShouldCallDeleteMediaToRemoveTheOldFile() {
+        prepareForSetAnswer();
+
         super.settingANewAnswerShouldRemoveTheOldAnswer();
 
         W widget = getWidget();
@@ -43,5 +50,24 @@ public abstract class FileWidgetTest<W extends FileWidget> extends BinaryWidgetT
 
         W widget = getWidget();
         verify(widget).deleteFile();
+    }
+
+    @Override
+    public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
+        prepareForSetAnswer();
+        super.getAnswerShouldReturnCorrectAnswerAfterBeingSet();
+    }
+
+    @Override
+    public void settingANewAnswerShouldRemoveTheOldAnswer() {
+        prepareForSetAnswer();
+        super.settingANewAnswerShouldRemoveTheOldAnswer();
+    }
+
+    /**
+     * Override this to provide additional set-up prior to testing any set answer methods.
+     */
+    protected void prepareForSetAnswer() {
+        // Default implementation does nothing.
     }
 }

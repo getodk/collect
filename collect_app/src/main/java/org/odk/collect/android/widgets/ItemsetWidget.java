@@ -14,10 +14,12 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,13 +37,15 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.XPathNodeset;
-import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.XPathParseTool;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,7 +59,9 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class ItemsetWidget extends QuestionWidget implements
+        MultiChoiceWidget,
         CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static final String QUOTATION_MARK = "\"";
@@ -65,16 +71,31 @@ public class ItemsetWidget extends QuestionWidget implements
 
     private ArrayList<RadioButton> buttons;
     private String answer = null;
+
     // Hashmap linking label:value
     private HashMap<String, String> answers;
     private AdvanceToNextListener autoAdvanceToNextListener;
 
     protected ItemsetWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride,
                             boolean autoAdvanceToNext) {
+
+        this(context, prompt, readOnlyOverride, autoAdvanceToNext,
+                new XPathParseTool(), new ItemsetDbAdapter(), new FileUtil());
+    }
+
+    @SuppressLint("StringFormatMatches")
+    protected ItemsetWidget(Context context,
+                            FormEntryPrompt prompt,
+                            boolean readOnlyOverride,
+                            boolean autoAdvanceToNext,
+                            @NonNull XPathParseTool parseTool,
+                            @NonNull ItemsetDbAdapter adapter,
+                            @NonNull FileUtil fileUtil) {
+
         super(context, prompt);
 
         readOnly = prompt.isReadOnly() || readOnlyOverride;
-        answers = new HashMap<String, String>();
+        answers = new HashMap<>();
 
         buttons = new ArrayList<>();
         this.autoAdvanceToNext = autoAdvanceToNext;
@@ -112,11 +133,13 @@ public class ItemsetWidget extends QuestionWidget implements
         // more
         // must include the spaces in indexOf so we don't match words like
         // "land"
-        int andIndex = -1;
+        int andIndex;
         int orIndex = -1;
-        ArrayList<String> arguments = new ArrayList<String>();
+        ArrayList<String> arguments = new ArrayList<>();
+
         while ((andIndex = queryString.indexOf(" and ")) != -1
                 || (orIndex = queryString.indexOf(" or ")) != -1) {
+
             if (andIndex != -1) {
                 String subString = queryString.substring(0, andIndex);
                 String[] pair = subString.split("=");
@@ -127,15 +150,15 @@ public class ItemsetWidget extends QuestionWidget implements
                             .append(QUOTATION_MARK)
                             .append("=? and ");
                     arguments.add(pair[1].trim());
-                } else {
-                    // parse error
                 }
+
                 // move string forward to after " and "
                 queryString = queryString.substring(andIndex + 5, queryString.length());
-                andIndex = -1;
-            } else if (orIndex != -1) {
+
+            } else {
                 String subString = queryString.substring(0, orIndex);
                 String[] pair = subString.split("=");
+
                 if (pair.length == 2) {
                     selection
                             .append(QUOTATION_MARK)
@@ -143,8 +166,6 @@ public class ItemsetWidget extends QuestionWidget implements
                             .append(QUOTATION_MARK)
                             .append("=? or ");
                     arguments.add(pair[1].trim());
-                } else {
-                    // parse error
                 }
 
                 // move string forward to after " or "
@@ -164,12 +185,6 @@ public class ItemsetWidget extends QuestionWidget implements
                     .append("=?");
             arguments.add(pair[1].trim());
         }
-        if (pair.length == 1) {
-            // this is probably okay, because then you just list all items in
-            // the list
-        } else {
-            // parse error
-        }
 
         // +1 is for the list_name
         String[] selectionArgs = new String[arguments.size() + 1];
@@ -182,12 +197,19 @@ public class ItemsetWidget extends QuestionWidget implements
         boolean nullArgs = false; // can't have any null arguments
         selectionArgs[0] = listName; // first argument is always listname
 
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.w("Can't instantiate ItemsetWidget with a null FormController.");
+            return;
+        }
+
         // loop through the arguments, evaluate any expressions
         // and build the query string for the DB
         for (int i = 0; i < arguments.size(); i++) {
-            XPathExpression xpr = null;
+            XPathExpression xpr;
             try {
-                xpr = XPathParseTool.parseXPath(arguments.get(i));
+                xpr = parseTool.parseXPath(arguments.get(i));
+
             } catch (XPathSyntaxException e) {
                 Timber.e(e);
                 TextView error = new TextView(context);
@@ -197,7 +219,7 @@ public class ItemsetWidget extends QuestionWidget implements
             }
 
             if (xpr != null) {
-                FormDef form = Collect.getInstance().getFormController().getFormDef();
+                FormDef form = formController.getFormDef();
                 TreeElement treeElement = form.getMainInstance().resolveReference(
                         prompt.getIndex().getReference());
                 EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
@@ -217,34 +239,32 @@ public class ItemsetWidget extends QuestionWidget implements
             }
         }
 
-        File itemsetFile = new File(
-                Collect.getInstance().getFormController().getMediaFolder().getAbsolutePath()
-                        + "/itemsets.csv");
         if (nullArgs) {
-            // we can't try to query with null values else it blows up
-            // so just leave the screen blank
-            // TODO: put an error?
-        } else if (itemsetFile.exists()) {
-            ItemsetDbAdapter ida = new ItemsetDbAdapter();
-            ida.open();
+            return;
+        }
+
+        File itemsetFile = fileUtil.getItemsetFile(formController.getMediaFolder().getAbsolutePath());
+        if (itemsetFile.exists()) {
+            adapter.open();
 
             // name of the itemset table for this form
             String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
             try {
-                Cursor c = ida.query(pathHash, selection.toString(), selectionArgs);
+                Cursor c = adapter.query(pathHash, selection.toString(), selectionArgs);
                 if (c != null) {
                     c.move(-1);
                     int index = 0;
                     while (c.moveToNext()) {
-                        String label = "";
-                        String val = "";
+                        String label;
+                        String val;
+
                         // try to get the value associated with the label:lang
                         // string if that doen't exist, then just use label
                         String lang = "";
-                        if (Collect.getInstance().getFormController().getLanguages() != null
-                                && Collect.getInstance().getFormController().getLanguages().length
-                                > 0) {
-                            lang = Collect.getInstance().getFormController().getLanguage();
+                        if (formController.getLanguages() != null
+                                && formController.getLanguages().length > 0) {
+
+                            lang = formController.getLanguage();
                         }
 
                         // apparently you only need the double quotes in the
@@ -294,7 +314,7 @@ public class ItemsetWidget extends QuestionWidget implements
                             ImageView rightArrow = new ImageView(getContext());
                             rightArrow.setImageBitmap(
                                     BitmapFactory.decodeResource(getContext().getResources(),
-                                    R.drawable.expander_ic_right));
+                                            R.drawable.expander_ic_right));
 
                             RelativeLayout.LayoutParams arrowParams =
                                     new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -326,7 +346,7 @@ public class ItemsetWidget extends QuestionWidget implements
             } catch (SQLiteException e) {
                 Timber.i(e);
             } finally {
-                ida.close();
+                adapter.close();
             }
 
             addAnswerView(allOptionsLayout);
@@ -407,5 +427,18 @@ public class ItemsetWidget extends QuestionWidget implements
         if (autoAdvanceToNext) {
             autoAdvanceToNextListener.advance();
         }
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return answers.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        RadioButton button = buttons.get(choiceIndex);
+        button.setChecked(isSelected);
+
+        onCheckedChanged(button, isSelected);
     }
 }

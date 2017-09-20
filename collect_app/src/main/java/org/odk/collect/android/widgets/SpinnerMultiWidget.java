@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,7 +48,8 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SpinnerMultiWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
     List<SelectChoice> items;
 
@@ -132,7 +134,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
         }
 
         // Fill in previous answers
-        List<Selection> ve = new ArrayList<Selection>();
+        List<Selection> ve = new ArrayList<>();
         if (prompt.getAnswerValue() != null) {
             ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
@@ -166,7 +168,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        List<Selection> vc = new ArrayList<Selection>();
+        List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selections[i]) {
                 SelectChoice sc = items.get(i);
@@ -209,4 +211,15 @@ public class SpinnerMultiWidget extends QuestionWidget {
         super.cancelLongPress();
         button.cancelLongPress();
     }
+
+    @Override
+    public int getChoiceCount() {
+        return selections.length;
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        selections[choiceIndex] = isSelected;
+    }
+
 }
