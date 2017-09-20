@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
 import android.view.View;
@@ -94,15 +95,15 @@ public class ItemsetWidget extends QuestionWidget implements
         String nodesetStr = prompt.getQuestion().getAdditionalAttribute(null, "query");
 
         // isolate the string between between the [ ] characters
-        String queryString = nodesetStr.substring(nodesetStr.indexOf("[") + 1,
-                nodesetStr.lastIndexOf("]"));
+        String queryString = nodesetStr.substring(nodesetStr.indexOf('[') + 1,
+                nodesetStr.lastIndexOf(']'));
 
         StringBuilder selection = new StringBuilder();
         // add the list name as the first argument, which will always be there
         selection.append("list_name=?");
 
         // check to see if there are any arguments
-        if (queryString.indexOf("=") != -1) {
+        if (queryString.indexOf('=') != -1) {
             selection.append(" and ");
         }
 
@@ -174,8 +175,8 @@ public class ItemsetWidget extends QuestionWidget implements
         String[] selectionArgs = new String[arguments.size() + 1];
 
         // parse out the list name, between the ''
-        String listName = nodesetStr.substring(nodesetStr.indexOf("'") + 1,
-                nodesetStr.lastIndexOf("'"));
+        String listName = nodesetStr.substring(nodesetStr.indexOf('\'') + 1,
+                nodesetStr.lastIndexOf('\''));
 
 
         boolean nullArgs = false; // can't have any null arguments
@@ -322,6 +323,8 @@ public class ItemsetWidget extends QuestionWidget implements
                     allOptionsLayout.setOrientation(LinearLayout.VERTICAL);
                     c.close();
                 }
+            } catch (SQLiteException e) {
+                Timber.i(e);
             } finally {
                 ida.close();
             }

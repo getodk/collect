@@ -4,6 +4,8 @@ import junit.framework.Assert;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 import static org.odk.collect.android.application.Collect.CACHE_PATH;
 import static org.odk.collect.android.application.Collect.FORMS_PATH;
 import static org.odk.collect.android.application.Collect.INSTANCES_PATH;
@@ -22,7 +24,7 @@ class ExportedActivitiesUtils {
             File dir = new File(dirName);
             if (dir.exists()) {
                 if (dir.delete()) {
-                    System.out.println("Directory was not deleted");
+                    Timber.i("Directory was not deleted");
                 }
             }
         }

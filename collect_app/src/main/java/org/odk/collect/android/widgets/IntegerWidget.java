@@ -41,7 +41,7 @@ public class IntegerWidget extends StringWidget {
             Object dataValue = dataHolder.getValue();
             if (dataValue != null) {
                 if (dataValue instanceof Double) {
-                    d = Integer.valueOf(((Double) dataValue).intValue());
+                    d = ((Double) dataValue).intValue();
                 } else {
                     d = (Integer) dataValue;
                 }
@@ -77,7 +77,7 @@ public class IntegerWidget extends StringWidget {
         Integer i = getIntegerAnswerValue();
 
         if (i != null) {
-            answer.setText(String.format(Locale.ENGLISH, "%d", i));
+            answer.setText(String.format(Locale.US, "%d", i));
             Selection.setSelection(answer.getText(), answer.getText().toString().length());
         }
 

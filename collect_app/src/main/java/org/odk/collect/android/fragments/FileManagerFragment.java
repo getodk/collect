@@ -16,14 +16,10 @@ package org.odk.collect.android.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
@@ -43,8 +39,6 @@ public abstract class FileManagerFragment extends AppListFragment {
         toggleButton = (Button) rootView.findViewById(R.id.toggle_button);
 
         setHasOptionsMenu(true);
-        searchBoxLayout = (LinearLayout) rootView.findViewById(R.id.searchBoxLayout);
-        setupSearchBox(rootView);
         return rootView;
     }
 
@@ -83,24 +77,6 @@ public abstract class FileManagerFragment extends AppListFragment {
 
         toggleButtonLabel(toggleButton, getListView());
         deleteButton.setEnabled(areCheckedItems());
-    }
-
-    private void setupSearchBox(View view) {
-        inputSearch = (EditText) view.findViewById(R.id.inputSearch);
-        inputSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter();
-            }
-        });
     }
 
     @Override

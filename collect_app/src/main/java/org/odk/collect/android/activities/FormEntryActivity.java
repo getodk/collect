@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -23,15 +22,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -51,14 +55,17 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -69,18 +76,21 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.IconMenuListAdapter;
+import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -93,11 +103,15 @@ import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
+import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
@@ -110,6 +124,11 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+
+
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
@@ -120,7 +139,7 @@ import timber.log.Timber;
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener {
+        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -166,6 +185,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
+    private static final String KEY_SAVE_NAME = "saveName";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -188,14 +208,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
-    private boolean doSwipe = true;
-
-    private TimerLogger timerLogger;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
 
     private String formPath;
+    private String saveName;
+
     private GestureDetector gestureDetector;
 
     private Animation inAnimation;
@@ -211,7 +230,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean shownAlertDialogIsGroupRepeat;
 
     // used to limit forward/backward swipes to one per question
-    private boolean beenSwiped = false;
+    private boolean beenSwiped;
 
     private final Object saveDialogLock = new Object();
     private int viewCount = 0;
@@ -230,7 +249,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private SharedPreferences adminPreferences;
-    private boolean showNavigationButtons = false;
+    private boolean showNavigationButtons;
 
     private FormsDao formsDao;
 
@@ -291,7 +310,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String startingXPath = null;
         String waitingXPath = null;
         String instancePath = null;
-        Boolean newForm = true;
+        boolean newForm = true;
         autoSaved = false;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
@@ -315,6 +334,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (savedInstanceState.containsKey(KEY_ERROR)) {
                 errorMessage = savedInstanceState.getString(KEY_ERROR);
             }
+            saveName = savedInstanceState.getString(KEY_SAVE_NAME);
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
@@ -360,8 +380,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
+                String uriMimeType = null;
 
-                if (uri != null && getContentResolver().getType(uri).equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uri != null) {
+                    uriMimeType = getContentResolver().getType(uri);
+                }
+
+                if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
@@ -370,7 +395,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         try {
                             instanceCursor = getContentResolver().query(uri,
                                     null, null, null, null);
-                            if (instanceCursor.getCount() != 1) {
+                            if (instanceCursor == null || instanceCursor.getCount() != 1) {
                                 this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                                 return;
                             } else {
@@ -453,13 +478,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             }
                         }
                     }
-                } else if (uri != null && getContentResolver().getType(uri).equals(
-                        FormsColumns.CONTENT_ITEM_TYPE)) {
+                } else if (uriMimeType != null
+                        && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
                     try {
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
-                        if (c.getCount() != 1) {
+                        if (c == null || c.getCount() != 1) {
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
@@ -494,8 +519,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             // see if any of these savepoints are for a
                             // filled-in form that has never been
                             // explicitly saved by the user...
-                            for (int i = 0; i < files.length; ++i) {
-                                File candidate = files[i];
+                            for (File candidate : files) {
                                 String instanceDirName = candidate.getName()
                                         .substring(
                                                 0,
@@ -577,12 +601,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
+        outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    final Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         FormController formController = Collect.getInstance()
                 .getFormController();
@@ -604,6 +628,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (requestCode != HIERARCHY_ACTIVITY) {
                 ((ODKView) currentView).cancelWaitingForBinaryData();
             }
+            return;
+        }
+
+        // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
+        if (intent == null && requestCode != DRAW_IMAGE && requestCode != ANNOTATE_IMAGE
+                && requestCode != SIGNATURE_CAPTURE && requestCode != IMAGE_CAPTURE
+                && requestCode != HIERARCHY_ACTIVITY) {
+            Timber.w("The intent has a null value for requestCode: " + requestCode);
+            ToastUtils.showLongToast(getString(R.string.null_intent_value));
             return;
         }
 
@@ -663,6 +696,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
+                scaleDownImageIfNeeded(Collect.TMPFILE_PATH);
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
@@ -784,6 +818,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (chosenImage != null) {
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
+                scaleDownImageIfNeeded(newImage.getPath());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -812,6 +847,66 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     showCustomToast(getString(R.string.gdrive_connection_exception), Toast.LENGTH_LONG);
                 }
             });
+        }
+    }
+
+    private void scaleDownImageIfNeeded(String path) {
+        QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
+        if (questionWidget != null) {
+            Integer maxPixels = getMaxPixelsForImageIfDefined(questionWidget);
+            if (maxPixels != null) {
+                scaleDownImage(path, maxPixels);
+            }
+        }
+    }
+
+    private QuestionWidget getWidgetWaitingForBinaryData() {
+        QuestionWidget questionWidget = null;
+        for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
+            if (qw instanceof BinaryWidget && ((BinaryWidget) qw).isWaitingForBinaryData()) {
+                questionWidget = qw;
+            }
+        }
+
+        return questionWidget;
+    }
+
+    private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
+        Integer maxPixels = null;
+        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
+            if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
+                try {
+                    maxPixels = Integer.parseInt(attrs.getAttributeValue());
+                } catch (NumberFormatException e) {
+                    Timber.i(e);
+                }
+            }
+        }
+        return maxPixels;
+    }
+
+    /*
+    This method is used to reduce an original picture size.
+    maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
+     */
+    private void scaleDownImage(String path, int maxPixels) {
+        Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
+
+        if (originalImage != null) {
+            double originalWidth = originalImage.getWidth();
+            double originalHeight = originalImage.getHeight();
+
+            if (originalWidth > originalHeight && originalWidth > maxPixels) {
+                int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
+
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, maxPixels, newHeight, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            } else if (originalHeight > maxPixels) {
+                int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
+
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, newWidth, maxPixels, false);
+                FileUtils.saveBitmapToFile(scaledImage, path);
+            }
         }
     }
 
@@ -844,10 +939,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // field-lists,
         // repeat events, and indexes in field-lists that is not the containing
         // group.
-
-        if (timerLogger == null) {
-            setTimerLogger(formController);
-        }
 
         View current = createView(event, false);
         showView(current, AnimationType.FADE);
@@ -933,7 +1024,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -1088,7 +1179,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         setTitle(formController.getFormTitle());
 
-        timerLogger.logTimerEvent(TimerLogger.EventTypes.FEC,
+        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FEC,
                 event, formController.getFormIndex().getReference(), advancingPage, true);
 
         switch (event) {
@@ -1112,8 +1203,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView
-                        .findViewById(R.id.save_name);
+                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1129,18 +1219,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 };
                 saveAs.setFilters(new InputFilter[]{returnFilter});
 
-                String saveName = formController.getSubmissionMetadata().instanceName;
-                if (saveName == null) {
+                if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
-                    if (getContentResolver().getType(getIntent().getData())
-                            == InstanceColumns.CONTENT_ITEM_TYPE) {
+                    String uriMimeType = getContentResolver().getType(getIntent().getData());
+                    if (saveName == null && uriMimeType != null
+                            && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                         Uri instanceUri = getIntent().getData();
                         Cursor instance = null;
                         try {
                             instance = getContentResolver().query(instanceUri,
                                     null, null, null, null);
-                            if (instance.getCount() == 1) {
+                            if (instance != null && instance.getCount() == 1) {
                                 instance.moveToFirst();
                                 saveName = instance
                                         .getString(instance
@@ -1157,18 +1247,31 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView
-                            .findViewById(R.id.save_form_as);
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.VISIBLE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
                     saveAs.setVisibility(View.VISIBLE);
+                    saveAs.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            saveName = String.valueOf(s);
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+                    });
                 } else {
                     // if instanceName is defined in form, this is the name -- no
                     // revisions
                     // display only the name, not the prompt, and disable edits
-                    TextView sa = (TextView) endView
-                            .findViewById(R.id.save_form_as);
+                    saveName = formController.getSubmissionMetadata().instanceName;
+                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
@@ -1222,8 +1325,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkv = new ODKView(this, formController.getQuestionPrompts(),
-                            groups, advancingPage);
+                    odkv = new ODKView(this, prompts, groups, advancingPage);
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -1369,7 +1471,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return;
             }
 
-            timerLogger.exitView();    // Close timer events waiting for an end time
+            formController.getTimerLogger().exitView();    // Close timer events waiting for an end time
 
             switch (event) {
                 case FormEntryController.EVENT_QUESTION:
@@ -1439,7 +1541,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         nonblockingCreateSavePointData();
                     }
                 }
-                timerLogger.exitView();    // Close timer events
+                formController.getTimerLogger().exitView();    // Close timer events
                 View next = createView(event, false);
                 showView(next, AnimationType.LEFT);
             } else {
@@ -1652,7 +1754,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         DialogInterface.OnClickListener repeatListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -1660,7 +1761,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 FormController formController = Collect.getInstance()
                         .getFormController();
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes, repeat
+                    case BUTTON_POSITIVE: // yes, repeat
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createRepeatDialog",
@@ -1685,7 +1786,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             refreshCurrentView();
                         }
                         break;
-                    case DialogInterface.BUTTON_NEGATIVE: // no, no repeat
+                    case BUTTON_NEGATIVE: // no, no repeat
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createRepeatDialog",
@@ -1731,18 +1832,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             alertDialog.setTitle(getString(R.string.leaving_repeat_ask));
             alertDialog.setMessage(getString(R.string.add_another_repeat,
                     formController.getLastGroupText()));
-            alertDialog.setButton(getString(R.string.add_another),
+            alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.add_another),
                     repeatListener);
-            alertDialog.setButton2(getString(R.string.leave_repeat_yes),
+            alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.leave_repeat_yes),
                     repeatListener);
 
         } else {
             alertDialog.setTitle(getString(R.string.entering_repeat_ask));
             alertDialog.setMessage(getString(R.string.add_repeat,
                     formController.getLastGroupText()));
-            alertDialog.setButton(getString(R.string.entering_repeat),
+            alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.entering_repeat),
                     repeatListener);
-            alertDialog.setButton2(getString(R.string.add_repeat_no),
+            alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.add_repeat_no),
                     repeatListener);
         }
         alertDialog.setCancelable(false);
@@ -1768,14 +1869,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             errorMessage = errorMsg;
         }
 
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setTitle(getString(R.string.error_occured));
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
+                    case BUTTON_POSITIVE:
                         Collect.getInstance().getActivityLogger()
                                 .logInstanceAction(this, "createErrorDialog", "OK");
                         if (shouldExit) {
@@ -1787,7 +1887,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), errorListener);
+        alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         beenSwiped = false;
         alertDialog.show();
     }
@@ -1804,7 +1904,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getFormController();
 
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         String name = formController.getLastRepeatedGroupName();
         int repeatcount = formController.getLastRepeatedGroupRepeatCount();
         if (repeatcount != -1) {
@@ -1819,17 +1918,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 FormController formController = Collect.getInstance()
                         .getFormController();
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes
+                    case BUTTON_POSITIVE: // yes
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
                                         "createDeleteRepeatConfirmDialog", "OK");
-                        timerLogger.logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.DELETE_REPEAT, 0, null, false, true);
                         formController.deleteRepeat();
                         showNextView();
                         break;
 
-                    case DialogInterface.BUTTON_NEGATIVE: // no
+                    case BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this,
@@ -1841,8 +1940,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.discard_group), quitListener);
-        alertDialog.setButton2(getString(R.string.delete_repeat_no),
+        alertDialog.setButton(BUTTON_POSITIVE, getString(R.string.discard_group), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.delete_repeat_no),
                 quitListener);
         alertDialog.show();
     }
@@ -1883,7 +1982,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Create a dialog with options to save and exit, save, or quit without
+     * Create a dialog with options to save and exit or quit without
      * saving
      */
     private void createQuitDialog() {
@@ -1896,92 +1995,66 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         }
 
-        String[] items;
+        List<IconMenuItem> items;
         if (adminPreferences.getBoolean(AdminKeys.KEY_SAVE_MID,
                 true)) {
-            items = new String[]{getString(R.string.keep_changes),
-                    getString(R.string.do_not_save)};
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         } else {
-            items = new String[]{getString(R.string.do_not_save)};
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
         }
 
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createQuitDialog", "show");
+
+        ListView listView = DialogUtils.createActionListView(this);
+
+        final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+                if (item.getTextResId() == R.string.keep_changes) {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createQuitDialog", "saveAndExit");
+                    saveDataToDisk(EXIT, isInstanceComplete(false),
+                            null);
+                } else {
+                    Collect.getInstance().getActivityLogger()
+                            .logInstanceAction(this, "createQuitDialog", "discardAndExit");
+
+                    // close all open databases of external data.
+                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                    if (manager != null) {
+                        manager.close();
+                    }
+
+                    FormController formController = Collect.getInstance().getFormController();
+                    if (formController != null) {
+                        formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
+                    }
+                    removeTempInstance();
+                    finishReturnInstance();
+                }
+                alertDialog.dismiss();
+            }
+        });
         alertDialog = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(
                         getString(R.string.quit_application, title))
-                .setNeutralButton(getString(R.string.do_not_exit),
+                .setPositiveButton(getString(R.string.do_not_exit),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
 
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog", "cancel");
+                                Collect.getInstance().getActivityLogger()
+                                        .logInstanceAction(this, "createQuitDialog", "cancel");
                                 dialog.cancel();
 
                             }
                         })
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-
-                            case 0: // save and exit
-                                // this is slightly complicated because if the
-                                // option is disabled in
-                                // the admin menu, then case 0 actually becomes
-                                // 'discard and exit'
-                                // whereas if it's enabled it's 'save and exit'
-                                if (adminPreferences
-                                        .getBoolean(
-                                                AdminKeys.KEY_SAVE_MID,
-                                                true)) {
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logInstanceAction(this,
-                                                    "createQuitDialog",
-                                                    "saveAndExit");
-                                    saveDataToDisk(EXIT, isInstanceComplete(false),
-                                            null);
-                                } else {
-                                    Collect.getInstance()
-                                            .getActivityLogger()
-                                            .logInstanceAction(this,
-                                                    "createQuitDialog",
-                                                    "discardAndExit");
-                                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-                                    removeTempInstance();
-                                    finishReturnInstance();
-                                }
-                                break;
-
-                            case 1: // discard changes and exit
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog",
-                                                "discardAndExit");
-
-                                // close all open databases of external data.
-                                Collect.getInstance().getExternalDataManager().close();
-
-                                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);
-                                removeTempInstance();
-                                finishReturnInstance();
-                                break;
-
-                            case 2:// do nothing
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDialog", "cancel");
-                                break;
-                        }
-                    }
-                }).create();
+                .setView(listView).create();
         alertDialog.show();
     }
 
@@ -2052,7 +2125,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .logInstanceAction(this, "createClearDialog", "show",
                         qw.getPrompt().getIndex());
         alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
 
         alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
@@ -2072,7 +2144,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // yes
+                    case BUTTON_POSITIVE: // yes
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
@@ -2080,7 +2152,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         break;
-                    case DialogInterface.BUTTON_NEGATIVE: // no
+                    case BUTTON_NEGATIVE: // no
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
@@ -2091,8 +2163,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         };
         alertDialog.setCancelable(false);
         alertDialog
-                .setButton(getString(R.string.discard_answer), quitListener);
-        alertDialog.setButton2(getString(R.string.clear_answer_no),
+                .setButton(BUTTON_POSITIVE, getString(R.string.discard_answer), quitListener);
+        alertDialog.setButton(BUTTON_NEGATIVE, getString(R.string.clear_answer_no),
                 quitListener);
         alertDialog.show();
     }
@@ -2200,7 +2272,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 finish();
                             }
                         };
-                progressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 progressDialog.setTitle(getString(R.string.loading_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.setIndeterminate(true);
@@ -2227,7 +2298,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 cancelSaveToDiskTask();
                             }
                         };
-                progressDialog.setIcon(android.R.drawable.ic_dialog_info);
                 progressDialog.setTitle(getString(R.string.saving_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.setIndeterminate(true);
@@ -2447,7 +2517,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2466,7 +2536,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     @Override
@@ -2474,7 +2544,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == inAnimation) ? "in"
-                : ((animation == outAnimation) ? "out" : "other")));
+                        : ((animation == outAnimation) ? "out" : "other")));
     }
 
     /**
@@ -2576,14 +2646,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 formController.setInstancePath(instanceFile);
             }
 
-            setTimerLogger(formController);
-            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_START, 0, null, false, true);
         } else {
             Intent reqIntent = getIntent();
             boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-            setTimerLogger(formController);
-            timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
+            formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_RESUME, 0, null, false, true);
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
@@ -2628,27 +2696,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         dismissDialog(SAVING_DIALOG);
 
         int saveStatus = saveResult.getSaveResult();
+        FormController formController = Collect.getInstance()
+                .getFormController();
         switch (saveStatus) {
             case SaveToDiskTask.SAVED:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
                 sendSavedBroadcast();
                 break;
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                if (saveResult.getComplete()) {
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
+                if (saveResult.isComplete()) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
-                    timerLogger.logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, true);         // Force writing of audit since we are exiting
                 }
                 sendSavedBroadcast();
                 finishReturnInstance();
                 break;
             case SaveToDiskTask.SAVE_ERROR:
                 String message;
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.SAVE_ERROR, 0, null, false, true);
                 if (saveResult.getSaveErrorMessage() != null) {
                     message = getString(R.string.data_saved_error) + ": "
                             + saveResult.getSaveErrorMessage();
@@ -2658,14 +2728,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 ToastUtils.showLongToast(message);
                 break;
             case SaveToDiskTask.ENCRYPTION_ERROR:
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FINALIZE_ERROR, 0, null, false, true);
                 ToastUtils.showLongToast(String.format(getString(R.string.encryption_error_message),
                         saveResult.getSaveErrorMessage()));
                 finishReturnInstance();
                 break;
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                timerLogger.logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
+                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
                 // get constraint behavior preference value with appropriate default
@@ -2695,17 +2765,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
-    /*
-     * Create the timer logger object
-     */
-    private void setTimerLogger(FormController formController) {
-
-        // Create the timer logger and then log the resume event
-        timerLogger = new TimerLogger(formController.getInstancePath(),
-                PreferenceManager.getDefaultSharedPreferences(this),
-                formController);
-    }
-
     /**
      * Checks the database to determine if the current instance being edited has
      * already been 'marked completed'. A form can be 'unmarked' complete and
@@ -2714,37 +2773,40 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * @return true if form has been marked completed, false otherwise.
      */
     private boolean isInstanceComplete(boolean end) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         // default to false if we're mid form
         boolean complete = false;
 
-        // if we're at the end of the form, then check the preferences
-        if (end) {
-            // First get the value from the preferences
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(this);
-            complete = sharedPreferences.getBoolean(
-                    PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
-        }
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            // if we're at the end of the form, then check the preferences
+            if (end) {
+                // First get the value from the preferences
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+                complete = sharedPreferences.getBoolean(
+                        PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
+            }
 
-        // Then see if we've already marked this form as complete before
-        Cursor c = null;
-        try {
-            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                    .getAbsolutePath());
-            if (c != null && c.getCount() > 0) {
-                c.moveToFirst();
-                String status = c.getString(c
-                        .getColumnIndex(InstanceColumns.STATUS));
-                if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
-                    complete = true;
+            // Then see if we've already marked this form as complete before
+            Cursor c = null;
+            try {
+                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                        .getAbsolutePath());
+                if (c != null && c.getCount() > 0) {
+                    c.moveToFirst();
+                    String status = c.getString(c
+                            .getColumnIndex(InstanceColumns.STATUS));
+                    if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
+                        complete = true;
+                    }
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
                 }
             }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
+        } else {
+            Timber.w("FormController has a null value");
         }
         return complete;
     }
@@ -2804,7 +2866,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 PreferenceKeys.KEY_NAVIGATION,
                 PreferenceKeys.NAVIGATION_SWIPE);
 
-        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE) && doSwipe) {
+        if (navigation.contains(PreferenceKeys.NAVIGATION_SWIPE)) {
             // Looks for user swipes. If the user has swiped, move to the
             // appropriate screen.
 
@@ -2920,6 +2982,17 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    @Override
+    public void onNumberPickerValueSelected(int widgetId, int value) {
+        if (currentView != null) {
+            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+                if (qw instanceof RangeWidget && widgetId == qw.getId()) {
+                    ((RangeWidget) qw).setNumberPickerValue(value);
+                }
+            }
+        }
+    }
+
     /**
      * Used whenever we need to show empty view and be able to recognize it from the code
      */
@@ -2928,9 +3001,5 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         public EmptyView(Context context) {
             super(context);
         }
-    }
-
-    public void allowSwiping(boolean doSwipe) {
-        this.doSwipe = doSwipe;
     }
 }

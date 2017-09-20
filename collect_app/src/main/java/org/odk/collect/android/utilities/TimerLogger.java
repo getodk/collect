@@ -1,20 +1,20 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.tasks.TimerSaveTask;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
 
 /**
  * Handle logging of timer events and pass them to an Async task to append to a file
@@ -148,8 +148,8 @@ public class TimerLogger {
                     textValue = "Unknown Event Type: " + eventType;
                     break;
             }
-            return textValue + "," + node + "," + String.valueOf(start) + ","
-                    + (end != 0 ? String.valueOf(end) : "");
+            return textValue + "," + node + "," + start + ","
+                    + (end != 0 ? end : "");
         }
     }
 
@@ -162,21 +162,16 @@ public class TimerLogger {
     private boolean timerEnabled = false;              // Set true of the timer logger is enabled
 
 
-    public TimerLogger(File instanceFile, SharedPreferences sharedPreferences, FormController formController) {
+    public TimerLogger(File instanceFile, FormController formController) {
 
         /*
-         * The timer logger is enabled if:
-         *  1) The meta section of the form contains a logging entry
+         * The timer logger is enabled if the meta section of the form contains a logging entry
          *      <orx:audit />
-         *  2) And logging has been enabled in the device preferences
          */
-        boolean loggingEnabledInForm = formController.getSubmissionMetadata().audit;
-        boolean loggingEnabledInPref = sharedPreferences.getBoolean(
-                AdminKeys.KEY_TIMER_LOG_ENABLED, true);
-        timerEnabled = loggingEnabledInForm && loggingEnabledInPref;
+        timerEnabled = formController.getSubmissionMetadata().audit;
 
         if (timerEnabled) {
-            filename = "audit.csv";
+            filename = AUDIT_FILE_NAME;
             if (instanceFile != null) {
                 File instanceFolder = instanceFile.getParentFile();
                 timerlogFile = new File(instanceFolder.getPath() + File.separator + filename);
@@ -203,7 +198,7 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
-            Timber.i("Event recorded: " + eventType + " : " + fecType);
+            Timber.i("Event recorded: %s : %s", eventType, fecType);
             // Calculate the time and add the event to the events array
             long start = getEventTime();
 
@@ -289,7 +284,11 @@ public class TimerLogger {
         if (saveTask == null || saveTask.getStatus() == AsyncTask.Status.FINISHED) {
 
             Event[] eventArray = events.toArray(new Event[events.size()]);
-            saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
+            if (timerlogFile != null) {
+                saveTask = new TimerSaveTask(timerlogFile).execute(eventArray);
+            } else {
+                Timber.e("timerlogFile null when attempting to write events.");
+            }
             events = new ArrayList<>();
 
         } else {

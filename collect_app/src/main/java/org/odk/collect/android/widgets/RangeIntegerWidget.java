@@ -35,6 +35,25 @@ public class RangeIntegerWidget extends RangeWidget {
 
     @Override
     protected void setUpActualValueLabel() {
-        currentValue.setText(String.valueOf(actualValue.intValue()));
+        String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
+        currentValue.setText(value);
+    }
+
+    @Override
+    protected void setUpDisplayedValuesForNumberPicker() {
+        int index = 0;
+        displayedValuesForNumberPicker = new String[elementCount + 1];
+
+        if (rangeEnd.compareTo(rangeStart) > -1) {
+            for (int i = rangeEnd.intValue(); i >= rangeStart.intValue(); i -= rangeStep.abs().intValue()) {
+                displayedValuesForNumberPicker[index] = String.valueOf(i);
+                index++;
+            }
+        } else {
+            for (int i = rangeEnd.intValue(); i <= rangeStart.intValue(); i += rangeStep.abs().intValue()) {
+                displayedValuesForNumberPicker[index] = String.valueOf(i);
+                index++;
+            }
+        }
     }
 }

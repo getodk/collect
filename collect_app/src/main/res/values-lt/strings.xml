@@ -114,7 +114,6 @@
   <string name="select_another_image">Parinkti kitą paveikslėlį</string>
   <string name="use_odk_default">Naudoti numatytąjį paveikslėlį</string>
   <string name="change_splash_path">Pakeisti paveikslėlį</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Išsaugoti pakeitimus</string>
   <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
   <string name="change_protocol">Protokolas</string>
@@ -184,7 +183,6 @@
   <string name="admin_password_disabled">Administratoriaus slaptažodis išjungtas</string>
   <string name="admin_password_incorrect">Neteisingas slaptažodis!</string>
   <string name="enter_admin_password">Įveskite administratoriaus slaptažodį</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
   <string name="no_account">No account</string>
@@ -198,7 +196,6 @@
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Serverio URL</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

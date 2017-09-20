@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.logic;
 
-
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -41,12 +40,12 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -76,6 +75,12 @@ public class FormController {
      * Non OpenRosa metadata tag names
      */
     private static final String AUDIT = "audit";
+    public static final String AUDIT_FILE_NAME = "audit.csv";
+
+    /*
+     * Store the timerLogger object with the form controller state
+     */
+    private TimerLogger timerLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -90,7 +95,7 @@ public class FormController {
         public final String instanceName;
         public final boolean audit;
 
-        InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
             this.audit = audit;
@@ -188,6 +193,17 @@ public class FormController {
 
     public FormIndex getIndexWaitingForData() {
         return indexWaitingForData;
+    }
+
+    public TimerLogger getTimerLogger() {
+        if (timerLogger == null) {
+            setTimerLogger(new TimerLogger(getInstancePath(), this));
+        }
+        return timerLogger;
+    }
+
+    private void setTimerLogger(TimerLogger logger) {
+        timerLogger = logger;
     }
 
     /**
@@ -462,7 +478,7 @@ public class FormController {
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error
      * type.
      */
-    public int validateAnswers(Boolean markCompleted) throws JavaRosaException {
+    public int validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
             this.jumpToIndex(outcome.failedPrompt);
@@ -693,9 +709,7 @@ public class FormController {
     public FailedConstraint saveAllScreenAnswers(LinkedHashMap<FormIndex, IAnswerData> answers,
             boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
-            Iterator<FormIndex> it = answers.keySet().iterator();
-            while (it.hasNext()) {
-                FormIndex index = it.next();
+            for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
                 if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
                     int saveStatus;
@@ -710,7 +724,7 @@ public class FormController {
                     }
                 } else {
                     Timber.w("Attempted to save an index referencing something other than a question: %s",
-                                    index.getReference().toString());
+                            index.getReference().toString());
                 }
             }
         }
@@ -929,7 +943,7 @@ public class FormController {
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                             treeElement.getRef());
                     Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (value != "") {
+                    if (!value.equals("")) {
                         return (String) value;
                     }
                     return null;
@@ -1185,8 +1199,10 @@ public class FormController {
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
                 audit = true;
+                IAnswerData answerData = new StringData();
+                answerData.setValue(AUDIT_FILE_NAME);
+                v.get(0).setValue(answerData);
             }
-
         }
 
         return new InstanceMetadata(instanceId, instanceName, audit);

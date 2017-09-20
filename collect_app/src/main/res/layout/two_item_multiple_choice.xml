@@ -20,7 +20,6 @@ the specific language governing permissions and limitations under the License. -
     android:paddingTop="4dip">
 
     <RelativeLayout
-        android:id="@+id/instance_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/checkbox"

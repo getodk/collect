@@ -38,14 +38,13 @@ import java.util.List;
  *
  * @author Nicholas Hallahan nhallahan@spatialdev.com
  */
-public class OSMWidget extends QuestionWidget implements IBinaryWidget {
+public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
     // button colors
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
     private static final int OSM_BLUE = Color.rgb(112, 146, 255);
 
     private Button launchOpenMapKitButton;
-    private String binaryName;
     private String instanceDirectory;
     private TextView errorTextView;
     private TextView osmFileNameHeaderTextView;
@@ -62,7 +61,7 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
 
         FormController formController = Collect.getInstance().getFormController();
 
-        /**
+        /*
          * NH: I'm trying to find the form xml file name, but this is neither
          * in the formController nor the formDef. In fact, it doesn't seem to
          * be saved into any object in JavaRosa. However, the mediaFolder

@@ -22,14 +22,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.javarosa.core.model.data.DateData;
@@ -45,6 +44,8 @@ import java.lang.reflect.Field;
 import java.util.Date;
 
 import timber.log.Timber;
+
+import static android.content.Context.ACCESSIBILITY_SERVICE;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -76,7 +77,7 @@ public class DateWidget extends QuestionWidget {
 
         readAppearance();
         createDateButton();
-        createDateTextView();
+        dateTextView = getAnswerTextView();
         createDatePickerDialog();
         hideDayFieldIfNotInFormat();
         addViews();
@@ -152,17 +153,8 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void createDateButton() {
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        dateButton = new Button(getContext());
-        dateButton.setId(QuestionWidget.newUniqueId());
-        dateButton.setText(R.string.select_date);
-        dateButton.setPadding(20, 20, 20, 20);
-        dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        dateButton.setLayoutParams(params);
+        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
         dateButton.setEnabled(!formEntryPrompt.isReadOnly());
-
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,14 +166,6 @@ public class DateWidget extends QuestionWidget {
                 datePickerDialog.show();
             }
         });
-    }
-
-    private void createDateTextView() {
-        dateTextView = new TextView(getContext());
-        dateTextView.setId(QuestionWidget.newUniqueId());
-        dateTextView.setTextColor(Color.BLACK);
-        dateTextView.setPadding(20, 20, 20, 20);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
 
     private void addViews() {
@@ -200,7 +184,12 @@ public class DateWidget extends QuestionWidget {
 
     private int getTheme() {
         int theme = 0;
-        if (!showCalendar) {
+        // https://github.com/opendatakit/collect/issues/1424
+        // https://github.com/opendatakit/collect/issues/1367
+        if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            theme = android.R.style.Theme_Material_Light_Dialog;
+        }
+        if (!showCalendar || (isBrokenSamsungDevice() && isTalkBackActive())) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
 
@@ -230,6 +219,18 @@ public class DateWidget extends QuestionWidget {
             setDateLabel();
             datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
         }
+    }
+
+    // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
+    private boolean isBrokenSamsungDevice() {
+        return (Build.MANUFACTURER.equalsIgnoreCase("samsung")
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    // https://stackoverflow.com/a/34853067/5479029
+    private boolean isTalkBackActive() {
+        return ((AccessibilityManager) getContext().getSystemService(ACCESSIBILITY_SERVICE)).isTouchExplorationEnabled();
     }
 
     public boolean isDayHidden() {
@@ -265,13 +266,13 @@ public class DateWidget extends QuestionWidget {
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {
-        int theme;
         private String dialogTitle = getContext().getString(R.string.select_date);
+        private int theme;
 
         CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, theme, listener, year, month, dayOfMonth);
             this.theme = theme;
-            if (theme != 0) {
+            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 setTitle(dialogTitle);
                 fixSpinner(context, year, month, dayOfMonth);
                 getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -280,7 +281,7 @@ public class DateWidget extends QuestionWidget {
         }
 
         public void setTitle(CharSequence title) {
-            if (theme != 0) {
+            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 super.setTitle(dialogTitle);
             }
         }
@@ -364,5 +365,10 @@ public class DateWidget extends QuestionWidget {
             }
             return null;
         }
+    }
+
+    // Exposed for testing purposes to avoid reflection.
+    public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
+        this.datePickerDialog = datePickerDialog;
     }
 }

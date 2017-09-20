@@ -126,7 +126,6 @@
   <string name="select_another_image">Seleccionar una altre imatge</string>
   <string name="use_odk_default">Usar imatge per defecte</string>
   <string name="change_splash_path">Canviar imatge</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Desar els canvis</string>
   <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
   <string name="change_protocol">Plataforma de servidor</string>
@@ -200,7 +199,6 @@
   <string name="admin_password_incorrect">La clau d\'accés és incorrecte!</string>
   <string name="enter_admin_password">Entrar clau d\'accés Administrador</string>
   <string name="change_admin_password">Canviar clau d\'administrador</string>
-  <string name="autosend">Auto-enviament</string>
   <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
   <string name="no_account">Sense compte</string>
@@ -266,15 +264,12 @@
   <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="invalid_oauth">OAuth 2 token invàlid </string>
   <string name="google_repeat_error">De moment Google Sheets no admet repeticions</string>
-  <string name="odk_auth_auth_fail">Fallo en la autenticació ODK Autosend, si us plau, revisar els paràmetres de la configuració</string>
-  <string name="odk_auto_note">Notificació ODK Autosend</string>
   <string name="notification_error">Error mostrant notificació</string>
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
   <string name="change_server_url">URL Servidor</string>
   <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="no_blank_search">Camp de cerca no pot ser blanc.</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
   <string name="sheets_max_columns">Numero max de columnes = 255, el vostre formulari en te %s. No es pot carregar la fulla de càlcul.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
@@ -297,9 +292,9 @@
   <string name="satellite">Satel·lit</string>
   <string name="map_basemap_selector_title">Mapes base</string>
   <string name="show_map_basemap">Veure opcions de mapa base</string>
-  <string name="save_point">Desar GeoPunt</string>
-  <string name="get_point">Comença GeoPunt</string>
-  <string name="geopoint_view_read_only">Veure GeoPunt</string>
+  <string name="save_point">Desar posició gps</string>
+  <string name="get_point">Comença localització gps</string>
+  <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
   <string name="get_trace">Comença GeoTraça</string>
   <string name="geoshape_title">GeoForma</string>
@@ -339,12 +334,22 @@
   <string name="bad_uri">URI dolenta: %s</string>
   <string name="unrecognized_uri">URI no reconeguda: %s</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;cap formulari carregat&gt;</string>
+  <string name="settings_successfully_loaded_file_notification">Configuració carregada correctament des d\'arxiu</string>
+  <string name="corrupt_settings_file_notification">Arxiu de configuració corrupte. Cal se esborrat o reemplaçat</string>
+  <string name="selected_invalid_image">L\'arxiu seleccionat no és una imatge vàlida</string>
+  <string name="edited_osm_file">Arxiu OSM XML editat:</string>
+  <string name="invalid_osm_data">Alguna cosa ha fallat. No s\'han llegit dades OSM vàlides.</string>
   <string name="alert">Alerta</string>
+  <string name="install_openmapkit">Si us plau, instal·la OpenMapKit!</string>
   <string name="go_back">Enrera</string>
   <string name="download_selected">Descarrega seleccionat</string>
-  <string name="record_geopoint">Grava GeoPunt</string>
+  <string name="record_geopoint">Grava posicionament gps</string>
+  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
+  <string name="parser_exception">Exceptio XPathParser: \"%s\"</string>
   <string name="selected_answer">Seleccionat: %s</string>
   <string name="version_number">Versió: %s</string>
+  <string name="odk_website">Visita la web d\'ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
@@ -361,4 +366,31 @@
   <string name="deleted_form">Formulari esborrat</string>
   <string name="exit">Sortir</string>
   <string name="instance_scan_completed">Escanejat finalitzat</string>
+  <string name="filter_the_list">Filtra la llista</string>
+  <string name="language">Idioma</string>
+  <string name="phone_number">Telèfon</string>
+  <string name="email">Direcció email</string>
+  <string name="user_defined">definit per l\'usuari</string>
+  <string name="device_defined">definit pel dispositiu</string>
+  <string name="device_id">ID dispositiu</string>
+  <string name="subscriber_id">ID subscriptor</string>
+  <string name="sim_serial_id">num. serie SIM</string>
+  <string name="select_date">Selecciona data</string>
+  <string name="select_time">Selecciona hora</string>
+  <string name="no_date_selected">Data no seleccionada</string>
+  <string name="no_time_selected">Hora no seleccionada</string>
+  <string name="import_settings">Importar/Exportar configuració</string>
+  <string name="qr_code">Codi QR</string>
+  <string name="scan_qrcode">Escaneja codi des d\'un altre dispositiu</string>
+  <string name="successfully_imported_settings">Configuració importada correctament</string>
+  <string name="share">Comparteix</string>
+  <string name="select_qrcode">Selecciona codi des de tarja SD</string>
+  <string name="import_export_settings">Configuració Importació/Exportació</string>
+  <string name="qrcode_scanner_prompt">Situa codi QR dins el rectangle</string>
+  <string name="server_password">Clau d\'accés servidor</string>
+  <string name="include_password_dialog">Claus d\'accés incloses al codi</string>
+  <string name="generate">Genera</string>
+  <string name="form_entry_setting">Característiques d\'omplir formulari</string>
+  <string name="user_settings">Configuració d\'usuari</string>
+  <string name="main_menu_settings">Menú principal de configuració</string>
 </resources>

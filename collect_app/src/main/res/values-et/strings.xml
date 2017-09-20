@@ -125,7 +125,6 @@
   <string name="select_another_image">Vali teine pilt</string>
   <string name="use_odk_default">Kasuta vaikimisi pildina</string>
   <string name="change_splash_path">Muuda pilti</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="change_formlist_url">Vormi nimekirja asukoht (lisatud veebiaadressile)</string>
   <string name="change_protocol">Platvorm</string>
@@ -199,7 +198,6 @@
   <string name="admin_password_incorrect">Vabandust, salasõna on vale!</string>
   <string name="enter_admin_password">Sisestage administraatori salasõna</string>
   <string name="change_admin_password">Muuda administraatori salasõna</string>
-  <string name="autosend">Automaatne saatmine</string>
   <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
   <string name="no_account">Konto puudub</string>
@@ -265,15 +263,12 @@
   <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
   <string name="invalid_oauth">Vale OAuth 2 token</string>
   <string name="google_repeat_error">Google Sheets ei toata hetkel vormiosa korduseid.</string>
-  <string name="odk_auth_auth_fail">ODK automaatse saatmise autentimine ebaõnnestus. Veendu, et seaded oleksid õiged. </string>
-  <string name="odk_auto_note">ODK automaatse saatmise teated</string>
   <string name="notification_error">Viga teate näitamisel </string>
   <string name="delete_after_send">Kustuta peale saatmist</string>
   <string name="delete_after_send_summary">Peale serverisse saatmist kustutab lõpetatud vormid ja meedia</string>
   <string name="change_server_url">Serveri veebiaadress</string>
   <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
   <string name="no_blank_search">Otsinguväli ei tohi olla tühi</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
   <string name="sheets_max_columns">Maksimum tulpade arv on 255, teie vormis on %s. Arvutustabeli üleslaadimine keelatud.</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>

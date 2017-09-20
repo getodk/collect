@@ -17,9 +17,7 @@ package org.odk.collect.android.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -68,7 +66,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
     // Displays the current selections below the button
     TextView selectionText;
 
-
     @SuppressWarnings("unchecked")
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -87,28 +84,18 @@ public class SpinnerMultiWidget extends QuestionWidget {
         selections = new boolean[items.size()];
         answerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
-        button = new Button(context);
-        selectionText = new TextView(getContext());
+        button = getSimpleButton(context.getString(R.string.select_answer));
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
             answerItems[i] = prompt.getSelectChoiceText(items.get(i));
         }
 
-        selectionText.setText(context.getString(R.string.selected));
-        selectionText.setTextColor(Color.BLACK);
-        selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+        selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
-        button.setText(context.getString(R.string.select_answer));
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
-        button.setPadding(0, 0, 0, 7);
-
-        // Give the button a click listener. This defines the alert as well. All the
-        // click and selection behavior is defined here.
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 alertBuilder.setTitle(formEntryPrompt.getQuestionText()).setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -176,7 +163,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
         addAnswerView(answerLayout);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
@@ -195,7 +181,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void clearAnswer() {
         selectionText.setText(R.string.selected);
@@ -204,7 +189,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
             selections[i] = false;
         }
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -215,17 +199,14 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         button.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         button.cancelLongPress();
     }
-
 }

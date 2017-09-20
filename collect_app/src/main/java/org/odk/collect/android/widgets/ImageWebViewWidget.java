@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,7 +23,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.TypedValue;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -55,10 +56,13 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
+
+    @Nullable
     private WebView imageDisplay;
 
     private String binaryName;
@@ -134,17 +138,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         errorTextView.setId(QuestionWidget.newUniqueId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_image));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,16 +180,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
             }
         });
 
-        // setup chooser button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_image));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,6 +233,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
             imageDisplay.setId(QuestionWidget.newUniqueId());
             imageDisplay.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             imageDisplay.getSettings().setBuiltInZoomControls(true);
+            //noinspection deprecation
             imageDisplay.getSettings().setDefaultZoom(
                     WebSettings.ZoomDensity.FAR);
             imageDisplay.setVisibility(View.VISIBLE);
@@ -261,7 +249,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         addAnswerView(answerLayout);
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -275,7 +264,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
 
         if (imageDisplay != null) {
             // update HTML to not hold image file reference.
@@ -307,7 +296,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;
@@ -323,7 +312,10 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
@@ -366,5 +358,4 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         captureButton.cancelLongPress();
         chooseButton.cancelLongPress();
     }
-
 }

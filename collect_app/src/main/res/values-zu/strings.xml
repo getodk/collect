@@ -117,7 +117,6 @@
   <string name="select_another_image">Khetha omunye umfanekiso</string>
   <string name="use_odk_default">Sebenzisa isithombe ngokungenhloso</string>
   <string name="change_splash_path">Shintsha umfanekiso</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Gcina ushintsho</string>
   <string name="change_formlist_url">Uhla lendlela yefomu (appended to URL)</string>
   <string name="change_protocol">Inkundla</string>
@@ -186,7 +185,6 @@
   <string name="admin_password_disabled">Inombolomfihlo yokusingathwa komsebenzi ivinjiwe</string>
   <string name="admin_password_incorrect">Uxolo, inombolomfihlo akuyona</string>
   <string name="enter_admin_password">Faka inombolomfihlo yokusingathwa komsebenzi</string>
-  <string name="autosend">Thumela ngokuzenzakalela</string>
   <string name="found_in_main">Susa uphawu ukufihla ohlwini oluwumongo</string>
   <string name="found_in_settings">Susa uphawu ukufihla ohlwini ezinhlelweni ezivamile</string>
   <string name="no_account">Ayikho I akhawunti</string>
@@ -218,7 +216,6 @@
   <string name="notification_error">Iphutha likhombisa umbiko wokwazisa</string>
   <string name="delete_after_send">Susa emva kokuthumela</string>
   <string name="delete_after_send_summary">Cima amafomu nezekuxhumana emuva kokuthumela ku seva</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

@@ -15,35 +15,13 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.TypedValue;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 
-import org.javarosa.core.model.SelectChoice;
-import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.core.model.data.SelectOneData;
-import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.listeners.AudioPlayListener;
-import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.views.MediaLayout;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * SelectOneSearchWidget allows the user to enter a value in an editable text box and based on
@@ -53,174 +31,17 @@ import java.util.Locale;
  *
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
-public class SelectOneSearchWidget extends QuestionWidget implements
-        OnCheckedChangeListener, AudioPlayListener {
-
-    List<SelectChoice> items; // may take a while to compute
-    ArrayList<RadioButton> buttons;
-    protected EditText searchStr;
-
-    protected LinearLayout buttonLayout;
-    protected FormEntryPrompt prompt;
-    protected Integer selectedTag = -1;
-
+public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-        this.prompt = prompt;
-
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
-
-        searchStr = new EditText(context);
-        searchStr.setId(QuestionWidget.newUniqueId());
-        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-        searchStr.setLayoutParams(params);
-        setupChangeListener();
-        addAnswerView(searchStr);
-
-        doSearch("");
-    }
-
-    public void doSearch(String searchStr) {
-
-        // First check if there is nothing on search
-        if (searchStr == null || searchStr.trim().length() == 0) {
-            createOptions(items, null);
-        } else { // Create a List with items that are relevant to the search text
-            List<SelectChoice> searchedItems = new ArrayList<SelectChoice>();
-            List<Integer> tagList = new ArrayList<Integer>();
-            searchStr = searchStr.toLowerCase(Locale.US);
-            for (int i = 0; i < items.size(); i++) {
-                String choiceText = prompt.getSelectChoiceText(items.get(i)).toLowerCase(Locale.US);
-                if (choiceText.contains(searchStr)) {
-                    searchedItems.add(items.get(i));
-                    tagList.add(i);
-                }
-
-            }
-            createOptions(searchedItems, tagList);
-        }
-    }
-
-    public void createOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {
-        removeView(buttonLayout);
-        buttons = new ArrayList<RadioButton>();
-
-        // Layout holds the vertical list of buttons
-        buttonLayout = new LinearLayout(getContext());
-
-        String s = null;
-        if (prompt.getAnswerValue() != null) {
-            s = ((Selection) prompt.getAnswerValue().getValue()).getValue();
-        }
-
-        if (searchedItems != null && searchedItems.size() > 0) {
-            for (int i = 0; i < searchedItems.size(); i++) {
-                RadioButton r = new RadioButton(getContext());
-                r.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-                r.setText(TextUtils.textToHtml(prompt.getSelectChoiceText(searchedItems.get(i))));
-
-                if (tagList == null) {
-                    r.setTag(Integer.valueOf(i));
-                } else {
-                    r.setTag(tagList.get(i));
-                }
-                r.setId(QuestionWidget.newUniqueId());
-                r.setEnabled(!prompt.isReadOnly());
-                r.setFocusable(!prompt.isReadOnly());
-
-                buttons.add(r);
-
-                if (selectedTag == -1 && searchedItems.get(i).getValue().equals(s)) {
-                    r.setChecked(true);
-                    selectedTag = (Integer) r.getTag();
-                } else if (selectedTag.equals(r.getTag())) {
-                    r.setChecked(true);
-                }
-
-                r.setOnCheckedChangeListener(this);
-
-                MediaLayout mediaLayout = new MediaLayout(getContext(), player);
-                mediaLayout.setAVT(prompt.getIndex(), "." + Integer.toString(i), r, null, null,
-                        null, null);
-                mediaLayout.setPlayTextColor(playColor);
-                mediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
-
-                if (i != searchedItems.size() - 1) {
-                    // Last, add the dividing line (except for the last element)
-                    ImageView divider = new ImageView(getContext());
-                    divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
-                    mediaLayout.addDivider(divider);
-                }
-                buttonLayout.addView(mediaLayout);
-            }
-        }
-
-        buttonLayout.setOrientation(LinearLayout.VERTICAL);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, searchStr.getId());
-        params.setMargins(10, 0, 10, 0);
-        addView(buttonLayout, params);
-    }
-
-
-    protected void setupChangeListener() {
-        searchStr.addTextChangedListener(new TextWatcher() {
-            private String oldText = "";
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().equals(oldText)) {
-                    Collect.getInstance().getActivityLogger()
-                            .logInstanceAction(this, "searchTextChanged", s.toString(),
-                                    getPrompt().getIndex());
-                    doSearch(s.toString());
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {
-                oldText = s.toString();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
-            }
-        });
     }
 
     @Override
-    public void clearAnswer() {
-        for (RadioButton button : this.buttons) {
-            if (button.isChecked()) {
-                button.setChecked(false);
-                return;
+    protected void addButtonsToLayout(List<Integer> tagList) {
+        for (int i = 0; i < buttons.size(); i++) {
+            if (tagList == null || tagList.contains(i)) {
+                answerLayout.addView(buttons.get(i));
             }
-        }
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        int i = getCheckedId();
-        if (i == -1) {
-            return null;
-        } else {
-            SelectChoice sc = items.get(i);
-            return new SelectOneData(new Selection(sc));
         }
     }
 
@@ -228,70 +49,18 @@ public class SelectOneSearchWidget extends QuestionWidget implements
     public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
         searchStr.requestFocus();
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(searchStr, 0);
-        /*
-         * If you do a multi-question screen after a "add another group" dialog, this won't
-         * automatically pop up. It's an Android issue.
-         *
-         * That is, if I have an edit text in an activity, and pop a dialog, and in that
-         * dialog's button's OnClick() I call edittext.requestFocus() and
-         * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
-         * is focused before the dialog pops up, everything works fine. great.
-         */
     }
-
-
-    public int getCheckedId() {
-        for (int i = 0; i < buttons.size(); ++i) {
-            RadioButton button = buttons.get(i);
-            if (button.isChecked()) {
-                return (Integer) button.getTag();
-            }
-        }
-        return -1;
-    }
-
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (!isChecked) {
-            // If it got unchecked, we don't care.
-            return;
-        }
-
-        for (RadioButton button : buttons) {
-            if (button.isChecked() && !(buttonView == button)) {
-                button.setChecked(false);
+    protected void createLayout() {
+        if (items != null) {
+            for (int i = 0; i < items.size(); i++) {
+                buttons.add(createRadioButton(i));
             }
         }
 
-        selectedTag = (Integer) buttonView.getTag();
-        SelectChoice choice = items.get(selectedTag);
-
-        if (choice != null) {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    choice.getValue(), formEntryPrompt.getIndex());
-        } else {
-            Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                    "<no matching choice>", formEntryPrompt.getIndex());
-        }
+        setUpSearchBox();
     }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        for (RadioButton r : buttons) {
-            r.setOnLongClickListener(l);
-        }
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        for (RadioButton button : this.buttons) {
-            button.cancelLongPress();
-        }
-    }
-
 }

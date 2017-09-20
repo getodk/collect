@@ -13,7 +13,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git checkout -b NAME_OF_YOUR_BRANCH
 
-1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, **comment on it** to say you are addressing it. If there is no issue yet, create one to provide background on the problem you are solving.
+1. If there is an [issue](https://github.com/opendatakit/collect/issues) corresponding to what you will work on, put `@opendatakit-bot claim` as a comment on issue to say you are claiming it. If there is no issue yet, create one to provide background on the problem you are solving.
 
 1. Once you've made incremental progress towards you goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
@@ -45,6 +45,22 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 1. Document your reasoning. Your commit messages should make it clear why each change has been made.
 
 1. Follow the guidelines below.
+
+## The review process
+Bug fixes, pull requests corresponding to issues with a clearly stated goal and pull requests with clear tests and/or process for manual verification are given priority. Pull requests that are unclear or controversial may be tagged as `needs discussion` and/or may take longer to review.
+
+We try to have at least two people review every pull request and we encourage everyone to participate in the review process to get familiar with the code base and help ensure higher quality. Reviewers should ask themselves some or all of the following questions:
+- Was this change adequately discussed prior to implementation?
+- Is the intended behavior clear under all conditions?
+- What interesting cases should be verified?
+- Is the behavior as intended in all cases?
+- What other functionality could this PR affect? Does that functionality still work as intended?
+- Was the change verified with several different devices and Android versions?
+- Is the code easy to understand and to maintain?
+
+Pull requests that need more [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) are tagged with `needs testing`. Pull requests that need more complete reviews including black-box testing but also review of approach and/or appropriateness are tagged with `reviews wanted`. Any contributor is encouraged to participate in both kinds of reviews!
+
+Small fixes that target very particular bugs may occasionally be merged without a second review.
 
 ## Style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).

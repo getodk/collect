@@ -83,7 +83,7 @@ the specific language governing permissions and limitations under the License.
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Collect">
+        android:theme="@style/AppThemeBase.Collect">
 
         <provider
             android:name="org.odk.collect.android.provider.FormsProvider"
@@ -138,17 +138,16 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.InstanceChooserList"
-            android:label="@string/app_name" />
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
 
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-
-            <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
-        </intent-filter>
-
+                <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.FormChooserList"
             android:label="@string/app_name">

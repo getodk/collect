@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -44,7 +45,6 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import java.util.Map;
 
 import timber.log.Timber;
-
 
 /**
  * <p>Launch an external app to supply a string value. If the app
@@ -87,8 +87,7 @@ import timber.log.Timber;
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
-
+public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     private boolean hasExApp = true;
     private Button launchIntentButton;
@@ -109,6 +108,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
+        answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
@@ -137,15 +137,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
-        // set button formatting
-        launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(QuestionWidget.newUniqueId());
-        launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
-        launchIntentButton.setLayoutParams(params);
-
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
