@@ -53,7 +53,7 @@ import timber.log.Timber;
  */
 
 @SuppressLint("ViewConstructor")
-public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
+public class AudioWidget extends QuestionWidget implements FileWidget {
 
     @Nullable
     private MediaUtil mediaUtil = null;
@@ -188,7 +188,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
     }
 
     @Override
-    public void deleteMedia() {
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -202,7 +202,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
 
 
         // reset buttons
@@ -255,7 +255,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryNameWidget {
 
             // when replacing an answer. remove the current media.
             if (binaryName != null && !binaryName.equals(newAudio.getName())) {
-                deleteMedia();
+                deleteFile();
             }
 
             binaryName = newAudio.getName();

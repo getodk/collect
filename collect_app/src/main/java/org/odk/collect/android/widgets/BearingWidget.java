@@ -39,7 +39,7 @@ import org.odk.collect.android.logic.FormController;
  * @author Carl Hartung (chartung@nafundi.com)
  */
 @SuppressLint("ViewConstructor")
-public class BearingWidget extends QuestionWidget implements IBinaryWidget {
+public class BearingWidget extends QuestionWidget implements BinaryWidget {
     private Button getBearingButton;
     private TextView answerDisplay;
 

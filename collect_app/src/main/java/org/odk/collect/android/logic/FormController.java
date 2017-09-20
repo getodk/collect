@@ -478,7 +478,7 @@ public class FormController {
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error
      * type.
      */
-    public int validateAnswers(Boolean markCompleted) throws JavaRosaException {
+    public int validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
             this.jumpToIndex(outcome.failedPrompt);
@@ -943,7 +943,7 @@ public class FormController {
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                             treeElement.getRef());
                     Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (value != "") {
+                    if (!value.equals("")) {
                         return (String) value;
                     }
                     return null;

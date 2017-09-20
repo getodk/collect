@@ -113,7 +113,7 @@ import org.odk.collect.android.application.Collect;
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
+public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
     private Button launchIntentButton;
 

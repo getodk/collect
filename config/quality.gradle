@@ -2,6 +2,8 @@ apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
 
+apply plugin: 'jacoco-everywhere'
+
 /*
  * Copyright 2015 Vincent Brison.
  *

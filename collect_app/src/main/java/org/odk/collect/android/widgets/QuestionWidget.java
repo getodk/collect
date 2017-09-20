@@ -52,7 +52,7 @@ import timber.log.Timber;
 
 public abstract class QuestionWidget
         extends RelativeLayout
-        implements IQuestionWidget, AudioPlayListener {
+        implements Widget, AudioPlayListener {
 
     private static int idGenerator = 1211322;
 

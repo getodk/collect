@@ -66,8 +66,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     public int zoomLevel = 3;
-    public Boolean gpsStatus = true;
-    private Boolean playCheck = false;
+    public boolean gpsStatus = true;
+    private boolean playCheck;
     private MapView mapView;
     public MyLocationNewOverlay myLocationOverlay;
     private ImageButton locationButton;
@@ -88,7 +88,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private Integer traceMode; // 0 manual, 1 is automatic
     private Spinner timeUnits;
     private Spinner timeDelay;
-    private Boolean beenPaused;
+    private boolean beenPaused;
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
@@ -97,7 +97,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
-    private Boolean modeActive = false;
+    private boolean modeActive;
 
     private LocationClient locationClient;
 
@@ -619,7 +619,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         String units = timeUnits.getSelectedItem().toString();
         Long timeDelay;
         TimeUnit timeUnitsValue;
-        if (units == getString(R.string.minutes)) {
+        if (units.equals(getString(R.string.minutes))) {
             timeDelay = Long.parseLong(delay) * (60); //Convert minutes to seconds
             timeUnitsValue = TimeUnit.SECONDS;
         } else {
@@ -875,7 +875,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         disableMyLocation();
     }
 
-    public void setModeActive(Boolean modeActive) {
+    public void setModeActive(boolean modeActive) {
         this.modeActive = modeActive;
     }
 

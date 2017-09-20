@@ -62,7 +62,7 @@ import static android.os.Build.MODEL;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
+public class VideoWidget extends QuestionWidget implements FileWidget {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -277,7 +277,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
     }
 
     @Override
-    public void deleteMedia() {
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -291,7 +291,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
 
         // reset buttons
         playButton.setEnabled(false);
@@ -346,7 +346,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryNameWidget {
         }
         // you are replacing an answer. remove the media.
         if (binaryName != null && !binaryName.equals(newVideo.getName())) {
-            deleteMedia();
+            deleteFile();
         }
 
         binaryName = newVideo.getName();

@@ -178,8 +178,7 @@ public class Collect extends Application {
         return formController;
     }
 
-    @Nullable
-    public void setFormController(FormController controller) {
+    public void setFormController(@Nullable FormController controller) {
         formController = controller;
     }
 
@@ -283,6 +282,7 @@ public class Collect extends Application {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
         boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");

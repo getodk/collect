@@ -47,7 +47,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
@@ -307,10 +307,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void setBinaryData(Object answer) {
         boolean set = false;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
+            if (q instanceof BinaryWidget) {
+                if (((BinaryWidget) q).isWaitingForBinaryData()) {
                     try {
-                        ((IBinaryWidget) q).setBinaryData(answer);
+                        ((BinaryWidget) q).setBinaryData(answer);
                     } catch (Exception e) {
                         Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
@@ -368,9 +368,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void cancelWaitingForBinaryData() {
         int count = 0;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
-                    ((IBinaryWidget) q).cancelWaitingForBinaryData();
+            if (q instanceof BinaryWidget) {
+                if (((BinaryWidget) q).isWaitingForBinaryData()) {
+                    ((BinaryWidget) q).cancelWaitingForBinaryData();
                     ++count;
                 }
             }
