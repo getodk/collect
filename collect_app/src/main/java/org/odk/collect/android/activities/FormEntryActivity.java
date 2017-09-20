@@ -1510,42 +1510,44 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void showPreviousView() {
         try {
-            FormController formController = Collect.getInstance()
-                    .getFormController();
+            FormController formController = Collect.getInstance().getFormController();
+            if (formController != null) {
+                // The answer is saved on a back swipe, but question constraints are
+                // ignored.
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
 
-            // The answer is saved on a back swipe, but question constraints are
-            // ignored.
-            if (formController.currentPromptIsQuestion()) {
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-            }
+                if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    int event = formController.stepToPreviousScreenEvent();
 
-            if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                int event = formController.stepToPreviousScreenEvent();
+                    // If we are the begining of the form, lets revert our actions and ignore
+                    // this swipe
+                    if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                        event = formController.stepToNextScreenEvent();
+                        beenSwiped = false;
 
-                // If we are the begining of the form, lets revert our actions and ignore
-                // this swipe
-                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                    event = formController.stepToNextScreenEvent();
+                        if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                            // Returning here prevents the same view sliding when user is on the first screen
+                            return;
+                        }
+                    }
+
+                    if (event == FormEntryController.EVENT_GROUP
+                            || event == FormEntryController.EVENT_QUESTION) {
+                        // create savepoint
+                        if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+                            nonblockingCreateSavePointData();
+                        }
+                    }
+                    formController.getTimerLogger().exitView();    // Close timer events
+                    View next = createView(event, false);
+                    showView(next, AnimationType.LEFT);
+                } else {
                     beenSwiped = false;
-
-                    if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                        // Returning here prevents the same view sliding when user is on the first screen
-                        return;
-                    }
                 }
-
-                if (event == FormEntryController.EVENT_GROUP
-                        || event == FormEntryController.EVENT_QUESTION) {
-                    // create savepoint
-                    if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        nonblockingCreateSavePointData();
-                    }
-                }
-                formController.getTimerLogger().exitView();    // Close timer events
-                View next = createView(event, false);
-                showView(next, AnimationType.LEFT);
             } else {
-                beenSwiped = false;
+                Timber.w("FormController has a null value");
             }
         } catch (JavaRosaException e) {
             Timber.e(e);
