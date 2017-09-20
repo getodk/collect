@@ -40,7 +40,7 @@ test:
         # SD card needed for circleci-android22 image
         # https://circleci.com/docs/1.0/android/
         - mksdcard -l e 128M sdcard.img
-        - emulator -avd circleci-android22 -sdcard sdcard.img -no-window:
+        - emulator -memory 256 -avd circleci-android22 -sdcard sdcard.img -no-window:
             background: true
             parallel: true
         - circle-android wait-for-boot
