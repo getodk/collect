@@ -725,12 +725,12 @@ public class Utilities {
 
     private static String getTaskSortOrderExpr(String sortOrder) {
 
-        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " ASC";;
+        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";;
 
         if(sortOrder.equals("BY_NAME_ASC")) {
-            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " ASC, " + InstanceColumns.T_SCHED_START + " ASC";
+            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + InstanceColumns.T_SCHED_START + " ASC";
         } else if(sortOrder.equals("BY_NAME_DESC")) {
-            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " DESC, " + InstanceColumns.T_SCHED_START + " DESC";
+            sortOrderExpr = InstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + InstanceColumns.T_SCHED_START + " DESC";
         } else if(sortOrder.equals("BY_DATE_ASC")) {
             sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.DISPLAY_NAME + " ASC";
         } else if(sortOrder.equals("BY_DATE_DESC")) {

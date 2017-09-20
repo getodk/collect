@@ -282,15 +282,6 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         super.onStop();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (taskManagerList.getDrawerStatus()) {
-            taskManagerList.setUserVisibleHint(false);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     // Get tasks and forms from the server
     public void processGetTask() {
 

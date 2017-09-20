@@ -225,13 +225,13 @@ public class TaskLoader extends AsyncTaskLoader<List<TaskEntry>> {
         String sortOrderExpr = "";
 
         if(sortOrder.equals("BY_NAME_ASC")) {
-            sortOrderExpr = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " ASC";
+            sortOrderExpr = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + FormsColumns.JR_VERSION + " ASC";
         } else if(sortOrder.equals("BY_NAME_DESC")) {
-            sortOrderExpr = FormsColumns.DISPLAY_NAME + " DESC, " + FormsColumns.JR_VERSION + " DESC";
+            sortOrderExpr = FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + FormsColumns.JR_VERSION + " DESC";
         } else if(sortOrder.equals("BY_DATE_ASC")) {
-            sortOrderExpr = FormsColumns.DATE + " ASC, " + FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " ASC";
+            sortOrderExpr = FormsColumns.DATE + " ASC, " + FormsColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + FormsColumns.JR_VERSION + " ASC";
         } else if(sortOrder.equals("BY_DATE_DESC")) {
-            sortOrderExpr = FormsColumns.DATE + " DESC, " + FormsColumns.DISPLAY_NAME + " DESC, " + FormsColumns.JR_VERSION + " DESC";
+            sortOrderExpr = FormsColumns.DATE + " DESC, " + FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + FormsColumns.JR_VERSION + " DESC";
         }
         return sortOrderExpr;
     }

@@ -30,11 +30,13 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -99,8 +101,6 @@ public class SmapTaskListFragment extends ListFragment
     private static final int TASK_LOADER_ID = 1;
     private static final int INSTANCE_UPLOADER = 2;
 
-    private static final int MENU_SORT = Menu.FIRST;
-    private static final int MENU_FILTER = Menu.FIRST + 1;
     private static final int MENU_ENTERDATA = Menu.FIRST + 2;
     private static final int MENU_GETFORMS = Menu.FIRST + 3;
     private static final int MENU_SENDDATA = Menu.FIRST + 4;
@@ -109,9 +109,6 @@ public class SmapTaskListFragment extends ListFragment
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
     View rootView;
-    private ListView drawerList;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
 
     private TaskLoader mTaskLoader;
 
@@ -119,6 +116,7 @@ public class SmapTaskListFragment extends ListFragment
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected EditText inputSearch;
+    private String filterText;
 
     private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
@@ -153,8 +151,8 @@ public class SmapTaskListFragment extends ListFragment
         rootView = inflater.inflate(R.layout.smap_task_layout, container, false);
 
         setHasOptionsMenu(true);
-        searchBoxLayout = (LinearLayout) rootView.findViewById(R.id.searchBoxLayout);
-        setupSearchBox(rootView);
+        //searchBoxLayout = (LinearLayout) rootView.findViewById(R.id.searchBoxLayout);
+        //setupSearchBox(rootView);
         return rootView;
     }
 
@@ -299,19 +297,13 @@ public class SmapTaskListFragment extends ListFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        super.onCreateOptionsMenu(menu, inflater);
+
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCreateOptionsMenu", "show");
 
         getActivity().getMenuInflater().inflate(R.menu.smap_menu, menu);
 
-        menu
-                .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort_black_36dp)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        menu
-                .add(0, MENU_FILTER, 0, R.string.filter_the_list)
-                .setIcon(R.drawable.ic_search)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         boolean odkMenus = PreferenceManager
                 .getDefaultSharedPreferences(getContext())
@@ -339,7 +331,42 @@ public class SmapTaskListFragment extends ListFragment
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
 
-        super.onCreateOptionsMenu(menu, inflater);
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                sortItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                sortItem.setVisible(true);
+                return true;
+            }
+        });
 
     }
 
@@ -377,26 +404,8 @@ public class SmapTaskListFragment extends ListFragment
             case MENU_MANAGEFILES:
                 processManageFiles();
                 return true;
-            case MENU_SORT:
-                /*
-                if (drawerLayout.isDrawerOpen(Gravity.END)) {
-                    drawerLayout.closeDrawer(Gravity.END);
-                } else {
-                    Collect.getInstance().hideKeyboard(inputSearch);
-                    drawerLayout.openDrawer(Gravity.END);
-                }
-                return true;
-                */
-                Collect.getInstance().hideKeyboard(inputSearch);
+            case R.id.menu_sort:
                 bottomSheetDialog.show();
-                return true;
-
-            case MENU_FILTER:
-                if (searchBoxLayout.getVisibility() == View.GONE) {
-                    showSearchBox();
-                } else {
-                    hideSearchBox();
-                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -410,28 +419,6 @@ public class SmapTaskListFragment extends ListFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    private void hideSearchBox() {
-        inputSearch.setText("");
-        searchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(inputSearch);
-    }
-
-    private void showSearchBox() {
-        searchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(inputSearch);
-    }
-
-
-    private void performSelectedSort(int position) {
-        saveSelectedSortingOrder(position);
-        updateAdapter();
-    }
-
-    //to get present drawer status
-    public Boolean getDrawerStatus() {
-        return drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.END);
     }
 
     protected String getSortingOrder() {
@@ -452,24 +439,6 @@ public class SmapTaskListFragment extends ListFragment
                 break;
         }
         return sortOrder;
-    }
-
-    private void setupSearchBox(View view) {
-        inputSearch = (EditText) view.findViewById(R.id.inputSearch);
-        inputSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAdapter();
-            }
-        });
     }
 
     private void saveSelectedSortingOrder(int selectedStringOrder) {
@@ -494,11 +463,11 @@ public class SmapTaskListFragment extends ListFragment
     }
 
     protected CharSequence getFilterText() {
-        return inputSearch != null ? inputSearch.getText() : "";
+        return filterText != null ? filterText : "";
+        //return inputSearch != null ? inputSearch.getText() : "";
     }
 
     protected void updateAdapter() {
-        Timber.i("################ update adapter");
         if(mTaskLoader != null) {
             mTaskLoader.updateSortOrder(getSortingOrder());
             mTaskLoader.updateFilter(getFilterText());
