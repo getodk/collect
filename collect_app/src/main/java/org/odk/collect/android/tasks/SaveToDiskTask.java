@@ -261,7 +261,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 // Entry didn't exist, so create it.
                 //Cursor c = null;    smap
                 try {
-                    // smap cannot rely on retrieving the fomr definition as the URI may have changed
+                    // smap cannot rely on retrieving the form definition as the URI may have changed
                 	// retrieve the form definition...
                 	//c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);    smap
 	                //c.moveToFirst();    smap

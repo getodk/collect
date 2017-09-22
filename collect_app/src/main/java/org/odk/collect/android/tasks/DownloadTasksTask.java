@@ -466,7 +466,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 toUpload.toArray(toSendArray);
                 Timber.i("Submitting " + toUpload.size() + " finalised surveys");
 
-            	return instanceUploaderTask.doInBackground(toSendArray);	// Already running a background task so call direct
+                Outcome o = instanceUploaderTask.doInBackground(toSendArray);	// Already running a background task so call direct
+            	instanceUploaderTask.onPostExecute(o);
+                return o;
             } else {
             	return null;
             }

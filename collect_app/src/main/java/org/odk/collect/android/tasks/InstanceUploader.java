@@ -42,7 +42,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
     private InstanceUploaderListener stateListener;
 
     @Override
-    protected void onPostExecute(Outcome outcome) {
+    public void onPostExecute(Outcome outcome) {        // smap make public
         synchronized (this) {
             if (outcome != null && stateListener != null) {
                 if (outcome.authRequestingServer != null) {
