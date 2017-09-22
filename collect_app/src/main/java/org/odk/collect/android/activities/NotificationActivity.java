@@ -1,5 +1,6 @@
 package org.odk.collect.android.activities;
 
+import android.app.NotificationManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import org.odk.collect.android.application.Collect;
 public class NotificationActivity extends AppCompatActivity {
 
     public static final String NOTIFICATION_KEY = "message";
+    public static final int NOTIFICATION_ID = 191919191;        // smap
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,12 @@ public class NotificationActivity extends AppCompatActivity {
         notificationText.setTypeface(null, Typeface.BOLD);
         notificationText.setPadding(0, 0, 0, 7);
         notificationText.setText(note);
+
+        // Start smap
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.cancel(NOTIFICATION_ID);
+        // end smap
     }
 
 }

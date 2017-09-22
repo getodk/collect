@@ -31,11 +31,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.tasks.DownloadTasksTask;
+import org.odk.collect.android.utilities.Utilities;
+
+import java.util.HashMap;
 
 import timber.log.Timber;
 
@@ -65,7 +69,6 @@ public class NotificationService extends GcmListenerService {
         Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        int mNotificationId = 001;
 
         ConnectivityManager manager = (ConnectivityManager) Collect.getInstance().getBaseContext().getSystemService(
                 Context.CONNECTIVITY_SERVICE);
@@ -75,7 +78,7 @@ public class NotificationService extends GcmListenerService {
         if (currentNetworkInfo != null
                 && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
             if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
-                completeNotification(mNotifyMgr, mNotificationId, uri);
+                completeNotification(mNotifyMgr, uri);
                 automaticNofification = true;
             }
         }
@@ -90,13 +93,13 @@ public class NotificationService extends GcmListenerService {
                             .setSound(uri)
                             .setContentTitle(getString(R.string.app_name))
                             .setContentText(getString(R.string.smap_server_changed));
-            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
         }
 
 
     }
 
-    private void completeNotification(NotificationManager mNotifyMgr, int mNotificationId, Uri uri) {
+    private void completeNotification(NotificationManager mNotifyMgr, Uri uri) {
 
 
         // Set refresh notification icon
@@ -108,15 +111,23 @@ public class NotificationService extends GcmListenerService {
                         .setProgress(0, 0, true)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText(getString(R.string.smap_refresh_started));
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
 
         // Refresh
         DownloadTasksTask dt = new DownloadTasksTask();
-        dt.doInBackground();
+        HashMap<String, String> result = dt.doInBackground();
+        StringBuilder message = Utilities.getUploadMessage(result);
 
         // Refresh task list
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+
+        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
+
+        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Set refresh done notification icon
         mBuilder =
@@ -127,8 +138,9 @@ public class NotificationService extends GcmListenerService {
                         .setContentTitle(getString(R.string.app_name))
                         .setProgress(0,0,false)
                         .setSound(uri)
-                        .setContentText(getString(R.string.smap_refresh_finished));
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                        .setContentIntent(pendingNotify)
+                        .setContentText(message.toString().trim());
+        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
     }
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {

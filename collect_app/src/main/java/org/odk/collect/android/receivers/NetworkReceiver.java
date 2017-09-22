@@ -1,9 +1,11 @@
 package org.odk.collect.android.receivers;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
@@ -34,11 +36,14 @@ import org.odk.collect.android.tasks.DownloadTasksTask;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
+import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -73,6 +78,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                     && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 //uploadForms(context);    // smap
                 if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {    // smap
+
                     refreshTasks(context);   // smap
                 }
             }
@@ -117,6 +123,21 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     private void refreshTasks(Context context) {
         //mProgressMsg = getString(org.smap.smapTask.android.R.string.smap_synchronising);
         //showDialog(PROGRESS_DIALOG);
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+        // Set refresh notification icon smap
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.notification_icon_go)
+                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                R.drawable.ic_launcher))
+                        .setProgress(0, 0, true)
+                        .setContentTitle(context.getString(R.string.app_name))
+                        .setContentText(context.getString(R.string.smap_refresh_started));
+        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+
         if (!running) {
             running = true;
             mContext = context;
@@ -284,6 +305,7 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     }
     */
 
+    // smap
     public void taskDownloadingComplete(HashMap<String, String> result) {
 
         running = false;
@@ -291,13 +313,19 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         Intent intent = new Intent("org.smap.smapTask.refresh");   // smap
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);  // smap
 
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationManager mNotifyMgr =
                 (NotificationManager) mContext.getSystemService(NOTIFICATION_SERVICE);
-        int mNotificationId = 001;
 
-        StringBuffer content = new StringBuffer();
-        content.append(mContext.getString(R.string.smap_refresh_finished));
+        StringBuilder message = Utilities.getUploadMessage(result);
+
+        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
+
+        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
@@ -305,9 +333,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                         .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
                                 R.drawable.ic_launcher))
                         .setSound(uri)
+                        .setContentIntent(pendingNotify)
                         .setContentTitle(mContext.getString(R.string.app_name))
-                        .setContentText(content);
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                        .setContentText(message.toString().trim());
+        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
     }
 
     @Override

@@ -27,6 +27,7 @@ import com.google.gson.GsonBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
@@ -60,7 +61,10 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
@@ -192,7 +196,7 @@ public class Utilities {
             resolver.insert(InstanceColumns.CONTENT_URI, values);
 
             // Update the existing task and set it to a non repeat in case the user exits out without saving
-            Uri initialUri =  Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, String.valueOf(entry.id));
+            Uri initialUri = Uri.withAppendedPath(InstanceProviderAPI.InstanceColumns.CONTENT_URI, String.valueOf(entry.id));
 
             values = new ContentValues();
             values.put(InstanceColumns.T_REPEAT, 0);
@@ -393,11 +397,11 @@ public class Utilities {
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
         }
 
-        if(serverOnly) {
-            selectClause +=  "and " + InstanceColumns.T_ASS_ID + " is not null ";
+        if (serverOnly) {
+            selectClause += "and " + InstanceColumns.T_ASS_ID + " is not null ";
         }
 
-        ArrayList<String> selectArgsList = new ArrayList<> ();
+        ArrayList<String> selectArgsList = new ArrayList<>();
 
         selectArgsList.add(Utilities.getSource());
         if (all_non_synchronised) {
@@ -406,11 +410,11 @@ public class Utilities {
             selectArgsList.add(Utilities.STATUS_T_CLOSED);
         }
 
-        if(filter.toString().trim().length() > 0 ) {
+        if (filter.toString().trim().length() > 0) {
             selectClause += " and " + InstanceColumns.T_TITLE + " LIKE ?";
             selectArgsList.add("%" + filter + "%");
         }
-        String [] selectArgs = new String[selectArgsList.size()];
+        String[] selectArgs = new String[selectArgsList.size()];
         selectArgs = selectArgsList.toArray(selectArgs);
 
         Cursor c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj,
@@ -723,17 +727,80 @@ public class Utilities {
         return out;
     }
 
+    public static StringBuilder getUploadMessage(HashMap<String, String> result) {
+        StringBuilder message = new StringBuilder();
+        message
+                .append(Collect.getInstance().getString(R.string.smap_refresh_finished))
+                .append(" :: \n\n");
+
+        String[] selectionArgs = null;
+        StringBuilder selection = new StringBuilder();
+        ArrayList<String> instanceKeys = new ArrayList<String>();
+
+        if (result == null) {
+            message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
+        } else {
+
+            for (String key : result.keySet()) {
+                try {
+                    Integer.parseInt(key);
+                    instanceKeys.add(key);
+                } catch (Exception e) {
+                    message.append(key).append(" - ").append(result.get(key)).append("\n\n");
+                }
+            }
+
+            selectionArgs = new String[instanceKeys.size()];
+            int i = 0;
+            for (String key : instanceKeys) {
+                if (i > 0) {
+                    selection.append(" or ");
+                }
+                selection.append(InstanceColumns._ID + "=?");
+                selectionArgs[i++] = key;
+            }
+        }
+
+        if (instanceKeys.size() > 0) {
+            Cursor results = null;
+            try {
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                if (results.getCount() > 0) {
+                    results.moveToPosition(-1);
+                    while (results.moveToNext()) {
+                        String name = results.getString(results
+                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                        String id = results.getString(results
+                                .getColumnIndex(InstanceColumns._ID));
+                        message
+                                .append(name)
+                                .append(" - ")
+                                .append(result.get(id))
+                                .append("\n\n");
+                    }
+                }
+            } finally {
+                if (results != null) {
+                    results.close();
+                }
+            }
+        }
+
+
+        return message;
+    }
+
     private static String getTaskSortOrderExpr(String sortOrder) {
 
-        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " COLLATE NOCASE ASC";;
+        String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " COLLATE NOCASE ASC";
 
-        if(sortOrder.equals("BY_NAME_ASC")) {
+        if (sortOrder.equals("BY_NAME_ASC")) {
             sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE ASC, " + InstanceColumns.T_SCHED_START + " ASC";
-        } else if(sortOrder.equals("BY_NAME_DESC")) {
+        } else if (sortOrder.equals("BY_NAME_DESC")) {
             sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE DESC, " + InstanceColumns.T_SCHED_START + " DESC";
-        } else if(sortOrder.equals("BY_DATE_ASC")) {
+        } else if (sortOrder.equals("BY_DATE_ASC")) {
             sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " ASC";
-        } else if(sortOrder.equals("BY_DATE_DESC")) {
+        } else if (sortOrder.equals("BY_DATE_DESC")) {
             sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.T_TITLE + " DESC";
         }
         return sortOrderExpr;
