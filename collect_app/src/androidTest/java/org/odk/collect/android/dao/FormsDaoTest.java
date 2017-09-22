@@ -117,10 +117,10 @@ public class FormsDaoTest {
         assertEquals(6, forms.size());
 
         assertEquals("Widgets", forms.get(0).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(1).getDisplaySubtext());
+        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
 
         assertEquals("sample", forms.get(1).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
+        assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(1).getDisplaySubtext());
 
         assertEquals("Miramare", forms.get(2).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(2).getDisplaySubtext());
