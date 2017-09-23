@@ -16,6 +16,7 @@ package org.odk.collect.android.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -77,6 +78,8 @@ import org.odk.collect.android.loaders.PointEntry;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.spatial.MapHelper;
@@ -106,6 +109,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 public class SmapTaskMapFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<MapEntry>, OnMapReadyCallback {
 
+    private static final int PASSWORD_DIALOG = 1;
+
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
     View rootView;
@@ -124,6 +129,8 @@ public class SmapTaskMapFragment extends Fragment
     private MapHelper mHelper;
     private Button layers_button;
     private Button location_button;
+
+    private SharedPreferences adminPreferences;
 
     ArrayList<Marker> markers = null;
     HashMap<Marker, Integer> markerMap = null;
@@ -181,6 +188,12 @@ public class SmapTaskMapFragment extends Fragment
 
     }
 
+    @Override
+    public void onActivityCreated(Bundle b) {
+        adminPreferences = getActivity().getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+        super.onActivityCreated(b);
+    }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle bundle) {
@@ -242,6 +255,21 @@ public class SmapTaskMapFragment extends Fragment
                                 "MENU_PREFERENCES");
                 Intent ig = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(ig);
+                return true;
+            case R.id.menu_admin_preferences:
+                Collect.getInstance().getActivityLogger()
+                        .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
+                String pw = adminPreferences.getString(
+                        AdminKeys.KEY_ADMIN_PW, "");
+                if ("".equalsIgnoreCase(pw)) {
+                    Intent i = new Intent(getActivity(),
+                            AdminPreferencesActivity.class);
+                    startActivity(i);
+                } else {
+                    getActivity().showDialog(PASSWORD_DIALOG);
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "createAdminPasswordDialog", "show");
+                }
                 return true;
             case R.id.menu_gettasks:
                 ((SmapMain) getActivity()).processGetTask();

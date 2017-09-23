@@ -68,6 +68,8 @@ import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.loaders.TaskLoader;
 import org.odk.collect.android.preferences.AboutPreferencesActivity;
+import org.odk.collect.android.preferences.AdminKeys;
+import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
@@ -106,6 +108,8 @@ public class SmapTaskListFragment extends ListFragment
     private static final int MENU_SENDDATA = Menu.FIRST + 4;
     private static final int MENU_MANAGEFILES = Menu.FIRST + 5;
 
+    private static final int PASSWORD_DIALOG = 1;
+
     protected final ActivityLogger logger = Collect.getInstance().getActivityLogger();
     protected String[] sortingOptions;
     View rootView;
@@ -122,6 +126,8 @@ public class SmapTaskListFragment extends ListFragment
     private BottomSheetDialog bottomSheetDialog;
 
     private static final String TASK_MANAGER_LIST_SORTING_ORDER = "taskManagerListSortingOrder";
+
+    private SharedPreferences adminPreferences;
 
     DeleteInstancesTask deleteInstancesTask = null;
     private AlertDialog alertDialog;
@@ -160,7 +166,6 @@ public class SmapTaskListFragment extends ListFragment
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        Timber.i("############### onActivityCreated: " + mAdapter);
         mAdapter = new TaskListArrayAdapter(getActivity());
         setListAdapter(mAdapter);
         getLoaderManager().initLoader(TASK_LOADER_ID, null, this);
@@ -175,10 +180,12 @@ public class SmapTaskListFragment extends ListFragment
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
-                Timber.i("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                 return onLongListItemClick(v,pos,id);
             }
         });
+
+        adminPreferences = getActivity().getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
     }
 
@@ -388,6 +395,21 @@ public class SmapTaskListFragment extends ListFragment
                                 "MENU_PREFERENCES");
                 Intent ig = new Intent(getActivity(), PreferencesActivity.class);
                 startActivity(ig);
+                return true;
+            case R.id.menu_admin_preferences:
+                Collect.getInstance().getActivityLogger()
+                        .logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
+                String pw = adminPreferences.getString(
+                        AdminKeys.KEY_ADMIN_PW, "");
+                if ("".equalsIgnoreCase(pw)) {
+                    Intent i = new Intent(getActivity(),
+                            AdminPreferencesActivity.class);
+                    startActivity(i);
+                } else {
+                    getActivity().showDialog(PASSWORD_DIALOG);
+                    Collect.getInstance().getActivityLogger()
+                            .logAction(this, "createAdminPasswordDialog", "show");
+                }
                 return true;
             case R.id.menu_gettasks:
                 ((SmapMain) getActivity()).processGetTask();

@@ -55,11 +55,11 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         addPreferencesFromResource(R.xml.admin_preferences);
 
-        findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
+        // findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);    // smap
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
-        findPreference("main_menu").setOnPreferenceClickListener(this);
-        findPreference("user_settings").setOnPreferenceClickListener(this);
-        findPreference("form_entry").setOnPreferenceClickListener(this);
+        // findPreference("main_menu").setOnPreferenceClickListener(this);                  // smap
+        // findPreference("user_settings").setOnPreferenceClickListener(this);              // smap
+        //findPreference("form_entry").setOnPreferenceClickListener(this);                  // smap
     }
 
     @Override

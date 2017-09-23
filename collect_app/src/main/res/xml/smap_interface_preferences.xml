@@ -7,4 +7,5 @@
         android:key="smap_gps_trail"
         android:summary="@string/smap_gps_trail_summary"
         android:title="@string/smap_gps_trail" />
+
 </PreferenceScreen>

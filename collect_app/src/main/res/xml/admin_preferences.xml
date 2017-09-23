@@ -1,5 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Smap
     <Preference
         android:key="odk_preferences"
         android:summary="@string/admin_access_settings"
@@ -24,11 +25,13 @@
         android:negativeButtonText="@string/cancel"
         android:positiveButtonText="@string/reset_settings_button_reset"
         android:title="@string/reset_settings_dialog" />
+    smap -->
 
     <PreferenceScreen
         android:key="import_settings"
         android:title="@string/import_settings" />
 
+    <!-- smap
     <PreferenceCategory android:title="@string/user_access_control">
 
         <PreferenceScreen
@@ -47,4 +50,6 @@
             android:title="@string/form_entry_setting" />
 
     </PreferenceCategory>
+    smap -->
+
 </PreferenceScreen>
