@@ -17,10 +17,6 @@ public class BarcodeWidgetTest extends BinaryWidgetTest<BarcodeWidget, StringDat
 
     private String barcodeData;
 
-    public BarcodeWidgetTest() {
-        super(BarcodeWidget.class);
-    }
-
     @NonNull
     @Override
     public BarcodeWidget createWidget() {

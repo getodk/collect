@@ -27,7 +27,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -71,11 +70,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     private static final String NEXUS7 = "Nexus 7";
     private static final String DIRECTORY_PICTURES = "Pictures";
 
-    @Nullable
-    private MediaUtil mediaUtil = null;
+    @NonNull
+    private MediaUtil mediaUtil;
 
-    @Nullable
-    private FileUtil fileUtil = null;
+    @NonNull
+    private FileUtil fileUtil;
 
     private Button captureButton;
     private Button playButton;
@@ -85,7 +84,14 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     private Uri nexus7Uri;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new FileUtil(), new MediaUtil());
+    }
+
+    public VideoWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
         super(context, prompt);
+
+        this.fileUtil = fileUtil;
+        this.mediaUtil = mediaUtil;
 
         final FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
@@ -283,7 +289,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = getMediaUtil().deleteVideoFileFromMediaProvider(
+        int del = mediaUtil.deleteVideoFileFromMediaProvider(
                 instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
@@ -319,12 +325,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         String sourcePath = getSourcePathFromUri(uri);
         String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 
-        FileUtil fileUtil = getFileUtil();
-
         File source = fileUtil.getFileAtPath(sourcePath);
         File newVideo = fileUtil.getFileAtPath(destinationPath);
 
-        getFileUtil().copyFile(source, newVideo);
+        fileUtil.copyFile(source, newVideo);
 
         if (newVideo.exists()) {
             // Add the copy to the content provier
@@ -364,39 +368,13 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
-        return getMediaUtil().getPathFromUri(getContext(), uri, Video.Media.DATA);
+        return mediaUtil.getPathFromUri(getContext(), uri, Video.Media.DATA);
     }
 
     private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return instanceFolder + File.separator
-                + getFileUtil().getRandomFilename() + extension;
-    }
-
-    @NonNull
-    public MediaUtil getMediaUtil() {
-        if (mediaUtil == null) {
-            mediaUtil = new MediaUtil();
-        }
-
-        return mediaUtil;
-    }
-
-    public void setMediaUtil(@Nullable MediaUtil mediaUtil) {
-        this.mediaUtil = mediaUtil;
-    }
-
-    @NonNull
-    public FileUtil getFileUtil() {
-        if (fileUtil == null) {
-            fileUtil = new FileUtil();
-        }
-
-        return fileUtil;
-    }
-
-    public void setFileUtil(@Nullable FileUtil fileUtil) {
-        this.fileUtil = fileUtil;
+                + fileUtil.getRandomFilename() + extension;
     }
 
     @Override

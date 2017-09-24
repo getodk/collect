@@ -14,11 +14,12 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,8 @@ import timber.log.Timber;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class GridMultiWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
     // The RGB value for the orange background
     public static final int orangeRedVal = 255;
@@ -118,6 +120,7 @@ public class GridMultiWidget extends QuestionWidget {
         gridview = new ExpandedHeightGridView(context);
         imageViews = new View[items.size()];
         audioHandlers = new AudioHandler[items.size()];
+
         // The max width of an icon in a given column. Used to line
         // up the columns and automatically fit the columns in when
         // they are chosen automatically
@@ -156,6 +159,7 @@ public class GridMultiWidget extends QuestionWidget {
             } else {
                 audioHandlers[i] = null;
             }
+
             // Read the image sizes and set maxColumnWidth. This allows us to make sure all of our
             // columns are going to fit
             String imageURI;
@@ -172,13 +176,11 @@ public class GridMultiWidget extends QuestionWidget {
 
                 String imageFilename;
                 try {
-                    imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                    imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                     final File imageFile = new File(imageFilename);
                     if (imageFile.exists()) {
-                        Bitmap b =
-                                FileUtils
-                                        .getBitmapScaledToDisplay(imageFile, screenHeight,
-                                                screenWidth);
+                        Bitmap b = FileUtils.getBitmapScaledToDisplay(imageFile,
+                                screenHeight, screenWidth);
                         if (b != null) {
 
                             if (b.getWidth() > maxColumnWidth) {
@@ -186,7 +188,6 @@ public class GridMultiWidget extends QuestionWidget {
                             }
 
                             ImageView imageView = (ImageView) imageViews[i];
-
 
                             if (numColumns > 0) {
                                 int resizeHeight = (b.getHeight() * resizeWidth) / b.getWidth();
@@ -319,7 +320,7 @@ public class GridMultiWidget extends QuestionWidget {
         IAnswerData answer = prompt.getAnswerValue();
         List<Selection> ve;
         if ((answer == null) || (answer.getValue() == null)) {
-            ve = new ArrayList<Selection>();
+            ve = new ArrayList<>();
         } else {
             ve = (List<Selection>) answer.getValue();
         }
@@ -344,7 +345,7 @@ public class GridMultiWidget extends QuestionWidget {
         }
 
         // Use the custom image adapter and initialize the grid view
-        ImageAdapter ia = new ImageAdapter(getContext(), choices);
+        ImageAdapter ia = new ImageAdapter(choices);
         gridview.setAdapter(ia);
         addAnswerView(gridview);
     }
@@ -352,7 +353,7 @@ public class GridMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = new ArrayList<Selection>();
+        List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selected[i]) {
                 SelectChoice sc = items.get(i);
@@ -362,6 +363,7 @@ public class GridMultiWidget extends QuestionWidget {
 
         if (vc.size() == 0) {
             return null;
+
         } else {
             return new SelectMultiData(vc);
         }
@@ -387,31 +389,47 @@ public class GridMultiWidget extends QuestionWidget {
 
     }
 
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        gridview.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        gridview.cancelLongPress();
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return selected.length;
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        selected[choiceIndex] = isSelected;
+    }
+
     // Custom image adapter. Most of the code is copied from
     // media layout for using a picture.
     private class ImageAdapter extends BaseAdapter {
         private String[] choices;
 
-
-        public ImageAdapter(Context c, String[] choices) {
+        ImageAdapter(String[] choices) {
             this.choices = choices;
         }
-
 
         public int getCount() {
             return choices.length;
         }
 
-
         public Object getItem(int position) {
             return null;
         }
 
-
         public long getItemId(int position) {
             return 0;
         }
-
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -421,18 +439,5 @@ public class GridMultiWidget extends QuestionWidget {
                 return convertView;
             }
         }
-    }
-
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        gridview.setOnLongClickListener(l);
-    }
-
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        gridview.cancelLongPress();
     }
 }

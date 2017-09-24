@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -55,11 +54,11 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class AudioWidget extends QuestionWidget implements FileWidget {
 
-    @Nullable
-    private MediaUtil mediaUtil = null;
+    @NonNull
+    private FileUtil fileUtil;
 
-    @Nullable
-    private FileUtil fileUtil = null;
+    @NonNull
+    private MediaUtil mediaUtil;
 
     private Button captureButton;
     private Button playButton;
@@ -69,7 +68,14 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private String instanceFolder;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new FileUtil(), new MediaUtil());
+    }
+
+    AudioWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
         super(context, prompt);
+
+        this.fileUtil = fileUtil;
+        this.mediaUtil = mediaUtil;
 
         final FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
@@ -194,7 +200,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = getMediaUtil().deleteAudioFileFromMediaProvider(
+        int del = mediaUtil.deleteAudioFileFromMediaProvider(
                 instanceFolder + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
@@ -231,8 +237,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         String sourcePath = getSourcePathFromUri(uri);
         String destinationPath = getDestinationPathFromSourcePath(sourcePath);
 
-        FileUtil fileUtil = getFileUtil();
-
         File source = fileUtil.getFileAtPath(sourcePath);
         File newAudio = fileUtil.getFileAtPath(destinationPath);
 
@@ -268,39 +272,13 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
-        return getMediaUtil().getPathFromUri(getContext(), uri, Audio.Media.DATA);
+        return mediaUtil.getPathFromUri(getContext(), uri, Audio.Media.DATA);
     }
 
     private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
         return instanceFolder + File.separator
-                + getFileUtil().getRandomFilename() + extension;
-    }
-
-    @NonNull
-    public MediaUtil getMediaUtil() {
-        if (mediaUtil == null) {
-            mediaUtil = new MediaUtil();
-        }
-
-        return mediaUtil;
-    }
-
-    public void setMediaUtil(@Nullable MediaUtil mediaUtil) {
-        this.mediaUtil = mediaUtil;
-    }
-
-    @NonNull
-    public FileUtil getFileUtil() {
-        if (fileUtil == null) {
-            fileUtil = new FileUtil();
-        }
-
-        return fileUtil;
-    }
-
-    public void setFileUtil(@Nullable FileUtil fileUtil) {
-        this.fileUtil = fileUtil;
+                + fileUtil.getRandomFilename() + extension;
     }
 
     @Override

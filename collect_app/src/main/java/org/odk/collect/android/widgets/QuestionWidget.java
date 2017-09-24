@@ -55,27 +55,14 @@ public abstract class QuestionWidget
         implements Widget, AudioPlayListener {
 
     private static int idGenerator = 1211322;
-
-    /**
-     * Generate a unique ID to keep Android UI happy when the screen orientation
-     * changes.
-     */
-    public static int newUniqueId() {
-        return ++idGenerator;
-    }
-
-    protected FormEntryPrompt formEntryPrompt;
-    protected MediaLayout questionMediaLayout;
-
     protected final int questionFontsize;
     protected final int answerFontsize;
-
-    private TextView helpTextView;
-
+    protected FormEntryPrompt formEntryPrompt;
+    protected MediaLayout questionMediaLayout;
     protected MediaPlayer player;
-
     protected int playColor = Color.BLUE;
     protected int playBackgroundColor = Color.WHITE;
+    private TextView helpTextView;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
@@ -112,6 +99,14 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(questionMediaLayout);
         addHelpTextView(helpTextView);
+    }
+
+    /**
+     * Generate a unique ID to keep Android UI happy when the screen orientation
+     * changes.
+     */
+    public static int newUniqueId() {
+        return ++idGenerator;
     }
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
@@ -232,7 +227,7 @@ public abstract class QuestionWidget
      * @return true if the fling gesture should be suppressed
      */
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-            float velocityY) {
+                                        float velocityY) {
         return false;
     }
 

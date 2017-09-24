@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -47,7 +48,8 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SpinnerWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
     List<SelectChoice> items;
     Spinner spinner;
     String[] choices;
@@ -164,6 +166,22 @@ public class SpinnerWidget extends QuestionWidget {
         spinner.cancelLongPress();
     }
 
+    @Override
+    public int getChoiceCount() {
+        return items.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        if (isSelected) {
+            spinner.setSelection(choiceIndex);
+
+        } else if (spinner.getSelectedItemPosition() == choiceIndex) {
+
+            clearAnswer();
+        }
+    }
+
     // Defines how to display the select answers
     private class SpinnerAdapter extends ArrayAdapter<String> {
         Context context;
@@ -202,6 +220,7 @@ public class SpinnerWidget extends QuestionWidget {
             if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
                 tv.setEnabled(false);
             } else if (spinner.getSelectedItemPosition() == position) {
+                //noinspection deprecation
                 tv.setTextColor(getContext().getResources().getColor(R.color.tintColor));
             } else {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));

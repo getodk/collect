@@ -26,7 +26,3 @@ public interface BinaryWidget extends Widget {
 
     boolean isWaitingForBinaryData();
 }
-
-/*TODO carlhartung:  we might want to move this into the QuestionWidget abstract class? 
- * 
- */

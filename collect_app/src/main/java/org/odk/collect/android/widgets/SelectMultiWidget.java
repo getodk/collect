@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -24,7 +25,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.utilities.TextUtils;
 
 import java.util.ArrayList;
@@ -36,11 +36,10 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectMultiWidget extends SelectWidget {
-    private boolean checkboxInit = true;
-
+@SuppressLint("ViewConstructor")
+public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget {
     protected ArrayList<CheckBox> checkBoxes;
-
+    private boolean checkboxInit = true;
     private List<Selection> ve;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
@@ -48,7 +47,10 @@ public class SelectMultiWidget extends SelectWidget {
         checkBoxes = new ArrayList<>();
         ve = new ArrayList<>();
         if (getPrompt().getAnswerValue() != null) {
+            //noinspection unchecked
             ve = (List<Selection>) getPrompt().getAnswerValue().getValue();
+        } else {
+            ve = new ArrayList<>();
         }
 
         createLayout();
@@ -145,4 +147,15 @@ public class SelectMultiWidget extends SelectWidget {
         }
         checkboxInit = false;
     }
+
+    @Override
+    public int getChoiceCount() {
+        return checkBoxes.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        checkBoxes.get(choiceIndex).setChecked(isSelected);
+    }
+
 }

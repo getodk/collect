@@ -34,28 +34,12 @@ import java.util.Locale;
 /**
  * Launch an external app to supply an integer value. If the app
  * does not launch, enable the text area for regular data entry.
- *
+ * <p>
  * See {@link org.odk.collect.android.widgets.ExStringWidget} for usage.
  *
  * @author mitchellsundt@gmail.com
  */
 public class ExIntegerWidget extends ExStringWidget {
-
-    private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
-        Integer d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Double) {
-                    d = ((Double) dataValue).intValue();
-                } else {
-                    d = (Integer) dataValue;
-                }
-            }
-        }
-        return d;
-    }
 
     public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -77,6 +61,21 @@ public class ExIntegerWidget extends ExStringWidget {
         }
     }
 
+    private Integer getIntegerAnswerValue() {
+        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
+        Integer d = null;
+        if (dataHolder != null) {
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                if (dataValue instanceof Double) {
+                    d = ((Double) dataValue).intValue();
+                } else {
+                    d = (Integer) dataValue;
+                }
+            }
+        }
+        return d;
+    }
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

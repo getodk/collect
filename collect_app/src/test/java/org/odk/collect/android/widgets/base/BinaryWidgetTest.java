@@ -1,16 +1,8 @@
 package org.odk.collect.android.widgets.base;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.widgets.BinaryWidget;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-
-import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,31 +12,13 @@ import static org.mockito.Mockito.when;
 /**
  * @author James Knight
  */
-@Config(constants = BuildConfig.class)
-@RunWith(RobolectricTestRunner.class)
-public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswerData> extends WidgetTest<W, A> {
-
-    @Mock
-    public File instancePath;
-
-    public BinaryWidgetTest(Class<W> clazz) {
-        super(clazz);
-    }
+public abstract class BinaryWidgetTest<W extends BinaryWidget, A extends IAnswerData>
+        extends QuestionWidgetTest<W, A> {
 
     public abstract Object createBinaryData(A answerData);
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        when(formController.getInstancePath()).thenReturn(instancePath);
-        when(instancePath.getParent()).thenReturn("");
-    }
-
     @Test
     public void getAnswerShouldReturnCorrectAnswerAfterBeingSet() {
-        when(formEntryPrompt.getAnswerText()).thenReturn(null);
-
         W widget = getWidget();
         assertNull(widget.getAnswer());
 
