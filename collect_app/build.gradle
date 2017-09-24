@@ -171,10 +171,11 @@ dependencies {
     }
 
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.1'
+    compile (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.1') {
+        exclude module: 'joda-time'
+    }
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     compile group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
@@ -187,6 +188,7 @@ dependencies {
     compile group: 'com.google.zxing', name: 'core', version: '3.3.0'
     compile group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
     compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
+    compile group: 'net.danlew', name: 'android.joda', version: '2.9.9'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
