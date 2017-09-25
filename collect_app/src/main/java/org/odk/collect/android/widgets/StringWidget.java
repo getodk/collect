@@ -82,7 +82,7 @@ public class StringWidget extends QuestionWidget {
         String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);
         if (height != null && height.length() != 0) {
             try {
-                int rows = Integer.valueOf(height);
+                int rows = Integer.parseInt(height);
                 answerText.setMinLines(rows);
                 answerText.setGravity(
                         Gravity.TOP); // to write test starting at the top of the edit area

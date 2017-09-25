@@ -98,7 +98,7 @@ public class AlignedImageWidget extends QuestionWidget implements FileWidget {
             if (splits.length <= i) {
                 iarray[i] = 0;
             } else {
-                iarray[i] = Integer.valueOf(splits[i]);
+                iarray[i] = Integer.parseInt(splits[i]);
             }
         }
 

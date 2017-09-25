@@ -81,6 +81,7 @@ public class Collect extends Application {
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+    public static String defaultSysLanguage;
     private static Collect singleton = null;
 
     // share all session cookies across all sessions...
@@ -93,8 +94,6 @@ public class Collect extends Application {
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
-
-    public static String defaultSysLanguage;
 
     public static Collect getInstance() {
         return singleton;
@@ -115,7 +114,7 @@ public class Collect extends Application {
         String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
 
-        return Integer.valueOf(questionFont);
+        return Integer.parseInt(questionFont);
     }
 
     /**
@@ -162,7 +161,7 @@ public class Collect extends Application {
         String dirPath = directory.getAbsolutePath();
         if (dirPath.startsWith(Collect.ODK_ROOT)) {
             dirPath = dirPath.substring(Collect.ODK_ROOT.length());
-            String[] parts = dirPath.split(File.separator);
+            String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
                 return true;
