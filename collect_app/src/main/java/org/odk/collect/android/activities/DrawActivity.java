@@ -16,7 +16,6 @@
 package org.odk.collect.android.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -25,6 +24,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.KeyEvent;
@@ -32,17 +32,25 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.google.common.collect.ImmutableList;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.IconMenuListAdapter;
+import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.AnimateUtils;
 import org.odk.collect.android.utilities.ColorPickerDialog;
+import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.DrawView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -296,61 +304,53 @@ public class DrawActivity extends AppCompatActivity {
      * saving
      */
     private void createQuitDrawDialog() {
-        String[] items = {getString(R.string.keep_changes),
-                getString(R.string.do_not_save)};
 
         Collect.getInstance().getActivityLogger()
                 .logInstanceAction(this, "createQuitDrawDialog", "show");
+
+        ListView listView = DialogUtils.createActionListView(this);
+
+        List<IconMenuItem> items;
+            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+
+        final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+                if (item.getTextResId() == R.string.keep_changes) {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this,
+                                    "createQuitDrawDialog",
+                                    "saveAndExit");
+                    saveAndClose();
+                } else {
+                    Collect.getInstance()
+                            .getActivityLogger()
+                            .logInstanceAction(this,
+                                    "createQuitDrawDialog",
+                                    "discardAndExit");
+                    cancelAndClose();
+                }
+                alertDialog.dismiss();
+            }
+        });
         alertDialog = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(alertTitleString)
-                .setNeutralButton(getString(R.string.do_not_exit),
+                .setPositiveButton(getString(R.string.do_not_exit),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDrawDialog",
-                                                "cancel");
-                                dialog.cancel();
-
-                            }
-                        })
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-
-                            case 0: // save and exit
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDrawDialog",
-                                                "saveAndExit");
-                                saveAndClose();
-                                break;
-
-                            case 1: // discard changes and exit
-
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "createQuitDrawDialog",
-                                                "discardAndExit");
-                                cancelAndClose();
-                                break;
-
-                            case 2:// do nothing
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logInstanceAction(this,
                                                 "createQuitDrawDialog", "cancel");
-                                break;
-                        }
-                    }
-                }).create();
+                            }
+                        })
+                .setView(listView).create();
         alertDialog.show();
     }
 
