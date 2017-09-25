@@ -42,14 +42,14 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 /**
  * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
  * locations.
- *
+ * <p>
  * Date
  *
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 
 @SuppressLint("ViewConstructor")
-public class GeoTraceWidget extends QuestionWidget implements IBinaryWidget {
+public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String GOOGLE_MAP_KEY = "google_maps";
     public static final String TRACE_LOCATION = "gp";

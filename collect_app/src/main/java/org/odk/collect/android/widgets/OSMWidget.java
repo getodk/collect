@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
@@ -32,13 +32,16 @@ import org.opendatakit.httpclientandroidlib.entity.ContentType;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
  * predetermined set of tags that are edited in the application.
  *
  * @author Nicholas Hallahan nhallahan@spatialdev.com
  */
-public class OSMWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
     // button colors
     private static final int OSM_GREEN = Color.rgb(126, 188, 111);
@@ -60,6 +63,10 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         super(context, prompt);
 
         FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.w("OSMWidget started with null FormController");
+            return;
+        }
 
         /*
          * NH: I'm trying to find the form xml file name, but this is neither
@@ -79,7 +86,6 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         errorTextView.setText(R.string.invalid_osm_data);
 
         // Determine the tags required
-        QuestionDef question = prompt.getQuestion();
         osmRequiredTags = prompt.getQuestion().getOsmTags();
 
         // If an OSM File has already been saved, get the name.
@@ -192,7 +198,13 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
             //launch activity if it is safe
             if (isIntentSafe) {
                 // notify that the form is waiting for data
-                Collect.getInstance().getFormController().setIndexWaitingForData(
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController == null) {
+                    Timber.w("FormController is null when trying to call setIndexWaitingForData.");
+                    return;
+                }
+
+                formController.setIndexWaitingForData(
                         formEntryPrompt.getIndex());
                 // launch
                 ((Activity) ctx).startActivityForResult(launchIntent,
@@ -224,29 +236,34 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForBinaryData();
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
     }
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+        return formController != null
+                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+
     }
 
     @Override
     public IAnswerData getAnswer() {
         String s = osmFileNameTextView.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+
+        return !s.isEmpty()
+                ? new StringData(s)
+                : null;
     }
 
     @Override
@@ -272,13 +289,13 @@ public class OSMWidget extends QuestionWidget implements IBinaryWidget {
      * See: https://github.com/AmericanRedCross/openmapkit/wiki/ODK-Collect-Tag-Intent-Extras
      */
     private void writeOsmRequiredTagsToExtras(Intent intent) {
-        ArrayList<String> tagKeys = new ArrayList<String>();
+        ArrayList<String> tagKeys = new ArrayList<>();
         for (OSMTag tag : osmRequiredTags) {
             tagKeys.add(tag.key);
             if (tag.label != null) {
                 intent.putExtra("TAG_LABEL." + tag.key, tag.label);
             }
-            ArrayList<String> tagValues = new ArrayList<String>();
+            ArrayList<String> tagValues = new ArrayList<>();
             if (tag.items != null) {
                 for (OSMTagItem item : tag.items) {
                     tagValues.add(item.value);

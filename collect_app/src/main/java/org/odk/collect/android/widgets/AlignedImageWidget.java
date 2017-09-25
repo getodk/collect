@@ -59,7 +59,7 @@ import timber.log.Timber;
  * @author Mitchell Tyler Lee
  */
 @SuppressLint("ViewConstructor")
-public class AlignedImageWidget extends QuestionWidget implements IBinaryNameWidget {
+public class AlignedImageWidget extends QuestionWidget implements FileWidget {
     private static final String ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT =
             "org.opendatakit.camera.TakePicture";
 
@@ -248,7 +248,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryNameWid
     }
 
     @Override
-    public void deleteMedia() {
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -262,7 +262,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryNameWid
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
         if (imageView != null) {
             imageView.setImageBitmap(null);
         }
@@ -287,7 +287,7 @@ public class AlignedImageWidget extends QuestionWidget implements IBinaryNameWid
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;

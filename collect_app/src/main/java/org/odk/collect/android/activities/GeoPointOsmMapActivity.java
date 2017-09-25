@@ -77,9 +77,9 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private Location location;
     private ImageButton reloadLocationButton;
 
-    private boolean captureLocation = false;
-    private boolean setClear = false;
-    private boolean isDragged = false;
+    private boolean captureLocation;
+    private boolean setClear;
+    private boolean isDragged;
     private ImageButton showLocationButton;
 
     private int locationCount = 0;
@@ -94,12 +94,12 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
     public MyLocationNewOverlay myLocationOverlay;
 
-    private Boolean readOnly = false;
-    private Boolean draggable = false;
-    private Boolean intentDraggable = false;
-    private Boolean locationFromIntent = false;
+    private boolean readOnly;
+    private boolean draggable;
+    private boolean intentDraggable;
+    private boolean locationFromIntent;
     private int locationCountNum = 0;
-    private Boolean foundFirstLocation = false;
+    private boolean foundFirstLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

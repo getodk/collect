@@ -44,14 +44,13 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
+public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";
-    private Button createShapeButton;
     public SharedPreferences sharedPreferences;
     public String mapSDK;
-
+    private Button createShapeButton;
     private TextView answerDisplay;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
@@ -127,7 +126,7 @@ public class GeoShapeWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        String s =  answer.toString();
+        String s = answer.toString();
         answerDisplay.setText(s);
 
         cancelWaitingForBinaryData();

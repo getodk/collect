@@ -98,8 +98,11 @@ public class ItemsetDbAdapter {
         // get md5 of the path to itemset.csv, which is unique per form
         // the md5 is easier to use because it doesn't have chars like '/'
 
-        sb.append("create table " + DATABASE_TABLE + pathHash
-                + " (_id integer primary key autoincrement ");
+        sb.append("create table ")
+                .append(DATABASE_TABLE)
+                .append(pathHash)
+                .append(" (_id integer primary key autoincrement ");
+
         for (String column : columns) {
             if (!column.isEmpty()) {
                 // add double quotes in case the column is of label:lang
@@ -207,16 +210,17 @@ public class ItemsetDbAdapter {
     }
 
     public static String getMd5FromString(String toEncode) {
-        MessageDigest md = null;
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
             Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
+            return null;
         }
+
         md.update(toEncode.getBytes());
         byte[] digest = md.digest();
         BigInteger bigInt = new BigInteger(1, digest);
         return bigInt.toString(16);
     }
-
 }

@@ -33,6 +33,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
@@ -177,8 +179,7 @@ public class Collect extends Application {
         return formController;
     }
 
-    @Nullable
-    public void setFormController(FormController controller) {
+    public void setFormController(@Nullable FormController controller) {
         formController = controller;
     }
 
@@ -254,6 +255,7 @@ public class Collect extends Application {
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        JodaTimeAndroid.init(this);
 
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
@@ -282,6 +284,7 @@ public class Collect extends Application {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
         boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");

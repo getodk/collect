@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -31,6 +32,7 @@ import java.util.List;
  *
  * @author Raghu Mittal (raghu.mittal@handsrel.com)
  */
+@SuppressLint("ViewConstructor")
 public class SelectOneSearchWidget extends SelectOneWidget implements OnCheckedChangeListener, AudioPlayListener {
     public SelectOneSearchWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);

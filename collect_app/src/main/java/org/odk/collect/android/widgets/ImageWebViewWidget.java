@@ -57,7 +57,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class ImageWebViewWidget extends QuestionWidget implements IBinaryNameWidget {
+public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
@@ -70,60 +70,6 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryNameWid
     private String instanceFolder;
 
     private TextView errorTextView;
-
-    private String constructImageElement() {
-        File f = new File(instanceFolder + File.separator + binaryName);
-
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        int screenWidth = metrics.widthPixels;
-
-        return f.exists() ? ("<img align=\"middle\" src=\"file:///"
-                + f.getAbsolutePath()
-                +
-                // Appending the time stamp to the filename is a hack to prevent
-                // caching.
-                "?"
-                + new Date().getTime()
-                + "\" width=\""
-                + Integer.toString(screenWidth - 10) + "\" >")
-                : "";
-    }
-
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2,
-                                        float velocityX, float velocityY) {
-        if (imageDisplay == null
-                || imageDisplay.getVisibility() != View.VISIBLE) {
-            return false;
-        }
-
-        Rect rect = new Rect();
-        imageDisplay.getHitRect(rect);
-
-        // Log.i(t, "hitRect: " + rect.left + "," + rect.top + " : " +
-        // rect.right + "," + rect.bottom );
-        // Log.i(t, "e1 Raw, Clean: " + e1.getRawX() + "," + e1.getRawY() +
-        // " : " + e1.getX() + "," + e1.getY());
-        // Log.i(t, "e2 Raw, Clean: " + e2.getRawX() + "," + e2.getRawY() +
-        // " : " + e2.getX() + "," + e2.getY());
-
-        // starts in WebView
-        if (rect.contains((int) e1.getRawX(), (int) e1.getRawY())) {
-            return true;
-        }
-
-        // ends in WebView
-        if (rect.contains((int) e2.getRawX(), (int) e2.getRawY())) {
-            return true;
-        }
-
-        // transits WebView
-        if (rect.contains((int) ((e1.getRawX() + e2.getRawX()) / 2.0),
-                (int) ((e1.getRawY() + e2.getRawY()) / 2.0))) {
-            return true;
-        }
-        // Log.i(t, "NOT SUPPRESSED");
-        return false;
-    }
 
     public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -249,8 +195,62 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryNameWid
         addAnswerView(answerLayout);
     }
 
+    private String constructImageElement() {
+        File f = new File(instanceFolder + File.separator + binaryName);
+
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
+
+        return f.exists() ? ("<img align=\"middle\" src=\"file:///"
+                + f.getAbsolutePath()
+                +
+                // Appending the time stamp to the filename is a hack to prevent
+                // caching.
+                "?"
+                + new Date().getTime()
+                + "\" width=\""
+                + Integer.toString(screenWidth - 10) + "\" >")
+                : "";
+    }
+
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2,
+                                        float velocityX, float velocityY) {
+        if (imageDisplay == null
+                || imageDisplay.getVisibility() != View.VISIBLE) {
+            return false;
+        }
+
+        Rect rect = new Rect();
+        imageDisplay.getHitRect(rect);
+
+        // Log.i(t, "hitRect: " + rect.left + "," + rect.top + " : " +
+        // rect.right + "," + rect.bottom );
+        // Log.i(t, "e1 Raw, Clean: " + e1.getRawX() + "," + e1.getRawY() +
+        // " : " + e1.getX() + "," + e1.getY());
+        // Log.i(t, "e2 Raw, Clean: " + e2.getRawX() + "," + e2.getRawY() +
+        // " : " + e2.getX() + "," + e2.getY());
+
+        // starts in WebView
+        if (rect.contains((int) e1.getRawX(), (int) e1.getRawY())) {
+            return true;
+        }
+
+        // ends in WebView
+        if (rect.contains((int) e2.getRawX(), (int) e2.getRawY())) {
+            return true;
+        }
+
+        // transits WebView
+        if (rect.contains((int) ((e1.getRawX() + e2.getRawX()) / 2.0),
+                (int) ((e1.getRawY() + e2.getRawY()) / 2.0))) {
+            return true;
+        }
+        // Log.i(t, "NOT SUPPRESSED");
+        return false;
+    }
+
     @Override
-    public void deleteMedia() {
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -264,7 +264,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryNameWid
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
 
         if (imageDisplay != null) {
             // update HTML to not hold image file reference.
@@ -296,7 +296,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryNameWid
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;

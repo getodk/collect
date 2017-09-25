@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.widgets.base.BinaryNameWidgetTest;
+import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -24,16 +24,12 @@ import static org.mockito.Mockito.when;
  */
 @Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-public class DrawWidgetTest extends BinaryNameWidgetTest<DrawWidget> {
+public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
     @Mock
     File file;
 
     private String fileName = null;
-
-    public DrawWidgetTest() {
-        super(DrawWidget.class);
-    }
 
     @NonNull
     @Override
@@ -55,9 +51,11 @@ public class DrawWidgetTest extends BinaryNameWidgetTest<DrawWidget> {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
         fileName = RandomString.make();
+    }
+
+    @Override
+    protected void prepareForSetAnswer() {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
