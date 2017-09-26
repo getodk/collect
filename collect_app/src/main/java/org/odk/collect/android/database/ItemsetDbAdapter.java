@@ -205,19 +205,4 @@ public class ItemsetDbAdapter {
         };
         db.delete(ITEMSET_TABLE, where, whereArgs);
     }
-
-    public static String getMd5FromString(String toEncode) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
-            return null;
-        }
-
-        md.update(toEncode.getBytes());
-        byte[] digest = md.digest();
-        BigInteger bigInt = new BigInteger(1, digest);
-        return bigInt.toString(16);
-    }
 }
