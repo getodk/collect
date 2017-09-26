@@ -63,7 +63,7 @@ if (secretsFile.exists()) {
 
 android {
     compileSdkVersion(25)
-    buildToolsVersion('25.0.2')
+    buildToolsVersion('26.0.1')
 
     defaultConfig {
         applicationId('org.odk.collect.android')
@@ -157,6 +157,7 @@ dependencies {
     compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
     compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
     compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
+    compile group: 'com.google.android.gms', name: 'play-services-location', version: '10.0.1'
     compile (group: 'com.google.code.gson', name: 'gson', version: '2.6.2'){
         exclude group: 'org.apache.httpcomponents'
     }
@@ -170,10 +171,11 @@ dependencies {
     }
 
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.0'
+    compile (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.1') {
+        exclude module: 'joda-time'
+    }
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     compile group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
@@ -186,6 +188,7 @@ dependencies {
     compile group: 'com.google.zxing', name: 'core', version: '3.3.0'
     compile group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
     compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
+    compile group: 'net.danlew', name: 'android.joda', version: '2.9.9'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'

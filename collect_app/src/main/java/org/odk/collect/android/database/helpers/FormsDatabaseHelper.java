@@ -18,9 +18,10 @@ package org.odk.collect.android.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
 import timber.log.Timber;
@@ -28,8 +29,8 @@ import timber.log.Timber;
 /**
  * This class helps open, create, and upgrade the database file.
  */
-public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
-    public static final String DATABASE_NAME = "forms.db";
+public class FormsDatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
     private static final int DATABASE_VERSION = 4;
@@ -38,8 +39,8 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
     private static final String MODEL_VERSION = "modelVersion";
 
-    public FormsDatabaseHelper(String databaseName) {
-        super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+    public FormsDatabaseHelper() {
+        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

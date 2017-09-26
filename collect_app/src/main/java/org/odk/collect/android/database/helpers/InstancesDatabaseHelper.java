@@ -19,9 +19,10 @@ package org.odk.collect.android.database.helpers;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 
 import timber.log.Timber;
@@ -29,14 +30,14 @@ import timber.log.Timber;
 /**
  * This class helps open, create, and upgrade the database file.
  */
-public class InstancesDatabaseHelper extends ODKSQLiteOpenHelper {
-    public static final String DATABASE_NAME = "instances.db";
+public class InstancesDatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
 
     private static final int DATABASE_VERSION = 4;
 
-    public InstancesDatabaseHelper(String databaseName) {
-        super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+    public InstancesDatabaseHelper() {
+        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

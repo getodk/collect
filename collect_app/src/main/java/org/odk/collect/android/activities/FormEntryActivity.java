@@ -83,6 +83,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -108,7 +109,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
-import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -229,7 +230,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private boolean shownAlertDialogIsGroupRepeat;
 
     // used to limit forward/backward swipes to one per question
-    private boolean beenSwiped = false;
+    private boolean beenSwiped;
 
     private final Object saveDialogLock = new Object();
     private int viewCount = 0;
@@ -248,7 +249,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private SharedPreferences adminPreferences;
-    private boolean showNavigationButtons = false;
+    private boolean showNavigationButtons;
 
     private FormsDao formsDao;
 
@@ -309,7 +310,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String startingXPath = null;
         String waitingXPath = null;
         String instancePath = null;
-        Boolean newForm = true;
+        boolean newForm = true;
         autoSaved = false;
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
@@ -862,7 +863,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
-            if (qw instanceof IBinaryWidget && ((IBinaryWidget) qw).isWaitingForBinaryData()) {
+            if (qw instanceof BinaryWidget && ((BinaryWidget) qw).isWaitingForBinaryData()) {
                 questionWidget = qw;
             }
         }
@@ -1324,8 +1325,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkv = new ODKView(this, formController.getQuestionPrompts(),
-                            groups, advancingPage);
+                    odkv = new ODKView(this, prompts, groups, advancingPage);
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -1510,42 +1510,44 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      */
     private void showPreviousView() {
         try {
-            FormController formController = Collect.getInstance()
-                    .getFormController();
+            FormController formController = Collect.getInstance().getFormController();
+            if (formController != null) {
+                // The answer is saved on a back swipe, but question constraints are
+                // ignored.
+                if (formController.currentPromptIsQuestion()) {
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                }
 
-            // The answer is saved on a back swipe, but question constraints are
-            // ignored.
-            if (formController.currentPromptIsQuestion()) {
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-            }
+                if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    int event = formController.stepToPreviousScreenEvent();
 
-            if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                int event = formController.stepToPreviousScreenEvent();
+                    // If we are the begining of the form, lets revert our actions and ignore
+                    // this swipe
+                    if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                        event = formController.stepToNextScreenEvent();
+                        beenSwiped = false;
 
-                // If we are the begining of the form, lets revert our actions and ignore
-                // this swipe
-                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                    event = formController.stepToNextScreenEvent();
+                        if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                            // Returning here prevents the same view sliding when user is on the first screen
+                            return;
+                        }
+                    }
+
+                    if (event == FormEntryController.EVENT_GROUP
+                            || event == FormEntryController.EVENT_QUESTION) {
+                        // create savepoint
+                        if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+                            nonblockingCreateSavePointData();
+                        }
+                    }
+                    formController.getTimerLogger().exitView();    // Close timer events
+                    View next = createView(event, false);
+                    showView(next, AnimationType.LEFT);
+                } else {
                     beenSwiped = false;
-
-                    if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                        // Returning here prevents the same view sliding when user is on the first screen
-                        return;
-                    }
                 }
-
-                if (event == FormEntryController.EVENT_GROUP
-                        || event == FormEntryController.EVENT_QUESTION) {
-                    // create savepoint
-                    if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        nonblockingCreateSavePointData();
-                    }
-                }
-                formController.getTimerLogger().exitView();    // Close timer events
-                View next = createView(event, false);
-                showView(next, AnimationType.LEFT);
             } else {
-                beenSwiped = false;
+                Timber.w("FormController has a null value");
             }
         } catch (JavaRosaException e) {
             Timber.e(e);
@@ -2025,7 +2027,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             .logInstanceAction(this, "createQuitDialog", "discardAndExit");
 
                     // close all open databases of external data.
-                    Collect.getInstance().getExternalDataManager().close();
+                    ExternalDataManager manager = Collect.getInstance().getExternalDataManager();
+                    if (manager != null) {
+                        manager.close();
+                    }
 
                     FormController formController = Collect.getInstance().getFormController();
                     if (formController != null) {
@@ -2283,18 +2288,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .logInstanceAction(this, "onCreateDialog.SAVING_DIALOG",
                                 "show");
                 progressDialog = new ProgressDialog(this);
-                DialogInterface.OnClickListener cancelSavingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Collect.getInstance()
-                                        .getActivityLogger()
-                                        .logInstanceAction(this,
-                                                "onCreateDialog.SAVING_DIALOG", "cancel");
-                                dialog.dismiss();
-                                cancelSaveToDiskTask();
-                            }
-                        };
                 progressDialog.setTitle(getString(R.string.saving_form));
                 progressDialog.setMessage(getString(R.string.please_wait));
                 progressDialog.setIndeterminate(true);
@@ -2704,7 +2697,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case SaveToDiskTask.SAVED_AND_EXIT:
                 ToastUtils.showShortToast(R.string.data_saved_ok);
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_SAVE, 0, null, false, false);
-                if (saveResult.getComplete()) {
+                if (saveResult.isComplete()) {
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_EXIT, 0, null, false, false);
                     formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.FORM_FINALIZE, 0, null, false, true);     // Force writing of audit since we are exiting
                 } else {
@@ -2770,37 +2763,40 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * @return true if form has been marked completed, false otherwise.
      */
     private boolean isInstanceComplete(boolean end) {
-        FormController formController = Collect.getInstance()
-                .getFormController();
         // default to false if we're mid form
         boolean complete = false;
 
-        // if we're at the end of the form, then check the preferences
-        if (end) {
-            // First get the value from the preferences
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(this);
-            complete = sharedPreferences.getBoolean(
-                    PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
-        }
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            // if we're at the end of the form, then check the preferences
+            if (end) {
+                // First get the value from the preferences
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+                complete = sharedPreferences.getBoolean(
+                        PreferenceKeys.KEY_COMPLETED_DEFAULT, true);
+            }
 
-        // Then see if we've already marked this form as complete before
-        Cursor c = null;
-        try {
-            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                    .getAbsolutePath());
-            if (c != null && c.getCount() > 0) {
-                c.moveToFirst();
-                String status = c.getString(c
-                        .getColumnIndex(InstanceColumns.STATUS));
-                if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
-                    complete = true;
+            // Then see if we've already marked this form as complete before
+            Cursor c = null;
+            try {
+                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                        .getAbsolutePath());
+                if (c != null && c.getCount() > 0) {
+                    c.moveToFirst();
+                    String status = c.getString(c
+                            .getColumnIndex(InstanceColumns.STATUS));
+                    if (InstanceProviderAPI.STATUS_COMPLETE.compareTo(status) == 0) {
+                        complete = true;
+                    }
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
                 }
             }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
+        } else {
+            Timber.w("FormController has a null value");
         }
         return complete;
     }

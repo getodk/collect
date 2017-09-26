@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -50,13 +52,16 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawWidget extends QuestionWidget implements IBinaryWidget {
-    private static final String t = "DrawWidget";
+@SuppressLint("ViewConstructor")
+public class DrawWidget extends QuestionWidget implements FileWidget {
 
     private Button drawButton;
     private String binaryName;
     private String instanceFolder;
+
+    @Nullable
     private ImageView imageView;
+
     private TextView errorTextView;
 
     public DrawWidget(Context context, FormEntryPrompt prompt) {
@@ -163,7 +168,8 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -177,8 +183,11 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
-        imageView.setImageBitmap(null);
+        deleteFile();
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons
@@ -199,7 +208,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) answer;
@@ -215,7 +224,10 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());

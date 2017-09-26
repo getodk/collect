@@ -72,7 +72,7 @@ public class UrlUtils {
                     Collect.getInstance().getString(R.string.invalid_sheet_id, urlString));
         } else {
             int start = urlString.indexOf(googleHeader) + googleHeader.length();
-            int end = urlString.indexOf("/", start);
+            int end = urlString.indexOf('/', start);
             if (end == -1) {
                 // if there wasn't a "/", just try to get the end
                 end = urlString.length();

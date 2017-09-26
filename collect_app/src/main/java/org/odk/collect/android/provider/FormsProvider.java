@@ -42,7 +42,6 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.DATABASE_NAME;
 import static org.odk.collect.android.database.helpers.FormsDatabaseHelper.FORMS_TABLE_NAME;
 
 public class FormsProvider extends ContentProvider {
@@ -67,7 +66,7 @@ public class FormsProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new FormsDatabaseHelper(DATABASE_NAME);
+        databaseHelper = new FormsDatabaseHelper();
         return databaseHelper;
     }
 
@@ -183,7 +182,7 @@ public class FormsProvider extends ContentProvider {
         }
         if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
             String pathNoExtension = filePath.substring(0,
-                    filePath.lastIndexOf("."));
+                    filePath.lastIndexOf('.'));
             String mediaPath = pathNoExtension + "-media";
             values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
         }

@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -53,10 +54,12 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends QuestionWidget implements IBinaryWidget {
+public class ImageWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
+
+    @Nullable
     private ImageView imageView;
 
     private String binaryName;
@@ -214,7 +217,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         addAnswerView(answerLayout);
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -228,8 +232,11 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
-        imageView.setImageBitmap(null);
+        deleteFile();
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons
@@ -250,7 +257,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;

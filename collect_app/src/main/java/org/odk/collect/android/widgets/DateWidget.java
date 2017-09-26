@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,11 +22,11 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -46,6 +47,8 @@ import java.util.Date;
 
 import timber.log.Timber;
 
+import static android.content.Context.ACCESSIBILITY_SERVICE;
+
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
  * exist.
@@ -53,7 +56,8 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DateWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDateSetListener {
     private DatePickerDialog datePickerDialog;
 
     private Button dateButton;
@@ -76,7 +80,7 @@ public class DateWidget extends QuestionWidget {
 
         readAppearance();
         createDateButton();
-        createDateTextView();
+        dateTextView = getAnswerTextView();
         createDatePickerDialog();
         hideDayFieldIfNotInFormat();
         addViews();
@@ -120,6 +124,7 @@ public class DateWidget extends QuestionWidget {
         if (nullAnswer) {
             return null;
         } else {
+            // This is LDT but TimeWidget is just DT. Seems like we should make these consistent.
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
                     .withMonthOfYear(hideMonth ? 1 : month)
@@ -160,19 +165,12 @@ public class DateWidget extends QuestionWidget {
                 if (nullAnswer) {
                     setDateToCurrent();
                 } else {
-                    datePickerDialog.updateDate(year, month - 1, dayOfMonth);
+                    updateDate(year, month, dayOfMonth, true);
                 }
+
                 datePickerDialog.show();
             }
         });
-    }
-
-    private void createDateTextView() {
-        dateTextView = new TextView(getContext());
-        dateTextView.setId(QuestionWidget.newUniqueId());
-        dateTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
-        dateTextView.setPadding(20, 20, 20, 20);
-        dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
     }
 
     private void addViews() {
@@ -191,11 +189,12 @@ public class DateWidget extends QuestionWidget {
 
     private int getTheme() {
         int theme = 0;
+        // https://github.com/opendatakit/collect/issues/1424
         // https://github.com/opendatakit/collect/issues/1367
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             theme = android.R.style.Theme_Material_Light_Dialog;
         }
-        if (!showCalendar) {
+        if (!showCalendar || (isBrokenSamsungDevice() && isTalkBackActive())) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
 
@@ -203,28 +202,31 @@ public class DateWidget extends QuestionWidget {
     }
 
     private void createDatePickerDialog() {
-        datePickerDialog = new CustomDatePickerDialog(getContext(), getTheme(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        DateWidget.this.year = year;
-                        month = monthOfYear + 1;
-                        DateWidget.this.dayOfMonth = dayOfMonth;
-                        setDateLabel();
-                    }
-                }, 1971, 1, 1); // placeholder date that is valid
+        datePickerDialog = new CustomDatePickerDialog(getContext(), getTheme(), this, 1971, 1, 1); // placeholder date that is valid
         datePickerDialog.setCanceledOnTouchOutside(false);
 
         if (formEntryPrompt.getAnswerValue() == null) {
             clearAnswer();
+
         } else {
-            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
-            year = dt.getYear();
-            month = dt.getMonthOfYear();
-            dayOfMonth = dt.getDayOfMonth();
-            setDateLabel();
-            datePickerDialog.updateDate(dt.getYear(), dt.getMonthOfYear() - 1, dt.getDayOfMonth());
+            Date date = (Date) formEntryPrompt.getAnswerValue().getValue();
+
+            // This is LDT but TimeWidget is just DT, why?:
+            LocalDateTime localDateTime = new LocalDateTime(date);
+            updateDate(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfMonth(), true);
         }
+    }
+
+    // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
+    private boolean isBrokenSamsungDevice() {
+        return (Build.MANUFACTURER.equalsIgnoreCase("samsung")
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    // https://stackoverflow.com/a/34853067/5479029
+    private boolean isTalkBackActive() {
+        return ((AccessibilityManager) getContext().getSystemService(ACCESSIBILITY_SERVICE)).isTouchExplorationEnabled();
     }
 
     public boolean isDayHidden() {
@@ -236,15 +238,15 @@ public class DateWidget extends QuestionWidget {
     }
 
     public int getYear() {
-        return datePickerDialog.getDatePicker().getYear();
+        return year;
     }
 
     public int getMonth() {
-        return datePickerDialog.getDatePicker().getMonth() + 1;
+        return month;
     }
 
     public int getDay() {
-        return datePickerDialog.getDatePicker().getDayOfMonth();
+        return dayOfMonth;
     }
 
     public boolean isNullAnswer() {
@@ -252,28 +254,65 @@ public class DateWidget extends QuestionWidget {
     }
 
     public void setDateToCurrent() {
-        DateTime dt = new DateTime();
-        year = dt.getYear();
-        month = dt.getMonthOfYear();
-        dayOfMonth = dt.getDayOfMonth();
+        updateDate(DateTime.now(), false);
+    }
+
+    public void updateDate(DateTime dateTime) {
+        updateDate(dateTime, true);
+    }
+
+    public void updateDate(DateTime dateTime, boolean shouldUpdateLabel) {
+        updateDate(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfMonth(), shouldUpdateLabel);
+    }
+
+    public void updateDate(int year, int month, int dayOfMonth, boolean shouldUpdateLabel) {
+        this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
+
         datePickerDialog.updateDate(year, month - 1, dayOfMonth);
+        if (shouldUpdateLabel) {
+            setDateLabel();
+        }
+    }
+
+    // Exposed for testing purposes to avoid reflection.
+    public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
+        this.datePickerDialog = datePickerDialog;
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.year = year;
+        this.month = month + 1;
+        this.dayOfMonth = dayOfMonth;
+
+        setDateLabel();
     }
 
     private class CustomDatePickerDialog extends DatePickerDialog {
         private String dialogTitle = getContext().getString(R.string.select_date);
+        private int theme;
 
         CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
             super(context, theme, listener, year, month, dayOfMonth);
-            if (!showCalendar) {
+            this.theme = theme;
+            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 setTitle(dialogTitle);
                 fixSpinner(context, year, month, dayOfMonth);
-                getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                Window window = getWindow();
+                if (window != null) {
+                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
+
+                //noinspection deprecation
                 getDatePicker().setCalendarViewShown(false);
             }
         }
 
         public void setTitle(CharSequence title) {
-            if (!showCalendar) {
+            if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 super.setTitle(dialogTitle);
             }
         }
@@ -282,7 +321,7 @@ public class DateWidget extends QuestionWidget {
          * Workaround for this bug: https://code.google.com/p/android/issues/detail?id=222208
          * In Android 7.0 Nougat, spinner mode for the DatePicker in DatePickerDialog is
          * incorrectly displayed as calendar, even when the theme specifies otherwise.
-         *
+         * <p>
          * Source: https://gist.github.com/jeffdgr8/6bc5f990bf0c13a7334ce385d482af9f
          */
         private void fixSpinner(Context context, int year, int month, int dayOfMonth) {
@@ -303,10 +342,23 @@ public class DateWidget extends QuestionWidget {
                     a.recycle();
 
                     if (mode == MODE_SPINNER) {
-                        DatePicker datePicker = (DatePicker) findField(DatePickerDialog.class,
-                                DatePicker.class, "mDatePicker").get(this);
+
+                        Field datePickerField = findField(DatePickerDialog.class,
+                                DatePicker.class, "mDatePicker");
+                        if (datePickerField == null) {
+                            Timber.w("Reflection failed: couldn't find 'mDatePicker' field on DatePickerDialog.");
+                            return;
+                        }
+
+                        DatePicker datePicker = (DatePicker) datePickerField.get(this);
                         Class<?> delegateClass = Class.forName("android.widget.DatePicker$DatePickerDelegate");
+
                         Field delegateField = findField(DatePicker.class, delegateClass, "mDelegate");
+                        if (delegateField == null) {
+                            Timber.w("Reflection failed: couldn't find 'mDelegate' field on DatePickerDialog.");
+                            return;
+                        }
+
                         Object delegate = delegateField.get(datePicker);
 
                         Class<?> spinnerDelegateClass = Class.forName("android.widget.DatePickerSpinnerDelegate");
@@ -357,10 +409,5 @@ public class DateWidget extends QuestionWidget {
             }
             return null;
         }
-    }
-
-    // Exposed for testing purposes to avoid reflection.
-    public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
-        this.datePickerDialog = datePickerDialog;
     }
 }

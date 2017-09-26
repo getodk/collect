@@ -14,12 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -49,7 +48,8 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SpinnerMultiWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
     List<SelectChoice> items;
 
@@ -87,16 +87,13 @@ public class SpinnerMultiWidget extends QuestionWidget {
         answerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
         button = getSimpleButton(context.getString(R.string.select_answer));
-        selectionText = new TextView(getContext());
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
             answerItems[i] = prompt.getSelectChoiceText(items.get(i));
         }
 
-        selectionText.setText(context.getString(R.string.selected));
-        selectionText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+        selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +134,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
         }
 
         // Fill in previous answers
-        List<Selection> ve = new ArrayList<Selection>();
+        List<Selection> ve = new ArrayList<>();
         if (prompt.getAnswerValue() != null) {
             ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
@@ -171,7 +168,7 @@ public class SpinnerMultiWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        List<Selection> vc = new ArrayList<Selection>();
+        List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selections[i]) {
                 SelectChoice sc = items.get(i);
@@ -214,4 +211,15 @@ public class SpinnerMultiWidget extends QuestionWidget {
         super.cancelLongPress();
         button.cancelLongPress();
     }
+
+    @Override
+    public int getChoiceCount() {
+        return selections.length;
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        selections[choiceIndex] = isSelected;
+    }
+
 }

@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,10 +56,13 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
+
+    @Nullable
     private WebView imageDisplay;
 
     private String binaryName;
@@ -65,60 +70,6 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     private String instanceFolder;
 
     private TextView errorTextView;
-
-    private String constructImageElement() {
-        File f = new File(instanceFolder + File.separator + binaryName);
-
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        int screenWidth = metrics.widthPixels;
-
-        return f.exists() ? ("<img align=\"middle\" src=\"file:///"
-                + f.getAbsolutePath()
-                +
-                // Appending the time stamp to the filename is a hack to prevent
-                // caching.
-                "?"
-                + new Date().getTime()
-                + "\" width=\""
-                + Integer.toString(screenWidth - 10) + "\" >")
-                : "";
-    }
-
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2,
-                                        float velocityX, float velocityY) {
-        if (imageDisplay == null
-                || imageDisplay.getVisibility() != View.VISIBLE) {
-            return false;
-        }
-
-        Rect rect = new Rect();
-        imageDisplay.getHitRect(rect);
-
-        // Log.i(t, "hitRect: " + rect.left + "," + rect.top + " : " +
-        // rect.right + "," + rect.bottom );
-        // Log.i(t, "e1 Raw, Clean: " + e1.getRawX() + "," + e1.getRawY() +
-        // " : " + e1.getX() + "," + e1.getY());
-        // Log.i(t, "e2 Raw, Clean: " + e2.getRawX() + "," + e2.getRawY() +
-        // " : " + e2.getX() + "," + e2.getY());
-
-        // starts in WebView
-        if (rect.contains((int) e1.getRawX(), (int) e1.getRawY())) {
-            return true;
-        }
-
-        // ends in WebView
-        if (rect.contains((int) e2.getRawX(), (int) e2.getRawY())) {
-            return true;
-        }
-
-        // transits WebView
-        if (rect.contains((int) ((e1.getRawX() + e2.getRawX()) / 2.0),
-                (int) ((e1.getRawY() + e2.getRawY()) / 2.0))) {
-            return true;
-        }
-        // Log.i(t, "NOT SUPPRESSED");
-        return false;
-    }
 
     public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -228,6 +179,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
             imageDisplay.setId(QuestionWidget.newUniqueId());
             imageDisplay.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             imageDisplay.getSettings().setBuiltInZoomControls(true);
+            //noinspection deprecation
             imageDisplay.getSettings().setDefaultZoom(
                     WebSettings.ZoomDensity.FAR);
             imageDisplay.setVisibility(View.VISIBLE);
@@ -243,7 +195,62 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         addAnswerView(answerLayout);
     }
 
-    private void deleteMedia() {
+    private String constructImageElement() {
+        File f = new File(instanceFolder + File.separator + binaryName);
+
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
+
+        return f.exists() ? ("<img align=\"middle\" src=\"file:///"
+                + f.getAbsolutePath()
+                +
+                // Appending the time stamp to the filename is a hack to prevent
+                // caching.
+                "?"
+                + new Date().getTime()
+                + "\" width=\""
+                + Integer.toString(screenWidth - 10) + "\" >")
+                : "";
+    }
+
+    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2,
+                                        float velocityX, float velocityY) {
+        if (imageDisplay == null
+                || imageDisplay.getVisibility() != View.VISIBLE) {
+            return false;
+        }
+
+        Rect rect = new Rect();
+        imageDisplay.getHitRect(rect);
+
+        // Log.i(t, "hitRect: " + rect.left + "," + rect.top + " : " +
+        // rect.right + "," + rect.bottom );
+        // Log.i(t, "e1 Raw, Clean: " + e1.getRawX() + "," + e1.getRawY() +
+        // " : " + e1.getX() + "," + e1.getY());
+        // Log.i(t, "e2 Raw, Clean: " + e2.getRawX() + "," + e2.getRawY() +
+        // " : " + e2.getX() + "," + e2.getY());
+
+        // starts in WebView
+        if (rect.contains((int) e1.getRawX(), (int) e1.getRawY())) {
+            return true;
+        }
+
+        // ends in WebView
+        if (rect.contains((int) e2.getRawX(), (int) e2.getRawY())) {
+            return true;
+        }
+
+        // transits WebView
+        if (rect.contains((int) ((e1.getRawX() + e2.getRawX()) / 2.0),
+                (int) ((e1.getRawY() + e2.getRawY()) / 2.0))) {
+            return true;
+        }
+        // Log.i(t, "NOT SUPPRESSED");
+        return false;
+    }
+
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -257,7 +264,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
 
         if (imageDisplay != null) {
             // update HTML to not hold image file reference.
@@ -289,7 +296,7 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;
@@ -305,7 +312,10 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());

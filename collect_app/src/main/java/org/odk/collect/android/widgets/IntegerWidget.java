@@ -14,12 +14,14 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
+import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
@@ -32,7 +34,43 @@ import java.util.Locale;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class IntegerWidget extends StringWidget {
+
+    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+        super(context, prompt, readOnlyOverride, true);
+
+        EditText answerText = getAnswerTextField();
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+        // needed to make long readonly text scroll
+        answerText.setHorizontallyScrolling(false);
+        answerText.setSingleLine(false);
+
+        // only allows numbers and no periods
+        answerText.setKeyListener(new DigitsKeyListener(true, false));
+
+        // ints can only hold 2,147,483,648. we allow 999,999,999
+        InputFilter[] fa = new InputFilter[1];
+        fa[0] = new InputFilter.LengthFilter(9);
+        answerText.setFilters(fa);
+
+        if (prompt.isReadOnly()) {
+            setBackground(null);
+            setFocusable(false);
+            setClickable(false);
+        }
+
+        Integer i = getIntegerAnswerValue();
+
+        if (i != null) {
+            answerText.setText(String.format(Locale.US, "%d", i));
+            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+        }
+
+        setupChangeListener();
+    }
 
     private Integer getIntegerAnswerValue() {
         IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
@@ -50,47 +88,13 @@ public class IntegerWidget extends StringWidget {
         return d;
     }
 
-    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
-        super(context, prompt, readOnlyOverride, true);
-
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        // needed to make long readonly text scroll
-        answer.setHorizontallyScrolling(false);
-        answer.setSingleLine(false);
-
-        // only allows numbers and no periods
-        answer.setKeyListener(new DigitsKeyListener(true, false));
-
-        // ints can only hold 2,147,483,648. we allow 999,999,999
-        InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(9);
-        answer.setFilters(fa);
-
-        if (prompt.isReadOnly()) {
-            setBackground(null);
-            setFocusable(false);
-            setClickable(false);
-        }
-
-        Integer i = getIntegerAnswerValue();
-
-        if (i != null) {
-            answer.setText(String.format(Locale.US, "%d", i));
-            Selection.setSelection(answer.getText(), answer.getText().toString().length());
-        }
-
-        setupChangeListener();
-    }
-
-
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = answer.getText().toString();
-        if (s == null || s.equals("")) {
+        String s = getAnswerTextField().getText().toString();
+        if (s.isEmpty()) {
             return null;
+
         } else {
             try {
                 return new IntegerData(Integer.parseInt(s));
