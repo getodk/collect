@@ -20,12 +20,10 @@ import com.google.api.services.drive.DriveScopes;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.tasks.InstanceServerUploader;
@@ -59,18 +57,17 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             if (currentNetworkInfo != null
-                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                uploadForms(context, isFormAutoSendOptionEnabled(currentNetworkInfo));
+                    && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED
+                    && isFormAutoSendOptionEnabled(currentNetworkInfo)) {
+                uploadForms(context);
             }
         } else if (action.equals("org.odk.collect.android.FormSaved")) {
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
-            if (ni == null || !ni.isConnected()) {
-                // not connected, do nothing
-            } else {
-                uploadForms(context, isFormAutoSendOptionEnabled(ni));
+            if (ni != null && ni.isConnected() && isFormAutoSendOptionEnabled(ni)) {
+                uploadForms(context);
             }
         }
     }
@@ -90,23 +87,19 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 && sendnetwork);
     }
 
-    private void uploadForms(Context context, boolean isFormAutoSendOptionEnabled) {
+    private void uploadForms(Context context) {
         if (!running) {
             running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<Long>();
+            ArrayList<Long> toUpload = new ArrayList<>();
             Cursor c = new InstancesDao().getFinalizedInstancesCursor();
 
             try {
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
-                    String formId;
                     while (c.moveToNext()) {
-                        formId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                        if (isFormAutoSendEnabled(formId, isFormAutoSendOptionEnabled)) {
-                            Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                            toUpload.add(l);
-                        }
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
                     }
                 }
             } finally {
@@ -122,7 +115,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
 
             Long[] toSendArray = new Long[toUpload.size()];
             toUpload.toArray(toSendArray);
-
 
             GoogleAccountCredential accountCredential;
             // Initialize credentials and service object.
@@ -166,23 +158,6 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         }
     }
 
-    // If the form explicitly sets the auto-send property, then it overrides the preferences.
-    private boolean isFormAutoSendEnabled(String jrFormId, boolean isFormAutoSendOptionEnabled) {
-        Cursor cursor = new FormsDao().getFormsCursorForFormId(jrFormId);
-
-        String autoSubmit = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            try {
-                int autoSubmitColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.AUTO_SUBMIT);
-                autoSubmit = cursor.getString(autoSubmitColumnIndex);
-            } finally {
-                cursor.close();
-            }
-        }
-
-        return autoSubmit == null ? isFormAutoSendOptionEnabled : Boolean.valueOf(autoSubmit);
-    }
-
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
         // task is done
@@ -195,7 +170,9 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
         running = false;
 
         StringBuilder message = new StringBuilder();
-        message.append(Collect.getInstance().getString(R.string.odk_auto_note) + " :: \n\n");
+        message
+                .append(Collect.getInstance().getString(R.string.odk_auto_note))
+                .append(" :: \n\n");
 
         if (result == null) {
             message.append(Collect.getInstance().getString(R.string.odk_auth_auth_fail));
@@ -215,24 +192,26 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                 }
             }
 
-            {
-                Cursor results = null;
-                try {
-                    results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
-                    if (results.getCount() > 0) {
-                        results.moveToPosition(-1);
-                        while (results.moveToNext()) {
-                            String name = results.getString(results
-                                    .getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                            String id = results.getString(results
-                                    .getColumnIndex(InstanceColumns._ID));
-                            message.append(name + " - " + result.get(id) + "\n\n");
-                        }
+            Cursor results = null;
+            try {
+                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                if (results.getCount() > 0) {
+                    results.moveToPosition(-1);
+                    while (results.moveToNext()) {
+                        String name = results.getString(results
+                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                        String id = results.getString(results
+                                .getColumnIndex(InstanceColumns._ID));
+                        message
+                                .append(name)
+                                .append(" - ")
+                                .append(result.get(id))
+                                .append("\n\n");
                     }
-                } finally {
-                    if (results != null) {
-                        results.close();
-                    }
+                }
+            } finally {
+                if (results != null) {
+                    results.close();
                 }
             }
         }

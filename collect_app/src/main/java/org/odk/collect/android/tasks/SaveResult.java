@@ -33,7 +33,7 @@ public class SaveResult {
         return saveResult;
     }
 
-    public boolean getComplete() {
+    public boolean isComplete() {
         return complete;
     }
 

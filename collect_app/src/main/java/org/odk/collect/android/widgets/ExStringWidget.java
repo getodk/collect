@@ -14,12 +14,14 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
@@ -40,26 +42,26 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.logic.FormController;
 
 import java.util.Map;
 
 import timber.log.Timber;
 
-
 /**
  * <p>Launch an external app to supply a string value. If the app
  * does not launch, enable the text area for regular data entry.</p>
- *
+ * <p>
  * <p>The default button text is "Launch"
- *
+ * <p>
  * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values.
- *
+ * <p>
  * <p>To use this widget, define an appearance on the &lt;input/&gt;
  * tag that begins "ex:" and then contains the intent action to lauch.
- *
+ * <p>
  * <p>e.g.,
- *
+ * <p>
  * <pre>
  * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/form/passPhrase" &gt;
  * </pre>
@@ -87,14 +89,13 @@ import timber.log.Timber;
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
-
+    protected EditText answer;
     private boolean hasExApp = true;
     private Button launchIntentButton;
     private Drawable textBackground;
-
-    protected EditText answer;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -109,6 +110,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
+        answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
@@ -137,15 +139,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
-        // set button formatting
-        launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(QuestionWidget.newUniqueId());
-        launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        launchIntentButton.setPadding(20, 20, 20, 20);
+        launchIntentButton = getSimpleButton(buttonText);
         launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
-        launchIntentButton.setLayoutParams(params);
-
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,9 +150,14 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                         ExternalAppsUtils.populateParameters(i, exParams,
                                 formEntryPrompt.getIndex().getReference());
 
-                        Collect.getInstance().getFormController().setIndexWaitingForData(
-                                formEntryPrompt.getIndex());
+                        FormController formController = Collect.getInstance().getFormController();
+                        if (formController == null) {
+                            return;
+                        }
+
+                        formController.setIndexWaitingForData(formEntryPrompt.getIndex());
                         fireActivity(i);
+
                     } catch (ExternalParamsException e) {
                         Timber.e(e);
                         onException(e.getMessage());
@@ -177,7 +177,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                 }
                 launchIntentButton.setEnabled(false);
                 launchIntentButton.setFocusable(false);
-                Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                cancelWaitingForBinaryData();
+
                 Toast.makeText(getContext(),
                         toastText, Toast.LENGTH_SHORT)
                         .show();
@@ -211,22 +212,19 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = answer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        return !s.isEmpty() ? new StringData(s) : null;
     }
 
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+
+        cancelWaitingForBinaryData();
     }
 
     @Override
@@ -262,13 +260,18 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController().getIndexWaitingForData());
+        FormController formController = Collect.getInstance().getFormController();
+        return formController != null
+                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+
     }
 
     @Override
     public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
     }
 
     @Override

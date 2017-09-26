@@ -101,7 +101,6 @@ public class AndroidShortcuts extends AppCompatActivity {
                 AndroidShortcuts sc = AndroidShortcuts.this;
                 sc.setResult(RESULT_CANCELED);
                 sc.finish();
-                return;
             }
         });
 
@@ -127,7 +126,6 @@ public class AndroidShortcuts extends AppCompatActivity {
 
         setResult(RESULT_OK, intent);
         finish();
-        return;
     }
 
 }

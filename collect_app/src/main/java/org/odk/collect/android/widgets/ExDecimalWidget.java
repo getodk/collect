@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 
 import org.javarosa.core.model.data.DecimalData;
@@ -36,28 +37,12 @@ import java.util.Locale;
 /**
  * Launch an external app to supply a decimal value. If the app
  * does not launch, enable the text area for regular data entry.
- *
+ * <p>
  * See {@link org.odk.collect.android.widgets.ExStringWidget} for usage.
  *
  * @author mitchellsundt@gmail.com
  */
 public class ExDecimalWidget extends ExStringWidget {
-
-    private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
-        Double d = null;
-        if (dataHolder != null) {
-            Object dataValue = dataHolder.getValue();
-            if (dataValue != null) {
-                if (dataValue instanceof Integer) {
-                    d = Double.valueOf(((Integer) dataValue).intValue());
-                } else {
-                    d = (Double) dataValue;
-                }
-            }
-        }
-        return d;
-    }
 
     public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -72,23 +57,37 @@ public class ExDecimalWidget extends ExStringWidget {
         fa[0] = new InputFilter.LengthFilter(15);
         answer.setFilters(fa);
 
-        // apparently an attempt at rounding to no more than 15 digit precision???
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMaximumFractionDigits(15);
-        nf.setMaximumIntegerDigits(15);
-        nf.setGroupingUsed(false);
-
         Double d = getDoubleAnswerValue();
 
         if (d != null) {
-            // truncate to 15 digits max...
-            String string = nf.format(d);
-            d = Double.parseDouble(string.replace(',', '.')); // in case , is decimal pt
-            //answer.setText(d.toString());
-            answer.setText(String.format(Locale.ENGLISH, "%f", d));
+            // truncate to 15 digits max in US locale
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+            nf.setMaximumFractionDigits(15);
+            nf.setMaximumIntegerDigits(15);
+            nf.setGroupingUsed(false);
+
+            String formattedValue = nf.format(d);
+            answer.setText(formattedValue);
+
+            Selection.setSelection(answer.getText(), answer.getText().length());
         }
     }
 
+    private Double getDoubleAnswerValue() {
+        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
+        Double d = null;
+        if (dataHolder != null) {
+            Object dataValue = dataHolder.getValue();
+            if (dataValue != null) {
+                if (dataValue instanceof Integer) {
+                    d = (double) (Integer) dataValue;
+                } else {
+                    d = (Double) dataValue;
+                }
+            }
+        }
+        return d;
+    }
 
     @Override
     protected void fireActivity(Intent i) throws ActivityNotFoundException {

@@ -70,20 +70,20 @@ public class ScannerWithFlashlightActivity extends Activity implements
 
     @Override
     protected void onPause() {
-        super.onPause();
         capture.onPause();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         capture.onDestroy();
+        super.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         capture.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

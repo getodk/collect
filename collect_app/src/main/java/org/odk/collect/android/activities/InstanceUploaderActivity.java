@@ -18,12 +18,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -304,11 +304,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
 
-
-                // Get the server, username, and password from the settings
-                SharedPreferences settings =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
                 return new AuthDialogUtility().createDialog(this, this);
         }
 
@@ -328,10 +323,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         Collections.addAll(workingSet, instancesToSend);
         if (doneSoFar != null) {
             Set<String> uploadedInstances = doneSoFar.keySet();
-            Iterator<String> itr = uploadedInstances.iterator();
 
-            while (itr.hasNext()) {
-                Long removeMe = Long.valueOf(itr.next());
+            for (String uploadedInstance : uploadedInstances) {
+                Long removeMe = Long.valueOf(uploadedInstance);
                 boolean removed = workingSet.remove(removeMe);
                 if (removed) {
                     Timber.i("%d was already sent, removing from queue before restarting task",

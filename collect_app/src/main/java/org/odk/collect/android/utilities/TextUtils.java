@@ -50,8 +50,8 @@ public class TextUtils {
             String[] styles = stylesText.trim().split(";");
             StringBuffer stylesOutput = new StringBuffer();
 
-            for (int i = 0; i < styles.length; i++) {
-                String[] stylesAttributes = styles[i].trim().split(":");
+            for (String style : styles) {
+                String[] stylesAttributes = style.trim().split(":");
                 if (stylesAttributes[0].equals("color")) {
                     stylesOutput.append(" color=\"" + stylesAttributes[1] + "\"");
                 }

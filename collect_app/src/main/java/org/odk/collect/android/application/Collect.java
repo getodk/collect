@@ -22,7 +22,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +33,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
@@ -38,11 +42,11 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
+import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
@@ -74,35 +78,43 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
+    public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+    public static String defaultSysLanguage;
     private static Collect singleton = null;
-
-    static {
-        PRNGFixes.apply();
-    }
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
     // retain credentials for 7 minutes...
     private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
     private ActivityLogger activityLogger;
+
+    @Nullable
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
-
-    public static String defaultSysLanguage;
 
     public static Collect getInstance() {
         return singleton;
     }
 
     public static int getQuestionFontsize() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
+        // For testing:
+        Collect instance = Collect.getInstance();
+        if (instance == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(instance);
+        if (settings == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
         String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        return Integer.valueOf(questionFont);
+
+        return Integer.parseInt(questionFont);
     }
 
     /**
@@ -149,7 +161,7 @@ public class Collect extends Application {
         String dirPath = directory.getAbsolutePath();
         if (dirPath.startsWith(Collect.ODK_ROOT)) {
             dirPath = dirPath.substring(Collect.ODK_ROOT.length());
-            String[] parts = dirPath.split(File.separator);
+            String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
                 return true;
@@ -162,11 +174,12 @@ public class Collect extends Application {
         return activityLogger;
     }
 
+    @Nullable
     public FormController getFormController() {
         return formController;
     }
 
-    public void setFormController(FormController controller) {
+    public void setFormController(@Nullable FormController controller) {
         formController = controller;
     }
 
@@ -238,6 +251,12 @@ public class Collect extends Application {
 
     @Override
     public void onCreate() {
+        super.onCreate();
+
+        PRNGFixes.apply();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        JodaTimeAndroid.init(this);
+
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
         singleton = this;
@@ -245,7 +264,6 @@ public class Collect extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
-        super.onCreate();
 
         PropertyManager mgr = new PropertyManager(this);
 
@@ -254,7 +272,7 @@ public class Collect extends Application {
         activityLogger = new ActivityLogger(
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(this);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
@@ -266,6 +284,7 @@ public class Collect extends Application {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
         boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");

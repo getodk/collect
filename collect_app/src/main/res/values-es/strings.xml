@@ -121,13 +121,13 @@
   <string name="username">Nombre del Usuario</string>
   <string name="view_hierarchy">Ir a la Pregunta</string>
   <string name="general_preferences">Cambiar la configuración</string>
+  <string name="client">Interfaz de usuario</string>
   <string name="show_splash_summary">Muestra cuando la aplicacion empieza</string>
   <string name="splash_path">Seleccione la Imagen para la pantalla inicial</string>
   <string name="default_splash_path">Predeterminado por ODK</string>
   <string name="select_another_image">Seleccione otra imagen</string>
   <string name="use_odk_default">Usar la imagen por defecto</string>
   <string name="change_splash_path">Cambiar la imagen</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
   <string name="change_protocol">Protocolo</string>
@@ -202,7 +202,7 @@
   <string name="admin_password_incorrect">¡Contraseña incorrecta!</string>
   <string name="enter_admin_password">Entrar contraseña de Administrador</string>
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
-  <string name="autosend">Auto Envío</string>
+  <string name="autosend">Auto enviar</string>
   <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
   <string name="no_account">Sin cuenta</string>
@@ -271,15 +271,12 @@
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
   <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
-  <string name="odk_auth_auth_fail">Error de autenticación ODK Autosend, por favor asegúrese de que la configuración es correcta</string>
-  <string name="odk_auto_note">Notificación de ODK Autosend</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
@@ -369,6 +366,7 @@
   <string name="version_number">Versión: %s</string>
   <string name="odk_website">Visitar el sitio web de ODK</string>
   <string name="odk_forum">Unirse al foro de ODK</string>
+  <string name="all_open_source_licenses">Librerías y licencias de código abierto</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -412,12 +410,6 @@
   <string name="instance_scan_count">%1$d formularios añadidos.</string>
   <string name="instance_sync">Importar formularios guardados como finalizados</string>
   <string name="instance_sync_summary">Importa los formularios guardados de la carpeta de instancias</string>
-  <string name="sort_by_name_asc">Por nombre, A-Z</string>
-  <string name="sort_by_name_desc">Por nombre, Z-A</string>
-  <string name="sort_by_date_asc">Por fecha, el más reciente primero</string>
-  <string name="sort_by_date_desc">Por fecha, el más antiguo primero</string>
-  <string name="sort_by_status_asc">Por estado, finalizado primero</string>
-  <string name="sort_by_status_desc">Por estado, sin finalizar primero</string>
   <string name="sort_the_list">Ordenar la lista</string>
   <string name="request_permissions_google_account">ODK Collect necesita acceder a tu cuenta de Google para obtener formularios en blanco y enviar formularios terminados.</string>
   <string name="filter_the_list">Filtrar la lista</string>
@@ -459,4 +451,20 @@
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="request_permission">Esta aplicación necesita permisos para usar la cámara</string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>
+  <string name="user_settings">Ajustes de usuario</string>
+  <string name="main_menu_settings">Menú principal de ajustes</string>
+  <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
+  <string name="user_access_control">Control de acceso a usuario</string>
+  <string name="autosend_selector_title">Auto enviar</string>
+  <string name="off">Off</string>
+  <string name="wifi_autosend">Solo con Wifi</string>
+  <string name="cellular_autosend">Solo con Datos Móviles</string>
+  <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
+  <string name="form_management_preferences">Gestión de formulario</string>
+  <string name="high_resolution_title">Video de alta resolución</string>
+  <string name="user_and_device_identity_title">Identidad de usuario y dispositivo</string>
+  <string name="constraint_behavior_title">Procesamiento de restricciones</string>
+  <string name="server_settings_title">Servidor</string>
+  <string name="form_entry">Desmarque para esconder del formulario</string>
+  <string name="use_device_language">Usar el idioma del dispositivo</string>
 </resources>

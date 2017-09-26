@@ -87,14 +87,4 @@ public class FileManagerTabs extends AppCompatActivity {
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
     }
-
-    @Override
-    public void onBackPressed() {
-        if (dataManagerList.getDrawerStatus()) {
-            dataManagerList.setUserVisibleHint(false);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
 }

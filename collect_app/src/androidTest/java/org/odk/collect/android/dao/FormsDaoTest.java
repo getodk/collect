@@ -110,16 +110,16 @@ public class FormsDaoTest {
         assertEquals("sample", forms.get(5).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(5).getDisplaySubtext());
 
-        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " DESC";
+        String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
 
         cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
         forms = formsDao.getFormsFromCursor(cursor);
         assertEquals(6, forms.size());
 
-        assertEquals("sample", forms.get(0).getDisplayName());
+        assertEquals("Widgets", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
 
-        assertEquals("Widgets", forms.get(1).getDisplayName());
+        assertEquals("sample", forms.get(1).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(1).getDisplaySubtext());
 
         assertEquals("Miramare", forms.get(2).getDisplayName());

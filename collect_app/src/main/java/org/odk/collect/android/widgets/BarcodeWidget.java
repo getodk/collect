@@ -16,14 +16,10 @@ package org.odk.collect.android.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -32,6 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 
 /**
@@ -39,27 +36,15 @@ import org.odk.collect.android.application.Collect;
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
+public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     private Button getBarcodeButton;
     private TextView stringAnswer;
 
     public BarcodeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        // set button formatting
-        getBarcodeButton = new Button(getContext());
-        getBarcodeButton.setId(QuestionWidget.newUniqueId());
-        getBarcodeButton.setText(getContext().getString(R.string.get_barcode));
-        getBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                answerFontsize);
-        getBarcodeButton.setPadding(20, 20, 20, 20);
+        getBarcodeButton = getSimpleButton(getContext().getString(R.string.get_barcode));
         getBarcodeButton.setEnabled(!prompt.isReadOnly());
-        getBarcodeButton.setLayoutParams(params);
-
-        // launch barcode capture intent on click
         getBarcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,16 +55,17 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 
                 Collect.getInstance().getFormController()
                         .setIndexWaitingForData(formEntryPrompt.getIndex());
-                new IntentIntegrator((Activity) getContext()).initiateScan();
+
+                new IntentIntegrator((Activity) getContext())
+                        .setCaptureActivity(ScannerWithFlashlightActivity.class)
+                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
+                        .setOrientationLocked(false)
+                        .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
+                        .initiateScan();
             }
         });
 
-        // set text formatting
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        stringAnswer.setTextColor(Color.BLACK);
-        stringAnswer.setGravity(Gravity.CENTER);
+        stringAnswer = getCenteredAnswerTextView();
 
         String s = prompt.getAnswerText();
         if (s != null) {
@@ -156,5 +142,4 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         getBarcodeButton.cancelLongPress();
         stringAnswer.cancelLongPress();
     }
-
 }
