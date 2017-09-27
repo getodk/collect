@@ -259,18 +259,23 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             } else {
                 Timber.i("No instance found, creating");
                 // Entry didn't exist, so create it.
-                //Cursor c = null;    smap
+                Cursor c = null;
                 try {
-                    // smap cannot rely on retrieving the form definition as the URI may have changed
-                	// retrieve the form definition...
-                	//c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);    smap
-	                //c.moveToFirst();    smap
-	                //source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));				// smap
-	                //String formname = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME)); smap
-	                //String submissionUri = null;  smap
-	                //if ( !c.isNull(c.getColumnIndex(FormsColumns.SUBMISSION_URI)) ) {  smap
-	                //	submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
-	                //}
+                    // smap cannot rely on retrieving the form definition as the URI may have changed - however just in case formDetail is null
+                    if(mFormDetail == null) {
+                        mFormDetail = new FormDetail();
+
+                        // retrieve the form definition...
+                        c = Collect.getInstance().getContentResolver().query(uri, null, null, null, null);
+                        c.moveToFirst();
+                        mFormDetail.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));
+                        mFormDetail.name = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+                        if ( !c.isNull(c.getColumnIndex(FormsColumns.SUBMISSION_URI)) ) {
+                            mFormDetail.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
+                        }
+                        mFormDetail.formId = c.getString(c.getColumnIndex(FormsColumns.JR_FORM_ID));
+                        mFormDetail.version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
+                    }
 
 	                // add missing fields into values
 	                values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
@@ -298,9 +303,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                 } catch (Exception e) {   // smap
                     FirebaseCrash.report(e);        // Report Crashes
                 } finally {
-                    //if (c != null) { smap
-                    //    c.close();
-                    //}
+                    if (c != null) {
+                        c.close();
+                    }
                 }
                 uri = new InstancesDao().saveInstance(values);
             }

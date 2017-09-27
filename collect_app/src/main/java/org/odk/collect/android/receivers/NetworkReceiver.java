@@ -124,22 +124,45 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         //mProgressMsg = getString(org.smap.smapTask.android.R.string.smap_synchronising);
         //showDialog(PROGRESS_DIALOG);
 
-        NotificationManager mNotifyMgr =
-                (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-
-        // Set refresh notification icon smap
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.notification_icon_go)
-                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                R.drawable.ic_launcher))
-                        .setProgress(0, 0, true)
-                        .setContentTitle(context.getString(R.string.app_name))
-                        .setContentText(context.getString(R.string.smap_refresh_started));
-        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
-
         if (!running) {
             running = true;
+
+            ArrayList<Long> toUpload = new ArrayList<>();
+            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+
+            try {
+                if (c != null && c.getCount() > 0) {
+                    c.move(-1);
+                    while (c.moveToNext()) {
+                        Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                        toUpload.add(l);
+                    }
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
+            }
+
+            if (toUpload.size() < 1) {
+                running = false;
+                return;
+            }
+
+            NotificationManager mNotifyMgr =
+                    (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+            // Set refresh notification icon smap
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                            .setSmallIcon(R.drawable.notification_icon_go)
+                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                    R.drawable.ic_launcher))
+                            .setProgress(0, 0, true)
+                            .setContentTitle(context.getString(R.string.app_name))
+                            .setContentText(context.getString(R.string.smap_refresh_started));
+            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+
             mContext = context;
             mDownloadTasks = new DownloadTasksTask();
             mDownloadTasks.setDownloaderListener(this, context);

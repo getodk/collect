@@ -182,58 +182,6 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                 ToastUtils.showLongToast(R.string.corrupt_settings_file_notification);
             }
         }
-
-        // NFC
-        listener = new MainTaskListener(this);
-        boolean authorised = false;
-        SharedPreferences sharedPreferences = this.getSharedPreferences(
-                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
-
-        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
-            mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-            authorised = true;
-        } else {
-            //Toast.makeText(
-            //        this,
-            //        getString(R.string.smap_nfc_not_authorised),
-            //        Toast.LENGTH_SHORT).show();
-        }
-
-        if (authorised) {
-            if (mNfcAdapter == null) {
-                //    Toast.makeText(
-                //            this,
-                //            getString(R.string.smap_nfc_not_available),
-                //            Toast.LENGTH_SHORT).show();
-            } else if (!mNfcAdapter.isEnabled()) {
-                //    Toast.makeText(
-                //            this,
-                //            getString(R.string.smap_nfc_not_enabled),
-                //            Toast.LENGTH_LONG).show();
-            } else {
-                /*
-                 * Set up NFC adapter
-                 */
-
-                // Pending intent
-                Intent nfcIntent = new Intent(getApplicationContext(), getClass());
-                nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent, 0);
-
-                // Filter
-                IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-                mNfcFilters = new IntentFilter[]{
-                        filter
-                };
-
-
-                //Toast.makeText(
-                //        this,
-                //        getString(R.string.smap_nfc_is_available),
-                //        Toast.LENGTH_LONG).show();
-
-            }
-        }
     }
 
     @Override
@@ -247,16 +195,45 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
     protected void onResume() {
         super.onResume();
 
-        if (mNfcAdapter != null && mNfcAdapter.isEnabled()) {
-            setupNFCDispatch(this, mNfcAdapter);        // NFC
-        }
-
         if (!listenerRegistered) {
+            listener = new MainTaskListener(this);
             IntentFilter filter = new IntentFilter();
             filter.addAction("startTask");
             filter.addAction("startMapTask");
             registerReceiver(listener, filter);
             listenerRegistered = true;
+        }
+
+        // NFC
+        boolean nfcAuthorised = false;
+        SharedPreferences sharedPreferences = this.getSharedPreferences(
+                AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
+            if(mNfcAdapter == null) {
+                mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            }
+
+            if (mNfcAdapter != null && mNfcAdapter.isEnabled()) {
+
+                // Pending intent
+                Intent nfcIntent = new Intent(getApplicationContext(), getClass());
+                nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                if(mNfcPendingIntent == null) {
+                    mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent, 0);
+                }
+
+                if(mNfcFilters == null) {
+                    // Filter
+                    IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+                    mNfcFilters = new IntentFilter[]{
+                            filter
+                    };
+                }
+
+                mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mNfcFilters, null);
+
+            }
         }
     }
 
@@ -490,18 +467,6 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
      * NFC Reading Overrides
      */
 
-    /**
-     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
-     */
-    public void setupNFCDispatch(final Activity activity, NfcAdapter adapter) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, true)) {
-            adapter.enableForegroundDispatch(activity, mNfcPendingIntent, mNfcFilters, null);
-        }
-    }
 
     /**
      * @param activity The corresponding {@link Activity} requesting to stop the foreground dispatch.
