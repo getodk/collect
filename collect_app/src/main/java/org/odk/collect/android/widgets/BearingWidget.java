@@ -162,10 +162,10 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         boolean isMagneticFieldSensorAvailable = false;
 
         SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             isAccelerometerSensorAvailable = true;
         }
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null){
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
             isMagneticFieldSensorAvailable = true;
         }
 
