@@ -46,7 +46,7 @@ import org.odk.collect.android.views.ODKView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
@@ -706,8 +706,8 @@ public class FormController {
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
-    public FailedConstraint saveAllScreenAnswers(LinkedHashMap<FormIndex, IAnswerData> answers,
-            boolean evaluateConstraints) throws JavaRosaException {
+    public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers,
+                                                 boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
