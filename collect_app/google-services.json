@@ -8,7 +8,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:322300403941:android:5e1d7c3c296329e8",
         "android_client_info": {
-          "package_name": "org.odk.collect.android"
+          "package_name": "org.odk.collect.android.debug"
         }
       },
       "oauth_client": [],
