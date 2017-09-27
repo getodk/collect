@@ -43,6 +43,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ViewUtil;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -54,7 +55,6 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
-    private static int idGenerator = 1211322;
     protected final int questionFontsize;
     protected final int answerFontsize;
     protected FormEntryPrompt formEntryPrompt;
@@ -101,14 +101,6 @@ public abstract class QuestionWidget
         addHelpTextView(helpTextView);
     }
 
-    /**
-     * Generate a unique ID to keep Android UI happy when the screen orientation
-     * changes.
-     */
-    public static int newUniqueId() {
-        return ++idGenerator;
-    }
-
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
@@ -136,7 +128,7 @@ public abstract class QuestionWidget
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext(), player);
-        questionMediaLayout.setId(QuestionWidget.newUniqueId()); // assign random id
+        questionMediaLayout.setId(ViewUtil.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
                 bigImageURI);
         questionMediaLayout.setAudioListener(this);
@@ -279,7 +271,7 @@ public abstract class QuestionWidget
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setId(QuestionWidget.newUniqueId());
+            helpText.setId(ViewUtil.generateViewId());
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 3);
             //noinspection ResourceType
             helpText.setPadding(0, -5, 0, 7);
@@ -364,7 +356,7 @@ public abstract class QuestionWidget
 
     protected Button getSimpleButton(String text) {
         Button button = new Button(getContext());
-        button.setId(QuestionWidget.newUniqueId());
+        button.setId(ViewUtil.generateViewId());
         button.setText(text);
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         button.setPadding(20, 20, 20, 20);
@@ -384,7 +376,7 @@ public abstract class QuestionWidget
 
     protected TextView getAnswerTextView() {
         TextView textView = new TextView(getContext());
-        textView.setId(QuestionWidget.newUniqueId());
+        textView.setId(ViewUtil.generateViewId());
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         textView.setPadding(20, 20, 20, 20);

@@ -40,6 +40,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewUtil;
 
 import java.io.File;
 import java.util.List;
@@ -90,7 +91,7 @@ public class LabelWidget extends QuestionWidget {
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = QuestionWidget.newUniqueId();
+                final int labelId = ViewUtil.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;
@@ -226,7 +227,7 @@ public class LabelWidget extends QuestionWidget {
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(QuestionWidget.newUniqueId());
+        center.setId(ViewUtil.generateViewId());
         addView(center, centerParams);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(

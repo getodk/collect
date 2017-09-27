@@ -35,6 +35,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ViewUtil;
 
 import timber.log.Timber;
 
@@ -61,7 +62,7 @@ public class StringWidget extends QuestionWidget {
         super(context, prompt);
 
         answerText = new EditText(context);
-        answerText.setId(QuestionWidget.newUniqueId());
+        answerText.setId(ViewUtil.generateViewId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
         answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);

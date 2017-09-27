@@ -43,6 +43,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewUtil;
 
 import java.io.File;
 
@@ -75,7 +76,7 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance().getFormController().getInstancePath().getParent();
 
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewUtil.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
@@ -171,7 +172,7 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
         // Only add the imageView if the user has taken a picture
         if (binaryName != null) {
             imageView = new ImageView(getContext());
-            imageView.setId(QuestionWidget.newUniqueId());
+            imageView.setId(ViewUtil.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;

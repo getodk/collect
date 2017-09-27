@@ -43,6 +43,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewUtil;
 
 import java.io.File;
 import java.util.Date;
@@ -81,7 +82,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         params.setMargins(7, 5, 7, 5);
 
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewUtil.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
@@ -176,7 +177,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         // Only add the imageView if the user has taken a picture
         if (binaryName != null) {
             imageDisplay = new WebView(getContext());
-            imageDisplay.setId(QuestionWidget.newUniqueId());
+            imageDisplay.setId(ViewUtil.generateViewId());
             imageDisplay.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             imageDisplay.getSettings().setBuiltInZoomControls(true);
             //noinspection deprecation

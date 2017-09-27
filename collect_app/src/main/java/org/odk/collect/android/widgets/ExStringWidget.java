@@ -43,6 +43,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ViewUtil;
 
 import java.util.Map;
 
@@ -105,7 +106,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
         // set text formatting
         answer = new EditText(context);
-        answer.setId(QuestionWidget.newUniqueId());
+        answer.setId(ViewUtil.generateViewId());
         answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
