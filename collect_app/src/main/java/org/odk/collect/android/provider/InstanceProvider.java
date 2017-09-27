@@ -25,6 +25,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
@@ -213,7 +215,8 @@ public class InstanceProvider extends ContentProvider {
             Collect.createODKDirs();
         } catch (RuntimeException e) {
             databaseHelper = null;
-            return null;
+            FirebaseCrash.report(e);    // smap
+            // return null;  smap
         }
 
         if (databaseHelper != null) {
