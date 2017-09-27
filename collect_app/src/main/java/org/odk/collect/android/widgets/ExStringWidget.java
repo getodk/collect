@@ -43,6 +43,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.logic.FormController;
 
 import java.util.Map;
 

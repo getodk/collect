@@ -346,7 +346,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 FormEntryPrompt prompt = questionWidget.getPrompt();
                 TreeReference treeReference =
                         (TreeReference) prompt.getFormElement().getBind().getReference();
-                
+
                 if (treeReference.getNameLast().equals(key)) {
 
                     switch (prompt.getDataType()) {
