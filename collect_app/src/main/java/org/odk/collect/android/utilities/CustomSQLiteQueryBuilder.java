@@ -19,7 +19,7 @@ package org.odk.collect.android.utilities;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-public class SQLiteQueryBuilder {
+public class CustomSQLiteQueryBuilder {
     private static final String SPACE = " ";
     private static final String SEMICOLON = ";";
 
@@ -27,13 +27,23 @@ public class SQLiteQueryBuilder {
 
     private StringBuilder query;
 
-    private SQLiteQueryBuilder(SQLiteDatabase db) {
+    // Only for tests
+    CustomSQLiteQueryBuilder() {
+        this(null);
+    }
+
+    // Only for tests
+    public StringBuilder getQuery() {
+        return query;
+    }
+
+    private CustomSQLiteQueryBuilder(SQLiteDatabase db) {
         this.db = db;
         query = new StringBuilder();
     }
 
-    public static SQLiteQueryBuilder begin(SQLiteDatabase db) {
-        return new SQLiteQueryBuilder(db);
+    public static CustomSQLiteQueryBuilder begin(SQLiteDatabase db) {
+        return new CustomSQLiteQueryBuilder(db);
     }
 
     public void end() throws SQLiteException {
@@ -41,19 +51,19 @@ public class SQLiteQueryBuilder {
         db.execSQL(query.toString());
     }
 
-    public SQLiteQueryBuilder select() {
+    public CustomSQLiteQueryBuilder select() {
         query.append("SELECT").append(SPACE);
         return this;
     }
 
-    public SQLiteQueryBuilder columnsForInsert(String... columns) {
+    public CustomSQLiteQueryBuilder columnsForInsert(String... columns) {
         query.append("(");
         columnsForSelect(columns);
         query.append(")").append(SPACE);
         return this;
     }
 
-    public SQLiteQueryBuilder columnsForSelect(String... columns) {
+    public CustomSQLiteQueryBuilder columnsForSelect(String... columns) {
         for (String column : columns) {
             query.append(column).append(",");
         }
@@ -62,58 +72,28 @@ public class SQLiteQueryBuilder {
         return this;
     }
 
-    public SQLiteQueryBuilder from(String table) {
+    public CustomSQLiteQueryBuilder from(String table) {
         query.append("FROM").append(SPACE).append(table).append(SPACE);
         return this;
     }
 
-    public SQLiteQueryBuilder renameTable(String table) {
+    public CustomSQLiteQueryBuilder renameTable(String table) {
         query.append("ALTER TABLE").append(SPACE).append(table).append(SPACE).append("RENAME TO").append(SPACE);
         return this;
     }
 
-    public SQLiteQueryBuilder dropIfExists(String table) {
-        query.append("DROP TABLE IF EXISTS").append(SPACE).append(table).append(SPACE);
-        return this;
-    }
-
-    public SQLiteQueryBuilder to(String table) {
+    public CustomSQLiteQueryBuilder to(String table) {
         query.append(table);
         return this;
     }
 
-    public SQLiteQueryBuilder insertInto(String table) {
+    public CustomSQLiteQueryBuilder dropIfExists(String table) {
+        query.append("DROP TABLE IF EXISTS").append(SPACE).append(table).append(SPACE);
+        return this;
+    }
+
+    public CustomSQLiteQueryBuilder insertInto(String table) {
         query.append("INSERT INTO").append(SPACE).append(table);
-        return this;
-    }
-
-    public SQLiteQueryBuilder alter() {
-        query.append("ALTER").append(SPACE);
-        return this;
-    }
-
-    public SQLiteQueryBuilder table(final String table) {
-        query.append("TABLE").append(SPACE).append(table).append(SPACE);
-        return this;
-    }
-
-    public SQLiteQueryBuilder defaultValue(final Object defaultValue) {
-        query.append("DEFAULT").append(SPACE).append(defaultValue).append(SPACE);
-        return this;
-    }
-
-    public SQLiteQueryBuilder where() {
-        query.append("WHERE").append(SPACE);
-        return this;
-    }
-
-    public SQLiteQueryBuilder column(final String column) {
-        query.append(column).append(SPACE);
-        return this;
-    }
-
-    public SQLiteQueryBuilder isNull() {
-        query.append("IS NULL").append(SPACE);
         return this;
     }
 }

@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.utilities.SQLiteQueryBuilder;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
 import timber.log.Timber;
 
@@ -158,7 +158,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
         String temporaryTable = INSTANCES_TABLE_NAME + "_tmp";
 
         try {
-            SQLiteQueryBuilder
+            CustomSQLiteQueryBuilder
                     .begin(db)
                     .renameTable(INSTANCES_TABLE_NAME)
                     .to(temporaryTable)
@@ -167,7 +167,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             createInstancesTable(db);
 
             // Try to avoid renaming columns in the future since restoring data after downgrade might not work
-            SQLiteQueryBuilder
+            CustomSQLiteQueryBuilder
                     .begin(db)
                     .insertInto(INSTANCES_TABLE_NAME)
                     .columnsForInsert(instancesTableColumns)
@@ -176,7 +176,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
                     .from(temporaryTable)
                     .end();
 
-            SQLiteQueryBuilder
+            CustomSQLiteQueryBuilder
                     .begin(db)
                     .dropIfExists(temporaryTable)
                     .end();

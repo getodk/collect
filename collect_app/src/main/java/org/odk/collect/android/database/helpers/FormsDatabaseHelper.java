@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.utilities.SQLiteQueryBuilder;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
 import timber.log.Timber;
 
@@ -77,7 +77,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         boolean success = true;
         try {
-            SQLiteQueryBuilder
+            CustomSQLiteQueryBuilder
                     .begin(db)
                     .dropIfExists(FORMS_TABLE_NAME)
                     .end();
