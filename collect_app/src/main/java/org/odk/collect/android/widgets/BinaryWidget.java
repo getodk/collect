@@ -21,8 +21,4 @@ package org.odk.collect.android.widgets;
  */
 public interface BinaryWidget extends Widget {
     void setBinaryData(Object answer);
-
-    void cancelWaitingForBinaryData();
-
-    boolean isWaitingForBinaryData();
 }

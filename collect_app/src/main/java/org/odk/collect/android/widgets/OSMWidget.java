@@ -200,14 +200,8 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             //launch activity if it is safe
             if (isIntentSafe) {
                 // notify that the form is waiting for data
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController == null) {
-                    Timber.w("FormController is null when trying to call setIndexWaitingForData.");
-                    return;
-                }
+                waitForData();
 
-                formController.setIndexWaitingForData(
-                        formEntryPrompt.getIndex());
                 // launch
                 ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
             } else {
@@ -237,25 +231,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
 
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
+        cancelWaitingForData();
     }
 
     @Override

@@ -76,12 +76,9 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                 Intent i;
                 i = new Intent(getContext(), BearingActivity.class);
 
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController != null) {
-                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
-                }
-
-                ((Activity) getContext()).startActivityForResult(i, RequestCodes.BEARING_CAPTURE);
+                waitForData();
+                ((Activity) getContext()).startActivityForResult(i,
+                        RequestCodes.BEARING_CAPTURE);
             }
         });
 
@@ -122,26 +119,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText((String) answer);
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override

@@ -22,6 +22,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
@@ -41,6 +43,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
@@ -429,5 +432,76 @@ public abstract class QuestionWidget
                 Timber.e(e);
             }
         }
+    }
+
+    @Override
+    public final void waitForData() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+    }
+
+    @Override
+    public final void cancelWaitingForData() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
+    }
+
+    @Override
+    public final boolean isWaitingForData() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return false;
+        }
+
+        FormIndex index = formEntryPrompt.getIndex();
+        return index.equals(formController.getIndexWaitingForData());
+    }
+
+    @Nullable
+    public final String getInstanceFolder() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return null;
+        }
+
+        return formController.getInstancePath().getParent();
+    }
+
+    @NonNull
+    public final ActivityLogger getActivityLogger() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        return collect.getActivityLogger();
     }
 }

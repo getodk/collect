@@ -27,6 +27,7 @@ import android.widget.Toast;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 
 
@@ -136,11 +137,10 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
             @Override
             public void onClick(View v) {
                 try {
-                    Collect.getInstance().getFormController().setIndexWaitingForData(
-                            formEntryPrompt.getIndex());
+                    waitForData();
                     firePrintingActivity(intentName);
                 } catch (ActivityNotFoundException e) {
-                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
+                    cancelWaitingForData();
                     Toast.makeText(getContext(),
                             errorString, Toast.LENGTH_SHORT)
                             .show();
@@ -219,11 +219,11 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -231,19 +231,6 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
         // focus on launch button
         launchIntentButton.requestFocus();
     }
-
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController().getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return !event.isAltPressed() && super.onKeyDown(keyCode, event);
