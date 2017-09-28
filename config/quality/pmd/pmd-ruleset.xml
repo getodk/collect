@@ -63,7 +63,6 @@
     </rule>
 
     <rule ref="rulesets/java/unusedcode.xml">
-        <exclude name="UnusedLocalVariable" />
         <exclude name="UnusedPrivateMethod" />
         <exclude name="UnusedPrivateField" />
         <exclude name="UnusedModifier" />
