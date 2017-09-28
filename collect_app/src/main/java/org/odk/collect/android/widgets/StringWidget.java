@@ -65,7 +65,7 @@ public class StringWidget extends QuestionWidget {
         answerText.setId(ViewIds.generateViewId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 
@@ -127,7 +127,7 @@ public class StringWidget extends QuestionWidget {
                 if (!s.toString().equals(oldText)) {
                     Collect.getInstance().getActivityLogger()
                             .logInstanceAction(this, "answerTextChanged", s.toString(),
-                                    getPrompt().getIndex());
+                                    getFormEntryPrompt().getIndex());
                 }
             }
 

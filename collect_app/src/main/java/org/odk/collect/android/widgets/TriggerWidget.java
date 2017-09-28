@@ -52,7 +52,7 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton = new CheckBox(getContext());
         triggerButton.setId(ViewIds.generateViewId());
         triggerButton.setText(getContext().getString(R.string.trigger));
-        triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         // mActionButton.setPadding(20, 20, 20, 20);
         triggerButton.setEnabled(!prompt.isReadOnly());
 
@@ -75,7 +75,7 @@ public class TriggerWidget extends QuestionWidget {
 
         stringAnswer = new TextView(getContext());
         stringAnswer.setId(ViewIds.generateViewId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         stringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
@@ -93,7 +93,7 @@ public class TriggerWidget extends QuestionWidget {
         addAnswerView(triggerButton);
     }
 
-    public FormEntryPrompt getPrompt() {
+    public FormEntryPrompt getFormEntryPrompt() {
         return prompt;
     }
 

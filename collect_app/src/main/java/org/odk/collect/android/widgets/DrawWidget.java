@@ -80,7 +80,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "drawButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 launchDrawActivity();
             }
         });
@@ -91,7 +91,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
 
-        if (formEntryPrompt.isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {
             drawButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
@@ -128,7 +128,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this, "viewImage", "click",
-                                    formEntryPrompt.getIndex());
+                                    getFormEntryPrompt().getIndex());
                     launchDrawActivity();
                 }
             });

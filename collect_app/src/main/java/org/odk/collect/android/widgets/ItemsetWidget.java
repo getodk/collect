@@ -287,7 +287,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
                         rb.setOnCheckedChangeListener(this);
                         rb.setOnClickListener(this);
-                        rb.setTextSize(answerFontsize);
+                        rb.setTextSize(getAnswerFontSize());
                         rb.setText(label);
                         rb.setTag(index);
                         rb.setId(ViewIds.generateViewId());

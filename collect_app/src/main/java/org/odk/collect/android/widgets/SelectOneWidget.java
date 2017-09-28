@@ -113,7 +113,7 @@ public class SelectOneWidget
     }
 
     protected RadioButton createRadioButton(int index) {
-        String choiceName = getPrompt().getSelectChoiceText(items.get(index));
+        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
         CharSequence choiceDisplayName;
         if (choiceName != null) {
             choiceDisplayName = TextUtils.textToHtml(choiceName);
@@ -122,13 +122,13 @@ public class SelectOneWidget
         }
 
         RadioButton radioButton = new RadioButton(getContext());
-        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         radioButton.setText(choiceDisplayName);
         radioButton.setMovementMethod(LinkMovementMethod.getInstance());
         radioButton.setTag(index);
         radioButton.setId(ViewIds.generateViewId());
-        radioButton.setEnabled(!getPrompt().isReadOnly());
-        radioButton.setFocusable(!getPrompt().isReadOnly());
+        radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
+        radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
 
         if (items.get(index).getValue().equals(selectedValue)) {
             radioButton.setChecked(true);

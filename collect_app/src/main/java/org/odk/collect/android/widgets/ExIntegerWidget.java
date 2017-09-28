@@ -63,7 +63,7 @@ public class ExIntegerWidget extends ExStringWidget {
     }
 
     private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
         Integer d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();

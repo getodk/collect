@@ -52,7 +52,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBarcode", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
 
                 waitForData();
 

@@ -75,7 +75,7 @@ public class ExDecimalWidget extends ExStringWidget {
     }
 
     private Double getDoubleAnswerValue() {
-        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
         Double d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();

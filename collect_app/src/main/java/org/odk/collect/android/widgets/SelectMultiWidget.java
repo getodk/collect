@@ -47,9 +47,9 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
         super(context, prompt);
         checkBoxes = new ArrayList<>();
         ve = new ArrayList<>();
-        if (getPrompt().getAnswerValue() != null) {
+        if (getFormEntryPrompt().getAnswerValue() != null) {
             //noinspection unchecked
-            ve = (List<Selection>) getPrompt().getAnswerValue().getValue();
+            ve = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
         } else {
             ve = new ArrayList<>();
         }
@@ -95,7 +95,7 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
     }
 
     protected CheckBox createCheckBox(int index) {
-        String choiceName = getPrompt().getSelectChoiceText(items.get(index));
+        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
         CharSequence choiceDisplayName;
         if (choiceName != null) {
             choiceDisplayName = TextUtils.textToHtml(choiceName);
@@ -108,9 +108,9 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
         checkBox.setId(ViewIds.generateViewId());
         checkBox.setText(choiceDisplayName);
         checkBox.setMovementMethod(LinkMovementMethod.getInstance());
-        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        checkBox.setFocusable(!getPrompt().isReadOnly());
-        checkBox.setEnabled(!getPrompt().isReadOnly());
+        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        checkBox.setFocusable(!getFormEntryPrompt().isReadOnly());
+        checkBox.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         for (int vi = 0; vi < ve.size(); vi++) {
             // match based on value, not key
@@ -124,7 +124,7 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!checkboxInit && formEntryPrompt.isReadOnly()) {
+                if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
                     if (buttonView.isChecked()) {
                         buttonView.setChecked(false);
                     } else {

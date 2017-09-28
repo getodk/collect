@@ -99,7 +99,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "captureButton",
-                                "click", formEntryPrompt.getIndex());
+                                "click", getFormEntryPrompt().getIndex());
                 Intent i = new Intent(
                         android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 
@@ -151,7 +151,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "chooseButton",
-                                "click", formEntryPrompt.getIndex());
+                                "click", getFormEntryPrompt().getIndex());
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("video/*");
                 // Intent i =
@@ -181,7 +181,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "playButton",
-                                "click", formEntryPrompt.getIndex());
+                                "click", getFormEntryPrompt().getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
                 File f = new File(getInstanceFolder() + File.separator
                         + binaryName);
@@ -214,7 +214,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
-        if (formEntryPrompt.isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
         }

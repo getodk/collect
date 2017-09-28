@@ -113,7 +113,6 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
         } else {
             items = prompt.getSelectChoices();
         }
-        formEntryPrompt = prompt;
 
         selected = new boolean[items.size()];
         choices = new String[items.size()];
@@ -155,7 +154,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
                 audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        player);
+                        getPlayer());
             } else {
                 audioHandlers[i] = null;
             }
@@ -223,7 +222,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 choices[i] = prompt.getSelectChoiceText(sc);
 
                 TextView missingImage = new TextView(getContext());
-                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
@@ -295,7 +294,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                     }
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onItemClick.deselect",
-                            items.get(position).getValue(), formEntryPrompt.getIndex());
+                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
 
                 } else {
                     selected[position] = true;
@@ -306,7 +305,7 @@ public class GridMultiWidget extends QuestionWidget implements MultiChoiceWidget
                             orangeBlueVal));
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onItemClick.select",
-                            items.get(position).getValue(), formEntryPrompt.getIndex());
+                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
                     if (audioHandlers[position] != null) {
                         audioHandlers[position].playAudio(getContext());
                     }

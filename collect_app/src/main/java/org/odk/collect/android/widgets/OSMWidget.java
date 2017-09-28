@@ -109,7 +109,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         launchOpenMapKitButton.setPadding(20, 20, 20, 20);
         launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -123,7 +123,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
                 launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "launchOpenMapKitButton",
-                        "click", formEntryPrompt.getIndex());
+                        "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 launchOpenMapKit();
             }

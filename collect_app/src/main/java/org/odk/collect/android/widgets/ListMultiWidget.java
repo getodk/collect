@@ -88,7 +88,6 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
             items = prompt.getSelectChoices();
         }
         checkBoxes = new ArrayList<>();
-        formEntryPrompt = prompt;
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -121,19 +120,19 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkboxInit && formEntryPrompt.isReadOnly()) {
+                        if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.deselect",
                                         items.get((Integer) buttonView.getTag()).getValue(),
-                                        formEntryPrompt.getIndex());
+                                        getFormEntryPrompt().getIndex());
                             } else {
                                 buttonView.setChecked(true);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.select",
                                         items.get((Integer) buttonView.getTag()).getValue(),
-                                        formEntryPrompt.getIndex());
+                                        getFormEntryPrompt().getIndex());
                             }
                         }
                     }
@@ -212,7 +211,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);

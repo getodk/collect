@@ -208,7 +208,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         // Only execute it during forward swipes through the form 
         if (advancingPage && widgets.size() == 1) {
             final String playOption = widgets.get(
-                    0).getPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
+                    0).getFormEntryPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -259,7 +259,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
              * The FormEntryPrompt has the FormIndex, which is where the answer gets stored. The
              * QuestionWidget has the answer the user has entered.
              */
-            FormEntryPrompt p = q.getPrompt();
+            FormEntryPrompt p = q.getFormEntryPrompt();
             answers.put(p.getIndex(), q.getAnswer());
         }
 
@@ -343,7 +343,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         Set<String> keys = bundle.keySet();
         for (String key : keys) {
             for (QuestionWidget questionWidget : widgets) {
-                FormEntryPrompt prompt = questionWidget.getPrompt();
+                FormEntryPrompt prompt = questionWidget.getFormEntryPrompt();
                 TreeReference treeReference =
                         (TreeReference) prompt.getFormElement().getBind().getReference();
 
@@ -407,7 +407,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public boolean clearAnswer() {
         // If there's only one widget, clear the answer.
         // If there are more, then force a long-press to clear the answer.
-        if (widgets.size() == 1 && !widgets.get(0).getPrompt().isReadOnly()) {
+        if (widgets.size() == 1 && !widgets.get(0).getFormEntryPrompt().isReadOnly()) {
             widgets.get(0).clearAnswer();
             return true;
         } else {

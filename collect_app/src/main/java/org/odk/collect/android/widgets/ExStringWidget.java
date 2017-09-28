@@ -109,7 +109,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         // set text formatting
         answer = new EditText(context);
         answer.setId(ViewIds.generateViewId());
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
@@ -127,7 +127,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             answer.setText(s);
         }
 
-        if (formEntryPrompt.isReadOnly() || hasExApp) {
+        if (getFormEntryPrompt().isReadOnly() || hasExApp) {
             answer.setFocusable(false);
             answer.setEnabled(false);
         }
@@ -137,13 +137,13 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
         final String buttonText;
         final String errorString;
-        String v = formEntryPrompt.getSpecialFormQuestionText("buttonText");
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-        v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
+        v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
         launchIntentButton = getSimpleButton(buttonText);
-        launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
+        launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +151,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 if (isActivityAvailable(i)) {
                     try {
                         ExternalAppsUtils.populateParameters(i, exParams,
-                                formEntryPrompt.getIndex().getReference());
+                                getFormEntryPrompt().getIndex().getReference());
 
                         waitForData();
                         fireActivity(i);
@@ -167,7 +167,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
             private void onException(String toastText) {
                 hasExApp = false;
-                if (!formEntryPrompt.isReadOnly()) {
+                if (!getFormEntryPrompt().isReadOnly()) {
                     answer.setBackground(textBackground);
                     answer.setFocusable(true);
                     answer.setFocusableInTouchMode(true);
@@ -194,7 +194,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", formEntryPrompt.getAnswerText());
+        i.putExtra("value", getFormEntryPrompt().getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
         ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
@@ -235,7 +235,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
-            if (!formEntryPrompt.isReadOnly()) {
+            if (!getFormEntryPrompt().isReadOnly()) {
                 answer.requestFocus();
                 inputManager.showSoftInput(answer, 0);
             /*

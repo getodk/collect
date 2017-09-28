@@ -127,9 +127,9 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
                 ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
         final String buttonText;
         final String errorString;
-        String v = formEntryPrompt.getSpecialFormQuestionText("buttonText");
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
-        v = formEntryPrompt.getSpecialFormQuestionText("noPrinterErrorString");
+        v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_printer);
 
         launchIntentButton = getSimpleButton(buttonText);
@@ -161,10 +161,10 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
 
-        String s = formEntryPrompt.getAnswerText();
+        String s = getFormEntryPrompt().getAnswerText();
 
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchPrinter",
-                intentName, formEntryPrompt.getIndex());
+                intentName, getFormEntryPrompt().getIndex());
         Intent i = new Intent(intentName);
         getContext().startActivity(i);
 
@@ -214,7 +214,7 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return formEntryPrompt.getAnswerValue();
+        return getFormEntryPrompt().getAnswerValue();
     }
 
 

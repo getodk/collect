@@ -71,7 +71,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBearing", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 Intent i;
                 i = new Intent(getContext(), BearingActivity.class);
 

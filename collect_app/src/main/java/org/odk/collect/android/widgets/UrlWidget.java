@@ -55,7 +55,7 @@ public class UrlWidget extends QuestionWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "openUrl", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
 
                 if (!isUrlEmpty(stringAnswer)) {
                     customTabHelper.bindCustomTabsService(getContext(), null);
