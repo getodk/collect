@@ -63,5 +63,6 @@
   <string name="smap_no_server">No se ha especificado el servidor en Configuración</string>
   <string name="smap_refresh_started">Actualización Iniciada</string>
   <string name="smap_refresh_finished">Actualización Terminada</string>
-  <string name="smap_server_changed">Hay Cambios - Favor Actualizar</string>
+  <string name="smap_server_changed">Hay Cambios - Favor Actualizar Formularios</string>
+  <string name="smap_version_changed">La versión del formulario que usted esta abriendo No es la más actualizada. Favor cerrar y volver a abrirla.</string>
 </resources>

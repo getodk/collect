@@ -31,6 +31,7 @@ import org.odk.collect.android.listeners.TaskDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.tasks.DownloadTasksTask;
 
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -127,17 +128,30 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
         if (!running) {
             running = true;
 
-            ArrayList<Long> toUpload = new ArrayList<>();
-            Cursor c = new InstancesDao().getFinalizedInstancesCursor();
+            String selection = InstanceColumns.SOURCE + "=? and (" + InstanceColumns.STATUS + "=? or " +
+                    InstanceColumns.STATUS + "=?)";
+            String selectionArgs[] = {
+                    Utilities.getSource(),
+                    InstanceProviderAPI.STATUS_COMPLETE,
+                    InstanceProviderAPI.STATUS_SUBMISSION_FAILED
+            };
 
+            ArrayList<Long> toUpload = new ArrayList<Long>();
+            Cursor c = null;
             try {
+                c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection,
+                        selectionArgs, null);
+
                 if (c != null && c.getCount() > 0) {
                     c.move(-1);
                     while (c.moveToNext()) {
                         Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                        toUpload.add(l);
+                        toUpload.add(Long.valueOf(l));
                     }
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 if (c != null) {
                     c.close();
