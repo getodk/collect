@@ -42,6 +42,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -77,7 +78,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
                 .getInstancePath().getParent();
 
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
@@ -191,7 +192,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
                 annotateButton.setEnabled(true);
             }
             imageView = new ImageView(getContext());
-            imageView.setId(QuestionWidget.newUniqueId());
+            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;

@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +126,7 @@ public class SelectOneWidget
         radioButton.setText(choiceDisplayName);
         radioButton.setMovementMethod(LinkMovementMethod.getInstance());
         radioButton.setTag(index);
-        radioButton.setId(QuestionWidget.newUniqueId());
+        radioButton.setId(ViewIds.generateViewId());
         radioButton.setEnabled(!getPrompt().isReadOnly());
         radioButton.setFocusable(!getPrompt().isReadOnly());
 

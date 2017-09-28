@@ -27,6 +27,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ViewIds;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         formId = formController.getFormDef().getID();
 
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.invalid_osm_data);
 
         // Determine the tags required
@@ -93,7 +94,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
         // Setup Launch OpenMapKit Button
         launchOpenMapKitButton = new Button(getContext());
-        launchOpenMapKitButton.setId(QuestionWidget.newUniqueId());
+        launchOpenMapKitButton.setId(ViewIds.generateViewId());
 
         // Button Styling
         if (osmFileName != null) {
@@ -128,7 +129,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         });
 
         osmFileNameHeaderTextView = new TextView(context);
-        osmFileNameHeaderTextView.setId(QuestionWidget.newUniqueId());
+        osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
         osmFileNameHeaderTextView.setTextSize(20);
         osmFileNameHeaderTextView.setTypeface(null, Typeface.BOLD);
         osmFileNameHeaderTextView.setPadding(10, 0, 0, 10);
@@ -136,7 +137,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
         // text view showing the resulting OSM file name
         osmFileNameTextView = new TextView(context);
-        osmFileNameTextView.setId(QuestionWidget.newUniqueId());
+        osmFileNameTextView.setId(ViewIds.generateViewId());
         osmFileNameTextView.setTextSize(18);
         osmFileNameTextView.setTypeface(null, Typeface.ITALIC);
         if (osmFileName != null) {

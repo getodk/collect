@@ -45,6 +45,7 @@ import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.utilities.XPathParseTool;
 
 import java.io.File;
@@ -289,7 +290,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         rb.setTextSize(answerFontsize);
                         rb.setText(label);
                         rb.setTag(index);
-                        rb.setId(QuestionWidget.newUniqueId());
+                        rb.setId(ViewIds.generateViewId());
 
                         buttons.add(rb);
 

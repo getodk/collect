@@ -117,7 +117,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -1042,7 +1042,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
         if (formController.currentPromptIsQuestion() && currentView instanceof ODKView) {
-            LinkedHashMap<FormIndex, IAnswerData> answers = ((ODKView) currentView)
+            HashMap<FormIndex, IAnswerData> answers = ((ODKView) currentView)
                     .getAnswers();
             try {
                 FailedConstraint constraint = formController.saveAllScreenAnswers(answers,

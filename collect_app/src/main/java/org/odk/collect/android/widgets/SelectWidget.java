@@ -37,6 +37,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -209,7 +210,7 @@ public abstract class SelectWidget extends QuestionWidget {
 
     protected void setUpSearchBox() {
         searchStr = new EditText(getContext());
-        searchStr.setId(QuestionWidget.newUniqueId());
+        searchStr.setId(ViewIds.generateViewId());
         searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
