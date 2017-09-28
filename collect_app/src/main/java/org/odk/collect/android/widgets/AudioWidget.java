@@ -121,7 +121,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 try {
                     waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.AUDIO_CHOOSER);
+                            RequestCodes.AUDIO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
