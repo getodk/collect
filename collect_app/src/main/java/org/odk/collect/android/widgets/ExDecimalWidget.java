@@ -94,8 +94,9 @@ public class ExDecimalWidget extends ExStringWidget {
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getDoubleAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
+                i.getAction(), getFormEntryPrompt().getIndex());
+        ((Activity) getContext()).startActivityForResult(i,
+                RequestCodes.EX_DECIMAL_CAPTURE);
     }
 
 
