@@ -48,7 +48,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -119,7 +119,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                 // set button formatting
                 Button launchIntentButton = new Button(getContext());
-                launchIntentButton.setId(ViewUtil.generateViewId());
+                launchIntentButton.setId(ViewIds.generateViewId());
                 launchIntentButton.setText(buttonText);
                 launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                         Collect.getQuestionFontsize() + 2);
@@ -196,7 +196,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     WidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
-            qw.setId(ViewUtil.generateViewId());
+            qw.setId(ViewIds.generateViewId());
 
             widgets.add(qw);
             view.addView(qw, layout);

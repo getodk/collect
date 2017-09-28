@@ -26,7 +26,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget
         // no checkbox group so id by answer + offset
         CheckBox checkBox = new CheckBox(getContext());
         checkBox.setTag(index);
-        checkBox.setId(ViewUtil.generateViewId());
+        checkBox.setId(ViewIds.generateViewId());
         checkBox.setText(choiceDisplayName);
         checkBox.setMovementMethod(LinkMovementMethod.getInstance());
         checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);

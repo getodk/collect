@@ -43,7 +43,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -156,7 +156,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         this.index = index;
         viewText = text;
         originalText = text.getText();
-        viewText.setId(ViewUtil.generateViewId());
+        viewText.setId(ViewIds.generateViewId());
         this.videoURI = videoURI;
 
         // Layout configurations for our elements in the relative layout
@@ -181,7 +181,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             audioButton.setPadding(22, 12, 22, 12);
             audioButton.setBackgroundColor(Color.LTGRAY);
             audioButton.setOnClickListener(this);
-            audioButton.setId(ViewUtil.generateViewId()); // random ID to be used by the
+            audioButton.setId(ViewIds.generateViewId()); // random ID to be used by the
             // relative layout.
         } else {
             // No audio file specified, so ignore.
@@ -207,14 +207,14 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 }
 
             });
-            videoButton.setId(ViewUtil.generateViewId());
+            videoButton.setId(ViewIds.generateViewId());
         } else {
             // No video file specified, so ignore.
         }
 
         // Now set up the image view
         String errorMsg = null;
-        final int imageId = ViewUtil.generateViewId();
+        final int imageId = ViewIds.generateViewId();
         if (imageURI != null) {
             try {
                 String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();

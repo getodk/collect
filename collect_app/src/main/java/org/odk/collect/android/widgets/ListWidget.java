@@ -46,7 +46,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             for (int i = 0; i < items.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
 
-                r.setId(ViewUtil.generateViewId());
+                r.setId(ViewIds.generateViewId());
                 r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
@@ -121,7 +121,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = ViewUtil.generateViewId();
+                final int labelId = ViewIds.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;
@@ -321,7 +321,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(ViewUtil.generateViewId());
+        center.setId(ViewIds.generateViewId());
         addView(center, centerParams);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(

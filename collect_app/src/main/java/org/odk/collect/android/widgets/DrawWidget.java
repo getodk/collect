@@ -42,7 +42,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -69,7 +69,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
         super(context, prompt);
 
         errorTextView = new TextView(context);
-        errorTextView.setId(ViewUtil.generateViewId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         instanceFolder = Collect.getInstance().getFormController()
@@ -105,7 +105,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
         // Only add the imageView if the user has signed
         if (binaryName != null) {
             imageView = new ImageView(getContext());
-            imageView.setId(ViewUtil.generateViewId());
+            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;

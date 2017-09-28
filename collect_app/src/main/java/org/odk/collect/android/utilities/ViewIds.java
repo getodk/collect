@@ -6,10 +6,16 @@ import android.view.View;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ViewUtil {
+public class ViewIds {
 
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
+    /**
+     * Generates a unique integer ID for a View.
+     * Falls back to the system provided {@link View#generateViewId()} when possible.
+     *
+     * @return A unique integer ID.
+     */
     public static int generateViewId() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return View.generateViewId();
@@ -18,6 +24,12 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * This is a line-for-line copy of the built-in, post API 17 {@link View#generateViewId()}.
+     * A bit odd, but what the system uses internally for generating unique IDs.
+     *
+     * @return A unique integer ID to be used for a View.
+     */
     private static int generateViewIdPre17() {
         while (true) {
             final int result = sNextGeneratedId.get();
@@ -33,6 +45,5 @@ public class ViewUtil {
         }
     }
 
-    private ViewUtil() {
-    }
+    private ViewIds() {}
 }

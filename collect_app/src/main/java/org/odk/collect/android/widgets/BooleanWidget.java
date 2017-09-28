@@ -25,7 +25,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 
 public class BooleanWidget extends QuestionWidget {
 
@@ -75,7 +75,7 @@ public class BooleanWidget extends QuestionWidget {
 
     private void setupBooleanButton() {
         booleanButton = new CheckBox(getContext());
-        booleanButton.setId(ViewUtil.generateViewId());
+        booleanButton.setId(ViewIds.generateViewId());
         booleanButton.setText(getContext().getString(R.string.trigger));
         booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         booleanButton.setEnabled(!prompt.isReadOnly());

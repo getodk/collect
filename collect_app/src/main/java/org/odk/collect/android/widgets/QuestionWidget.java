@@ -43,7 +43,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
@@ -128,7 +128,7 @@ public abstract class QuestionWidget
 
         // Create the layout for audio, image, text
         MediaLayout questionMediaLayout = new MediaLayout(getContext(), player);
-        questionMediaLayout.setId(ViewUtil.generateViewId()); // assign random id
+        questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
                 bigImageURI);
         questionMediaLayout.setAudioListener(this);
@@ -271,7 +271,7 @@ public abstract class QuestionWidget
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setId(ViewUtil.generateViewId());
+            helpText.setId(ViewIds.generateViewId());
             helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 3);
             //noinspection ResourceType
             helpText.setPadding(0, -5, 0, 7);
@@ -356,7 +356,7 @@ public abstract class QuestionWidget
 
     protected Button getSimpleButton(String text) {
         Button button = new Button(getContext());
-        button.setId(ViewUtil.generateViewId());
+        button.setId(ViewIds.generateViewId());
         button.setText(text);
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         button.setPadding(20, 20, 20, 20);
@@ -376,7 +376,7 @@ public abstract class QuestionWidget
 
     protected TextView getAnswerTextView() {
         TextView textView = new TextView(getContext());
-        textView.setId(ViewUtil.generateViewId());
+        textView.setId(ViewIds.generateViewId());
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
         textView.setPadding(20, 20, 20, 20);

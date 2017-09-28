@@ -45,7 +45,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewUtil;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
                 CheckBox c = new CheckBox(getContext());
                 c.setTag(i);
-                c.setId(ViewUtil.generateViewId());
+                c.setId(ViewIds.generateViewId());
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
 
@@ -151,7 +151,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = ViewUtil.generateViewId();
+                final int labelId = ViewIds.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;
@@ -330,7 +330,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(ViewUtil.generateViewId());
+        center.setId(ViewIds.generateViewId());
         addView(center, centerParams);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
