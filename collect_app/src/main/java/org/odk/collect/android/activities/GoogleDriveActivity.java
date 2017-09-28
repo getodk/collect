@@ -616,7 +616,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
 
         String parentId = (String) results.get(PARENT_ID_KEY);
-        String currentDir = (String) results.get(CURRENT_ID_KEY);
 
         if (myDrive) {
             rootButton.setText(getString(R.string.go_shared));
