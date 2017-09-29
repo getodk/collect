@@ -50,7 +50,6 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.BinaryWidget;
-import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 

@@ -52,6 +52,6 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
         widget.setBinaryData(dateTime);
         assertFalse(widget.isWaitingForBinaryData());
         assertFalse(widget.getDateWidget().nullAnswer);
-        assertEquals(widget.getDateWidget().getAnswer(), new DateData(dateTime.toDate()));
+        assertEquals(widget.getDateWidget().getAnswer().getDisplayText(), new DateData(dateTime.toDate()).getDisplayText());
     }
 }
