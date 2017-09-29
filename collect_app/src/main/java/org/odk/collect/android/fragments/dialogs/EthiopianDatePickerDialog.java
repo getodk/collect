@@ -16,14 +16,13 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
+import org.javarosa.core.model.FormIndex;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.AbstractDateWidget;
 
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -32,9 +31,9 @@ import java.util.Date;
 public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     private String[] monthsArray;
 
-    public static EthiopianDatePickerDialog newInstance(int widgetId, int day, int month, int year, AbstractDateWidget.CalendarMode calendarMode) {
+    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, DateTime dateTime, AbstractDateWidget.CalendarMode calendarMode) {
         EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(widgetId, day, month, year, calendarMode));
+        dialog.setArguments(getArgs(formIndex, dateTime, calendarMode));
 
         return dialog;
     }
@@ -88,16 +87,7 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     }
 
     private void setUpValues() {
-        Date date = new LocalDateTime()
-                .withYear(year)
-                .withMonthOfYear(month)
-                .withDayOfMonth(day)
-                .withHourOfDay(0)
-                .withMinuteOfHour(0)
-                .toDate();
-
-        DateTime gregorianDate = new DateTime(date.getTime());
-        setUpDatePicker(gregorianDate);
+        setUpDatePicker(dateTime);
         updateGregorianDateLabel();
     }
 

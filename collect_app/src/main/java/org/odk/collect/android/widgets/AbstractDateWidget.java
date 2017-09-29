@@ -26,15 +26,16 @@ import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 
 import java.util.Date;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
  */
-public abstract class AbstractDateWidget extends QuestionWidget {
+public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget {
 
     public enum CalendarMode {
         CALENDAR, FULL_DATE, MONTH_YEAR, YEAR
@@ -45,9 +46,7 @@ public abstract class AbstractDateWidget extends QuestionWidget {
 
     protected boolean nullAnswer;
 
-    protected int year;
-    protected int month;
-    protected int day;
+    protected DateTime dateTime;
 
     protected CalendarMode calendarMode = CalendarMode.CALENDAR;
 
@@ -65,10 +64,7 @@ public abstract class AbstractDateWidget extends QuestionWidget {
             clearAnswer();
             setDateToCurrent();
         } else {
-            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
-            year = dt.getYear();
-            month = dt.getMonthOfYear();
-            day = dt.getDayOfMonth();
+            dateTime = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
             setDateLabel();
         }
     }
@@ -106,14 +102,29 @@ public abstract class AbstractDateWidget extends QuestionWidget {
         if (nullAnswer) {
             return null;
         } else {
-            LocalDateTime ldt = new LocalDateTime()
-                    .withYear(year)
-                    .withMonthOfYear(month)
-                    .withDayOfMonth(day)
-                    .withHourOfDay(0)
-                    .withMinuteOfHour(0);
-            return new DateData(ldt.toDate());
+            return new DateData(dateTime.toDate());
         }
+    }
+
+    @Override
+    public void setBinaryData(Object answer) {
+        dateTime = (DateTime) answer;
+        setDateLabel();
+        cancelWaitingForBinaryData();
+    }
+
+    @Override
+    public void cancelWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
+    }
+
+    @Override
+    public boolean isWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        return formController != null && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
     }
 
     public boolean isDayHidden() {
@@ -124,16 +135,8 @@ public abstract class AbstractDateWidget extends QuestionWidget {
         return calendarMode.equals(CalendarMode.YEAR);
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getDay() {
-        return day;
+    public DateTime getDate() {
+        return dateTime;
     }
 
     public boolean isNullAnswer() {
@@ -173,19 +176,8 @@ public abstract class AbstractDateWidget extends QuestionWidget {
         addAnswerView(linearLayout);
     }
 
-    public void onDateChanged(int day, int month, int year) {
-        nullAnswer = false;
-        this.day = day;
-        this.month = month;
-        this.year = year;
-        setDateLabel();
-    }
-
     protected void setDateToCurrent() {
-        DateTime dateTime = DateTime.now();
-        day = dateTime.getDayOfMonth();
-        month = dateTime.getMonthOfYear();
-        year = dateTime.getYear();
+        dateTime = DateTime.now();
     }
 
     protected abstract void setDateLabel();

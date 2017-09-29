@@ -29,6 +29,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.DatePicker;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
@@ -73,7 +74,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
     }
 
     protected void showDatePickerDialog() {
-        datePickerDialog = new FixedDatePickerDialog(getContext(), getTheme(), this, year, month - 1, day);
+        datePickerDialog = new FixedDatePickerDialog(getContext(), getTheme(), this, dateTime);
         datePickerDialog.show();
     }
 
@@ -110,10 +111,10 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        this.year = year;
-        this.month = month + 1;
-        this.day = dayOfMonth;
-
+        dateTime = new DateTime()
+                .withYear(year)
+                .withMonthOfYear(month + 1)
+                .withDayOfMonth(dayOfMonth);
         setDateLabel();
     }
 
@@ -121,12 +122,12 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         private String dialogTitle = getContext().getString(R.string.select_date);
         private int theme;
 
-        FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
-            super(context, theme, listener, year, month, dayOfMonth);
+        FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener, DateTime dateTime) {
+            super(context, theme, listener, dateTime.getYear(), dateTime.getMonthOfYear() - 1, dateTime.getDayOfMonth());
             this.theme = theme;
             if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 setTitle(dialogTitle);
-                fixSpinner(context, year, month, dayOfMonth);
+                fixSpinner(context, dateTime.getYear(), dateTime.getMonthOfYear() - 1, dateTime.getDayOfMonth());
                 hidePickersIfNeeded();
 
                 Window window = getWindow();
@@ -152,11 +153,11 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
 
                 getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
                         .setVisibility(View.GONE);
-                getDatePicker().updateDate(year, 0, 1);
+                getDatePicker().updateDate(dateTime.getYear(), 0, 1);
             } else if (calendarMode.equals(AbstractDateWidget.CalendarMode.MONTH_YEAR)) {
                 getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                         .setVisibility(View.GONE);
-                getDatePicker().updateDate(year, month - 1, 1);
+                getDatePicker().updateDate(dateTime.getYear(), dateTime.getMonthOfYear() - 1, 1);
             }
         }
 

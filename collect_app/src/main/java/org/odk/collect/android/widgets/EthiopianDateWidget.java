@@ -36,8 +36,6 @@ import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.D
  */
 public class EthiopianDateWidget extends AbstractDateWidget {
 
-    private EthiopianDatePickerDialog ethiopianDatePickerDialog;
-
     public EthiopianDateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }
@@ -63,7 +61,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
     }
 
     protected void showDatePickerDialog() {
-        ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getId(), day, month, year, calendarMode);
+        EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getPrompt().getIndex(), dateTime, calendarMode);
         ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 

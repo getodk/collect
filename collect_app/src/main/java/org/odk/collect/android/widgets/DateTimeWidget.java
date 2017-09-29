@@ -24,6 +24,8 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -34,7 +36,7 @@ import org.joda.time.LocalDateTime;
  */
 
 @SuppressLint("ViewConstructor")
-public class DateTimeWidget extends QuestionWidget {
+public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
 
     private AbstractDateWidget dateWidget;
     private TimeWidget timeWidget;
@@ -85,9 +87,9 @@ public class DateTimeWidget extends QuestionWidget {
             boolean hideDay = dateWidget.isDayHidden();
             boolean hideMonth = dateWidget.isMonthHidden();
 
-            int year = dateWidget.getYear();
-            int month = dateWidget.getMonth();
-            int day = dateWidget.getDay();
+            int year = dateWidget.getDate().getYear();
+            int month = dateWidget.getDate().getMonthOfYear();
+            int day = dateWidget.getDate().getDayOfMonth();
             int hour = timeWidget.getHour();
             int minute = timeWidget.getMinute();
 
@@ -129,6 +131,26 @@ public class DateTimeWidget extends QuestionWidget {
         super.cancelLongPress();
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
+    }
+
+    @Override
+    public void setBinaryData(Object answer) {
+        dateWidget.setBinaryData(answer);
+        cancelWaitingForBinaryData();
+    }
+
+    @Override
+    public void cancelWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null) {
+            formController.setIndexWaitingForData(null);
+        }
+    }
+
+    @Override
+    public boolean isWaitingForBinaryData() {
+        FormController formController = Collect.getInstance().getFormController();
+        return formController != null && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
     }
 
     public AbstractDateWidget getDateWidget() {

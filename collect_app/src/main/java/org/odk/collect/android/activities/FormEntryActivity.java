@@ -74,6 +74,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.DateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -111,8 +112,6 @@ import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.BinaryWidget;
-import org.odk.collect.android.widgets.DateTimeWidget;
-import org.odk.collect.android.widgets.EthiopianDateWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -3001,18 +3000,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    public void onDateChanged(int widgetId, int day, int month, int year) {
-        if (currentView != null) {
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (widgetId == qw.getId()) {
-                    if (qw instanceof EthiopianDateWidget) {
-                        ((EthiopianDateWidget) qw).onDateChanged(day, month, year);
-                    } else if (qw instanceof DateTimeWidget) {
-                        ((DateTimeWidget) qw).getDateWidget().onDateChanged(day, month, year);
-                    }
-                }
-            }
-        }
+    public void onDateChanged(DateTime dateTime) {
+        ((ODKView) currentView).setBinaryData(dateTime);
     }
 
     /**
