@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="meskerem">መስከረም</string>
+    <string name="tikimt">ጥቅምቲ</string>
+    <string name="hidar">ሕዳር</string>
+    <string name="tahsas">ታኅሳስ</string>
+    <string name="tir">ጥሪ</string>
+    <string name="yekatit">ለካቲት</string>
+    <string name="megabit">መጋቢት</string>
+    <string name="miazia">ምያዝያ</string>
+    <string name="ginbot">ግንቦት</string>
+    <string name="senie">ሰነ</string>
+    <string name="hamlie">ሓምለ</string>
+    <string name="nehasie">ነሓሰ</string>
+    <string name="pagumien">ጳጐሜን</string>
+</resources>
