@@ -199,10 +199,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.setOnLongClickListener(this);
             qw.setId(ViewIds.generateViewId());
 
-            if (qw instanceof DateTimeWidget) {
-                ((DateTimeWidget) qw).getDateWidget().setId(qw.getId());
-            }
-
             widgets.add(qw);
             view.addView(qw, layout);
         }
