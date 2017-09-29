@@ -31,6 +31,9 @@ import java.util.Date;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
+/**
+ * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
+ */
 public class EthiopianDateWidget extends AbstractDateWidget {
 
     private EthiopianDatePickerDialog ethiopianDatePickerDialog;
@@ -52,6 +55,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
 
     @Override
     protected void setDateLabel() {
+        nullAnswer = false;
         String ethiopianDate = getEthiopianDateLabel(new DateTime(((Date) getAnswer().getValue()).getTime()), getContext());
         String gregorianDate = DateTimeUtils.getDateTimeBasedOnUserLocale((Date) getAnswer().getValue(), getPrompt().getQuestion().getAppearanceAttr(), false);
 

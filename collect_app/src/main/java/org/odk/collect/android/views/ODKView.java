@@ -50,6 +50,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.BinaryWidget;
+import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
@@ -197,6 +198,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
             qw.setId(ViewIds.generateViewId());
+
+            if (qw instanceof DateTimeWidget) {
+                ((DateTimeWidget) qw).getDateWidget().setId(qw.getId());
+            }
 
             widgets.add(qw);
             view.addView(qw, layout);

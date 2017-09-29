@@ -31,6 +31,9 @@ import org.odk.collect.android.R;
 
 import java.util.Date;
 
+/**
+ * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
+ */
 public abstract class AbstractDateWidget extends QuestionWidget {
 
     public enum CalendarMode {

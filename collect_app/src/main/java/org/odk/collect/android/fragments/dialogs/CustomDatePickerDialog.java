@@ -32,6 +32,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.AbstractDateWidget;
 
+/**
+ * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
+ */
 public abstract class CustomDatePickerDialog extends DialogFragment {
     public static final String DATE_PICKER_DIALOG = "datePickerDialog";
 

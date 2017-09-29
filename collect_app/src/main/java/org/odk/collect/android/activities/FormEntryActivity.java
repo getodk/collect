@@ -111,6 +111,7 @@ import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.BinaryWidget;
+import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.EthiopianDateWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
@@ -3003,8 +3004,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onDateChanged(int widgetId, int day, int month, int year) {
         if (currentView != null) {
             for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
-                if (qw instanceof EthiopianDateWidget && widgetId == qw.getId()) {
-                    ((EthiopianDateWidget) qw).onDateChanged(day, month, year);
+                if (widgetId == qw.getId()) {
+                    if (qw instanceof EthiopianDateWidget) {
+                        ((EthiopianDateWidget) qw).onDateChanged(day, month, year);
+                    } else if (qw instanceof DateTimeWidget) {
+                        ((DateTimeWidget) qw).getDateWidget().onDateChanged(day, month, year);
+                    }
                 }
             }
         }

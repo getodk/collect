@@ -93,8 +93,8 @@ public class DateTimeWidget extends QuestionWidget {
 
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
-                    .withMonthOfYear(hideMonth ? 1 : month)
-                    .withDayOfMonth((hideMonth || hideDay) ? 1 : day)
+                    .withMonthOfYear(month)
+                    .withDayOfMonth(day)
                     .withHourOfDay((hideMonth || hideDay) ? 0 : hour)
                     .withMinuteOfHour((hideMonth || hideDay) ? 0 : minute)
                     .withSecondOfMinute(0)
@@ -129,6 +129,10 @@ public class DateTimeWidget extends QuestionWidget {
         super.cancelLongPress();
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
+    }
+
+    public AbstractDateWidget getDateWidget() {
+        return dateWidget;
     }
 
     public TimeWidget getTimeWidget() {
