@@ -2,12 +2,24 @@ package org.odk.collect.android.utilities;
 
 import android.os.Build;
 
+import org.odk.collect.android.widgets.AbstractDateWidget;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class DateTimeUtils {
+
+    public static String getDateTimeBasedOnUserLocale(Date date, AbstractDateWidget.CalendarMode calendarMode, boolean containsTime) {
+        String appearance = null;
+        if (calendarMode.equals(AbstractDateWidget.CalendarMode.MONTH_YEAR)) {
+            appearance = "month-year";
+        } else if (calendarMode.equals(AbstractDateWidget.CalendarMode.YEAR)) {
+            appearance = "year";
+        }
+        return getDateTimeBasedOnUserLocale(date, appearance, containsTime);
+    }
 
     public static String getDateTimeBasedOnUserLocale(Date date, String appearance, boolean containsTime) {
         DateFormat dateFormatter;
@@ -27,10 +39,12 @@ public class DateTimeUtils {
         } else {
             datePattern = "yyyyMMMdd";
         }
-        if ("year".equals(appearance)) {
-            datePattern = "yyyy";
-        } else if ("month-year".equals(appearance)) {
-            datePattern = "yyyyMMM";
+        if (appearance != null) {
+            if (appearance.contains("month-year")) {
+                datePattern = "yyyyMMM";
+            } else if (appearance.contains("year")) {
+                datePattern = "yyyy";
+            }
         }
         return datePattern;
     }
