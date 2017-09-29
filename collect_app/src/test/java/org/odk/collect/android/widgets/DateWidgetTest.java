@@ -52,8 +52,6 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
                 .withHourOfDay(0)
                 .withMinuteOfHour(0);
 
-        widget.updateDate(dateTime);
-
         IAnswerData answer = widget.getAnswer();
         DateTime answerDateTime = new DateTime(answer.getValue());
 

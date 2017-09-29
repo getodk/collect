@@ -36,7 +36,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     public static final String DATE_PICKER_DIALOG = "datePickerDialog";
 
     protected static final String WIDGET_ID = "widgetId";
-    protected static final String IS_VALUE_SELECTED = "isValueSelected";
     protected static final String DAY = "day";
     protected static final String MONTH = "month";
     protected static final String YEAR = "year";
@@ -52,8 +51,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     protected int day;
     protected int month;
     protected int year;
-
-    protected boolean isValueSelected;
 
     private AbstractDateWidget.CalendarMode calendarMode;
 
@@ -82,7 +79,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
             savedInstanceStateToRead = getArguments();
         }
 
-        isValueSelected = savedInstanceStateToRead.getBoolean(IS_VALUE_SELECTED);
         widgetId = savedInstanceStateToRead.getInt(WIDGET_ID);
         day = savedInstanceStateToRead.getInt(DAY);
         month = savedInstanceStateToRead.getInt(MONTH);
@@ -123,7 +119,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         DateTime dateTime = getDateAsGregorian(getOriginalDate());
         outState.putInt(WIDGET_ID, widgetId);
-        outState.putBoolean(IS_VALUE_SELECTED, true);
         outState.putInt(DAY, dateTime.getDayOfMonth());
         outState.putInt(MONTH, dateTime.getMonthOfYear());
         outState.putInt(YEAR, dateTime.getYear());
@@ -157,6 +152,10 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
             }
         });
 
+        hidePickersIfNeeded();
+    }
+
+    private void hidePickersIfNeeded() {
         if (calendarMode.equals(AbstractDateWidget.CalendarMode.MONTH_YEAR)) {
             dayPicker.setVisibility(View.GONE);
             dayPicker.setValue(0);
@@ -168,10 +167,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         }
     }
 
-    protected static Bundle getArgs(int widgetId, boolean isValueSelected, int day, int month, int year, AbstractDateWidget.CalendarMode calendarMode) {
+    protected static Bundle getArgs(int widgetId, int day, int month, int year, AbstractDateWidget.CalendarMode calendarMode) {
         Bundle args = new Bundle();
         args.putInt(WIDGET_ID, widgetId);
-        args.putBoolean(IS_VALUE_SELECTED, isValueSelected);
         args.putInt(DAY, day);
         args.putInt(MONTH, month);
         args.putInt(YEAR, year);
@@ -189,5 +187,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     protected abstract void updateDays();
+
     protected abstract DateTime getOriginalDate();
 }

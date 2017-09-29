@@ -45,8 +45,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getId(), !nullAnswer, day, month, year, calendarMode);
-                ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
+                showDatePickerDialog();
             }
         });
     }
@@ -59,9 +58,14 @@ public class EthiopianDateWidget extends AbstractDateWidget {
         dateTextView.setText(String.format(getContext().getString(R.string.ethiopian_date), ethiopianDate, gregorianDate));
     }
 
+    protected void showDatePickerDialog() {
+        ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getId(), day, month, year, calendarMode);
+        ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
+    }
+
     private String getEthiopianDateLabel(DateTime dateTime, Context context) {
         DateTime ethiopianDate = dateTime.withChronology(EthiopicChronology.getInstance());
-        String day = calendarMode.equals(CalendarMode.FULL_DATE) ? String.valueOf(ethiopianDate.getDayOfMonth()) +" " : "";
+        String day = calendarMode.equals(CalendarMode.FULL_DATE) ? String.valueOf(ethiopianDate.getDayOfMonth()) + " " : "";
         String month = !calendarMode.equals(CalendarMode.YEAR) ? context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " " : "";
 
         return day + month + ethiopianDate.getYear();

@@ -36,7 +36,7 @@ import org.joda.time.LocalDateTime;
 @SuppressLint("ViewConstructor")
 public class DateTimeWidget extends QuestionWidget {
 
-    private DateWidget dateWidget;
+    private AbstractDateWidget dateWidget;
     private TimeWidget timeWidget;
 
     public DateTimeWidget(Context context, FormEntryPrompt prompt) {
@@ -44,7 +44,12 @@ public class DateTimeWidget extends QuestionWidget {
 
         setGravity(Gravity.START);
 
-        dateWidget = new DateWidget(context, prompt);
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+        if (appearance != null && appearance.contains("ethiopian")) {
+            dateWidget = new EthiopianDateWidget(context, prompt);
+        } else {
+            dateWidget = new DateWidget(context, prompt);
+        }
         timeWidget = new TimeWidget(context, prompt);
 
         dateWidget.questionMediaLayout.getView_Text().setVisibility(GONE);
@@ -124,10 +129,6 @@ public class DateTimeWidget extends QuestionWidget {
         super.cancelLongPress();
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
-    }
-
-    public DateWidget getDateWidget() {
-        return dateWidget;
     }
 
     public TimeWidget getTimeWidget() {

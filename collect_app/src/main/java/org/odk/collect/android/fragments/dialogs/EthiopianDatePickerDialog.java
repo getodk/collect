@@ -25,12 +25,16 @@ import org.odk.collect.android.widgets.AbstractDateWidget;
 import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
+ * @author Aurelio Di Pasquale (aurelio.dipasquale@unibas.ch)
+ */
 public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     private String[] monthsArray;
 
-    public static EthiopianDatePickerDialog newInstance(int widgetId, boolean isValueSelected, int day, int month, int year, AbstractDateWidget.CalendarMode calendarMode) {
+    public static EthiopianDatePickerDialog newInstance(int widgetId, int day, int month, int year, AbstractDateWidget.CalendarMode calendarMode) {
         EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(widgetId, isValueSelected, day, month, year, calendarMode));
+        dialog.setArguments(getArgs(widgetId, day, month, year, calendarMode));
 
         return dialog;
     }
@@ -84,21 +88,16 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     }
 
     private void setUpValues() {
-        if (!isValueSelected) {
-            DateTime dt = new DateTime();
-            setUpDatePicker(dt);
-        } else {
-            Date date = new LocalDateTime()
-                    .withYear(year)
-                    .withMonthOfYear(month)
-                    .withDayOfMonth(day)
-                    .withHourOfDay(0)
-                    .withMinuteOfHour(0)
-                    .toDate();
+        Date date = new LocalDateTime()
+                .withYear(year)
+                .withMonthOfYear(month)
+                .withDayOfMonth(day)
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .toDate();
 
-            DateTime gregorianDate = new DateTime(date.getTime());
-            setUpDatePicker(gregorianDate);
-        }
+        DateTime gregorianDate = new DateTime(date.getTime());
+        setUpDatePicker(gregorianDate);
         updateGregorianDateLabel();
     }
 

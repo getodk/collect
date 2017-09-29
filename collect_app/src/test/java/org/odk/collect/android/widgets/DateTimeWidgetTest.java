@@ -48,11 +48,9 @@ public class DateTimeWidgetTest extends GeneralDateTimeWidgetTest<DateTimeWidget
     public void updatingTheDateAndTimeWidgetsShouldUpdateTheAnswer() {
         DateTimeWidget widget = getWidget();
 
-        DateWidget dateWidget = widget.getDateWidget();
         TimeWidget timeWidget = widget.getTimeWidget();
 
         DateTime dateTime = getNextDateTime();
-        dateWidget.updateDate(dateTime);
         timeWidget.updateTime(dateTime);
 
         IAnswerData answer = widget.getAnswer();

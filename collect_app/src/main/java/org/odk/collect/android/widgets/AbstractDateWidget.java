@@ -34,7 +34,7 @@ import java.util.Date;
 public abstract class AbstractDateWidget extends QuestionWidget {
 
     public enum CalendarMode {
-        FULL_DATE, MONTH_YEAR, YEAR
+        CALENDAR, FULL_DATE, MONTH_YEAR, YEAR
     }
 
     protected Button dateButton;
@@ -46,7 +46,7 @@ public abstract class AbstractDateWidget extends QuestionWidget {
     protected int month;
     protected int day;
 
-    protected CalendarMode calendarMode = CalendarMode.FULL_DATE;
+    protected CalendarMode calendarMode = CalendarMode.CALENDAR;
 
     public AbstractDateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -60,6 +60,7 @@ public abstract class AbstractDateWidget extends QuestionWidget {
         addViews();
         if (formEntryPrompt.getAnswerValue() == null) {
             clearAnswer();
+            setDateToCurrent();
         } else {
             DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
             year = dt.getYear();
@@ -92,6 +93,7 @@ public abstract class AbstractDateWidget extends QuestionWidget {
     public void clearAnswer() {
         nullAnswer = true;
         dateTextView.setText(R.string.no_date_selected);
+        setDateToCurrent();
     }
 
     @Override
@@ -111,6 +113,30 @@ public abstract class AbstractDateWidget extends QuestionWidget {
         }
     }
 
+    public boolean isDayHidden() {
+        return calendarMode.equals(CalendarMode.MONTH_YEAR) || calendarMode.equals(CalendarMode.YEAR);
+    }
+
+    public boolean isMonthHidden() {
+        return calendarMode.equals(CalendarMode.YEAR);
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public boolean isNullAnswer() {
+        return nullAnswer;
+    }
+
     private void readAppearance() {
         String appearance = formEntryPrompt.getQuestion().getAppearanceAttr();
         if (appearance != null) {
@@ -118,6 +144,15 @@ public abstract class AbstractDateWidget extends QuestionWidget {
                 calendarMode = CalendarMode.MONTH_YEAR;
             } else if (appearance.contains("year")) {
                 calendarMode = CalendarMode.YEAR;
+            } else if ("no-calendar".equals(appearance)) {
+                calendarMode = CalendarMode.FULL_DATE;
+            }
+        }
+
+        if (!(this instanceof DateWidget)) {
+            // We don't support calendar mode for other calendars
+            if (calendarMode.equals(CalendarMode.CALENDAR)) {
+                calendarMode = CalendarMode.FULL_DATE;
             }
         }
     }
@@ -143,5 +178,14 @@ public abstract class AbstractDateWidget extends QuestionWidget {
         setDateLabel();
     }
 
+    protected void setDateToCurrent() {
+        DateTime dateTime = DateTime.now();
+        day = dateTime.getDayOfMonth();
+        month = dateTime.getMonthOfYear();
+        year = dateTime.getYear();
+    }
+
     protected abstract void setDateLabel();
+
+    protected abstract void showDatePickerDialog();
 }
