@@ -171,7 +171,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
 
         if (!isAccelerometerSensorAvailable || ! isMagneticFieldSensorAvailable) {
             getBearingButton.setEnabled(false);
-            ToastUtils.showLongToast(R.string.lack_of_sensors);
+            ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
         }
     }
 }
