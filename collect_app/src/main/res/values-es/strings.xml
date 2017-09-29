@@ -61,7 +61,7 @@
   <string name="finished_disk_scan">Exploración finalizada. Todos los formularios cargados.</string>
   <string name="forms">F. EN BLANCO</string>
   <string name="getting_location">Cargando la Ubicación</string>
-  <string name="get_barcode">Obtener Codigo de Barras</string>
+  <string name="get_barcode">Escanear Código de Barras</string>
   <string name="get_forms">Obtener Formulario en Blanco</string>
   <string name="get_location">Obtener localización</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
