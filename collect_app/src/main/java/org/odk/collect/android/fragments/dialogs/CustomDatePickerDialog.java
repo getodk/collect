@@ -169,6 +169,10 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         }
     }
 
+    private DateTime getDateAsGregorian(DateTime dateTime) {
+        return dateTime.withChronology(GregorianChronology.getInstance());
+    }
+
     protected static Bundle getArgs(FormIndex formIndex, DateTime dateTime, AbstractDateWidget.CalendarMode calendarMode) {
         Bundle args = new Bundle();
         args.putSerializable(FORM_INDEX, formIndex);
@@ -180,10 +184,6 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     protected void updateGregorianDateLabel() {
         gregorianDateText.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(getDateAsGregorian(getOriginalDate()).toLocalDate().toDate(), calendarMode, false));
-    }
-
-    protected DateTime getDateAsGregorian(DateTime dateTime) {
-        return dateTime.withChronology(GregorianChronology.getInstance());
     }
 
     protected abstract void updateDays();

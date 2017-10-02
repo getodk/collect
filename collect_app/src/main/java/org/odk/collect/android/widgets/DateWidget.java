@@ -67,15 +67,26 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         });
     }
 
+    @Override
     protected void setDateLabel() {
         nullAnswer = false;
         dateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
                 (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false));
     }
 
+    @Override
     protected void showDatePickerDialog() {
         datePickerDialog = new FixedDatePickerDialog(getContext(), getTheme(), this, dateTime);
         datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        dateTime = new DateTime()
+                .withYear(year)
+                .withMonthOfYear(month + 1)
+                .withDayOfMonth(dayOfMonth);
+        setDateLabel();
     }
 
     private int getTheme() {
@@ -107,15 +118,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
     // Exposed for testing purposes to avoid reflection.
     public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
         this.datePickerDialog = datePickerDialog;
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        dateTime = new DateTime()
-                .withYear(year)
-                .withMonthOfYear(month + 1)
-                .withDayOfMonth(dayOfMonth);
-        setDateLabel();
     }
 
     private class FixedDatePickerDialog extends DatePickerDialog {
