@@ -125,4 +125,17 @@
         <exclude name="UnnecessaryFinalModifier" />
         <exclude name="UselessQualifiedThis" />
     </rule>
+    <rule ref="rulesets/java/codesize.xml">
+        <exclude name="CyclomaticComplexity" />
+        <exclude name="TooManyMethods" />
+        <exclude name="ModifiedCyclomaticComplexity" />
+        <exclude name="StdCyclomaticComplexity" />
+        <exclude name="TooManyFields" />
+        <exclude name="ExcessiveMethodLength" />
+        <exclude name="NPathComplexity" />
+        <exclude name="NcssConstructorCount" />
+        <exclude name="ExcessivePublicCount" />
+        <exclude name="ExcessiveClassLength" />
+        <exclude name="NcssMethodCount" />
+    </rule>
 </ruleset>
