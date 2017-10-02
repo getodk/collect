@@ -26,12 +26,13 @@ import android.text.method.DigitsKeyListener;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_DECIMAL_CAPTURE;
 
 
 /**
@@ -94,8 +95,7 @@ public class ExDecimalWidget extends ExStringWidget {
         i.putExtra("value", getDoubleAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                FormEntryActivity.EX_DECIMAL_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, EX_DECIMAL_CAPTURE);
     }
 
 
