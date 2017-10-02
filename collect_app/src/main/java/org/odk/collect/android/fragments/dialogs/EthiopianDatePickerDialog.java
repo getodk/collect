@@ -29,6 +29,9 @@ import java.util.Arrays;
  * @author Aurelio Di Pasquale (aurelio.dipasquale@unibas.ch)
  */
 public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
+    private static final int MIN_SUPPORTED_YEAR = 1893; //1900 in Gregorian calendar
+    private static final int MAX_SUPPORTED_YEAR = 2093; //2100 in Gregorian calendar
+
     private String[] monthsArray;
 
     public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, DateTime dateTime, AbstractDateWidget.CalendarMode calendarMode) {
@@ -47,12 +50,12 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
 
     @Override
     protected void updateDays() {
-        setUpDayPicker(getCurrentEthiopianDateDisplay());
+        setUpDayPicker(getCurrentEthiopianDate());
     }
 
     @Override
     protected DateTime getOriginalDate() {
-        return getCurrentEthiopianDateDisplay();
+        return getCurrentEthiopianDate();
     }
 
     private void setUpDatePicker(DateTime gregorianDate) {
@@ -63,27 +66,21 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     }
 
     private void setUpDayPicker(DateTime ethiopianDate) {
-        int maxDay = ethiopianDate.dayOfMonth().getMaximumValue();
-        dayPicker.setDisplayedValues(null);
-        dayPicker.setMaxValue(maxDay - 1);
-        dayPicker.setDisplayedValues(getDayPickerValues(maxDay));
-        dayPicker.setValue(ethiopianDate.getDayOfMonth() - 1);
+        dayPicker.setMinValue(1);
+        dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
+        dayPicker.setValue(ethiopianDate.getDayOfMonth());
     }
 
     private void setUpMonthPicker(DateTime ethiopianDate) {
-        monthPicker.setDisplayedValues(null);
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
         monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
     }
 
     private void setUpYearPicker(DateTime ethiopianDate) {
-        int maxYear = 2200;
-        String[] years = getYearPickerValues(maxYear);
-        yearPicker.setDisplayedValues(null);
-        yearPicker.setMaxValue(maxYear - 1);
-        yearPicker.setDisplayedValues(getYearPickerValues(maxYear));
-        yearPicker.setValue(Arrays.asList(years).indexOf(String.valueOf(ethiopianDate.getYear())));
+        yearPicker.setMinValue(MIN_SUPPORTED_YEAR);
+        yearPicker.setMaxValue(MAX_SUPPORTED_YEAR);
+        yearPicker.setValue(ethiopianDate.getYear());
     }
 
     private void setUpValues() {
@@ -91,10 +88,10 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
         updateGregorianDateLabel();
     }
 
-    private DateTime getCurrentEthiopianDateDisplay() {
-        int ethiopianDay = Integer.parseInt(dayPicker.getDisplayedValues()[dayPicker.getValue()]);
+    private DateTime getCurrentEthiopianDate() {
+        int ethiopianDay = dayPicker.getValue();
         int ethiopianMonth = Arrays.asList(monthsArray).indexOf(monthPicker.getDisplayedValues()[monthPicker.getValue()]);
-        int ethiopianYear = Integer.parseInt(yearPicker.getDisplayedValues()[yearPicker.getValue()]);
+        int ethiopianYear = yearPicker.getValue();
 
         DateTime ethiopianDate = new DateTime(ethiopianYear, ethiopianMonth + 1, 1, 0, 0, 0, 0, EthiopicChronology.getInstance());
         if (ethiopianDay > ethiopianDate.dayOfMonth().getMaximumValue()) {
@@ -102,23 +99,5 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
         }
 
         return new DateTime(ethiopianYear, ethiopianMonth + 1, ethiopianDay, 0, 0, 0, 0, EthiopicChronology.getInstance());
-    }
-
-    private String[] getDayPickerValues(int maxDay) {
-        String[] days = new String[maxDay];
-        for (int i = 1; i <= maxDay; i++) {
-            days[i - 1] = String.valueOf(i);
-        }
-
-        return days;
-    }
-
-    private String[] getYearPickerValues(int maxYear) {
-        String[] years = new String[maxYear];
-        for (int i = 1; i <= maxYear; i++) {
-            years[i - 1] = String.valueOf(i);
-        }
-
-        return years;
     }
 }
