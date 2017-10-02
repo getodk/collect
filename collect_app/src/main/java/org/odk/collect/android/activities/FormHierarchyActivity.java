@@ -30,6 +30,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import bikramsambat.BsCalendar;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
@@ -329,7 +331,14 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
-                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
+                            String answerDisplay;
+                            if (formController.getLanguage().startsWith("ne")) {
+                                answerDisplay = BsCalendar.getInstance().toBik_dev(
+                                        new java.text.SimpleDateFormat("yyyy-MM-dd").format(
+                                        (java.util.Date) fp.getAnswerValue().getValue()));
+                            } else {
+                                answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
+                            }
                             formList.add(
                                     new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));

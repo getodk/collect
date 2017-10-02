@@ -21,6 +21,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url = 'https://oss.sonatype.org/content/groups/public' }
+        maven { url 'https://staging.dev.medicmobile.org/_couch/maven-repo' }
     }
 }
 
