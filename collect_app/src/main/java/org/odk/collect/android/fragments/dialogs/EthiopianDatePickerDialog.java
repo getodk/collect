@@ -17,7 +17,7 @@
 package org.odk.collect.android.fragments.dialogs;
 
 import org.javarosa.core.model.FormIndex;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.widgets.AbstractDateWidget;
@@ -34,9 +34,9 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, DateTime dateTime, AbstractDateWidget.CalendarMode calendarMode) {
+    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, AbstractDateWidget.CalendarMode calendarMode) {
         EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, dateTime, calendarMode));
+        dialog.setArguments(getArgs(formIndex, date, calendarMode));
 
         return dialog;
     }
@@ -54,50 +54,53 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     }
 
     @Override
-    protected DateTime getOriginalDate() {
+    protected LocalDateTime getOriginalDate() {
         return getCurrentEthiopianDate();
     }
 
-    private void setUpDatePicker(DateTime gregorianDate) {
-        DateTime ethiopianDate = gregorianDate.withChronology(EthiopicChronology.getInstance());
+    private void setUpDatePicker(LocalDateTime gregorianDate) {
+        LocalDateTime ethiopianDate = gregorianDate
+                .toDateTime()
+                .withChronology(EthiopicChronology.getInstance())
+                .toLocalDateTime();
         setUpDayPicker(ethiopianDate);
         setUpMonthPicker(ethiopianDate);
         setUpYearPicker(ethiopianDate);
     }
 
-    private void setUpDayPicker(DateTime ethiopianDate) {
+    private void setUpDayPicker(LocalDateTime ethiopianDate) {
         dayPicker.setMinValue(1);
         dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
         dayPicker.setValue(ethiopianDate.getDayOfMonth());
     }
 
-    private void setUpMonthPicker(DateTime ethiopianDate) {
+    private void setUpMonthPicker(LocalDateTime ethiopianDate) {
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
         monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
     }
 
-    private void setUpYearPicker(DateTime ethiopianDate) {
+    private void setUpYearPicker(LocalDateTime ethiopianDate) {
         yearPicker.setMinValue(MIN_SUPPORTED_YEAR);
         yearPicker.setMaxValue(MAX_SUPPORTED_YEAR);
         yearPicker.setValue(ethiopianDate.getYear());
     }
 
     private void setUpValues() {
-        setUpDatePicker(dateTime);
+        setUpDatePicker(date);
         updateGregorianDateLabel();
     }
 
-    private DateTime getCurrentEthiopianDate() {
+    private LocalDateTime getCurrentEthiopianDate() {
         int ethiopianDay = dayPicker.getValue();
         int ethiopianMonth = Arrays.asList(monthsArray).indexOf(monthPicker.getDisplayedValues()[monthPicker.getValue()]);
         int ethiopianYear = yearPicker.getValue();
 
-        DateTime ethiopianDate = new DateTime(ethiopianYear, ethiopianMonth + 1, 1, 0, 0, 0, 0, EthiopicChronology.getInstance());
+        LocalDateTime ethiopianDate = new LocalDateTime(ethiopianYear, ethiopianMonth + 1, 1, 0, 0, 0, 0, EthiopicChronology.getInstance());
         if (ethiopianDay > ethiopianDate.dayOfMonth().getMaximumValue()) {
             ethiopianDay = ethiopianDate.dayOfMonth().getMaximumValue();
         }
 
-        return new DateTime(ethiopianYear, ethiopianMonth + 1, ethiopianDay, 0, 0, 0, 0, EthiopicChronology.getInstance());
+        return new LocalDateTime(ethiopianYear, ethiopianMonth + 1, ethiopianDay, 0, 0, 0, 0, EthiopicChronology.getInstance());
     }
 }

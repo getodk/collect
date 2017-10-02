@@ -74,7 +74,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -3000,8 +3000,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    public void onDateChanged(DateTime dateTime) {
-        ((ODKView) currentView).setBinaryData(dateTime);
+    public void onDateChanged(LocalDateTime date) {
+        ((ODKView) currentView).setBinaryData(date);
     }
 
     /**

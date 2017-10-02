@@ -27,7 +27,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -42,14 +42,14 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     public static final String DATE_PICKER_DIALOG = "datePickerDialog";
 
     private static final String FORM_INDEX = "formIndex";
-    private static final String DATE_TIME = "dateTime";
+    private static final String DATE = "date";
     private static final String CALENDAR_MODE = "calendarMode";
 
     protected NumberPicker dayPicker;
     protected NumberPicker monthPicker;
     protected NumberPicker yearPicker;
 
-    protected DateTime dateTime;
+    protected LocalDateTime date;
 
     private TextView gregorianDateText;
 
@@ -58,7 +58,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private AbstractDateWidget.CalendarMode calendarMode;
 
     public interface CustomDatePickerDialogListener {
-        void onDateChanged(DateTime dateTime);
+        void onDateChanged(LocalDateTime date);
     }
 
     private CustomDatePickerDialogListener listener;
@@ -83,7 +83,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         }
 
         formIndex = (FormIndex) savedInstanceStateToRead.getSerializable(FORM_INDEX);
-        dateTime = (DateTime) savedInstanceStateToRead.getSerializable(DATE_TIME);
+        date = (LocalDateTime) savedInstanceStateToRead.getSerializable(DATE);
         calendarMode = (AbstractDateWidget.CalendarMode) savedInstanceStateToRead.getSerializable(CALENDAR_MODE);
     }
 
@@ -121,9 +121,8 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        DateTime dateTime = getDateAsGregorian(getOriginalDate());
         outState.putSerializable(FORM_INDEX, formIndex);
-        outState.putSerializable(DATE_TIME, dateTime);
+        outState.putSerializable(DATE, getDateAsGregorian(getOriginalDate()));
         outState.putSerializable(CALENDAR_MODE, calendarMode);
 
         super.onSaveInstanceState(outState);
@@ -169,14 +168,17 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         }
     }
 
-    private DateTime getDateAsGregorian(DateTime dateTime) {
-        return dateTime.withChronology(GregorianChronology.getInstance());
+    private LocalDateTime getDateAsGregorian(LocalDateTime date) {
+        return date
+                .toDateTime()
+                .withChronology(GregorianChronology.getInstance())
+                .toLocalDateTime();
     }
 
-    protected static Bundle getArgs(FormIndex formIndex, DateTime dateTime, AbstractDateWidget.CalendarMode calendarMode) {
+    protected static Bundle getArgs(FormIndex formIndex, LocalDateTime date, AbstractDateWidget.CalendarMode calendarMode) {
         Bundle args = new Bundle();
         args.putSerializable(FORM_INDEX, formIndex);
-        args.putSerializable(DATE_TIME, dateTime);
+        args.putSerializable(DATE, date);
         args.putSerializable(CALENDAR_MODE, calendarMode);
 
         return args;
@@ -188,5 +190,5 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     protected abstract void updateDays();
 
-    protected abstract DateTime getOriginalDate();
+    protected abstract LocalDateTime getOriginalDate();
 }

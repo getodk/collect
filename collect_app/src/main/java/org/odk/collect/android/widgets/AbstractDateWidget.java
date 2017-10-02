@@ -25,12 +25,10 @@ import android.widget.TextView;
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
-
-import java.util.Date;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
@@ -46,7 +44,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     protected boolean nullAnswer;
 
-    protected DateTime dateTime;
+    protected LocalDateTime date;
 
     protected CalendarMode calendarMode = CalendarMode.CALENDAR;
 
@@ -64,7 +62,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             clearAnswer();
             setDateToCurrent();
         } else {
-            dateTime = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
+            date = new LocalDateTime(formEntryPrompt.getAnswerValue().getValue());
             setDateLabel();
         }
     }
@@ -98,12 +96,12 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        return nullAnswer ? null : new DateData(dateTime.toDate());
+        return nullAnswer ? null : new DateData(date.toDate());
     }
 
     @Override
     public void setBinaryData(Object answer) {
-        dateTime = (DateTime) answer;
+        date = (LocalDateTime) answer;
         setDateLabel();
         cancelWaitingForBinaryData();
     }
@@ -126,12 +124,8 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
         return calendarMode.equals(CalendarMode.MONTH_YEAR) || calendarMode.equals(CalendarMode.YEAR);
     }
 
-    public boolean isMonthHidden() {
-        return calendarMode.equals(CalendarMode.YEAR);
-    }
-
-    public DateTime getDate() {
-        return dateTime;
+    public LocalDateTime getDate() {
+        return date;
     }
 
     public boolean isNullAnswer() {
@@ -172,7 +166,12 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     protected void setDateToCurrent() {
-        dateTime = DateTime.now();
+        date = LocalDateTime
+                .now()
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
     }
 
     protected abstract void setDateLabel();

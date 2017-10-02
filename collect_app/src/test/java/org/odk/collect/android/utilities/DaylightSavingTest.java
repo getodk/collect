@@ -22,7 +22,7 @@ import android.widget.DatePicker;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -125,7 +125,7 @@ public class DaylightSavingTest {
         when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
 
         DateWidget dateWidget = mock(DateWidget.class);
-        when(dateWidget.getDate()).thenReturn(new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day));
+        when(dateWidget.getDate()).thenReturn(new LocalDateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(day));
 
         TimeWidget timeWidget = mock(TimeWidget.class);
         when(timeWidget.getHour()).thenReturn(hour);

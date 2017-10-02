@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateData;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
@@ -47,10 +47,10 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
     @Test
     public void setData() {
         DateWidget widget = getWidget();
-        DateTime dateTime = new DateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
-        widget.setBinaryData(dateTime);
+        LocalDateTime date = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
+        widget.setBinaryData(date);
         assertFalse(widget.isWaitingForBinaryData());
         assertFalse(widget.nullAnswer);
-        assertEquals(widget.getAnswer().getDisplayText(), new DateData(dateTime.toDate()).getDisplayText());
+        assertEquals(widget.getAnswer().getDisplayText(), new DateData(date.toDate()).getDisplayText());
     }
 }

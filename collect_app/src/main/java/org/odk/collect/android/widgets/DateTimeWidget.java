@@ -84,9 +84,6 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
                 dateWidget.setDateLabel();
             }
 
-            boolean hideDay = dateWidget.isDayHidden();
-            boolean hideMonth = dateWidget.isMonthHidden();
-
             int year = dateWidget.getDate().getYear();
             int month = dateWidget.getDate().getMonthOfYear();
             int day = dateWidget.getDate().getDayOfMonth();
@@ -97,8 +94,8 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
                     .withYear(year)
                     .withMonthOfYear(month)
                     .withDayOfMonth(day)
-                    .withHourOfDay((hideMonth || hideDay) ? 0 : hour)
-                    .withMinuteOfHour((hideMonth || hideDay) ? 0 : minute)
+                    .withHourOfDay(hour)
+                    .withMinuteOfHour(minute)
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
 
@@ -155,10 +152,6 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
 
     public AbstractDateWidget getDateWidget() {
         return dateWidget;
-    }
-
-    public TimeWidget getTimeWidget() {
-        return timeWidget;
     }
 
     // Exposed for testing purposes to avoid reflection.
