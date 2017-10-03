@@ -55,7 +55,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     private FormIndex formIndex;
 
-    private AbstractDateWidget.CalendarMode calendarMode;
+    protected AbstractDateWidget.CalendarMode calendarMode;
 
     public interface CustomDatePickerDialogListener {
         void onDateChanged(LocalDateTime date);
@@ -159,12 +159,12 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private void hidePickersIfNeeded() {
         if (calendarMode.equals(AbstractDateWidget.CalendarMode.MONTH_YEAR)) {
             dayPicker.setVisibility(View.GONE);
-            dayPicker.setValue(0);
+            dayPicker.setValue(1);
         } else if (calendarMode.equals(AbstractDateWidget.CalendarMode.YEAR)) {
             dayPicker.setVisibility(View.GONE);
             monthPicker.setVisibility(View.GONE);
-            dayPicker.setValue(0);
-            yearPicker.setValue(0);
+            dayPicker.setValue(1);
+            yearPicker.setValue(1);
         }
     }
 

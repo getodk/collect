@@ -71,13 +71,17 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     private void setUpDayPicker(LocalDateTime ethiopianDate) {
         dayPicker.setMinValue(1);
         dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
-        dayPicker.setValue(ethiopianDate.getDayOfMonth());
+        if (calendarMode.equals(AbstractDateWidget.CalendarMode.FULL_DATE)) {
+            dayPicker.setValue(ethiopianDate.getDayOfMonth());
+        }
     }
 
     private void setUpMonthPicker(LocalDateTime ethiopianDate) {
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
-        monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
+        if (!calendarMode.equals(AbstractDateWidget.CalendarMode.YEAR)) {
+            monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
+        }
     }
 
     private void setUpYearPicker(LocalDateTime ethiopianDate) {
