@@ -240,7 +240,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton nextButton;
     private ImageButton backButton;
 
-    private String stepMessage = "";
     private Toolbar toolbar;
 
     enum AnimationType {
@@ -2726,7 +2725,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onProgressStep(String stepMessage) {
-        this.stepMessage = stepMessage;
         if (progressDialog != null) {
             progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }
