@@ -2,6 +2,8 @@ package org.odk.collect.android.utilities;
 
 import android.os.Build;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.widgets.AbstractDateWidget;
 
 import java.text.DateFormat;
@@ -47,5 +49,13 @@ public class DateTimeUtils {
             }
         }
         return datePattern;
+    }
+
+    public static LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime date) {
+        final DateTimeZone dtz = DateTimeZone.getDefault();
+        while (dtz.isLocalDateTimeGap(date)) {
+            date = date.plusMinutes(1);
+        }
+        return date;
     }
 }

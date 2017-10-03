@@ -169,7 +169,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     private LocalDateTime getDateAsGregorian(LocalDateTime date) {
-        return date
+        return DateTimeUtils.skipDaylightSavingGapIfExists(date)
                 .toDateTime()
                 .withChronology(GregorianChronology.getInstance())
                 .toLocalDateTime();
@@ -185,7 +185,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     protected void updateGregorianDateLabel() {
-        gregorianDateText.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(getDateAsGregorian(getOriginalDate()).toLocalDate().toDate(), calendarMode, false));
+        gregorianDateText.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(getDateAsGregorian(getOriginalDate()).toDate(), calendarMode, false));
     }
 
     protected abstract void updateDays();

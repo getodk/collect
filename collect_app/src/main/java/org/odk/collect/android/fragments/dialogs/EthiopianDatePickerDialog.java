@@ -20,6 +20,7 @@ import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.AbstractDateWidget;
 
 import java.util.Arrays;
@@ -59,7 +60,8 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     }
 
     private void setUpDatePicker(LocalDateTime gregorianDate) {
-        LocalDateTime ethiopianDate = gregorianDate
+        LocalDateTime ethiopianDate = DateTimeUtils
+                .skipDaylightSavingGapIfExists(gregorianDate)
                 .toDateTime()
                 .withChronology(EthiopicChronology.getInstance())
                 .toLocalDateTime();
