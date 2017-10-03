@@ -16,4 +16,5 @@ the specific language governing permissions and limitations under the License. -
     <string name="default_odk_formlist" translatable="false">/formList</string>
     <string name="default_odk_submission" translatable="false">/submission</string>
     <string name="app_url" translatable="false">http://opendatakit.org</string>
+    <string name="off_untranslated" translatable="false">off</string>
 </resources>

@@ -68,6 +68,7 @@ public final class PreferenceKeys {
 
            static final int    ARRAY_INDEX_GOOGLE_MAPS      = 0;
            static final String OSM_BASEMAP_KEY              = "osmdroid";
+           static final String GOOGLE_MAPS                  = "google_maps";
            static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
 
@@ -76,7 +77,7 @@ public final class PreferenceKeys {
 
         hashMap.put(KEY_SHOW_SPLASH,                false);
         hashMap.put(KEY_SPLASH_PATH,                Collect.getInstance().getString(R.string.default_splash_path));
-        hashMap.put(KEY_FONT_SIZE,                  "21");
+        hashMap.put(KEY_FONT_SIZE,                  Collect.DEFAULT_FONTSIZE);
         hashMap.put(KEY_DELETE_AFTER_SEND,          false);
         hashMap.put(KEY_ANALYTICS,                  true);
         hashMap.put(KEY_INSTANCE_SYNC,              true);
@@ -91,12 +92,12 @@ public final class PreferenceKeys {
         hashMap.put(KEY_GOOGLE_SHEETS_URL,          "");
         hashMap.put(KEY_FORMLIST_URL,               Collect.getInstance().getString(R.string.default_odk_formlist));
         hashMap.put(KEY_SUBMISSION_URL,             Collect.getInstance().getString(R.string.default_odk_submission));
-        hashMap.put(KEY_NAVIGATION,                 "swipe");
-        hashMap.put(KEY_CONSTRAINT_BEHAVIOR,        "on_swipe");
+        hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
+        hashMap.put(KEY_CONSTRAINT_BEHAVIOR,        CONSTRAINT_BEHAVIOR_ON_SWIPE);
         hashMap.put(KEY_COMPLETED_DEFAULT,          true);
-        hashMap.put(KEY_MAP_SDK,                    "google_maps");
-        hashMap.put(KEY_MAP_BASEMAP,                "streets");
-        hashMap.put(KEY_AUTOSEND,                   "off");
+        hashMap.put(KEY_MAP_SDK,                    GOOGLE_MAPS);
+        hashMap.put(KEY_MAP_BASEMAP,                GOOGLE_MAPS_BASEMAP_DEFAULT);
+        hashMap.put(KEY_AUTOSEND,                   Collect.getInstance().getString(R.string.off_untranslated));
         return hashMap;
     }
 
