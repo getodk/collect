@@ -15,7 +15,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowActivity;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
-import static org.robolectric.Shadows.shadowOf;
 
 
 @Config(constants = BuildConfig.class)
@@ -37,7 +35,6 @@ public class GeoShapeGoogleMapActivityTest {
     private ActivityController<GeoShapeGoogleMapActivity> activityController;
 
     private GeoShapeGoogleMapActivity activity;
-    private ShadowActivity shadowActivity;
 
     @Mock
     LocationClient locationClient;
@@ -49,7 +46,6 @@ public class GeoShapeGoogleMapActivityTest {
     public void setUp() throws Exception {
         activityController = Robolectric.buildActivity(GeoShapeGoogleMapActivity.class);
         activity = activityController.get();
-        shadowActivity = shadowOf(activity);
 
         LocationClients.setTestClient(locationClient);
     }

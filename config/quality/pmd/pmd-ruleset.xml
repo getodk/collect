@@ -61,4 +61,8 @@
         <exclude name="MethodNamingConventions"/>
         <exclude name="AvoidFieldNameMatchingTypeName"/>
     </rule>
+
+    <rule ref="rulesets/java/unusedcode.xml">
+        <exclude name="UnusedFormalParameter" />
+    </rule>
 </ruleset>
