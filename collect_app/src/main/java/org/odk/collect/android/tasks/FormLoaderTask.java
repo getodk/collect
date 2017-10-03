@@ -268,7 +268,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // Remove previous forms
-        ReferenceManager._().clearSession();
+        ReferenceManager.instance().clearSession();
 
         // for itemsets.csv, we only check to see if the itemset file has been
         // updated
@@ -308,19 +308,19 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // This should get moved to the Application Class
-        if (ReferenceManager._().getFactories().length == 0) {
+        if (ReferenceManager.instance().getFactories().length == 0) {
             // this is /sdcard/odk
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+            ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
         }
 
         // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
+        ReferenceManager.instance().addSessionRootTranslator(
                 new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
 
         // clean up vars
