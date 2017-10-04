@@ -42,6 +42,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -111,12 +112,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         Intent intent = getIntent();
         selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
 
-        instancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
-        if (selectedInstanceIDs != null) {
-            for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                instancesToSend[i] = selectedInstanceIDs[i];
-            }
-        }
+        instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {

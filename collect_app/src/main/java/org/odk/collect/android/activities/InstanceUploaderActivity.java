@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -107,12 +108,8 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
 
-        instancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
-        if (selectedInstanceIDs != null) {
-            for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                instancesToSend[i] = selectedInstanceIDs[i];
-            }
-        }
+        instancesToSend = selectedInstanceIDs == null ? ArrayUtils.EMPTY_LONG_OBJECT_ARRAY
+                : ArrayUtils.toObject(selectedInstanceIDs);
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
@@ -161,12 +158,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         outState.putString(ALERT_MSG, alertMsg);
         outState.putBoolean(ALERT_SHOWING, alertShowing);
         outState.putString(AUTH_URI, url);
-
-        long[] toSend = new long[instancesToSend.length];
-        for (int i = 0; i < instancesToSend.length; ++i) {
-            toSend[i] = instancesToSend[i];
-        }
-        outState.putLongArray(TO_SEND, toSend);
+        outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
     }
 
 
