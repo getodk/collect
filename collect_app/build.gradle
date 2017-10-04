@@ -171,6 +171,7 @@ dependencies {
     }
 
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
     compile (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.5.1') {
