@@ -306,6 +306,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String instancePath = null;
         boolean newForm = true;
         autoSaved = false;
+        // only check the buttons if it's enabled in preferences
+        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
+        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
+            showNavigationButtons = true;
+        }
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
@@ -2384,12 +2389,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         if (saveToDiskTask != null) {
             saveToDiskTask.setFormSavedListener(this);
-        }
-
-        // only check the buttons if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
-        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
-            showNavigationButtons = true;
         }
 
         if (showNavigationButtons) {
