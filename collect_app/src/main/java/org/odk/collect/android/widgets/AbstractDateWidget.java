@@ -36,7 +36,7 @@ import org.odk.collect.android.logic.FormController;
 public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget {
 
     public enum CalendarMode {
-        CALENDAR, FULL_DATE, MONTH_YEAR, YEAR
+        CALENDAR, SPINNERS, MONTH_YEAR, YEAR
     }
 
     protected Button dateButton;
@@ -140,14 +140,14 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             } else if (appearance.contains("year")) {
                 calendarMode = CalendarMode.YEAR;
             } else if ("no-calendar".equals(appearance)) {
-                calendarMode = CalendarMode.FULL_DATE;
+                calendarMode = CalendarMode.SPINNERS;
             }
         }
 
         if (!(this instanceof DateWidget)) {
             // We don't support calendar mode for other calendars
             if (calendarMode.equals(CalendarMode.CALENDAR)) {
-                calendarMode = CalendarMode.FULL_DATE;
+                calendarMode = CalendarMode.SPINNERS;
             }
         }
     }

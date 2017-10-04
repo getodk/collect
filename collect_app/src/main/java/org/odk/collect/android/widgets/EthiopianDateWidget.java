@@ -67,7 +67,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
 
     private String getEthiopianDateLabel(DateTime dateTime, Context context) {
         DateTime ethiopianDate = dateTime.withChronology(EthiopicChronology.getInstance());
-        String day = calendarMode.equals(CalendarMode.FULL_DATE) ? ethiopianDate.getDayOfMonth() + " " : "";
+        String day = calendarMode.equals(CalendarMode.SPINNERS) ? ethiopianDate.getDayOfMonth() + " " : "";
         String month = !calendarMode.equals(CalendarMode.YEAR) ? context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " " : "";
 
         return day + month + ethiopianDate.getYear();
