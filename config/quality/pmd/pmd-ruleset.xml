@@ -121,7 +121,6 @@
     </rule>
     <rule ref="rulesets/java/unnecessary.xml" >
         <exclude name="UselessParentheses" />
-        <exclude name="UselessOverridingMethod" />
         <exclude name="UnnecessaryFinalModifier" />
         <exclude name="UselessQualifiedThis" />
     </rule>

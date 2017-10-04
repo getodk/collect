@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -251,11 +250,6 @@ public class DrawActivity extends AppCompatActivity {
     private void cancelAndClose() {
         setResult(Activity.RESULT_CANCELED);
         this.finish();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
