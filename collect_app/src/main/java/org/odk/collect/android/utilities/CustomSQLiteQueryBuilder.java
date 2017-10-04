@@ -56,6 +56,7 @@ public class CustomSQLiteQueryBuilder {
         return this;
     }
 
+    @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
     public CustomSQLiteQueryBuilder columnsForInsert(String... columns) {
         query.append("(");
         columnsForSelect(columns);
