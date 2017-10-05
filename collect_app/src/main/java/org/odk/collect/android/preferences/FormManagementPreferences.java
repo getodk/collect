@@ -24,6 +24,7 @@ import org.odk.collect.android.R;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
 
 public class FormManagementPreferences extends BasePreferenceFragment {
 
@@ -34,6 +35,7 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         initConstraintBehaviorPref();
         initAutoSendPrefs();
+        initImageSizePrefs();
     }
 
     @Override
@@ -80,6 +82,25 @@ public class FormManagementPreferences extends BasePreferenceFragment {
 
         autosend.setSummary(autosend.getEntry());
         autosend.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                String entry = (String) ((ListPreference) preference).getEntries()[index];
+                preference.setSummary(entry);
+                return true;
+            }
+        });
+    }
+
+    private void initImageSizePrefs() {
+        final ListPreference imageSize = (ListPreference) findPreference(KEY_IMAGE_SIZE);
+
+        if (imageSize == null) {
+            return;
+        }
+
+        imageSize.setSummary(imageSize.getEntry());
+        imageSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());

@@ -42,6 +42,7 @@ public final class AdminKeys {
     public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
     public static final String KEY_DEFAULT_TO_FINALIZED        = "default_to_finalized";
     public static final String KEY_HIGH_RESOLUTION             = "high_resolution";
+    public static final String KEY_IMAGE_SIZE                  = "image_size";
     public static final String KEY_SHOW_SPLASH_SCREEN          = "show_splash_screen";
     public static final String KEY_DELETE_AFTER_SEND           = "delete_after_send";
     public static final String KEY_INSTANCE_FORM_SYNC          = "instance_form_sync";
@@ -73,6 +74,7 @@ public final class AdminKeys {
             ag(KEY_APP_LANGUAGE,               PreferenceKeys.KEY_APP_LANGUAGE),
             ag(KEY_DEFAULT_TO_FINALIZED,       PreferenceKeys.KEY_COMPLETED_DEFAULT),
             ag(KEY_HIGH_RESOLUTION,            PreferenceKeys.KEY_HIGH_RESOLUTION),
+            ag(KEY_IMAGE_SIZE,                 PreferenceKeys.KEY_IMAGE_SIZE),
             ag(KEY_SHOW_SPLASH_SCREEN,         PreferenceKeys.KEY_SHOW_SPLASH),
             ag(KEY_SHOW_SPLASH_SCREEN,         PreferenceKeys.KEY_SPLASH_PATH),
             ag(KEY_DELETE_AFTER_SEND,          PreferenceKeys.KEY_DELETE_AFTER_SEND),
@@ -121,6 +123,7 @@ public final class AdminKeys {
             KEY_DEFAULT_TO_FINALIZED,
             KEY_CONSTRAINT_BEHAVIOR,
             KEY_HIGH_RESOLUTION,
+            KEY_IMAGE_SIZE,
             KEY_INSTANCE_FORM_SYNC,
             KEY_TIMER_LOG_ENABLED
     );

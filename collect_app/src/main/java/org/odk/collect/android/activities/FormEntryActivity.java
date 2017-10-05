@@ -125,6 +125,7 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
 
 
@@ -844,9 +845,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void scaleDownImageIfNeeded(String path) {
+        Integer maxPixels;
+
         QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
         if (questionWidget != null) {
-            Integer maxPixels = getMaxPixelsForImageIfDefined(questionWidget);
+            maxPixels = getMaxPixelsFromFormIfDefined(questionWidget);
+
+            if (maxPixels == null) {
+                maxPixels = getMaxPixelsFromSettings();
+            }
+
             if (maxPixels != null) {
                 scaleDownImage(path, maxPixels);
             }
@@ -864,7 +872,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         return questionWidget;
     }
 
-    private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
+    private Integer getMaxPixelsFromFormIfDefined(QuestionWidget questionWidget) {
         Integer maxPixels = null;
         for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
             if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
@@ -873,6 +881,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 } catch (NumberFormatException e) {
                     Timber.i(e);
                 }
+            }
+        }
+        return maxPixels;
+    }
+
+    private Integer getMaxPixelsFromSettings() {
+        Integer maxPixels = null;
+        String imageSizeMode = (String) GeneralSharedPreferences.getInstance().get(KEY_IMAGE_SIZE);
+        String[] imageEntryValues = getResources().getStringArray(R.array.image_size_entry_values);
+        if (!imageSizeMode.equals(imageEntryValues[0])) {
+            if (imageSizeMode.equals(imageEntryValues[1])) {
+                maxPixels = 640;
+            } else if (imageSizeMode.equals(imageEntryValues[2])) {
+                maxPixels = 1024;
+            } else if (imageSizeMode.equals(imageEntryValues[3])) {
+                maxPixels = 2048;
+            } else if (imageSizeMode.equals(imageEntryValues[4])) {
+                maxPixels = 4096;
             }
         }
         return maxPixels;

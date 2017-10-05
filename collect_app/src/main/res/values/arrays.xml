@@ -52,6 +52,20 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/constraint_behavior_on_swipe</item>
         <item>@string/constraint_behavior_on_finalize</item>
     </string-array>
+    <string-array name="image_size_entry_values" translatable="false">
+        <item>original_image_size</item>
+        <item>very_small</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+    <string-array name="image_size_entries">
+        <item>@string/original_image_size</item>
+        <item>@string/very_small</item>
+        <item>@string/small</item>
+        <item>@string/medium</item>
+        <item>@string/large</item>
+    </string-array>
     <string-array name="map_sdk_selector_entries">
         <item>@string/google_maps_sdk</item>
         <item>@string/openstreetmap_sdk</item>
