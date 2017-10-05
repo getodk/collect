@@ -89,9 +89,9 @@ public class DateTimeWidget extends QuestionWidget {
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
                     .withMonthOfYear(hideMonth ? 1 : month)
-                    .withDayOfMonth((hideMonth || hideDay) ? 1 : day)
-                    .withHourOfDay((hideMonth || hideDay) ? 0 : hour)
-                    .withMinuteOfHour((hideMonth || hideDay) ? 0 : minute)
+                    .withDayOfMonth(hideMonth || hideDay ? 1 : day)
+                    .withHourOfDay(hideMonth || hideDay ? 0 : hour)
+                    .withMinuteOfHour(hideMonth || hideDay ? 0 : minute)
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
 

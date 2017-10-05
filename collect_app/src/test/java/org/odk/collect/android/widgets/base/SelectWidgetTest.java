@@ -32,7 +32,7 @@ public abstract class SelectWidgetTest<W extends Widget, A extends IAnswerData>
     }
 
     private List<SelectChoice> createSelectChoices() {
-        int choiceCount = (Math.abs(random.nextInt()) % 3) + 2;
+        int choiceCount = Math.abs(random.nextInt()) % 3 + 2;
 
         List<SelectChoice> selectChoices = new ArrayList<>();
         for (int i = 0; i < choiceCount; i++) {

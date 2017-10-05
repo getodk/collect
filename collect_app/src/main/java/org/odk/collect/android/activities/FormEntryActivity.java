@@ -966,7 +966,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 .getFormController();
 
         useability = (boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_CHANGE_LANGUAGE)
-                && (formController != null)
+                && formController != null
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
 
@@ -1194,7 +1194,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     public CharSequence filter(CharSequence source, int start,
                                                int end, Spanned dest, int dstart, int dend) {
                         for (int i = start; i < end; i++) {
-                            if (Character.getType((source.charAt(i))) == Character.CONTROL) {
+                            if (Character.getType(source.charAt(i)) == Character.CONTROL) {
                                 return "";
                             }
                         }
@@ -2061,7 +2061,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             try {
                 c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
                         .getAbsolutePath());
-                erase = (c.getCount() < 1);
+                erase = c.getCount() < 1;
             } finally {
                 if (c != null) {
                     c.close();
@@ -2483,7 +2483,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void onAnimationEnd(Animation animation) {
         Timber.i("onAnimationEnd %s",
                 ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
+                        : animation == outAnimation ? "out" : "other"));
         if (inAnimation == animation) {
             animationCompletionSet |= 1;
         } else if (outAnimation == animation) {
@@ -2502,7 +2502,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationRepeat %s",
                 ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
+                        : animation == outAnimation ? "out" : "other"));
     }
 
     @Override
@@ -2510,7 +2510,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Added by AnimationListener interface.
         Timber.i("onAnimationStart %s",
                 ((animation == inAnimation) ? "in"
-                        : ((animation == outAnimation) ? "out" : "other")));
+                        : animation == outAnimation ? "out" : "other"));
     }
 
     /**
@@ -2849,9 +2849,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 return false;
             }
 
-            if ((Math.abs(e1.getX() - e2.getX()) > xpixellimit && Math.abs(e1
-                    .getY() - e2.getY()) < ypixellimit)
-                    || Math.abs(e1.getX() - e2.getX()) > xpixellimit * 2) {
+            if (Math.abs(e1.getX() - e2.getX()) > xpixellimit && Math.abs(e1.getY() - e2.getY())
+                    < ypixellimit || Math.abs(e1.getX() - e2.getX()) > xpixellimit * 2) {
                 beenSwiped = true;
                 if (velocityX > 0) {
                     if (e1.getX() > e2.getX()) {

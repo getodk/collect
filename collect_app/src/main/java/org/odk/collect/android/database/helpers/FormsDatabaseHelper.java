@@ -142,7 +142,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     + FormsProviderAPI.FormsColumns.JR_VERSION
                     + ", "
                     + ((oldVersion != 3) ? ""
-                    : (FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                    : FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", ")
                     + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH
                     + ") SELECT "
                     + FormsProviderAPI.FormsColumns._ID
@@ -174,7 +174,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                     + MODEL_VERSION
                     + " AS TEXT) ELSE NULL END, "
                     + ((oldVersion != 3) ? ""
-                    : (FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
+                    : FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + ", ")
                     + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " FROM "
                     + FORMS_TABLE_NAME);
 

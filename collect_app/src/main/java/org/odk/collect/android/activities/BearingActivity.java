@@ -173,7 +173,7 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
                 double degrees = normalizeDegree(azimuth);
                 bearingDecimal = String.format(Locale.US, "%.3f", degrees);
                 String dir = "N";
-                if ((degrees > 0 && degrees <= 22.5) || degrees > 337.5) {
+                if (degrees > 0 && degrees <= 22.5 || degrees > 337.5) {
                     dir = "N";
                 } else if (degrees > 22.5 && degrees <= 67.5) {
                     dir = "NE";
