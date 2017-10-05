@@ -240,7 +240,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton nextButton;
     private ImageButton backButton;
 
-    private String stepMessage = "";
     private Toolbar toolbar;
 
     enum AnimationType {
@@ -1372,16 +1371,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Disables the back button if it is first question....
      */
     private void adjustBackNavigationButtonVisibility() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = Collect.getInstance().getFormController();
         try {
+            FormIndex originalFormIndex = formController.getFormIndex();
             boolean firstQuestion = formController.stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM;
             backButton.setEnabled(!firstQuestion);
-            formController.stepToNextScreenEvent();
-            if (formController.getEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+            if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 backButton.setEnabled(true);
-                formController.stepToNextScreenEvent();
             }
+            formController.jumpToIndex(originalFormIndex);
         } catch (JavaRosaException e) {
             backButton.setEnabled(true);
             Timber.e(e);
@@ -2726,7 +2724,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onProgressStep(String stepMessage) {
-        this.stepMessage = stepMessage;
         if (progressDialog != null) {
             progressDialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }

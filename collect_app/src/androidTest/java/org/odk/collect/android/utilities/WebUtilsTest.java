@@ -1,16 +1,14 @@
 package org.odk.collect.android.utilities;
 
-import java.net.URI;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.test.MockedServerTest;
-import org.opendatakit.httpclientandroidlib.HttpResponse;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+
+import java.net.URI;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -103,7 +101,7 @@ public class WebUtilsTest extends MockedServerTest {
 
     private void doRequest(String path) throws Exception {
         HttpGet req = WebUtils.createOpenRosaHttpGet(new URI(url(path)));
-        HttpResponse response = httpClient().execute(req, httpContext());
+        httpClient().execute(req, httpContext());
     }
 
     private static HttpClient httpClient() {

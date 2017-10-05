@@ -17,10 +17,8 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -204,14 +202,6 @@ public class DrawActivity extends AppCompatActivity {
         drawView.setupView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);
     }
 
-    private int getInverseColor(int color) {
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        int alpha = Color.alpha(color);
-        return Color.argb(alpha, 255 - red, 255 - green, 255 - blue);
-    }
-
     private void saveAndClose() {
         try {
             saveFile(output);
@@ -260,11 +250,6 @@ public class DrawActivity extends AppCompatActivity {
     private void cancelAndClose() {
         setResult(Activity.RESULT_CANCELED);
         this.finish();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
