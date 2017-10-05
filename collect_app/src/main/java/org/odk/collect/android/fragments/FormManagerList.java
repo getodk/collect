@@ -82,12 +82,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         super.onViewCreated(rootView, savedInstanceState);
     }
 
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-    }
-
     @Override
     public void onResume() {
         // hook up to receive completion events
