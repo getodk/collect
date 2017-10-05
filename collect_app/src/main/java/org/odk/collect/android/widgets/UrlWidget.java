@@ -14,15 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,23 +36,19 @@ import org.odk.collect.android.utilities.CustomTabHelper;
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
-    private CustomTabHelper customTabHelper;
-    private Uri uri;
 
+    private Uri uri;
     private Button openUrlButton;
     private TextView stringAnswer;
+    private CustomTabHelper customTabHelper;
 
     public UrlWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        View answerLayout = inflate(context, R.layout.url_widget_layout, null);
-
-        // set button formatting
-        openUrlButton = (Button) answerLayout.findViewById(R.id.openUrl);
-        openUrlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        openUrlButton = getSimpleButton(context.getString(R.string.open_url));
         openUrlButton.setEnabled(!prompt.isReadOnly());
-
         openUrlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,19 +57,16 @@ public class UrlWidget extends QuestionWidget {
                         .logInstanceAction(this, "openUrl", "click",
                                 formEntryPrompt.getIndex());
 
-                if (stringAnswer != null & stringAnswer.getText() != null
-                        && !"".equalsIgnoreCase((String) stringAnswer.getText())) {
-
-                    openUrl();
+                if (!isUrlEmpty(stringAnswer)) {
+                    customTabHelper.bindCustomTabsService(getContext(), null);
+                    customTabHelper.openUri(getContext(), uri);
                 } else {
                     Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        // set text formatting
-        stringAnswer = (TextView) answerLayout.findViewById(R.id.url);
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        stringAnswer = getCenteredAnswerTextView();
 
         String s = prompt.getAnswerText();
         if (s != null) {
@@ -84,22 +75,18 @@ public class UrlWidget extends QuestionWidget {
         }
 
         // finish complex layout
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(openUrlButton);
+        answerLayout.addView(stringAnswer);
         addAnswerView(answerLayout);
 
         customTabHelper = new CustomTabHelper();
-        customTabHelper.bindCustomTabsService((AppCompatActivity) context, null);
     }
 
-    private void openUrl() {
-        if (customTabHelper.getPackageName(getContext()).size() != 0) {
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-            customTabsIntent.intent.setPackage(customTabHelper.getPackageName(getContext()).get(0));
-            customTabsIntent.launchUrl(getContext(), uri);
-        } else {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(uri);
-            getContext().startActivity(intent);
-        }
+    private boolean isUrlEmpty(TextView stringAnswer) {
+        return stringAnswer == null || stringAnswer.getText() == null
+                || stringAnswer.getText().toString().isEmpty();
     }
 
     @Override
@@ -110,11 +97,9 @@ public class UrlWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        return !s.isEmpty()
+                ? new StringData(s)
+                : null;
     }
 
     @Override
@@ -136,4 +121,10 @@ public class UrlWidget extends QuestionWidget {
         stringAnswer.cancelLongPress();
     }
 
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (customTabHelper.getServiceConnection() != null) {
+            getContext().unbindService(customTabHelper.getServiceConnection());
+        }
+    }
 }

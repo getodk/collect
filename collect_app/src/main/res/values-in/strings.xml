@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="show_password">Tunjukan sandi</string>
   <string name="activity_not_found">Tidak ditemukan aktifitas untuk diselesaikan: %s</string>
   <string name="add_another">Tambah grup</string>
@@ -420,12 +420,6 @@
   <string name="instance_scan_count">%1$d formulir ditambahkan.</string>
   <string name="instance_sync">Impor formulir selesai tersimpan</string>
   <string name="instance_sync_summary">Impor formulir tersimpan di folder instances</string>
-  <string name="sort_by_name_asc">Berdasarkan nama, A-Z</string>
-  <string name="sort_by_name_desc">Berdasarkan nama, Z-A</string>
-  <string name="sort_by_date_asc">Berdasarkan tanggal, diawali terbaru</string>
-  <string name="sort_by_date_desc">Berdasarkan tanggal, diawali terlama</string>
-  <string name="sort_by_status_asc">Berdasarkan status, diawali selesai</string>
-  <string name="sort_by_status_desc">Berdasarkan status, diawali belum selesai</string>
   <string name="sort_the_list">Urutkan daftar</string>
   <string name="request_permissions_google_account">ODK Collect membutuhkan akses akun Google anda untuk mendapatkan formulir kosong dan mengirimkan isi formulir.</string>
   <string name="filter_the_list">Pilah daftar</string>

@@ -2,6 +2,7 @@
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build status](https://circleci.com/gh/opendatakit/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/opendatakit/collect)
+[![codecov.io](https://codecov.io/github/opendatakit/collect/branch/master/graph/badge.svg)](https://codecov.io/github/opendatakit/collect)
 [![Slack status](http://slack.opendatakit.org/badge.svg)](http://slack.opendatakit.org)
 
 ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part of Open Data Kit (ODK), a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about the Open Data Kit project and its history [here](https://opendatakit.org/about/) and read about example ODK deployments [here](https://opendatakit.org/about/deployments/).
@@ -53,7 +54,7 @@ To run functionality that makes API calls from your debug-signed builds, you may
 
 **Google Drive and Sheets APIs** - Follow the instructions in the "Generate the signing certificate fingerprint and register your application" section from [here](https://developers.google.com/drive/android/auth). Enable the Google Drive API [here](https://console.developers.google.com/apis/api/drive/). Enable the Google Sheets API [here](https://console.developers.google.com/apis/api/sheets.googleapis.com).
 
-**Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup). Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
+**Google Maps API** - Follow the instructions [here](https://developers.google.com/maps/documentation/android-api/signup) and paste your key in the `AndroidManifest` as the value for `com.google.android.geo.API_KEY`. Please be sure not to commit your personal API key to a branch that you will submit a pull request for.
  
 ## Contributing code
 Any and all contributions to the project are welcome. ODK Collect is used across the world primarily by organizations with a social purpose so you can have real impact!

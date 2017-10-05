@@ -14,22 +14,21 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -50,7 +49,8 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class TimeWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class TimeWidget extends QuestionWidget implements TimePickerDialog.OnTimeSetListener {
     private TimePickerDialog timePickerDialog;
 
     private Button timeButton;
@@ -67,7 +67,7 @@ public class TimeWidget extends QuestionWidget {
         setGravity(Gravity.START);
 
         createTimeButton();
-        createTimeTextView();
+        timeTextView = getAnswerTextView();
         createTimePickerDialog();
         addViews();
     }
@@ -82,8 +82,12 @@ public class TimeWidget extends QuestionWidget {
     public IAnswerData getAnswer() {
         clearFocus();
         // use picker time, convert to today's date, store as utc
-        DateTime dt = (new DateTime()).withTime(hourOfDay, minuteOfHour, 0, 0);
-        return nullAnswer ? null : new TimeData(dt.toDate());
+        DateTime localDateTime = new DateTime()
+                .withTime(hourOfDay, minuteOfHour, 0, 0);
+
+        return !nullAnswer
+                ? new TimeData(localDateTime.toDate())
+                : null;
     }
 
     @Override
@@ -108,36 +112,19 @@ public class TimeWidget extends QuestionWidget {
     }
 
     private void createTimeButton() {
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
-        timeButton = new Button(getContext());
-        timeButton.setId(QuestionWidget.newUniqueId());
-        timeButton.setText(R.string.select_time);
-        timeButton.setPadding(20, 20, 20, 20);
-        timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        timeButton.setLayoutParams(params);
+        timeButton = getSimpleButton(getContext().getString(R.string.select_time));
         timeButton.setEnabled(!formEntryPrompt.isReadOnly());
-
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (nullAnswer) {
                     setTimeToCurrent();
                 } else {
-                    timePickerDialog.updateTime(hourOfDay, minuteOfHour);
+                    updateTime(hourOfDay, minuteOfHour, true);
                 }
                 timePickerDialog.show();
             }
         });
-    }
-
-    private void createTimeTextView() {
-        timeTextView = new TextView(getContext());
-        timeTextView.setId(QuestionWidget.newUniqueId());
-        timeTextView.setPadding(20, 20, 20, 20);
-        timeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        timeTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
     }
 
     private void addViews() {
@@ -154,25 +141,16 @@ public class TimeWidget extends QuestionWidget {
     }
 
     private void createTimePickerDialog() {
-        timePickerDialog = new CustomTimePickerDialog(getContext(),
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-                        TimeWidget.this.hourOfDay = hourOfDay;
-                        TimeWidget.this.minuteOfHour = minuteOfHour;
-                        setTimeLabel();
-                    }
-                }, 0, 0);
+        timePickerDialog = new CustomTimePickerDialog(getContext(), this, 0, 0);
         timePickerDialog.setCanceledOnTouchOutside(false);
 
         if (formEntryPrompt.getAnswerValue() == null) {
             clearAnswer();
         } else {
-            DateTime dt = new DateTime(((Date) formEntryPrompt.getAnswerValue().getValue()).getTime());
-            hourOfDay = dt.getHourOfDay();
-            minuteOfHour = dt.getMinuteOfHour();
-            setTimeLabel();
-            timePickerDialog.updateTime(hourOfDay, minuteOfHour);
+            Date date = ((Date) formEntryPrompt.getAnswerValue().getValue());
+
+            DateTime dateTime = new DateTime(date);
+            updateTime(dateTime, true);
         }
     }
 
@@ -189,10 +167,34 @@ public class TimeWidget extends QuestionWidget {
     }
 
     public void setTimeToCurrent() {
-        DateTime dt = new DateTime();
-        hourOfDay = dt.getHourOfDay();
-        minuteOfHour = dt.getMinuteOfHour();
+        updateTime(DateTime.now(), false);
+    }
+
+    public void updateTime(DateTime dateTime) {
+        updateTime(dateTime, true);
+    }
+
+    public void updateTime(DateTime dateTime, boolean shouldUpdateLabel) {
+        updateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), shouldUpdateLabel);
+    }
+
+    public void updateTime(int hourOfDay, int minuteOfHour, boolean shouldUpdateLabel) {
+        this.hourOfDay = hourOfDay;
+        this.minuteOfHour = minuteOfHour;
+
         timePickerDialog.updateTime(hourOfDay, minuteOfHour);
+
+        if (shouldUpdateLabel) {
+            setTimeLabel();
+        }
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        this.hourOfDay = hourOfDay;
+        this.minuteOfHour = minute;
+
+        setTimeLabel();
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
@@ -202,7 +204,11 @@ public class TimeWidget extends QuestionWidget {
             super(context, android.R.style.Theme_Holo_Light_Dialog, callBack, hour, minute, DateFormat.is24HourFormat(context));
             setTitle(dialogTitle);
             fixSpinner(context, hour, minute, DateFormat.is24HourFormat(context));
-            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            Window window = getWindow();
+            if (window != null) {
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
         }
 
         public void setTitle(CharSequence title) {
@@ -213,9 +219,10 @@ public class TimeWidget extends QuestionWidget {
          * Workaround for this bug: https://code.google.com/p/android/issues/detail?id=222208
          * In Android 7.0 Nougat, spinner mode for the TimePicker in TimePickerDialog is
          * incorrectly displayed as clock, even when the theme specifies otherwise.
-         *
+         * <p>
          * Source: https://gist.github.com/jeffdgr8/6bc5f990bf0c13a7334ce385d482af9f
          */
+        @SuppressWarnings("deprecation")
         private void fixSpinner(Context context, int hourOfDay, int minute, boolean is24HourView) {
             // android:timePickerMode spinner and clock began in Lollipop
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -233,10 +240,20 @@ public class TimeWidget extends QuestionWidget {
                     a.recycle();
 
                     if (mode == MODE_SPINNER) {
-                        TimePicker timePicker = (TimePicker) findField(TimePickerDialog.class,
-                                TimePicker.class, "mTimePicker").get(this);
+                        Field field = findField(TimePickerDialog.class, TimePicker.class, "mTimePicker");
+                        if (field == null) {
+                            Timber.e("Reflection failed: Couldn't find field 'mTimePicker'");
+                            return;
+                        }
+
+                        TimePicker timePicker = (TimePicker) field.get(this);
                         Class<?> delegateClass = Class.forName("android.widget.TimePicker$TimePickerDelegate");
                         Field delegateField = findField(TimePicker.class, delegateClass, "mDelegate");
+
+                        if (delegateField == null) {
+                            Timber.e("Reflection failed: Couldn't find field 'mDelegate'");
+                            return;
+                        }
                         Object delegate = delegateField.get(timePicker);
 
                         Class<?> spinnerDelegateClass;

@@ -46,7 +46,7 @@ import org.odk.collect.android.views.ODKView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
@@ -75,6 +75,7 @@ public class FormController {
      * Non OpenRosa metadata tag names
      */
     private static final String AUDIT = "audit";
+    public static final String AUDIT_FILE_NAME = "audit.csv";
 
     /*
      * Store the timerLogger object with the form controller state
@@ -94,7 +95,7 @@ public class FormController {
         public final String instanceName;
         public final boolean audit;
 
-        InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
             this.audit = audit;
@@ -477,7 +478,7 @@ public class FormController {
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error
      * type.
      */
-    public int validateAnswers(Boolean markCompleted) throws JavaRosaException {
+    public int validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
             this.jumpToIndex(outcome.failedPrompt);
@@ -705,8 +706,8 @@ public class FormController {
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
-    public FailedConstraint saveAllScreenAnswers(LinkedHashMap<FormIndex, IAnswerData> answers,
-            boolean evaluateConstraints) throws JavaRosaException {
+    public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers,
+                                                 boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
@@ -942,7 +943,7 @@ public class FormController {
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                             treeElement.getRef());
                     Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (value != "") {
+                    if (!value.equals("")) {
                         return (String) value;
                     }
                     return null;
@@ -1198,8 +1199,10 @@ public class FormController {
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
                 audit = true;
+                IAnswerData answerData = new StringData();
+                answerData.setValue(AUDIT_FILE_NAME);
+                v.get(0).setValue(answerData);
             }
-
         }
 
         return new InstanceMetadata(instanceId, instanceName, audit);

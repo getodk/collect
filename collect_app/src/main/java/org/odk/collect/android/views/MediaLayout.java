@@ -43,7 +43,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -96,6 +96,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
+            viewText.setBackgroundColor(playBackgroundTextColor);
             audioButton.playAudio();
         }
     }
@@ -124,7 +125,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             String videoFilename = "";
             try {
                 videoFilename =
-                        ReferenceManager._().DeriveReference(videoURI).getLocalURI();
+                        ReferenceManager.instance().DeriveReference(videoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
             }
@@ -156,7 +157,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         this.index = index;
         viewText = text;
         originalText = text.getText();
-        viewText.setId(QuestionWidget.newUniqueId());
+        viewText.setId(ViewIds.generateViewId());
         this.videoURI = videoURI;
 
         // Layout configurations for our elements in the relative layout
@@ -181,7 +182,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             audioButton.setPadding(22, 12, 22, 12);
             audioButton.setBackgroundColor(Color.LTGRAY);
             audioButton.setOnClickListener(this);
-            audioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
+            audioButton.setId(ViewIds.generateViewId()); // random ID to be used by the
             // relative layout.
         } else {
             // No audio file specified, so ignore.
@@ -207,17 +208,17 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 }
 
             });
-            videoButton.setId(QuestionWidget.newUniqueId());
+            videoButton.setId(ViewIds.generateViewId());
         } else {
             // No video file specified, so ignore.
         }
 
         // Now set up the image view
         String errorMsg = null;
-        final int imageId = QuestionWidget.newUniqueId();
+        final int imageId = ViewIds.generateViewId();
         if (imageURI != null) {
             try {
-                String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                String imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -233,7 +234,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
 
                         if (bigImageURI != null) {
                             imageView.setOnClickListener(new OnClickListener() {
-                                String bigImageFilename = ReferenceManager._()
+                                String bigImageFilename = ReferenceManager.instance()
                                         .DeriveReference(bigImageURI).getLocalURI();
                                 File bigImage = new File(bigImageFilename);
 

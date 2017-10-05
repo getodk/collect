@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,14 +23,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.TypedValue;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +42,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -54,12 +55,14 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
-    private static final String t = "AnnotateWidget";
+@SuppressLint("ViewConstructor")
+public class AnnotateWidget extends QuestionWidget implements FileWidget {
 
     private Button captureButton;
     private Button chooseButton;
     private Button annotateButton;
+
+    @Nullable
     private ImageView imageView;
 
     private String binaryName;
@@ -74,24 +77,12 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder = Collect.getInstance().getFormController()
                 .getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup capture button
-        captureButton = new Button(getContext());
-        captureButton.setId(QuestionWidget.newUniqueId());
-        captureButton.setText(getContext().getString(R.string.capture_image));
-        captureButton
-                .setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        captureButton.setPadding(20, 20, 20, 20);
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setLayoutParams(params);
-
-        // launch capture intent on click
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,16 +123,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup chooser button
-        chooseButton = new Button(getContext());
-        chooseButton.setId(QuestionWidget.newUniqueId());
-        chooseButton.setText(getContext().getString(R.string.choose_image));
-        chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        chooseButton.setPadding(20, 20, 20, 20);
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setLayoutParams(params);
-
-        // launch capture intent on click
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,16 +153,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // setup Blank Image Button
-        annotateButton = new Button(getContext());
-        annotateButton.setId(QuestionWidget.newUniqueId());
-        annotateButton.setText(getContext().getString(R.string.markup_image));
-        annotateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-                answerFontsize);
-        annotateButton.setPadding(20, 20, 20, 20);
+        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image));
         annotateButton.setEnabled(false);
-        annotateButton.setLayoutParams(params);
-        // launch capture intent on click
         annotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +192,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
                 annotateButton.setEnabled(true);
             }
             imageView = new ImageView(getContext());
-            imageView.setId(QuestionWidget.newUniqueId());
+            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
@@ -280,7 +255,8 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -294,8 +270,11 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
-        imageView.setImageBitmap(null);
+        deleteFile();
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
         if (!formEntryPrompt.isReadOnly()) {
             annotateButton.setEnabled(false);
@@ -319,7 +298,7 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) newImageObj;
@@ -335,10 +314,14 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
+
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
@@ -386,5 +369,4 @@ public class AnnotateWidget extends QuestionWidget implements IBinaryWidget {
             imageView.cancelLongPress();
         }
     }
-
 }

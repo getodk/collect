@@ -244,8 +244,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-        driveService = new com.google.api.services.drive.Drive.Builder(
-                transport, jsonFactory, credential)
+        driveService = new Drive.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
 
@@ -617,7 +616,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
 
         String parentId = (String) results.get(PARENT_ID_KEY);
-        String currentDir = (String) results.get(CURRENT_ID_KEY);
 
         if (myDrive) {
             rootButton.setText(getString(R.string.go_shared));

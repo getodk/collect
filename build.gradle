@@ -5,7 +5,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
         classpath 'com.google.gms:google-services:3.0.0'
+    }
+    configurations.all {
+        resolutionStrategy {
+            // use old jacoco so Robolectric test coverage is included in reports
+            // track https://github.com/paveldudka/JacocoEverywhere/issues/14 for a less hacky solution
+            force 'org.jacoco:org.jacoco.core:0.7.2.201409121644'
+        }
     }
 }
 

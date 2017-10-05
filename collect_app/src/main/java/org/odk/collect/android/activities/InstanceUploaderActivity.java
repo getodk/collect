@@ -19,12 +19,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
@@ -324,11 +322,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
                         instancesToSend.length);
                 Collect.getInstance().getActivityLogger().logAction(this,
                         "onCreateDialog.AUTH_DIALOG", "show");
-
-
-                // Get the server, username, and password from the settings
-                SharedPreferences settings =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
                 return new AuthDialogUtility().createDialog(this, this);
         }

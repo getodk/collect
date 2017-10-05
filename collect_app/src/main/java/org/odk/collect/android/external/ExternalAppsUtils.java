@@ -77,7 +77,7 @@ public class ExternalAppsUtils {
 
         String paramsStr;
         if (exString.endsWith(")")) {
-            paramsStr = exString.substring(leftParIndex + 1, exString.lastIndexOf(")"));
+            paramsStr = exString.substring(leftParIndex + 1, exString.lastIndexOf(')'));
         } else {
             paramsStr = exString.substring(leftParIndex + 1, exString.length());
         }
