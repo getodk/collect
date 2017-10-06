@@ -235,12 +235,12 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                         imageView.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Collect.getInstance().getActivityLogger().logInstanceAction(
+                                if (bigImageURI != null) {
+                                    Collect.getInstance().getActivityLogger().logInstanceAction(
                                         this, "onClick",
                                         "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
                                         MediaLayout.this.index);
-
-                                if (bigImageURI != null) {
+                                    
                                     try {
                                         File bigImage = new File(ReferenceManager
                                                 .instance()
