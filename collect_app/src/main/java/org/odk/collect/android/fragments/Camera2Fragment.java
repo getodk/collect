@@ -477,12 +477,8 @@ public class Camera2Fragment extends Fragment
 
                 int[] afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
 
-                if (afAvailableModes.length == 0 || (afAvailableModes.length == 1
-                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF)) {
-                    autoFocusSupported = false;
-                } else {
-                    autoFocusSupported = true;
-                }
+                autoFocusSupported = !(afAvailableModes.length == 0 || (afAvailableModes.length == 1
+                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF));
 
                 StreamConfigurationMap map = characteristics.get(
                         CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);

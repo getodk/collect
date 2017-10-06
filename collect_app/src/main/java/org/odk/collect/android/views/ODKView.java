@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.views;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -47,13 +48,14 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -65,16 +67,12 @@ import timber.log.Timber;
  *
  * @author carlhartung
  */
+@SuppressLint("ViewConstructor")
 public class ODKView extends ScrollView implements OnLongClickListener {
-
-    // starter random number for view IDs
-    private static final int VIEW_ID = 12345;
-
 
     private LinearLayout view;
     private LinearLayout.LayoutParams layout;
     private ArrayList<QuestionWidget> widgets;
-    private Handler handler = null;
 
     public static final String FIELD_LIST = "field-list";
 
@@ -82,7 +80,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             FormEntryCaption[] groups, boolean advancingPage) {
         super(context);
 
-        widgets = new ArrayList<QuestionWidget>();
+        widgets = new ArrayList<>();
 
         view = new LinearLayout(getContext());
         view.setOrientation(LinearLayout.VERTICAL);
@@ -121,7 +119,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
                 // set button formatting
                 Button launchIntentButton = new Button(getContext());
-                launchIntentButton.setId(QuestionWidget.newUniqueId());
+                launchIntentButton.setId(ViewIds.generateViewId());
                 launchIntentButton.setText(buttonText);
                 launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
                         Collect.getQuestionFontsize() + 2);
@@ -183,7 +181,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
 
         boolean first = true;
-        int id = 0;
         for (FormEntryPrompt p : questionPrompts) {
             if (!first) {
                 View divider = new View(getContext());
@@ -199,12 +196,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                     WidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
-            qw.setId(VIEW_ID + id++);
+            qw.setId(ViewIds.generateViewId());
 
             widgets.add(qw);
             view.addView(qw, layout);
-
-
         }
 
         addView(view);
@@ -215,7 +210,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             final String playOption = widgets.get(
                     0).getPrompt().getFormElement().getAdditionalAttribute(null, "autoplay");
             if (playOption != null) {
-                handler = new Handler();
+                Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -248,15 +243,13 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     /**
      * @return a HashMap of answers entered by the user for this set of widgets
      */
-    public LinkedHashMap<FormIndex, IAnswerData> getAnswers() {
-        LinkedHashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<FormIndex, IAnswerData>();
-        Iterator<QuestionWidget> i = widgets.iterator();
-        while (i.hasNext()) {
+    public HashMap<FormIndex, IAnswerData> getAnswers() {
+        HashMap<FormIndex, IAnswerData> answers = new LinkedHashMap<>();
+        for (QuestionWidget q : widgets) {
             /*
              * The FormEntryPrompt has the FormIndex, which is where the answer gets stored. The
              * QuestionWidget has the answer the user has entered.
              */
-            QuestionWidget q = i.next();
             FormEntryPrompt p = q.getPrompt();
             answers.put(p.getIndex(), q.getAnswer());
         }
@@ -270,7 +263,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      */
     private void addGroupText(FormEntryCaption[] groups) {
         StringBuilder s = new StringBuilder("");
-        String t = "";
+        String t;
         int i;
         // list all groups in one string
         for (FormEntryCaption g : groups) {
@@ -279,7 +272,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             if (t != null) {
                 s.append(t);
                 if (g.repeats() && i > 0) {
-                    s.append(" (" + i + ")");
+                    s.append(" (")
+                            .append(i)
+                            .append(")");
                 }
                 s.append(" > ");
             }
@@ -310,10 +305,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void setBinaryData(Object answer) {
         boolean set = false;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
+            if (q instanceof BinaryWidget) {
+                if (((BinaryWidget) q).isWaitingForBinaryData()) {
                     try {
-                        ((IBinaryWidget) q).setBinaryData(answer);
+                        ((BinaryWidget) q).setBinaryData(answer);
                     } catch (Exception e) {
                         Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,
@@ -341,6 +336,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 FormEntryPrompt prompt = questionWidget.getPrompt();
                 TreeReference treeReference =
                         (TreeReference) prompt.getFormElement().getBind().getReference();
+                
                 if (treeReference.getNameLast().equals(key)) {
 
                     switch (prompt.getDataType()) {
@@ -371,9 +367,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     public void cancelWaitingForBinaryData() {
         int count = 0;
         for (QuestionWidget q : widgets) {
-            if (q instanceof IBinaryWidget) {
-                if (((IBinaryWidget) q).isWaitingForBinaryData()) {
-                    ((IBinaryWidget) q).cancelWaitingForBinaryData();
+            if (q instanceof BinaryWidget) {
+                if (((BinaryWidget) q).isWaitingForBinaryData()) {
+                    ((BinaryWidget) q).cancelWaitingForBinaryData();
                     ++count;
                 }
             }

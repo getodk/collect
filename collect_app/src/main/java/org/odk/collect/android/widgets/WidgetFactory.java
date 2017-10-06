@@ -38,7 +38,7 @@ public class WidgetFactory {
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
-            boolean readOnlyOverride) {
+                                                        boolean readOnlyOverride) {
 
         // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
@@ -48,7 +48,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget;
+        QuestionWidget questionWidget = new StringWidget(context, fep, readOnlyOverride);
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -114,9 +114,6 @@ public class WidgetFactory {
                     case Constants.DATATYPE_BOOLEAN:
                         questionWidget = new BooleanWidget(context, fep);
                         break;
-                    default:
-                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
-                        break;
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
@@ -152,7 +149,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -190,7 +187,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -209,6 +206,8 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
+                } else if (appearance.contains("autocomplete")) {
+                    questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }
@@ -224,16 +223,9 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DECIMAL:
                         questionWidget = new RangeDecimalWidget(context, fep);
                         break;
-                    default:
-                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
-                        break;
                 }
-                break;
-            default:
-                questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
         }
         return questionWidget;
     }
-
 }

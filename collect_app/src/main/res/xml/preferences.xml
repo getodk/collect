@@ -9,12 +9,10 @@
         android:key="@string/client"
         android:title="@string/client">
         <ListPreference
-            android:id="@+id/app_language"
             android:dialogTitle="@string/language"
             android:key="app_language"
             android:title="@string/language" />
         <ListPreference
-            android:id="@+id/font_size"
             android:defaultValue="21"
             android:dialogTitle="@string/change_font_size"
             android:entries="@array/font_size_entries"
@@ -22,7 +20,6 @@
             android:key="font_size"
             android:title="@string/font_size" />
         <ListPreference
-            android:id="@+id/navigation"
             android:defaultValue="swipe"
             android:dialogTitle="@string/navigation"
             android:entries="@array/navigation_entries"
@@ -30,13 +27,11 @@
             android:key="navigation"
             android:title="@string/navigation" />
         <CheckBoxPreference
-            android:id="@+id/show_splash"
             android:defaultValue="false"
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash_title" />
         <PreferenceScreen
-            android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"
             android:dependency="showSplash"
             android:key="splashPath"
@@ -47,7 +42,6 @@
             android:key="@string/map_preferences"
             android:title="@string/map_preferences">
             <ListPreference
-                android:id="@+id/map_sdk_behavior"
                 android:defaultValue="google_maps"
                 android:dialogTitle="@string/map_sdk_selector_title"
                 android:entries="@array/map_sdk_selector_entries"
@@ -55,7 +49,6 @@
                 android:key="map_sdk_behavior"
                 android:title="@string/map_sdk_behavior" />
             <ListPreference
-                android:id="@+id/map_basemap_behavior"
                 android:defaultValue="streets"
                 android:dialogTitle="@string/map_basemap_selector_title"
                 android:entries="@array/map_google_basemap_selector_entries"
@@ -73,7 +66,6 @@
             android:key="form_submission"
             android:title="@string/form_submission_category">
             <ListPreference
-                android:id="@+id/autosend"
                 android:defaultValue="off"
                 android:dialogTitle="@string/autosend_selector_title"
                 android:entries="@array/autosend_selector_entries"
@@ -81,7 +73,6 @@
                 android:key="autosend"
                 android:title="@string/autosend" />
             <CheckBoxPreference
-                android:id="@+id/delete_after_send"
                 android:defaultValue="false"
                 android:key="delete_send"
                 android:summary="@string/delete_after_send_summary"
@@ -92,13 +83,11 @@
             android:key="form_filling"
             android:title="@string/form_filling_category">
             <CheckBoxPreference
-                android:id="@+id/default_completed"
                 android:defaultValue="true"
                 android:key="default_completed"
                 android:summary="@string/default_completed_summary"
                 android:title="@string/default_completed" />
             <ListPreference
-                android:id="@+id/constraint_behavior"
                 android:defaultValue="on_swipe"
                 android:dialogTitle="@string/constraint_behavior"
                 android:entries="@array/constraint_behavior_entries"
@@ -106,7 +95,6 @@
                 android:key="constraint_behavior"
                 android:title="@string/constraint_behavior_title" />
             <CheckBoxPreference
-                android:id="@+id/high_resolution"
                 android:defaultValue="true"
                 android:key="high_resolution"
                 android:summary="@string/high_resolution_summary"
@@ -117,7 +105,6 @@
             android:key="form_import"
             android:title="@string/form_import_category">
             <CheckBoxPreference
-                android:id="@+id/instance_sync"
                 android:defaultValue="true"
                 android:key="instance_sync"
                 android:summary="@string/instance_sync_summary"
@@ -137,7 +124,6 @@
             android:key="@string/analytics_preferences"
             android:title="@string/analytics_preferences">
             <CheckBoxPreference
-                android:id="@+id/analytics"
                 android:defaultValue="true"
                 android:key="analytics"
                 android:summary="@string/analytics_summary"

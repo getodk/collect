@@ -16,12 +16,14 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+@SuppressLint("ViewConstructor")
 public class RangeIntegerWidget extends RangeWidget {
 
     public RangeIntegerWidget(Context context, FormEntryPrompt prompt) {
@@ -35,6 +37,28 @@ public class RangeIntegerWidget extends RangeWidget {
 
     @Override
     protected void setUpActualValueLabel() {
-        currentValue.setText(String.valueOf(actualValue.intValue()));
+        String value = actualValue != null ? String.valueOf(actualValue.intValue()) : "";
+
+        if (currentValue != null) {
+            currentValue.setText(value);
+        }
+    }
+
+    @Override
+    protected void setUpDisplayedValuesForNumberPicker() {
+        int index = 0;
+        displayedValuesForNumberPicker = new String[elementCount + 1];
+
+        if (rangeEnd.compareTo(rangeStart) > -1) {
+            for (int i = rangeEnd.intValue(); i >= rangeStart.intValue(); i -= rangeStep.abs().intValue()) {
+                displayedValuesForNumberPicker[index] = String.valueOf(i);
+                index++;
+            }
+        } else {
+            for (int i = rangeEnd.intValue(); i <= rangeStart.intValue(); i += rangeStep.abs().intValue()) {
+                displayedValuesForNumberPicker[index] = String.valueOf(i);
+                index++;
+            }
+        }
     }
 }

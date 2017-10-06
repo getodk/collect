@@ -22,14 +22,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
-import android.util.TypedValue;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +41,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -52,12 +52,15 @@ import timber.log.Timber;
  *
  * @author BehrAtherton@gmail.com
  */
-public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
+public class SignatureWidget extends QuestionWidget implements FileWidget {
 
     private Button signButton;
     private String binaryName;
     private String instanceFolder;
+
+    @Nullable
     private ImageView imageView;
+
     private TextView errorTextView;
 
     public SignatureWidget(Context context, FormEntryPrompt prompt) {
@@ -66,22 +69,12 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         instanceFolder =
                 Collect.getInstance().getFormController().getInstancePath().getParent();
 
-        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-        params.setMargins(7, 5, 7, 5);
-
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        // setup Blank Image Button
-        signButton = new Button(getContext());
-        signButton.setId(QuestionWidget.newUniqueId());
-        signButton.setText(getContext().getString(R.string.sign_button));
-        signButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        signButton.setPadding(20, 20, 20, 20);
+        signButton = getSimpleButton(getContext().getString(R.string.sign_button));
         signButton.setEnabled(!prompt.isReadOnly());
-        signButton.setLayoutParams(params);
-        // launch capture intent on click
         signButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +85,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 launchSignatureActivity();
             }
         });
-
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -112,7 +104,7 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         // Only add the imageView if the user has signed
         if (binaryName != null) {
             imageView = new ImageView(getContext());
-            imageView.setId(QuestionWidget.newUniqueId());
+            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
@@ -170,7 +162,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
@@ -181,18 +174,19 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
-
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
-        imageView.setImageBitmap(null);
+        deleteFile();
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons
         signButton.setText(getContext().getString(R.string.sign_button));
     }
-
 
     @Override
     public IAnswerData getAnswer() {
@@ -203,13 +197,12 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-
     @Override
     public void setBinaryData(Object answer) {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) answer;
@@ -225,7 +218,10 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
@@ -243,7 +239,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
-
 
     @Override
     public boolean isWaitingForBinaryData() {
@@ -264,7 +259,6 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
         }
     }
 
-
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
@@ -273,5 +267,4 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
             imageView.cancelLongPress();
         }
     }
-
 }

@@ -63,6 +63,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
+
 /**
  * Utility class for encrypting submissions during the SaveToDiskTask.
  *
@@ -81,7 +83,6 @@ public class EncryptionUtils {
 
     private static final String XML_ENCRYPTED_TAG_NAMESPACE =
             "http://www.opendatakit.org/xforms/encrypted";
-    private static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
     private static final String DATA = "data";
     private static final String ID = "id";
     private static final String VERSION = "version";
@@ -387,7 +388,7 @@ public class EncryptionUtils {
             } else {
                 msg = "No BouncyCastle provider for padding implementation of symmetric algorithm!";
             }
-            Timber.e(e, msg);
+            Timber.e(msg);
             return null;
         }
 

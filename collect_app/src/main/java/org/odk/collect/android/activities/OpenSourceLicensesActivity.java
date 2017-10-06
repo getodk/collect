@@ -17,10 +17,8 @@
 package org.odk.collect.android.activities;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ViewConfiguration;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -45,11 +43,7 @@ public class OpenSourceLicensesActivity extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.all_open_source_licenses));
-        boolean hasHardwareMenu =
-                ViewConfigurationCompat.hasPermanentMenuKey(ViewConfiguration.get(getApplicationContext()));
-        if (!hasHardwareMenu) {
-            setSupportActionBar(toolbar);
-        }
+        setTitle(getString(R.string.all_open_source_licenses));
+        setSupportActionBar(toolbar);
     }
 }

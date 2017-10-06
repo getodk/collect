@@ -96,7 +96,6 @@
   <string name="select_another_image">Başka bir görüntü seçin</string>
   <string name="use_odk_default">Geçerli görüntüyü kullan</string>
   <string name="change_splash_path">Görüntüyü Değiştir</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Değişiklikleri Kaydet</string>
   <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
   <string name="change_protocol">Platform</string>
@@ -148,7 +147,6 @@
   <string name="admin_password_disabled">Yönetici Şifresi Kapatılmış</string>
   <string name="admin_password_incorrect">Yanliş Şifre</string>
   <string name="enter_admin_password">Yönetici Şifresi Giriniz</string>
-  <string name="autosend">Otomatik Gönder</string>
   <string name="no_account">Hesabınız Yok</string>
   <string name="save_preferences">Değişiklikleri Diske Kaydet</string>
   <string name="form_forward">İleri</string>
@@ -157,7 +155,6 @@
   <string name="buttons_navigation">ileri/geri butonlarini kullan </string>
   <string name="view_change_location">Lokasyonu Göster yada Değiştir</string>
   <string name="open_url">URL Aç</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

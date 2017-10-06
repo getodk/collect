@@ -96,8 +96,7 @@ public class DownloadFormsTask extends
         HashMap<FormDetails, String> result = new HashMap<FormDetails, String>();
 
         for (FormDetails fd : toDownload) {
-            publishProgress(fd.formName, Integer.valueOf(count).toString(), Integer.valueOf(total)
-                    .toString());
+            publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
 
             String message = "";
 
@@ -128,8 +127,7 @@ public class DownloadFormsTask extends
                     Timber.i("No Manifest for: %s", fd.formName);
                 }
             } catch (TaskCancelledException e) {
-                Timber.e(e);
-
+                Timber.i(e);
                 cleanUp(fileResult, e.getFile(), tempMediaPath);
 
                 // do not download additional forms.
@@ -182,8 +180,7 @@ public class DownloadFormsTask extends
 
                     cleanUp(fileResult, null, tempMediaPath);
                 } catch (TaskCancelledException e) {
-                    Timber.e(e);
-
+                    Timber.i(e);
                     cleanUp(fileResult, e.getFile(), tempMediaPath);
                 }
             } else {
@@ -198,19 +195,21 @@ public class DownloadFormsTask extends
     }
 
     private void checkForBadSubmissionUrl(FileResult fileResult) throws IllegalArgumentException {
-        File form = fileResult.getFile();
-        HashMap<String, String> fields = null;
-        try {
-            fields = FileUtils.parseXML(form);
-        } catch (RuntimeException e) {
-            throw new IllegalArgumentException(form.getName() + " :: " + e.toString());
-        }
+        if (fileResult != null) {
+            File form = fileResult.getFile();
+            HashMap<String, String> fields;
+            try {
+                fields = FileUtils.parseXML(form);
+            } catch (RuntimeException e) {
+                throw new IllegalArgumentException(form.getName() + " :: " + e.toString());
+            }
 
-        String submission = fields.get(FileUtils.SUBMISSIONURI);
-        if (submission != null && !UrlUtils.isValidUrl(submission)) {
-            throw new IllegalArgumentException(
-                    Collect.getInstance().getString(R.string.xform_parse_error,
+            String submission = fields.get(FileUtils.SUBMISSIONURI);
+            if (submission != null && !UrlUtils.isValidUrl(submission)) {
+                throw new IllegalArgumentException(
+                        Collect.getInstance().getString(R.string.xform_parse_error,
                                 form.getName(), "submission url"));
+            }
         }
     }
 
@@ -578,7 +577,7 @@ public class DownloadFormsTask extends
         }
 
         publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.formName),
-                Integer.valueOf(count).toString(), Integer.valueOf(total).toString());
+                String.valueOf(count), String.valueOf(total));
 
         List<MediaFile> files = new ArrayList<MediaFile>();
         // get shared HttpContext so that authentication and cookies are retained.
@@ -692,9 +691,8 @@ public class DownloadFormsTask extends
                 publishProgress(
                         Collect.getInstance().getString(R.string.form_download_progress,
                                 fd.formName,
-                                String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
-                        Integer
-                                .valueOf(total).toString());
+                                String.valueOf(mediaCount), String.valueOf(files.size())),
+                                String.valueOf(count),String.valueOf(total));
                 //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.filename);
                 File tempMediaFile = new File(tempMediaDir, toDownload.filename);
@@ -740,8 +738,8 @@ public class DownloadFormsTask extends
             if (stateListener != null) {
                 // update progress and total
                 stateListener.progressUpdate(values[0],
-                        Integer.valueOf(values[1]),
-                        Integer.valueOf(values[2]));
+                        Integer.parseInt(values[1]),
+                        Integer.parseInt(values[2]));
             }
         }
 

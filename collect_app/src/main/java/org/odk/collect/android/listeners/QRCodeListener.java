@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
  */
 
 public interface QRCodeListener {
-    public void preExecute();
+    void preExecute();
 
-    public void bitmapGenerated(Bitmap bitmap);
+    void bitmapGenerated(Bitmap bitmap);
 }

@@ -40,20 +40,20 @@ public class AutoSendPreferenceMigrator {
     public static void migrate(Map<String, ?> entries) {
 
         boolean autoSendWifi = false;
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_WIFI)) {
-            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_WIFI);
+        if (entries.containsKey(KEY_AUTOSEND_WIFI)) {
+            Object value = entries.get(KEY_AUTOSEND_WIFI);
             if (value instanceof Boolean) {
                 autoSendWifi = (boolean) value;
-                entries.remove(PreferenceKeys.KEY_AUTOSEND_WIFI);
+                entries.remove(KEY_AUTOSEND_WIFI);
             }
         }
 
         boolean autoSendNetwork = false;
-        if (entries.containsKey(PreferenceKeys.KEY_AUTOSEND_NETWORK)) {
-            Object value = entries.get(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+        if (entries.containsKey(KEY_AUTOSEND_NETWORK)) {
+            Object value = entries.get(KEY_AUTOSEND_NETWORK);
             if (value instanceof Boolean) {
                 autoSendNetwork = (boolean) value;
-                entries.remove(PreferenceKeys.KEY_AUTOSEND_NETWORK);
+                entries.remove(KEY_AUTOSEND_NETWORK);
             }
         }
 
@@ -72,6 +72,6 @@ public class AutoSendPreferenceMigrator {
         }
 
         //save to shared preferences
-        GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_AUTOSEND, autoSend);
+        GeneralSharedPreferences.getInstance().save(KEY_AUTOSEND, autoSend);
     }
 }

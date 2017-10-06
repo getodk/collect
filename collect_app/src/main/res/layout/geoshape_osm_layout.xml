@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <LinearLayout
-        android:id="@+id/outer_linear"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +15,6 @@
         android:background="#BF000000">
 
         <TextView
-            android:id="@+id/geoshape_instruction"
             android:text="@string/geoshape_instruction"
             android:textColor="#FFFFFF"
             android:layout_width="wrap_content"

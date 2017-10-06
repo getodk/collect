@@ -42,7 +42,6 @@ import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -80,7 +79,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
-    private static final int MENU_PREFERENCES = AppListActivity.MENU_FILTER + 1;
+    private static final int MENU_PREFERENCES = Menu.FIRST;
 
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
     private static final String BUNDLE_FORM_MAP = "formmap";
@@ -126,12 +125,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.remote_file_manage_list);
         super.onCreate(savedInstanceState);
-
-        if (hasHardwareMenu) {
-            toolbar.setTitle(getString(R.string.get_forms));
-        } else {
-            setTitle(getString(R.string.get_forms));
-        }
+        setTitle(getString(R.string.get_forms));
 
         alertMsg = getString(R.string.please_wait);
 
@@ -365,7 +359,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         menu
                 .add(0, MENU_PREFERENCES, 0, R.string.general_preferences)
-                .setIcon(R.drawable.ic_menu_preferences)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
@@ -471,7 +464,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         Collections.sort(filteredFormList, new Comparator<HashMap<String, String>>() {
             @Override
             public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                if (getSortingOrder().equals(FormsProviderAPI.FormsColumns.DISPLAY_NAME + " ASC")) {
+                if (getSortingOrder().equals(SORT_BY_NAME_ASC)) {
                     return lhs.get(FORMNAME).compareToIgnoreCase(rhs.get(FORMNAME));
                 } else {
                     return rhs.get(FORMNAME).compareToIgnoreCase(lhs.get(FORMNAME));

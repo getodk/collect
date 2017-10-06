@@ -14,17 +14,13 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -54,7 +50,9 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,7 +117,6 @@ public final class WebUtils {
             Credentials c = credsProvider.getCredentials(a);
             if (c == null) {
                 hasCreds = false;
-                continue;
             }
         }
         return hasCreds;
@@ -208,32 +205,14 @@ public final class WebUtils {
         HttpGet req = new HttpGet();
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
-        setGoogleHeaders(req);
         req.setURI(uri);
         return req;
-    }
-
-    public static final void setGoogleHeaders(HttpRequest req) {
-        SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(
-                        Collect.getInstance().getApplicationContext());
-        String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
-                Collect.getInstance().getString(R.string.protocol_odk_default));
-
-        // TODO:  this doesn't exist....
-        //if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
-        //String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-        //if ((auth != null) && (auth.length() > 0)) {
-        //req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-        //}
-        //}
     }
 
     public static final HttpPost createOpenRosaHttpPost(Uri u) {
         HttpPost req = new HttpPost(URI.create(u.toString()));
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
-        setGoogleHeaders(req);
         return req;
     }
 
@@ -291,7 +270,7 @@ public final class WebUtils {
                     // loop until all bytes read
                 }
             } catch (Exception e) {
-                Timber.e(e);
+                Timber.i(e);
             } finally {
                 if (is != null) {
                     try {
@@ -310,12 +289,12 @@ public final class WebUtils {
      */
     public static DocumentFetchResult getXmlDocument(String urlString,
             HttpContext localContext, HttpClient httpclient) {
-        URI u = null;
+        URI u;
         try {
             URL url = new URL(urlString);
             u = url.toURI();
-        } catch (Exception e) {
-            Timber.e(e, "Error converting URL %s to uri", urlString);
+        } catch (URISyntaxException | MalformedURLException e) {
+            Timber.i(e, "Error converting URL %s to uri", urlString);
             return new DocumentFetchResult(e.getLocalizedMessage()
                     // + app.getString(R.string.while_accessing) + urlString);
                     + ("while accessing") + urlString, 0);
@@ -334,7 +313,7 @@ public final class WebUtils {
         HttpGet req = WebUtils.createOpenRosaHttpGet(u);
         req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
 
-        HttpResponse response = null;
+        HttpResponse response;
         try {
             response = httpclient.execute(req, localContext);
             int statusCode = response.getStatusLine().getStatusCode();
@@ -424,7 +403,7 @@ public final class WebUtils {
             } catch (Exception e) {
                 String error = "Parsing failed with " + e.getMessage()
                         + "while accessing " + u.toString();
-                Timber.e(e, error);
+                Timber.e(error);
                 return new DocumentFetchResult(error, 0);
             }
 
@@ -462,7 +441,7 @@ public final class WebUtils {
             String error = "Error: " + cause + " while accessing "
                     + u.toString();
 
-            Timber.w(e, error);
+            Timber.w(error);
             return new DocumentFetchResult(error, 0);
         }
     }

@@ -16,12 +16,16 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.math.BigDecimal;
+
+@SuppressLint("ViewConstructor")
 public class RangeDecimalWidget extends RangeWidget {
 
     public RangeDecimalWidget(Context context, FormEntryPrompt prompt) {
@@ -30,11 +34,51 @@ public class RangeDecimalWidget extends RangeWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return actualValue == null ? null : new DecimalData(actualValue.doubleValue());
+        return actualValue != null
+                ? new DecimalData(actualValue.doubleValue())
+                : null;
     }
 
     @Override
     protected void setUpActualValueLabel() {
-        currentValue.setText(String.valueOf(actualValue.doubleValue()));
+        String value = actualValue != null
+                ? String.valueOf(actualValue.doubleValue())
+                : "";
+
+        if (currentValue != null) {
+            currentValue.setText(value);
+        }
+    }
+
+    @Override
+    protected void setUpDisplayedValuesForNumberPicker() {
+        displayedValuesForNumberPicker = new String[elementCount + 1];
+
+        if (isRangeIncreasing()) {
+            fillDisplayedValuesWithIncreasingValues();
+
+        } else {
+            fillDisplayedValuesWithDecreasingValues();
+        }
+    }
+
+    private boolean isRangeIncreasing() {
+        return rangeEnd.compareTo(rangeStart) > -1;
+    }
+
+    private void fillDisplayedValuesWithIncreasingValues() {
+        int index = 0;
+        for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
+            displayedValuesForNumberPicker[index] = String.valueOf(i);
+            index++;
+        }
+    }
+
+    private void fillDisplayedValuesWithDecreasingValues() {
+        int index = 0;
+        for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
+            displayedValuesForNumberPicker[index] = String.valueOf(i);
+            index++;
+        }
     }
 }
