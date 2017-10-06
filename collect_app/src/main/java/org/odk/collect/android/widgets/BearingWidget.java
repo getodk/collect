@@ -18,6 +18,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -32,6 +34,7 @@ import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ToastUtils;
 
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
@@ -81,6 +84,8 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                         FormEntryActivity.BEARING_CAPTURE);
             }
         });
+
+        checkForRequiredSensors();
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -150,5 +155,23 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         super.cancelLongPress();
         getBearingButton.cancelLongPress();
         answerDisplay.cancelLongPress();
+    }
+
+    private void checkForRequiredSensors() {
+        boolean isAccelerometerSensorAvailable = false;
+        boolean isMagneticFieldSensorAvailable = false;
+
+        SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            isAccelerometerSensorAvailable = true;
+        }
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
+            isMagneticFieldSensorAvailable = true;
+        }
+
+        if (!isAccelerometerSensorAvailable || ! isMagneticFieldSensorAvailable) {
+            getBearingButton.setEnabled(false);
+            ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
+        }
     }
 }
