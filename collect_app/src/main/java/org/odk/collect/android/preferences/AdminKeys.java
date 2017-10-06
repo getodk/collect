@@ -35,6 +35,7 @@ public final class AdminKeys {
     // server
     static final String KEY_CHANGE_ADMIN_PASSWORD               = "admin_password";
     static final String KEY_IMPORT_SETTINGS                     = "import_settings";
+    static final String KEY_PREVENT_UNINSTALLING                = "prevent_uninstalling";
     public static final String KEY_CHANGE_SERVER               = "change_server";
     public static final String KEY_CHANGE_FORM_METADATA        = "change_form_metadata";
 
