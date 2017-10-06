@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
@@ -33,6 +32,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 
 import java.util.ArrayList;
@@ -108,8 +108,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
 
-        instancesToSend = selectedInstanceIDs == null ? ArrayUtils.EMPTY_LONG_OBJECT_ARRAY
-                : ArrayUtils.toObject(selectedInstanceIDs);
+        instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
