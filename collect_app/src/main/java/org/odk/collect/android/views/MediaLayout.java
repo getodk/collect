@@ -168,7 +168,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams imageParams =
-                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams videoParams =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -232,32 +232,41 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                         imageView.setImageBitmap(b);
                         imageView.setId(imageId);
 
-                        if (bigImageURI != null) {
-                            imageView.setOnClickListener(new OnClickListener() {
-                                String bigImageFilename = ReferenceManager.instance()
-                                        .DeriveReference(bigImageURI).getLocalURI();
-                                File bigImage = new File(bigImageFilename);
-
-
-                                @Override
-                                public void onClick(View v) {
+                        imageView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (bigImageURI != null) {
                                     Collect.getInstance().getActivityLogger().logInstanceAction(
-                                            this, "onClick",
-                                            "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
-                                            MediaLayout.this.index);
-
-                                    Intent i = new Intent("android.intent.action.VIEW");
-                                    i.setDataAndType(Uri.fromFile(bigImage), "image/*");
+                                        this, "onClick",
+                                        "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
+                                        MediaLayout.this.index);
+                                    
                                     try {
+                                        File bigImage = new File(ReferenceManager
+                                                .instance()
+                                                .DeriveReference(bigImageURI)
+                                                .getLocalURI());
+
+                                        Intent i = new Intent("android.intent.action.VIEW");
+                                        i.setDataAndType(Uri.fromFile(bigImage), "image/*");
                                         getContext().startActivity(i);
+                                    } catch (InvalidReferenceException e) {
+                                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                                     } catch (ActivityNotFoundException e) {
                                         Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
                                         ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
-                                                        "view image"));
+                                                "view image"));
+                                    }
+                                } else {
+                                    if (viewText instanceof RadioButton) {
+                                        ((RadioButton) viewText).setChecked(true);
+                                    } else if (viewText instanceof CheckBox) {
+                                        CheckBox checkbox = (CheckBox) viewText;
+                                        checkbox.setChecked(!checkbox.isChecked());
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
                     } else {
                         // Loading the image failed, so it's likely a bad file.
                         errorMsg = getContext().getString(R.string.file_invalid, imageFile);
