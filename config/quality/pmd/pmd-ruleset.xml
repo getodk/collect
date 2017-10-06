@@ -104,7 +104,6 @@
         <exclude name="PrematureDeclaration" />
         <exclude name="UseStringBufferForStringAppends" />
         <exclude name="SimplifyStartsWith" />
-        <exclude name="AvoidArrayLoops" />
         <exclude name="UnnecessaryWrapperObjectCreation" />
     </rule>
     <rule ref="rulesets/java/strictexception.xml">
