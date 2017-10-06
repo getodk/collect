@@ -71,6 +71,7 @@ public final class PreferenceKeys {
            static final String GOOGLE_MAPS                  = "google_maps";
            static final String GOOGLE_MAPS_BASEMAP_DEFAULT  = "streets";
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
+           static final String AUTOSEND_OFF                 = "off";
 
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -97,7 +98,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_COMPLETED_DEFAULT,          true);
         hashMap.put(KEY_MAP_SDK,                    GOOGLE_MAPS);
         hashMap.put(KEY_MAP_BASEMAP,                GOOGLE_MAPS_BASEMAP_DEFAULT);
-        hashMap.put(KEY_AUTOSEND,                   Collect.getInstance().getString(R.string.off_untranslated));
+        hashMap.put(KEY_AUTOSEND,                   AUTOSEND_OFF);
         return hashMap;
     }
 
