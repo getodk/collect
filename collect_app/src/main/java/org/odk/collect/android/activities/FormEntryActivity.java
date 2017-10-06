@@ -250,6 +250,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private FormsDao formsDao;
 
+    private Bundle state;
+
     /**
      * Called when the activity is first created.
      */
@@ -306,6 +308,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         boolean newForm = true;
         autoSaved = false;
         if (savedInstanceState != null) {
+            state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
             }
@@ -554,6 +557,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    public Bundle getState() {
+        return state;
+    }
+
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.loading_form));
@@ -596,6 +603,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outState.putString(KEY_ERROR, errorMessage);
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
+
+        if (currentView instanceof ODKView) {
+            outState.putAll(((ODKView) currentView).getState());
+            // This value is originally set in onCreate() method but if you only minimize the app or
+            // block/unblock the screen, onCreate() method might not be called (if the activity is just paused
+            // not stopped https://developer.android.com/guide/components/activities/activity-lifecycle.html)
+            state = outState;
+        }
     }
 
     @Override
@@ -1001,6 +1016,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
                 return true;
             case R.id.menu_goto:
+                state = null;
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -1415,6 +1431,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * answers to the data model after checking constraints.
      */
     private void showNextView() {
+        state = null;
         try {
             FormController formController = Collect.getInstance()
                     .getFormController();
@@ -1490,6 +1507,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * model without checking constraints.
      */
     private void showPreviousView() {
+        state = null;
         try {
             FormController formController = Collect.getInstance().getFormController();
             if (formController != null) {
