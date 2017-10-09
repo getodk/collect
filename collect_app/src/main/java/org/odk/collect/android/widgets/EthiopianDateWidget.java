@@ -51,7 +51,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
     @Override
     protected void setDateLabel() {
         nullAnswer = false;
-        dateTextView.setText(DateTimeUtils.getDateTime((Date) getAnswer().getValue(),
+        dateTextView.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(),
                 getPrompt().getQuestion().getAppearanceAttr(), false, getContext()));
     }
 

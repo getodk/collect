@@ -17,15 +17,15 @@ import java.util.Locale;
 
 public class DateTimeUtils {
 
-    public static String getDateTime(Date date, String appearance, boolean containsTime, Context context) {
+    public static String getDateTimeLabel(Date date, String appearance, boolean containsTime, Context context) {
         if (appearance != null && appearance.contains("ethiopian")) {
-            return getEthiopianDateTime(date, appearance, containsTime, context);
+            return getEthiopianDateTimeLabel(date, appearance, containsTime, context);
         } else {
-            return getGregorianDateTimeBasedOnLocale(date, appearance, containsTime, null);
+            return getGregorianDateTimeLabel(date, appearance, containsTime, null);
         }
     }
 
-    private static String getGregorianDateTimeBasedOnLocale(Date date, String appearance, boolean containsTime, Locale locale) {
+    private static String getGregorianDateTimeLabel(Date date, String appearance, boolean containsTime, Locale locale) {
         DateFormat dateFormatter;
         locale = locale == null ? Locale.getDefault() : locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -37,23 +37,15 @@ public class DateTimeUtils {
         return dateFormatter.format(date);
     }
 
-    private static String getEthiopianDateTime(Date date, String appearance, boolean containsTime, Context context) {
-        String gregorianDateText = getGregorianDateTimeBasedOnLocale(date, appearance, false, Locale.US);
+    private static String getEthiopianDateTimeLabel(Date date, String appearance, boolean containsTime, Context context) {
+        String gregorianDateText = getGregorianDateTimeLabel(date, appearance, containsTime, Locale.US);
 
         DateTime ethiopianDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
         String day = appearance != null && (appearance.contains("month-year") || appearance.contains("year")) ? "" : ethiopianDate.getDayOfMonth() + " ";
         String month = appearance != null && appearance.contains("year") ? "" : context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " ";
 
         String ethiopianDateText = day + month + ethiopianDate.getYear();
-
-        if (containsTime) {
-            String hour = ethiopianDate.getHourOfDay() < 10 ? "0" + ethiopianDate.getHourOfDay() : String.valueOf(ethiopianDate.getHourOfDay());
-            String minute = ethiopianDate.getMinuteOfHour() < 10 ? "0" + ethiopianDate.getMinuteOfHour() : String.valueOf(ethiopianDate.getMinuteOfHour());
-
-            return String.format(context.getString(R.string.ethiopian_date_time), ethiopianDateText, gregorianDateText, hour + ":" + minute);
-        } else {
-            return String.format(context.getString(R.string.ethiopian_date), ethiopianDateText, gregorianDateText);
-        }
+        return String.format(context.getString(R.string.ethiopian_date), ethiopianDateText, gregorianDateText);
     }
 
     private static String getDateTimePattern(boolean containsTime, String appearance) {

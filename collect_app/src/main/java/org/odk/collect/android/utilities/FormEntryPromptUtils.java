@@ -31,10 +31,10 @@ public class FormEntryPromptUtils {
         IAnswerData data = fep.getAnswerValue();
         String text;
         if (data instanceof DateTimeData) {
-            text = DateTimeUtils.getDateTime((Date) data.getValue(),
+            text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
                     fep.getQuestion().getAppearanceAttr(), true, context);
         } else if (data instanceof DateData) {
-            text = DateTimeUtils.getDateTime((Date) data.getValue(),
+            text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
                     fep.getQuestion().getAppearanceAttr(), false, context);
         } else {
             text = fep.getAnswerText();

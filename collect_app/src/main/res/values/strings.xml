@@ -531,5 +531,4 @@
     <string name="ethiopian_month_nehasie">Nehasie</string>
     <string name="ethiopian_month_pagumien">Pagumien</string>
     <string name="ethiopian_date">%1$s (%2$s)</string>
-    <string name="ethiopian_date_time">%1$s (%2$s), %3$s</string>
 </resources>

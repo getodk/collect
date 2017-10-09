@@ -70,7 +70,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
     @Override
     protected void setDateLabel() {
         nullAnswer = false;
-        dateTextView.setText(DateTimeUtils.getDateTime(
+        dateTextView.setText(DateTimeUtils.getDateTimeLabel(
                 (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false, getContext()));
     }
 
