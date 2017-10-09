@@ -20,9 +20,6 @@ import android.content.Context;
 import android.view.View;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
-import org.joda.time.chrono.EthiopicChronology;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
 import org.odk.collect.android.utilities.DateTimeUtils;
@@ -54,22 +51,12 @@ public class EthiopianDateWidget extends AbstractDateWidget {
     @Override
     protected void setDateLabel() {
         nullAnswer = false;
-        String ethiopianDate = getEthiopianDateLabel(new DateTime(((Date) getAnswer().getValue()).getTime()), getContext());
-        String gregorianDate = DateTimeUtils.getDateTimeBasedOnUserLocale((Date) getAnswer().getValue(), getPrompt().getQuestion().getAppearanceAttr(), false);
-
-        dateTextView.setText(String.format(getContext().getString(R.string.ethiopian_date), ethiopianDate, gregorianDate));
+        dateTextView.setText(DateTimeUtils.getDateTime((Date) getAnswer().getValue(),
+                getPrompt().getQuestion().getAppearanceAttr(), false, getContext()));
     }
 
     protected void showDatePickerDialog() {
         EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getPrompt().getIndex(), date, calendarMode);
         ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
-    }
-
-    private String getEthiopianDateLabel(DateTime dateTime, Context context) {
-        DateTime ethiopianDate = dateTime.withChronology(EthiopicChronology.getInstance());
-        String day = calendarMode.equals(CalendarMode.SPINNERS) ? ethiopianDate.getDayOfMonth() + " " : "";
-        String month = !calendarMode.equals(CalendarMode.YEAR) ? context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " " : "";
-
-        return day + month + ethiopianDate.getYear();
     }
 }
