@@ -113,13 +113,7 @@ public class FormController {
      */
     public static synchronized void initializeJavaRosa(IPropertyManager mgr) {
         if (!isJavaRosaInitialized) {
-            // need a list of classes that formdef uses
-            // unfortunately, the JR registerModule() functions do more than this.
-            // register just the classes that would have been registered by:
-            // new JavaRosaCoreModule().registerModule();
-            // new CoreModelModule().registerModule();
-            // replace with direct call to PrototypeManager
-
+            // Register prototypes for classes that FormDef uses
             PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
             PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
