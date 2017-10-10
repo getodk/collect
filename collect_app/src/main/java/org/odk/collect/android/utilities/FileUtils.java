@@ -141,7 +141,7 @@ public class FileUtils {
 
             final InputStream is = new FileInputStream(file);
 
-            while(true) {
+            while (true) {
                 int result = is.read(buffer, 0, bufSize);
                 if (result == -1) {
                     break;

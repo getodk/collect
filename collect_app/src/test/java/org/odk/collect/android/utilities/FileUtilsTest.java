@@ -20,9 +20,8 @@ public class FileUtilsTest {
         fw.close();
         for (int bufSize : Arrays.asList(1, contents.length() - 1, contents.length(), 64 * 1024)) {
             FileUtils.bufSize = bufSize;
-            String md5Hash = FileUtils.getMd5Hash(tempFile);
             String expectedResult = "bc6e6f16b8a077ef5fbc8d59d0b931b9";  // From md5 command-line utility
-            assertEquals(expectedResult, md5Hash);
+            assertEquals(expectedResult, FileUtils.getMd5Hash(tempFile));
         }
     }
 }
