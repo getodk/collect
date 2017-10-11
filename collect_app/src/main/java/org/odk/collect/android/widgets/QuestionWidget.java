@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.listeners.AudioPlayListener;
@@ -48,6 +50,8 @@ import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
@@ -63,9 +67,14 @@ public abstract class QuestionWidget
     protected int playColor = Color.BLUE;
     protected int playBackgroundColor = Color.WHITE;
     private TextView helpTextView;
+    private Bundle state;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
+
+        if (context instanceof FormEntryActivity) {
+            state = ((FormEntryActivity) context).getState();
+        }
 
         player = new MediaPlayer();
         player.setOnCompletionListener(new OnCompletionListener() {
@@ -246,6 +255,19 @@ public abstract class QuestionWidget
         addView(v, params);
     }
 
+    public Bundle getState() {
+        return state;
+    }
+
+    public Bundle getCurrentState() {
+        saveState();
+        return state;
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    protected void saveState() {
+        state = new Bundle();
+    }
 
     /**
      * Add a TextView containing the help text to the default location.
