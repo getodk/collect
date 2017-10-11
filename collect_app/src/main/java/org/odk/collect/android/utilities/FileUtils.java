@@ -127,42 +127,29 @@ public class FileUtils {
         }
     }
 
+    static int bufSize = 16 * 1024; // May be set by unit test
+
     public static String getMd5Hash(File file) {
         try {
-            // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
             MessageDigest md = MessageDigest.getInstance("MD5");
-            int chunkSize = 256;
+            final byte[] buffer = new byte[bufSize];
 
-            byte[] chunk = new byte[chunkSize];
-
-            // Get the size of the file
-            long llength = file.length();
-
-            if (llength > Integer.MAX_VALUE) {
+            if (file.length() > Integer.MAX_VALUE) {
                 Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
-            int length = (int) llength;
+            final InputStream is = new FileInputStream(file);
 
-            InputStream is = null;
-            is = new FileInputStream(file);
-
-            int l = 0;
-            for (l = 0; l + chunkSize < length; l += chunkSize) {
-                is.read(chunk, 0, chunkSize);
-                md.update(chunk, 0, chunkSize);
+            while (true) {
+                int result = is.read(buffer, 0, bufSize);
+                if (result == -1) {
+                    break;
+                }
+                md.update(buffer, 0, result);
             }
 
-            int remaining = length - l;
-            if (remaining > 0) {
-                is.read(chunk, 0, remaining);
-                md.update(chunk, 0, remaining);
-            }
-            byte[] messageDigest = md.digest();
-
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
+            String md5 = new BigInteger(1, md.digest()).toString(16);
             while (md5.length() < 32) {
                 md5 = "0" + md5;
             }
