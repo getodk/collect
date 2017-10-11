@@ -225,8 +225,10 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
 			Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
 	                cInstanceProvider.getLong(
 	                cInstanceProvider.getColumnIndex(InstanceColumns._ID)));
-			// Start activity to complete form
-			Intent i = new Intent(Intent.ACTION_EDIT, instanceUri);
+
+            // Use an explicit intent
+            Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
+            i.setData(instanceUri);
 
 			i.putExtra(FormEntryActivity.KEY_FORMPATH, formPath);	// TODO Don't think this is needed
 			i.putExtra(FormEntryActivity.KEY_TASK, taskId);			

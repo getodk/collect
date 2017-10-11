@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -104,6 +105,7 @@ public class Utilities {
                 InstanceColumns._ID,
                 InstanceColumns.T_TITLE,
                 InstanceColumns.T_TASK_STATUS,
+                InstanceColumns.T_REPEAT,
                 InstanceColumns.T_SCHED_START,
                 InstanceColumns.T_ADDRESS,
                 InstanceColumns.FORM_PATH,
@@ -156,7 +158,7 @@ public class Utilities {
             entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FirebaseCrash.report(e);
         } finally {
             if (c != null) {
                 try {
