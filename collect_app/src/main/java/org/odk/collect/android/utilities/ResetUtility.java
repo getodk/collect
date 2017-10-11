@@ -19,7 +19,6 @@ package org.odk.collect.android.utilities;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
@@ -79,13 +78,13 @@ public class ResetUtility {
                 .clear()
                 .commit();
 
-        PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
-
         boolean clearedAdminPreferences = context
                 .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0)
                 .edit()
                 .clear()
                 .commit();
+
+        Collect.getInstance().loadDefaultPreferences();
 
         boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
                 || deleteFolderContents(Collect.SETTINGS);
