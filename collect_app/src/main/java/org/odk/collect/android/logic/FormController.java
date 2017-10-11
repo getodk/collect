@@ -133,7 +133,7 @@ public class FormController {
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
         this.mediaFolder = mediaFolder;
-        formEntryController = fec;
+        this.formEntryController = fec;
         this.instancePath = instancePath;
     }
 
@@ -295,8 +295,12 @@ public class FormController {
     }
 
     public String getBindAttribute(FormIndex idx, String attributeNamespace, String attributeName) {
-        return formEntryController.getModel().getForm().getMainInstance().resolveReference(
-                idx.getReference()).getBindAttributeValue(attributeNamespace, attributeName);
+        return formEntryController
+                .getModel()
+                .getForm()
+                .getMainInstance()
+                .resolveReference(idx.getReference())
+                .getBindAttributeValue(attributeNamespace, attributeName);
     }
 
     /**
