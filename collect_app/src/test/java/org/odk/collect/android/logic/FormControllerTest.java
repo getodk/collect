@@ -3,17 +3,20 @@ package org.odk.collect.android.logic;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.odk.collect.android.utilities.TimerLogger;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,13 +25,15 @@ public class FormControllerTest {
     @Mock
     File mockMediaFolder;
     @Mock
+    File mockInstancePath;
+    @Mock
     FormEntryController mockFormEntryController;
     @Mock
-    File mockInstancePath;
+    FormEntryModel mockFormEntryModel;
     @Mock
     FormIndex mockFormIndex;
     @Mock
-    FormEntryModel mockFormEntryModel;
+    FormDef mockForm;
 
 
 
@@ -41,6 +46,7 @@ public class FormControllerTest {
         MockitoAnnotations.initMocks(this);
         when(mockFormEntryController.getModel()).thenReturn(mockFormEntryModel);
         when(mockFormEntryModel.getFormIndex()).thenReturn(mockFormIndex);
+        when(mockFormEntryModel.getForm()).thenReturn(mockForm);
 
         this.formController = new FormController(mockMediaFolder,
                 mockFormEntryController, mockInstancePath);
@@ -48,10 +54,8 @@ public class FormControllerTest {
 
     @Test
     public void getFormDef_ReturnsTheFormDefinitionFromJavaRosaAPI() throws Exception {
-        FormDef mockFormDefinition = mock(FormDef.class);
-        when(mockFormEntryModel.getForm()).thenReturn(mockFormDefinition);
 
-        assertEquals(formController.getFormDef(), mockFormDefinition);
+        assertEquals(formController.getFormDef(), mockForm);
     }
 
     @Test
@@ -77,14 +81,14 @@ public class FormControllerTest {
         assertEquals(formController.getIndexWaitingForData(), mockFormIndex);
     }
 
-// TODO: Determine how TimerLogger is initialized
-//    @Test
-//    public void getTimerLogger_LazyLoadsTimerLogger() throws Exception {
-//        TimerLogger logger = formController.getTimerLogger();
-//        assertNotNull(logger);
-//
-//        assertEquals(formController.getTimerLogger(), logger);
-//    }
+    /*TODO: Determine how TimerLogger is initialized
+    @Test
+    public void getTimerLogger_LazyLoadsTimerLogger() throws Exception {
+        TimerLogger logger = formController.getTimerLogger();
+        assertNotNull(logger);
+
+        assertEquals(formController.getTimerLogger(), logger);
+    }*/
 
 
     @Test
@@ -133,16 +137,16 @@ public class FormControllerTest {
     public void getIndexFromXPath_ThrowsIllegalArgumentExceptionIfUnexpected() throws Exception {
         try {
             formController.getIndexFromXPath("unexpected");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             assertNotNull(e);
             assertEquals(e.getMessage(), "unexpected string from XPath");
         }
     }
 
-//    TODO: Figure out how candidate XPaths are found
-//    @Test
-//    public void getIndexFromXPath_TriesToFindIndexInMiddleOfForm() throws Exception {
-//    }
+    /*TODO: Figure out how candidate XPaths are found
+    @Test
+    public void getIndexFromXPath_TriesToFindIndexInMiddleOfForm() throws Exception {
+    }*/
 
 
     @Test
@@ -173,8 +177,55 @@ public class FormControllerTest {
 
     @Test
     public void getFormLanguage_ReturnsTheLanguageOfTheFormFromTheModel() throws Exception {
-        when(mockFormEntryModel.getFormTitle()).thenReturn("Title");
-        assertEquals(formController.getFormTitle(), "Title");
+        when(mockFormEntryModel.getLanguage()).thenReturn("eng-us");
+        assertEquals(formController.getLanguage(), "eng-us");
     }
 
+    /*TODO: Figure out what this method is doing
+    @Test
+    public void getBindAttribute_ReturnsTheBindAttributeValueForTheNamespaceAndName() throws Exception {
+
+    }
+
+    TODO: This method is private. Useful for when the method is used internally
+    @Test
+    public void getCaptionHierarchy_ReturnsTheHierarchyForTheFormModel() throws Exception {
+        FormEntryCaption captionA = new FormEntryCaption();
+        FormEntryCaption captionB = new FormEntryCaption();
+        FormEntryCaption[] captionHierarchy = {captionA, captionB};
+
+        when(mockFormEntryModel.getCaptionHierarchy()).thenReturn(captionHierarchy);
+
+    }*/
+
+
+    @Test
+    public void getCaptionPrompt_ReturnsThePromptForTheFormModel() throws Exception {
+        FormEntryCaption caption = new FormEntryCaption();
+        when(mockFormEntryModel.getCaptionPrompt()).thenReturn(caption);
+
+        assertEquals(formController.getCaptionPrompt(), caption);
+    }
+
+    @Test
+    public void getCaptionPrompt_ReturnsThePromptForTheFormModelAtGivenIndex() throws Exception {
+        FormEntryCaption caption = new FormEntryCaption();
+        when(mockFormEntryModel.getCaptionPrompt(mockFormIndex)).thenReturn(caption);
+
+        assertEquals(formController.getCaptionPrompt(mockFormIndex), caption);
+    }
+
+    @Test
+    public void postProcessInstance_ReturnsTheValueOfDispatchingTheFormToProcess() throws Exception {
+        when(mockForm.postProcessInstance()).thenReturn(true);
+        assertTrue(formController.postProcessInstance());
+    }
+
+    /*TODO: This method is private. Useful for when the method is used internally
+    @Test
+    public void getInstance_ReturnsTheInstanceOfTheFormDefinition() throws Exception {
+        FormInstance mockFormInstance = mock(FormInstance.class);
+        when(mockForm.getInstance()).thenReturn(mockFormInstance);
+
+    }*/
 }
