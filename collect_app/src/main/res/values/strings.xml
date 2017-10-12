@@ -517,7 +517,7 @@
     <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
-    <string name="large">Large (4096px)</string>
+    <string name="large">Large (3072px)</string>
     <string name="medium">Medium (2048px)</string>
     <string name="small">Small (1024px)</string>
     <string name="very_small">Very small (640px)</string>

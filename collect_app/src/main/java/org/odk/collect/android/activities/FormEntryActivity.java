@@ -898,7 +898,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             } else if (imageSizeMode.equals(imageEntryValues[3])) {
                 maxPixels = 2048;
             } else if (imageSizeMode.equals(imageEntryValues[4])) {
-                maxPixels = 4096;
+                maxPixels = 3072;
             }
         }
         return maxPixels;
