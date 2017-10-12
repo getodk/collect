@@ -28,8 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v7.app.AlertDialog;>>
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -1067,7 +1066,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
         if (formController.currentPromptIsQuestion() && getCurrentViewIfODKView() != null) {
-            LinkedHashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
+            HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
                     .getAnswers();
             try {
                 FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
@@ -2985,7 +2984,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      **/
     @Nullable
     private ODKView getCurrentViewIfODKView() {
-        if (currentView != null && currentView instanceof ODKView) {
+        if (currentView instanceof ODKView) {
             return (ODKView) currentView;
         }
         return null;
