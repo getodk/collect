@@ -41,8 +41,11 @@ public class DateTimeUtils {
         String gregorianDateText = getGregorianDateTimeLabel(date, appearance, containsTime, Locale.US);
 
         DateTime ethiopianDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
-        String day = appearance != null && (appearance.contains("month-year") || appearance.contains("year")) ? "" : ethiopianDate.getDayOfMonth() + " ";
-        String month = appearance != null && appearance.contains("year") ? "" : context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " ";
+        boolean showDay = appearance == null || (!appearance.contains("month-year") && !appearance.contains("year"));
+        boolean showMonth = showDay || appearance.contains("month-year");
+
+        String day = showDay ? ethiopianDate.getDayOfMonth() + " " : "";
+        String month = showMonth ? context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " " : "";
 
         String ethiopianDateText = day + month + ethiopianDate.getYear();
         return String.format(context.getString(R.string.ethiopian_date), ethiopianDateText, gregorianDateText);
