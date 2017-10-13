@@ -28,16 +28,14 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.DateTimeUtils;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
  */
 public abstract class AbstractDateWidget extends QuestionWidget implements BinaryWidget {
-
-    public enum CalendarMode {
-        CALENDAR, SPINNERS, MONTH_YEAR, YEAR
-    }
 
     protected Button dateButton;
     protected TextView dateTextView;
@@ -46,7 +44,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     protected LocalDateTime date;
 
-    protected CalendarMode calendarMode = CalendarMode.CALENDAR;
+    protected DatePickerDetails datePickerDetails;
 
     public AbstractDateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -54,7 +52,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     protected void createWidget() {
-        readAppearance();
+        datePickerDetails = DateTimeUtils.getDatePickerDetails(formEntryPrompt.getQuestion().getAppearanceAttr());
         createDateButton();
         dateTextView = getAnswerTextView();
         addViews();
@@ -121,7 +119,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     public boolean isDayHidden() {
-        return calendarMode.equals(CalendarMode.MONTH_YEAR) || calendarMode.equals(CalendarMode.YEAR);
+        return datePickerDetails.isMonthYearMode() || datePickerDetails.isYearMode();
     }
 
     public LocalDateTime getDate() {
@@ -130,26 +128,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     public boolean isNullAnswer() {
         return nullAnswer;
-    }
-
-    private void readAppearance() {
-        String appearance = formEntryPrompt.getQuestion().getAppearanceAttr();
-        if (appearance != null) {
-            if (appearance.contains("month-year")) {
-                calendarMode = CalendarMode.MONTH_YEAR;
-            } else if (appearance.contains("year")) {
-                calendarMode = CalendarMode.YEAR;
-            } else if ("no-calendar".equals(appearance)) {
-                calendarMode = CalendarMode.SPINNERS;
-            }
-        }
-
-        if (!(this instanceof DateWidget)) {
-            // We don't support calendar mode for other calendars
-            if (calendarMode.equals(CalendarMode.CALENDAR)) {
-                calendarMode = CalendarMode.SPINNERS;
-            }
-        }
     }
 
     private void createDateButton() {

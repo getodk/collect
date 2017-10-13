@@ -51,12 +51,11 @@ public class EthiopianDateWidget extends AbstractDateWidget {
     @Override
     protected void setDateLabel() {
         nullAnswer = false;
-        dateTextView.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(),
-                getPrompt().getQuestion().getAppearanceAttr(), false, getContext()));
+        dateTextView.setText(DateTimeUtils.getDateTimeLabel((Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
     }
 
     protected void showDatePickerDialog() {
-        EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getPrompt().getIndex(), date, calendarMode);
+        EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getPrompt().getIndex(), date, datePickerDetails);
         ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }

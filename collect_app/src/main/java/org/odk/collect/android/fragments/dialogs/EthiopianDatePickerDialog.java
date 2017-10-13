@@ -20,8 +20,8 @@ import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.odk.collect.android.R;
+import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.android.widgets.AbstractDateWidget;
 
 import java.util.Arrays;
 
@@ -35,9 +35,9 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
 
     private String[] monthsArray;
 
-    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, AbstractDateWidget.CalendarMode calendarMode) {
+    public static EthiopianDatePickerDialog newInstance(FormIndex formIndex, LocalDateTime date, DatePickerDetails datePickerDetails) {
         EthiopianDatePickerDialog dialog = new EthiopianDatePickerDialog();
-        dialog.setArguments(getArgs(formIndex, date, calendarMode));
+        dialog.setArguments(getArgs(formIndex, date, datePickerDetails));
 
         return dialog;
     }
@@ -73,7 +73,7 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     private void setUpDayPicker(LocalDateTime ethiopianDate) {
         dayPicker.setMinValue(1);
         dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
-        if (calendarMode.equals(AbstractDateWidget.CalendarMode.SPINNERS)) {
+        if (datePickerDetails.isSpinnerMode()) {
             dayPicker.setValue(ethiopianDate.getDayOfMonth());
         }
     }
@@ -81,7 +81,7 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
     private void setUpMonthPicker(LocalDateTime ethiopianDate) {
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
-        if (!calendarMode.equals(AbstractDateWidget.CalendarMode.YEAR)) {
+        if (!datePickerDetails.isYearMode()) {
             monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
         }
     }

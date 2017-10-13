@@ -32,10 +32,10 @@ public class FormEntryPromptUtils {
         String text;
         if (data instanceof DateTimeData) {
             text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    fep.getQuestion().getAppearanceAttr(), true, context);
+                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), true, context);
         } else if (data instanceof DateData) {
             text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    fep.getQuestion().getAppearanceAttr(), false, context);
+                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), false, context);
         } else {
             text = fep.getAnswerText();
         }

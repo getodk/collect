@@ -71,7 +71,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
     protected void setDateLabel() {
         nullAnswer = false;
         dateTextView.setText(DateTimeUtils.getDateTimeLabel(
-                (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false, getContext()));
+                (Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             theme = android.R.style.Theme_Material_Light_Dialog;
         }
-        if (!calendarMode.equals(CalendarMode.CALENDAR) || (isBrokenSamsungDevice() && isTalkBackActive())) {
+        if (!datePickerDetails.isCalendarMode() || (isBrokenSamsungDevice() && isTalkBackActive())) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
 
@@ -153,14 +153,14 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         }
 
         private void hidePickersIfNeeded() {
-            if (calendarMode.equals(AbstractDateWidget.CalendarMode.YEAR)) {
+            if (datePickerDetails.isYearMode()) {
                 getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                         .setVisibility(View.GONE);
 
                 getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
                         .setVisibility(View.GONE);
                 getDatePicker().updateDate(date.getYear(), 0, 1);
-            } else if (calendarMode.equals(AbstractDateWidget.CalendarMode.MONTH_YEAR)) {
+            } else if (datePickerDetails.isMonthYearMode()) {
                 getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                         .setVisibility(View.GONE);
                 getDatePicker().updateDate(date.getYear(), date.getMonthOfYear() - 1, 1);
