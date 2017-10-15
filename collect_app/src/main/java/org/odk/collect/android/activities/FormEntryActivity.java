@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -633,8 +634,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         if (resultCode == RESULT_CANCELED) {
             // request was canceled...
-            if (requestCode != HIERARCHY_ACTIVITY) {
-                ((ODKView) currentView).cancelWaitingForBinaryData();
+            if (requestCode != HIERARCHY_ACTIVITY && getCurrentViewIfODKView() != null) {
+                getCurrentViewIfODKView().cancelWaitingForBinaryData();
             }
             return;
         }
@@ -656,7 +657,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Timber.i("QR code scanning cancelled");
             } else {
                 String sb = intent.getStringExtra("SCAN_RESULT");
-                ((ODKView) currentView).setBinaryData(sb);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(sb);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 refreshCurrentView();
                 return;
@@ -668,7 +671,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
             case OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
-                ((ODKView) currentView).setBinaryData(osmFileName);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(osmFileName);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case EX_STRING_CAPTURE:
@@ -678,14 +683,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 boolean exists = intent.getExtras().containsKey(key);
                 if (exists) {
                     Object externalValue = intent.getExtras().get(key);
-                    ((ODKView) currentView).setBinaryData(externalValue);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setBinaryData(externalValue);
+                    }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 break;
             case EX_GROUP_CAPTURE:
                 try {
                     Bundle extras = intent.getExtras();
-                    ((ODKView) currentView).setDataForFields(extras);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setDataForFields(extras);
+                    }
                 } catch (JavaRosaException e) {
                     Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
@@ -718,7 +727,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
-                ((ODKView) currentView).setBinaryData(nf);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(nf);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case ALIGNED_IMAGE:
@@ -741,7 +752,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
-                ((ODKView) currentView).setBinaryData(nf);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(nf);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case IMAGE_CHOOSER:
@@ -785,23 +798,31 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 break;
             case LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
-                ((ODKView) currentView).setBinaryData(sl);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(sl);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case GEOSHAPE_CAPTURE:
                 //String ls = intent.getStringExtra(GEOSHAPE_RESULTS);
                 String gshr = intent.getStringExtra(GEOSHAPE_RESULTS);
-                ((ODKView) currentView).setBinaryData(gshr);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(gshr);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case GEOTRACE_CAPTURE:
                 String traceExtra = intent.getStringExtra(GEOTRACE_RESULTS);
-                ((ODKView) currentView).setBinaryData(traceExtra);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(traceExtra);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
-                ((ODKView) currentView).setBinaryData(bearing);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(bearing);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
             case HIERARCHY_ACTIVITY:
@@ -831,7 +852,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     @Override
                     public void run() {
                         dismissDialog(SAVING_IMAGE_DIALOG);
-                        ((ODKView) currentView).setBinaryData(newImage);
+                        if (getCurrentViewIfODKView() != null) {
+                            getCurrentViewIfODKView().setBinaryData(newImage);
+                        }
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         refreshCurrentView();
                     }
@@ -923,7 +946,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // provider
         // then the widget copies the file and makes a new entry in the
         // content provider.
-        ((ODKView) currentView).setBinaryData(media);
+        if (getCurrentViewIfODKView() != null) {
+            getCurrentViewIfODKView().setBinaryData(media);
+        }
         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
@@ -1056,8 +1081,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
-        if (formController.currentPromptIsQuestion() && currentView instanceof ODKView) {
-            HashMap<FormIndex, IAnswerData> answers = ((ODKView) currentView)
+        if (formController.currentPromptIsQuestion() && getCurrentViewIfODKView() != null) {
+            HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
                     .getAnswers();
             try {
                 FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
@@ -1115,7 +1140,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             * clicked on.
             */
             boolean shouldClearDialogBeShown;
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+            for (QuestionWidget qw : getCurrentViewIfODKView().getWidgets()) {
                 shouldClearDialogBeShown = false;
                 if (qw instanceof StringWidget) {
                     for (int i = 0; i < qw.getChildCount(); i++) {
@@ -2347,9 +2372,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
         }
-        if (currentView != null && currentView instanceof ODKView) {
+        if (getCurrentViewIfODKView() != null) {
             // stop audio if it's playing
-            ((ODKView) currentView).stopAudio();
+            getCurrentViewIfODKView().stopAudio();
         }
 
 
@@ -2491,8 +2516,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             staleView = null;
         }
 
-        if (currentView != null && currentView instanceof ODKView) {
-            ((ODKView) currentView).setFocus(this);
+        if (getCurrentViewIfODKView() != null) {
+            getCurrentViewIfODKView().setFocus(this);
         }
         beenSwiped = false;
     }
@@ -2856,8 +2881,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             int xpixellimit = (int) (dm.xdpi * .25);
             int ypixellimit = (int) (dm.ydpi * .25);
 
-            if (currentView != null && currentView instanceof ODKView) {
-                if (((ODKView) currentView).suppressFlingGesture(e1, e2,
+            if (getCurrentViewIfODKView() != null) {
+                if (getCurrentViewIfODKView().suppressFlingGesture(e1, e2,
                         velocityX, velocityY)) {
                     return false;
                 }
@@ -2969,6 +2994,18 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             }
         }
+    }
+
+    /**
+     * getter for currentView variable. This method should always be used
+     * to access currentView as an ODKView object to avoid inconsistency
+     **/
+    @Nullable
+    private ODKView getCurrentViewIfODKView() {
+        if (currentView instanceof ODKView) {
+            return (ODKView) currentView;
+        }
+        return null;
     }
 
     /**
