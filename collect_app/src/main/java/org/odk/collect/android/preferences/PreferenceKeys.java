@@ -51,6 +51,7 @@ public final class PreferenceKeys {
     public static final String KEY_COMPLETED_DEFAULT        = "default_completed";
 
     public static final String KEY_HIGH_RESOLUTION          = "high_resolution";
+    public static final String KEY_IMAGE_SIZE               = "image_size";
 
     public static final String KEY_AUTOSEND                 = "autosend";
     public static final String KEY_AUTOSEND_WIFI            = "autosend_wifi";
@@ -93,6 +94,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_GOOGLE_SHEETS_URL,          "");
         hashMap.put(KEY_FORMLIST_URL,               Collect.getInstance().getString(R.string.default_odk_formlist));
         hashMap.put(KEY_SUBMISSION_URL,             Collect.getInstance().getString(R.string.default_odk_submission));
+        hashMap.put(KEY_IMAGE_SIZE,                 "original_image_size");
         hashMap.put(KEY_NAVIGATION,                 NAVIGATION_SWIPE);
         hashMap.put(KEY_CONSTRAINT_BEHAVIOR,        CONSTRAINT_BEHAVIOR_ON_SWIPE);
         hashMap.put(KEY_COMPLETED_DEFAULT,          true);

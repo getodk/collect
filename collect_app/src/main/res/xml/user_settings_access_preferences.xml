@@ -47,6 +47,10 @@
             android:title="@string/high_resolution_title" />
         <CheckBoxPreference
             android:defaultValue="true"
+            android:key="image_size"
+            android:title="@string/image_size_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="show_splash_screen"
             android:title="@string/show_splash_title" />
         <CheckBoxPreference
