@@ -54,4 +54,16 @@ public class DatePickerDetails implements Serializable {
     public boolean isYearMode() {
         return datePickerMode.equals(DatePickerMode.YEAR);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof DatePickerDetails)) {
+            return false;
+        }
+        final DatePickerDetails datePickerDetails = (DatePickerDetails) obj;
+        return this.datePickerType.equals(datePickerDetails.datePickerType) && this.datePickerMode.equals(datePickerDetails.datePickerMode);
+    }
 }

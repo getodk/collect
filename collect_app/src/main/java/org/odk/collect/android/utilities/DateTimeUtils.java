@@ -76,6 +76,7 @@ public class DateTimeUtils {
         DatePickerDetails.DatePickerType datePickerType = DatePickerDetails.DatePickerType.GREGORIAN;
         DatePickerDetails.DatePickerMode datePickerMode = DatePickerDetails.DatePickerMode.CALENDAR;
         if (appearance != null) {
+            appearance = appearance.toLowerCase();
             if (appearance.contains("ethiopian")) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
