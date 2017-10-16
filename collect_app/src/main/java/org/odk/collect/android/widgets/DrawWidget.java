@@ -38,7 +38,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -47,6 +46,8 @@ import org.odk.collect.android.utilities.ViewIds;
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.DRAW_IMAGE;
 
 /**
  * Free drawing widget.
@@ -157,8 +158,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
         try {
             Collect.getInstance().getFormController()
                     .setIndexWaitingForData(formEntryPrompt.getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
-                    FormEntryActivity.DRAW_IMAGE);
+            ((Activity) getContext()).startActivityForResult(i, DRAW_IMAGE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),

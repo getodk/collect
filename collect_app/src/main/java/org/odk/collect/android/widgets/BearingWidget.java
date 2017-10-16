@@ -31,10 +31,11 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.BEARING_CAPTURE;
 
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
@@ -80,8 +81,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                     formController.setIndexWaitingForData(formEntryPrompt.getIndex());
                 }
 
-                ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.BEARING_CAPTURE);
+                ((Activity) getContext()).startActivityForResult(i, BEARING_CAPTURE);
             }
         });
 

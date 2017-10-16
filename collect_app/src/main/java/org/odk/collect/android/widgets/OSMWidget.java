@@ -24,7 +24,6 @@ import org.javarosa.core.model.osm.OSMTag;
 import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ViewIds;
@@ -34,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.OSM_CAPTURE;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -208,8 +209,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
                 formController.setIndexWaitingForData(
                         formEntryPrompt.getIndex());
                 // launch
-                ((Activity) ctx).startActivityForResult(launchIntent,
-                        FormEntryActivity.OSM_CAPTURE);
+                ((Activity) ctx).startActivityForResult(launchIntent, OSM_CAPTURE);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }

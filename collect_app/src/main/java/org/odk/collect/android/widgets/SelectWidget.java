@@ -19,6 +19,7 @@ package org.odk.collect.android.widgets;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -45,6 +46,8 @@ import java.util.List;
 import java.util.Locale;
 
 public abstract class SelectWidget extends QuestionWidget {
+    private static final String SEARCH_TEXT = "search_text";
+
     protected List<SelectChoice> items;
     protected ArrayList<MediaLayout> playList;
     protected LinearLayout answerLayout;
@@ -109,6 +112,14 @@ public abstract class SelectWidget extends QuestionWidget {
         });
         // plays the question text
         super.playAllPromptText();
+    }
+
+    @Override
+    protected void saveState() {
+        super.saveState();
+        if (searchStr != null) {
+            getState().putString(SEARCH_TEXT + getPrompt().getIndex(), searchStr.getText().toString());
+        }
     }
 
     private void playNextSelectItem() {
@@ -219,7 +230,16 @@ public abstract class SelectWidget extends QuestionWidget {
         setupChangeListener();
         addAnswerView(searchStr);
 
-        doSearch("");
+        String searchText = null;
+        if (getState() != null) {
+            searchText = getState().getString(SEARCH_TEXT + getPrompt().getIndex());
+        }
+        if (searchText != null && !searchText.isEmpty()) {
+            searchStr.setText(searchText);
+            Selection.setSelection(searchStr.getText(), searchStr.getText().toString().length());
+        } else {
+            doSearch("");
+        }
     }
 
     private void createFilteredOptions(List<SelectChoice> searchedItems, List<Integer> tagList) {

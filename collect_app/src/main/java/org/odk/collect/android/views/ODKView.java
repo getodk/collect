@@ -41,7 +41,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -61,6 +60,8 @@ import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_GROUP_CAPTURE;
 
 /**
  * This class is
@@ -157,8 +158,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 }
                             }
 
-                            ((Activity) getContext()).startActivityForResult(i,
-                                    FormEntryActivity.EX_GROUP_CAPTURE);
+                            ((Activity) getContext()).startActivityForResult(i, EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
                             Timber.e(e, "ExternalParamsException");
 
@@ -223,6 +223,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 }, 150);
             }
         }
+    }
+
+    public Bundle getState() {
+        Bundle state = new Bundle();
+        for (QuestionWidget qw : getWidgets()) {
+            state.putAll(qw.getCurrentState());
+        }
+
+        return state;
     }
 
     /**
