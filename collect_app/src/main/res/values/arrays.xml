@@ -60,11 +60,11 @@ the specific language governing permissions and limitations under the License. -
         <item>large</item>
     </string-array>
     <string-array name="image_size_entries">
-        <item>@string/original_image_size</item>
-        <item>@string/very_small</item>
-        <item>@string/small</item>
-        <item>@string/medium</item>
-        <item>@string/large</item>
+        <item>@string/image_size_original</item>
+        <item>@string/image_size_very_small</item>
+        <item>@string/image_size_small</item>
+        <item>@string/image_size_medium</item>
+        <item>@string/image_size_large</item>
     </string-array>
     <string-array name="map_sdk_selector_entries">
         <item>@string/google_maps_sdk</item>

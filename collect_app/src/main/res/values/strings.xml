@@ -517,11 +517,11 @@
     <string name="deleting_form_dialog_update_message">Deleting form: %1$d out of %2$d </string>
     <string name="search">Search</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
-    <string name="large">Large (3072px)</string>
-    <string name="medium">Medium (2048px)</string>
-    <string name="small">Small (1024px)</string>
-    <string name="very_small">Very small (640px)</string>
-    <string name="original_image_size">Original size from camera (default)</string>
+    <string name="image_size_large">Large (3072px)</string>
+    <string name="image_size_medium">Medium (2048px)</string>
+    <string name="image_size_small">Small (1024px)</string>
+    <string name="image_size_very_small">Very small (640px)</string>
+    <string name="image_size_original">Original size from camera (default)</string>
     <string name="image_size_dialog_title">Maximum pixels of the long edge of the image</string>
     <string name="bearing_lack_of_sensors">Bearing cannot be collected: device is missing accelerometer, magnetic field sensor or both.</string>
 </resources>
