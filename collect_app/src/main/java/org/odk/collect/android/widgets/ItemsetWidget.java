@@ -43,6 +43,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.ViewIds;
@@ -249,7 +250,7 @@ public class ItemsetWidget extends QuestionWidget implements
             adapter.open();
 
             // name of the itemset table for this form
-            String pathHash = ItemsetDbAdapter.getMd5FromString(itemsetFile.getAbsolutePath());
+            String pathHash = TextUtils.getMd5FromString(itemsetFile.getAbsolutePath());
             try {
                 Cursor c = adapter.query(pathHash, selection.toString(), selectionArgs);
                 if (c != null) {

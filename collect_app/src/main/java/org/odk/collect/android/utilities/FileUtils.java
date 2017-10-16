@@ -25,10 +25,13 @@ import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -56,6 +59,42 @@ public class FileUtils {
     public static final String TITLE = "title";
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
+
+    public static String getFileContent(String filePath) {
+        return getFileContent(new File(filePath));
+    }
+
+    public static String getFileContent(File file) {
+        StringBuilder text = null;
+        try {
+            text = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+            }
+            br.close();
+        } catch (IOException e) {
+            Timber.w(e);
+        }
+
+        return text.toString();
+    }
+
+    public static boolean createFileWithContent(String text, String filePath) {
+        boolean result = true;
+        try {
+            FileWriter writer = new FileWriter(new File(filePath));
+            writer.append(text);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            result = false;
+            Timber.w(e);
+        }
+        return result;
+    }
 
     public static String getMimeType(String fileUrl) throws IOException {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();

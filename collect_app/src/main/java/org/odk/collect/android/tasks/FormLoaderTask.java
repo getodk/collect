@@ -47,6 +47,7 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.logic.FileReferenceFactory;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ZipUtils;
 
 import java.io.DataInputStream;
@@ -290,7 +291,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                         // they're equal, do nothing
                     } else {
                         // the csv has been updated, delete the old entries
-                        ida.dropTable(ItemsetDbAdapter.getMd5FromString(csv.getAbsolutePath()),
+                        ida.dropTable(TextUtils.getMd5FromString(csv.getAbsolutePath()),
                                 csv.getAbsolutePath());
                         // and read the new
                         readFile = true;
@@ -303,7 +304,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             }
             ida.close();
             if (readFile) {
-                readCSV(csv, csvmd5, ItemsetDbAdapter.getMd5FromString(csv.getAbsolutePath()));
+                readCSV(csv, csvmd5, TextUtils.getMd5FromString(csv.getAbsolutePath()));
             }
         }
 

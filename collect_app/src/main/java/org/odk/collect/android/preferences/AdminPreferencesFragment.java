@@ -17,7 +17,6 @@ package org.odk.collect.android.preferences;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -33,11 +32,13 @@ import android.widget.EditText;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static android.content.Context.MODE_PRIVATE;
+import java.io.File;
+
 import static android.content.Context.MODE_WORLD_READABLE;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
 
@@ -99,24 +100,14 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                     public void onClick(DialogInterface dialog, int which) {
                         String pw = passwordEditText.getText().toString();
                         if (!pw.equals("")) {
-                            SharedPreferences.Editor editor = getActivity()
-                                    .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                            editor.putString(KEY_ADMIN_PW, pw);
-                            ToastUtils.showShortToast(R.string.admin_password_changed);
-                            editor.apply();
-                            dialog.dismiss();
-                            Collect.getInstance().getActivityLogger()
-                                    .logAction(this, "AdminPasswordDialog", "CHANGED");
+                            if (FileUtils.createFileWithContent(TextUtils.getMd5FromString(pw), Collect.ADMIN_PASSWORD_FILE_PATH)) {
+                                ToastUtils.showShortToast(R.string.admin_password_changed);
+                            }
                         } else {
-                            SharedPreferences.Editor editor = getActivity()
-                                    .getSharedPreferences(ADMIN_PREFERENCES, MODE_PRIVATE).edit();
-                            editor.putString(KEY_ADMIN_PW, "");
-                            editor.apply();
+                            FileUtils.deleteAndReport(new File(Collect.ADMIN_PASSWORD_FILE_PATH));
                             ToastUtils.showShortToast(R.string.admin_password_disabled);
-                            dialog.dismiss();
-                            Collect.getInstance().getActivityLogger()
-                                    .logAction(this, "AdminPasswordDialog", "DISABLED");
                         }
+                        dialog.dismiss();
                     }
                 });
                 builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

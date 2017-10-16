@@ -21,6 +21,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +30,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
@@ -50,6 +54,11 @@ public class AdminPreferencesActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(context);
             SharedPreferences adminPreferences = context.getSharedPreferences(
                     AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
+
+            File adminPassFile = new File(Collect.ADMIN_PASSWORD_FILE_PATH);
+            if (adminPassFile.exists()) {
+                adminPreferences.edit().putString(KEY_ADMIN_PW, FileUtils.getFileContent(adminPassFile)).apply();
+            }
 
             output.writeObject(pref.getAll());
             output.writeObject(adminPreferences.getAll());
