@@ -64,7 +64,6 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SERVER_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SHOW_SPLASH;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
 
 @RunWith(AndroidJUnit4.class)
