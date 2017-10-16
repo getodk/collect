@@ -97,7 +97,8 @@ public class GeneralSharedPreferences {
     }
 
     public void clear() {
-        editor
+        sharedPreferences
+                .edit()
                 .clear()
                 .apply();
     }

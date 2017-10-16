@@ -17,6 +17,8 @@ package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.application.Collect;
 
+import java.util.Map;
+
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
@@ -75,4 +77,14 @@ public class AdminSharedPreferences {
         editor.apply();
     }
 
+    public void clear() {
+        sharedPreferences
+                .edit()
+                .clear()
+                .apply();
+    }
+
+    public Map<String, ?> getAll() {
+        return sharedPreferences.getAll();
+    }
 }
