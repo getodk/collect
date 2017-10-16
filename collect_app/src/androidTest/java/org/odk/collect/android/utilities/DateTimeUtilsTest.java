@@ -226,7 +226,7 @@ public class DateTimeUtilsTest {
         assertEquals("Okt 20, 1991 11:00", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), gregorianDatePickerDetails, true, context));
 
         Locale.setDefault(Locale.ENGLISH);
-        assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, false, context));
-        assertEquals("9 Tikimt 1984 (Oct 20, 1991, 11:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
+        assertEquals("9 Tikimt 1984, 11:00 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, false, context));
+        assertEquals("9 Tikimt 1984, 11:00 (Oct 20, 1991, 11:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
     }
 }

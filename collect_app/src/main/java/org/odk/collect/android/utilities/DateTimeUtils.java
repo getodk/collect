@@ -45,7 +45,13 @@ public class DateTimeUtils {
         String day = datePickerDetails.isSpinnerMode() ? ethiopianDate.getDayOfMonth() + " " : "";
         String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " " : "";
 
-        String ethiopianDateText = day + month + ethiopianDate.getYear();
+        String ethiopianDateText;
+        if (containsTime) {
+            SimpleDateFormat df = new SimpleDateFormat("hh:mm", Locale.getDefault());
+            ethiopianDateText = day + month + ethiopianDate.getYear() + ", " + df.format(ethiopianDate.toDate());
+        } else {
+            ethiopianDateText = day + month + ethiopianDate.getYear();
+        }
         return String.format(context.getString(R.string.ethiopian_date), ethiopianDateText, gregorianDateText);
     }
 
