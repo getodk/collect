@@ -189,6 +189,8 @@ dependencies {
     compile group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
     compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
     compile group: 'net.danlew', name: 'android.joda', version: '2.9.9'
+    compile 'bikramsambat:bikram-sambat:1.0.0'
+    compile 'bikramsambat:bikram-sambat-android:1.0.0@aar'
 
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
