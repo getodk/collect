@@ -40,7 +40,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -49,6 +48,9 @@ import java.io.File;
 import java.util.Date;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.IMAGE_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.IMAGE_CHOOSER;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -112,8 +114,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.IMAGE_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i, IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
@@ -143,8 +144,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.IMAGE_CHOOSER);
+                    ((Activity) getContext()).startActivityForResult(i, IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

@@ -37,7 +37,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -46,6 +45,8 @@ import org.odk.collect.android.utilities.ViewIds;
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE;
 
 /**
  * Signature widget.
@@ -152,8 +153,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
 
         try {
             Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
-                    FormEntryActivity.SIGNATURE_CAPTURE);
+            ((Activity) getContext()).startActivityForResult(i, SIGNATURE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
                     getContext().getString(R.string.activity_not_found, "signature capture"),

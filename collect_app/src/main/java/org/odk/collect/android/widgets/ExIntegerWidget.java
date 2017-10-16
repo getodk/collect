@@ -25,11 +25,12 @@ import android.text.method.DigitsKeyListener;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.util.Locale;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_INT_CAPTURE;
 
 /**
  * Launch an external app to supply an integer value. If the app
@@ -82,8 +83,7 @@ public class ExIntegerWidget extends ExStringWidget {
         i.putExtra("value", getIntegerAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i,
-                FormEntryActivity.EX_INT_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, EX_INT_CAPTURE);
     }
 
 

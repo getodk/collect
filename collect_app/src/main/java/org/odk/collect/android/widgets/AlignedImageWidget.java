@@ -38,7 +38,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtils;
@@ -48,6 +47,9 @@ import org.odk.collect.android.utilities.ViewIds;
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.ALIGNED_IMAGE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.IMAGE_CHOOSER;
 
 /**
  * Widget that allows user to invoke the aligned-image camera to take pictures and add them to the
@@ -142,8 +144,7 @@ public class AlignedImageWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController.setIndexWaitingForData(
                             formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.ALIGNED_IMAGE);
+                    ((Activity) getContext()).startActivityForResult(i, ALIGNED_IMAGE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found,
@@ -169,8 +170,7 @@ public class AlignedImageWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.IMAGE_CHOOSER);
+                    ((Activity) getContext()).startActivityForResult(i, IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found, "choose image"),

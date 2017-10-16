@@ -37,7 +37,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
@@ -52,6 +51,8 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static android.os.Build.MODEL;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.VIDEO_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.VIDEO_CHOOSER;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -140,8 +141,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.VIDEO_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i, VIDEO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
@@ -172,8 +172,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.VIDEO_CHOOSER);
+                    ((Activity) getContext()).startActivityForResult(i, VIDEO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
