@@ -57,19 +57,17 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     protected DatePickerDetails datePickerDetails;
 
+    private CustomDatePickerDialogListener listener;
+
     public interface CustomDatePickerDialogListener {
         void onDateChanged(LocalDateTime date);
     }
 
-    private CustomDatePickerDialogListener listener;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
+        if (context instanceof CustomDatePickerDialogListener) {
             listener = (CustomDatePickerDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnHeadlineSelectedListener");
         }
     }
 

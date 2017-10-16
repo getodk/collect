@@ -57,13 +57,24 @@ public class DatePickerDetails implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
         if (obj == null) {
             return false;
         }
         if (!(obj instanceof DatePickerDetails)) {
             return false;
         }
-        final DatePickerDetails datePickerDetails = (DatePickerDetails) obj;
+        DatePickerDetails datePickerDetails = (DatePickerDetails) obj;
         return this.datePickerType.equals(datePickerDetails.datePickerType) && this.datePickerMode.equals(datePickerDetails.datePickerMode);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + datePickerType.hashCode();
+        result = 31 * result + datePickerMode.hashCode();
+        return result;
     }
 }

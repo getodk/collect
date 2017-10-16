@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.odk.collect.android.utilities;
 
 import org.joda.time.LocalDateTime;
@@ -56,6 +55,7 @@ public class DateTimeUtilsTest {
 
     @Test
     public void skipDaylightSavingGapIfExistsTest() {
+        TimeZone originalDefaultTimeZone = TimeZone.getDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("Africa/Nairobi"));
 
         // 1 Jan 1960 at 00:00:00 clocks were turned forward to 00:15:00
@@ -63,6 +63,7 @@ public class DateTimeUtilsTest {
         LocalDateTime ldtPlExcepted = new LocalDateTime().withYear(1960).withMonthOfYear(1).withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(15).withSecondOfMinute(0).withMillisOfSecond(0);
 
         assertEquals(ldtPlExcepted, DateTimeUtils.skipDaylightSavingGapIfExists(ldtPl));
+        TimeZone.setDefault(originalDefaultTimeZone);
     }
 
     @Test

@@ -40,7 +40,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     protected Button dateButton;
     protected TextView dateTextView;
 
-    protected boolean nullAnswer;
+    protected boolean isNullAnswer;
 
     protected LocalDateTime date;
 
@@ -86,7 +86,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     @Override
     public void clearAnswer() {
-        nullAnswer = true;
+        isNullAnswer = true;
         dateTextView.setText(R.string.no_date_selected);
         setDateToCurrent();
     }
@@ -94,13 +94,15 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        return nullAnswer ? null : new DateData(date.toDate());
+        return isNullAnswer ? null : new DateData(date.toDate());
     }
 
     @Override
     public void setBinaryData(Object answer) {
-        date = (LocalDateTime) answer;
-        setDateLabel();
+        if (answer instanceof LocalDateTime) {
+            date = (LocalDateTime) answer;
+            setDateLabel();
+        }
         cancelWaitingForBinaryData();
     }
 
@@ -127,7 +129,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     public boolean isNullAnswer() {
-        return nullAnswer;
+        return isNullAnswer;
     }
 
     private void createDateButton() {

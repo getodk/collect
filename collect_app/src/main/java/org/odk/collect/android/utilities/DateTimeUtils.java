@@ -47,7 +47,7 @@ public class DateTimeUtils {
 
         String ethiopianDateText;
         if (containsTime) {
-            SimpleDateFormat df = new SimpleDateFormat("hh:mm", Locale.getDefault());
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
             ethiopianDateText = day + month + ethiopianDate.getYear() + ", " + df.format(ethiopianDate.toDate());
         } else {
             ethiopianDateText = day + month + ethiopianDate.getYear();
@@ -82,7 +82,7 @@ public class DateTimeUtils {
         DatePickerDetails.DatePickerType datePickerType = DatePickerDetails.DatePickerType.GREGORIAN;
         DatePickerDetails.DatePickerMode datePickerMode = DatePickerDetails.DatePickerMode.CALENDAR;
         if (appearance != null) {
-            appearance = appearance.toLowerCase();
+            appearance = appearance.toLowerCase(Locale.US);
             if (appearance.contains("ethiopian")) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;

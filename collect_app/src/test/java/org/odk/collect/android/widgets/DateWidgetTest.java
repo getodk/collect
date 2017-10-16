@@ -50,7 +50,7 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
         LocalDateTime date = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
         widget.setBinaryData(date);
         assertFalse(widget.isWaitingForBinaryData());
-        assertFalse(widget.nullAnswer);
+        assertFalse(widget.isNullAnswer);
         assertEquals(widget.getAnswer().getDisplayText(), new DateData(date.toDate()).getDisplayText());
     }
 }

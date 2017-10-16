@@ -3001,7 +3001,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onDateChanged(LocalDateTime date) {
-        ((ODKView) currentView).setBinaryData(date);
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView != null) {
+            odkView.setBinaryData(date);
+        }
     }
 
     /**
