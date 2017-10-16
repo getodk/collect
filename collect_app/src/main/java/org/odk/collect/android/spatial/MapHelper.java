@@ -184,7 +184,7 @@ public class MapHelper {
     public void showLayersDialog(final Context context) {
         AlertDialog.Builder layerDialod = new AlertDialog.Builder(context);
         layerDialod.setTitle(context.getString(R.string.select_offline_layer));
-        AlertDialog.Builder builder = layerDialod.setSingleChoiceItems(offilineOverlays,
+        layerDialod.setSingleChoiceItems(offilineOverlays,
                 selectedLayer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         switch (item) {

@@ -138,7 +138,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         when(expression.eval(any(FormInstance.class), any(EvaluationContext.class))).thenReturn(nodeset);
         when(nodeset.getValAt(0)).thenReturn("");
 
-        when(adapter.query(anyString(), anyString(), any(String[].class))).thenReturn(cursor);
+        when(adapter.query(anyString(), anyString(), any(String[].class))).thenReturn(cursorMocker.getCursor());
 
 
         when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
@@ -172,8 +172,10 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
     public static class CursorMocker {
         private int cursorIndex = -1;
+        private Cursor cursor;
 
         CursorMocker(final Map<String, String> choices, Cursor cursor) {
+            this.cursor = cursor;
 
             when(cursor.moveToNext()).thenAnswer(new Answer<Boolean>() {
                 @Override
@@ -208,6 +210,10 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
 
             when(cursor.getColumnIndex("label")).thenReturn(-1);
             when(cursor.getColumnIndex("label::")).thenReturn(-1);
+        }
+
+        Cursor getCursor() {
+            return cursor;
         }
     }
 }

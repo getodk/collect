@@ -34,10 +34,6 @@ public class ResponseMessageParser {
         }
     }
 
-    private HttpEntity getHttpEntity() {
-        return httpEntity;
-    }
-
     public boolean isValid() {
         return this.isValid;
     }

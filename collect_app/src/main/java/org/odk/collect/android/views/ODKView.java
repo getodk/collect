@@ -225,6 +225,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
+    public Bundle getState() {
+        Bundle state = new Bundle();
+        for (QuestionWidget qw : getWidgets()) {
+            state.putAll(qw.getCurrentState());
+        }
+
+        return state;
+    }
+
     /**
      * http://code.google.com/p/android/issues/detail?id=8488
      */
