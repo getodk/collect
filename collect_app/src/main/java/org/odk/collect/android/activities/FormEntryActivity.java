@@ -21,8 +21,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -99,6 +97,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
@@ -126,10 +125,7 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
-
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -692,7 +688,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                scaleDownImageIfNeeded(Collect.TMPFILE_PATH);
+                ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
@@ -825,7 +821,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (chosenImage != null) {
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
-                scaleDownImageIfNeeded(newImage.getPath());
+                ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -859,23 +855,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
-    private void scaleDownImageIfNeeded(String path) {
-        Integer maxPixels;
-
-        QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
-        if (questionWidget != null) {
-            maxPixels = getMaxPixelsFromFormIfDefined(questionWidget);
-
-            if (maxPixels == null) {
-                maxPixels = getMaxPixelsFromSettings();
-            }
-
-            if (maxPixels != null) {
-                scaleDownImage(path, maxPixels);
-            }
-        }
-    }
-
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
@@ -885,63 +864,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
 
         return questionWidget;
-    }
-
-    private Integer getMaxPixelsFromFormIfDefined(QuestionWidget questionWidget) {
-        Integer maxPixels = null;
-        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
-            if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
-                try {
-                    maxPixels = Integer.parseInt(attrs.getAttributeValue());
-                } catch (NumberFormatException e) {
-                    Timber.i(e);
-                }
-            }
-        }
-        return maxPixels;
-    }
-
-    private Integer getMaxPixelsFromSettings() {
-        Integer maxPixels = null;
-        String imageSizeMode = (String) GeneralSharedPreferences.getInstance().get(KEY_IMAGE_SIZE);
-        String[] imageEntryValues = getResources().getStringArray(R.array.image_size_entry_values);
-        if (!imageSizeMode.equals(imageEntryValues[0])) {
-            if (imageSizeMode.equals(imageEntryValues[1])) {
-                maxPixels = 640;
-            } else if (imageSizeMode.equals(imageEntryValues[2])) {
-                maxPixels = 1024;
-            } else if (imageSizeMode.equals(imageEntryValues[3])) {
-                maxPixels = 2048;
-            } else if (imageSizeMode.equals(imageEntryValues[4])) {
-                maxPixels = 3072;
-            }
-        }
-        return maxPixels;
-    }
-
-    /*
-    This method is used to reduce an original picture size.
-    maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
-     */
-    private void scaleDownImage(String path, int maxPixels) {
-        Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
-
-        if (originalImage != null) {
-            double originalWidth = originalImage.getWidth();
-            double originalHeight = originalImage.getHeight();
-
-            if (originalWidth > originalHeight && originalWidth > maxPixels) {
-                int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
-
-                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, maxPixels, newHeight, false);
-                FileUtils.saveBitmapToFile(scaledImage, path);
-            } else if (originalHeight > maxPixels) {
-                int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
-
-                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, newWidth, maxPixels, false);
-                FileUtils.saveBitmapToFile(scaledImage, path);
-            }
-        }
     }
 
     private void saveAudioVideoAnswer(Uri media) {
