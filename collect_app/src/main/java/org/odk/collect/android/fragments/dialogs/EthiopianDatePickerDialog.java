@@ -59,48 +59,26 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
         return getCurrentEthiopianDate();
     }
 
-    private void setUpDatePicker(LocalDateTime gregorianDate) {
+    private void setUpDatePicker() {
         LocalDateTime ethiopianDate = DateTimeUtils
-                .skipDaylightSavingGapIfExists(gregorianDate)
+                .skipDaylightSavingGapIfExists(getDate())
                 .toDateTime()
                 .withChronology(EthiopicChronology.getInstance())
                 .toLocalDateTime();
         setUpDayPicker(ethiopianDate);
-        setUpMonthPicker(ethiopianDate);
-        setUpYearPicker(ethiopianDate);
-    }
-
-    private void setUpDayPicker(LocalDateTime ethiopianDate) {
-        dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
-        if (datePickerDetails.isSpinnerMode()) {
-            dayPicker.setValue(ethiopianDate.getDayOfMonth());
-        }
-    }
-
-    private void setUpMonthPicker(LocalDateTime ethiopianDate) {
-        monthPicker.setMaxValue(monthsArray.length - 1);
-        monthPicker.setDisplayedValues(monthsArray);
-        if (!datePickerDetails.isYearMode()) {
-            monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
-        }
-    }
-
-    private void setUpYearPicker(LocalDateTime ethiopianDate) {
-        yearPicker.setMinValue(MIN_SUPPORTED_YEAR);
-        yearPicker.setMaxValue(MAX_SUPPORTED_YEAR);
-        yearPicker.setValue(ethiopianDate.getYear());
+        setUpMonthPicker(ethiopianDate, monthsArray);
+        setUpYearPicker(ethiopianDate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
     }
 
     private void setUpValues() {
-        setUpDatePicker(date);
+        setUpDatePicker();
         updateGregorianDateLabel();
     }
 
     private LocalDateTime getCurrentEthiopianDate() {
-        int ethiopianDay = dayPicker.getValue();
-        int ethiopianMonth = Arrays.asList(monthsArray).indexOf(monthPicker.getDisplayedValues()[monthPicker.getValue()]);
-        int ethiopianYear = yearPicker.getValue();
+        int ethiopianDay = getDay();
+        int ethiopianMonth = Arrays.asList(monthsArray).indexOf(getMonth());
+        int ethiopianYear = getYear();
 
         LocalDateTime ethiopianDate = new LocalDateTime(ethiopianYear, ethiopianMonth + 1, 1, 0, 0, 0, 0, EthiopicChronology.getInstance());
         if (ethiopianDay > ethiopianDate.dayOfMonth().getMaximumValue()) {

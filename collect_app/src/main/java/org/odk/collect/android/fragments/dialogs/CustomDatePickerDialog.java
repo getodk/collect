@@ -45,17 +45,17 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     private static final String DATE = "date";
     private static final String DATE_PICKER_DETAILS = "datePickerDetails";
 
-    protected NumberPicker dayPicker;
-    protected NumberPicker monthPicker;
-    protected NumberPicker yearPicker;
+    private NumberPicker dayPicker;
+    private NumberPicker monthPicker;
+    private NumberPicker yearPicker;
 
-    protected LocalDateTime date;
+    private LocalDateTime date;
 
     private TextView gregorianDateText;
 
     private FormIndex formIndex;
 
-    protected DatePickerDetails datePickerDetails;
+    private DatePickerDetails datePickerDetails;
 
     private CustomDatePickerDialogListener listener;
 
@@ -185,6 +185,44 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     protected void updateGregorianDateLabel() {
         String label = DateTimeUtils.getDateTimeLabel(getDateAsGregorian(getOriginalDate()).toDate(), datePickerDetails, false, getContext());
         gregorianDateText.setText(label);
+    }
+
+    protected void setUpDayPicker(LocalDateTime ethiopianDate) {
+        dayPicker.setMinValue(1);
+        dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
+        if (datePickerDetails.isSpinnerMode()) {
+            dayPicker.setValue(ethiopianDate.getDayOfMonth());
+        }
+    }
+
+    protected void setUpMonthPicker(LocalDateTime ethiopianDate, String[] monthsArray) {
+        monthPicker.setMaxValue(monthsArray.length - 1);
+        monthPicker.setDisplayedValues(monthsArray);
+        if (!datePickerDetails.isYearMode()) {
+            monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
+        }
+    }
+
+    protected void setUpYearPicker(LocalDateTime ethiopianDate, int minSupportedYear, int maxSupportedYear) {
+        yearPicker.setMinValue(minSupportedYear);
+        yearPicker.setMaxValue(maxSupportedYear);
+        yearPicker.setValue(ethiopianDate.getYear());
+    }
+
+    public int getDay() {
+        return dayPicker.getValue();
+    }
+
+    public String getMonth() {
+        return monthPicker.getDisplayedValues()[monthPicker.getValue()];
+    }
+
+    public int getYear() {
+        return yearPicker.getValue();
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 
     protected abstract void updateDays();
