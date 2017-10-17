@@ -372,6 +372,8 @@ public class FormController {
         return (ODKView.FIELD_LIST.equalsIgnoreCase(gd.getAppearanceAttr()));
     }
 
+    // TODO: This is the same as the method above. This, {@link #groupIsFieldList} and
+    // TODO: {@link #indexIsInFieldList} can be simplified
     private boolean repeatIsFieldList(FormIndex index) {
         // if this isn't a group, return right away
         IFormElement element = formEntryController.getModel().getForm().getChild(index);
