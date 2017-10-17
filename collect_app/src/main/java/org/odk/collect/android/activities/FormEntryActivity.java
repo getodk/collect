@@ -182,6 +182,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
+    public static final String EXTRA_TESTING_PATH = "testingPath";
+
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
     private static final int SAVING_IMAGE_DIALOG = 3;
@@ -362,7 +364,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     uriMimeType = getContentResolver().getType(uri);
                 }
 
-                if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
+                    formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
+
+                } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
