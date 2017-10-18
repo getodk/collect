@@ -31,6 +31,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.helpers.InstancesDatabaseHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -205,10 +206,10 @@ public class InstanceProvider extends ContentProvider {
                 for (File f : files) {
                     // should make this recursive if we get worried about
                     // the media directory containing directories
-                    f.delete();
+                    FileUtils.deleteAndReport(f);
                 }
             }
-            directory.delete();
+            FileUtils.deleteAndReport(directory);
         }
     }
 

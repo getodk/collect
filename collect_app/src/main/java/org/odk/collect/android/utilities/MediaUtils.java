@@ -137,7 +137,7 @@ public class MediaUtils {
         }
         File f = new File(imageFile);
         if (f.exists()) {
-            f.delete();
+            FileUtils.deleteAndReport(f);
         }
         return count;
     }
@@ -252,7 +252,7 @@ public class MediaUtils {
         }
         File f = new File(audioFile);
         if (f.exists()) {
-            f.delete();
+            FileUtils.deleteAndReport(f);
         }
         return count;
     }
@@ -367,7 +367,7 @@ public class MediaUtils {
         }
         File f = new File(videoFile);
         if (f.exists()) {
-            f.delete();
+            FileUtils.deleteAndReport(f);
         }
         return count;
     }

@@ -245,10 +245,10 @@ public class FormsProvider extends ContentProvider {
                     // should make this recursive if we get worried about
                     // the media directory containing directories
                     Timber.i("attempting to delete file: %s", f.getAbsolutePath());
-                    f.delete();
+                    FileUtils.deleteAndReport(f);
                 }
             }
-            file.delete();
+            FileUtils.deleteAndReport(file);
             Timber.i("attempting to delete file: %s", file.getAbsolutePath());
         }
     }

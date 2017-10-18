@@ -146,7 +146,7 @@ public class DrawActivity extends AppCompatActivity {
             loadOption = OPTION_DRAW;
             refImage = null;
             savepointImage = new File(Collect.TMPDRAWFILE_PATH);
-            savepointImage.delete();
+            FileUtils.deleteAndReport(savepointImage);
             output = new File(Collect.TMPFILE_PATH);
         } else {
             loadOption = extras.getString(OPTION);
@@ -167,7 +167,7 @@ public class DrawActivity extends AppCompatActivity {
                 }
             } else {
                 savepointImage = new File(Collect.TMPDRAWFILE_PATH);
-                savepointImage.delete();
+                FileUtils.deleteAndReport(savepointImage);
                 if (refImage != null && refImage.exists()) {
                     FileUtils.copyFile(refImage, savepointImage);
                 }
@@ -238,7 +238,7 @@ public class DrawActivity extends AppCompatActivity {
     }
 
     private void reset() {
-        savepointImage.delete();
+        FileUtils.deleteAndReport(savepointImage);
         if (!OPTION_SIGNATURE.equals(loadOption) && refImage != null
                 && refImage.exists()) {
             FileUtils.copyFile(refImage, savepointImage);

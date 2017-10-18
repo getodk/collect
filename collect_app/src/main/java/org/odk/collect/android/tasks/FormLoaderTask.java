@@ -154,7 +154,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // from xml
                 Timber.w("Deserialization FAILED!  Deleting cache file: %s",
                         formBin.getAbsolutePath());
-                formBin.delete();
+                FileUtils.deleteAndReport(formBin);
             }
         }
         if (fd == null) {

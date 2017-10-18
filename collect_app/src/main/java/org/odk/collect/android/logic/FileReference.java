@@ -5,6 +5,7 @@
 package org.odk.collect.android.logic;
 
 import org.javarosa.core.reference.Reference;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,8 +65,7 @@ public class FileReference implements Reference {
 
     @Override
     public void remove() {
-        // TODO bad practice to ignore return values
-        new File(getInternalURI()).delete();
+        FileUtils.deleteAndReport(new File(getInternalURI()));
     }
 
 

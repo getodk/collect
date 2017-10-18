@@ -157,8 +157,12 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         errors.append(e.getMessage()).append("\r\n");
                         File badFile = new File(formDefFile.getParentFile(),
                                 formDefFile.getName() + ".bad");
-                        badFile.delete();
-                        formDefFile.renameTo(badFile);
+                        FileUtils.deleteAndReport(badFile);
+                        boolean success = formDefFile.renameTo(badFile);
+                        if (!success) {
+                            //TODO: proper course of action for the fail case
+                            Timber.e("Failed to rename file %s", formDefFile.getAbsoluteFile().toString());
+                        }
                         continue;
                     }
 
@@ -195,8 +199,11 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                         errors.append(e.getMessage()).append("\r\n");
                         File badFile = new File(formDefFile.getParentFile(),
                                 formDefFile.getName() + ".bad");
-                        badFile.delete();
-                        formDefFile.renameTo(badFile);
+                        FileUtils.deleteAndReport(badFile);
+                        boolean success = formDefFile.renameTo(badFile);
+                        if (!success) {
+                            Timber.e("Failed to rename file: %s" , formDefFile.getAbsoluteFile().toString());
+                        }
                         continue;
                     }
 

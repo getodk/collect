@@ -761,7 +761,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveAudioVideoAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
                 if (filePath != null) {
-                    new File(filePath).delete();
+                    FileUtils.deleteAndReport(new File(filePath));
                 }
                 try {
                     getContentResolver().delete(mediaUri, null, null);
@@ -2098,7 +2098,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         File temp = SaveToDiskTask.savepointFile(formController
                 .getInstancePath());
         if (temp.exists()) {
-            temp.delete();
+            FileUtils.deleteAndReport(temp);
         }
 
         boolean erase = false;
@@ -2137,9 +2137,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (f.exists() && f.isDirectory()) {
                 for (File del : f.listFiles()) {
                     Timber.i("Deleting file: %s", del.getAbsolutePath());
-                    del.delete();
+                    FileUtils.deleteAndReport(del);
                 }
-                f.delete();
+                FileUtils.deleteAndReport(f);
             }
         }
     }

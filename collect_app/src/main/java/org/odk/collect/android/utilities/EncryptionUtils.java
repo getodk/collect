@@ -495,7 +495,7 @@ public class EncryptionUtils {
                 continue; // MacOSX garbage
             }
             if (f.getName().endsWith(".enc")) {
-                f.delete(); // try to delete this (leftover junk)
+                FileUtils.deleteAndReport(f); // try to delete this (leftover junk)
             } else {
                 filesToProcess.add(f);
             }
