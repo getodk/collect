@@ -267,6 +267,7 @@
       <label>Text widgets</label>
       <input ref="/all-widgets/text_widgets/string_widget">
         <label>String widget</label>
+        <hint>plain text type</hint>
       </input>
       <input appearance="numbers" ref="/all-widgets/text_widgets/string_number_widget">
         <label>String number widget</label>
