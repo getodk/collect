@@ -119,7 +119,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     }
 
     public boolean isZoomLevelAvailable(int zoom) {
-        return (zoom >= this.minimumZoom) && (zoom <= this.maximumZoom);
+        return zoom >= this.minimumZoom && zoom <= this.maximumZoom;
     }
 
     // ------------------------------------------------------------------------
@@ -181,7 +181,7 @@ public class GoogleMapsMapBoxOfflineTileProvider implements TileProvider, Closea
     }
 
     private boolean isDatabaseAvailable() {
-        return (this.database != null) && (this.database.isOpen());
+        return this.database != null && this.database.isOpen();
     }
 
 }

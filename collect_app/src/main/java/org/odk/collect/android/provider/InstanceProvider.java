@@ -234,7 +234,7 @@ public class InstanceProvider extends ContentProvider {
                                     del.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                             Collect.getInstance().getActivityLogger().logAction(this, "delete",
                                     instanceFile);
-                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            File instanceDir = new File(instanceFile).getParentFile();
                             deleteAllFilesInDirectory(instanceDir);
                         } while (del.moveToNext());
                     }
@@ -261,7 +261,7 @@ public class InstanceProvider extends ContentProvider {
                                     c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
                             Collect.getInstance().getActivityLogger().logAction(this, "delete",
                                     instanceFile);
-                            File instanceDir = (new File(instanceFile)).getParentFile();
+                            File instanceDir = new File(instanceFile).getParentFile();
                             deleteAllFilesInDirectory(instanceDir);
                         } while (c.moveToNext());
                     }

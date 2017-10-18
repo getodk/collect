@@ -364,7 +364,7 @@ public class FileUtils {
                 String base64RsaPublicKey = submission.getAttributeValue(null,
                         "base64RsaPublicKey");
                 fields.put(BASE64_RSA_PUBLIC_KEY,
-                        (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
+                        base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0
                                 ? null : base64RsaPublicKey.trim());
             } catch (Exception e) {
                 Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());

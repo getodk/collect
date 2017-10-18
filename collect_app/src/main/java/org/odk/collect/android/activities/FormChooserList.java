@@ -72,7 +72,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
             TextView tv = (TextView) findViewById(R.id.status_text);
-            tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
+            tv.setText(savedInstanceState.getString(syncMsgKey).trim());
         }
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
