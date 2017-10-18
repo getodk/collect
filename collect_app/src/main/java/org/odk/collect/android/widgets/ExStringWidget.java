@@ -49,7 +49,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_STRING_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * <p>Launch an external app to supply a string value. If the app
@@ -202,7 +202,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         i.putExtra("value", formEntryPrompt.getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i, EX_STRING_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
     }
 
     @Override

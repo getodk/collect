@@ -47,7 +47,7 @@ import java.io.File;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.DRAW_IMAGE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Free drawing widget.
@@ -158,7 +158,7 @@ public class DrawWidget extends QuestionWidget implements FileWidget {
         try {
             Collect.getInstance().getFormController()
                     .setIndexWaitingForData(formEntryPrompt.getIndex());
-            ((Activity) getContext()).startActivityForResult(i, DRAW_IMAGE);
+            ((Activity) getContext()).startActivityForResult(i, RequestCodes.DRAW_IMAGE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),

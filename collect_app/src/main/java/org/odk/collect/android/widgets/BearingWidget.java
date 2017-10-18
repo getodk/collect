@@ -35,7 +35,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.BEARING_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
@@ -81,7 +81,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                     formController.setIndexWaitingForData(formEntryPrompt.getIndex());
                 }
 
-                ((Activity) getContext()).startActivityForResult(i, BEARING_CAPTURE);
+                ((Activity) getContext()).startActivityForResult(i, RequestCodes.BEARING_CAPTURE);
             }
         });
 

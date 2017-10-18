@@ -46,7 +46,7 @@ import java.io.File;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.SIGNATURE_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Signature widget.
@@ -153,7 +153,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
 
         try {
             Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
-            ((Activity) getContext()).startActivityForResult(i, SIGNATURE_CAPTURE);
+            ((Activity) getContext()).startActivityForResult(i, RequestCodes.SIGNATURE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
                     getContext().getString(R.string.activity_not_found, "signature capture"),

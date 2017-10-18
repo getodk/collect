@@ -43,7 +43,7 @@ import org.odk.collect.android.utilities.PlayServicesUtil;
 
 import java.text.DecimalFormat;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -151,7 +151,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                     formController.setIndexWaitingForData(formEntryPrompt.getIndex());
                 }
 
-                ((Activity) getContext()).startActivityForResult(i, LOCATION_CAPTURE);
+                ((Activity) getContext()).startActivityForResult(i, RequestCodes.LOCATION_CAPTURE);
             }
         });
 

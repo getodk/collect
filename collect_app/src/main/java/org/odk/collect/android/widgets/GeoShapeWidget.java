@@ -37,7 +37,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
@@ -113,7 +113,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(SHAPE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, GEOSHAPE_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

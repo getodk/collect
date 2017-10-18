@@ -51,8 +51,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static android.os.Build.MODEL;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.VIDEO_CAPTURE;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.VIDEO_CHOOSER;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -141,7 +140,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, VIDEO_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.VIDEO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
@@ -172,7 +171,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, VIDEO_CHOOSER);
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.VIDEO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

@@ -38,7 +38,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
@@ -122,7 +122,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(TRACE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, GEOTRACE_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {

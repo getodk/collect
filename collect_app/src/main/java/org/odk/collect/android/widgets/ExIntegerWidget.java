@@ -30,7 +30,7 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 
 import java.util.Locale;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_INT_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Launch an external app to supply an integer value. If the app
@@ -83,7 +83,7 @@ public class ExIntegerWidget extends ExStringWidget {
         i.putExtra("value", getIntegerAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i, EX_INT_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_INT_CAPTURE);
     }
 
 
