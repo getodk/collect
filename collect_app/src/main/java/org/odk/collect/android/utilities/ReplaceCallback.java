@@ -54,7 +54,7 @@ public class ReplaceCallback {
      */
     public static String replace(String regex, String subject, int limit,
             AtomicInteger count, Callback callback) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Matcher matcher = Pattern.compile(regex).matcher(subject);
         int i;
         for (i = 0; (limit < 0 || i < limit) && matcher.find(); i++) {
