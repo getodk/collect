@@ -51,7 +51,7 @@ public class ImageConverter {
                 maxPixels = getMaxPixelsFromSettings(context);
             }
 
-            if (maxPixels != null) {
+            if (maxPixels != null && maxPixels > 0) {
                 scaleDownImage(imagePath, maxPixels);
             }
         }
