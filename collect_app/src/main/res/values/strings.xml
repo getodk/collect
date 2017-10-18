@@ -517,4 +517,14 @@
     <string name="search">Search</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
     <string name="bearing_lack_of_sensors">Bearing cannot be collected: device is missing accelerometer, magnetic field sensor or both.</string>
+    <string name="get_help">Get help</string>
+    <string name="get_help_text">
+        <![CDATA[
+            <p>To get help with ODK Collect, please search the community forum first for a solution at:</p>
+            <a href="https://forum.opendatakit.org">https://forum.opendatakit.org</a>
+            <p>If you can\'t find a solution, then post to the forum in the support category.
+            This way, everyone can see the question, everyone can have a chance to answer,
+            and the answer will be seen by everyone.</p>
+        ]]>
+    </string>
 </resources>
