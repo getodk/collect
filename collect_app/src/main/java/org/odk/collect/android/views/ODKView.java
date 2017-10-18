@@ -61,7 +61,7 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_GROUP_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * This class is
@@ -158,7 +158,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 }
                             }
 
-                            ((Activity) getContext()).startActivityForResult(i, EX_GROUP_CAPTURE);
+                            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_GROUP_CAPTURE);
                         } catch (ExternalParamsException e) {
                             Timber.e(e, "ExternalParamsException");
 

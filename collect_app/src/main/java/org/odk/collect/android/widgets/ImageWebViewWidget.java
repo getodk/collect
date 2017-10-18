@@ -49,8 +49,7 @@ import java.util.Date;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.IMAGE_CAPTURE;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.IMAGE_CHOOSER;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -114,7 +113,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, IMAGE_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
@@ -144,7 +143,7 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
                 try {
                     Collect.getInstance().getFormController()
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, IMAGE_CHOOSER);
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

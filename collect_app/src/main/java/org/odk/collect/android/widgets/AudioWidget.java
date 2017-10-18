@@ -42,8 +42,7 @@ import java.io.File;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.AUDIO_CAPTURE;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.AUDIO_CHOOSER;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -105,7 +104,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, AUDIO_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.AUDIO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
@@ -133,7 +132,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 try {
                     formController
                             .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, AUDIO_CHOOSER);
+                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.AUDIO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),

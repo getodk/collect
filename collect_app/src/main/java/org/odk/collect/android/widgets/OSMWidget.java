@@ -34,7 +34,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.OSM_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -209,7 +209,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
                 formController.setIndexWaitingForData(
                         formEntryPrompt.getIndex());
                 // launch
-                ((Activity) ctx).startActivityForResult(launchIntent, OSM_CAPTURE);
+                ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }

@@ -32,7 +32,7 @@ import org.odk.collect.android.external.ExternalAppsUtils;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.EX_DECIMAL_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 
 /**
@@ -95,7 +95,7 @@ public class ExDecimalWidget extends ExStringWidget {
         i.putExtra("value", getDoubleAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i, EX_DECIMAL_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
     }
 
 
