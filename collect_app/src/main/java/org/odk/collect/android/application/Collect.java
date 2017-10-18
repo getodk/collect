@@ -314,7 +314,7 @@ public class Collect extends Application {
         return tracker;
     }
 
-    // First app run after a fresh instalation or first app run after upgrading to the version in which the flag was introduced
+    // First app run after a fresh installation or first app run after upgrading to the version in which the flag was introduced
     private boolean firstAppRun() {
         boolean firstAppRun = GeneralSharedPreferences.getInstance().getBoolean(FIRST_APP_RUN, true);
         if (firstAppRun) {
