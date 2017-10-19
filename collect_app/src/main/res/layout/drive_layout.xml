@@ -92,7 +92,8 @@ the License.
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:enabled="false"
-            android:src="@drawable/ic_action_action_search" />
+            android:src="@drawable/ic_action_action_search"
+            android:contentDescription="@string/accessibility_content_description_search_button" />
 
     </LinearLayout>
 

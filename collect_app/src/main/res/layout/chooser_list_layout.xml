@@ -32,13 +32,13 @@ the License.
             android:layout_height="wrap_content"
             android:background="#DDDDDD"
             android:paddingBottom="4dip"
-            android:paddingEnd="8dip"
-            android:paddingLeft="8dip"
-            android:paddingRight="8dip"
-            android:paddingStart="8dip"
-            android:paddingTop="4dip"
+            android:paddingEnd="@dimen/padding_medium"
+            android:paddingLeft="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_medium"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingTop="@dimen/padding_small"
             android:text="@string/form_scan_starting"
-            android:textSize="14sp"/>
+            android:textSize="@dimen/text_size_status_message"/>
 
         <ListView
             android:id="@id/android:list"
