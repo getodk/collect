@@ -524,4 +524,18 @@
     <string name="image_size_original">Original size from camera (default)</string>
     <string name="image_size_dialog_title">Maximum pixels of the long edge of the image</string>
     <string name="bearing_lack_of_sensors">Bearing cannot be collected: device is missing accelerometer, magnetic field sensor or both.</string>
+    <string name="ethiopian_month_meskerem">Meskerem</string>
+    <string name="ethiopian_month_tikimt">Tikimt</string>
+    <string name="ethiopian_month_hidar">Hidar</string>
+    <string name="ethiopian_month_tahsas">Tahsas</string>
+    <string name="ethiopian_month_tir">Tir</string>
+    <string name="ethiopian_month_yekatit">Yekatit</string>
+    <string name="ethiopian_month_megabit">Megabit</string>
+    <string name="ethiopian_month_miazia">Miazia</string>
+    <string name="ethiopian_month_ginbot">Ginbot</string>
+    <string name="ethiopian_month_senie">Senie</string>
+    <string name="ethiopian_month_hamlie">Hamlie</string>
+    <string name="ethiopian_month_nehasie">Nehasie</string>
+    <string name="ethiopian_month_pagumien">Pagumien</string>
+    <string name="ethiopian_date">%1$s (%2$s)</string>
 </resources>

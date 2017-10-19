@@ -4,14 +4,14 @@ import android.support.annotation.NonNull;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.widgets.base.GeneralDateTimeWidgetTest;
 import org.robolectric.RuntimeEnvironment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
 public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateData> {
@@ -45,18 +45,12 @@ public class DateWidgetTest extends GeneralDateTimeWidgetTest<DateWidget, DateDa
     }
 
     @Test
-    public void updatingTheDateAndTimeWidgetsShouldUpdateTheAnswer() {
+    public void setData() {
         DateWidget widget = getWidget();
-
-        DateTime dateTime = getNextDateTime()
-                .withHourOfDay(0)
-                .withMinuteOfHour(0);
-
-        widget.updateDate(dateTime);
-
-        IAnswerData answer = widget.getAnswer();
-        DateTime answerDateTime = new DateTime(answer.getValue());
-
-        assertEquals(dateTime, answerDateTime);
+        LocalDateTime date = new LocalDateTime().withYear(2010).withMonthOfYear(5).withDayOfMonth(12);
+        widget.setBinaryData(date);
+        assertFalse(widget.isWaitingForBinaryData());
+        assertFalse(widget.isNullAnswer);
+        assertEquals(widget.getAnswer().getDisplayText(), new DateData(date.toDate()).getDisplayText());
     }
 }

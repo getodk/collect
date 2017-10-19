@@ -74,6 +74,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -83,6 +84,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -141,7 +143,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROS
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener {
+        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
+        CustomDatePickerDialog.CustomDatePickerDialogListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -2999,6 +3002,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     ((RangeWidget) qw).setNumberPickerValue(value);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onDateChanged(LocalDateTime date) {
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView != null) {
+            odkView.setBinaryData(date);
         }
     }
 

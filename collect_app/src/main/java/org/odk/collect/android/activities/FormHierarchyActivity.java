@@ -329,7 +329,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
-                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
+                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this);
                             formList.add(
                                     new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));

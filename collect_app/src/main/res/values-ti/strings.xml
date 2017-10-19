@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ethiopian_month_meskerem">መስከረም</string>
+    <string name="ethiopian_month_tikimt">ጥቅምቲ</string>
+    <string name="ethiopian_month_hidar">ሕዳር</string>
+    <string name="ethiopian_month_tahsas">ታኅሳስ</string>
+    <string name="ethiopian_month_tir">ጥሪ</string>
+    <string name="ethiopian_month_yekatit">ለካቲት</string>
+    <string name="ethiopian_month_megabit">መጋቢት</string>
+    <string name="ethiopian_month_miazia">ምያዝያ</string>
+    <string name="ethiopian_month_ginbot">ግንቦት</string>
+    <string name="ethiopian_month_senie">ሰነ</string>
+    <string name="ethiopian_month_hamlie">ሓምለ</string>
+    <string name="ethiopian_month_nehasie">ነሓሰ</string>
+    <string name="ethiopian_month_pagumien">ጳጐሜን</string>
+</resources>

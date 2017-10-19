@@ -128,4 +128,19 @@ the specific language governing permissions and limitations under the License. -
         <item>cellular_only</item>
         <item>wifi_and_cellular</item>
     </string-array>
+    <string-array name="ethiopian_months">
+        <item>@string/ethiopian_month_meskerem</item>
+        <item>@string/ethiopian_month_tikimt</item>
+        <item>@string/ethiopian_month_hidar</item>
+        <item>@string/ethiopian_month_tahsas</item>
+        <item>@string/ethiopian_month_tir</item>
+        <item>@string/ethiopian_month_yekatit</item>
+        <item>@string/ethiopian_month_megabit</item>
+        <item>@string/ethiopian_month_miazia</item>
+        <item>@string/ethiopian_month_ginbot</item>
+        <item>@string/ethiopian_month_senie</item>
+        <item>@string/ethiopian_month_hamlie</item>
+        <item>@string/ethiopian_month_nehasie</item>
+        <item>@string/ethiopian_month_pagumien</item>
+    </string-array>
 </resources>
