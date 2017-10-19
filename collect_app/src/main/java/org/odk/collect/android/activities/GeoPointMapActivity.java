@@ -158,7 +158,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
     public void returnLocation() {
         Intent i = new Intent();
-        if (setClear || readOnly && latLng == null) {
+        if (setClear || (readOnly && latLng == null)) {
             i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
             setResult(RESULT_OK, i);
 

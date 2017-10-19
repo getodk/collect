@@ -582,7 +582,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             int idxJrVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
             if (formCursor.isNull(idxJrVersion)) {
                 // any non-null version on server is newer
-                return latestVersion != null;
+                return (latestVersion != null);
             }
             String jrVersion = formCursor.getString(idxJrVersion);
             // apparently, the isNull() predicate above is not respected on all Android OSes???
@@ -596,7 +596,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 return false;
             }
             // if what we have is less, then the server is newer
-            return jrVersion.compareTo(latestVersion) < 0;
+            return (jrVersion.compareTo(latestVersion) < 0);
         } finally {
             if (formCursor != null) {
                 formCursor.close();
@@ -661,8 +661,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 HashMap<String, String> item = new HashMap<String, String>();
                 item.put(FORMNAME, details.formName);
                 item.put(FORMID_DISPLAY,
-                        (details.formVersion == null) ? "" : (getString(R.string.version) + " "
-                                + details.formVersion + " ") + "ID: " + details.formID);
+                        ((details.formVersion == null) ? "" : (getString(R.string.version) + " "
+                                + details.formVersion + " ")) + "ID: " + details.formID);
                 item.put(FORMDETAIL_KEY, formDetailsKey);
                 item.put(FORM_ID_KEY, details.formID);
                 item.put(FORM_VERSION_KEY, details.formVersion);

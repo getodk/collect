@@ -128,7 +128,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
                     .withMonthOfYear(hideMonth ? 1 : month)
-                    .withDayOfMonth(hideMonth || hideDay ? 1 : dayOfMonth)
+                    .withDayOfMonth((hideMonth || hideDay) ? 1 : dayOfMonth)
                     .withHourOfDay(0)
                     .withMinuteOfHour(0);
             return new DateData(ldt.toDate());
@@ -194,7 +194,7 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             theme = android.R.style.Theme_Material_Light_Dialog;
         }
-        if (!showCalendar || isBrokenSamsungDevice() && isTalkBackActive()) {
+        if (!showCalendar || (isBrokenSamsungDevice() && isTalkBackActive())) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
 
@@ -219,9 +219,9 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
 
     // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
     private boolean isBrokenSamsungDevice() {
-        return Build.MANUFACTURER.equalsIgnoreCase("samsung")
+        return (Build.MANUFACTURER.equalsIgnoreCase("samsung")
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1;
+                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
     // https://stackoverflow.com/a/34853067/5479029

@@ -91,7 +91,7 @@ public class ResetUtility {
                 || deleteFolderContents(Collect.SETTINGS);
 
         boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
-                || new File(Collect.ODK_ROOT + "/collect.settings").delete();
+                || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
 
         if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
