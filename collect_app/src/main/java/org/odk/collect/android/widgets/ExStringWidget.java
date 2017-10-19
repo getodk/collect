@@ -42,8 +42,11 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ActivityUtil;
+import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.ViewIds;
-import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
 
@@ -100,6 +103,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private Button launchIntentButton;
     private Drawable textBackground;
 
+    private ActivityUtil activityUtil;
+
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -148,7 +153,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
-                if (isActivityAvailable(i)) {
+                if (activityUtil.isActivityAvailable(i)) {
                     try {
                         ExternalAppsUtils.populateParameters(i, exParams,
                                 getFormEntryPrompt().getIndex().getReference());
@@ -279,5 +284,18 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 .getPackageManager()
                 .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
                 .size() > 0;
+    }
+
+    @Override
+    protected void injectDependencies(DependencyProvider dependencyProvider) {
+        DependencyProvider<ActivityUtil> activityUtilProvider =
+                ObjectUtils.uncheckedCast(dependencyProvider);
+
+        if (activityUtilProvider == null) {
+            Timber.e("DependencyProvider doesn't provide ActivityUtil.");
+            return;
+        }
+
+        this.activityUtil = activityUtilProvider.provide();
     }
 }
