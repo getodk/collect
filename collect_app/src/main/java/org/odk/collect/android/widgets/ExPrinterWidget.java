@@ -122,7 +122,7 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
         String appearance = prompt.getAppearanceHint();
         String[] attrs = appearance.split(":");
-        final String intentName = attrs.length < 2 || attrs[1].length() == 0
+        final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
                 ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
         final String buttonText;
         final String errorString;

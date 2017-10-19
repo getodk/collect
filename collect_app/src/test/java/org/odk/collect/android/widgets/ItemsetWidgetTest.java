@@ -150,7 +150,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
         ItemsetWidget widget = getWidget();
         assertNull(widget.getAnswer());
 
-        int randomIndex = Math.abs(random.nextInt()) % widget.getChoiceCount();
+        int randomIndex = (Math.abs(random.nextInt()) % widget.getChoiceCount());
         widget.setChoiceSelected(randomIndex, true);
 
         String selectedChoice = choices.get(Integer.toString(randomIndex));
@@ -160,7 +160,7 @@ public class ItemsetWidgetTest extends QuestionWidgetTest<ItemsetWidget, StringD
     }
 
     private Map<String, String> createChoices() {
-        int choiceCount = Math.abs(random.nextInt()) % 3 + 2;
+        int choiceCount = (Math.abs(random.nextInt()) % 3) + 2;
 
         Map<String, String> choices = new HashMap<>();
         for (int i = 0; i < choiceCount; i++) {

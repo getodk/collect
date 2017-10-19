@@ -108,10 +108,10 @@ public final class PRNGFixes {
         // default, if not yet installed.
         Provider[] secureRandomProviders =
                 Security.getProviders("SecureRandom.SHA1PRNG");
-        if (secureRandomProviders == null
-                || secureRandomProviders.length < 1
-                || !LinuxPRNGSecureRandomProvider.class.equals(
-                secureRandomProviders[0].getClass())) {
+        if ((secureRandomProviders == null)
+                || (secureRandomProviders.length < 1)
+                || (!LinuxPRNGSecureRandomProvider.class.equals(
+                secureRandomProviders[0].getClass()))) {
             Security.insertProviderAt(new LinuxPRNGSecureRandomProvider(), 1);
         }
 
