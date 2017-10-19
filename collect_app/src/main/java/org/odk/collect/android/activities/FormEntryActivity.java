@@ -2603,13 +2603,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             }
 
-            // if somehow we end up with a bad language, set it to the default
+            long start = System.currentTimeMillis();
+            Timber.i("calling formController.setLanguage");
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
+                // if somehow we end up with a bad language, set it to the default
                 Timber.e("Ended up with a bad language. %s", newLanguage);
                 formController.setLanguage(defaultLanguage);
             }
+            Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
         }
 
         boolean pendingActivityResult = task.hasPendingActivityResult();
