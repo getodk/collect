@@ -82,7 +82,8 @@
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:src="@android:drawable/ic_dialog_alert"
-            android:tint="#ffff00" />
+            android:tint="#ffff00"
+            android:contentDescription="@string/accessibility_content_description_image" />
 
         <TextView
             android:id="@+id/edit_qrcode"

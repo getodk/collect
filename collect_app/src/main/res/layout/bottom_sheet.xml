@@ -20,7 +20,7 @@ the License.
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/padding_large"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <TextView
@@ -29,7 +29,7 @@ the License.
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:text="@string/sort_by"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/margin_medium"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <android.support.v7.widget.RecyclerView

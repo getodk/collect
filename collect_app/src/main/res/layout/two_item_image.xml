@@ -18,7 +18,10 @@
         android:layout_centerVertical="true"
         android:paddingEnd="8dip"
         android:paddingRight="8dip"
-        android:src="@drawable/ic_menu_forward" />
+        android:paddingStart="8dip"
+        android:paddingLeft="8dip"
+        android:src="@drawable/ic_menu_forward"
+        android:contentDescription="@string/accessibility_content_description_image" />
 
     <TextView
         android:id="@+id/text1"

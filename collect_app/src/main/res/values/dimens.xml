@@ -6,12 +6,25 @@
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_large">16dp</dimen>
     <dimen name="padding_extra_large">24dp</dimen>
+    <dimen name="padding_button">10dp</dimen>
+    <dimen name="padding_card_view_draw_text">6dp</dimen>
 
     <!-- margin -->
     <dimen name="margin_small">4dp</dimen>
     <dimen name="margin_medium">8dp</dimen>
     <dimen name="margin_large">16dp</dimen>
     <dimen name="margin_extra_large">24dp</dimen>
+    <dimen name="margin_button">10dp</dimen>
+    <dimen name="margin_barcode_text_view">10dp</dimen>
+    <dimen name="margin_card_view_draw">72dp</dimen>
+    <dimen name="margin_card_view_draw_bottom">192dp</dimen>
+    <dimen name="margin_card_view_FAB_bottom">198dp</dimen>
+    <dimen name="margin_card_view_FAB_bottom_set_color">96dp</dimen>
+    <dimen name="margin_card_view_set_color">92dp</dimen>
+    <dimen name="margin_card_view_draw_bottom_save_and_close_cv">142dp</dimen>
+    <dimen name="margin_card_view_draw_bottom_save_and_close">147dp</dimen>
+    <dimen name="margin_card_view_draw_fab_actions">30dp</dimen>
+
 
     <!-- fontSize -->
     <dimen name="text_size_extra_small">12sp</dimen>
@@ -19,6 +32,8 @@
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_large">24sp</dimen>
     <dimen name="text_size_extra_large">28sp</dimen>
+    <dimen name="text_size_status_message">14sp</dimen>
+    <dimen name="text_size_draw_card_view_text">14sp</dimen>
 
     <!-- elevation -->
     <dimen name="elevation_switch">1dp</dimen>
@@ -39,6 +54,7 @@
     <dimen name="elevation_right_drawer">16dp</dimen>
     <dimen name="elevation_dialog">24dp</dimen>
     <dimen name="elevation_picker">24dp</dimen>
+    <dimen name="elevation_card_view_draw">6dp</dimen>
 
     <!-- touch target -->
     <dimen name="touch_target_size">48dp</dimen>
@@ -46,6 +62,7 @@
 
     <!-- corner radius -->
     <dimen name="corner_radius">2dp</dimen>
+    <dimen name="corner_radius_card_view_draw">4dp</dimen>
 
     <!-- divider -->
     <dimen name="divier_height">3dp</dimen>
