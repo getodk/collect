@@ -219,7 +219,7 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
 
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link org.odk.collect.android.activities.FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {

@@ -42,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.injection.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
@@ -50,6 +51,7 @@ import org.odk.collect.android.views.MediaLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
@@ -71,9 +73,12 @@ public abstract class QuestionWidget
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
-
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
+        }
+
+        if (context instanceof DependencyProvider) {
+            injectDependencies((DependencyProvider) context);
         }
 
         player = new MediaPlayer();
@@ -109,6 +114,8 @@ public abstract class QuestionWidget
         addQuestionMediaLayout(questionMediaLayout);
         addHelpTextView(helpTextView);
     }
+
+    protected void injectDependencies(DependencyProvider dependencyProvider) {}
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();

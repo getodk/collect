@@ -7,11 +7,9 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
@@ -22,7 +20,12 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.utilities.ActivityUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,12 +46,16 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
@@ -65,8 +72,16 @@ public class AllFormsWidgetTest {
     private String exStringWidgetFirstText = randomString();
     private String exStringWidgetSecondText = randomString();
 
+    private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
+
+    @Mock
+    ActivityUtil activityUtil;
+
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
 
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
@@ -90,8 +105,15 @@ public class AllFormsWidgetTest {
                 + ALL_WIDGETS_FORM;
     }
 
+    @Before
+    public void prepareDependencies() {
+        activityTestRule.getActivity()
+                .setActivityUtil(activityUtil);
+    }
+
     @Test
     public void testActivityOpen()  {
+
         // Label widget:
         onView(withText(startsWith("This form"))).perform(swipeLeft());
 
@@ -106,14 +128,16 @@ public class AllFormsWidgetTest {
         // UrlWidget:
         Uri uri = Uri.parse("http://opendatakit.org/");
 
-        ActivityResult urlResult = new ActivityResult(RESULT_OK, new Intent());
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
-                .respondWith(urlResult);
+                .respondWith(okResult);
 
         onView(withText("Open Url")).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
 
         // Ex String Widget:
+        when(activityUtil.isActivityAvailable(any(Intent.class)))
+                .thenReturn(false);
+
         onView(withText("Launch")).perform(click());
         onVisibleEditText().perform(replaceText(exStringWidgetFirstText));
 
@@ -130,8 +154,85 @@ public class AllFormsWidgetTest {
 
         )).respondWith(exStringResult);
 
+
+        when(activityUtil.isActivityAvailable(any(Intent.class)))
+                .thenReturn(true);
+
         onView(withText("Launch")).perform(click());
-        onView(withText(exStringWidgetSecondText)).check(matches(isDisplayed()));
+        onView(withText(exStringWidgetSecondText))
+                .check(matches(isDisplayed()));
+
+        onView(withText("Ex string widget")).perform(swipeLeft());
+
+        // ExPrinterWidget
+
+        onView(withText("Initiate Printing")).perform(click());
+
+        intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
+        // There is also a BroadcastIntent that sends the data but we don't
+        // have a way to test that currently.
+        // Will probably move that out to a helper class we can Unit test in Robolectric and
+        // inject here.
+
+        onView(withText("Ex printer widget")).perform(swipeLeft());
+
+        // Integer widget:
+
+        onView(withText("Integer widget")).perform(swipeLeft());
+        // Ex integer widget:
+
+        onView(withText("Ex integer widget")).perform(swipeLeft());
+        onView(withText("Decimal widget")).perform(swipeLeft());
+        onView(withText("Ex decimal widget")).perform(swipeLeft());
+        onView(withText("Bearing widget")).perform(swipeLeft());
+
+        onView(withText("Image widget")).perform(swipeLeft());
+        onView(withText("Selfie widget")).perform(swipeLeft());
+        onView(withText("Draw widget")).perform(swipeLeft());
+        onView(withText("Annotate widget")).perform(swipeLeft());
+        onView(withText("Signature widget")).perform(swipeLeft());
+
+        onView(withText("Web view image widget")).perform(swipeLeft());
+        onView(withText("Align image widget")).perform(swipeLeft());
+
+        onView(withText("Barcode widget")).perform(swipeLeft());
+        onView(withText("Audio widget")).perform(swipeLeft());
+        onView(withText("Video widget")).perform(swipeLeft());
+        onView(withText("Date widget")).perform(swipeLeft());
+        onView(withText("Date Widget")).perform(swipeLeft());
+        onView(withText("Date widget")).perform(swipeLeft());
+        onView(withText("Date widget")).perform(swipeLeft());
+        onView(withText("Time widget")).perform(swipeLeft());
+
+        onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+        onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
+                .perform(swipeLeft());
+
+        onView(withText("Geopoint widget")).perform(swipeLeft());
+        onView(withText("Geopoint widget")).perform(swipeLeft());
+        onView(withText("Geopoint widget")).perform(swipeLeft());
+        onView(withText("Geotrace widget")).perform(swipeLeft());
+        onView(withText("Geoshape widget")).perform(swipeLeft());
+        onView(withText("OSM integration")).perform(swipeLeft());
+        onView(withText("OSM integration")).perform(swipeLeft());
+        onView(withText("Select one widget")).perform(swipeLeft());
+        onView(withText("Spinner widget")).perform(swipeLeft());
+        onView(withText("Select one autoadvance widget")).perform(swipeLeft());
+        onView(withText("Select one search widget")).perform(swipeLeft());
+        onView(withText("Select one search widget")).perform(swipeLeft());
+        onView(withText("Grid select one widget")).perform(swipeLeft());
+        onView(withText("Grid select one widget")).perform(swipeLeft());
+        onView(withText("Grid select one widget")).perform(swipeLeft());
+        onView(withText("Grid select one widget")).perform(swipeLeft());
+        onView(withText("Grid select one widget")).perform(swipeLeft());
+        onView(withText("Multi select widget")).perform(swipeLeft());
+        onView(withText("Grid select multiple widget")).perform(swipeLeft());
+        onView(withText("Grid select multiple widget")).perform(swipeLeft());
+        onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
+        onView(withText("Label widget")).perform(swipeLeft());
+        onView(withText("Trigger widget")).perform(swipeLeft());
+
     }
 
     public static ViewInteraction onVisibleEditText() {
@@ -164,11 +265,6 @@ public class AllFormsWidgetTest {
             intent.putExtra(EXTRA_TESTING_PATH, formPath());
 
             return intent;
-        }
-
-        @Override
-        protected void afterActivityLaunched() {
-            super.afterActivityLaunched();
         }
     }
 }

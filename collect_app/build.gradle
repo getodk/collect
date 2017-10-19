@@ -196,7 +196,7 @@ dependencies {
     testCompile group: 'org.robolectric', name: 'robolectric', version: '3.4'
     testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.3.2'
 
-    androidTestCompile group: 'org.mockito', name: 'mockito-core', version: '2.8.47'
+    androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
     androidTestCompile(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
