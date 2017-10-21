@@ -466,9 +466,7 @@
   <string name="generate">Згенерувати</string>
   <string name="invalid_qrcode">QR код не містить коректних налаштувань</string>
   <string name="share_qrcode">Поділитись QR кодом</string>
-  <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
   <string name="request_permission">Програмі потрібен дозвіл на використання камери.</string>
-  <string name="camera_error">Цей пристрій не підтримує Camera2 API.</string>
   <string name="invalid_range_widget">Цей віджет має некоректні параметри!</string>
   <string name="form_entry_setting">Налашувати Заповнити Анкету</string>
   <string name="form_entry_settings_summary">Натисніть для управління пунктами заповнити анкету</string>

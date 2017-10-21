@@ -466,9 +466,7 @@
   <string name="generate">Générer</string>
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
   <string name="share_qrcode">Partager le QR code</string>
-  <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
   <string name="request_permission">Cette application nécessite les droits d\'utilisation de votre appareil photo.</string>
-  <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
   <string name="invalid_range_widget">Les paramètres de ce widget sont invalides!</string>
   <string name="form_entry_setting">Paramètres d\'entrée du formulaire</string>
   <string name="form_entry_settings_summary">Appuyez pour gérer les éléments du formulaire</string>

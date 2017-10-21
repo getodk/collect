@@ -466,9 +466,7 @@
   <string name="generate">生成</string>
   <string name="invalid_qrcode">QR コードに有効な設定が含まれていません</string>
   <string name="share_qrcode">QR コードを共有</string>
-  <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
   <string name="request_permission">このアプリケーションはカメラのアクセス許可が必要です。</string>
-  <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>
   <string name="invalid_range_widget">このウィジェットに無効なパラメータがあります!</string>
   <string name="form_entry_setting">フォーム入力設定</string>
   <string name="form_entry_settings_summary">タップしてフォーム入力項目を管理</string>

@@ -459,9 +459,7 @@
   <string name="generate">Mengeluarkan</string>
   <string name="invalid_qrcode">QR code tidak mengandung pengaturan yang benar</string>
   <string name="share_qrcode">Bagikan QR code</string>
-  <string name="take_picture_instruction">Ketuk layar untuk ambil gambar</string>
   <string name="request_permission">Applikasi ini butuh izin penggunaan camera.</string>
-  <string name="camera_error">Perangkat ini tidak mendukung Camera2 API.</string>
   <string name="invalid_range_widget">Widget ini memiliki pamater tidak valid!</string>
   <string name="form_entry_setting">Pengaturan Pengisian Formulir</string>
   <string name="form_entry_settings_summary">Ketuk untuk mengelola item pengisian formulir</string>

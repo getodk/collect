@@ -422,9 +422,7 @@
   <string name="generate">Gjenero</string>
   <string name="invalid_qrcode">Kodi QR nuk ka parametra të vlefshëm</string>
   <string name="share_qrcode">Ndaj kodin QR</string>
-  <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
   <string name="request_permission">Ky aplikacion ka nevojë për leje që të aksesojë kamerën</string>
-  <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
   <string name="invalid_range_widget">Ky widget ka parametra të paplotë!</string>
   <string name="form_entry_setting">Parametrat e plotësimit të formularëve</string>
   <string name="form_entry_settings_summary">Administro elementët e plotësimit të formularëve</string>
