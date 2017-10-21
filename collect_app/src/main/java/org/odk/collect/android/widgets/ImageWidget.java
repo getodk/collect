@@ -58,8 +58,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends QuestionWidget implements FileWidget
-        , EasyPermissions.PermissionCallbacks {
+public class ImageWidget extends QuestionWidget implements FileWidget,
+        EasyPermissions.PermissionCallbacks {
 
     private static final int REQUEST_CAMERA_PERMISSION = 1;
 
