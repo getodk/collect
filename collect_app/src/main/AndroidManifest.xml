@@ -253,10 +253,6 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.CaptureSelfieActivity" />
-        <activity
-            android:name=".activities.CaptureSelfieActivityNewApi" />
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true">
