@@ -81,6 +81,7 @@ public class AllFormsWidgetTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
+    //region Test prep.
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
         String pathname = formPath();
@@ -90,17 +91,11 @@ public class AllFormsWidgetTest {
 
         AssetManager assetManager = InstrumentationRegistry.getContext().getAssets();
         InputStream inputStream = assetManager.open(ALL_WIDGETS_FORM);
-;
+
         File outFile = new File(pathname);
         OutputStream outputStream = new FileOutputStream(outFile);
 
         IOUtils.copy(inputStream, outputStream);
-    }
-
-    public static String formPath() {
-        return Environment.getExternalStorageDirectory().getPath()
-                + FORMS_DIRECTORY
-                + ALL_WIDGETS_FORM;
     }
 
     @Before
@@ -108,7 +103,9 @@ public class AllFormsWidgetTest {
         activityTestRule.getActivity()
                 .setActivityUtil(activityUtil);
     }
+    //endregion
 
+    //region Main test block.
     @Test
     public void testActivityOpen()  {
         skipInitialLabel();
@@ -147,33 +144,50 @@ public class AllFormsWidgetTest {
         testDateNoCalendarAppearance();
         testDateMonthYearAppearance();
         testDateYearAppearance();
+
         testTimeNoAppearance();
+
         testDateTimeNoAppearance();
         testDateTimeNoCalendarAppearance();
+
         testGeopointNoAppearance();
         testGeopointPlacementMapApperance();
         testGeopointMapsAppearance();
+
         testGeotraceWidget();
         testGeoshapeWidget();
+
         testOSMIntegrationOSMType();
         testOSMIntegrationBuildingType();
+
         testSelectOneNoAppearance();
+
         testSpinnerWidget();
+
         testSelectOneAutoAdvance();
         testSelectOneSearchAppearance();
         testSelectOneSearchAutoAdvance();
+
         testGridSelectNoAppearance();
         testGridSelectCompactAppearance();
         testGridSelectCompact2Appearance();
         testGridSelectQuickCompactAppearance();
         testGridSelectQuickCompact2Appearance();
+
         testMultiSelectWidget();
+
         testGridSelectMultipleCompact();
         testGridSelectCompact2();
+
         testSpinnerSelectMultiple();
+
         testLabelWidget();
+
         testTriggerWidget();
     }
+    //endregion
+
+    //region Widget tests.
 
     public void skipInitialLabel() {
         onView(withText(startsWith("This form"))).perform(swipeLeft());
@@ -428,6 +442,14 @@ public class AllFormsWidgetTest {
     public void testSubmission() {
 
     }
+    //endregion
+
+    //region Helper methods.
+    public static String formPath() {
+        return Environment.getExternalStorageDirectory().getPath()
+                + FORMS_DIRECTORY
+                + ALL_WIDGETS_FORM;
+    }
 
     public static ViewInteraction onVisibleEditText() {
         return onView(withClassName(endsWith("EditText")));
@@ -444,7 +466,9 @@ public class AllFormsWidgetTest {
     private String randomNumberString() {
         return Integer.toString(randomInt());
     }
+    //endregion
 
+    //region Custom TestRule.
     private class FormEntryActivityTestRule extends IntentsTestRule<FormEntryActivity> {
 
         public FormEntryActivityTestRule() {
@@ -461,4 +485,5 @@ public class AllFormsWidgetTest {
             return intent;
         }
     }
+    //endregion
 }
