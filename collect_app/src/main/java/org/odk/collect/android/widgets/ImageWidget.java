@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -21,8 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore.Images;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -37,15 +38,16 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieActivity;
-import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
+import java.util.List;
 
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -56,7 +58,10 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class ImageWidget extends QuestionWidget implements FileWidget {
+public class ImageWidget extends QuestionWidget implements FileWidget,
+        EasyPermissions.PermissionCallbacks {
+
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
 
     private Button captureButton;
     private Button chooseButton;
@@ -70,11 +75,13 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
 
     private TextView errorTextView;
 
+    private final boolean selfie;
+
     public ImageWidget(Context context, final FormEntryPrompt prompt, final boolean selfie) {
         super(context, prompt);
 
-        instanceFolder =
-                Collect.getInstance().getFormController().getInstancePath().getParent();
+        this.selfie = selfie;
+        instanceFolder = Collect.getInstance().getFormController().getInstancePath().getParent();
 
         errorTextView = new TextView(context);
         errorTextView.setId(ViewIds.generateViewId());
@@ -88,39 +95,7 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
                         "click", formEntryPrompt.getIndex());
                 errorTextView.setVisibility(View.GONE);
-                Intent i;
-                if (selfie) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        i = new Intent(getContext(), CaptureSelfieActivityNewApi.class);
-                    } else {
-                        i = new Intent(getContext(), CaptureSelfieActivity.class);
-                    }
-                } else {
-                    i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    // We give the camera an absolute filename/path where to put the
-                    // picture because of bug:
-                    // http://code.google.com/p/android/issues/detail?id=1480
-                    // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-                    // 2010, G1 phones only run 1.6. Without specifying the path the
-                    // images returned by the camera in 1.6 (and earlier) are ~1/4
-                    // the size. boo.
-
-                    // if this gets modified, the onActivityResult in
-                    // FormEntyActivity will also need to be updated.
-                    i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                            Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-                }
-                try {
-                    Collect.getInstance().getFormController().setIndexWaitingForData(
-                            formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(),
-                            getContext().getString(R.string.activity_not_found, "image capture"),
-                            Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController().setIndexWaitingForData(null);
-                }
-
+                startCapturingImage();
             }
         });
 
@@ -217,6 +192,56 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
         addAnswerView(answerLayout);
     }
 
+    @AfterPermissionGranted(REQUEST_CAMERA_PERMISSION)
+    private void startCapturingImage() {
+        if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.CAMERA)) {
+            startIntent();
+        } else {
+            // Request the CAMERA permission via a user dialog
+            EasyPermissions.requestPermissions(
+                    this,
+                    getContext().getString(R.string.request_permission),
+                    REQUEST_CAMERA_PERMISSION,
+                    Manifest.permission.CAMERA);
+        }
+    }
+
+    private void startIntent() {
+        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (selfie) {
+            i.putExtra("android.intent.extras.CAMERA_FACING", 1);
+            i.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+            i.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+        } else {
+            i.putExtra("android.intent.extras.CAMERA_FACING", 0);
+        }
+
+        // We give the camera an absolute filename/path where to put the
+        // picture because of bug:
+        // http://code.google.com/p/android/issues/detail?id=1480
+        // The bug appears to be fixed in Android 2.0+, but as of feb 2,
+        // 2010, G1 phones only run 1.6. Without specifying the path the
+        // images returned by the camera in 1.6 (and earlier) are ~1/4
+        // the size. boo.
+
+        // if this gets modified, the onActivityResult in
+        // FormEntyActivity will also need to be updated.
+        i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+
+        try {
+            Collect.getInstance().getFormController().setIndexWaitingForData(
+                    formEntryPrompt.getIndex());
+            ((Activity) getContext()).startActivityForResult(i, RequestCodes.IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(),
+                    getContext().getString(R.string.activity_not_found, "image capture"),
+                    Toast.LENGTH_SHORT).show();
+            Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        }
+    }
+
     @Override
     public void deleteFile() {
         // get the file path and delete the file
@@ -303,7 +328,6 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
         Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         captureButton.setOnLongClickListener(l);
@@ -321,5 +345,21 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
         if (imageView != null) {
             imageView.cancelLongPress();
         }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(
+                requestCode, permissions, grantResults, this);
     }
 }
