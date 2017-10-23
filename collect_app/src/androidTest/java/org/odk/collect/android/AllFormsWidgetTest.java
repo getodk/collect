@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
@@ -20,7 +19,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -113,19 +111,85 @@ public class AllFormsWidgetTest {
 
     @Test
     public void testActivityOpen()  {
+        skipInitialLabel();
 
-        // Label widget:
+        testStringWidget();
+        testStringNumberWidget();
+
+        testUrlWidget();
+        testExStringWidget();
+        testExPrinterWidget();
+
+        testIntegerWidget();
+        testExIntegerWidget();
+
+        testDecimalWidget();
+        testExDecimalWidget();
+
+        testBearingWidget();
+
+        testImageWidget();
+        testSelfieWidget();
+
+        testDrawWidget();
+        testAnnotateWidget();
+        testSignatureWidget();
+
+        testWebViewImageWidget();
+        testAlignImageWidget();
+
+        testBarcodeWidget();
+
+        testAudioWidget();
+        testVideoWidget();
+
+        testDateNoAppearanceWidget();
+        testDateNoCalendarAppearance();
+        testDateMonthYearAppearance();
+        testDateYearAppearance();
+        testTimeNoAppearance();
+        testDateTimeNoAppearance();
+        testDateTimeNoCalendarAppearance();
+        testGeopointNoAppearance();
+        testGeopointPlacementMapApperance();
+        testGeopointMapsAppearance();
+        testGeotraceWidget();
+        testGeoshapeWidget();
+        testOSMIntegrationOSMType();
+        testOSMIntegrationBuildingType();
+        testSelectOneNoAppearance();
+        testSpinnerWidget();
+        testSelectOneAutoAdvance();
+        testSelectOneSearchAppearance();
+        testSelectOneSearchAutoAdvance();
+        testGridSelectNoAppearance();
+        testGridSelectCompactAppearance();
+        testGridSelectCompact2Appearance();
+        testGridSelectQuickCompactAppearance();
+        testGridSelectQuickCompact2Appearance();
+        testMultiSelectWidget();
+        testGridSelectMultipleCompact();
+        testGridSelectCompact2();
+        testSpinnerSelectMultiple();
+        testLabelWidget();
+        testTriggerWidget();
+    }
+
+    public void skipInitialLabel() {
         onView(withText(startsWith("This form"))).perform(swipeLeft());
+    }
 
-        // String widget:
+    public void testStringWidget() {
         onVisibleEditText().perform(replaceText(stringWidgetText));
         onView(withText("String widget")).perform(swipeLeft());
+    }
 
-        // String number widget:
+    public void testStringNumberWidget() {
         onVisibleEditText().perform(replaceText(stringNumberWidgetText));
         onView(withText("String number widget")).perform(swipeLeft());
+    }
 
-        // UrlWidget:
+    public void testUrlWidget() {
         Uri uri = Uri.parse("http://opendatakit.org/");
 
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
@@ -133,8 +197,9 @@ public class AllFormsWidgetTest {
 
         onView(withText("Open Url")).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
+    }
 
-        // Ex String Widget:
+    public void testExStringWidget() {
         when(activityUtil.isActivityAvailable(any(Intent.class)))
                 .thenReturn(false);
 
@@ -163,9 +228,9 @@ public class AllFormsWidgetTest {
                 .check(matches(isDisplayed()));
 
         onView(withText("Ex string widget")).perform(swipeLeft());
+    }
 
-        // ExPrinterWidget
-
+    public void testExPrinterWidget() {
         onView(withText("Initiate Printing")).perform(click());
 
         intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
@@ -175,63 +240,192 @@ public class AllFormsWidgetTest {
         // inject here.
 
         onView(withText("Ex printer widget")).perform(swipeLeft());
+    }
 
-        // Integer widget:
+    public void testIntegerWidget() {
 
         onView(withText("Integer widget")).perform(swipeLeft());
-        // Ex integer widget:
+    }
 
+    public void testExIntegerWidget() {
         onView(withText("Ex integer widget")).perform(swipeLeft());
+    }
+
+    public void testDecimalWidget() {
         onView(withText("Decimal widget")).perform(swipeLeft());
+    }
+
+    public void testExDecimalWidget() {
         onView(withText("Ex decimal widget")).perform(swipeLeft());
+    }
+
+    public void testBearingWidget() {
         onView(withText("Bearing widget")).perform(swipeLeft());
+    }
 
+    public void testImageWidget() {
         onView(withText("Image widget")).perform(swipeLeft());
+    }
+
+    public void testSelfieWidget() {
         onView(withText("Selfie widget")).perform(swipeLeft());
+    }
+
+    public void testDrawWidget() {
         onView(withText("Draw widget")).perform(swipeLeft());
+    }
+
+    public void testAnnotateWidget() {
         onView(withText("Annotate widget")).perform(swipeLeft());
+    }
+
+    public void testSignatureWidget() {
         onView(withText("Signature widget")).perform(swipeLeft());
+    }
 
+    public void testWebViewImageWidget() {
         onView(withText("Web view image widget")).perform(swipeLeft());
+    }
+
+    public void testAlignImageWidget() {
         onView(withText("Align image widget")).perform(swipeLeft());
+    }
 
+    public void testBarcodeWidget() {
         onView(withText("Barcode widget")).perform(swipeLeft());
+    }
+
+    public void testAudioWidget() {
         onView(withText("Audio widget")).perform(swipeLeft());
+    }
+
+    public void testVideoWidget() {
         onView(withText("Video widget")).perform(swipeLeft());
+    }
+
+    public void testDateNoAppearanceWidget() {
         onView(withText("Date widget")).perform(swipeLeft());
+    }
+
+    public void testDateNoCalendarAppearance() {
         onView(withText("Date Widget")).perform(swipeLeft());
+    }
+
+    public void testDateMonthYearAppearance() {
         onView(withText("Date widget")).perform(swipeLeft());
+    }
+
+    public void testDateYearAppearance() {
         onView(withText("Date widget")).perform(swipeLeft());
+    }
+
+    public void testTimeNoAppearance() {
         onView(withText("Time widget")).perform(swipeLeft());
+    }
 
+    public void testDateTimeNoAppearance() {
         onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
                 .perform(swipeLeft());
+    }
+
+    public void testDateTimeNoCalendarAppearance() {
         onView(allOf(withText("Date time widget"), withEffectiveVisibility(VISIBLE)))
                 .perform(swipeLeft());
+    }
 
+    public void testGeopointNoAppearance() {
         onView(withText("Geopoint widget")).perform(swipeLeft());
+    }
+
+    public void testGeopointPlacementMapApperance() {
         onView(withText("Geopoint widget")).perform(swipeLeft());
+    }
+
+    public void testGeopointMapsAppearance() {
         onView(withText("Geopoint widget")).perform(swipeLeft());
+    }
+
+    public void testGeotraceWidget() {
         onView(withText("Geotrace widget")).perform(swipeLeft());
+    }
+
+    public void testGeoshapeWidget() {
         onView(withText("Geoshape widget")).perform(swipeLeft());
+    }
+
+    public void testOSMIntegrationOSMType() {
         onView(withText("OSM integration")).perform(swipeLeft());
+    }
+
+    public void testOSMIntegrationBuildingType() {
         onView(withText("OSM integration")).perform(swipeLeft());
+    }
+
+    public void testSelectOneNoAppearance() {
         onView(withText("Select one widget")).perform(swipeLeft());
+    }
+
+    public void testSpinnerWidget() {
         onView(withText("Spinner widget")).perform(swipeLeft());
+    }
+
+    public void testSelectOneAutoAdvance() {
         onView(withText("Select one autoadvance widget")).perform(swipeLeft());
+    }
+
+    public void testSelectOneSearchAppearance() {
         onView(withText("Select one search widget")).perform(swipeLeft());
+    }
+
+    public void testSelectOneSearchAutoAdvance() {
         onView(withText("Select one search widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectNoAppearance() {
         onView(withText("Grid select one widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectCompactAppearance() {
         onView(withText("Grid select one widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectCompact2Appearance() {
         onView(withText("Grid select one widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectQuickCompactAppearance() {
         onView(withText("Grid select one widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectQuickCompact2Appearance() {
         onView(withText("Grid select one widget")).perform(swipeLeft());
+    }
+
+    public void testMultiSelectWidget() {
         onView(withText("Multi select widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectMultipleCompact() {
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
+    }
+
+    public void testGridSelectCompact2() {
         onView(withText("Grid select multiple widget")).perform(swipeLeft());
+    }
+
+    public void testSpinnerSelectMultiple() {
         onView(withText("Spinner widget: select multiple")).perform(swipeLeft());
+    }
+
+    public void testLabelWidget() {
         onView(withText("Label widget")).perform(swipeLeft());
+    }
+
+    public void testTriggerWidget() {
         onView(withText("Trigger widget")).perform(swipeLeft());
+    }
+
+    public void testSubmission() {
 
     }
 
