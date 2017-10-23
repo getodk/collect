@@ -66,7 +66,7 @@ android {
     buildToolsVersion('26.0.1')
 
     defaultConfig {
-        applicationId('org.odk.collect.android')
+        applicationId('org.odk.collect.android.debug')
         minSdkVersion(16)
         targetSdkVersion(22)
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
