@@ -273,10 +273,10 @@ public class Collect extends Application {
                 mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
         AuthDialogUtility.setWebCredentialsFromPreferences();
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new NotLoggingTree());
-        } else {
+        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
+        } else {
+            Timber.plant(new NotLoggingTree());
         }
     }
 
@@ -308,7 +308,7 @@ public class Collect extends Application {
 
     private class NotLoggingTree extends Timber.Tree {
         @Override
-        protected void log(int priority, String tag, String message, Throwable throwable) {
+        protected void log(int priority, String tag, String message, Throwable t) {
         }
     }
 
