@@ -83,6 +83,7 @@ public class ExIntegerWidget extends ExStringWidget {
         i.putExtra("value", getIntegerAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
                 i.getAction(), formEntryPrompt.getIndex());
+
         ((Activity) getContext()).startActivityForResult(i, EX_INT_CAPTURE);
     }
 

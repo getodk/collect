@@ -84,7 +84,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
         errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +125,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +154,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image));
+        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image), R.id.markup_image);
         annotateButton.setEnabled(false);
         annotateButton.setOnClickListener(new View.OnClickListener() {
             @Override

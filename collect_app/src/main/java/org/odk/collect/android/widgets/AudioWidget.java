@@ -87,7 +87,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         instanceFolder = formController.getInstancePath().getParent();
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +119,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +146,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_audio));
+        playButton = getSimpleButton(getContext().getString(R.string.play_audio), R.id.play_audio);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
