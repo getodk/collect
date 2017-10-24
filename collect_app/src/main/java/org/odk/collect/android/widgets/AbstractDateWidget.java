@@ -27,9 +27,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.DateTimeUtils;
 
 /**
@@ -103,21 +101,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             date = (LocalDateTime) answer;
             setDateLabel();
         }
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(null);
-        }
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        return formController != null && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
+        cancelWaitingForData();
     }
 
     public boolean isDayHidden() {

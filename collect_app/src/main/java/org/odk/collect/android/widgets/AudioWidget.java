@@ -34,7 +34,6 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 
@@ -66,7 +65,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private Button chooseButton;
 
     private String binaryName;
-    private String instanceFolder;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         this(context, prompt, new FileUtil(), new MediaUtil());
@@ -77,14 +75,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
-
-        final FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Timber.e("Started AudioWidget with null FormController.");
-            return;
-        }
-
-        instanceFolder = formController.getInstancePath().getParent();
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -102,17 +92,16 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                         android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                                 .toString());
                 try {
-                    formController
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.AUDIO_CAPTURE);
+                    waitForData();
+                    ((Activity) getContext()).startActivityForResult(i,
+                            RequestCodes.AUDIO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "audio capture"), Toast.LENGTH_SHORT)
                             .show();
-                    formController
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
@@ -130,16 +119,15 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 try {
-                    formController
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i, RequestCodes.AUDIO_CHOOSER);
+                    waitForData();
+                    ((Activity) getContext()).startActivityForResult(i,
+                            RequestCodes.AUDIO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "choose audio"), Toast.LENGTH_SHORT).show();
-                    formController
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
@@ -154,7 +142,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                         .logInstanceAction(this, "playButton", "click",
                                 formEntryPrompt.getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(instanceFolder + File.separator
+                File f = new File(getInstanceFolder() + File.separator
                         + binaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
                 try {
@@ -200,7 +188,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         binaryName = null;
         // delete from media provider
         int del = mediaUtil.deleteAudioFileFromMediaProvider(
-                instanceFolder + File.separator + name);
+                getInstanceFolder() + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
@@ -267,7 +255,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             Timber.e("Inserting Audio file FAILED");
         }
 
-        cancelWaitingForBinaryData();
+        cancelWaitingForData();
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
@@ -276,7 +264,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return instanceFolder + File.separator
+        return getInstanceFolder() + File.separator
                 + fileUtil.getRandomFilename() + extension;
     }
 
@@ -286,25 +274,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
     }
 
     @Override

@@ -28,6 +28,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 
@@ -53,8 +54,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
                         .logInstanceAction(this, "recordBarcode", "click",
                                 formEntryPrompt.getIndex());
 
-                Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+                waitForData();
 
                 new IntentIntegrator((Activity) getContext())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
@@ -90,7 +90,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
+        if (s.equals("")) {
             return null;
         } else {
             return new StringData(s);
@@ -98,7 +98,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     }
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
@@ -107,7 +107,7 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -116,18 +116,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override

@@ -341,7 +341,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         }
 
         // Use the custom image adapter and initialize the grid view
-        ImageAdapter ia = new ImageAdapter(getContext(), choices);
+        ImageAdapter ia = new ImageAdapter(choices);
         gridview.setAdapter(ia);
         addAnswerView(gridview);
     }
@@ -408,26 +408,21 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     private class ImageAdapter extends BaseAdapter {
         private String[] choices;
 
-
-        ImageAdapter(Context c, String[] choices) {
+        ImageAdapter(String[] choices) {
             this.choices = choices;
         }
-
 
         public int getCount() {
             return choices.length;
         }
 
-
         public Object getItem(int position) {
             return null;
         }
 
-
         public long getItemId(int position) {
             return 0;
         }
-
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {

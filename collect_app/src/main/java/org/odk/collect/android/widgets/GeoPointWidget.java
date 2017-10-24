@@ -28,7 +28,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -37,7 +36,6 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 
@@ -146,10 +144,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 i.putExtra(DRAGGABLE_ONLY, draggable);
                 i.putExtra(ACCURACY_THRESHOLD, accuracyThreshold);
 
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController != null) {
-                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
-                }
+                waitForData();
 
                 ((Activity) getContext()).startActivityForResult(i, RequestCodes.LOCATION_CAPTURE);
             }
@@ -309,28 +304,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         }
 
         updateButtonLabelsAndVisibility(true);
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return false;
-        }
-
-        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
-
-        return formEntryPrompt.getIndex().equals(
-                indexWaitingForData);
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(null);
-        }
+        cancelWaitingForData();
     }
 
     @Override

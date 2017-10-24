@@ -102,7 +102,7 @@ public class ExDecimalWidget extends ExStringWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = answer.getText().toString();
-        if (s == null || s.equals("")) {
+        if (s.equals("")) {
             return null;
         } else {
             try {
@@ -115,13 +115,13 @@ public class ExDecimalWidget extends ExStringWidget {
 
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
         this.answer.setText(decimalData == null ? null : decimalData.getValue().toString());
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
 }
