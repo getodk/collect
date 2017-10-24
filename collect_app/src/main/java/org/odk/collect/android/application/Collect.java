@@ -274,7 +274,7 @@ public class Collect extends Application {
 
         AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
+            Timber.plant(new NotLoggingTree());
         } else {
             Timber.plant(new CrashReportingTree());
         }
@@ -304,6 +304,12 @@ public class Collect extends Application {
             tracker = analytics.newTracker(R.xml.global_tracker);
         }
         return tracker;
+    }
+
+    private class NotLoggingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable throwable) {
+        }
     }
 
     private static class CrashReportingTree extends Timber.Tree {
