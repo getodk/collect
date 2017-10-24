@@ -36,7 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
-import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 
@@ -77,7 +76,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +107,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +133,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_audio));
+        playButton = getSimpleButton(getContext().getString(R.string.play_audio), R.id.play_audio);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

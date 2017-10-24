@@ -110,7 +110,8 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
         errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
+
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +155,7 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override

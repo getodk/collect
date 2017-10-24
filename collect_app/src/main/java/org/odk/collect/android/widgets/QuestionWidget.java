@@ -25,6 +25,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -391,9 +392,10 @@ public abstract class QuestionWidget
         }
     }
 
-    protected Button getSimpleButton(String text) {
+    protected Button getSimpleButton(String text, @IdRes int withId) {
         Button button = new Button(getContext());
-        button.setId(ViewIds.generateViewId());
+
+        button.setId(withId);
         button.setText(text);
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         button.setPadding(20, 20, 20, 20);
@@ -405,18 +407,29 @@ public abstract class QuestionWidget
         return button;
     }
 
+    protected Button getSimpleButton(@IdRes int id) {
+        return getSimpleButton(null, id);
+    }
+
+    protected Button getSimpleButton(String text) {
+        return getSimpleButton(text, R.id.simple_button);
+    }
+
     protected TextView getCenteredAnswerTextView() {
         TextView textView = getAnswerTextView();
         textView.setGravity(Gravity.CENTER);
+
         return textView;
     }
 
     protected TextView getAnswerTextView() {
         TextView textView = new TextView(getContext());
-        textView.setId(ViewIds.generateViewId());
+
+        textView.setId(R.id.answer_text);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
+
         return textView;
     }
 
