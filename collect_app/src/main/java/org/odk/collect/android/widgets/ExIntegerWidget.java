@@ -63,7 +63,7 @@ public class ExIntegerWidget extends ExStringWidget {
     }
 
     private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
         Integer d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
@@ -82,8 +82,9 @@ public class ExIntegerWidget extends ExStringWidget {
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
         i.putExtra("value", getIntegerAnswerValue());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), formEntryPrompt.getIndex());
-        ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_INT_CAPTURE);
+                i.getAction(), getFormEntryPrompt().getIndex());
+        ((Activity) getContext()).startActivityForResult(i,
+                RequestCodes.EX_INT_CAPTURE);
     }
 
 

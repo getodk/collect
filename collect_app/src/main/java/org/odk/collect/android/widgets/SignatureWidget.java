@@ -78,7 +78,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "signButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 launchSignatureActivity();
             }
         });
@@ -124,7 +124,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
-                            "click", formEntryPrompt.getIndex());
+                            "click", getFormEntryPrompt().getIndex());
                     launchSignatureActivity();
                 }
             });

@@ -82,7 +82,7 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
-                        "click", formEntryPrompt.getIndex());
+                        "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i;
                 if (selfie) {
@@ -126,7 +126,7 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "chooseButton",
-                        "click", formEntryPrompt.getIndex());
+                        "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
@@ -190,7 +190,7 @@ public class ImageWidget extends QuestionWidget implements FileWidget {
                 @Override
                 public void onClick(View v) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewButton",
-                            "click", formEntryPrompt.getIndex());
+                            "click", getFormEntryPrompt().getIndex());
                     Intent i = new Intent("android.intent.action.VIEW");
                     Uri uri = MediaUtils.getImageUriFromMediaProvider(
                             getInstanceFolder() + File.separator + binaryName);

@@ -59,7 +59,7 @@ public class ImageConverter {
 
     private static Integer getMaxPixelsFromFormIfDefined(QuestionWidget questionWidget) {
         Integer maxPixels = null;
-        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
+        for (TreeElement attrs : questionWidget.getFormEntryPrompt().getBindAttributes()) {
             if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
                 try {
                     maxPixels = Integer.parseInt(attrs.getAttributeValue());

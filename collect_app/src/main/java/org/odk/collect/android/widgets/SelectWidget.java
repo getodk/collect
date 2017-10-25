@@ -101,7 +101,7 @@ public abstract class SelectWidget extends QuestionWidget {
     public void playAllPromptText() {
         // set up to play the items when the
         // question text is finished
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        getPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 resetQuestionTextColor();
@@ -118,7 +118,7 @@ public abstract class SelectWidget extends QuestionWidget {
     protected void saveState() {
         super.saveState();
         if (searchStr != null) {
-            getState().putString(SEARCH_TEXT + getPrompt().getIndex(), searchStr.getText().toString());
+            getState().putString(SEARCH_TEXT + getFormEntryPrompt().getIndex(), searchStr.getText().toString());
         }
     }
 
@@ -126,7 +126,7 @@ public abstract class SelectWidget extends QuestionWidget {
         if (isShown()) {
             // if there's more, set up to play the next item
             if (playcounter < playList.size()) {
-                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                getPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mediaPlayer) {
                         resetQuestionTextColor();
@@ -140,33 +140,33 @@ public abstract class SelectWidget extends QuestionWidget {
 
             } else {
                 playcounter = 0;
-                player.setOnCompletionListener(null);
-                player.reset();
+                getPlayer().setOnCompletionListener(null);
+                getPlayer().reset();
             }
         }
     }
 
     protected MediaLayout createMediaLayout(int index, TextView textView) {
-        String audioURI = getPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
+        String audioURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), FormEntryCaption.TEXT_FORM_AUDIO);
 
         String imageURI;
         if (items.get(index) instanceof ExternalSelectChoice) {
             imageURI = ((ExternalSelectChoice) items.get(index)).getImage();
         } else {
-            imageURI = getPrompt().getSpecialFormSelectChoiceText(items.get(index),
+            imageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index),
                     FormEntryCaption.TEXT_FORM_IMAGE);
         }
 
-        String videoURI = getPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
-        String bigImageURI = getPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
+        String videoURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "video");
+        String bigImageURI = getFormEntryPrompt().getSpecialFormSelectChoiceText(items.get(index), "big-image");
 
-        MediaLayout mediaLayout = new MediaLayout(getContext(), player);
-        mediaLayout.setAVT(getPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
+        MediaLayout mediaLayout = new MediaLayout(getContext(), getPlayer());
+        mediaLayout.setAVT(getFormEntryPrompt().getIndex(), "." + Integer.toString(index), textView, audioURI,
                 imageURI, videoURI, bigImageURI);
 
         mediaLayout.setAudioListener(this);
-        mediaLayout.setPlayTextColor(playColor);
-        mediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
+        mediaLayout.setPlayTextColor(getPlayColor());
+        mediaLayout.setPlayTextBackgroundColor(getPlayBackgroundColor());
         playList.add(mediaLayout);
 
         if (index != items.size() - 1) {
@@ -187,7 +187,7 @@ public abstract class SelectWidget extends QuestionWidget {
             List<Integer> tagList = new ArrayList<>();
             searchStr = searchStr.toLowerCase(Locale.US);
             for (int i = 0; i < items.size(); i++) {
-                String choiceText = getPrompt().getSelectChoiceText(items.get(i)).toLowerCase(Locale.US);
+                String choiceText = getFormEntryPrompt().getSelectChoiceText(items.get(i)).toLowerCase(Locale.US);
                 if (choiceText.contains(searchStr)) {
                     searchedItems.add(items.get(i));
                     tagList.add(i);
@@ -222,7 +222,7 @@ public abstract class SelectWidget extends QuestionWidget {
     protected void setUpSearchBox() {
         searchStr = new EditText(getContext());
         searchStr.setId(ViewIds.generateViewId());
-        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        searchStr.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -232,7 +232,7 @@ public abstract class SelectWidget extends QuestionWidget {
 
         String searchText = null;
         if (getState() != null) {
-            searchText = getState().getString(SEARCH_TEXT + getPrompt().getIndex());
+            searchText = getState().getString(SEARCH_TEXT + getFormEntryPrompt().getIndex());
         }
         if (searchText != null && !searchText.isEmpty()) {
             searchStr.setText(searchText);

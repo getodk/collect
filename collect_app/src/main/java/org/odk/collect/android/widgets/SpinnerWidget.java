@@ -78,7 +78,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
                 new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                        TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+                        TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
@@ -109,11 +109,11 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
                 if (position == items.size()) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged.clearValue",
-                            "", formEntryPrompt.getIndex());
+                            "", getFormEntryPrompt().getIndex());
                 } else {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged",
-                            items.get(position).getValue(), formEntryPrompt.getIndex());
+                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
                 }
             }
 

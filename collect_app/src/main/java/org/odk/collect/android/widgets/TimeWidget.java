@@ -113,7 +113,7 @@ public class TimeWidget extends QuestionWidget implements TimePickerDialog.OnTim
 
     private void createTimeButton() {
         timeButton = getSimpleButton(getContext().getString(R.string.select_time));
-        timeButton.setEnabled(!formEntryPrompt.isReadOnly());
+        timeButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,10 +144,10 @@ public class TimeWidget extends QuestionWidget implements TimePickerDialog.OnTim
         timePickerDialog = new CustomTimePickerDialog(getContext(), this, 0, 0);
         timePickerDialog.setCanceledOnTouchOutside(false);
 
-        if (formEntryPrompt.getAnswerValue() == null) {
+        if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
         } else {
-            Date date = ((Date) formEntryPrompt.getAnswerValue().getValue());
+            Date date = ((Date) getFormEntryPrompt().getAnswerValue().getValue());
 
             DateTime dateTime = new DateTime(date);
             updateTime(dateTime, true);

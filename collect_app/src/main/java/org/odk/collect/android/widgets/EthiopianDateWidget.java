@@ -55,7 +55,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
     }
 
     protected void showDatePickerDialog() {
-        EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getPrompt().getIndex(), date, datePickerDetails);
+        EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
         ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }

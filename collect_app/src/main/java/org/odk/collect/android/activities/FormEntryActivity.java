@@ -1089,7 +1089,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this, "onContextItemSelected",
-                                    "createClearDialog", qw.getPrompt().getIndex());
+                                    "createClearDialog", qw.getFormEntryPrompt().getIndex());
                     createClearDialog(qw);
                     break;
                 }
@@ -1301,7 +1301,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
-                    if (!qw.getPrompt().isReadOnly()) {
+                    if (!qw.getFormEntryPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
                         if (qw instanceof StringWidget) {
@@ -2080,12 +2080,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "createClearDialog", "show",
-                        qw.getPrompt().getIndex());
+                        qw.getFormEntryPrompt().getIndex());
         alertDialog = new AlertDialog.Builder(this).create();
 
         alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
-        String question = qw.getPrompt().getLongText();
+        String question = qw.getFormEntryPrompt().getLongText();
         if (question == null) {
             question = "";
         }
@@ -2105,7 +2105,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
-                                        "clearAnswer", qw.getPrompt().getIndex());
+                                        "clearAnswer", qw.getFormEntryPrompt().getIndex());
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         break;
@@ -2113,7 +2113,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
-                                        "cancel", qw.getPrompt().getIndex());
+                                        "cancel", qw.getFormEntryPrompt().getIndex());
                         break;
                 }
             }

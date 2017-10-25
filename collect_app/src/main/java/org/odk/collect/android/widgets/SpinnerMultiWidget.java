@@ -81,8 +81,6 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
             items = prompt.getSelectChoices();
         }
 
-        formEntryPrompt = prompt;
-
         selections = new boolean[items.size()];
         answerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
@@ -98,7 +96,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                alertBuilder.setTitle(formEntryPrompt.getQuestionText()).setPositiveButton(R.string.ok,
+                alertBuilder.setTitle(getFormEntryPrompt().getQuestionText()).setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 List<String> selectedValues = new ArrayList<>();
