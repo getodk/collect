@@ -43,6 +43,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -59,6 +60,8 @@ import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.AdminPreferencesActivity.ADMIN_PREFERENCES;
 
 /**
  * The Open Data Kit Collect application.
@@ -81,6 +84,9 @@ public class Collect extends Application {
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+
+    private static final String FIRST_APP_RUN = "firstAppRun";
+
     public static String defaultSysLanguage;
     private static Collect singleton = null;
 
@@ -261,7 +267,9 @@ public class Collect extends Application {
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        if (firstAppRun()) {
+            loadDefaultPreferences();
+        }
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
 
@@ -306,6 +314,15 @@ public class Collect extends Application {
         return tracker;
     }
 
+    // First app run after a fresh installation or first app run after upgrading to the version in which the flag was introduced
+    private boolean firstAppRun() {
+        boolean firstAppRun = GeneralSharedPreferences.getInstance().getBoolean(FIRST_APP_RUN, true);
+        if (firstAppRun) {
+            GeneralSharedPreferences.getInstance().save(FIRST_APP_RUN, false);
+        }
+        return firstAppRun;
+    }
+
     private static class CrashReportingTree extends Timber.Tree {
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
@@ -321,4 +338,16 @@ public class Collect extends Application {
         }
     }
 
+    public void loadDefaultPreferences() {
+        PreferenceManager.setDefaultValues(this, R.xml.aggregate_preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.form_management_preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.identity_preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.other_preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.server_preferences, true);
+        PreferenceManager.setDefaultValues(this, R.xml.user_interface_preferences, true);
+
+        PreferenceManager.setDefaultValues(this, ADMIN_PREFERENCES, 0, R.xml.main_menu_access_preferences, true);
+        PreferenceManager.setDefaultValues(this, ADMIN_PREFERENCES, 0, R.xml.form_entry_access_preferences, true);
+        PreferenceManager.setDefaultValues(this, ADMIN_PREFERENCES, 0, R.xml.user_settings_access_preferences, true);
+    }
 }
