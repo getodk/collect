@@ -50,15 +50,15 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     }
 
     protected void createWidget() {
-        datePickerDetails = DateTimeUtils.getDatePickerDetails(formEntryPrompt.getQuestion().getAppearanceAttr());
+        datePickerDetails = DateTimeUtils.getDatePickerDetails(getFormEntryPrompt().getQuestion().getAppearanceAttr());
         createDateButton();
         dateTextView = getAnswerTextView();
         addViews();
-        if (formEntryPrompt.getAnswerValue() == null) {
+        if (getFormEntryPrompt().getAnswerValue() == null) {
             clearAnswer();
             setDateToCurrent();
         } else {
-            date = new LocalDateTime(formEntryPrompt.getAnswerValue().getValue());
+            date = new LocalDateTime(getFormEntryPrompt().getAnswerValue().getValue());
             setDateLabel();
         }
     }
@@ -118,7 +118,7 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
 
     private void createDateButton() {
         dateButton = getSimpleButton(getContext().getString(R.string.select_date));
-        dateButton.setEnabled(!formEntryPrompt.isReadOnly());
+        dateButton.setEnabled(!getFormEntryPrompt().isReadOnly());
     }
 
     private void addViews() {

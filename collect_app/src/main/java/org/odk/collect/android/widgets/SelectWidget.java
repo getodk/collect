@@ -118,7 +118,7 @@ public abstract class SelectWidget extends QuestionWidget {
     protected void saveState() {
         super.saveState();
         if (searchStr != null) {
-            getState().putString(SEARCH_TEXT + getPrompt().getIndex(), searchStr.getText().toString());
+            getState().putString(SEARCH_TEXT + getFormEntryPrompt().getIndex(), searchStr.getText().toString());
         }
     }
 
@@ -232,7 +232,7 @@ public abstract class SelectWidget extends QuestionWidget {
 
         String searchText = null;
         if (getState() != null) {
-            searchText = getState().getString(SEARCH_TEXT + getPrompt().getIndex());
+            searchText = getState().getString(SEARCH_TEXT + getFormEntryPrompt().getIndex());
         }
         if (searchText != null && !searchText.isEmpty()) {
             searchStr.setText(searchText);
