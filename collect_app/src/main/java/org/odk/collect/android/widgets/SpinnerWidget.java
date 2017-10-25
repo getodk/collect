@@ -38,6 +38,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
 

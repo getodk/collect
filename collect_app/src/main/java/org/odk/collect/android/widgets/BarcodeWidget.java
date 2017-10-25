@@ -31,6 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.

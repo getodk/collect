@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not

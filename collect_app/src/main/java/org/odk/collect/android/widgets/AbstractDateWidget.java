@@ -29,6 +29,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
  * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)

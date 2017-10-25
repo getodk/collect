@@ -42,6 +42,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 
 import java.io.File;
 
@@ -60,7 +61,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Mitchell Tyler Lee
  */
 @SuppressLint("ViewConstructor")
-public class AlignedImageWidget extends QuestionWidget implements FileWidget {
+public class AlignedImageWidget extends QuestionWidget implements BaseImageWidget {
     private static final String ODK_CAMERA_TAKE_PICTURE_INTENT_COMPONENT =
             "org.opendatakit.camera.TakePicture";
 
@@ -196,52 +197,45 @@ public class AlignedImageWidget extends QuestionWidget implements FileWidget {
 
         // Only add the imageView if the user has taken a picture
         if (binaryName != null) {
-            imageView = new ImageView(getContext());
-            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
             File f = new File(instanceFolder + File.separator + binaryName);
 
+            Bitmap bmp = null;
             if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+                bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
                 }
-                imageView.setImageBitmap(bmp);
-            } else {
-                imageView.setImageBitmap(null);
             }
 
-            imageView.setPadding(10, 10, 10, 10);
-            imageView.setAdjustViewBounds(true);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivityLogger().logInstanceAction(this, "viewButton",
-                            "click", getFormEntryPrompt().getIndex());
-                    Intent i = new Intent("android.intent.action.VIEW");
-                    Uri uri = MediaUtils.getImageUriFromMediaProvider(
-                            instanceFolder + File.separator + binaryName);
-                    if (uri != null) {
-                        Timber.i("setting view path to: %s", uri.toString());
-                        i.setDataAndType(uri, "image/*");
-                        try {
-                            getContext().startActivity(i);
-                        } catch (ActivityNotFoundException e) {
-                            Toast.makeText(getContext(),
-                                    getContext().getString(R.string.activity_not_found,
-                                            "view image"),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-
+            imageView = getAnswerImageView(bmp);
             answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
+    }
+
+    @Override
+    public void onImageClick() {
+        getActivityLogger().logInstanceAction(this, "viewButton",
+                "click", getFormEntryPrompt().getIndex());
+        Intent i = new Intent("android.intent.action.VIEW");
+        Uri uri = MediaUtils.getImageUriFromMediaProvider(
+                instanceFolder + File.separator + binaryName);
+        if (uri != null) {
+            Timber.i("setting view path to: %s", uri.toString());
+            i.setDataAndType(uri, "image/*");
+            try {
+                getContext().startActivity(i);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(),
+                        getContext().getString(R.string.activity_not_found,
+                                "view image"),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

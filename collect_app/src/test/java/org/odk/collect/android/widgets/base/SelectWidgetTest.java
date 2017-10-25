@@ -4,7 +4,7 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.widgets.Widget;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
 import java.util.List;

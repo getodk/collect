@@ -42,6 +42,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 
 import java.io.File;
 
@@ -57,7 +58,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class AnnotateWidget extends QuestionWidget implements FileWidget {
+public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
 
     private Button captureButton;
     private Button chooseButton;
@@ -183,41 +184,33 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
             if (!prompt.isReadOnly()) {
                 annotateButton.setEnabled(true);
             }
-            imageView = new ImageView(getContext());
-            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
             File f = new File(getInstanceFolder() + File.separator + binaryName);
 
+            Bitmap bmp = null;
             if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f,
+                bmp = FileUtils.getBitmapScaledToDisplay(f,
                         screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
                 }
-                imageView.setImageBitmap(bmp);
-            } else {
-                imageView.setImageBitmap(null);
             }
-
-            imageView.setPadding(10, 10, 10, 10);
-            imageView.setAdjustViewBounds(true);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "viewImage", "click",
-                                    getFormEntryPrompt().getIndex());
-                    launchAnnotateActivity();
-                }
-            });
-
+            imageView = getAnswerImageView(bmp);
             answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
+    }
+
+    @Override
+    public void onImageClick() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "viewImage", "click",
+                        getFormEntryPrompt().getIndex());
+        launchAnnotateActivity();
     }
 
     private void launchAnnotateActivity() {
