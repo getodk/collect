@@ -50,6 +50,8 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -409,6 +411,24 @@ public abstract class QuestionWidget
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
         return textView;
+    }
+
+    protected ImageView getAnswerImageView(Bitmap bitmap) {
+        final QuestionWidget questionWidget = this;
+        ImageView imageView = new ImageView(getContext());
+        imageView.setId(ViewIds.generateViewId());
+        imageView.setPadding(10, 10, 10, 10);
+        imageView.setAdjustViewBounds(true);
+        imageView.setImageBitmap(bitmap);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (questionWidget instanceof BaseImageWidget) {
+                    ((BaseImageWidget) questionWidget).onImageClick();
+                }
+            }
+        });
+        return imageView;
     }
 
     /**

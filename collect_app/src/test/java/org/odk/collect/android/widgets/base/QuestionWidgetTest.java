@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.widgets.Widget;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.Random;
 

@@ -8,7 +8,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
-import org.odk.collect.android.widgets.MultiChoiceWidget;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -41,6 +41,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

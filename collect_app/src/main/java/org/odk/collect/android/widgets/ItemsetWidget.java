@@ -47,6 +47,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.utilities.XPathParseTool;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;

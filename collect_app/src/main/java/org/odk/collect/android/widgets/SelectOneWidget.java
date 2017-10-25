@@ -29,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;

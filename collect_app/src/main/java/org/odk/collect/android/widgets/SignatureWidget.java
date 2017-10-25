@@ -41,6 +41,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 
 import java.io.File;
 
@@ -53,7 +54,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
  *
  * @author BehrAtherton@gmail.com
  */
-public class SignatureWidget extends QuestionWidget implements FileWidget {
+public class SignatureWidget extends QuestionWidget implements BaseImageWidget {
 
     private Button signButton;
     private String binaryName;
@@ -100,39 +101,31 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
 
         // Only add the imageView if the user has signed
         if (binaryName != null) {
-            imageView = new ImageView(getContext());
-            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
             File f = new File(getInstanceFolder() + File.separator + binaryName);
 
+            Bitmap bmp = null;
             if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+                bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
                 }
-                imageView.setImageBitmap(bmp);
-            } else {
-                imageView.setImageBitmap(null);
             }
 
-            imageView.setPadding(10, 10, 10, 10);
-            imageView.setAdjustViewBounds(true);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
-                            "click", getFormEntryPrompt().getIndex());
-                    launchSignatureActivity();
-                }
-            });
-
+            imageView = getAnswerImageView(bmp);
             answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
+    }
 
+    @Override
+    public void onImageClick() {
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
+                "click", getFormEntryPrompt().getIndex());
+        launchSignatureActivity();
     }
 
     private void launchSignatureActivity() {
