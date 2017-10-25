@@ -371,7 +371,7 @@ public class ImageConverterTest {
         when(formEntryPrompt.getBindAttributes()).thenReturn(bindAttributes);
 
         ImageWidget imageWidget = mock(ImageWidget.class);
-        when(imageWidget.getPrompt()).thenReturn(formEntryPrompt);
+        when(imageWidget.getFormEntryPrompt()).thenReturn(formEntryPrompt);
 
         return imageWidget;
     }
