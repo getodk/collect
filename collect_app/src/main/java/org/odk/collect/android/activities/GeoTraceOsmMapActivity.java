@@ -735,9 +735,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         @Override
         public void onMarkerDrag(Marker marker) {
             update_polygon();
-
+            marker.setSubDescription("0.0");
         }
-
     };
 
     private void showClearDialog() {
