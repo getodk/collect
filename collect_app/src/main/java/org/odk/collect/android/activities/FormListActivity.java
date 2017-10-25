@@ -15,7 +15,7 @@ abstract class FormListActivity extends AppListActivity {
     protected static final String SORT_BY_NAME_DESC
             = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
     protected static final String SORT_BY_DATE_ASC = FormsProviderAPI.FormsColumns.DATE + " ASC";
-    protected static final String SORT_BY_DATE_DESC = FormsProviderAPI.FormsColumns.DATE + " ASC";
+    protected static final String SORT_BY_DATE_DESC = FormsProviderAPI.FormsColumns.DATE + " DESC";
 
     protected String getSortingOrder() {
         String sortingOrder = SORT_BY_NAME_ASC;
