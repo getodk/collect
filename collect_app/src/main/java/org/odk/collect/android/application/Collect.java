@@ -43,6 +43,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -59,6 +60,10 @@ import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
+import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 /**
  * The Open Data Kit Collect application.
@@ -265,12 +270,7 @@ public class Collect extends Application {
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
 
-        PropertyManager mgr = new PropertyManager(this);
-
-        FormController.initializeJavaRosa(mgr);
-
-        activityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+        initProperties();
 
         AuthDialogUtility.setWebCredentialsFromPreferences();
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
@@ -327,4 +327,15 @@ public class Collect extends Application {
         }
     }
 
+    public void initProperties() {
+        PropertyManager mgr = new PropertyManager(this);
+
+        // Use the server username by default if the metadata username is not defined
+        if ((mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty())) {
+            mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
+        }
+
+        FormController.initializeJavaRosa(mgr);
+        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+    }
 }
