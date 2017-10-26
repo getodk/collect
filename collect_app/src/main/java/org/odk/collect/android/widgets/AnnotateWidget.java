@@ -71,6 +71,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
 
     private TextView errorTextView;
 
+    private int screenOrientation;
+
     public AnnotateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -196,6 +198,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
                         screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
+                } else if (bmp.getHeight() > bmp.getWidth()) {
+                    screenOrientation = 1; // portrait
                 }
             }
             imageView = getAnswerImageView(bmp);
@@ -222,8 +226,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
             File f = new File(getInstanceFolder() + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
-        i.putExtra(DrawActivity.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        i.putExtra(DrawActivity.SCREEN_ORIENTATION, screenOrientation);
 
         try {
             waitForData();
