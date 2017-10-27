@@ -2,16 +2,13 @@ package org.odk.collect.android.widgets;
 
 import android.support.annotation.NonNull;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
-import org.mockito.Mock;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.mockito.Mockito.when;
 
@@ -21,17 +18,8 @@ import static org.mockito.Mockito.when;
 
 public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringData> {
 
-    private Random random = new Random();
-
-    private ArrayList<double[]> initialDoubles;
-    private ArrayList<double[]> answerDoubles;
-
-    @Mock
-    QuestionDef questionDef;
-
-    public GeoTraceWidgetTest() {
-        super(GeoTraceWidget.class);
-    }
+    private List<double[]> initialDoubles;
+    private List<double[]> answerDoubles;
 
     @Override
     public StringData getInitialAnswer() {
@@ -58,7 +46,6 @@ public class GeoTraceWidgetTest extends BinaryWidgetTest<GeoTraceWidget, StringD
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        when(formEntryPrompt.getQuestion()).thenReturn(questionDef);
 
         initialDoubles = getRandomDoubleArrayList();
         answerDoubles = getRandomDoubleArrayList();

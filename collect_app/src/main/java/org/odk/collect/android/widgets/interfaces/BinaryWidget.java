@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.interfaces;
 
 /**
  * Interface implemented by widgets that need binary data.
@@ -21,12 +21,4 @@ package org.odk.collect.android.widgets;
  */
 public interface BinaryWidget extends Widget {
     void setBinaryData(Object answer);
-
-    void cancelWaitingForBinaryData();
-
-    boolean isWaitingForBinaryData();
 }
-
-/*TODO carlhartung:  we might want to move this into the QuestionWidget abstract class? 
- * 
- */

@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.View;
@@ -35,6 +36,7 @@ import org.odk.collect.android.utilities.CustomTabHelper;
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {
 
     private Uri uri;
@@ -53,7 +55,7 @@ public class UrlWidget extends QuestionWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "openUrl", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
 
                 if (!isUrlEmpty(stringAnswer)) {
                     customTabHelper.bindCustomTabsService(getContext(), null);
@@ -95,11 +97,9 @@ public class UrlWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        return !s.isEmpty()
+                ? new StringData(s)
+                : null;
     }
 
     @Override

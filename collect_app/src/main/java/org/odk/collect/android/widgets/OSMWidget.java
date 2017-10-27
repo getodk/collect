@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,20 +18,24 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
 import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -38,6 +43,7 @@ import java.util.List;
  *
  * @author Nicholas Hallahan nhallahan@spatialdev.com
  */
+@SuppressLint("ViewConstructor")
 public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
     // button colors
@@ -60,6 +66,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         super(context, prompt);
 
         FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.w("OSMWidget started with null FormController");
+            return;
+        }
 
         /*
          * NH: I'm trying to find the form xml file name, but this is neither
@@ -75,11 +85,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         formId = formController.getFormDef().getID();
 
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.invalid_osm_data);
 
         // Determine the tags required
-        QuestionDef question = prompt.getQuestion();
         osmRequiredTags = prompt.getQuestion().getOsmTags();
 
         // If an OSM File has already been saved, get the name.
@@ -87,7 +96,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
         // Setup Launch OpenMapKit Button
         launchOpenMapKitButton = new Button(getContext());
-        launchOpenMapKitButton.setId(QuestionWidget.newUniqueId());
+        launchOpenMapKitButton.setId(ViewIds.generateViewId());
 
         // Button Styling
         if (osmFileName != null) {
@@ -101,7 +110,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         launchOpenMapKitButton.setPadding(20, 20, 20, 20);
         launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -115,14 +124,14 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
                 launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "launchOpenMapKitButton",
-                        "click", formEntryPrompt.getIndex());
+                        "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 launchOpenMapKit();
             }
         });
 
         osmFileNameHeaderTextView = new TextView(context);
-        osmFileNameHeaderTextView.setId(QuestionWidget.newUniqueId());
+        osmFileNameHeaderTextView.setId(ViewIds.generateViewId());
         osmFileNameHeaderTextView.setTextSize(20);
         osmFileNameHeaderTextView.setTypeface(null, Typeface.BOLD);
         osmFileNameHeaderTextView.setPadding(10, 0, 0, 10);
@@ -130,7 +139,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
 
         // text view showing the resulting OSM file name
         osmFileNameTextView = new TextView(context);
-        osmFileNameTextView.setId(QuestionWidget.newUniqueId());
+        osmFileNameTextView.setId(ViewIds.generateViewId());
         osmFileNameTextView.setTextSize(18);
         osmFileNameTextView.setTypeface(null, Typeface.ITALIC);
         if (osmFileName != null) {
@@ -192,11 +201,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             //launch activity if it is safe
             if (isIntentSafe) {
                 // notify that the form is waiting for data
-                Collect.getInstance().getFormController().setIndexWaitingForData(
-                        formEntryPrompt.getIndex());
+                waitForData();
+
                 // launch
-                ((Activity) ctx).startActivityForResult(launchIntent,
-                        FormEntryActivity.OSM_CAPTURE);
+                ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }
@@ -224,29 +232,16 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
+        cancelWaitingForData();
     }
 
     @Override
     public IAnswerData getAnswer() {
         String s = osmFileNameTextView.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+
+        return !s.isEmpty()
+                ? new StringData(s)
+                : null;
     }
 
     @Override
@@ -272,13 +267,13 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
      * See: https://github.com/AmericanRedCross/openmapkit/wiki/ODK-Collect-Tag-Intent-Extras
      */
     private void writeOsmRequiredTagsToExtras(Intent intent) {
-        ArrayList<String> tagKeys = new ArrayList<String>();
+        ArrayList<String> tagKeys = new ArrayList<>();
         for (OSMTag tag : osmRequiredTags) {
             tagKeys.add(tag.key);
             if (tag.label != null) {
                 intent.putExtra("TAG_LABEL." + tag.key, tag.label);
             }
-            ArrayList<String> tagValues = new ArrayList<String>();
+            ArrayList<String> tagValues = new ArrayList<>();
             if (tag.items != null) {
                 for (OSMTagItem item : tag.items) {
                     tagValues.add(item.value);

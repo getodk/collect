@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -24,8 +25,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,19 +38,21 @@ import java.util.List;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectMultiWidget extends SelectWidget {
-    private boolean checkboxInit = true;
-
+@SuppressLint("ViewConstructor")
+public class SelectMultiWidget extends SelectWidget implements MultiChoiceWidget {
     protected ArrayList<CheckBox> checkBoxes;
-
+    private boolean checkboxInit = true;
     private List<Selection> ve;
 
     public SelectMultiWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
         checkBoxes = new ArrayList<>();
         ve = new ArrayList<>();
-        if (getPrompt().getAnswerValue() != null) {
-            ve = (List<Selection>) getPrompt().getAnswerValue().getValue();
+        if (getFormEntryPrompt().getAnswerValue() != null) {
+            //noinspection unchecked
+            ve = (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();
+        } else {
+            ve = new ArrayList<>();
         }
 
         createLayout();
@@ -92,7 +96,7 @@ public class SelectMultiWidget extends SelectWidget {
     }
 
     protected CheckBox createCheckBox(int index) {
-        String choiceName = getPrompt().getSelectChoiceText(items.get(index));
+        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
         CharSequence choiceDisplayName;
         if (choiceName != null) {
             choiceDisplayName = TextUtils.textToHtml(choiceName);
@@ -102,12 +106,12 @@ public class SelectMultiWidget extends SelectWidget {
         // no checkbox group so id by answer + offset
         CheckBox checkBox = new CheckBox(getContext());
         checkBox.setTag(index);
-        checkBox.setId(QuestionWidget.newUniqueId());
+        checkBox.setId(ViewIds.generateViewId());
         checkBox.setText(choiceDisplayName);
         checkBox.setMovementMethod(LinkMovementMethod.getInstance());
-        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        checkBox.setFocusable(!getPrompt().isReadOnly());
-        checkBox.setEnabled(!getPrompt().isReadOnly());
+        checkBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        checkBox.setFocusable(!getFormEntryPrompt().isReadOnly());
+        checkBox.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         for (int vi = 0; vi < ve.size(); vi++) {
             // match based on value, not key
@@ -121,7 +125,7 @@ public class SelectMultiWidget extends SelectWidget {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!checkboxInit && formEntryPrompt.isReadOnly()) {
+                if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
                     if (buttonView.isChecked()) {
                         buttonView.setChecked(false);
                     } else {
@@ -145,4 +149,15 @@ public class SelectMultiWidget extends SelectWidget {
         }
         checkboxInit = false;
     }
+
+    @Override
+    public int getChoiceCount() {
+        return checkBoxes.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        checkBoxes.get(choiceIndex).setChecked(isSelected);
+    }
+
 }

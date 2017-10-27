@@ -6,13 +6,9 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import java.io.File;
 
@@ -21,8 +17,6 @@ import static org.mockito.Mockito.when;
 /**
  * @author James Knight
  */
-@Config(constants = BuildConfig.class)
-@RunWith(RobolectricTestRunner.class)
 public class ImageWebViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
 
     @Mock
@@ -31,7 +25,7 @@ public class ImageWebViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
     private String fileName = null;
 
     public ImageWebViewWidgetTest() {
-        super(ImageWebViewWidget.class);
+        super();
     }
 
     @NonNull
@@ -54,10 +48,11 @@ public class ImageWebViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
         fileName = RandomString.make();
+    }
 
+    @Override
+    protected void prepareForSetAnswer() {
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);
     }

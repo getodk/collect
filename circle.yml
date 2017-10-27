@@ -1,13 +1,16 @@
 machine:
     environment:
+        # Disable emulator audio
+        QEMU_AUDIO_DRV: none
+
         # Set memory limits for the JVM
         # https://circleci.com/docs/oom/#setting-memory-limits-for-the-jvm
-        _JAVA_OPTIONS: "-Xms512m -Xmx2048m"
+        _JAVA_OPTIONS: "-Xms256m -Xmx1280m -XX:MaxPermSize=350m"
 
         # Out of memory errors in Android builds
         # https://circleci.com/docs/oom/#out-of-memory-errors-in-android-builds
         # https://docs.gradle.org/current/userguide/build_environment.html
-        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2560M -XX:+HeapDumpOnOutOfMemoryError"'
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1536m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError"'
 
 dependencies:
     pre:
@@ -36,17 +39,15 @@ test:
         - ./gradlew findbugs -Pandroid.useDexArchive=false
         - ./gradlew lint -Pandroid.useDexArchive=false
         - ./gradlew checkstyle -Pandroid.useDexArchive=false
-        - ./gradlew jacocoTestDebugUnitTestReport -Pandroid.useDexArchive=false
-        
-        # Instrumented tests take time, so only run them on master
+
         # SD card needed for circleci-android22 image
         # https://circleci.com/docs/1.0/android/
-        - if [ $CIRCLE_BRANCH = 'master' ]; then mksdcard -l e 128M sdcard.img; fi
-        - if [ $CIRCLE_BRANCH = 'master' ]; then emulator -avd circleci-android22 -sdcard sdcard.img -no-window; fi:
+        - mksdcard -l e 128M sdcard.img
+        - emulator -memory 256 -avd circleci-android22 -sdcard sdcard.img -no-window:
             background: true
             parallel: true
-        - if [ $CIRCLE_BRANCH = 'master' ]; then circle-android wait-for-boot; fi
-        - if [ $CIRCLE_BRANCH = 'master' ]; then ./gradlew connectedCheck -Pandroid.useDexArchive=false; fi
+        - circle-android wait-for-boot
+        - ./gradlew connectedCheck -Pandroid.useDexArchive=false
 
     post:
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
@@ -61,8 +62,6 @@ test:
         - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
-        - find . -type f -regex ".*/collect_app/build/test-results/.*.xml" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
+        - find . -type f -regex ".*/collect_app/build/reports/coverage/debug/report*.*" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
 
-        - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/outputs/apk $CIRCLE_ARTIFACTS; fi
-        - if [ $CIRCLE_BRANCH = 'master' ]; then cp -r collect_app/build/reports/androidTests/connected $CIRCLE_TEST_REPORTS/androidTests; fi
         - bash <(curl -s https://codecov.io/bash)

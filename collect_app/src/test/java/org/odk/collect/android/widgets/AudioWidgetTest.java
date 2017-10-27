@@ -7,16 +7,11 @@ import android.support.annotation.NonNull;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
-import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import java.io.File;
 
@@ -27,8 +22,6 @@ import static org.mockito.Mockito.when;
 /**
  * @author James Knight
  */
-@Config(constants = BuildConfig.class)
-@RunWith(RobolectricTestRunner.class)
 public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
 
     @Mock
@@ -42,19 +35,10 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
 
     private String destinationName = null;
 
-    public AudioWidgetTest() {
-        super(AudioWidget.class);
-    }
-
     @NonNull
     @Override
     public AudioWidget createWidget() {
-        AudioWidget audioWidget = new AudioWidget(RuntimeEnvironment.application, formEntryPrompt);
-
-        audioWidget.setMediaUtil(mediaUtil);
-        audioWidget.setFileUtil(fileUtil);
-
-        return audioWidget;
+        return new AudioWidget(RuntimeEnvironment.application, formEntryPrompt, fileUtil, mediaUtil);
     }
 
     @NonNull
@@ -68,16 +52,19 @@ public class AudioWidgetTest extends FileWidgetTest<AudioWidget> {
         return uri;
     }
 
-
-    @Before
+    @Override
     public void setUp() throws Exception {
         super.setUp();
+        destinationName = RandomString.make();
+    }
+
+    @Override
+    protected void prepareForSetAnswer() {
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
         when(mediaUtil.getPathFromUri(any(Context.class), any(Uri.class), any(String.class)))
                 .thenReturn(String.format("%s.mp3", RandomString.make()));
 
-        destinationName = RandomString.make();
         when(fileUtil.getRandomFilename()).thenReturn(destinationName);
 
         File firstFile = mock(File.class);

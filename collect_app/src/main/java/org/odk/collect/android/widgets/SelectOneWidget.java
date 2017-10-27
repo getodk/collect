@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -25,11 +26,13 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.TextUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -37,9 +40,12 @@ import java.util.ArrayList;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SelectOneWidget extends SelectWidget implements OnCheckedChangeListener, AudioPlayListener {
+@SuppressLint("ViewConstructor")
+public class SelectOneWidget
+        extends SelectWidget
+        implements OnCheckedChangeListener, AudioPlayListener, MultiChoiceWidget {
 
-    protected ArrayList<RadioButton> buttons;
+    protected List<RadioButton> buttons;
     protected String selectedValue;
 
     public SelectOneWidget(Context context, FormEntryPrompt prompt) {
@@ -108,7 +114,7 @@ public class SelectOneWidget extends SelectWidget implements OnCheckedChangeList
     }
 
     protected RadioButton createRadioButton(int index) {
-        String choiceName = getPrompt().getSelectChoiceText(items.get(index));
+        String choiceName = getFormEntryPrompt().getSelectChoiceText(items.get(index));
         CharSequence choiceDisplayName;
         if (choiceName != null) {
             choiceDisplayName = TextUtils.textToHtml(choiceName);
@@ -117,13 +123,13 @@ public class SelectOneWidget extends SelectWidget implements OnCheckedChangeList
         }
 
         RadioButton radioButton = new RadioButton(getContext());
-        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         radioButton.setText(choiceDisplayName);
         radioButton.setMovementMethod(LinkMovementMethod.getInstance());
         radioButton.setTag(index);
-        radioButton.setId(QuestionWidget.newUniqueId());
-        radioButton.setEnabled(!getPrompt().isReadOnly());
-        radioButton.setFocusable(!getPrompt().isReadOnly());
+        radioButton.setId(ViewIds.generateViewId());
+        radioButton.setEnabled(!getFormEntryPrompt().isReadOnly());
+        radioButton.setFocusable(!getFormEntryPrompt().isReadOnly());
 
         if (items.get(index).getValue().equals(selectedValue)) {
             radioButton.setChecked(true);
@@ -145,4 +151,26 @@ public class SelectOneWidget extends SelectWidget implements OnCheckedChangeList
             addAnswerView(answerLayout);
         }
     }
+
+    public List<RadioButton> getButtons() {
+        return buttons;
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return buttons.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        for (RadioButton button : buttons) {
+            button.setChecked(false);
+        }
+
+        RadioButton button = buttons.get(choiceIndex);
+        button.setChecked(isSelected);
+
+        onCheckedChanged(button, isSelected);
+    }
+
 }

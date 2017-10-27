@@ -25,18 +25,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoShapeGoogleMapActivity;
 import org.odk.collect.android.activities.GeoShapeOsmMapActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * GeoShapeWidget is the widget that allows the user to get Collect multiple GPS points.
@@ -48,10 +47,9 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     public static final String SHAPE_LOCATION = "gp";
     public static final String GOOGLE_MAP_KEY = "google_maps";
-    private Button createShapeButton;
     public SharedPreferences sharedPreferences;
     public String mapSDK;
-
+    private Button createShapeButton;
     private TextView answerDisplay;
 
     public GeoShapeWidget(Context context, FormEntryPrompt prompt) {
@@ -68,11 +66,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
             @Override
             public void onClick(View v) {
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController != null) {
-                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
-                }
-
+                waitForData();
                 startGeoShapeActivity();
             }
         });
@@ -113,7 +107,7 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(SHAPE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.GEOSHAPE_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOSHAPE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -127,31 +121,10 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        String s =  answer.toString();
+        String s = answer.toString();
         answerDisplay.setText(s);
 
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(null);
-        }
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return false;
-        }
-
-        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
-
-        return formEntryPrompt.getIndex().equals(
-                indexWaitingForData);
+        cancelWaitingForData();
     }
 
     @Override

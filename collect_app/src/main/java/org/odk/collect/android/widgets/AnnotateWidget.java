@@ -38,14 +38,17 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Image widget that supports annotations on the image.
@@ -55,7 +58,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class AnnotateWidget extends QuestionWidget implements FileWidget {
+public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
 
     private Button captureButton;
     private Button chooseButton;
@@ -66,18 +69,13 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
 
     private String binaryName;
 
-    private String instanceFolder;
-
     private TextView errorTextView;
 
     public AnnotateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        instanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
-
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
@@ -88,7 +86,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "captureButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(
                         android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -105,18 +103,16 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
                 i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(new File(Collect.TMPFILE_PATH)));
                 try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
+                    waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.IMAGE_CAPTURE);
+                            RequestCodes.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "image capture"), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
@@ -130,23 +126,21 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "chooseButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("image/*");
 
                 try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
+                    waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.IMAGE_CHOOSER);
+                            RequestCodes.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "choose image"), Toast.LENGTH_SHORT).show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
@@ -160,7 +154,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "annotateButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 launchAnnotateActivity();
             }
         });
@@ -190,41 +184,33 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
             if (!prompt.isReadOnly()) {
                 annotateButton.setEnabled(true);
             }
-            imageView = new ImageView(getContext());
-            imageView.setId(QuestionWidget.newUniqueId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
-            File f = new File(instanceFolder + File.separator + binaryName);
+            File f = new File(getInstanceFolder() + File.separator + binaryName);
 
+            Bitmap bmp = null;
             if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f,
+                bmp = FileUtils.getBitmapScaledToDisplay(f,
                         screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
                 }
-                imageView.setImageBitmap(bmp);
-            } else {
-                imageView.setImageBitmap(null);
             }
-
-            imageView.setPadding(10, 10, 10, 10);
-            imageView.setAdjustViewBounds(true);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "viewImage", "click",
-                                    formEntryPrompt.getIndex());
-                    launchAnnotateActivity();
-                }
-            });
-
+            imageView = getAnswerImageView(bmp);
             answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
+    }
+
+    @Override
+    public void onImageClick() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "viewImage", "click",
+                        getFormEntryPrompt().getIndex());
+        launchAnnotateActivity();
     }
 
     private void launchAnnotateActivity() {
@@ -233,24 +219,22 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
         i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE);
         // copy...
         if (binaryName != null) {
-            File f = new File(instanceFolder + File.separator + binaryName);
+            File f = new File(getInstanceFolder() + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
         i.putExtra(DrawActivity.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
 
         try {
-            Collect.getInstance().getFormController()
-                    .setIndexWaitingForData(formEntryPrompt.getIndex());
+            waitForData();
             ((Activity) getContext()).startActivityForResult(i,
-                    FormEntryActivity.ANNOTATE_IMAGE);
+                    RequestCodes.ANNOTATE_IMAGE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
                             "annotate image"), Toast.LENGTH_SHORT).show();
-            Collect.getInstance().getFormController()
-                    .setIndexWaitingForData(null);
+            cancelWaitingForData();
         }
     }
 
@@ -261,7 +245,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(instanceFolder
+        int del = MediaUtils.deleteImageFileFromMediaProvider(getInstanceFolder()
                 + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
@@ -275,7 +259,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
         }
 
         errorTextView.setVisibility(View.GONE);
-        if (!formEntryPrompt.isReadOnly()) {
+        if (!getFormEntryPrompt().isReadOnly()) {
             annotateButton.setEnabled(false);
         }
 
@@ -325,7 +309,7 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -334,18 +318,6 @@ public class AnnotateWidget extends QuestionWidget implements FileWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override

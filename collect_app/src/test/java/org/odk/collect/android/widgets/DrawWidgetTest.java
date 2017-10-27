@@ -31,10 +31,6 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
     private String fileName = null;
 
-    public DrawWidgetTest() {
-        super(DrawWidget.class);
-    }
-
     @NonNull
     @Override
     public DrawWidget createWidget() {
@@ -55,9 +51,11 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        when(formEntryPrompt.isReadOnly()).thenReturn(false);
-
         fileName = RandomString.make();
+    }
+
+    @Override
+    protected void prepareForSetAnswer() {
 
         when(file.exists()).thenReturn(true);
         when(file.getName()).thenReturn(fileName);

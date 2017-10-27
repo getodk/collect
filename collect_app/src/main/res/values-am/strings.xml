@@ -11,4 +11,17 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="ethiopian_month_meskerem">መስከረም</string>
+  <string name="ethiopian_month_tikimt">ጥቅምት</string>
+  <string name="ethiopian_month_hidar">ኅዳር</string>
+  <string name="ethiopian_month_tahsas">ታኅሣሥ</string>
+  <string name="ethiopian_month_tir">ጥር</string>
+  <string name="ethiopian_month_yekatit">የካቲት</string>
+  <string name="ethiopian_month_megabit">መጋቢት</string>
+  <string name="ethiopian_month_miazia">ሚያዝያ</string>
+  <string name="ethiopian_month_ginbot">ግንቦት</string>
+  <string name="ethiopian_month_senie">ሰኔ</string>
+  <string name="ethiopian_month_hamlie">ሐምሌ</string>
+  <string name="ethiopian_month_nehasie">ነሐሴ</string>
+  <string name="ethiopian_month_pagumien">ጳጐሜን</string>
 </resources>

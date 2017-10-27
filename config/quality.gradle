@@ -2,6 +2,8 @@ apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
 
+apply plugin: 'jacoco-everywhere'
+
 /*
  * Copyright 2015 Vincent Brison.
  *
@@ -37,7 +39,7 @@ task checkstyle(type: Checkstyle) {
 }
 
 task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
-    ignoreFailures = true       // commented out to make the build pass until all errors have been fixed
+    ignoreFailures = false
     effort = "max"
     reportLevel = "high"
     excludeFilter = new File("$configDir/findbugs/findbugs-filter.xml")
