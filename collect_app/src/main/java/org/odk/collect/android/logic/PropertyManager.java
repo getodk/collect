@@ -53,7 +53,7 @@ public class PropertyManager implements IPropertyManager {
 
     private static final String ANDROID6_FAKE_MAC = "02:00:00:00:00:00";
 
-    private static final String SCHEME_USERNAME     = "username";
+    public static final String SCHEME_USERNAME     = "username";
     private static final String SCHEME_TEL          = "tel";
     private static final String SCHEME_MAILTO       = "mailto";
     private static final String SCHEME_IMSI         = "imsi";
@@ -147,7 +147,7 @@ public class PropertyManager implements IPropertyManager {
         putProperty(propName, scheme, preferences.getString(prefKey, null));
     }
 
-    private void putProperty(String propName, String scheme, String value) {
+    public void putProperty(String propName, String scheme, String value) {
         if (value != null) {
             properties.put(propName, value);
             properties.put(withUri(propName), scheme + ":" + value);

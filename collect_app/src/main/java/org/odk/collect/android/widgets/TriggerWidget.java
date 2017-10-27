@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -27,24 +28,21 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ViewIds;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class TriggerWidget extends QuestionWidget {
+
+    public static final String OK_TEXT = "OK";
 
     private CheckBox triggerButton;
     private TextView stringAnswer;
-    private static final String mOK = "OK";
-
     private FormEntryPrompt prompt;
-
-
-    public FormEntryPrompt getPrompt() {
-        return prompt;
-    }
 
 
     public TriggerWidget(Context context, FormEntryPrompt prompt) {
@@ -52,9 +50,9 @@ public class TriggerWidget extends QuestionWidget {
         this.prompt = prompt;
 
         triggerButton = new CheckBox(getContext());
-        triggerButton.setId(QuestionWidget.newUniqueId());
+        triggerButton.setId(ViewIds.generateViewId());
         triggerButton.setText(getContext().getString(R.string.trigger));
-        triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        triggerButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         // mActionButton.setPadding(20, 20, 20, 20);
         triggerButton.setEnabled(!prompt.isReadOnly());
 
@@ -62,7 +60,7 @@ public class TriggerWidget extends QuestionWidget {
             @Override
             public void onClick(View v) {
                 if (triggerButton.isChecked()) {
-                    stringAnswer.setText(mOK);
+                    stringAnswer.setText(OK_TEXT);
                     Collect.getInstance().getActivityLogger().logInstanceAction(TriggerWidget.this,
                             "triggerButton",
                             "OK", TriggerWidget.this.prompt.getIndex());
@@ -76,13 +74,13 @@ public class TriggerWidget extends QuestionWidget {
         });
 
         stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        stringAnswer.setId(ViewIds.generateViewId());
+        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         stringAnswer.setGravity(Gravity.CENTER);
 
         String s = prompt.getAnswerText();
         if (s != null) {
-            if (s.equals(mOK)) {
+            if (s.equals(OK_TEXT)) {
                 triggerButton.setChecked(true);
             } else {
                 triggerButton.setChecked(false);
@@ -95,6 +93,9 @@ public class TriggerWidget extends QuestionWidget {
         addAnswerView(triggerButton);
     }
 
+    public FormEntryPrompt getFormEntryPrompt() {
+        return prompt;
+    }
 
     @Override
     public void clearAnswer() {
@@ -106,11 +107,9 @@ public class TriggerWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        return !s.isEmpty()
+                ? new StringData(s)
+                : null;
     }
 
 
@@ -137,4 +136,7 @@ public class TriggerWidget extends QuestionWidget {
         stringAnswer.cancelLongPress();
     }
 
+    public CheckBox getTriggerButton() {
+        return triggerButton;
+    }
 }

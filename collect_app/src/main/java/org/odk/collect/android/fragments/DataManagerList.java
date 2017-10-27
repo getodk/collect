@@ -83,12 +83,6 @@ public class DataManagerList extends InstanceListFragment
         super.onViewCreated(rootView, savedInstanceState);
     }
 
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle bundle) {
-        super.onViewStateRestored(bundle);
-    }
-
     @Override
     public void onResume() {
         // hook up to receive completion events

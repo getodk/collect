@@ -20,10 +20,11 @@ package org.odk.collect.android.external;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
 
@@ -45,7 +46,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * Date: 30/04/13
  * Time: 09:36
  */
-public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
+public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
     private static final char DELIMITING_CHAR = ",".charAt(0);
@@ -57,7 +58,7 @@ public class ExternalSQLiteOpenHelper extends ODKSQLiteOpenHelper {
     private FormLoaderTask formLoaderTask;
 
     public ExternalSQLiteOpenHelper(File dbFile) {
-        super(dbFile.getParentFile().getAbsolutePath(), dbFile.getName(), null, VERSION);
+        super(new DatabaseContext(dbFile.getParentFile().getAbsolutePath()), dbFile.getName(), null, VERSION);
     }
 
     public void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,

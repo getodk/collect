@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.logic;
 
+import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -30,6 +31,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -46,7 +48,7 @@ import org.odk.collect.android.views.ODKView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
@@ -98,44 +100,12 @@ public class FormController {
         public final String instanceName;
         public final boolean audit;
 
-        InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
             this.audit = audit;
         }
     }
-
-    /**
-     * Classes needed to serialize objects. Need to put anything from JR in here.
-     */
-    private static final String[] SERIALIABLE_CLASSES = {
-            "org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
-            "org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
-            "org.javarosa.core.model.FormDef",
-            "org.javarosa.core.model.SubmissionProfile", // CoreModelModule
-            "org.javarosa.core.model.QuestionDef", // CoreModelModule
-            "org.javarosa.core.model.GroupDef", // CoreModelModule
-            "org.javarosa.core.model.instance.FormInstance", // CoreModelModule
-            "org.javarosa.core.model.data.BooleanData", // CoreModelModule
-            "org.javarosa.core.model.data.DateData", // CoreModelModule
-            "org.javarosa.core.model.data.DateTimeData", // CoreModelModule
-            "org.javarosa.core.model.data.DecimalData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoPointData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoShapeData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoTraceData", // CoreModelModule
-            "org.javarosa.core.model.data.IntegerData", // CoreModelModule
-            "org.javarosa.core.model.data.LongData", // CoreModelModule
-            "org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectOneData", // CoreModelModule
-            "org.javarosa.core.model.data.StringData", // CoreModelModule
-            "org.javarosa.core.model.data.TimeData", // CoreModelModule
-            "org.javarosa.core.model.data.UncastData", // CoreModelModule
-            "org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
-            "org.javarosa.core.model.Action", // CoreModelModule
-            "org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
-    };
 
     private static boolean isJavaRosaInitialized = false;
 
@@ -146,13 +116,9 @@ public class FormController {
      */
     public static synchronized void initializeJavaRosa(IPropertyManager mgr) {
         if (!isJavaRosaInitialized) {
-            // need a list of classes that formdef uses
-            // unfortunately, the JR registerModule() functions do more than this.
-            // register just the classes that would have been registered by:
-            // new JavaRosaCoreModule().registerModule();
-            // new CoreModelModule().registerModule();
-            // replace with direct call to PrototypeManager
-            PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+            // Register prototypes for classes that FormDef uses
+            PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
+            PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
 
             isJavaRosaInitialized = true;
@@ -481,7 +447,7 @@ public class FormController {
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error
      * type.
      */
-    public int validateAnswers(Boolean markCompleted) throws JavaRosaException {
+    public int validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
             this.jumpToIndex(outcome.failedPrompt);
@@ -709,8 +675,8 @@ public class FormController {
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
-    public FailedConstraint saveAllScreenAnswers(LinkedHashMap<FormIndex, IAnswerData> answers,
-            boolean evaluateConstraints) throws JavaRosaException {
+    public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers,
+                                                 boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
@@ -946,7 +912,7 @@ public class FormController {
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                             treeElement.getRef());
                     Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (value != "") {
+                    if (!value.equals("")) {
                         return (String) value;
                     }
                     return null;
@@ -984,9 +950,7 @@ public class FormController {
 
         FormEntryCaption[] v = getCaptionHierarchy();
         FormEntryCaption[] groups = new FormEntryCaption[v.length - lastquestion];
-        for (int i = 0; i < v.length - lastquestion; i++) {
-            groups[i] = v[i];
-        }
+        System.arraycopy(v, 0, groups, 0, v.length - lastquestion);
         return groups;
     }
 

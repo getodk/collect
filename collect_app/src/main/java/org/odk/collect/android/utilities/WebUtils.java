@@ -14,17 +14,13 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Document;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpHost;
@@ -210,32 +206,14 @@ public final class WebUtils {
         HttpGet req = new HttpGet();
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
-        setGoogleHeaders(req);
         req.setURI(uri);
         return req;
-    }
-
-    public static final void setGoogleHeaders(HttpRequest req) {
-        SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(
-                        Collect.getInstance().getApplicationContext());
-        String protocol = settings.getString(PreferenceKeys.KEY_PROTOCOL,
-                Collect.getInstance().getString(R.string.protocol_odk_default));
-
-        // TODO:  this doesn't exist....
-        //if ( protocol.equals(PreferencesActivity.PROTOCOL_GOOGLE) ) {
-        //String auth = settings.getString(PreferencesActivity.KEY_AUTH, "");
-        //if ((auth != null) && (auth.length() > 0)) {
-        //req.setHeader("Authorization", "GoogleLogin auth=" + auth);
-        //}
-        //}
     }
 
     public static final HttpPost createOpenRosaHttpPost(Uri u) {
         HttpPost req = new HttpPost(URI.create(u.toString()));
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
-        setGoogleHeaders(req);
         return req;
     }
 

@@ -39,6 +39,13 @@
             android:key="high_resolution"
             android:summary="@string/high_resolution_summary"
             android:title="@string/high_resolution_title" />
+        <ListPreference
+            android:defaultValue="original_image_size"
+            android:dialogTitle="@string/image_size_dialog_title"
+            android:entries="@array/image_size_entries"
+            android:entryValues="@array/image_size_entry_values"
+            android:key="image_size"
+            android:title="@string/image_size_title" />
     </PreferenceCategory>
 
     <!-- Remove

@@ -42,9 +42,6 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-/**
- *
- */
 public class FormsProvider extends ContentProvider {
 
     private static final String t = "FormsProvider";
@@ -285,7 +282,7 @@ public class FormsProvider extends ContentProvider {
         if (mDbHelper != null) {
             return mDbHelper;
         }
-        mDbHelper = new DatabaseHelper(DATABASE_NAME);
+        mDbHelper = new DatabaseHelper(DATABASE_NAME);      // smap
         return mDbHelper;
     }
 
@@ -404,7 +401,7 @@ public class FormsProvider extends ContentProvider {
         }
         if (!values.containsKey(FormsColumns.FORM_MEDIA_PATH)) {
             String pathNoExtension = filePath.substring(0,
-                    filePath.lastIndexOf("."));
+                    filePath.lastIndexOf('.'));
             String mediaPath = pathNoExtension + "-media";
             values.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
         }

@@ -72,7 +72,7 @@ public class AudioButton extends AppCompatImageButton {
 
             String audioFilename = "";
             try {
-                audioFilename = ReferenceManager._().DeriveReference(uri).getLocalURI();
+                audioFilename = ReferenceManager.instance().DeriveReference(uri).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e);
             }

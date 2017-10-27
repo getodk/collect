@@ -19,6 +19,9 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
 
+import java.util.Map;
+import java.util.Set;
+
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.PreferenceKeys.GENERAL_KEYS;
@@ -50,7 +53,7 @@ public class GeneralSharedPreferences {
             Timber.e("Default for %s not found", key);
         }
 
-        if (defaultValue == null || defaultValue == "" || defaultValue instanceof String) {
+        if (defaultValue == null || defaultValue instanceof String) {
             value = sharedPreferences.getString(key, (String) defaultValue);
         } else if (defaultValue instanceof Boolean) {
             value = sharedPreferences.getBoolean(key, (Boolean) defaultValue);
@@ -71,7 +74,7 @@ public class GeneralSharedPreferences {
 
     public void save(String key, Object value) {
         editor = sharedPreferences.edit();
-        if (value == null || value == "" || value instanceof String) {
+        if (value == null || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);
@@ -81,11 +84,25 @@ public class GeneralSharedPreferences {
             editor.putInt(key, (Integer) value);
         } else if (value instanceof Float) {
             editor.putFloat(key, (Float) value);
+        } else if (value instanceof Set) {
+            editor.putStringSet(key, (Set<String>) value);
+        } else {
+            throw new RuntimeException("Unhandled preference value type: " + value);
         }
         editor.apply();
     }
 
     public boolean getBoolean(String key, boolean value) {
         return sharedPreferences.getBoolean(key, value);
+    }
+
+    public void clear() {
+        editor
+                .clear()
+                .apply();
+    }
+
+    public Map<String, ?> getAll() {
+        return sharedPreferences.getAll();
     }
 }

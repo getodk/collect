@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -36,38 +38,40 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Free drawing widget.
  *
  * @author BehrAtherton@gmail.com
  */
-public class DrawWidget extends QuestionWidget implements IBinaryWidget {
-    private static final String t = "DrawWidget";
+@SuppressLint("ViewConstructor")
+public class DrawWidget extends QuestionWidget implements BaseImageWidget {
 
     private Button drawButton;
     private String binaryName;
-    private String instanceFolder;
+
+    @Nullable
     private ImageView imageView;
+
     private TextView errorTextView;
 
     public DrawWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         errorTextView = new TextView(context);
-        errorTextView.setId(QuestionWidget.newUniqueId());
+        errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
-
-        instanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
 
         drawButton = getSimpleButton(getContext().getString(R.string.draw_image));
         drawButton.setEnabled(!prompt.isReadOnly());
@@ -77,7 +81,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "drawButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 launchDrawActivity();
             }
         });
@@ -88,7 +92,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
 
-        if (formEntryPrompt.isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {
             drawButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
@@ -98,42 +102,34 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
         // Only add the imageView if the user has signed
         if (binaryName != null) {
-            imageView = new ImageView(getContext());
-            imageView.setId(QuestionWidget.newUniqueId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
-            File f = new File(instanceFolder + File.separator + binaryName);
+            File f = new File(getInstanceFolder() + File.separator + binaryName);
 
+            Bitmap bmp = null;
             if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f,
+                bmp = FileUtils.getBitmapScaledToDisplay(f,
                         screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
                 }
-                imageView.setImageBitmap(bmp);
-            } else {
-                imageView.setImageBitmap(null);
             }
 
-            imageView.setPadding(10, 10, 10, 10);
-            imageView.setAdjustViewBounds(true);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "viewImage", "click",
-                                    formEntryPrompt.getIndex());
-                    launchDrawActivity();
-                }
-            });
-
+            imageView = getAnswerImageView(bmp);
             answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
+    }
 
+    @Override
+    public void onImageClick() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "viewImage", "click",
+                        getFormEntryPrompt().getIndex());
+        launchDrawActivity();
     }
 
     private void launchDrawActivity() {
@@ -142,34 +138,33 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_DRAW);
         // copy...
         if (binaryName != null) {
-            File f = new File(instanceFolder + File.separator + binaryName);
+            File f = new File(getInstanceFolder() + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
         i.putExtra(DrawActivity.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
 
         try {
-            Collect.getInstance().getFormController()
-                    .setIndexWaitingForData(formEntryPrompt.getIndex());
+            waitForData();
             ((Activity) getContext()).startActivityForResult(i,
-                    FormEntryActivity.DRAW_IMAGE);
+                    RequestCodes.DRAW_IMAGE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),
                     getContext().getString(R.string.activity_not_found,
                             "draw image"), Toast.LENGTH_SHORT).show();
-            Collect.getInstance().getFormController()
-                    .setIndexWaitingForData(null);
+            cancelWaitingForData();
         }
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = MediaUtils.deleteImageFileFromMediaProvider(instanceFolder
+        int del = MediaUtils.deleteImageFileFromMediaProvider(getInstanceFolder()
                 + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
@@ -177,8 +172,11 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
-        imageView.setImageBitmap(null);
+        deleteFile();
+        if (imageView != null) {
+            imageView.setImageBitmap(null);
+        }
+
         errorTextView.setVisibility(View.GONE);
 
         // reset buttons
@@ -199,7 +197,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         // you are replacing an answer. delete the previous image using the
         // content provider.
         if (binaryName != null) {
-            deleteMedia();
+            deleteFile();
         }
 
         File newImage = (File) answer;
@@ -215,7 +213,10 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri imageURI = getContext().getContentResolver().insert(
                     Images.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting image returned uri = %s", imageURI.toString());
+
+            if (imageURI != null) {
+                Timber.i("Inserting image returned uri = %s", imageURI.toString());
+            }
 
             binaryName = newImage.getName();
             Timber.i("Setting current answer to %s", newImage.getName());
@@ -223,7 +224,7 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -232,18 +233,6 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override

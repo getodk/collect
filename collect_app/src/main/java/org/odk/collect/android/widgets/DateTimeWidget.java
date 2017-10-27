@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
@@ -22,8 +23,9 @@ import android.widget.LinearLayout;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.joda.time.LocalDateTime;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
  * exist.
@@ -32,9 +34,10 @@ import org.joda.time.LocalDateTime;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class DateTimeWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
 
-    private DateWidget dateWidget;
+    private AbstractDateWidget dateWidget;
     private TimeWidget timeWidget;
 
     public DateTimeWidget(Context context, FormEntryPrompt prompt) {
@@ -42,13 +45,18 @@ public class DateTimeWidget extends QuestionWidget {
 
         setGravity(Gravity.START);
 
-        dateWidget = new DateWidget(context, prompt);
+        String appearance = prompt.getQuestion().getAppearanceAttr();
+        if (appearance != null && appearance.contains("ethiopian")) {
+            dateWidget = new EthiopianDateWidget(context, prompt);
+        } else {
+            dateWidget = new DateWidget(context, prompt);
+        }
         timeWidget = new TimeWidget(context, prompt);
 
-        dateWidget.questionMediaLayout.getView_Text().setVisibility(GONE);
+        dateWidget.getQuestionMediaLayout().getView_Text().setVisibility(GONE);
         dateWidget.getHelpTextView().setVisibility(GONE);
 
-        timeWidget.questionMediaLayout.getView_Text().setVisibility(GONE);
+        timeWidget.getQuestionMediaLayout().getView_Text().setVisibility(GONE);
         timeWidget.getHelpTextView().setVisibility(GONE);
 
         LinearLayout linearLayout = new LinearLayout(getContext());
@@ -74,22 +82,19 @@ public class DateTimeWidget extends QuestionWidget {
                 dateWidget.setDateToCurrent();
                 dateWidget.setDateLabel();
             }
-            
-            boolean hideDay = dateWidget.isDayHidden();
-            boolean hideMonth = dateWidget.isMonthHidden();
 
-            int year = dateWidget.getYear();
-            int month = dateWidget.getMonth();
-            int day = dateWidget.getDay();
+            int year = dateWidget.getDate().getYear();
+            int month = dateWidget.getDate().getMonthOfYear();
+            int day = dateWidget.getDate().getDayOfMonth();
             int hour = timeWidget.getHour();
             int minute = timeWidget.getMinute();
 
             LocalDateTime ldt = new LocalDateTime()
                     .withYear(year)
-                    .withMonthOfYear(hideMonth ? 1 : month)
-                    .withDayOfMonth((hideMonth || hideDay) ? 1 : day)
-                    .withHourOfDay((hideMonth || hideDay) ? 0 : hour)
-                    .withMinuteOfHour((hideMonth || hideDay) ? 0 : minute)
+                    .withMonthOfYear(month)
+                    .withDayOfMonth(day)
+                    .withHourOfDay(hour)
+                    .withMinuteOfHour(minute)
                     .withSecondOfMinute(0)
                     .withMillisOfSecond(0);
 
@@ -122,6 +127,16 @@ public class DateTimeWidget extends QuestionWidget {
         super.cancelLongPress();
         dateWidget.cancelLongPress();
         timeWidget.cancelLongPress();
+    }
+
+    @Override
+    public void setBinaryData(Object answer) {
+        dateWidget.setBinaryData(answer);
+        cancelWaitingForData();
+    }
+
+    public AbstractDateWidget getDateWidget() {
+        return dateWidget;
     }
 
     // Exposed for testing purposes to avoid reflection.

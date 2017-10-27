@@ -588,7 +588,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                 }
             }
             prefEdit.apply();
-            AuthDialogUtility.setWebCredentialsFromPreferences(this);
+            AuthDialogUtility.setWebCredentialsFromPreferences();
 
             // second object is admin options
             SharedPreferences.Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES,

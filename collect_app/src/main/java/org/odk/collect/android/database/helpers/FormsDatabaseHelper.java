@@ -18,18 +18,20 @@ package org.odk.collect.android.database.helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.ODKSQLiteOpenHelper;
+import org.odk.collect.android.database.DatabaseContext;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 
 import timber.log.Timber;
 
 /**
  * This class helps open, create, and upgrade the database file.
  */
-public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
-    public static final String DATABASE_NAME = "forms.db";
+public class FormsDatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
     private static final int DATABASE_VERSION = 4;
@@ -38,35 +40,13 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
     private static final String MODEL_VERSION = "modelVersion";
 
-    public FormsDatabaseHelper(String databaseName) {
-        super(Collect.METADATA_PATH, databaseName, null, DATABASE_VERSION);
+    public FormsDatabaseHelper() {
+        super(new DatabaseContext(Collect.METADATA_PATH), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        onCreateNamed(db, FORMS_TABLE_NAME);
-    }
-
-    private void onCreateNamed(SQLiteDatabase db, String tableName) {
-        db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
-                + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
-                + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
-                + " text not null, " + FormsProviderAPI.FormsColumns.DESCRIPTION
-                + " text, "
-                + FormsProviderAPI.FormsColumns.JR_FORM_ID
-                + " text not null, "
-                + FormsProviderAPI.FormsColumns.JR_VERSION
-                + " text, "
-                + FormsProviderAPI.FormsColumns.MD5_HASH
-                + " text not null, "
-                + FormsProviderAPI.FormsColumns.DATE
-                + " integer not null, " // milliseconds
-                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " text not null, "
-                + FormsProviderAPI.FormsColumns.LANGUAGE + " text, "
-                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + " text, "
-                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
-                + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " text not null);");
+        createFormsTable(db, FORMS_TABLE_NAME);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -93,6 +73,28 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         }
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        boolean success = true;
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .dropIfExists(FORMS_TABLE_NAME)
+                    .end();
+
+            createFormsTable(db, FORMS_TABLE_NAME);
+        } catch (SQLiteException e) {
+            Timber.e(e);
+            success = false;
+        }
+
+        if (success) {
+            Timber.i("Downgrading database completed with success.");
+        } else {
+            Timber.i("Downgrading database from version " + oldVersion + " to " + newVersion + " failed.");
+        }
+    }
+
     private boolean upgradeToVersion2(SQLiteDatabase db) {
         boolean success = true;
         try {
@@ -111,7 +113,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
             // adding BASE64_RSA_PUBLIC_KEY and changing type and name of
             // integer MODEL_VERSION to text VERSION
             db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
-            onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
+            createFormsTable(db, TEMP_FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + TEMP_FORMS_TABLE_NAME
                     + " ("
@@ -178,7 +180,7 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
 
             // risky failures here...
             db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
-            onCreateNamed(db, FORMS_TABLE_NAME);
+            createFormsTable(db, FORMS_TABLE_NAME);
             db.execSQL("INSERT INTO "
                     + FORMS_TABLE_NAME
                     + " ("
@@ -231,5 +233,27 @@ public class FormsDatabaseHelper extends ODKSQLiteOpenHelper {
         }
 
         return success;
+    }
+
+    private void createFormsTable(SQLiteDatabase db, String tableName) {
+        db.execSQL("CREATE TABLE " + tableName + " (" + FormsProviderAPI.FormsColumns._ID
+                + " integer primary key, " + FormsProviderAPI.FormsColumns.DISPLAY_NAME
+                + " text not null, " + FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT
+                + " text not null, " + FormsProviderAPI.FormsColumns.DESCRIPTION
+                + " text, "
+                + FormsProviderAPI.FormsColumns.JR_FORM_ID
+                + " text not null, "
+                + FormsProviderAPI.FormsColumns.JR_VERSION
+                + " text, "
+                + FormsProviderAPI.FormsColumns.MD5_HASH
+                + " text not null, "
+                + FormsProviderAPI.FormsColumns.DATE
+                + " integer not null, " // milliseconds
+                + FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH + " text not null, "
+                + FormsProviderAPI.FormsColumns.FORM_FILE_PATH + " text not null, "
+                + FormsProviderAPI.FormsColumns.LANGUAGE + " text, "
+                + FormsProviderAPI.FormsColumns.SUBMISSION_URI + " text, "
+                + FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY + " text, "
+                + FormsProviderAPI.FormsColumns.JRCACHE_FILE_PATH + " text not null);");
     }
 }

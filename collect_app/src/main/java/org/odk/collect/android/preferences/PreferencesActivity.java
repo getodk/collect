@@ -21,10 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.javarosa.core.services.IPropertyManager;
 import org.odk.collect.android.R;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.application.Collect;
 
 import java.util.Collection;
 import java.util.List;
@@ -115,11 +113,7 @@ public class PreferencesActivity extends PreferenceActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
-        // the property manager should be re-assigned, as properties
-        // may have changed.
-        IPropertyManager mgr = new PropertyManager(this);
-        FormController.initializeJavaRosa(mgr);
+        Collect.getInstance().initProperties();
     }
 
     private ViewGroup getRootView() {

@@ -8,6 +8,10 @@ fieldTask-release/
 fieldTask/fieldTask-release/
 *.sublime-project
 
+*.iml
+
+collect_app/src/kontrolid/
+
 # emacs backup files
 *.*~
 

@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -25,6 +26,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Video;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -35,11 +37,11 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.FileUtil;
+import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -49,6 +51,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static android.os.Build.MODEL;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -57,25 +60,37 @@ import static android.os.Build.MODEL;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class VideoWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class VideoWidget extends QuestionWidget implements FileWidget {
 
     public static final boolean DEFAULT_HIGH_RESOLUTION = true;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+
     private static final String NEXUS7 = "Nexus 7";
     private static final String DIRECTORY_PICTURES = "Pictures";
+
+    @NonNull
+    private MediaUtil mediaUtil;
+
+    @NonNull
+    private FileUtil fileUtil;
+
     private Button captureButton;
     private Button playButton;
     private Button chooseButton;
     private String binaryName;
-    private String instanceFolder;
     private Uri nexus7Uri;
 
     public VideoWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new FileUtil(), new MediaUtil());
+    }
+
+    public VideoWidget(Context context, FormEntryPrompt prompt, @NonNull FileUtil fileUtil, @NonNull MediaUtil mediaUtil) {
         super(context, prompt);
 
-        instanceFolder = Collect.getInstance().getFormController()
-                .getInstancePath().getParent();
+        this.fileUtil = fileUtil;
+        this.mediaUtil = mediaUtil;
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_video));
         captureButton.setEnabled(!prompt.isReadOnly());
@@ -85,7 +100,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "captureButton",
-                                "click", formEntryPrompt.getIndex());
+                                "click", getFormEntryPrompt().getIndex());
                 Intent i = new Intent(
                         android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 
@@ -114,18 +129,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                     i.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 }
                 try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
+                    waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.VIDEO_CAPTURE);
+                            RequestCodes.VIDEO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "capture video"), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
@@ -139,25 +152,24 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "chooseButton",
-                                "click", formEntryPrompt.getIndex());
+                                "click", getFormEntryPrompt().getIndex());
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("video/*");
                 // Intent i =
                 // new Intent(Intent.ACTION_PICK,
                 // android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 try {
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
+                    waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.VIDEO_CHOOSER);
+                            RequestCodes.VIDEO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "choose video "), Toast.LENGTH_SHORT)
                             .show();
-                    Collect.getInstance().getFormController()
-                            .setIndexWaitingForData(null);
+
+                    cancelWaitingForData();
                 }
 
             }
@@ -170,9 +182,9 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(VideoWidget.this, "playButton",
-                                "click", formEntryPrompt.getIndex());
+                                "click", getFormEntryPrompt().getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(instanceFolder + File.separator
+                File f = new File(getInstanceFolder() + File.separator
                         + binaryName);
                 i.setDataAndType(Uri.fromFile(f), "video/*");
                 try {
@@ -203,7 +215,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
-        if (formEntryPrompt.isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
         }
@@ -263,21 +275,22 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         return mediaFile;
     }
 
-    private void deleteMedia() {
+    @Override
+    public void deleteFile() {
         // get the file path and delete the file
         String name = binaryName;
         // clean up variables
         binaryName = null;
         // delete from media provider
-        int del = MediaUtils.deleteVideoFileFromMediaProvider(
-                instanceFolder + File.separator + name);
+        int del = mediaUtil.deleteVideoFileFromMediaProvider(
+                getInstanceFolder() + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
     @Override
     public void clearAnswer() {
         // remove the file
-        deleteMedia();
+        deleteFile();
 
         // reset buttons
         playButton.setEnabled(false);
@@ -294,17 +307,21 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
     @Override
     public void setBinaryData(Object binaryuri) {
+        if (binaryuri == null || !(binaryuri instanceof Uri)) {
+            Timber.w("AudioWidget's setBinaryData must receive a Uri object.");
+            return;
+        }
 
         // get the file path and create a copy in the instance folder
-        String binaryPath = MediaUtils.getPathFromUri(this.getContext(), (Uri) binaryuri,
-                Video.Media.DATA);
-        String extension = binaryPath.substring(binaryPath.lastIndexOf("."));
-        String destVideoPath = instanceFolder + File.separator
-                + System.currentTimeMillis() + extension;
+        Uri uri = (Uri) binaryuri;
 
-        File source = new File(binaryPath);
-        File newVideo = new File(destVideoPath);
-        FileUtils.copyFile(source, newVideo);
+        String sourcePath = getSourcePathFromUri(uri);
+        String destinationPath = getDestinationPathFromSourcePath(sourcePath);
+
+        File source = fileUtil.getFileAtPath(sourcePath);
+        File newVideo = fileUtil.getFileAtPath(destinationPath);
+
+        fileUtil.copyFile(source, newVideo);
 
         if (newVideo.exists()) {
             // Add the copy to the content provier
@@ -316,27 +333,41 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
             Uri videoURI = getContext().getContentResolver().insert(
                     Video.Media.EXTERNAL_CONTENT_URI, values);
-            Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
+
+            if (videoURI != null) {
+                Timber.i("Inserting VIDEO returned uri = %s", videoURI.toString());
+            }
+
         } else {
             Timber.e("Inserting Video file FAILED");
         }
         // you are replacing an answer. remove the media.
         if (binaryName != null && !binaryName.equals(newVideo.getName())) {
-            deleteMedia();
+            deleteFile();
         }
 
         binaryName = newVideo.getName();
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
 
         // Need to have this ugly code to account for
         // a bug in the Nexus 7 on 4.3 not returning the mediaUri in the data
         // of the intent - uri in this case is a file
         if (NEXUS7.equals(MODEL) && Build.VERSION.SDK_INT == 18) {
-            Uri mediaUri = (Uri) binaryuri;
-            File fileToDelete = new File(mediaUri.getPath());
+            File fileToDelete = new File(uri.getPath());
             int delCount = fileToDelete.delete() ? 1 : 0;
-            Timber.i("Deleting original capture of file: %s count: %d", mediaUri.toString(), delCount);
+
+            Timber.i("Deleting original capture of file: %s count: %d", uri.toString(), delCount);
         }
+    }
+
+    private String getSourcePathFromUri(@NonNull Uri uri) {
+        return mediaUtil.getPathFromUri(getContext(), uri, Video.Media.DATA);
+    }
+
+    private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
+        String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
+        return getInstanceFolder() + File.separator
+                + fileUtil.getRandomFilename() + extension;
     }
 
     @Override
@@ -345,18 +376,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override

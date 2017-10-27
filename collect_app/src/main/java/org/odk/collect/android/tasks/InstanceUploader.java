@@ -78,8 +78,7 @@ public abstract class InstanceUploader extends AsyncTask<Long, Integer, Instance
                         }
 
                         count -= selectionArgs.length - 1;
-                        selection.append(")");
-                        selection.append(" and status=?");
+                        selection.append(") and status=?");
                         selectionArgs[i] = InstanceProviderAPI.STATUS_SUBMITTED;
 
                         Cursor results = null;

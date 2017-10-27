@@ -207,7 +207,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         super.onPause();
 
         if (credentialsHaveChanged) {
-            AuthDialogUtility.setWebCredentialsFromPreferences(getActivity().getBaseContext());
+            AuthDialogUtility.setWebCredentialsFromPreferences();
         }
     }
 

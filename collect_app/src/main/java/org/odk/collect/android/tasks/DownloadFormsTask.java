@@ -61,6 +61,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import timber.log.Timber;
@@ -102,11 +103,10 @@ public class DownloadFormsTask extends
         Collect.getInstance().getActivityLogger().logAction(this, "downloadForms",
                 String.valueOf(total));
 
-        HashMap<FormDetails, String> result = new HashMap<FormDetails, String>();
+        final HashMap<FormDetails, String> result = new HashMap<>();
 
         for (FormDetails fd : toDownload) {
-            publishProgress(fd.formName, Integer.valueOf(count).toString(), Integer.valueOf(total)
-                    .toString());
+            publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
 
             String message = "";
 
@@ -159,7 +159,15 @@ public class DownloadFormsTask extends
             }
 
             try {
-                checkForBadSubmissionUrl(fileResult);
+                if (fileResult != null) {
+                    final long start = System.currentTimeMillis();
+                    Timber.i("Starting an extra parse to check for a bad submission URL. %s",
+                            fileResult.file.getAbsolutePath());
+                    // todo can we avoid this extra parse? It can run a long time.
+                    checkForBadSubmissionUrl(fileResult);
+                    Timber.i("Parse finished in %.3f seconds.",
+                            (System.currentTimeMillis() - start) / 1000F);
+                }
             } catch (IllegalArgumentException e) {
                 message += e.getMessage();
             }
@@ -282,8 +290,10 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
 
                 Timber.w("Parsing document %s", formFile.getAbsolutePath());
-
-                HashMap<String, String> formInfo = FileUtils.parseXML(formFile);
+                final long start = System.currentTimeMillis();
+                Map<String, String> formInfo = FileUtils.parseXML(formFile);
+                Timber.i("Parse finished in %.3f seconds.",
+                        (System.currentTimeMillis() - start) / 1000F);
 
                 if (isCancelled()) {
                     throw new TaskCancelledException(formFile, "Form " + formFile.getName()
@@ -605,7 +615,7 @@ public class DownloadFormsTask extends
         }
 
         publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.formName),
-                Integer.valueOf(count).toString(), Integer.valueOf(total).toString());
+                String.valueOf(count), String.valueOf(total));
 
         List<MediaFile> files = new ArrayList<MediaFile>();
         // get shared HttpContext so that authentication and cookies are retained.
@@ -719,9 +729,8 @@ public class DownloadFormsTask extends
                 publishProgress(
                         Collect.getInstance().getString(R.string.form_download_progress,
                                 fd.formName,
-                                String.valueOf(mediaCount), String.valueOf(files.size())), String.valueOf(count),
-                        Integer
-                                .valueOf(total).toString());
+                                String.valueOf(mediaCount), String.valueOf(files.size())),
+                                String.valueOf(count),String.valueOf(total));
                 //try {
                 File finalMediaFile = new File(finalMediaDir, toDownload.filename);
                 File tempMediaFile = new File(tempMediaDir, toDownload.filename);
@@ -767,8 +776,8 @@ public class DownloadFormsTask extends
             if (stateListener != null) {
                 // update progress and total
                 stateListener.progressUpdate(values[0],
-                        Integer.valueOf(values[1]),
-                        Integer.valueOf(values[2]));
+                        Integer.parseInt(values[1]),
+                        Integer.parseInt(values[2]));
             }
         }
 

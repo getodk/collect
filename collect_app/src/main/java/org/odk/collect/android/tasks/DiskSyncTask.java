@@ -94,9 +94,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                     cursor = formsDao.getFormsCursor();
                     if (cursor == null) {
                         Timber.e("[%d] Forms Content Provider returned NULL", instance);
-                        errors.append(
-                                "Internal Error: Unable to access Forms content provider").append(
-                                "\r\n");
+                        errors.append("Internal Error: Unable to access Forms content provider\r\n");
                         return errors.toString();
                     }
 

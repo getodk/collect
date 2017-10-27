@@ -23,6 +23,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.location.Location;       // smap
+import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
@@ -32,6 +33,8 @@ import android.view.inputmethod.InputMethodManager;
 // import com.google.android.gms.analytics.GoogleAnalytics;    // smap
 //import com.google.android.gms.analytics.Tracker;    // smap
 //import com.google.firebase.crash.FirebaseCrash;    // smap
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
@@ -44,6 +47,7 @@ import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.taskModel.FormDetail;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -60,6 +64,10 @@ import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
+import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 /**
  * The Open Data Kit Collect application.
@@ -79,25 +87,22 @@ public class Collect extends Application {
     public static final String TMPDRAWFILE_PATH = CACHE_PATH + File.separator + "tmpDraw.jpg";
     public static final String LOG_PATH = ODK_ROOT + File.separator + "log";
     public static final String DEFAULT_FONTSIZE = "21";
+    public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+    public static String defaultSysLanguage;
     private static Collect singleton = null;
-
-    static {
-        PRNGFixes.apply();
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
 
     // share all session cookies across all sessions...
     private CookieStore cookieStore = new BasicCookieStore();
     // retain credentials for 7 minutes...
     private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
     private ActivityLogger activityLogger;
+
+    @Nullable
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
     //private Tracker tracker;    // smap
-
-    public static String defaultSysLanguage;
 
     private Location location = null;       // smap
     private boolean recordLocation = false; // smap
@@ -109,11 +114,21 @@ public class Collect extends Application {
     }
 
     public static int getQuestionFontsize() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect
-                .getInstance());
+        // For testing:
+        Collect instance = Collect.getInstance();
+        if (instance == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(instance);
+        if (settings == null) {
+            return Collect.DEFAULT_FONTSIZE_INT;
+        }
+
         String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
                 Collect.DEFAULT_FONTSIZE);
-        return Integer.valueOf(questionFont);
+
+        return Integer.parseInt(questionFont);
     }
 
     /**
@@ -160,7 +175,7 @@ public class Collect extends Application {
         String dirPath = directory.getAbsolutePath();
         if (dirPath.startsWith(Collect.ODK_ROOT)) {
             dirPath = dirPath.substring(Collect.ODK_ROOT.length());
-            String[] parts = dirPath.split(File.separator);
+            String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
             // [appName, instances, tableId, instanceId ]
             if (parts.length == 4 && parts[1].equals("instances")) {
                 return true;
@@ -173,11 +188,12 @@ public class Collect extends Application {
         return activityLogger;
     }
 
+    @Nullable
     public FormController getFormController() {
         return formController;
     }
 
-    public void setFormController(FormController controller) {
+    public void setFormController(@Nullable FormController controller) {
         formController = controller;
     }
 
@@ -251,6 +267,10 @@ public class Collect extends Application {
     public void onCreate() {
         super.onCreate();
 
+        PRNGFixes.apply();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        JodaTimeAndroid.init(this);
+
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
         singleton = this;
@@ -259,20 +279,17 @@ public class Collect extends Application {
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
 
-        PropertyManager mgr = new PropertyManager(this);
+        initProperties();
 
-        FormController.initializeJavaRosa(mgr);
-
-        activityLogger = new ActivityLogger(
-                mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
-
-        AuthDialogUtility.setWebCredentialsFromPreferences(this);
-        Timber.plant(new Timber.DebugTree());   // smap
         /* smap
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
+        AuthDialogUtility.setWebCredentialsFromPreferences();
+        if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
+        } else {
+            Timber.plant(new NotLoggingTree());
         }
         */
     }
@@ -281,6 +298,7 @@ public class Collect extends Application {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
+        //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
         boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
@@ -321,7 +339,7 @@ public class Collect extends Application {
 
 
     /**
-     * Gets the default {@link Tracker} for this {@link Application}.
+     * Gets the default {@link } for this {@link Application}.
      *
      * @return tracker
      *
@@ -334,6 +352,12 @@ public class Collect extends Application {
         }
 
         return tracker;
+    }
+
+    private class NotLoggingTree extends Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+        }
     }
 
     private static class CrashReportingTree extends Timber.Tree {
@@ -352,4 +376,15 @@ public class Collect extends Application {
     }
     */
 
+    public void initProperties() {
+        PropertyManager mgr = new PropertyManager(this);
+
+        // Use the server username by default if the metadata username is not defined
+        if ((mgr.getSingularProperty(PROPMGR_USERNAME) == null || mgr.getSingularProperty(PROPMGR_USERNAME).isEmpty())) {
+            mgr.putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, (String) GeneralSharedPreferences.getInstance().get(KEY_USERNAME));
+        }
+
+        FormController.initializeJavaRosa(mgr);
+        activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+    }
 }

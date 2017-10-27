@@ -51,7 +51,6 @@ import timber.log.Timber;
 public class FormManagerList extends FormListFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
-    private static final String syncMsgKey = "syncmsgkey";
     BackgroundTasks backgroundTasks; // handled across orientation changes
     private AlertDialog alertDialog;
 
@@ -81,12 +80,6 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
             backgroundTasks.diskSyncTask.execute((Void[]) null);
         }
         super.onViewCreated(rootView, savedInstanceState);
-    }
-
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
     }
 
     @Override

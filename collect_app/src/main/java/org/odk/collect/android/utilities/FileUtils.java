@@ -128,42 +128,29 @@ public class FileUtils {
         }
     }
 
+    static int bufSize = 16 * 1024; // May be set by unit test
+
     public static String getMd5Hash(File file) {
         try {
-            // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
             MessageDigest md = MessageDigest.getInstance("MD5");
-            int chunkSize = 256;
+            final byte[] buffer = new byte[bufSize];
 
-            byte[] chunk = new byte[chunkSize];
-
-            // Get the size of the file
-            long llength = file.length();
-
-            if (llength > Integer.MAX_VALUE) {
+            if (file.length() > Integer.MAX_VALUE) {
                 Timber.e("File %s is too large", file.getName());
                 return null;
             }
 
-            int length = (int) llength;
+            final InputStream is = new FileInputStream(file);
 
-            InputStream is = null;
-            is = new FileInputStream(file);
-
-            int l = 0;
-            for (l = 0; l + chunkSize < length; l += chunkSize) {
-                is.read(chunk, 0, chunkSize);
-                md.update(chunk, 0, chunkSize);
+            while (true) {
+                int result = is.read(buffer, 0, bufSize);
+                if (result == -1) {
+                    break;
+                }
+                md.update(buffer, 0, result);
             }
 
-            int remaining = length - l;
-            if (remaining > 0) {
-                is.read(chunk, 0, remaining);
-                md.update(chunk, 0, remaining);
-            }
-            byte[] messageDigest = md.digest();
-
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
+            String md5 = new BigInteger(1, md.digest()).toString(16);
             while (md5.length() < 32) {
                 md5 = "0" + md5;
             }
@@ -297,8 +284,8 @@ public class FileUtils {
     }
 
     public static HashMap<String, String> parseXML(File xmlFile) {
-        HashMap<String, String> fields = new HashMap<String, String>();
-        InputStream is;
+        final HashMap<String, String> fields = new HashMap<String, String>();
+        final InputStream is;
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
@@ -314,80 +301,75 @@ public class FileUtils {
             isr = new InputStreamReader(is);
         }
 
-        if (isr != null) {
-
-            Document doc;
+        final Document doc;
+        try {
+            doc = XFormParser.getXMLDocument(isr);
+        } catch (IOException e) {
+            Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
+            throw new IllegalStateException("Unable to parse XML document", e);
+        } finally {
             try {
-                doc = XFormParser.getXMLDocument(isr);
+                isr.close();
             } catch (IOException e) {
-                Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
-                throw new IllegalStateException("Unable to parse XML document", e);
-            } finally {
-                try {
-                    isr.close();
-                } catch (IOException e) {
-                    Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
-                }
+                Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
             }
-
-            String xforms = "http://www.w3.org/2002/xforms";
-            String html = doc.getRootElement().getNamespace();
-
-            Element head = doc.getRootElement().getElement(html, "head");
-            Element title = head.getElement(html, "title");
-            if (title != null) {
-                fields.put(TITLE, XFormParser.getXMLText(title, true));
-            }
-
-            Element model = getChildElement(head, "model");
-            Element cur = getChildElement(model, "instance");
-
-            int idx = cur.getChildCount();
-            int i;
-            for (i = 0; i < idx; ++i) {
-                if (cur.isText(i)) {
-                    continue;
-                }
-                if (cur.getType(i) == Node.ELEMENT) {
-                    break;
-                }
-            }
-
-            if (i < idx) {
-                cur = cur.getElement(i); // this is the first data element
-                String id = cur.getAttributeValue(null, "id");
-                String xmlns = cur.getNamespace();
-
-                String project = cur.getAttributeValue(null, "project");	// smap
-                String version = cur.getAttributeValue(null, "version");
-                String uiVersion = cur.getAttributeValue(null, "uiVersion");
-                if (uiVersion != null) {
-                    // pre-OpenRosa 1.0 variant of spec
-                    Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
-                            version);
-                }
-
-                fields.put(PROJECT, (project == null) ? null : project);	// smap
-                fields.put(FORMID, (id == null) ? xmlns : id);
-                fields.put(VERSION, (version == null) ? null : version);
-            } else {
-                throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
-            }
-            try {
-                Element submission = model.getElement(xforms, "submission");
-                String submissionUri = submission.getAttributeValue(null, "action");
-                fields.put(SUBMISSIONURI, submissionUri);
-                String base64RsaPublicKey = submission.getAttributeValue(null,
-                        "base64RsaPublicKey");
-                fields.put(BASE64_RSA_PUBLIC_KEY,
-                        (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
-                                ? null : base64RsaPublicKey.trim());
-            } catch (Exception e) {
-                Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
-                // and that's totally fine.
-            }
-
         }
+
+        final String xforms = "http://www.w3.org/2002/xforms";
+        final String html = doc.getRootElement().getNamespace();
+
+        final Element head = doc.getRootElement().getElement(html, "head");
+        final Element title = head.getElement(html, "title");
+        if (title != null) {
+            fields.put(TITLE, XFormParser.getXMLText(title, true));
+        }
+
+        final Element model = getChildElement(head, "model");
+        Element cur = getChildElement(model, "instance");
+
+        final int idx = cur.getChildCount();
+        int i;
+        for (i = 0; i < idx; ++i) {
+            if (cur.isText(i)) {
+                continue;
+            }
+            if (cur.getType(i) == Node.ELEMENT) {
+                break;
+            }
+        }
+
+        if (i < idx) {
+            cur = cur.getElement(i); // this is the first data element
+            final String id = cur.getAttributeValue(null, "id");
+
+            String project = cur.getAttributeValue(null, "project");	// smap
+            final String version = cur.getAttributeValue(null, "version");
+            final String uiVersion = cur.getAttributeValue(null, "uiVersion");
+            if (uiVersion != null) {
+                // pre-OpenRosa 1.0 variant of spec
+                Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
+                        version);
+            }
+
+            fields.put(PROJECT, (project == null) ? null : project);	// smap
+            fields.put(FORMID, (id == null) ? cur.getNamespace() : id);
+            fields.put(VERSION, (version == null) ? null : version);
+        } else {
+            throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
+        }
+        try {
+            final Element submission = model.getElement(xforms, "submission");
+            fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
+            final String base64RsaPublicKey = submission.getAttributeValue(null,
+                    "base64RsaPublicKey");
+            fields.put(BASE64_RSA_PUBLIC_KEY,
+                    (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
+                            ? null : base64RsaPublicKey.trim());
+        } catch (Exception e) {
+            Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
+            // and that's totally fine.
+        }
+
         return fields;
     }
 
@@ -419,7 +401,7 @@ public class FileUtils {
     }
 
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf("."));
+        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
         return pathNoExtension + "-media";
     }
 

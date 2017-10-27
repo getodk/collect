@@ -36,6 +36,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.NFCActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 
 /**
@@ -44,7 +46,7 @@ import org.odk.collect.android.application.Collect;
  * @author Neil Penman (neilpenman@gmail.com)
  * Based on BarcodeWidget by Yaw Anokwa (yanokwa@gmail.com)
  */
-public class NfcWidget extends QuestionWidget implements IBinaryWidget {
+public class NfcWidget extends QuestionWidget implements BinaryWidget {
 	private Button mGetNfcButton;
 	private TextView mStringAnswer;
     private NfcAdapter mNfcAdapter;
@@ -58,14 +60,8 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 		params.setMargins(7, 5, 7, 5);
 
 		// set button formatting
-		mGetNfcButton = new Button(getContext());
-		mGetNfcButton.setId(QuestionWidget.newUniqueId());
-		mGetNfcButton.setText(getContext().getString(R.string.smap_read_nfc));
-		mGetNfcButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
-				answerFontsize);
-		mGetNfcButton.setPadding(20, 20, 20, 20);
-		mGetNfcButton.setEnabled(!prompt.isReadOnly());
-		mGetNfcButton.setLayoutParams(params);
+		mGetNfcButton = getSimpleButton(getContext().getString(R.string.smap_read_nfc));
+        mGetNfcButton.setEnabled(!prompt.isReadOnly());
 
 		// launch nfc capture intent on click
 		mGetNfcButton.setOnClickListener(new OnClickListener() {
@@ -74,23 +70,20 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 				Collect.getInstance()
 						.getActivityLogger()
 						.logInstanceAction(this, "recordNfc", "click",
-								formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
 
 
                 Intent i = new Intent(getContext(), NFCActivity.class);
                 Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+                        .setIndexWaitingForData(getFormEntryPrompt().getIndex());
                 ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.NFC_CAPTURE);
+                        ApplicationConstants.RequestCodes.NFC_CAPTURE);
 
 			}
 		});
 
 		// set text formatting
-		mStringAnswer = new TextView(getContext());
-		mStringAnswer.setId(QuestionWidget.newUniqueId());
-		mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-		mStringAnswer.setGravity(Gravity.CENTER);
+		mStringAnswer = getCenteredAnswerTextView();
 
 		String s = prompt.getAnswerText();
 		if (s != null) {
@@ -139,18 +132,6 @@ public class NfcWidget extends QuestionWidget implements IBinaryWidget {
 		InputMethodManager inputManager = (InputMethodManager) context
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-	}
-
-	@Override
-	public boolean isWaitingForBinaryData() {
-		return formEntryPrompt.getIndex().equals(
-				Collect.getInstance().getFormController()
-						.getIndexWaitingForData());
-	}
-
-	@Override
-	public void cancelWaitingForBinaryData() {
-		Collect.getInstance().getFormController().setIndexWaitingForData(null);
 	}
 
 	@Override

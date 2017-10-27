@@ -59,8 +59,8 @@ import timber.log.Timber;
 public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
     private FormSavedListener savedListener;
-    private Boolean save;
-    private Boolean markCompleted;
+    private boolean save;
+    private boolean markCompleted;
     private Uri uri;
     private String instanceName;
     private long mTaskId;		    // ---------- smap
@@ -76,8 +76,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     public static final int SAVED_AND_EXIT = 504;
     public static final int ENCRYPTION_ERROR = 505;
 
-    public SaveToDiskTask(Uri uri, Boolean saveAndExit, Boolean markCompleted, String updatedName,
-    		long taskId, String formPath, String surveyNotes, boolean canUpdate, FormDetail formDetail) {		// smap added assignment_id, formPath, formDetail
+    public SaveToDiskTask(Uri uri, boolean saveAndExit, boolean markCompleted, String updatedName,
+        long taskId, String formPath, String surveyNotes, boolean canUpdate, FormDetail formDetail) {		// smap added assignment_id, formPath, formDetail
+
         this.uri = uri;
         mFormDetail = formDetail;  // smap
         save = saveAndExit;

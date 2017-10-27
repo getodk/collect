@@ -35,6 +35,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploader;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 
 import java.util.ArrayList;
@@ -110,12 +111,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
         }
 
-        instancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
-        if (selectedInstanceIDs != null) {
-            for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                instancesToSend[i] = selectedInstanceIDs[i];
-            }
-        }
+        instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
@@ -164,12 +160,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         outState.putString(ALERT_MSG, alertMsg);
         outState.putBoolean(ALERT_SHOWING, alertShowing);
         outState.putString(AUTH_URI, url);
-
-        long[] toSend = new long[instancesToSend.length];
-        for (int i = 0; i < instancesToSend.length; ++i) {
-            toSend[i] = instancesToSend[i];
-        }
-        outState.putLongArray(TO_SEND, toSend);
+        outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
     }
 
 

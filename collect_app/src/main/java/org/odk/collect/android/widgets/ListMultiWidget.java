@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +45,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,11 +65,8 @@ import timber.log.Timber;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class ListMultiWidget extends QuestionWidget {
-
-    // Holds the entire question and answers. It is a horizontally aligned linear layout
-    // needed because it is created in the super() constructor via addQuestionText() call.
-    LinearLayout questionLayout;
+@SuppressLint("ViewConstructor")
+public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
     private boolean checkboxInit = true;
 
@@ -89,24 +88,25 @@ public class ListMultiWidget extends QuestionWidget {
         } else {
             items = prompt.getSelectChoices();
         }
-        checkBoxes = new ArrayList<CheckBox>();
-        formEntryPrompt = prompt;
+        checkBoxes = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
 
-        List<Selection> ve = new ArrayList<Selection>();
+        List<Selection> ve = new ArrayList<>();
         if (prompt.getAnswerValue() != null) {
             ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
 
         if (items != null) {
             for (int i = 0; i < items.size(); i++) {
+
                 CheckBox c = new CheckBox(getContext());
-                c.setTag(Integer.valueOf(i));
-                c.setId(QuestionWidget.newUniqueId());
+                c.setTag(i);
+                c.setId(ViewIds.generateViewId());
                 c.setFocusable(!prompt.isReadOnly());
                 c.setEnabled(!prompt.isReadOnly());
+
                 for (int vi = 0; vi < ve.size(); vi++) {
                     // match based on value, not key
                     if (items.get(i).getValue().equals(ve.get(vi).getValue())) {
@@ -121,19 +121,19 @@ public class ListMultiWidget extends QuestionWidget {
                 c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (!checkboxInit && formEntryPrompt.isReadOnly()) {
+                        if (!checkboxInit && getFormEntryPrompt().isReadOnly()) {
                             if (buttonView.isChecked()) {
                                 buttonView.setChecked(false);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.deselect",
                                         items.get((Integer) buttonView.getTag()).getValue(),
-                                        formEntryPrompt.getIndex());
+                                        getFormEntryPrompt().getIndex());
                             } else {
                                 buttonView.setChecked(true);
                                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                                         "onItemClick.select",
                                         items.get((Integer) buttonView.getTag()).getValue(),
-                                        formEntryPrompt.getIndex());
+                                        getFormEntryPrompt().getIndex());
                             }
                         }
                     }
@@ -151,14 +151,14 @@ public class ListMultiWidget extends QuestionWidget {
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = QuestionWidget.newUniqueId();
+                final int labelId = ViewIds.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;
@@ -186,7 +186,7 @@ public class ListMultiWidget extends QuestionWidget {
                                 errorMsg = getContext().getString(R.string.file_invalid, imageFile);
 
                             }
-                        } else if (errorMsg == null) {
+                        } else {
                             // An error hasn't been logged. We should have an image, but the file
                             // doesn't
                             // exist.
@@ -202,18 +202,17 @@ public class ListMultiWidget extends QuestionWidget {
                             missingImage.setPadding(2, 2, 2, 2);
                             missingImage.setId(labelId);
                         }
+
                     } catch (InvalidReferenceException e) {
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
-                } else {
-                    // There's no imageURI listed, so just ignore it.
                 }
 
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
@@ -287,7 +286,7 @@ public class ListMultiWidget extends QuestionWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        List<Selection> vc = new ArrayList<Selection>();
+        List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < checkBoxes.size(); i++) {
             CheckBox c = checkBoxes.get(i);
             if (c.isChecked()) {
@@ -303,7 +302,6 @@ public class ListMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void setFocus(Context context) {
         // Hide the soft keyboard if it's showing.
@@ -312,40 +310,12 @@ public class ListMultiWidget extends QuestionWidget {
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
-
-    // Override QuestionWidget's add question text. Build it the same
-    // but add it to the questionLayout
-    protected void addQuestionText(FormEntryPrompt p) {
-
-        // Add the text view. Textview always exists, regardless of whether there's text.
-        TextView questionText = new TextView(getContext());
-        questionText.setText(p.getLongText());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
-        questionText.setTypeface(null, Typeface.BOLD);
-        questionText.setPadding(0, 0, 0, 7);
-        questionText.setId(QuestionWidget.newUniqueId()); // assign random id
-
-        // Wrap to the size of the parent view
-        questionText.setHorizontallyScrolling(false);
-
-        if (p.getLongText() == null) {
-            questionText.setVisibility(GONE);
-        }
-
-        // Put the question text on the left half of the screen
-        LinearLayout.LayoutParams labelParams =
-                new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        labelParams.weight = 1;
-    }
-
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         for (CheckBox c : checkBoxes) {
             c.setOnLongClickListener(l);
         }
     }
-
 
     @Override
     public void cancelLongPress() {
@@ -360,7 +330,7 @@ public class ListMultiWidget extends QuestionWidget {
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(QuestionWidget.newUniqueId());
+        center.setId(ViewIds.generateViewId());
         addView(center, centerParams);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -368,4 +338,15 @@ public class ListMultiWidget extends QuestionWidget {
         params.addRule(RelativeLayout.LEFT_OF, center.getId());
         addView(v, params);
     }
+
+    @Override
+    public int getChoiceCount() {
+        return checkBoxes.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        checkBoxes.get(choiceIndex).setChecked(isSelected);
+    }
+
 }

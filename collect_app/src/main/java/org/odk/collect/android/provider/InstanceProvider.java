@@ -41,9 +41,6 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-/**
- *
- */
 public class InstanceProvider extends ContentProvider {
 
 
@@ -222,7 +219,8 @@ public class InstanceProvider extends ContentProvider {
         if (databaseHelper != null) {
             return databaseHelper;
         }
-        databaseHelper = new DatabaseHelper(DATABASE_NAME);
+        databaseHelper = new DatabaseHelper(DATABASE_NAME);     // smap instance of InstanceDatabaseHelper
+
         return databaseHelper;
     }
 

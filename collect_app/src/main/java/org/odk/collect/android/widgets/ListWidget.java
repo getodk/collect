@@ -14,10 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.TypedValue;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,11 +65,8 @@ import timber.log.Timber;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class ListWidget extends QuestionWidget implements OnCheckedChangeListener {
-
-    // Holds the entire question and answers. It is a horizontally aligned linear layout
-    // needed because it is created in the super() constructor via addQuestionText() call.
-    LinearLayout questionLayout;
+@SuppressLint("ViewConstructor")
+public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnCheckedChangeListener {
 
     List<SelectChoice> items; // may take a while to compute
 
@@ -84,7 +84,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         } else {
             items = prompt.getSelectChoices();
         }
-        buttons = new ArrayList<RadioButton>();
+        buttons = new ArrayList<>();
 
         // Layout holds the horizontal list of buttons
         LinearLayout buttonLayout = new LinearLayout(context);
@@ -98,8 +98,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             for (int i = 0; i < items.size(); i++) {
                 RadioButton r = new RadioButton(getContext());
 
-                r.setId(QuestionWidget.newUniqueId());
-                r.setTag(Integer.valueOf(i));
+                r.setId(ViewIds.generateViewId());
+                r.setTag(i);
                 r.setEnabled(!prompt.isReadOnly());
                 r.setFocusable(!prompt.isReadOnly());
 
@@ -122,14 +122,14 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 ImageView imageView = null;
                 TextView missingImage = null;
 
-                final int labelId = QuestionWidget.newUniqueId();
+                final int labelId = ViewIds.generateViewId();
 
                 // Now set up the image view
                 String errorMsg = null;
                 if (imageURI != null) {
                     try {
                         String imageFilename =
-                                ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                                ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                         final File imageFile = new File(imageFilename);
                         if (imageFile.exists()) {
                             Bitmap b = null;
@@ -157,7 +157,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                                 errorMsg = getContext().getString(R.string.file_invalid, imageFile);
 
                             }
-                        } else if (errorMsg == null) {
+                        } else {
                             // An error hasn't been logged. We should have an image, but the file
                             // doesn't
                             // exist.
@@ -173,18 +173,17 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                             missingImage.setPadding(2, 2, 2, 2);
                             missingImage.setId(labelId);
                         }
+
                     } catch (InvalidReferenceException e) {
                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                     }
-                } else {
-                    // There's no imageURI listed, so just ignore it.
                 }
 
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
@@ -298,7 +297,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                items.get((Integer) buttonView.getTag()).getValue(), formEntryPrompt.getIndex());
+                items.get((Integer) buttonView.getTag()).getValue(), getFormEntryPrompt().getIndex());
     }
 
 
@@ -323,12 +322,25 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
         center = new View(getContext());
         RelativeLayout.LayoutParams centerParams = new RelativeLayout.LayoutParams(0, 0);
         centerParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        center.setId(QuestionWidget.newUniqueId());
+        center.setId(ViewIds.generateViewId());
         addView(center, centerParams);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.LEFT_OF, center.getId());
         addView(v, params);
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return buttons.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        RadioButton button = buttons.get(choiceIndex);
+        button.setChecked(true);
+
+        onCheckedChanged(button, true);
     }
 }

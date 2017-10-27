@@ -26,9 +26,6 @@ import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -41,15 +38,17 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
+public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
     private Button getBarcodeButton;
     private TextView stringAnswer;
 
@@ -64,10 +63,9 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBarcode", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
 
-                Collect.getInstance().getFormController()
-                        .setIndexWaitingForData(formEntryPrompt.getIndex());
+                waitForData();
 
                 new IntentIntegrator((Activity) getContext())
                         .setCaptureActivity(ScannerWithFlashlightActivity.class)
@@ -78,12 +76,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
             }
         });
 
-        // set text formatting
-        stringAnswer = new TextView(getContext());
-        stringAnswer.setId(QuestionWidget.newUniqueId());
-        stringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        stringAnswer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-        stringAnswer.setGravity(Gravity.CENTER);
+        stringAnswer = getCenteredAnswerTextView();
 
         String s = prompt.getAnswerText();
         if (s != null) {
@@ -108,7 +101,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = stringAnswer.getText().toString();
-        if (s == null || s.equals("")) {
+        if (s.equals("")) {
             return null;
         } else {
             return new StringData(s);
@@ -116,7 +109,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
@@ -125,7 +118,7 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -134,18 +127,6 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController()
-                        .getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override

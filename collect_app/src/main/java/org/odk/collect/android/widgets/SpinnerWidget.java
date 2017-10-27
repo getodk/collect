@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +38,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
 
@@ -47,7 +49,8 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SpinnerWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
     List<SelectChoice> items;
     Spinner spinner;
     String[] choices;
@@ -76,7 +79,7 @@ public class SpinnerWidget extends QuestionWidget {
         // The spinner requires a custom adapter. It is defined below
         SpinnerAdapter adapter =
                 new SpinnerAdapter(getContext(), android.R.layout.simple_spinner_item, choices,
-                        TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+                        TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
 
         spinner.setAdapter(adapter);
         spinner.setPrompt(prompt.getQuestionText());
@@ -107,11 +110,11 @@ public class SpinnerWidget extends QuestionWidget {
                 if (position == items.size()) {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged.clearValue",
-                            "", formEntryPrompt.getIndex());
+                            "", getFormEntryPrompt().getIndex());
                 } else {
                     Collect.getInstance().getActivityLogger().logInstanceAction(this,
                             "onCheckedChanged",
-                            items.get(position).getValue(), formEntryPrompt.getIndex());
+                            items.get(position).getValue(), getFormEntryPrompt().getIndex());
                 }
             }
 
@@ -164,6 +167,22 @@ public class SpinnerWidget extends QuestionWidget {
         spinner.cancelLongPress();
     }
 
+    @Override
+    public int getChoiceCount() {
+        return items.size();
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        if (isSelected) {
+            spinner.setSelection(choiceIndex);
+
+        } else if (spinner.getSelectedItemPosition() == choiceIndex) {
+
+            clearAnswer();
+        }
+    }
+
     // Defines how to display the select answers
     private class SpinnerAdapter extends ArrayAdapter<String> {
         Context context;
@@ -202,6 +221,7 @@ public class SpinnerWidget extends QuestionWidget {
             if (position == (items.length - 1) && spinner.getSelectedItemPosition() == position) {
                 tv.setEnabled(false);
             } else if (spinner.getSelectedItemPosition() == position) {
+                //noinspection deprecation
                 tv.setTextColor(getContext().getResources().getColor(R.color.tintColor));
             } else {
                 tv.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));

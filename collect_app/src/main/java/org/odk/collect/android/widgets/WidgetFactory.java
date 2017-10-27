@@ -38,7 +38,7 @@ public class WidgetFactory {
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
-            boolean readOnlyOverride) {
+                                                        boolean readOnlyOverride) {
 
         // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
@@ -56,7 +56,11 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(context, fep);
+                        if (appearance.contains("ethiopian")) {
+                            questionWidget = new EthiopianDateWidget(context, fep);
+                        } else {
+                            questionWidget = new DateWidget(context, fep);
+                        }
                         break;
                     case Constants.DATATYPE_TIME:
                         questionWidget = new TimeWidget(context, fep);
@@ -153,7 +157,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -171,7 +175,7 @@ public class WidgetFactory {
                 } else if (appearance.startsWith("minimal")) {
                     questionWidget = new SpinnerWidget(context, fep);
                 } else if (appearance.startsWith("quick")) {
-                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
+                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep, readOnlyOverride);   // smap
                 } else if (appearance.equals("list-nolabel")) {
                     questionWidget = new ListWidget(context, fep, false);
                 } else if (appearance.equals("list")) {
@@ -179,7 +183,7 @@ public class WidgetFactory {
                 } else if (appearance.equals("label")) {
                     questionWidget = new LabelWidget(context, fep);
                 } else if (appearance.contains("search") || appearance.contains("autocomplete")) {
-                    questionWidget = new SelectOneSearchWidget(context, fep);
+                    questionWidget = new SelectOneSearchWidget(context, fep, readOnlyOverride);     // smap
                 } else {
                     questionWidget = new SelectOneWidget(context, fep, readOnlyOverride);   // smap - add readOnlyOverride
                 }
@@ -191,7 +195,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -210,6 +214,8 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
+                } else if (appearance.contains("autocomplete")) {
+                    questionWidget = new SelectMultipleAutocompleteWidget(context, fep, readOnlyOverride);  // smap
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep,  readOnlyOverride);
                 }

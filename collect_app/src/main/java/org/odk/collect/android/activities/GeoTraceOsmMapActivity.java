@@ -16,15 +16,12 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -40,7 +37,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.google.android.gms.location.LocationListener;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.location.LocationClient;
+import org.odk.collect.android.location.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.widgets.GeoTraceWidget;
 import org.osmdroid.tileprovider.IRegisterReceiver;
@@ -60,12 +61,13 @@ import java.util.concurrent.TimeUnit;
 
 
 public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceiver,
-        LocationListener {
+        LocationListener, LocationClient.LocationClientListener {
+
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
     public int zoomLevel = 3;
-    public Boolean gpsStatus = true;
-    private Boolean playCheck = false;
+    public boolean gpsStatus = true;
+    private boolean playCheck;
     private MapView mapView;
     public MyLocationNewOverlay myLocationOverlay;
     private ImageButton locationButton;
@@ -86,16 +88,18 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     private Integer traceMode; // 0 manual, 1 is automatic
     private Spinner timeUnits;
     private Spinner timeDelay;
-    private Boolean beenPaused;
+    private boolean beenPaused;
     private MapHelper helper;
 
     private AlertDialog zoomDialog;
+    private AlertDialog errorDialog;
+
     private View zoomDialogView;
     private Button zoomPointButton;
     private Button zoomLocationButton;
-    private Boolean modeActive = false;
-    private Boolean gpsOn = false;
-    private Boolean networkOn = false;
+    private boolean modeActive;
+
+    private LocationClient locationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +109,22 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         setContentView(R.layout.geotrace_osm_layout);
         setTitle(getString(R.string.geotrace_title)); // Setting title of the action
 
-        mapView = (MapView) findViewById(R.id.geotrace_mapview);
-        helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+        // For testing purposes:
+        if (mapView == null) {
+            mapView = (MapView) findViewById(R.id.geotrace_mapview);
+        }
+
+        if (helper == null) {
+            helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+        }
+
+        if (myLocationOverlay == null) {
+            myLocationOverlay = new MyLocationNewOverlay(mapView);
+        }
+
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(zoomLevel);
-        myLocationOverlay = new MyLocationNewOverlay(mapView);
 
         inflater = this.getLayoutInflater();
         traceSettingsView = inflater.inflate(R.layout.geotrace_dialog, null);
@@ -304,35 +318,15 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 
         mapView.invalidate();
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = locationManager.getProviders(true);
-        for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                gpsOn = true;
-            }
-            if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                networkOn = true;
-            }
-        }
-        if (gpsOn) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }
-        if (networkOn) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        }
+
+        locationClient = LocationClients.clientForContext(this);
+        locationClient.setListener(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
+        locationClient.start();
     }
 
     @Override
@@ -341,13 +335,11 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         if (mapView != null) {
             helper.setBasemap();
         }
-
-        upMyLocationOverlayLayers();
     }
 
     @Override
     protected void onStop() {
-        disableMyLocation();
+        locationClient.stop();
         super.onStop();
     }
 
@@ -380,7 +372,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         }, delay, delay, units);
 
     }
-
 
     public void overlayIntentTrace(String str) {
         String s = str.replace("; ", ";");
@@ -416,20 +407,18 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     private void disableMyLocation() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!locationClient.isLocationAvailable()) {
             myLocationOverlay.setEnabled(false);
             myLocationOverlay.disableFollowLocation();
             myLocationOverlay.disableMyLocation();
             gpsStatus = false;
         }
-
     }
 
     private void upMyLocationOverlayLayers() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationClient.isLocationAvailable()) {
             overlayMyLocationLayers();
+
         } else {
             showGPSDisabledAlertToUser();
         }
@@ -502,8 +491,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+        errorDialog = alertDialogBuilder.create();
+        errorDialog.show();
     }
 
     //This happens on click of the play button
@@ -630,7 +619,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         String units = timeUnits.getSelectedItem().toString();
         Long timeDelay;
         TimeUnit timeUnitsValue;
-        if (units == getString(R.string.minutes)) {
+        if (units.equals(getString(R.string.minutes))) {
             timeDelay = Long.parseLong(delay) * (60); //Convert minutes to seconds
             timeUnitsValue = TimeUnit.SECONDS;
         } else {
@@ -746,9 +735,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         @Override
         public void onMarkerDrag(Marker marker) {
             update_polygon();
-
+            marker.setSubDescription("0.0");
         }
-
     };
 
     private void showClearDialog() {
@@ -866,22 +854,43 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public void onClientStart() {
+        locationClient.requestLocationUpdates(this);
+        upMyLocationOverlayLayers();
+    }
+
+    @Override
+    public void onClientStartFailure() {
+        showGPSDisabledAlertToUser();
+    }
+
+    @Override
+    public void onClientStop() {
+        disableMyLocation();
+    }
+
+    public void setModeActive(boolean modeActive) {
+        this.modeActive = modeActive;
+    }
+
+    public void setMapView(MapView mapView) {
+        this.mapView = mapView;
+    }
+
+    public void setHelper(MapHelper helper) {
+        this.helper = helper;
+    }
+
+    public void setMyLocationOverlay(MyLocationNewOverlay myLocationOverlay) {
+        this.myLocationOverlay = myLocationOverlay;
+    }
+
+    public AlertDialog getErrorDialog() {
+        return errorDialog;
     }
 }
