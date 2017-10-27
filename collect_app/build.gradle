@@ -62,8 +62,8 @@ if (secretsFile.exists()) {
 }
 
 android {
-    compileSdkVersion(26)
-    buildToolsVersion('26.0.1')
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId('org.odk.collect.android')
@@ -141,7 +141,6 @@ android {
     dexOptions {
         javaMaxHeapSize '2048M'
     }
-    buildToolsVersion '26.0.2'
 }
 
 configurations.all {
