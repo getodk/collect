@@ -37,7 +37,7 @@ public class NFCActivity extends Activity implements NFCListener {
 
     private ProgressDialog mNfcDialog;
     private String mNfcId;
-    private NfcAdapter mNfcAdapter;		// NFC
+    private NfcAdapter mNfcAdapter;        // NFC
     public NdefReaderTask mReadNFC;
     private PendingIntent mNfcPendingIntent;
     private IntentFilter[] mNfcFilters;
@@ -54,7 +54,7 @@ public class NFCActivity extends Activity implements NFCListener {
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.smap_read_nfc));
 
         /*
-		 * NFC
+         * NFC
 		 */
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
@@ -82,7 +82,7 @@ public class NFCActivity extends Activity implements NFCListener {
 
             // Filter
             IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-            mNfcFilters = new IntentFilter[] {
+            mNfcFilters = new IntentFilter[]{
                     filter
             };
 
@@ -98,17 +98,17 @@ public class NFCActivity extends Activity implements NFCListener {
 
     }
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
 
 
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             stopNFCDispatch(this, mNfcAdapter);        // NFC
         }
 
@@ -124,7 +124,7 @@ public class NFCActivity extends Activity implements NFCListener {
     protected void onResume() {
         super.onResume();
 
-        if(mNfcAdapter != null && mNfcAdapter.isEnabled()) {
+        if (mNfcAdapter != null && mNfcAdapter.isEnabled()) {
             setupNFCDispatch(this, mNfcAdapter);        // NFC
         }
 
@@ -133,36 +133,36 @@ public class NFCActivity extends Activity implements NFCListener {
 
     @Override
     protected void onStart() {
-    	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this);
+        super.onStart();
+        Collect.getInstance().getActivityLogger().logOnStart(this);
     }
 
     @Override
     protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this);
-    	super.onStop();
+        Collect.getInstance().getActivityLogger().logOnStop(this);
+        super.onStop();
     }
 
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
     private void setupNfcDialog() {
-    	Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupNFCDialog", "show");
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "setupNFCDialog", "show");
         // dialog displayed while reading NFC
         mNfcDialog = new ProgressDialog(this);
         DialogInterface.OnClickListener nfcButtonListener =
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case DialogInterface. BUTTON_NEGATIVE:
-                            Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
-                            mNfcId = null;
-                            finish();
-                            break;
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                Collect.getInstance().getActivityLogger().logInstanceAction(this, "cancelLocation", "cancel");
+                                mNfcId = null;
+                                finish();
+                                break;
+                        }
                     }
-                }
-            };
+                };
 
         // back button doesn't cancel
         mNfcDialog.setCancelable(false);
@@ -172,8 +172,8 @@ public class NFCActivity extends Activity implements NFCListener {
         mNfcDialog.setMessage(getString(R.string.smap_swipe_nfc));
         //mLocationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.accept_location),
         //    geopointButtonListener);
-        mNfcDialog.setButton(DialogInterface. BUTTON_NEGATIVE, getString(R.string.cancel_location),
-            nfcButtonListener);
+        mNfcDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel_location),
+                nfcButtonListener);
     }
 
 
@@ -185,9 +185,6 @@ public class NFCActivity extends Activity implements NFCListener {
 
         finish();
     }
-
-
-
 
 
     private String truncateDouble(float number) {
@@ -226,7 +223,7 @@ public class NFCActivity extends Activity implements NFCListener {
 
     /**
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
      */
     public void setupNFCDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.enableForegroundDispatch(activity, mNfcPendingIntent, mNfcFilters, null);
@@ -234,7 +231,7 @@ public class NFCActivity extends Activity implements NFCListener {
 
     /**
      * @param activity The corresponding {@link Activity} requesting to stop the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
      */
     public static void stopNFCDispatch(final Activity activity, NfcAdapter adapter) {
 
@@ -242,12 +239,6 @@ public class NFCActivity extends Activity implements NFCListener {
             adapter.disableForegroundDispatch(activity);
         }
     }
-
-
-
-
-
-
 
 
 }
