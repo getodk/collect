@@ -47,6 +47,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.utilities.XPathParseTool;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -287,7 +288,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
                         rb.setOnCheckedChangeListener(this);
                         rb.setOnClickListener(this);
-                        rb.setTextSize(answerFontsize);
+                        rb.setTextSize(getAnswerFontSize());
                         rb.setText(label);
                         rb.setTag(index);
                         rb.setId(ViewIds.generateViewId());

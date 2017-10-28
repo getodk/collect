@@ -21,12 +21,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -73,6 +72,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -82,6 +82,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.exception.GDriveConnectionException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -98,6 +99,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
@@ -108,7 +110,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
-import org.odk.collect.android.widgets.BinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangeWidget;
 import org.odk.collect.android.widgets.StringWidget;
@@ -125,8 +126,7 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
-import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROSA_NAMESPACE;
-
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -138,7 +138,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.XML_OPENROS
  */
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener {
+        OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
+        CustomDatePickerDialog.CustomDatePickerDialogListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -151,29 +152,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final boolean DO_NOT_EXIT = false;
     private static final boolean EVALUATE_CONSTRAINTS = true;
     private static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
-
-    // Request codes for returning data from specified intent.
-    public static final int IMAGE_CAPTURE = 1;
-    public static final int BARCODE_CAPTURE = 2;
-    public static final int AUDIO_CAPTURE = 3;
-    public static final int VIDEO_CAPTURE = 4;
-    public static final int LOCATION_CAPTURE = 5;
-    public static final int HIERARCHY_ACTIVITY = 6;
-    public static final int IMAGE_CHOOSER = 7;
-    public static final int AUDIO_CHOOSER = 8;
-    public static final int VIDEO_CHOOSER = 9;
-    public static final int EX_STRING_CAPTURE = 10;
-    public static final int EX_INT_CAPTURE = 11;
-    public static final int EX_DECIMAL_CAPTURE = 12;
-    public static final int DRAW_IMAGE = 13;
-    public static final int SIGNATURE_CAPTURE = 14;
-    public static final int ANNOTATE_IMAGE = 15;
-    public static final int ALIGNED_IMAGE = 16;
-    public static final int BEARING_CAPTURE = 17;
-    public static final int EX_GROUP_CAPTURE = 18;
-    public static final int OSM_CAPTURE = 19;
-    public static final int GEOSHAPE_CAPTURE = 20;
-    public static final int GEOTRACE_CAPTURE = 21;
 
     // Extra returned from gp activity
     public static final String LOCATION_RESULT = "LOCATION_RESULT";
@@ -250,6 +228,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private FormsDao formsDao;
 
+    private Bundle state;
+
     /**
      * Called when the activity is first created.
      */
@@ -305,7 +285,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         String instancePath = null;
         boolean newForm = true;
         autoSaved = false;
+        // only check the buttons if it's enabled in preferences
+        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
+        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
+            showNavigationButtons = true;
+        }
         if (savedInstanceState != null) {
+            state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
             }
@@ -554,6 +540,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    public Bundle getState() {
+        return state;
+    }
+
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.loading_form));
@@ -596,6 +586,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         outState.putString(KEY_ERROR, errorMessage);
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
+
+        if (currentView instanceof ODKView) {
+            outState.putAll(((ODKView) currentView).getState());
+            // This value is originally set in onCreate() method but if you only minimize the app or
+            // block/unblock the screen, onCreate() method might not be called (if the activity is just paused
+            // not stopped https://developer.android.com/guide/components/activities/activity-lifecycle.html)
+            state = outState;
+        }
     }
 
     @Override
@@ -618,16 +616,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         if (resultCode == RESULT_CANCELED) {
             // request was canceled...
-            if (requestCode != HIERARCHY_ACTIVITY) {
-                ((ODKView) currentView).cancelWaitingForBinaryData();
+            if (requestCode != RequestCodes.HIERARCHY_ACTIVITY && getCurrentViewIfODKView() != null) {
+                getCurrentViewIfODKView().cancelWaitingForBinaryData();
             }
             return;
         }
 
         // intent is needed for all requestCodes except of DRAW_IMAGE, ANNOTATE_IMAGE, SIGNATURE_CAPTURE, IMAGE_CAPTURE and HIERARCHY_ACTIVITY
-        if (intent == null && requestCode != DRAW_IMAGE && requestCode != ANNOTATE_IMAGE
-                && requestCode != SIGNATURE_CAPTURE && requestCode != IMAGE_CAPTURE
-                && requestCode != HIERARCHY_ACTIVITY) {
+        if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
+                && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE
+                && requestCode != RequestCodes.HIERARCHY_ACTIVITY) {
             Timber.w("The intent has a null value for requestCode: " + requestCode);
             ToastUtils.showLongToast(getString(R.string.null_intent_value));
             return;
@@ -641,7 +639,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 Timber.i("QR code scanning cancelled");
             } else {
                 String sb = intent.getStringExtra("SCAN_RESULT");
-                ((ODKView) currentView).setBinaryData(sb);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(sb);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 refreshCurrentView();
                 return;
@@ -651,35 +651,41 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         switch (requestCode) {
 
-            case OSM_CAPTURE:
+            case RequestCodes.OSM_CAPTURE:
                 String osmFileName = intent.getStringExtra("OSM_FILE_NAME");
-                ((ODKView) currentView).setBinaryData(osmFileName);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(osmFileName);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case EX_STRING_CAPTURE:
-            case EX_INT_CAPTURE:
-            case EX_DECIMAL_CAPTURE:
+            case RequestCodes.EX_STRING_CAPTURE:
+            case RequestCodes.EX_INT_CAPTURE:
+            case RequestCodes.EX_DECIMAL_CAPTURE:
                 String key = "value";
                 boolean exists = intent.getExtras().containsKey(key);
                 if (exists) {
                     Object externalValue = intent.getExtras().get(key);
-                    ((ODKView) currentView).setBinaryData(externalValue);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setBinaryData(externalValue);
+                    }
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
                 break;
-            case EX_GROUP_CAPTURE:
+            case RequestCodes.EX_GROUP_CAPTURE:
                 try {
                     Bundle extras = intent.getExtras();
-                    ((ODKView) currentView).setDataForFields(extras);
+                    if (getCurrentViewIfODKView() != null) {
+                        getCurrentViewIfODKView().setDataForFields(extras);
+                    }
                 } catch (JavaRosaException e) {
                     Timber.e(e);
                     createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
                 }
                 break;
-            case DRAW_IMAGE:
-            case ANNOTATE_IMAGE:
-            case SIGNATURE_CAPTURE:
-            case IMAGE_CAPTURE:
+            case RequestCodes.DRAW_IMAGE:
+            case RequestCodes.ANNOTATE_IMAGE:
+            case RequestCodes.SIGNATURE_CAPTURE:
+            case RequestCodes.IMAGE_CAPTURE:
                 /*
                  * We saved the image to the tempfile_path, but we really want it to
                  * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
@@ -689,7 +695,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                scaleDownImageIfNeeded(Collect.TMPFILE_PATH);
+                ImageConverter.execute(Collect.TMPFILE_PATH, getWidgetWaitingForBinaryData(), this);
                 File fi = new File(Collect.TMPFILE_PATH);
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
@@ -703,10 +709,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
-                ((ODKView) currentView).setBinaryData(nf);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(nf);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case ALIGNED_IMAGE:
+            case RequestCodes.ALIGNED_IMAGE:
                 /*
                  * We saved the image to the tempfile_path; the app returns the full
                  * path to the saved file in the EXTRA_OUTPUT extra. Take that file
@@ -726,10 +734,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Timber.i("Renamed %s to %s", fi.getAbsolutePath(), nf.getAbsolutePath());
                 }
 
-                ((ODKView) currentView).setBinaryData(nf);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(nf);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case IMAGE_CHOOSER:
+            case RequestCodes.IMAGE_CHOOSER:
                 /*
                  * We have a saved image somewhere, but we really want it to be in:
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move
@@ -748,8 +758,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 new Thread(runnable).start();
 
                 break;
-            case AUDIO_CAPTURE:
-            case VIDEO_CAPTURE:
+            case RequestCodes.AUDIO_CAPTURE:
+            case RequestCodes.VIDEO_CAPTURE:
                 Uri mediaUri = intent.getData();
                 saveAudioVideoAnswer(mediaUri);
                 String filePath = MediaUtils.getDataColumn(this, mediaUri, null, null);
@@ -764,32 +774,39 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 break;
 
 
-            case AUDIO_CHOOSER:
-            case VIDEO_CHOOSER:
+            case RequestCodes.AUDIO_CHOOSER:
+            case RequestCodes.VIDEO_CHOOSER:
                 saveAudioVideoAnswer(intent.getData());
                 break;
-            case LOCATION_CAPTURE:
+            case RequestCodes.LOCATION_CAPTURE:
                 String sl = intent.getStringExtra(LOCATION_RESULT);
-                ((ODKView) currentView).setBinaryData(sl);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(sl);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case GEOSHAPE_CAPTURE:
-                //String ls = intent.getStringExtra(GEOSHAPE_RESULTS);
+            case RequestCodes.GEOSHAPE_CAPTURE:
                 String gshr = intent.getStringExtra(GEOSHAPE_RESULTS);
-                ((ODKView) currentView).setBinaryData(gshr);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(gshr);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case GEOTRACE_CAPTURE:
+            case RequestCodes.GEOTRACE_CAPTURE:
                 String traceExtra = intent.getStringExtra(GEOTRACE_RESULTS);
-                ((ODKView) currentView).setBinaryData(traceExtra);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(traceExtra);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case BEARING_CAPTURE:
+            case RequestCodes.BEARING_CAPTURE:
                 String bearing = intent.getStringExtra(BEARING_RESULT);
-                ((ODKView) currentView).setBinaryData(bearing);
+                if (getCurrentViewIfODKView() != null) {
+                    getCurrentViewIfODKView().setBinaryData(bearing);
+                }
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 break;
-            case HIERARCHY_ACTIVITY:
+            case RequestCodes.HIERARCHY_ACTIVITY:
                 // We may have jumped to a new index in hierarchy activity, so
                 // refresh
                 break;
@@ -811,12 +828,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (chosenImage != null) {
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
-                scaleDownImageIfNeeded(newImage.getPath());
+                ImageConverter.execute(newImage.getPath(), getWidgetWaitingForBinaryData(), this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dismissDialog(SAVING_IMAGE_DIALOG);
-                        ((ODKView) currentView).setBinaryData(newImage);
+                        if (getCurrentViewIfODKView() != null) {
+                            getCurrentViewIfODKView().setBinaryData(newImage);
+                        }
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         refreshCurrentView();
                     }
@@ -843,20 +862,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
-    private void scaleDownImageIfNeeded(String path) {
-        QuestionWidget questionWidget = getWidgetWaitingForBinaryData();
-        if (questionWidget != null) {
-            Integer maxPixels = getMaxPixelsForImageIfDefined(questionWidget);
-            if (maxPixels != null) {
-                scaleDownImage(path, maxPixels);
-            }
-        }
-    }
-
     private QuestionWidget getWidgetWaitingForBinaryData() {
         QuestionWidget questionWidget = null;
         for (QuestionWidget qw :  ((ODKView) currentView).getWidgets()) {
-            if (qw instanceof BinaryWidget && ((BinaryWidget) qw).isWaitingForBinaryData()) {
+            if (qw.isWaitingForData()) {
                 questionWidget = qw;
             }
         }
@@ -864,51 +873,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         return questionWidget;
     }
 
-    private Integer getMaxPixelsForImageIfDefined(QuestionWidget questionWidget) {
-        Integer maxPixels = null;
-        for (TreeElement attrs : questionWidget.getPrompt().getBindAttributes()) {
-            if ("max-pixels".equals(attrs.getName()) && XML_OPENROSA_NAMESPACE.equals(attrs.getNamespace())) {
-                try {
-                    maxPixels = Integer.parseInt(attrs.getAttributeValue());
-                } catch (NumberFormatException e) {
-                    Timber.i(e);
-                }
-            }
-        }
-        return maxPixels;
-    }
-
-    /*
-    This method is used to reduce an original picture size.
-    maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
-     */
-    private void scaleDownImage(String path, int maxPixels) {
-        Bitmap originalImage = FileUtils.getBitmap(path, new BitmapFactory.Options());
-
-        if (originalImage != null) {
-            double originalWidth = originalImage.getWidth();
-            double originalHeight = originalImage.getHeight();
-
-            if (originalWidth > originalHeight && originalWidth > maxPixels) {
-                int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
-
-                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, maxPixels, newHeight, false);
-                FileUtils.saveBitmapToFile(scaledImage, path);
-            } else if (originalHeight > maxPixels) {
-                int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
-
-                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, newWidth, maxPixels, false);
-                FileUtils.saveBitmapToFile(scaledImage, path);
-            }
-        }
-    }
-
     private void saveAudioVideoAnswer(Uri media) {
         // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
         // content provider.
-        ((ODKView) currentView).setBinaryData(media);
+        if (getCurrentViewIfODKView() != null) {
+            getCurrentViewIfODKView().setBinaryData(media);
+        }
         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
     }
 
@@ -1001,6 +973,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
                 return true;
             case R.id.menu_goto:
+                state = null;
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
@@ -1013,7 +986,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                startActivityForResult(i, HIERARCHY_ACTIVITY);
+                startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_preferences:
                 Collect.getInstance()
@@ -1040,8 +1013,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
-        if (formController.currentPromptIsQuestion() && currentView instanceof ODKView) {
-            HashMap<FormIndex, IAnswerData> answers = ((ODKView) currentView)
+        if (formController.currentPromptIsQuestion() && getCurrentViewIfODKView() != null) {
+            HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
                     .getAnswers();
             try {
                 FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
@@ -1099,7 +1072,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             * clicked on.
             */
             boolean shouldClearDialogBeShown;
-            for (QuestionWidget qw : ((ODKView) currentView).getWidgets()) {
+            for (QuestionWidget qw : getCurrentViewIfODKView().getWidgets()) {
                 shouldClearDialogBeShown = false;
                 if (qw instanceof StringWidget) {
                     for (int i = 0; i < qw.getChildCount(); i++) {
@@ -1116,7 +1089,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     Collect.getInstance()
                             .getActivityLogger()
                             .logInstanceAction(this, "onContextItemSelected",
-                                    "createClearDialog", qw.getPrompt().getIndex());
+                                    "createClearDialog", qw.getFormEntryPrompt().getIndex());
                     createClearDialog(qw);
                     break;
                 }
@@ -1328,7 +1301,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkv.getWidgets()) {
-                    if (!qw.getPrompt().isReadOnly()) {
+                    if (!qw.getFormEntryPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
                         if (qw instanceof StringWidget) {
@@ -1415,6 +1388,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * answers to the data model after checking constraints.
      */
     private void showNextView() {
+        state = null;
         try {
             FormController formController = Collect.getInstance()
                     .getFormController();
@@ -1490,6 +1464,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * model without checking constraints.
      */
     private void showPreviousView() {
+        state = null;
         try {
             FormController formController = Collect.getInstance().getFormController();
             if (formController != null) {
@@ -2105,12 +2080,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         Collect.getInstance()
                 .getActivityLogger()
                 .logInstanceAction(this, "createClearDialog", "show",
-                        qw.getPrompt().getIndex());
+                        qw.getFormEntryPrompt().getIndex());
         alertDialog = new AlertDialog.Builder(this).create();
 
         alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
-        String question = qw.getPrompt().getLongText();
+        String question = qw.getFormEntryPrompt().getLongText();
         if (question == null) {
             question = "";
         }
@@ -2130,7 +2105,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
-                                        "clearAnswer", qw.getPrompt().getIndex());
+                                        "clearAnswer", qw.getFormEntryPrompt().getIndex());
                         clearAnswer(qw);
                         saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                         break;
@@ -2138,7 +2113,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         Collect.getInstance()
                                 .getActivityLogger()
                                 .logInstanceAction(this, "createClearDialog",
-                                        "cancel", qw.getPrompt().getIndex());
+                                        "cancel", qw.getFormEntryPrompt().getIndex());
                         break;
                 }
             }
@@ -2329,9 +2304,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
             }
         }
-        if (currentView != null && currentView instanceof ODKView) {
+        if (getCurrentViewIfODKView() != null) {
             // stop audio if it's playing
-            ((ODKView) currentView).stopAudio();
+            getCurrentViewIfODKView().stopAudio();
         }
 
 
@@ -2382,12 +2357,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
         if (saveToDiskTask != null) {
             saveToDiskTask.setFormSavedListener(this);
-        }
-
-        // only check the buttons if it's enabled in preferences
-        String navigation = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_NAVIGATION);
-        if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
-            showNavigationButtons = true;
         }
 
         if (showNavigationButtons) {
@@ -2473,8 +2442,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             staleView = null;
         }
 
-        if (currentView != null && currentView instanceof ODKView) {
-            ((ODKView) currentView).setFocus(this);
+        if (getCurrentViewIfODKView() != null) {
+            getCurrentViewIfODKView().setFocus(this);
         }
         beenSwiped = false;
     }
@@ -2557,13 +2526,16 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             }
 
-            // if somehow we end up with a bad language, set it to the default
+            long start = System.currentTimeMillis();
+            Timber.i("calling formController.setLanguage");
             try {
                 formController.setLanguage(newLanguage);
             } catch (Exception e) {
+                // if somehow we end up with a bad language, set it to the default
                 Timber.e("Ended up with a bad language. %s", newLanguage);
                 formController.setLanguage(defaultLanguage);
             }
+            Timber.i("Done in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
         }
 
         boolean pendingActivityResult = task.hasPendingActivityResult();
@@ -2838,8 +2810,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             int xpixellimit = (int) (dm.xdpi * .25);
             int ypixellimit = (int) (dm.ydpi * .25);
 
-            if (currentView != null && currentView instanceof ODKView) {
-                if (((ODKView) currentView).suppressFlingGesture(e1, e2,
+            if (getCurrentViewIfODKView() != null) {
+                if (getCurrentViewIfODKView().suppressFlingGesture(e1, e2,
                         velocityX, velocityY)) {
                     return false;
                 }
@@ -2951,6 +2923,26 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
             }
         }
+    }
+
+    @Override
+    public void onDateChanged(LocalDateTime date) {
+        ODKView odkView = getCurrentViewIfODKView();
+        if (odkView != null) {
+            odkView.setBinaryData(date);
+        }
+    }
+
+    /**
+     * getter for currentView variable. This method should always be used
+     * to access currentView as an ODKView object to avoid inconsistency
+     **/
+    @Nullable
+    private ODKView getCurrentViewIfODKView() {
+        if (currentView instanceof ODKView) {
+            return (ODKView) currentView;
+        }
+        return null;
     }
 
     /**

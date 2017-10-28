@@ -126,8 +126,8 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
 
         if (isWidgetValid()) {
             elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
-            if (getPrompt().getAnswerValue() != null) {
-                actualValue = new BigDecimal(getPrompt().getAnswerValue().getValue().toString());
+            if (getFormEntryPrompt().getAnswerValue() != null) {
+                actualValue = new BigDecimal(getFormEntryPrompt().getAnswerValue().getValue().toString());
                 progress = actualValue.subtract(rangeStart).abs().divide(rangeStep).intValue();
             } else {
                 setUpNullValue();
@@ -138,8 +138,8 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
                 setUpSeekBar();
             } else {
                 setUpDisplayedValuesForNumberPicker();
-                answerTextView.setText(getPrompt().getAnswerValue() != null ? String.valueOf(actualValue) : getContext().getString(R.string.no_value_selected));
-                pickerButton.setText(getPrompt().getAnswerValue() != null ? getContext().getString(R.string.edit_value) : getContext().getString(R.string.select_value));
+                answerTextView.setText(getFormEntryPrompt().getAnswerValue() != null ? String.valueOf(actualValue) : getContext().getString(R.string.no_value_selected));
+                pickerButton.setText(getFormEntryPrompt().getAnswerValue() != null ? getContext().getString(R.string.edit_value) : getContext().getString(R.string.select_value));
             }
         }
     }
@@ -162,7 +162,7 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
     }
 
     private void setUpWidgetParameters() {
-        RangeQuestion rangeQuestion = (RangeQuestion) getPrompt().getQuestion();
+        RangeQuestion rangeQuestion = (RangeQuestion) getFormEntryPrompt().getQuestion();
 
         rangeStart = rangeQuestion.getRangeStart();
         rangeEnd = rangeQuestion.getRangeEnd();
@@ -213,7 +213,7 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
     }
 
     private void setUpAppearance() {
-        String appearance = getPrompt().getQuestion().getAppearanceAttr();
+        String appearance = getFormEntryPrompt().getQuestion().getAppearanceAttr();
 
         if (appearance == null) {
             loadAppearance(R.layout.range_widget_horizontal, R.id.seek_bar);

@@ -55,8 +55,7 @@ the License.
             android:layout_height="50dip"
             android:layout_weight="1"
             android:contentDescription="@string/form_backward"
-            android:src="@drawable/ic_menu_backward"
-            android:textSize="12sp"/>
+            android:src="@drawable/navigate_back_button"/>
 
         <ImageButton
             android:id="@+id/form_forward_button"
@@ -64,8 +63,7 @@ the License.
             android:layout_height="50dip"
             android:layout_weight="1"
             android:contentDescription="@string/form_forward"
-            android:src="@drawable/ic_menu_forward"
-            android:textSize="12sp"/>
+            android:src="@drawable/navigate_forward_button"/>
     </LinearLayout>
 
 </RelativeLayout>

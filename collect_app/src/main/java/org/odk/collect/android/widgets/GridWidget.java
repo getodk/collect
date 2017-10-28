@@ -51,6 +51,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.List;
@@ -114,7 +115,6 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         } else {
             items = prompt.getSelectChoices();
         }
-        formEntryPrompt = prompt;
 
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
@@ -160,7 +160,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
                 audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        player);
+                        getPlayer());
             } else {
                 audioHandlers[i] = null;
             }
@@ -232,7 +232,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 choices[i] = prompt.getSelectChoiceText(sc);
 
                 TextView missingImage = new TextView(getContext());
-                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
@@ -311,7 +311,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 selected[position] = true;
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "onItemClick.select",
-                        items.get(position).getValue(), formEntryPrompt.getIndex());
+                        items.get(position).getValue(), getFormEntryPrompt().getIndex());
                 imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
 
@@ -341,7 +341,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
         }
 
         // Use the custom image adapter and initialize the grid view
-        ImageAdapter ia = new ImageAdapter(getContext(), choices);
+        ImageAdapter ia = new ImageAdapter(choices);
         gridview.setAdapter(ia);
         addAnswerView(gridview);
     }
@@ -408,26 +408,21 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
     private class ImageAdapter extends BaseAdapter {
         private String[] choices;
 
-
-        ImageAdapter(Context c, String[] choices) {
+        ImageAdapter(String[] choices) {
             this.choices = choices;
         }
-
 
         public int getCount() {
             return choices.length;
         }
 
-
         public Object getItem(int position) {
             return null;
         }
 
-
         public long getItemId(int position) {
             return 0;
         }
-
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {

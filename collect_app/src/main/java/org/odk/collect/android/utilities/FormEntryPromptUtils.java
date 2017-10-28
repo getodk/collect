@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import android.content.Context;
+
 import org.javarosa.core.model.data.DateData;
 import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -25,15 +27,15 @@ import java.util.Date;
 
 public class FormEntryPromptUtils {
 
-    public static String getAnswerText(FormEntryPrompt fep) {
+    public static String getAnswerText(FormEntryPrompt fep, Context context) {
         IAnswerData data = fep.getAnswerValue();
         String text;
         if (data instanceof DateTimeData) {
-            text = DateTimeUtils.getDateTimeBasedOnUserLocale((Date) data.getValue(),
-                    fep.getQuestion().getAppearanceAttr(), true);
+            text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), true, context);
         } else if (data instanceof DateData) {
-            text = DateTimeUtils.getDateTimeBasedOnUserLocale((Date) data.getValue(),
-                    fep.getQuestion().getAppearanceAttr(), false);
+            text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), false, context);
         } else {
             text = fep.getAnswerText();
         }

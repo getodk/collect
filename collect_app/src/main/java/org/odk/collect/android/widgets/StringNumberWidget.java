@@ -39,7 +39,7 @@ public class StringNumberWidget extends StringWidget {
 
         EditText answerTextField = getAnswerTextField();
 
-        answerTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerTextField.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll

@@ -23,20 +23,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import org.javarosa.core.model.data.DateData;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.DateTimeUtils;
@@ -57,134 +49,48 @@ import static android.content.Context.ACCESSIBILITY_SERVICE;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDateSetListener {
+public class DateWidget extends AbstractDateWidget implements DatePickerDialog.OnDateSetListener {
     private DatePickerDialog datePickerDialog;
-
-    private Button dateButton;
-    private TextView dateTextView;
-
-    private boolean hideDay;
-    private boolean hideMonth;
-    private boolean showCalendar;
-
-    private int year;
-    private int month;
-    private int dayOfMonth;
-
-    private boolean nullAnswer;
 
     public DateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        setGravity(Gravity.START);
-
-        readAppearance();
-        createDateButton();
-        dateTextView = getAnswerTextView();
-        createDatePickerDialog();
-        hideDayFieldIfNotInFormat();
-        addViews();
-    }
-
-    private void readAppearance() {
-        String appearance = formEntryPrompt.getQuestion().getAppearanceAttr();
-        if ("month-year".equals(appearance)) {
-            hideDay = true;
-        } else if ("year".equals(appearance)) {
-            hideDay = true;
-            hideMonth = true;
-        } else if (!"no-calendar".equals(appearance)) {
-            showCalendar = true;
-        }
-    }
-
-    private void hideDayFieldIfNotInFormat() {
-        if (hideDay) {
-            datePickerDialog.getDatePicker().findViewById(
-                    Resources.getSystem().getIdentifier("day", "id", "android"))
-                    .setVisibility(View.GONE);
-        }
-        if (hideMonth) {
-            datePickerDialog.getDatePicker().findViewById(
-                    Resources.getSystem().getIdentifier("month", "id", "android"))
-                    .setVisibility(View.GONE);
-        }
     }
 
     @Override
-    public void clearAnswer() {
-        nullAnswer = true;
-        dateTextView.setText(R.string.no_date_selected);
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        clearFocus();
-
-        if (nullAnswer) {
-            return null;
-        } else {
-            // This is LDT but TimeWidget is just DT. Seems like we should make these consistent.
-            LocalDateTime ldt = new LocalDateTime()
-                    .withYear(year)
-                    .withMonthOfYear(hideMonth ? 1 : month)
-                    .withDayOfMonth((hideMonth || hideDay) ? 1 : dayOfMonth)
-                    .withHourOfDay(0)
-                    .withMinuteOfHour(0);
-            return new DateData(ldt.toDate());
-        }
-    }
-
-    @Override
-    public void setFocus(Context context) {
-        // Hide the soft keyboard if it's showing.
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        dateButton.setOnLongClickListener(l);
-        dateTextView.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        dateButton.cancelLongPress();
-        dateTextView.cancelLongPress();
-    }
-
-    private void createDateButton() {
-        dateButton = getSimpleButton(getContext().getString(R.string.select_date));
-        dateButton.setEnabled(!formEntryPrompt.isReadOnly());
+    protected void createWidget() {
+        super.createWidget();
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (nullAnswer) {
-                    setDateToCurrent();
-                } else {
-                    updateDate(year, month, dayOfMonth, true);
-                }
-
-                datePickerDialog.show();
+                showDatePickerDialog();
             }
         });
     }
 
-    private void addViews() {
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(dateButton);
-        linearLayout.addView(dateTextView);
-        addAnswerView(linearLayout);
+    @Override
+    protected void setDateLabel() {
+        isNullAnswer = false;
+        dateTextView.setText(DateTimeUtils.getDateTimeLabel(
+                (Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
     }
 
-    public void setDateLabel() {
-        nullAnswer = false;
-        dateTextView.setText(DateTimeUtils.getDateTimeBasedOnUserLocale(
-                (Date) getAnswer().getValue(), formEntryPrompt.getQuestion().getAppearanceAttr(), false));
+    @Override
+    protected void showDatePickerDialog() {
+        datePickerDialog = new FixedDatePickerDialog(getContext(), getTheme(), this);
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        date = new LocalDateTime()
+                .withYear(year)
+                .withMonthOfYear(month + 1)
+                .withDayOfMonth(dayOfMonth)
+                .withHourOfDay(0)
+                .withMinuteOfHour(0)
+                .withSecondOfMinute(0)
+                .withMillisOfSecond(0);
+        setDateLabel();
     }
 
     private int getTheme() {
@@ -194,27 +100,11 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         if (!isBrokenSamsungDevice() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             theme = android.R.style.Theme_Material_Light_Dialog;
         }
-        if (!showCalendar || (isBrokenSamsungDevice() && isTalkBackActive())) {
+        if (!datePickerDetails.isCalendarMode() || (isBrokenSamsungDevice() && isTalkBackActive())) {
             theme = android.R.style.Theme_Holo_Light_Dialog;
         }
 
         return theme;
-    }
-
-    private void createDatePickerDialog() {
-        datePickerDialog = new CustomDatePickerDialog(getContext(), getTheme(), this, 1971, 1, 1); // placeholder date that is valid
-        datePickerDialog.setCanceledOnTouchOutside(false);
-
-        if (formEntryPrompt.getAnswerValue() == null) {
-            clearAnswer();
-
-        } else {
-            Date date = (Date) formEntryPrompt.getAnswerValue().getValue();
-
-            // This is LDT but TimeWidget is just DT, why?:
-            LocalDateTime localDateTime = new LocalDateTime(date);
-            updateDate(localDateTime.getYear(), localDateTime.getMonthOfYear(), localDateTime.getDayOfMonth(), true);
-        }
     }
 
     // https://stackoverflow.com/questions/28618405/datepicker-crashes-on-my-device-when-clicked-with-personal-app
@@ -229,77 +119,22 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         return ((AccessibilityManager) getContext().getSystemService(ACCESSIBILITY_SERVICE)).isTouchExplorationEnabled();
     }
 
-    public boolean isDayHidden() {
-        return hideDay;
-    }
-
-    public boolean isMonthHidden() {
-        return hideMonth;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getDay() {
-        return dayOfMonth;
-    }
-
-    public boolean isNullAnswer() {
-        return nullAnswer;
-    }
-
-    public void setDateToCurrent() {
-        updateDate(DateTime.now(), false);
-    }
-
-    public void updateDate(DateTime dateTime) {
-        updateDate(dateTime, true);
-    }
-
-    public void updateDate(DateTime dateTime, boolean shouldUpdateLabel) {
-        updateDate(dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfMonth(), shouldUpdateLabel);
-    }
-
-    public void updateDate(int year, int month, int dayOfMonth, boolean shouldUpdateLabel) {
-        this.year = year;
-        this.month = month;
-        this.dayOfMonth = dayOfMonth;
-
-        datePickerDialog.updateDate(year, month - 1, dayOfMonth);
-        if (shouldUpdateLabel) {
-            setDateLabel();
-        }
-    }
-
     // Exposed for testing purposes to avoid reflection.
     public void setDatePickerDialog(DatePickerDialog datePickerDialog) {
         this.datePickerDialog = datePickerDialog;
     }
 
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        this.year = year;
-        this.month = month + 1;
-        this.dayOfMonth = dayOfMonth;
-
-        setDateLabel();
-    }
-
-    private class CustomDatePickerDialog extends DatePickerDialog {
+    private class FixedDatePickerDialog extends DatePickerDialog {
         private String dialogTitle = getContext().getString(R.string.select_date);
         private int theme;
 
-        CustomDatePickerDialog(Context context, int theme, OnDateSetListener listener, int year, int month, int dayOfMonth) {
-            super(context, theme, listener, year, month, dayOfMonth);
+        FixedDatePickerDialog(Context context, int theme, OnDateSetListener listener) {
+            super(context, theme, listener, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
             this.theme = theme;
             if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 setTitle(dialogTitle);
-                fixSpinner(context, year, month, dayOfMonth);
+                fixSpinner(context, date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+                hidePickersIfNeeded();
 
                 Window window = getWindow();
                 if (window != null) {
@@ -314,6 +149,21 @@ public class DateWidget extends QuestionWidget implements DatePickerDialog.OnDat
         public void setTitle(CharSequence title) {
             if (theme == android.R.style.Theme_Holo_Light_Dialog) {
                 super.setTitle(dialogTitle);
+            }
+        }
+
+        private void hidePickersIfNeeded() {
+            if (datePickerDetails.isYearMode()) {
+                getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
+                        .setVisibility(View.GONE);
+
+                getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
+                        .setVisibility(View.GONE);
+                getDatePicker().updateDate(date.getYear(), 0, 1);
+            } else if (datePickerDetails.isMonthYearMode()) {
+                getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
+                        .setVisibility(View.GONE);
+                getDatePicker().updateDate(date.getYear(), date.getMonthOfYear() - 1, 1);
             }
         }
 

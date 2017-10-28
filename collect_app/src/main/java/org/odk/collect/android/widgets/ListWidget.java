@@ -47,6 +47,7 @@ import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -182,7 +183,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
                 label.setText(prompt.getSelectChoiceText(items.get(i)));
-                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {
                     label.setVisibility(View.GONE);
@@ -296,7 +297,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
             }
         }
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged",
-                items.get((Integer) buttonView.getTag()).getValue(), formEntryPrompt.getIndex());
+                items.get((Integer) buttonView.getTag()).getValue(), getFormEntryPrompt().getIndex());
     }
 
 
