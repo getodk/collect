@@ -211,6 +211,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private final Object saveDialogLock = new Object();
     private int viewCount = 0;
+    private int animationCompletionSet = 0;
 
     private FormLoaderTask formLoaderTask;
     private SaveToDiskTask saveToDiskTask;
@@ -2429,8 +2430,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         super.onDestroy();
 
     }
-
-    private int animationCompletionSet = 0;
 
     private void afterAllAnimations() {
         Timber.i("afterAllAnimations");

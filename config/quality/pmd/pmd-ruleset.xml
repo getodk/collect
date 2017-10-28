@@ -69,7 +69,6 @@
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="ImmutableField" />
         <exclude name="GodClass" />
-        <exclude name="FieldDeclarationsShouldBeAtStartOfClass" />
         <exclude name="SwitchDensity" />
         <exclude name="UseCollectionIsEmpty" />
         <exclude name="UncommentedEmptyMethodBody" />

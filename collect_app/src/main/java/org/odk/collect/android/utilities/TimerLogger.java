@@ -27,6 +27,14 @@ import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
  */
 public class TimerLogger {
 
+    private static AsyncTask saveTask = null;
+    private ArrayList<Event> events = null;
+    private String filename = null;
+    private File timerlogFile = null;
+    private long surveyOpenTime = 0;
+    private long surveyOpenElapsedTime = 0;
+    private boolean timerEnabled = false;              // Set true of the timer logger is enabled
+
     public enum EventTypes {
         FEC,                // FEC, Real type defined in FormEntryController
         FORM_START,         // Start filling in the form
@@ -152,15 +160,6 @@ public class TimerLogger {
                     + (end != 0 ? end : "");
         }
     }
-
-    private static AsyncTask saveTask = null;
-    private ArrayList<Event> events = null;
-    private String filename = null;
-    private File timerlogFile = null;
-    private long surveyOpenTime = 0;
-    private long surveyOpenElapsedTime = 0;
-    private boolean timerEnabled = false;              // Set true of the timer logger is enabled
-
 
     public TimerLogger(File instanceFile, FormController formController) {
 

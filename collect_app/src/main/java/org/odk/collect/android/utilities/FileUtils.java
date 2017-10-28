@@ -57,6 +57,8 @@ public class FileUtils {
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
 
+    static int bufSize = 16 * 1024; // May be set by unit test
+
     public static String getMimeType(String fileUrl) throws IOException {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         return fileNameMap.getContentTypeFor(fileUrl);
@@ -126,8 +128,6 @@ public class FileUtils {
             }
         }
     }
-
-    static int bufSize = 16 * 1024; // May be set by unit test
 
     public static String getMd5Hash(File file) {
         try {

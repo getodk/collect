@@ -101,6 +101,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
     private LocationClient locationClient;
 
+    private Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -444,8 +446,6 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
 
 
     }
-
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     private Runnable centerAroundFix = new Runnable() {
         public void run() {

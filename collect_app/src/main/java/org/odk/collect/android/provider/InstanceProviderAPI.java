@@ -25,23 +25,20 @@ import android.provider.BaseColumns;
 public final class InstanceProviderAPI {
     public static final String AUTHORITY = "org.odk.collect.android.provider.odk.instances";
 
-    // This class cannot be instantiated
-    private InstanceProviderAPI() {
-    }
-
     // status for instances
     public static final String STATUS_INCOMPLETE = "incomplete";
     public static final String STATUS_COMPLETE = "complete";
     public static final String STATUS_SUBMITTED = "submitted";
     public static final String STATUS_SUBMISSION_FAILED = "submissionFailed";
 
+    // This class cannot be instantiated
+    private InstanceProviderAPI() {
+    }
+
     /**
      * Notes table
      */
     public static final class InstanceColumns implements BaseColumns {
-        // This class cannot be instantiated
-        private InstanceColumns() {
-        }
 
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/instances");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.instance";
@@ -69,5 +66,9 @@ public final class InstanceProviderAPI {
         //        public static final String NOTE = "note";
         //        public static final String CREATED_DATE = "created";
         //        public static final String MODIFIED_DATE = "modified";
+
+        // This class cannot be instantiated
+        private InstanceColumns() {
+        }
     }
 }

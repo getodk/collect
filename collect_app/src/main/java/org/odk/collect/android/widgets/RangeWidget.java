@@ -69,6 +69,8 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
     private Button pickerButton;
     private TextView answerTextView;
 
+    private LayoutInflater layoutInflater = null;
+
     public RangeWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -290,8 +292,6 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
             Timber.i(e);
         }
     }
-
-    private LayoutInflater layoutInflater = null;
 
     // For testing purposes only:
     void setLayoutInflater(LayoutInflater layoutInflater) {

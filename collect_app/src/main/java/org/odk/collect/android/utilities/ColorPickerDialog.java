@@ -40,14 +40,15 @@ import org.odk.collect.android.R;
  * @author yougli@yougli.net
  */
 public class ColorPickerDialog extends Dialog {
-    public interface OnColorChangedListener {
-        void colorChanged(String key, int color);
-    }
 
     private OnColorChangedListener listener;
     private int initialColor;
     private int defaultColor;
     private String key;
+
+    public interface OnColorChangedListener {
+        void colorChanged(String key, int color);
+    }
 
     /**
      * Modified HorizontalScrollView that communicates scroll
@@ -94,6 +95,10 @@ public class ColorPickerDialog extends Dialog {
         private final int[] hueBarColors = new int[258];
         private int[] mainColors = new int[65536];
         private OnColorChangedListener listener;
+
+        private boolean afterFirstDown = false;
+        private float startX;
+        private float startY;
 
         ColorPickerView(Context c, OnColorChangedListener l, int color,
                         int defaultColor) {
@@ -287,10 +292,6 @@ public class ColorPickerDialog extends Dialog {
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             setMeasuredDimension(276, 366);
         }
-
-        private boolean afterFirstDown = false;
-        private float startX;
-        private float startY;
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {

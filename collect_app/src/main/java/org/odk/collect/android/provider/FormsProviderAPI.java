@@ -33,10 +33,6 @@ public final class FormsProviderAPI {
      * Notes table
      */
     public static final class FormsColumns implements BaseColumns {
-        // This class cannot be instantiated
-        private FormsColumns() {
-        }
-
 
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
@@ -62,6 +58,9 @@ public final class FormsProviderAPI {
         // this is null on create, and can only be set on an update.
         public static final String LANGUAGE = "language";
 
+        // This class cannot be instantiated
+        private FormsColumns() {
+        }
 
     }
 }

@@ -74,6 +74,8 @@ public final class PreferenceKeys {
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
            static final String AUTOSEND_OFF                 = "off";
 
+    public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
+
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
 
@@ -103,7 +105,4 @@ public final class PreferenceKeys {
         hashMap.put(KEY_AUTOSEND,                   AUTOSEND_OFF);
         return hashMap;
     }
-
-    public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
-
 }

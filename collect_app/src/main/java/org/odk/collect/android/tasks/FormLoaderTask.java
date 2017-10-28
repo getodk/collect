@@ -83,6 +83,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private int resultCode = 0;
     private Intent intent = null;
     private ExternalDataManager externalDataManager;
+    private FECWrapper data;
 
     protected class FECWrapper {
         FormController controller;
@@ -105,8 +106,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             controller = null;
         }
     }
-
-    FECWrapper data;
 
     public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
         this.instancePath = instancePath;

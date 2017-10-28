@@ -38,6 +38,8 @@ import timber.log.Timber;
  */
 public class AudioButton extends AppCompatImageButton {
 
+    AudioHandler handler;
+
     /**
      * Useful class for handling the playing and stopping of audio prompts.
      * This is used here, and also in the GridMultiWidget and GridWidget
@@ -99,8 +101,6 @@ public class AudioButton extends AppCompatImageButton {
 
         }
     }
-
-    AudioHandler handler;
 
     public AudioButton(Context context, FormIndex index, String selectionDesignator, String uri,
             MediaPlayer player) {

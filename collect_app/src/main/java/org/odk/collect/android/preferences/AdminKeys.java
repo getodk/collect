@@ -137,6 +137,8 @@ public final class AdminKeys {
             KEY_SHOW_MAP_SDK
     );
 
+    public static final Collection<String> ALL_KEYS = allKeys();
+
     private static Collection<String> allKeys() {
         Collection<String> keys = new ArrayList<>();
         for (AdminAndGeneralKeys atg : adminToGeneral) {
@@ -147,6 +149,4 @@ public final class AdminKeys {
         }
         return keys;
     }
-
-    public static final Collection<String> ALL_KEYS = allKeys();
 }
