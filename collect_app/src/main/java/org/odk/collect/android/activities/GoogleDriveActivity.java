@@ -168,7 +168,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
             ArrayList<DriveListItem> dl = savedInstanceState
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
-            adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image, dl);
+            adapter = new FileArrayAdapter(this, R.layout.two_item_image, dl);
             listView.setAdapter(adapter);
             adapter.setEnabled(true);
         } else {
@@ -699,7 +699,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         setProgressBarIndeterminateVisibility(true);
         adapter = null;
         retrieveDriveFileContentsAsyncTask = new RetrieveDriveFileContentsAsyncTask();
-        retrieveDriveFileContentsAsyncTask.setTaskListener(GoogleDriveActivity.this);
+        retrieveDriveFileContentsAsyncTask.setTaskListener(this);
         if (query != null) {
             retrieveDriveFileContentsAsyncTask.execute(dir, query);
         } else {
