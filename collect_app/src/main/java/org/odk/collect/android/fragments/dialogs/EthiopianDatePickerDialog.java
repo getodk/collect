@@ -65,6 +65,7 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
                 .toDateTime()
                 .withChronology(EthiopicChronology.getInstance())
                 .toLocalDateTime();
+
         setUpDayPicker(ethiopianDate);
         setUpMonthPicker(ethiopianDate, monthsArray);
         setUpYearPicker(ethiopianDate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);

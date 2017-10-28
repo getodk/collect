@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 University of Washington Licensed under the Apache
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 University of Washington Licensed under the Apache
 License, Version 2.0 (the "License"); you may not use this file except in
 compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software distributed
@@ -142,5 +141,20 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/ethiopian_month_hamlie</item>
         <item>@string/ethiopian_month_nehasie</item>
         <item>@string/ethiopian_month_pagumien</item>
+    </string-array>
+
+    <string-array name="nepali_months">
+        <item>बैशाख</item>
+        <item>जेठ</item>
+        <item>असार</item>
+        <item>साउन</item>
+        <item>भदौ</item>
+        <item>असोज</item>
+        <item>कार्तिक</item>
+        <item>मंसिर</item>
+        <item>पौष</item>
+        <item>माघ</item>
+        <item>फाल्गुन</item>
+        <item>चैत</item>
     </string-array>
 </resources>

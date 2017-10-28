@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -190,6 +191,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     protected void setUpDayPicker(LocalDateTime ethiopianDate) {
         dayPicker.setMinValue(1);
         dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
+
         if (datePickerDetails.isSpinnerMode()) {
             dayPicker.setValue(ethiopianDate.getDayOfMonth());
         }
