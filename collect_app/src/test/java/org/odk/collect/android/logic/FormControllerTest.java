@@ -4,6 +4,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
+import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryCaption;
@@ -24,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -433,11 +435,36 @@ public class FormControllerTest {
     }
 
     @Test(expected = JavaRosaException.class)
-    public void answerQuestion_ThrowsNewJavaRosaExceptionIfAnswerDidNotSave() throws Exception {
-        when(formController.answerQuestion(any(FormIndex.class), any(IAnswerData.class)))
+    public void answerQuestion_ThrowsNewJavaRosaExceptionIfAnswerDidNotAnswer() throws Exception {
+        when(mockFormEntryController.answerQuestion(any(FormIndex.class), any(IAnswerData.class), anyBoolean()))
                 .thenThrow(new JavaRosaException(new Throwable()));
 
         IAnswerData mockData = mock(IAnswerData.class);
         formController.answerQuestion(mockFormIndex, mockData);
     }
+
+    @Test
+    public void validateAnswers_ReturnsAnswerOkayIfOutcomeIsNull() throws Exception {
+        when(mockForm.validate(anyBoolean())).thenReturn(null);
+
+        int value = formController.validateAnswers(false);
+        assertEquals(value, FormEntryController.ANSWER_OK);
+    }
+
+    @Test
+    public void validateAnswer_JumpsToIndexIfOutcomeIsReturned() throws Exception {
+        ValidateOutcome outcome = mock(ValidateOutcome.class);
+        when(mockForm.validate(anyBoolean())).thenReturn(outcome);
+
+        formController.validateAnswers(false);
+        verify(mockFormEntryController).jumpToIndex(null);
+    }
+
+    @Test(expected = JavaRosaException.class)
+    public void saveAnswer_ThrowsNewJavaRosaExceptionIfAnswerDidNotSave() throws Exception {
+        when(mockFormEntryController.saveAnswer(any(FormIndex.class), any(IAnswerData.class), anyBoolean()))
+                .thenThrow(new JavaRosaException(new Throwable()));
+    }
+
+    
 }
