@@ -1,6 +1,0 @@
-<resources>
-
-    <style name="AppThemeBase.Collect.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppThemeBase.Collect.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-</resources>
