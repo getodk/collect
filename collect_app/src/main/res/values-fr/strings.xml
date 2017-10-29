@@ -99,12 +99,12 @@
   <string name="quit_entry">Sauvegarder et sortir</string>
   <string name="refresh">Rafraîchir</string>
   <string name="replace_barcode">Remplacer le code-barre</string>
-  <string name="required_answer_error">Réponse obligatoire !</string>
+  <string name="required_answer_error">Réponse obligatoire!</string>
   <string name="review_data">Éditer un formulaire sauvegardé</string>
   <string name="review_data_button">Éditer un formulaire sauvegardé (%s)</string>
   <string name="save_all_answers">Sauvegarder le formulaire</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
-  <string name="saving_form">Sauvegarde du Formulaire…</string>
+  <string name="saving_form">Sauvegarde du formulaire…</string>
   <string name="sending_items">Envoi de %1$s sur %2$s formulaire(s)</string>
   <string name="send_data">Envoyer un formulaire finalisé</string>
   <string name="send_data_button">Envoyer un formulaire finalisé (%s)</string>
@@ -487,6 +487,7 @@
   <string name="form_submission_category">Soumission de formulaire</string>
   <string name="form_filling_category">Remplissage de formulaire</string>
   <string name="high_resolution_title">Vidéo Haute Définition</string>
+  <string name="image_size_title">Taille des images</string>
   <string name="form_import_category">Import de formulaire</string>
   <string name="user_and_device_identity_title">Identité de l\'utilisateur et de l\'appareil</string>
   <string name="constraint_behavior_title">Traitement de contraintes</string>
@@ -502,5 +503,14 @@
   <string name="select_value">Choisir valeur</string>
   <string name="edit_value">Modifier valeur</string>
   <string name="no_value_selected">Aucune valeur choisie</string>
+  <string name="form_delete_message">Supprimer les formulaires sélectionnés</string>
+  <string name="deleting_form_dialog_update_message">Suppression du formulaire: %1$d sur %2$d </string>
   <string name="search">Rechercher</string>
+  <string name="null_intent_value">L\'application externe n\'a pas fourni les informations attendues.</string>
+  <string name="image_size_large">Grande (3072px)</string>
+  <string name="image_size_medium">Moyenne (2048px)</string>
+  <string name="image_size_small">Petite (1024px)</string>
+  <string name="image_size_very_small">Très petite (640px)</string>
+  <string name="image_size_original">Taille originale de la caméra (défaut)</string>
+  <string name="bearing_lack_of_sensors">L\'orientement n\'est pas disponible: l\'appareil n\'a pas d\'accéléromètre ou de capteur de champ magnétique.</string>
 </resources>
