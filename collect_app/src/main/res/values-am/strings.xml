@@ -1,5 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">የይለፍ ቃሉን አሳይ</string>
+  <string name="enter_data">ባዶዉን ቅጽ ሙላ</string>
+  <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
+  <string name="get_forms">አድስ ቅጽ</string>
+  <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
+  <string name="send_data">የተጠናቆ የተሞላዉን  ቅጽ ይላኩ</string>
+  <string name="view_sent_forms">- ተሞልቶ የተላከዉን  ቅጽ ይመልከቱ</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
