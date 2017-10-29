@@ -4,7 +4,7 @@
   <string name="activity_not_found">No se encontró actividad para manejar: %s</string>
   <string name="add_another">Agregar Grupo</string>
   <string name="add_another_repeat">¿Agregar otro grupo de \"%s\"?</string>
-  <string name="add_repeat">¿Agregar un nuevo grupo de \"%s\"?</string>
+  <string name="add_repeat">¿Agregar un nuevo ciclo de \"%s\"?</string>
   <string name="add_repeat_no">No Agregar</string>
   <string name="audio_file_error">Ningún archivo de audio fue especificado.</string>
   <string name="audio_file_invalid">Archivo: %s no es un archivo de audio válido.</string>
@@ -203,7 +203,7 @@
   <string name="admin_password_incorrect">¡Contraseña incorrecta!</string>
   <string name="enter_admin_password">Entrar contraseña de Administrador</string>
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
-  <string name="autosend">Auto enviar</string>
+  <string name="autosend">Envío Automático</string>
   <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
   <string name="no_account">Sin cuenta</string>
@@ -221,10 +221,10 @@
   <string name="constraint_behavior_on_finalize">Postponer validación hasta el final</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
   <string name="open_url">Abrir URL</string>
-  <string name="get_bearing">Registrar Dirección</string>
-  <string name="replace_bearing">Cambiar Dirección</string>
-  <string name="getting_bearing">Cargando Dirección</string>
-  <string name="accept_bearing">Guardar Dirección</string>
+  <string name="get_bearing">Registrar Orientación</string>
+  <string name="replace_bearing">Cambiar Orientación</string>
+  <string name="getting_bearing">Cargando Orientación</string>
+  <string name="accept_bearing">Guardar Orientación</string>
   <string name="sdcard_unmounted">Collect no puede acceder tarjeta SD. ¿Está conectada vía USB? (estado actual: %s)</string>
   <string name="ext_file_no_data_error">¡El archivo no contiene datos!</string>
   <string name="ext_conflicting_columns_error">¡Columnas %s coinciden!</string>
@@ -248,11 +248,11 @@
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
 </string>
-  <string name="survey_loading_reading_form_message">Leyendo definición de formulario...</string>
-  <string name="survey_loading_reading_data_message">Leyendo datos sondeo...</string>
-  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV...</string>
-  <string name="survey_saving_validating_message">Validando respuestas...</string>
-  <string name="survey_saving_collecting_message">Colectando datos...</string>
+  <string name="survey_loading_reading_form_message">Leyendo definición de formulario…</string>
+  <string name="survey_loading_reading_data_message">Leyendo datos sondeo…</string>
+  <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
+  <string name="survey_saving_validating_message">Validando respuestas…</string>
+  <string name="survey_saving_collecting_message">Colectando datos…</string>
   <string name="survey_saving_saving_message">Salvando en tarjeta SD </string>
   <string name="survey_saving_finalizing_message">FInalizando en tarjeta SD</string>
   <string name="survey_saving_encrypting_message">Encriptando datos...</string>
@@ -272,14 +272,15 @@
   <string name="invalid_oauth">OAuth 2 token Invalido.</string>
   <string name="google_repeat_error">Repeticiones no admitidas por Google Sheets de momento.</string>
   <string name="media_upload_error">Fallo al cargar foto que no existe:%1$s</string>
-  <string name="odk_auth_auth_fail">Falla de autenticación en auto-envio, favor verificar sus ajustes en servidor</string>
-  <string name="odk_auto_note">Notificación de Auto envío de servidor</string>
+  <string name="odk_auth_auth_fail">Falla de autenticación en envío automático. Favor verificar sus ajustes en servidor</string>
+  <string name="odk_auto_note">Notificación de Envío Automático de servidor</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="change_server_url">URL del Servidor</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="no_blank_search">Campo de búsqueda no puede estar en blanco.</string>
+  <string name="google_sheets_url">URL alterno para envío</string>
   <string name="send_in_progress">Envio funcionando, reintentar en breve</string>
   <string name="sheets_max_columns">Máximo de columnas = 255, su formulario tiene %s. No se puede subir la hoja.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
@@ -348,7 +349,7 @@
   <string name="google_sheets_invalid_column_instance">\'n%1$s\' es un nombre de columna invalido en su instancia guardada. Google Sheets solo permite caracteres alfanuméricos y guiones en nombres de columna</string>
   <string name="geoshape_view_change_location">Ver o cambiar FormaGeo</string>
   <string name="geotrace_view_change_location">Ver o cambiar RastroGeo</string>
-  <string name="bearing">Dirección: %.3f</string>
+  <string name="bearing">Orientación: %.3f</string>
   <string name="direction">Dirección: %s</string>
   <string name="select_odk_shortcut">Seleccionar acceso directo</string>
   <string name="bad_uri">URI erroneo: %s</string>
@@ -478,8 +479,8 @@
   <string name="main_menu_settings">Menú principal de ajustes</string>
   <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
   <string name="user_access_control">Control de acceso a usuario</string>
-  <string name="autosend_selector_title">Auto enviar</string>
-  <string name="off">Apagado</string>
+  <string name="autosend_selector_title">Envío Automático</string>
+  <string name="off">Desactivado</string>
   <string name="wifi_autosend">Solo con WIFI</string>
   <string name="cellular_autosend">Solo con Datos Móviles</string>
   <string name="wifi_cellular_autosend">Wifi o Datos Móviles</string>
@@ -488,6 +489,7 @@
   <string name="form_submission_category">Enviar formulario</string>
   <string name="form_filling_category">Llenado de Formularios</string>
   <string name="high_resolution_title">Video de alta resolución</string>
+  <string name="image_size_title">Tamaño de imagen</string>
   <string name="form_import_category">Importar formulario</string>
   <string name="user_and_device_identity_title">Identificación del usuario y dispositivo</string>
   <string name="constraint_behavior_title">Manejo de restricciones</string>
@@ -507,4 +509,11 @@
   <string name="deleting_form_dialog_update_message">Eliminando formularios  %1$d de %2$d </string>
   <string name="search">Buscar</string>
   <string name="null_intent_value">La aplicación externa no suministra la información esperada</string>
+  <string name="image_size_large">Grande (3072px)</string>
+  <string name="image_size_medium">Mediana (2048px)</string>
+  <string name="image_size_small">Pequeña (1024px)</string>
+  <string name="image_size_very_small">Muy pequeña (640px)</string>
+  <string name="image_size_original">Tamaño original de la cámara (por defecto)</string>
+  <string name="image_size_dialog_title">Número de pixeles máximo del lado más largo de la imagen</string>
+  <string name="bearing_lack_of_sensors">La Orientación no puede ser registrada: El dispositivo no tiene acelerómetro, o sensor de campo magnético o ambos.</string>
 </resources>

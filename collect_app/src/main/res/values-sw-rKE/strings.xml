@@ -226,9 +226,19 @@
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="streets">Barabara</string>
+  <string name="start">Anza</string>
+  <string name="dialog_continue">Endelea</string>
+  <string name="clear">Futa</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="sort_by_name_asc">Jina, A-Z</string>
+  <string name="sort_by_name_desc">Jina, Z-A</string>
+  <string name="language">Lugha</string>
+  <string name="phone_number">Nambari ya simu</string>
+  <string name="select_date">Changua tarehe</string>
+  <string name="select_time">Chagua wakati</string>
 </resources>
