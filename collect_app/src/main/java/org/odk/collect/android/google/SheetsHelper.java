@@ -38,8 +38,7 @@ public class SheetsHelper {
 
     SheetsHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
         // Initialize sheets service
-        sheets = new com.google.api.services.sheets.v4.Sheets.Builder(
-                transport, jsonFactory, credential)
+        sheets = new Sheets.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
     }
