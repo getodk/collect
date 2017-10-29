@@ -131,8 +131,8 @@ public class SheetsHelper {
 
         List<Request> requests = new ArrayList<>();
         requests.add(
-                new Request().setUpdateSpreadsheetProperties
-                        (new UpdateSpreadsheetPropertiesRequest()
+                new Request().setUpdateSpreadsheetProperties(
+                        new UpdateSpreadsheetPropertiesRequest()
                                 .setProperties(sheetProperties)
                                 .setFields("title")));
 

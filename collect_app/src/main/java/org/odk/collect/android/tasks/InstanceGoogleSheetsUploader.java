@@ -131,7 +131,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     }
                     String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
                     String jrformid = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                    String urlString = getGoogleSheetsUrl(c);
                     Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
                     ContentValues cv = new ContentValues();
 
@@ -155,6 +154,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                     publishProgress(c.getPosition() + 1 + low, instanceCount);
                     String instance = c.getString(c
                             .getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                    String urlString = getGoogleSheetsUrl(c);
+
                     if (!uploadOneSubmission(id, instance, jrformid, token, formFilePath, urlString)) {
                         cv.put(InstanceColumns.STATUS,
                                 InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
