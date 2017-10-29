@@ -39,6 +39,10 @@ public class DatePickerDetails implements Serializable {
         return datePickerType.equals(DatePickerType.GREGORIAN);
     }
 
+    public boolean isNepaliType() {
+        return datePickerType.equals(DatePickerType.NEPALI);
+    }
+
     public boolean isCalendarMode() {
         return datePickerMode.equals(DatePickerMode.CALENDAR);
     }

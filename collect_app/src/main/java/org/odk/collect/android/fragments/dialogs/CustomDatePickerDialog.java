@@ -168,6 +168,9 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     }
 
     private LocalDateTime getDateAsGregorian(LocalDateTime date) {
+
+
+
         return DateTimeUtils.skipDaylightSavingGapIfExists(date)
                 .toDateTime()
                 .withChronology(GregorianChronology.getInstance())
@@ -188,27 +191,27 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
         gregorianDateText.setText(label);
     }
 
-    protected void setUpDayPicker(LocalDateTime ethiopianDate) {
+    protected void setUpDayPicker(LocalDateTime localDateTime) {
         dayPicker.setMinValue(1);
-        dayPicker.setMaxValue(ethiopianDate.dayOfMonth().getMaximumValue());
+        dayPicker.setMaxValue(localDateTime.dayOfMonth().getMaximumValue());
 
         if (datePickerDetails.isSpinnerMode()) {
-            dayPicker.setValue(ethiopianDate.getDayOfMonth());
+            dayPicker.setValue(localDateTime.getDayOfMonth());
         }
     }
 
-    protected void setUpMonthPicker(LocalDateTime ethiopianDate, String[] monthsArray) {
+    protected void setUpMonthPicker(LocalDateTime localDateTime, String[] monthsArray) {
         monthPicker.setMaxValue(monthsArray.length - 1);
         monthPicker.setDisplayedValues(monthsArray);
         if (!datePickerDetails.isYearMode()) {
-            monthPicker.setValue(ethiopianDate.getMonthOfYear() - 1);
+            monthPicker.setValue(localDateTime.getMonthOfYear() - 1);
         }
     }
 
-    protected void setUpYearPicker(LocalDateTime ethiopianDate, int minSupportedYear, int maxSupportedYear) {
+    protected void setUpYearPicker(LocalDateTime localDateTime, int minSupportedYear, int maxSupportedYear) {
         yearPicker.setMinValue(minSupportedYear);
         yearPicker.setMaxValue(maxSupportedYear);
-        yearPicker.setValue(ethiopianDate.getYear());
+        yearPicker.setValue(localDateTime.getYear());
     }
 
     public int getDay() {

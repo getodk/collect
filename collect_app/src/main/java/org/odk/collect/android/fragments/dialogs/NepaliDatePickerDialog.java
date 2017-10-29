@@ -16,23 +16,15 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import android.util.Log;
-
-import net.danlew.android.joda.JodaTimeAndroid;
-
 import org.javarosa.core.model.FormIndex;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.joda.time.chrono.EthiopicChronology;
-import org.joda.time.chrono.ISOChronology;
 import org.odk.collect.android.R;
-import org.odk.collect.android.exception.BsException;
+import org.odk.collect.android.exception.NepaliDateException;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Arrays;
-
-import static java.lang.String.format;
 
 /**
  * @author Nishon Tandukar (nishon.tan@gmail.com)
@@ -41,8 +33,8 @@ import static java.lang.String.format;
  */
 public class NepaliDatePickerDialog extends CustomDatePickerDialog {
 
-    private static final int MIN_SUPPORTED_YEAR = 1893; //1900 in Gregorian calendar
-    private static final int MAX_SUPPORTED_YEAR = 2093; //2100 in Gregorian calendar
+    private static final int MIN_SUPPORTED_YEAR = 2000; // in Gregorian calendar
+    private static final int MAX_SUPPORTED_YEAR = 2093; // in Gregorian calendar
 
     private String[] monthsArray;
 
@@ -63,16 +55,15 @@ public class NepaliDatePickerDialog extends CustomDatePickerDialog {
     private void setUpValues() {
         try {
             setUpDatePicker();
-        } catch (BsException e) {
-            e.printStackTrace();
+            updateGregorianDateLabel();
+        } catch (NepaliDateException e) {
+            ToastUtils.showLongToast(e.getMessage());
         }
     }
 
-    private void setUpDatePicker() throws BsException {
+    private void setUpDatePicker() throws NepaliDateException {
 
         LocalDateTime nepalidate = DateTimeUtils.getNepaliDateTime(getDate());
-
-
         setUpDayPicker(nepalidate);
         setUpMonthPicker(nepalidate, monthsArray);
         setUpYearPicker(nepalidate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
@@ -80,13 +71,29 @@ public class NepaliDatePickerDialog extends CustomDatePickerDialog {
 
     @Override
     protected void updateDays() {
-
+        setUpDayPicker(getCurrentNepaliDate());
     }
+
 
     @Override
     protected LocalDateTime getOriginalDate() {
-        return null;
+        return getCurrentNepaliDate();
     }
+
+
+    private LocalDateTime getCurrentNepaliDate() {
+        LocalDateTime nepaliDateTime = null;
+
+        try {
+            nepaliDateTime = DateTimeUtils.getNepaliDateTime(getDate());
+        } catch (NepaliDateException e) {
+            //setUpValues() captures the exception
+        }
+
+        return nepaliDateTime;
+
+    }
+
 
 
 }
