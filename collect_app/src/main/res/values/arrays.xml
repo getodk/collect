@@ -143,4 +143,19 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/ethiopian_month_nehasie</item>
         <item>@string/ethiopian_month_pagumien</item>
     </string-array>
+    <string-array name="coptic_months">
+        <item>@string/coptic_month_thout</item>
+        <item>@string/coptic_month_paopi</item>
+        <item>@string/coptic_month_hathor</item>
+        <item>@string/coptic_month_koiak</item>
+        <item>@string/coptic_month_tobi</item>
+        <item>@string/coptic_month_meshir</item>
+        <item>@string/coptic_month_paremhat</item>
+        <item>@string/coptic_month_parmouti</item>
+        <item>@string/coptic_month_pashons</item>
+        <item>@string/coptic_month_paoni</item>
+        <item>@string/coptic_month_epip</item>
+        <item>@string/coptic_month_mesori</item>
+        <item>@string/coptic_month_pi_kogi_enavot</item>
+    </string-array>
 </resources>

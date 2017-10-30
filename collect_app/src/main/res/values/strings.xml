@@ -537,5 +537,18 @@
     <string name="ethiopian_month_hamlie">Hamlie</string>
     <string name="ethiopian_month_nehasie">Nehasie</string>
     <string name="ethiopian_month_pagumien">Pagumien</string>
-    <string name="ethiopian_date">%1$s (%2$s)</string>
+    <string name="custom_date">%1$s (%2$s)</string>
+    <string name="coptic_month_thout">Thout</string>
+    <string name="coptic_month_paopi">Paopi</string>
+    <string name="coptic_month_hathor">Hathor</string>
+    <string name="coptic_month_koiak">Koiak</string>
+    <string name="coptic_month_tobi">Tobi</string>
+    <string name="coptic_month_meshir">Meshir</string>
+    <string name="coptic_month_paremhat">Paremhat</string>
+    <string name="coptic_month_parmouti">Parmouti</string>
+    <string name="coptic_month_pashons">Pashons</string>
+    <string name="coptic_month_paoni">Paoni</string>
+    <string name="coptic_month_epip">Epip</string>
+    <string name="coptic_month_mesori">Mesori</string>
+    <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
 </resources>

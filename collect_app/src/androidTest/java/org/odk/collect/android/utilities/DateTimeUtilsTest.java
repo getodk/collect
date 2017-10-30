@@ -35,6 +35,7 @@ public class DateTimeUtilsTest {
 
     private DatePickerDetails gregorianDatePickerDetails;
     private DatePickerDetails ethiopianDatePickerDetails;
+    private DatePickerDetails copticDatePickerDetails;
 
     private Context context;
 
@@ -42,6 +43,7 @@ public class DateTimeUtilsTest {
     public void setUp() {
         gregorianDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.GREGORIAN, DatePickerDetails.DatePickerMode.CALENDAR);
         ethiopianDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.ETHIOPIAN, DatePickerDetails.DatePickerMode.SPINNERS);
+        copticDatePickerDetails = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.SPINNERS);
 
         context = Collect.getInstance();
     }
@@ -244,5 +246,9 @@ public class DateTimeUtilsTest {
         Locale.setDefault(Locale.ENGLISH);
         assertEquals("9 Tikimt 1984 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, false, context));
         assertEquals("9 Tikimt 1984, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
+
+        Locale.setDefault(Locale.ENGLISH);
+        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, false, context));
+        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
     }
 }
