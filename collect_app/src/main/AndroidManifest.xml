@@ -295,6 +295,7 @@ the specific language governing permissions and limitations under the License.
             android:name="com.google.android.maps"
             android:required="false" />
 
+        <activity android:name=".activities.GetHelpActivity" />
     </application>
 
 </manifest>

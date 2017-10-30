@@ -460,6 +460,13 @@ public class MainMenuActivity extends AppCompatActivity {
                             .logAction(this, "createAdminPasswordDialog", "show");
                 }
                 return true;
+            case R.id.menu_get_help:
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logAction(this, "onOptionsItemSelected",
+                                "GET_HELP");
+                startActivity(new Intent(this, GetHelpActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
