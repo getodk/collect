@@ -54,9 +54,8 @@ public class DrawView extends View {
         super(context, attrs);
     }
 
-    public void setupView(Context c, boolean isSignature, File f) {
+    public void setupView(boolean isSignature) {
         this.isSignature = isSignature;
-        backgroundBitmapFile = f;
 
         bitmapPaint = new Paint(Paint.DITHER_FLAG);
         currentPath = new Path();
@@ -88,20 +87,9 @@ public class DrawView extends View {
 
     public void resetImage(int w, int h) {
         if (backgroundBitmapFile.exists()) {
-            // Because this activity is used in a fixed landscape mode only, sometimes resetImage()
-            // is called upon with flipped w/h (before orientation changes have been applied)
-            if (w > h) {
-                int temp = w;
-                w = h;
-                h = temp;
-            }
-            
             bitmap = FileUtils.getBitmapAccuratelyScaledToDisplay(
-                    backgroundBitmapFile, w, h).copy(
+                    backgroundBitmapFile, h, w).copy(
                     Bitmap.Config.ARGB_8888, true);
-            // bitmap =
-            // Bitmap.createScaledBitmap(BitmapFactory.decodeFile(backgroundBitmapFile.getPath()),
-            // w, h, true);
             canvas = new Canvas(bitmap);
         } else {
             bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);

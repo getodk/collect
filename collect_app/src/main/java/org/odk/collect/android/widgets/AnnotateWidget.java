@@ -71,6 +71,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
 
     private TextView errorTextView;
 
+    private int screenOrientation;
+
     public AnnotateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -78,7 +80,7 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
         errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +120,7 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +148,7 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
             }
         });
 
-        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image));
+        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image), R.id.markup_image);
         annotateButton.setEnabled(false);
         annotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +198,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
                         screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
+                } else if (bmp.getHeight() > bmp.getWidth()) {
+                    screenOrientation = 1; // portrait
                 }
             }
             imageView = getAnswerImageView(bmp);
@@ -222,8 +226,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
             File f = new File(getInstanceFolder() + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
-        i.putExtra(DrawActivity.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        i.putExtra(DrawActivity.SCREEN_ORIENTATION, screenOrientation);
 
         try {
             waitForData();

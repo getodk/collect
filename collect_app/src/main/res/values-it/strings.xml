@@ -364,6 +364,7 @@
   <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
   <string name="odk_website">Visitare il sito web ODK</string>
+  <string name="odk_forum">Collegati al forum di ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
