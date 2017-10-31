@@ -43,10 +43,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.injection.DependencyProvider;
-import org.odk.collect.android.logic.FormController;
-import org.odk.collect.android.utilities.ActivityUtil;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
 
@@ -103,7 +103,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private Button launchIntentButton;
     private Drawable textBackground;
 
-    private ActivityUtil activityUtil;
+    private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -153,7 +153,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
-                if (activityUtil.isActivityAvailable(i)) {
+                if (activityAvailability.isActivityAvailable(i)) {
                     try {
                         ExternalAppsUtils.populateParameters(i, exParams,
                                 getFormEntryPrompt().getIndex().getReference());
@@ -288,14 +288,14 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     protected void injectDependencies(DependencyProvider dependencyProvider) {
-        DependencyProvider<ActivityUtil> activityUtilProvider =
+        DependencyProvider<ActivityAvailability> activityUtilProvider =
                 ObjectUtils.uncheckedCast(dependencyProvider);
 
         if (activityUtilProvider == null) {
-            Timber.e("DependencyProvider doesn't provide ActivityUtil.");
+            Timber.e("DependencyProvider doesn't provide ActivityAvailability.");
             return;
         }
 
-        this.activityUtil = activityUtilProvider.provide();
+        this.activityAvailability = activityUtilProvider.provide();
     }
 }

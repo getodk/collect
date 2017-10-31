@@ -101,11 +101,11 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.ActivityUtil;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
@@ -142,7 +142,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
-        DependencyProvider<ActivityUtil>,
+        DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
@@ -237,7 +237,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private Bundle state;
 
     @NonNull
-    private ActivityUtil activityUtil = new ActivityUtil(this);
+    private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
     /**
      * Called when the activity is first created.
@@ -2958,12 +2958,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     @Override
-    public ActivityUtil provide() {
-        return activityUtil;
+    public ActivityAvailability provide() {
+        return activityAvailability;
     }
 
-    public void setActivityUtil(@NonNull ActivityUtil activityUtil) {
-        this.activityUtil = activityUtil;
+    public void setActivityAvailability(@NonNull ActivityAvailability activityAvailability) {
+        this.activityAvailability = activityAvailability;
     }
 
     /**

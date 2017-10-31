@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
-public class ActivityUtil {
+public class ActivityAvailability {
 
     @NonNull
     private final Context context;
 
-    public ActivityUtil(@NonNull Context context) {
+    public ActivityAvailability(@NonNull Context context) {
         this.context = context;
     }
 

@@ -25,7 +25,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.utilities.ActivityUtil;
+import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,7 +72,7 @@ public class AllFormsWidgetTest {
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
 
     @Mock
-    ActivityUtil activityUtil;
+    private ActivityAvailability activityAvailability;
 
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
@@ -100,7 +100,7 @@ public class AllFormsWidgetTest {
     @Before
     public void prepareDependencies() {
         activityTestRule.getActivity()
-                .setActivityUtil(activityUtil);
+                .setActivityAvailability(activityAvailability);
     }
     //endregion
 
@@ -232,7 +232,7 @@ public class AllFormsWidgetTest {
         // Manually input the value:
         String exStringWidgetFirstText = randomString();
 
-        when(activityUtil.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
@@ -256,7 +256,7 @@ public class AllFormsWidgetTest {
 
         )).respondWith(exStringResult);
 
-        when(activityUtil.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(true);
 
         onView(withText("Launch")).perform(click());
@@ -300,7 +300,7 @@ public class AllFormsWidgetTest {
         // Manually input the value:
         String exIntegerFirstValue = randomIntegerString();
 
-        when(activityUtil.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
@@ -324,7 +324,7 @@ public class AllFormsWidgetTest {
 
         )).respondWith(exStringResult);
 
-        when(activityUtil.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(true);
 
         onView(withText("Launch")).perform(click());
@@ -355,7 +355,7 @@ public class AllFormsWidgetTest {
         // Manually input the value:
         String exDecimalFirstValue = randomDecimalString();
 
-        when(activityUtil.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(false);
 
         onView(withText("Launch")).perform(click());
@@ -379,7 +379,7 @@ public class AllFormsWidgetTest {
 
         )).respondWith(exStringResult);
 
-        when(activityUtil.isActivityAvailable(any(Intent.class)))
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
                 .thenReturn(true);
 
         onView(withText("Launch")).perform(click());
