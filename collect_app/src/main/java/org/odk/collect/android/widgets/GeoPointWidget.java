@@ -105,9 +105,9 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
 
         answerDisplay = getCenteredAnswerTextView();
 
-        viewButton = getSimpleButton(getContext().getString(R.string.get_point));
+        viewButton = getSimpleButton(getContext().getString(R.string.get_point), R.id.get_point);
 
-        getLocationButton = getSimpleButton(null);
+        getLocationButton = getSimpleButton(R.id.get_location);
         getLocationButton.setEnabled(!prompt.isReadOnly());
         getLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override

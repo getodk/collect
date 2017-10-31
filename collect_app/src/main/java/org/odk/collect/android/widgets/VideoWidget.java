@@ -92,7 +92,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_video));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_video), R.id.capture_video);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +144,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_video));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_video), R.id.choose_video);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +175,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget {
             }
         });
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_video));
+        playButton = getSimpleButton(getContext().getString(R.string.play_video), R.id.play_video);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
