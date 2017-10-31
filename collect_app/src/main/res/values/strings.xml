@@ -261,7 +261,7 @@
     <string name="survey_saving_saving_message">Saving to SD card…</string>
     <string name="survey_saving_finalizing_message">Finalizing to SD card…</string>
     <string name="survey_saving_encrypting_message">Encrypting data…</string>
-    <string name="high_resolution_summary">Enable high-resolution video recordings</string>
+    <string name="high_resolution_summary">Enable high-resolution video recordings. This option depends on the camera app you use and might not work in some cases.</string>
     <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
     <string name="google_drive">Google Drive</string>
     <string name="go_drive">My Drive</string>
