@@ -106,7 +106,6 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
-import org.odk.collect.android.utilities.ActivityUtil;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
