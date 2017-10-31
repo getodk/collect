@@ -12,7 +12,7 @@ public class ObjectUtils {
             return (T) object;
 
         } catch (ClassCastException e) {
-            Timber.e("Object %s could not be cast.");
+            Timber.e("Object %s could not be cast.", object);
             return null;
         }
     }

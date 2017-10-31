@@ -603,18 +603,18 @@ public class AllFormsWidgetTest {
         return onView(withClassName(endsWith("EditText")));
     }
 
-    private void openWidget(String name) {
-        openWidgetList();
-        onView(withText(name)).perform(click());
-    }
+    // private void openWidget(String name) {
+    //     openWidgetList();
+    //     onView(withText(name)).perform(click());
+    // }
 
     private void openWidgetList() {
         onView(withId(R.id.menu_goto)).perform(click());
     }
 
-    private void saveForm() {
-        onView(withId(R.id.menu_save)).perform(click());
-    }
+    // private void saveForm() {
+    //    onView(withId(R.id.menu_save)).perform(click());
+    // }
 
     private String randomString() {
         return RandomString.make();
