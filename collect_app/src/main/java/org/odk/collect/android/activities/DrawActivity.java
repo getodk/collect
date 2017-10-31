@@ -301,8 +301,8 @@ public class DrawActivity extends AppCompatActivity {
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);
@@ -361,8 +361,7 @@ public class DrawActivity extends AppCompatActivity {
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            ColorPickerDialog cpd = new ColorPickerDialog(
-                    DrawActivity.this,
+            ColorPickerDialog cpd = new ColorPickerDialog(this,
                     new ColorPickerDialog.OnColorChangedListener() {
                         public void colorChanged(String key, int color) {
                             drawView.setColor(color);
