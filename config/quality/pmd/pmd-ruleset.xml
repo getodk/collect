@@ -120,7 +120,6 @@
     </rule>
     <rule ref="rulesets/java/unnecessary.xml" >
         <exclude name="UselessParentheses" />
-        <exclude name="UnnecessaryFinalModifier" />
         <exclude name="UselessQualifiedThis" />
     </rule>
     <rule ref="rulesets/java/codesize.xml">
