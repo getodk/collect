@@ -279,13 +279,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         launchIntentButton.cancelLongPress();
     }
 
-    private boolean isActivityAvailable(Intent intent) {
-        return getContext()
-                .getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-                .size() > 0;
-    }
-
     @Override
     protected void injectDependencies(DependencyProvider dependencyProvider) {
         DependencyProvider<ActivityAvailability> activityUtilProvider =
