@@ -163,20 +163,6 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
                 return;
             }
 
-            NotificationManager mNotifyMgr =
-                    (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-
-            // Set refresh notification icon smap
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.notification_icon_go)
-                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                    R.drawable.ic_launcher))
-                            .setProgress(0, 0, true)
-                            .setContentTitle(context.getString(R.string.app_name))
-                            .setContentText(context.getString(R.string.smap_refresh_started));
-            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
-
             mContext = context;
             mDownloadTasks = new DownloadTasksTask();
             mDownloadTasks.setDownloaderListener(this, context);
@@ -186,6 +172,10 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
+        // Refresh task list
+        Intent intent = new Intent("org.smap.smapTask.refresh");
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+
     }
 
     /* smap comment out upload forms

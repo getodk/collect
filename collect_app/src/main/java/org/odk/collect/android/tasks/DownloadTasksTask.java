@@ -14,13 +14,20 @@
 
 package org.odk.collect.android.tasks;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,6 +37,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.Assignment;
 import org.odk.collect.android.database.TaskAssignment;
@@ -82,6 +90,7 @@ import java.util.TimeZone;
 
 import timber.log.Timber;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 
 /**
@@ -176,7 +185,48 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         } else {
             Collect.getInstance().setDownloading(true);
         }
+
+        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationManager mNotifyMgr =
+                (NotificationManager) Collect.getInstance().getBaseContext().getSystemService(NOTIFICATION_SERVICE);
+
+        // Set refresh notification icon
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
+                        .setSmallIcon(R.drawable.notification_icon_go)
+                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                R.drawable.ic_launcher))
+                        .setProgress(0, 0, true)
+                        .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
+                        .setContentText(Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started));
+        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+
         synchronise();      // Synchronise the phone with the server
+
+        // Refresh task list
+        Intent intent = new Intent("org.smap.smapTask.refresh");
+        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
+
+        // Set refresh done notification icon
+        StringBuilder message = Utilities.getUploadMessage(results);
+
+        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
+        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder =
+                new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                R.drawable.ic_launcher))
+                        .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
+                        .setProgress(0,0,false)
+                        .setSound(uri)
+                        .setContentIntent(pendingNotify)
+                        .setContentText(message.toString().trim());
+        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+
         Collect.getInstance().setDownloading(false);
 
         return results;

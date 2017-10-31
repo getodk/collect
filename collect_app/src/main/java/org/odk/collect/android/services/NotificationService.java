@@ -78,7 +78,10 @@ public class NotificationService extends GcmListenerService {
         if (currentNetworkInfo != null
                 && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
             if (isFormAutoSendOptionEnabled(currentNetworkInfo)) {
-                completeNotification(mNotifyMgr, uri);
+                // Refresh
+                DownloadTasksTask dt = new DownloadTasksTask();
+                dt.doInBackground();
+
                 automaticNofification = true;
             }
         }
@@ -97,50 +100,6 @@ public class NotificationService extends GcmListenerService {
         }
 
 
-    }
-
-    private void completeNotification(NotificationManager mNotifyMgr, Uri uri) {
-
-
-        // Set refresh notification icon
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.notification_icon_go)
-                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                R.drawable.ic_launcher))
-                        .setProgress(0, 0, true)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText(getString(R.string.smap_refresh_started));
-        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
-
-        // Refresh
-        DownloadTasksTask dt = new DownloadTasksTask();
-        HashMap<String, String> result = dt.doInBackground();
-        StringBuilder message = Utilities.getUploadMessage(result);
-
-        // Refresh task list
-        Intent intent = new Intent("org.smap.smapTask.refresh");
-        LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-
-        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
-
-        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Set refresh done notification icon
-        mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.notification_icon)
-                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                R.drawable.ic_launcher))
-                        .setContentTitle(getString(R.string.app_name))
-                        .setProgress(0,0,false)
-                        .setSound(uri)
-                        .setContentIntent(pendingNotify)
-                        .setContentText(message.toString().trim());
-        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
     }
 
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
