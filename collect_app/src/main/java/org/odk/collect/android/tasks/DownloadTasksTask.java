@@ -382,7 +382,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                      * Override the autosend setting if this is set from the server
                      */
                     if(tr.settings.ft_send != null) {
-                        // Server version is 17.11+
+                        // Server version is 17.11+ or new setting has not been used
                         if(tr.settings.ft_send.equals("off") || tr.settings.ft_send.equals("wifi_only") || tr.settings.ft_send.equals("wifi_and_cellular")) {
                             // Set the preference value using the server value and disable from local editing
                             editor.putString(PreferenceKeys.KEY_AUTOSEND, tr.settings.ft_send);
@@ -391,20 +391,38 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             // Leave the local settings as they are and enable for local editing
                             editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC, false);
                         }
+                    } else {
+                        // Support legacy servers / settings
+                        String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
+                        if (tr.settings.ft_send_wifi_cell) {
+                            autoSend = "wifi_and_cellular";
+                        } else if (tr.settings.ft_send_wifi) {
+                            autoSend = "wifi_only";
+                        }
+                        editor.putString(PreferenceKeys.KEY_AUTOSEND, autoSend);
+                        editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC, false);
                     }
 
-                    // update settings in phone app that are over ridden by the server (Only overridden to be enabled
-                    // TODO allow the server to force auto send off
-                    String autoSend = (String) GeneralSharedPreferences.getInstance().get(KEY_AUTOSEND);
-                    if (tr.settings.ft_send_wifi_cell) {
-                        autoSend = "wifi_and_cellular";
-                    } else if (tr.settings.ft_send_wifi) {
-                        autoSend = "wifi_only";
-                    }
-                    GeneralSharedPreferences.getInstance().save(PreferenceKeys.KEY_AUTOSEND, autoSend);
+                     /*
+                     * Override the delete after send setting if this is set from the server
+                     */
+                    if(tr.settings.ft_delete != null) {
+                        if(tr.settings.ft_delete.equals("off")) {
+                            editor.putBoolean(PreferenceKeys.KEY_DELETE_AFTER_SEND, false);
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_DELETE, true);
+                        } else if(tr.settings.ft_delete.equals("on")) {
+                            editor.putBoolean(PreferenceKeys.KEY_DELETE_AFTER_SEND, true);
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_DELETE, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_DELETE, false);
+                        }
 
-                    // Update settings in phone for delete after submit
-                    editor.putBoolean(PreferenceKeys.KEY_DELETE_AFTER_SEND, tr.settings.ft_delete_submitted);
+                    } else {
+                        // Support legacy servers / settings
+                        editor.putBoolean(PreferenceKeys.KEY_DELETE_AFTER_SEND, tr.settings.ft_delete_submitted);
+                    }
+
 
                     editor.apply();
                 }

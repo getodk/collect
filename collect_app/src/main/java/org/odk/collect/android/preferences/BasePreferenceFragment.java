@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 
-import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class BasePreferenceFragment extends PreferenceFragment {
@@ -41,13 +40,26 @@ public class BasePreferenceFragment extends PreferenceFragment {
         }
 
         // start smap disable preferences overridden by the server
-        boolean override_sync = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC);
-        Preference autosend = getPreferenceScreen().findPreference(KEY_AUTOSEND);
+
+        // Auto Sync
+        Preference autosend = getPreferenceScreen().findPreference(PreferenceKeys.KEY_AUTOSEND);
         if(autosend != null) {
+            boolean override_sync = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC);
             if (override_sync) {
                 autosend.setEnabled(false);
             } else {
                 autosend.setEnabled(true);
+            }
+        }
+
+        // Delete after send
+        Preference del = getPreferenceScreen().findPreference(PreferenceKeys.KEY_DELETE_AFTER_SEND);
+        if(del != null) {
+            boolean override_delete = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_DELETE);
+            if (override_delete) {
+                del.setEnabled(false);
+            } else {
+                del.setEnabled(true);
             }
         }
         // end smap

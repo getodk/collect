@@ -18,6 +18,7 @@ package org.odk.collect.android.taskModel;
  * Created by neilpenman on 14/11/2014.
  */
 public class FieldTaskSettings {
+    public String ft_delete;
     public boolean ft_delete_submitted;
     public boolean ft_send_trail;
     public boolean ft_location_trigger;

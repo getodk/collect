@@ -81,6 +81,7 @@ public final class PreferenceKeys {
     public static final String KEY_SMAP_LOCATION_TRIGGER = "location_trigger";  // Enable triggering of forms by location
     public static final String KEY_SMAP_ODK_STYLE_MENUS = "odk_style_menus";  // Show ODK style menus as well as refresh
     public static final String KEY_SMAP_OVERRIDE_SYNC = "smap_override_sync";  // Override the local settings for synchronisation
+    public static final String KEY_SMAP_OVERRIDE_DELETE = "smap_override_del";  // Override the local settings for delete after send
     public static final String KEY_SMAP_REGISTRATION_ID = "registration_id";  // Android notifications id
     public static final String KEY_SMAP_REGISTRATION_SERVER = "registration_server";  // Server name that has been registered
     public static final String KEY_SMAP_REGISTRATION_USER = "registration_user";  // User name that has been registered
@@ -120,6 +121,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_SMAP_LOCATION_TRIGGER, true);
         hashMap.put(KEY_SMAP_ODK_STYLE_MENUS, true);
         hashMap.put(KEY_SMAP_OVERRIDE_SYNC, false);
+        hashMap.put(KEY_SMAP_OVERRIDE_DELETE, false);
         hashMap.put(KEY_SMAP_REGISTRATION_ID, "");
         hashMap.put(KEY_SMAP_REGISTRATION_SERVER, "");
         hashMap.put(KEY_SMAP_REGISTRATION_USER, "");
