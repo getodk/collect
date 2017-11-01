@@ -103,10 +103,8 @@ public class NetworkReceiver extends BroadcastReceiver implements TaskDownloader
     private boolean isFormAutoSendOptionEnabled(NetworkInfo currentNetworkInfo) {
         // make sure autosend is enabled on the given connected interface
         String autosend = (String) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_AUTOSEND);
-        boolean autosend_wifi_override = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI);    // smap
-        boolean autosend_wifi_cell_override = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI_CELL);    // smap
-        boolean sendwifi = autosend.equals("wifi_only") || autosend_wifi_override || autosend_wifi_override;    // smap add overrides
-        boolean sendnetwork = autosend.equals("cellular_only") || autosend_wifi_cell_override;    // smap add orverrides
+        boolean sendwifi = autosend.equals("wifi_only");
+        boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {
             sendwifi = true;
             sendnetwork = true;

@@ -377,8 +377,21 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
-                    editor.putBoolean(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI, tr.settings.ft_send_wifi);
-                    editor.putBoolean(PreferenceKeys.KEY_SMAP_AUTOSEND_WIFI_CELL, tr.settings.ft_send_wifi_cell);
+
+                    /*
+                     * Override the autosend setting if this is set from the server
+                     */
+                    if(tr.settings.ft_send != null) {
+                        // Server version is 17.11+
+                        if(tr.settings.ft_send.equals("off") || tr.settings.ft_send.equals("wifi_only") || tr.settings.ft_send.equals("wifi_and_cellular")) {
+                            // Set the preference value using the server value and disable from local editing
+                            editor.putString(PreferenceKeys.KEY_AUTOSEND, tr.settings.ft_send);
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC, true);
+                        } else {
+                            // Leave the local settings as they are and enable for local editing
+                            editor.putBoolean(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC, false);
+                        }
+                    }
 
                     // update settings in phone app that are over ridden by the server (Only overridden to be enabled
                     // TODO allow the server to force auto send off

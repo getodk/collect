@@ -2,6 +2,7 @@ package org.odk.collect.android.preferences;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.PreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 public class BasePreferenceFragment extends PreferenceFragment {
@@ -37,6 +39,18 @@ public class BasePreferenceFragment extends PreferenceFragment {
                 removeAllDisabledPrefs();
             }
         }
+
+        // start smap disable preferences overridden by the server
+        boolean override_sync = (Boolean) GeneralSharedPreferences.getInstance().get(PreferenceKeys.KEY_SMAP_OVERRIDE_SYNC);
+        Preference autosend = getPreferenceScreen().findPreference(KEY_AUTOSEND);
+        if(autosend != null) {
+            if (override_sync) {
+                autosend.setEnabled(false);
+            } else {
+                autosend.setEnabled(true);
+            }
+        }
+        // end smap
 
         super.onViewCreated(view, savedInstanceState);
     }
