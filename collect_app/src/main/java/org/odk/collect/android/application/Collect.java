@@ -277,7 +277,7 @@ public class Collect extends Application {
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
-            Timber.plant(new NotLoggingTree());
+            Timber.plant(new Timber.DebugTree());
         }
 
         setupLeakCanary();
@@ -315,12 +315,6 @@ public class Collect extends Application {
             tracker = analytics.newTracker(R.xml.global_tracker);
         }
         return tracker;
-    }
-
-    private class NotLoggingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-        }
     }
 
     private static class CrashReportingTree extends Timber.Tree {
