@@ -283,7 +283,6 @@ the specific language governing permissions and limitations under the License.
             android:enabled="true"
             android:exported="false" />
         <!-- ... -->
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI" />
