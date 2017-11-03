@@ -134,7 +134,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private void runTask() {
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, GoogleSheetsUploaderActivity.this);
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, this);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

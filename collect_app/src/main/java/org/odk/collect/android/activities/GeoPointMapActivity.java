@@ -197,7 +197,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
             finish();
             return;
         }
-        helper = new MapHelper(GeoPointMapActivity.this, map);
+        helper = new MapHelper(this, map);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);

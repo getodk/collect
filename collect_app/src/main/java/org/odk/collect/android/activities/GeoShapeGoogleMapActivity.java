@@ -130,10 +130,10 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
             finish();
             return;
         }
-        helper = new MapHelper(GeoShapeGoogleMapActivity.this, map);
+        helper = new MapHelper(this, map);
         map.setMyLocationEnabled(true);
-        map.setOnMapLongClickListener(GeoShapeGoogleMapActivity.this);
-        map.setOnMarkerDragListener(GeoShapeGoogleMapActivity.this);
+        map.setOnMapLongClickListener(this);
+        map.setOnMarkerDragListener(this);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setCompassEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);

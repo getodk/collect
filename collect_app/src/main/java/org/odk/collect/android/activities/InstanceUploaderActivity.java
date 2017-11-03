@@ -126,8 +126,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             instanceServerUploader = new InstanceServerUploader();
 
             // register this activity with the new uploader task
-            instanceServerUploader.setUploaderListener(InstanceUploaderActivity.this);
-
+            instanceServerUploader.setUploaderListener(this);
             instanceServerUploader.execute(instancesToSend);
         }
     }
@@ -392,7 +391,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         instanceServerUploader = new InstanceServerUploader();
 
         // register this activity with the new uploader task
-        instanceServerUploader.setUploaderListener(InstanceUploaderActivity.this);
+        instanceServerUploader.setUploaderListener(this);
         instanceServerUploader.execute(instancesToSend);
     }
 

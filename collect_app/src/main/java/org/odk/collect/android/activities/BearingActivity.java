@@ -170,8 +170,9 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
                 double azimuth = 180 * orientation[0] / Math.PI;
                 // double pitch = 180 * orientation[1] / Math.PI;
                 // double roll = 180 * orientation[2] / Math.PI;
-                double degrees = normalizeDegree(azimuth);
-                bearingDecimal = String.format(Locale.US, "%.3f", degrees);
+                double degrees = normalizeDegrees(azimuth);
+                bearingDecimal = formatDegrees(degrees);
+
                 String dir = "N";
                 if ((degrees > 0 && degrees <= 22.5) || degrees > 337.5) {
                     dir = "N";
@@ -197,12 +198,15 @@ public class BearingActivity extends AppCompatActivity implements SensorEventLis
         }
     }
 
-    private double normalizeDegree(double value) {
+    public static String formatDegrees(double degrees) {
+        return String.format(Locale.US, "%.3f", degrees);
+    }
+
+    public static double normalizeDegrees(double value) {
         if (value >= 0.0f && value <= 180.0f) {
             return value;
         } else {
             return 180 + (180 + value);
         }
     }
-
 }
