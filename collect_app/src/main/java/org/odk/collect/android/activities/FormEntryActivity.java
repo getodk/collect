@@ -239,6 +239,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     @NonNull
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
 
+    private boolean shouldOverrideAnimations = false;
+
     /**
      * Called when the activity is first created.
      */
@@ -1566,6 +1568,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // complete setup for animations...
         inAnimation.setAnimationListener(this);
         outAnimation.setAnimationListener(this);
+
+        if (shouldOverrideAnimations) {
+            inAnimation.setDuration(0);
+            outAnimation.setDuration(0);
+        }
 
         // drop keyboard before transition...
         if (currentView != null) {
@@ -2964,6 +2971,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     public void setActivityAvailability(@NonNull ActivityAvailability activityAvailability) {
         this.activityAvailability = activityAvailability;
+    }
+
+    public void setShouldOverrideAnimations(boolean shouldOverrideAnimations) {
+        this.shouldOverrideAnimations = shouldOverrideAnimations;
     }
 
     /**

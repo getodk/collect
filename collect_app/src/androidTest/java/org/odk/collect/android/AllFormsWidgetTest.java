@@ -71,14 +71,14 @@ public class AllFormsWidgetTest {
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
 
-    @Mock
-    private ActivityAvailability activityAvailability;
-
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
+
+    @Mock
+    private ActivityAvailability activityAvailability;
 
     //region Test prep.
     @BeforeClass
@@ -99,8 +99,9 @@ public class AllFormsWidgetTest {
 
     @Before
     public void prepareDependencies() {
-        activityTestRule.getActivity()
-                .setActivityAvailability(activityAvailability);
+        FormEntryActivity activity = activityTestRule.getActivity();
+        activity.setActivityAvailability(activityAvailability);
+        activity.setShouldOverrideAnimations(true);
     }
     //endregion
 
@@ -224,7 +225,7 @@ public class AllFormsWidgetTest {
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
                 .respondWith(okResult);
 
-        onView(withText("Open Url")).perform(click());
+        onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
     }
 
