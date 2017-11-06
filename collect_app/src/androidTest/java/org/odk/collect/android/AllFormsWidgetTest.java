@@ -1,5 +1,6 @@
 package org.odk.collect.android;
 
+import android.animation.ValueAnimator;
 import android.app.Instrumentation.ActivityResult;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -26,6 +29,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.AnimationUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,6 +62,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
@@ -71,14 +76,17 @@ public class AllFormsWidgetTest {
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
 
-    @Mock
-    private ActivityAvailability activityAvailability;
-
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
+
+    @Mock
+    private ActivityAvailability activityAvailability;
+
+    @Mock
+    private AnimationUtil animationUtil;
 
     //region Test prep.
     @BeforeClass
@@ -99,8 +107,13 @@ public class AllFormsWidgetTest {
 
     @Before
     public void prepareDependencies() {
-        activityTestRule.getActivity()
-                .setActivityAvailability(activityAvailability);
+        FormEntryActivity activity = activityTestRule.getActivity();
+        activity.setActivityAvailability(activityAvailability);
+
+        when(animationUtil.loadAnimation(anyInt()))
+                .thenReturn(AnimationUtils.loadAnimation(activity, R.anim.empty));
+
+        activity.setAnimationUtil(animationUtil);
     }
     //endregion
 

@@ -51,7 +51,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -101,14 +100,15 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.AnimationUtil;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -202,6 +202,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     private Animation inAnimation;
     private Animation outAnimation;
+
     private View staleView = null;
 
     private LinearLayout questionHolder;
@@ -238,6 +239,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @NonNull
     private ActivityAvailability activityAvailability = new ActivityAvailability(this);
+
+    @NonNull
+    private AnimationUtil animationUtil = new AnimationUtil(this);
 
     /**
      * Called when the activity is first created.
@@ -1542,24 +1546,20 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // by createView()
         switch (from) {
             case RIGHT:
-                inAnimation = AnimationUtils.loadAnimation(this,
-                        R.anim.push_left_in);
-                outAnimation = AnimationUtils.loadAnimation(this,
-                        R.anim.push_left_out);
+                inAnimation = animationUtil.loadAnimation(R.anim.push_left_in);
+                outAnimation = animationUtil.loadAnimation(R.anim.push_left_out);
                 // if animation is left or right then it was a swipe, and we want to re-save on
                 // entry
                 autoSaved = false;
                 break;
             case LEFT:
-                inAnimation = AnimationUtils.loadAnimation(this,
-                        R.anim.push_right_in);
-                outAnimation = AnimationUtils.loadAnimation(this,
-                        R.anim.push_right_out);
+                inAnimation = animationUtil.loadAnimation(R.anim.push_right_in);
+                outAnimation = animationUtil.loadAnimation(R.anim.push_right_out);
                 autoSaved = false;
                 break;
             case FADE:
-                inAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-                outAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+                inAnimation = animationUtil.loadAnimation(R.anim.fade_in);
+                outAnimation = animationUtil.loadAnimation(R.anim.fade_out);
                 break;
         }
 
@@ -2964,6 +2964,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     public void setActivityAvailability(@NonNull ActivityAvailability activityAvailability) {
         this.activityAvailability = activityAvailability;
+    }
+
+    public void setAnimationUtil(@NonNull AnimationUtil animationUtil) {
+        this.animationUtil = animationUtil;
     }
 
     /**
