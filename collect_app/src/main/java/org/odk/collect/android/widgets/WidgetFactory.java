@@ -15,9 +15,11 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Locale;
 
@@ -40,6 +42,7 @@ public class WidgetFactory {
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
                                                         boolean readOnlyOverride) {
 
+
         // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
         if (appearance == null) {
@@ -58,6 +61,8 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DATE:
                         if (appearance.contains("ethiopian")) {
                             questionWidget = new EthiopianDateWidget(context, fep);
+                        } else if (appearance.contains("nepali")) {
+                            questionWidget = new NepaliDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }

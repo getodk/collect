@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
+import android.util.Log;
+
 import org.javarosa.core.model.FormIndex;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
@@ -65,6 +67,7 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
                 .toDateTime()
                 .withChronology(EthiopicChronology.getInstance())
                 .toLocalDateTime();
+
         setUpDayPicker(ethiopianDate);
         setUpMonthPicker(ethiopianDate, monthsArray);
         setUpYearPicker(ethiopianDate, MIN_SUPPORTED_YEAR, MAX_SUPPORTED_YEAR);
@@ -81,9 +84,11 @@ public class EthiopianDatePickerDialog extends CustomDatePickerDialog {
         int ethiopianYear = getYear();
 
         LocalDateTime ethiopianDate = new LocalDateTime(ethiopianYear, ethiopianMonth + 1, 1, 0, 0, 0, 0, EthiopicChronology.getInstance());
+
         if (ethiopianDay > ethiopianDate.dayOfMonth().getMaximumValue()) {
             ethiopianDay = ethiopianDate.dayOfMonth().getMaximumValue();
         }
+
 
         return new LocalDateTime(ethiopianYear, ethiopianMonth + 1, ethiopianDay, 0, 0, 0, 0, EthiopicChronology.getInstance());
     }

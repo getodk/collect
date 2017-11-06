@@ -23,6 +23,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Date;
 
@@ -43,7 +44,7 @@ public class EthiopianDateWidget extends AbstractDateWidget {
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDatePickerDialog();
+                 showDatePickerDialog();
             }
         });
     }

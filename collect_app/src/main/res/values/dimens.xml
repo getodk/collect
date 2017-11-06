@@ -50,5 +50,6 @@
     <!-- divider -->
     <dimen name="divier_height">3dp</dimen>
     <dimen name="divider_accidental_tap">8dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
