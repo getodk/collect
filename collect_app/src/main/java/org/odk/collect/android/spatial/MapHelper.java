@@ -172,9 +172,11 @@ public class MapHelper {
         File[] files = new File(Collect.OFFLINE_LAYERS).listFiles();
         ArrayList<String> results = new ArrayList<String>();
         results.add(no_folder_key);
-        for (File f : files) {
-            if (f.isDirectory() && !f.isHidden()) {
-                results.add(f.getName());
+        if(files != null) {     // smap.  Firebase reports crashes here, perhaps the layers folder could not be created
+            for (File f : files) {
+                if (f.isDirectory() && !f.isHidden()) {
+                    results.add(f.getName());
+                }
             }
         }
 

@@ -127,14 +127,12 @@ public class Utilities {
             selectClause = InstanceColumns.INSTANCE_FILE_PATH + " = '" + instancePath + "'";
         }
 
-
         final ContentResolver resolver = Collect.getInstance().getContentResolver();
         Cursor c = resolver.query(InstanceColumns.CONTENT_URI, proj, selectClause, null, null);
 
         try {
             c.moveToFirst();
             DateFormat dFormat = DateFormat.getDateTimeInstance();
-
 
             entry = new TaskEntry();
 
@@ -158,6 +156,7 @@ public class Utilities {
             entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
 
         } catch (Exception e) {
+            FirebaseCrash.log("Get task with ID or path: ID: " + id + " Path: " + instancePath);
             FirebaseCrash.report(e);
         } finally {
             if (c != null) {

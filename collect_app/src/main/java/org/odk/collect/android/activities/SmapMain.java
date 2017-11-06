@@ -640,8 +640,6 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         long taskId = entry.id;
         String status = entry.taskStatus;
 
-        Timber.i("Complete task" + entry.id + " : " + entry.name + " : " + entry.taskStatus);
-
         // set the adhoc location
         boolean canUpdate = false;
         try {
@@ -674,6 +672,9 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             String[] whereArgs = {
                     instancePath
             };
+
+            FirebaseCrash.log("Complete Task: " + entry.id + " : " + entry.name + " : "
+                    + entry.taskStatus + " : " + instancePath);
 
             Cursor cInstanceProvider = Collect.getInstance().getContentResolver().query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                     null, where, whereArgs, null);
