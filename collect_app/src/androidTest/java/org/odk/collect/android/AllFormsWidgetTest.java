@@ -224,7 +224,7 @@ public class AllFormsWidgetTest {
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
                 .respondWith(okResult);
 
-        onView(withText("Open Url")).perform(click());
+        onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
     }
 
