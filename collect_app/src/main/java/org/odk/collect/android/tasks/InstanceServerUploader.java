@@ -312,34 +312,38 @@ public class InstanceServerUploader extends InstanceUploader {
 
         // add media files
         List<File> files = new ArrayList<File>();
-        for (File f : allFiles) {
-            String fileName = f.getName();
+        if (allFiles != null) {
+            for (File f : allFiles) {
+                String fileName = f.getName();
 
-            if (fileName.startsWith(".")) {
-                continue; // ignore invisible files
-            } else if (fileName.equals(instanceFile.getName())) {
-                continue; // the xml file has already been added
-            } else if (fileName.equals(submissionFile.getName())) {
-                continue; // the xml file has already been added
+                if (fileName.startsWith(".")) {
+                    continue; // ignore invisible files
+                } else if (fileName.equals(instanceFile.getName())) {
+                    continue; // the xml file has already been added
+                } else if (fileName.equals(submissionFile.getName())) {
+                    continue; // the xml file has already been added
+                }
+
+                String extension = getFileExtension(fileName);
+
+                if (openRosaServer) {
+                    files.add(f);
+                } else if (extension.equals("jpg")) { // legacy 0.9x
+                    files.add(f);
+                } else if (extension.equals("3gpp")) { // legacy 0.9x
+                    files.add(f);
+                } else if (extension.equals("3gp")) { // legacy 0.9x
+                    files.add(f);
+                } else if (extension.equals("mp4")) { // legacy 0.9x
+                    files.add(f);
+                } else if (extension.equals("osm")) { // legacy 0.9x
+                    files.add(f);
+                } else {
+                    Timber.w("unrecognized file type %s", f.getName());
+                }
             }
-
-            String extension = getFileExtension(fileName);
-
-            if (openRosaServer) {
-                files.add(f);
-            } else if (extension.equals("jpg")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("3gpp")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("3gp")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("mp4")) { // legacy 0.9x
-                files.add(f);
-            } else if (extension.equals("osm")) { // legacy 0.9x
-                files.add(f);
-            } else {
-                Timber.w("unrecognized file type %s", f.getName());
-            }
+        } else {
+            return false;
         }
 
         boolean first = true;
