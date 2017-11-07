@@ -538,4 +538,5 @@
     <string name="ethiopian_month_nehasie">Nehasie</string>
     <string name="ethiopian_month_pagumien">Pagumien</string>
     <string name="ethiopian_date">%1$s (%2$s)</string>
+    <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 </resources>
