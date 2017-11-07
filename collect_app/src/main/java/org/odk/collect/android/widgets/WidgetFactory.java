@@ -66,9 +66,9 @@ public class WidgetFactory {
                         questionWidget = new TimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
-                        if (appearance.startsWith("ex:")) {
+                        if (appearance.contains("ex:")) {     // smap change to contains rather than equals
                             questionWidget = new ExDecimalWidget(context, fep);
-                        } else if (appearance.equals("bearing")) {
+                        } else if (appearance.contains("bearing")) {    // smap change to contains rather than equals
                             questionWidget = new BearingWidget(context, fep);
                         } else {
                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
@@ -100,20 +100,20 @@ public class WidgetFactory {
                     case Constants.DATATYPE_TEXT:
                         String query = fep.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
-                            if (appearance.startsWith("quick")) {
+                            if (appearance.contains("quick")) {       // smap change to contains rather than equals
                                 questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
                                         true);
                             } else {
                                 questionWidget = new ItemsetWidget(context, fep, readOnlyOverride,
                                         false);
                             }
-                        } else if (appearance.startsWith("printer")) {
+                        } else if (appearance.contains("printer")) {      // smap change to contains rather than equals
                             questionWidget = new ExPrinterWidget(context, fep);
-                        } else if (appearance.startsWith("ex:")) {
+                        } else if (appearance.contains("ex:")) {          // smap change to contains rather than equals
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.equals("numbers")) {
+                        } else if (appearance.contains("numbers")) {     // smap change to contains rather than equals
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
-                        } else if (appearance.equals("url")) {
+                        } else if (appearance.contains("url")) {        // smap change to contains rather than equals
                             questionWidget = new UrlWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
@@ -127,15 +127,15 @@ public class WidgetFactory {
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals("web")) {
                     questionWidget = new ImageWebViewWidget(context, fep);
-                } else if (appearance.equals("signature")) {
+                } else if (appearance.contains("signature")) {            // smap change to contains rather than equals
                     questionWidget = new SignatureWidget(context, fep);
                 } else if (appearance.contains("annotate")) {           // smap change to contains rather than equals, may have other appearance settings
                     questionWidget = new AnnotateWidget(context, fep);
-                } else if (appearance.equals("draw")) {
+                } else if (appearance.contains("draw")) {                 // smap change to contains rather than equals
                     questionWidget = new DrawWidget(context, fep);
-                } else if (appearance.startsWith("align:")) {
+                } else if (appearance.contains("align:")) {                 // smap change to contains rather than equals
                     questionWidget = new AlignedImageWidget(context, fep);
-                } else if (appearance.equals("selfie")) {
+                } else if (appearance.contains("selfie")) {                 // smap change to contains rather than equals
                     questionWidget = new ImageWidget(context, fep, true);
                 } else {
                     questionWidget = new ImageWidget(context, fep, false);
