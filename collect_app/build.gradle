@@ -38,19 +38,19 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "5.12"
+            versionName "5.13"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "5.12-plan"
+            versionName "5.13-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "5.12-kontrolid"
+            versionName "5.13-kontrolid"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "5.12-pop"
+            versionName "5.13-pop"
         }
     }
 
