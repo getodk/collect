@@ -201,7 +201,6 @@
   <string name="change_admin_password">Canviar clau d\'administrador</string>
   <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
   <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
-  <string name="no_account">Sense compte</string>
   <string name="save_preferences">Salve Configuració a disc</string>
   <string name="form_forward">Següent</string>
   <string name="form_backward">Previ</string>

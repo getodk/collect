@@ -204,7 +204,6 @@
   <string name="change_admin_password">Cambia la password di amministratore</string>
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
-  <string name="no_account">Nessun account</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
   <string name="form_forward">Prossimo</string>
   <string name="form_backward">Precedente</string>

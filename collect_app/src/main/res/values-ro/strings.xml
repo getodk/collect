@@ -195,7 +195,6 @@
   <string name="change_admin_password">Schimbați parola administratorului</string>
   <string name="found_in_main">Deselectați pentru a ascunde din Meniul principal</string>
   <string name="found_in_settings">Deselectați pentru a ascunde din Setări generale</string>
-  <string name="no_account">Niciun cont</string>
   <string name="save_preferences">Salvați setările pe disk</string>
   <string name="form_forward">Următor</string>
   <string name="form_backward">Anterior</string>

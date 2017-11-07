@@ -205,7 +205,6 @@
   <string name="autosend">Автоматичне надсилання</string>
   <string name="found_in_main">Зніміть позначку щоб прибрати з Головного меню</string>
   <string name="found_in_settings">Зніміть позначку щоб прибрати з Загальні Налаштування</string>
-  <string name="no_account">Відсутній обліковий запис</string>
   <string name="save_preferences">Зберегти налаштування на диск</string>
   <string name="form_forward">Далі</string>
   <string name="form_backward">Назад</string>
