@@ -16,13 +16,13 @@
 
 package org.odk.collect.android.preferences;
 
-import android.accounts.Account;
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.InputFilter;
@@ -34,6 +34,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,10 +50,17 @@ import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
@@ -63,7 +73,9 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     protected EditTextPreference formListUrlPreference;
     private ListPopupWindow listPopupWindow;
     private List<String> urlList;
-    private ListPreference selectedGoogleAccountPreference;
+    private Preference selectedGoogleAccountPreference;
+    private GoogleAccountCredential credential;
+
 
     public void addAggregatePreferences() {
         addPreferencesFromResource(R.xml.aggregate_preferences);
@@ -108,11 +120,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     public void addGooglePreferences() {
         addPreferencesFromResource(R.xml.google_preferences);
-
-        selectedGoogleAccountPreference = (ListPreference) findPreference(
-                PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
-        selectedGoogleAccountPreference.setOnPreferenceChangeListener(this);
-        selectedGoogleAccountPreference.setSummary(selectedGoogleAccountPreference.getValue());
+        selectedGoogleAccountPreference = findPreference(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
                 PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
@@ -151,23 +159,23 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void initAccountPreferences() {
-        // get list of google accounts
-        final Account[] accounts = AccountManager.get(getActivity().getApplicationContext())
-                .getAccountsByType("com.google");
-        ArrayList<String> accountEntries = new ArrayList<String>();
-        ArrayList<String> accountValues = new ArrayList<String>();
+        credential =  GoogleAccountCredential.usingOAuth2(getActivity(), Collections.singletonList(DriveScopes.DRIVE))
+                .setBackOff(new ExponentialBackOff());
 
-        for (Account account : accounts) {
-            accountEntries.add(account.name);
-            accountValues.add(account.name);
-        }
-        accountEntries.add(getString(R.string.no_account));
-        accountValues.add("");
-
-        selectedGoogleAccountPreference.setEntries(accountEntries
-                .toArray(new String[accountEntries.size()]));
-        selectedGoogleAccountPreference.setEntryValues(accountValues
-                .toArray(new String[accountValues.size()]));
+        selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.GET_ACCOUNTS)) {
+                    startActivityForResult(credential.newChooseAccountIntent(),REQUEST_ACCOUNT_PICKER);
+                } else {
+                    EasyPermissions.requestPermissions(this,
+                            getString(R.string.request_permissions_google_account),
+                            REQUEST_PERMISSION_GET_ACCOUNTS,
+                            Manifest.permission.GET_ACCOUNTS);
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -295,14 +303,6 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
                 credentialsHaveChanged = true;
                 break;
 
-            case PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT:
-                int index = ((ListPreference) preference).findIndexOfValue(newValue
-                        .toString());
-                String value =
-                        (String) ((ListPreference) preference).getEntryValues()[index];
-                preference.setSummary(value);
-                break;
-
             case PreferenceKeys.KEY_GOOGLE_SHEETS_URL:
                 url = newValue.toString();
 
@@ -343,4 +343,29 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
         sharedPreferences.reset(KEY_FORMLIST_URL);
         sharedPreferences.reset(KEY_SUBMISSION_URL);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+                        editor.apply();
+                        selectedGoogleAccountPreference.setSummary(accountName);
+                        credential.setSelectedAccountName(accountName);
+                    }
+                }
+                break;
+        }
+        if (resultCode == RESULT_CANCELED) {
+            ToastUtils.showShortToast("Account selection cancelled");
+        }
+
+    }
+
 }
