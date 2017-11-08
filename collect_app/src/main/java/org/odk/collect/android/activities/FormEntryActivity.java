@@ -85,6 +85,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.injection.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -142,6 +143,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
+        DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
@@ -2921,6 +2923,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return (ODKView) currentView;
         }
         return null;
+    }
+
+    @Override
+    public ActivityAvailability provide() {
+        return activityAvailability;
+    }
+
+    public void setActivityAvailability(@NonNull ActivityAvailability activityAvailability) {
+        this.activityAvailability = activityAvailability;
     }
 
     public void setShouldOverrideAnimations(boolean shouldOverrideAnimations) {
