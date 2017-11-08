@@ -110,6 +110,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.tempinstance.TempInstanceRemover;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
@@ -2034,62 +2035,22 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         alertDialog.show();
     }
 
+    @NonNull
+    private TempInstanceRemover tempInstanceRemover = new TempInstanceRemover();
+
     /**
      * this method cleans up unneeded files when the user selects 'discard and
      * exit'
      */
     private void removeTempInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
-
-        // attempt to remove any scratch file
-        File temp = SaveToDiskTask.savepointFile(formController
-                .getInstancePath());
-        if (temp.exists()) {
-            temp.delete();
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController == null) {
+            Timber.w("Null FormController, can't delete temporary instance.");
+            return;
         }
 
-        boolean erase = false;
-        {
-            Cursor c = null;
-            try {
-                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                        .getAbsolutePath());
-                erase = (c.getCount() < 1);
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
-        }
-
-        // if it's not already saved, erase everything
-        if (erase) {
-            // delete media first
-            String instanceFolder = formController.getInstancePath()
-                    .getParent();
-            Timber.i("Attempting to delete: %s", instanceFolder);
-            int images = MediaUtils
-                    .deleteImagesInFolderFromMediaProvider(formController
-                            .getInstancePath().getParentFile());
-            int audio = MediaUtils
-                    .deleteAudioInFolderFromMediaProvider(formController
-                            .getInstancePath().getParentFile());
-            int video = MediaUtils
-                    .deleteVideoInFolderFromMediaProvider(formController
-                            .getInstancePath().getParentFile());
-
-            Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
-                    images, audio, video);
-            File f = new File(instanceFolder);
-            if (f.exists() && f.isDirectory()) {
-                for (File del : f.listFiles()) {
-                    Timber.i("Deleting file: %s", del.getAbsolutePath());
-                    del.delete();
-                }
-                f.delete();
-            }
-        }
+        File instancePath = formController.getInstancePath();
+        tempInstanceRemover.removeTempInstanceAtInstancePath(instancePath);
     }
 
     /**
