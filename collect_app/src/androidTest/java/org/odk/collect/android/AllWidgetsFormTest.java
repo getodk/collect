@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.filters.Suppress;
 import android.support.test.runner.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
