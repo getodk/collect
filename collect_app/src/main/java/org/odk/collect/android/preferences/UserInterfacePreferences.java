@@ -36,7 +36,6 @@ import java.util.TreeMap;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
@@ -183,7 +182,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                if (index == ARRAY_INDEX_GOOGLE_MAPS) {
+                if (index == 0) {
                     mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
                     mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
                     mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
