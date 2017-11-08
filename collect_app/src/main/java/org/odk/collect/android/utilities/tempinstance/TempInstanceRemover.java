@@ -36,6 +36,7 @@ public class TempInstanceRemover {
 
     public void removeTempInstanceAtInstancePath(@NonNull File instancePath) {
 
+        // Dependency injected:
         File temp = temporaryInstanceFileManager.getSavePointFileForInstancePath(instancePath);
 
         if (temp.exists()) {
@@ -45,6 +46,7 @@ public class TempInstanceRemover {
             }
         }
 
+        // Dependency injected:
         boolean shouldErase = existingInstanceChecker.shouldDeleteExistingInstance(instancePath);
 
         // if it's not already saved, erase everything
@@ -55,6 +57,7 @@ public class TempInstanceRemover {
 
             File parentFile = instancePath.getParentFile();
 
+            // Dependency injected:
             int images = mediaDeleter
                     .deleteImagesInFolderFromMediaProvider(parentFile);
             int audio = mediaDeleter
@@ -65,6 +68,7 @@ public class TempInstanceRemover {
             Timber.i("Removed from content providers: %d image files, %d audio files and %d audio files.",
                     images, audio, video);
 
+            // Dependency injected:
             File f = temporaryInstanceFileManager.getInstanceFolder(instancePath);
             if (f.exists() && f.isDirectory()) {
                 for (File del : f.listFiles()) {
