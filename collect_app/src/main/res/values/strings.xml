@@ -552,4 +552,6 @@
     <string name="coptic_month_epip">Epip</string>
     <string name="coptic_month_mesori">Mesori</string>
     <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
+    <string name="ethiopian_date">%1$s (%2$s)</string>
+    <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 </resources>

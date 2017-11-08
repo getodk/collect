@@ -266,7 +266,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     }
 
     private void clearChoices() {
-        FormDownloadList.this.listView.clearChoices();
+        listView.clearChoices();
         downloadButton.setEnabled(false);
     }
 

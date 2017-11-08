@@ -31,7 +31,7 @@ def getMasterCommitCount = { ->
         }
         return Integer.parseInt(stdout.toString().trim())
     } catch (ignored) {
-        return -1;
+        return -1
     }
 }
 
@@ -51,7 +51,7 @@ def getVersionName = { ->
         }
         return stdout.toString().trim()
     } catch (ignored) {
-        return null;
+        return null
     }
 }
 
@@ -182,7 +182,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.6.0') {
+    compile (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.6.1') {
         exclude module: 'joda-time'
     }
     compile group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
@@ -199,17 +199,36 @@ dependencies {
     compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
     compile group: 'net.danlew', name: 'android.joda', version: '2.9.9'
 
+    // Real LeakCanary for debug builds only: notifications, analysis, etc
+    debugCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android', version: '1.5.4'
+    // No-Op version of LeakCanary for release builds: no notifications, no analysis, nothing
+    releaseCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    testCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    androidTestCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    odkCollectReleaseCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+
     // Testing-only dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.8.47'
     testCompile group: 'org.robolectric', name: 'robolectric', version: '3.4'
     testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.3.2'
 
-    androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.8.47'
-    androidTestCompile group: 'com.android.support', name: 'support-annotations', version: '25.3.1'
-    androidTestCompile group: 'com.android.support.test', name: 'runner', version: '0.5'
-    androidTestCompile group: 'com.android.support.test', name: 'rules', version: '0.5'
-    androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.2.0'
+    androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
+    androidTestCompile(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    androidTestCompile(group: 'com.android.support.test.espresso', name: 'espresso-core', version: '3.0.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
+
+    androidTestCompile(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: '3.0.1')  {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
+
+    androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.9.0'
 }
 
 // Must be at bottom to prevent dependency collisions

@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
+import com.squareup.leakcanary.LeakCanary;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -278,6 +279,16 @@ public class Collect extends Application {
         } else {
             Timber.plant(new NotLoggingTree());
         }
+
+        setupLeakCanary();
+    }
+
+    private void setupLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+        }
+        LeakCanary.install(this);
     }
 
     @Override

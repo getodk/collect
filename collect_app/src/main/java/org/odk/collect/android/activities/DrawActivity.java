@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -64,6 +65,7 @@ public class DrawActivity extends AppCompatActivity {
     public static final String OPTION_ANNOTATE = "annotate";
     public static final String OPTION_DRAW = "draw";
     public static final String REF_IMAGE = "refImage";
+    public static final String SCREEN_ORIENTATION = "screenOrientation";
     public static final String EXTRA_OUTPUT = android.provider.MediaStore.EXTRA_OUTPUT;
     public static final String SAVEPOINT_IMAGE = "savepointImage"; // during
     // restore
@@ -149,6 +151,9 @@ public class DrawActivity extends AppCompatActivity {
             savepointImage.delete();
             output = new File(Collect.TMPFILE_PATH);
         } else {
+            if (extras.getInt(SCREEN_ORIENTATION) == 1) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
             loadOption = extras.getString(OPTION);
             if (loadOption == null) {
                 loadOption = OPTION_DRAW;
@@ -199,7 +204,7 @@ public class DrawActivity extends AppCompatActivity {
         }
 
         drawView = (DrawView) findViewById(R.id.drawView);
-        drawView.setupView(this, OPTION_SIGNATURE.equals(loadOption), savepointImage);
+        drawView.setupView(OPTION_SIGNATURE.equals(loadOption));
     }
 
     private void saveAndClose() {
@@ -296,8 +301,8 @@ public class DrawActivity extends AppCompatActivity {
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
-            items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
-                    new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
+        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save_grey_32dp_wrapped, R.string.keep_changes),
+                new IconMenuItem(R.drawable.ic_delete_grey_32dp_wrapped, R.string.do_not_save));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);
@@ -356,8 +361,7 @@ public class DrawActivity extends AppCompatActivity {
     public void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            ColorPickerDialog cpd = new ColorPickerDialog(
-                    DrawActivity.this,
+            ColorPickerDialog cpd = new ColorPickerDialog(this,
                     new ColorPickerDialog.OnColorChangedListener() {
                         public void colorChanged(String key, int color) {
                             drawView.setColor(color);

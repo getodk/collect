@@ -109,9 +109,6 @@
   <string name="send_data">إرسال الاستمارة النهائية</string>
   <string name="send_data_button">إرسال الاستمارة النهائية (%s)</string>
   <string name="send_selected_data">إرسال الاستمارات المُختارة</string>
-  <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
-  <string name="view_sent_forms_button">عرض الاستمارات المرسلة</string>
-  <string name="server_auth_credentials">بيانات اعتماد مصادقة الخادم</string>
   <string name="server_requires_auth">المخدم يتطلب المصادقة</string>
   <string name="server_url">الرابط</string>
   <string name="server_preferences">إعدادات الخادم</string>
@@ -148,7 +145,6 @@
   <string name="success">نجاح</string>
   <string name="no_forms_uploaded">عذرا، لا يوجد استمارة للتحميل.</string>
   <string name="upload_results">تحميل النتائج</string>
-  <string name="xform_parse_error">حدث خطأ اثناء معالجة قالب الاستمارة</string>
   <string name="choose_sound">إختر تسجيل صوتي</string>
   <string name="choose_video">إختر فيديو</string>
   <string name="choose_image">إختر صورة</string>
@@ -269,7 +265,6 @@
   <string name="google_set_account">لقد قمت باختيار صفحات الجوجل كخادم لك، أرجو اختيار حساب الجوجل  المتوافق عن طريق الاعدادت العامة قبل الاستمرار</string>
   <string name="invalid_oauth">الرمز غير صالح</string>
   <string name="google_repeat_error">التكرارات غير مدعومة من قبل صفحات الجوجل بهذا الوقت</string>
-  <string name="media_upload_error">خطأ اثناء رفع الوسائط</string>
   <string name="odk_auth_auth_fail">فشل في عملية التحقق من بيانات المصادقة</string>
   <string name="odk_auto_note">ملاحظات تلقائية</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
@@ -343,15 +338,11 @@
   <string name="zoom_to_where">التقريب الى…</string>
   <string name="zoom_to_location">التقريب الى موقع الحالي</string>
   <string name="zoom_to_feature">التقريب الى الميزة المحفوظة</string>
-  <string name="google_sheets_invalid_column_form">حقل خاطئ في اوراق جوجل</string>
-  <string name="google_sheets_invalid_column_instance">حقل خاطئ في مصدر اوراق جوجل</string>
   <string name="geoshape_view_change_location">عرض التغييرات في الموقع لـ GeoShape</string>
   <string name="geotrace_view_change_location">عرض التغييرات في الموقع لـ GeoTrace</string>
   <string name="bearing">تحمل %.3f</string>
   <string name="direction">الاتجاة: %s</string>
   <string name="select_odk_shortcut">اختيار الاختصار</string>
-  <string name="bad_uri">عنوان غير صحيح</string>
-  <string name="unrecognized_uri">عنوان غير معروف</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">لم يتم العثور على الاستمارات…</string>
   <string name="settings_successfully_loaded_file_notification">تم تحميل ملف الاعدادت بنجاح</string>
@@ -385,7 +376,6 @@
   <string name="not_exactly_one_record_for_this_instance">لايوجد تطابق لهذا السجل في الاستمارة</string>
   <string name="not_exactly_one_blank_form_for_this_form_id">معرف الاستمارة لا يتطابق مع الاستمارة الفارغة</string>
   <string name="no_form_id_specified">لم يتم تحديد عنوان الاستمارة</string>
-  <string name="phone_does_not_have_base64_class">الهاتف لايحتوي على خاصية Base64</string>
   <string name="phone_does_not_support_rsa">الهاتف لايدعم خاصية RSA</string>
   <string name="invalid_rsa_public_key">مفتاح الـ RSA العام غير صالح</string>
   <string name="encryption_error_message">الاستمارة لم يتم حفظها كنهائية %s </string>
@@ -503,7 +493,6 @@
   <string name="edit_value">غير</string>
   <string name="no_value_selected">لم يتم اختيار قيمة</string>
   <string name="form_delete_message">تحذير…سيتم مسح الاستمارات المحددة.</string>
-  <string name="deleting_form_dialog_update_message">تمت عملية المسح.</string>
   <string name="search">بحث</string>
   <string name="null_intent_value">حدث خطأ. قيمة فارغة</string>
 </resources>
