@@ -120,7 +120,7 @@ public class ResetAppStateTestCase {
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ResetUtility().reset(Collect.getInstance(), resetActions);
+        List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 

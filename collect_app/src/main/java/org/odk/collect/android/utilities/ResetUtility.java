@@ -17,14 +17,13 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
-import org.odk.collect.android.preferences.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.osmdroid.config.Configuration;
 
 import java.io.File;
@@ -35,7 +34,7 @@ public class ResetUtility {
 
     private List<Integer> failedResetActions;
 
-    public List<Integer> reset(final Context context, List<Integer> resetActions) {
+    public List<Integer> reset(List<Integer> resetActions) {
 
         failedResetActions = new ArrayList<>();
         failedResetActions.addAll(resetActions);
@@ -43,7 +42,7 @@ public class ResetUtility {
         for (int action : resetActions) {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
-                    resetPreferences(context);
+                    resetPreferences();
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
@@ -72,20 +71,9 @@ public class ResetUtility {
         return failedResetActions;
     }
 
-    private void resetPreferences(Context context) {
-        boolean clearedDefaultPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context)
-                .edit()
-                .clear()
-                .commit();
-
-        PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
-
-        boolean clearedAdminPreferences = context
-                .getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0)
-                .edit()
-                .clear()
-                .commit();
+    private void resetPreferences() {
+        GeneralSharedPreferences.getInstance().loadDefaultValues();
+        AdminSharedPreferences.getInstance().loadDefaultValues();
 
         boolean deletedSettingsFolderContest = !new File(Collect.SETTINGS).exists()
                 || deleteFolderContents(Collect.SETTINGS);
@@ -93,7 +81,7 @@ public class ResetUtility {
         boolean deletedSettingsFile = !new File(Collect.ODK_ROOT + "/collect.settings").exists()
                 || (new File(Collect.ODK_ROOT + "/collect.settings").delete());
 
-        if (clearedDefaultPreferences && clearedAdminPreferences && deletedSettingsFolderContest && deletedSettingsFile) {
+        if (deletedSettingsFolderContest && deletedSettingsFile) {
             failedResetActions.remove(failedResetActions.indexOf(ResetAction.RESET_PREFERENCES));
         }
     }
