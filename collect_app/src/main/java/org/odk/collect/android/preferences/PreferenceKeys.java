@@ -46,7 +46,6 @@ public final class PreferenceKeys {
     public static final String NAVIGATION_BUTTONS           = "buttons";
 
     public static final String CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe";
-    public static final String CONSTRAINT_BEHAVIOR_DEFAULT  = "on_swipe";
 
     public static final String KEY_COMPLETED_DEFAULT        = "default_completed";
 
@@ -56,7 +55,7 @@ public final class PreferenceKeys {
     public static final String KEY_AUTOSEND                 = "autosend";
     public static final String KEY_AUTOSEND_WIFI            = "autosend_wifi";
     public static final String KEY_AUTOSEND_NETWORK         = "autosend_network";
-    
+
     public static final String KEY_NAVIGATION               = "navigation";
     public static final String KEY_CONSTRAINT_BEHAVIOR      = "constraint_behavior";
 
@@ -83,6 +82,7 @@ public final class PreferenceKeys {
         hashMap.put(KEY_DELETE_AFTER_SEND,          false);
         hashMap.put(KEY_ANALYTICS,                  true);
         hashMap.put(KEY_INSTANCE_SYNC,              true);
+        hashMap.put(KEY_HIGH_RESOLUTION,            true);
         hashMap.put(KEY_APP_LANGUAGE,               "");
         hashMap.put(KEY_PROTOCOL,                   Collect.getInstance().getString(R.string.protocol_odk_default));
         hashMap.put(KEY_SELECTED_GOOGLE_ACCOUNT,    "");
