@@ -233,45 +233,7 @@ public class AllFormsWidgetTest {
 
     public void testExStringWidget() {
         // Manually input the value:
-        String exStringWidgetFirstText = randomString();
-
-        when(activityAvailability.isActivityAvailable(any(Intent.class)))
-                .thenReturn(false);
-
-        onView(withText("Launch")).perform(click());
-        onVisibleEditText().perform(replaceText(exStringWidgetFirstText));
-
-        openWidgetList();
-        onView(withText("Ex string widget")).perform(click());
-
-        onVisibleEditText().check(matches(withText(exStringWidgetFirstText)));
-
-        // Replace with Intent value:
-        String exStringWidgetSecondText = randomString();
-
-        Intent stringIntent = new Intent();
-        stringIntent.putExtra("value", exStringWidgetSecondText);
-
-        ActivityResult exStringResult = new ActivityResult(RESULT_OK, stringIntent);
-        intending(allOf(
-                hasAction("change.uw.android.BREATHCOUNT"),
-                hasExtra("value", exStringWidgetFirstText)
-
-        )).respondWith(exStringResult);
-
-        when(activityAvailability.isActivityAvailable(any(Intent.class)))
-                .thenReturn(true);
-
-        onView(withText("Launch")).perform(click());
-        onView(withText(exStringWidgetSecondText))
-                .check(matches(isDisplayed()));
-
-        openWidgetList();
-        onView(withText("Ex string widget")).perform(click());
-
-        onVisibleEditText().check(matches(withText(exStringWidgetSecondText)));
-
-        onView(withText("Ex string widget")).perform(swipeLeft());
+        
     }
 
     public void testExPrinterWidget() {
@@ -428,8 +390,6 @@ public class AllFormsWidgetTest {
     }
 
     public void testImageWidget() {
-
-
         onView(withText("Image widget")).perform(swipeLeft());
     }
 
