@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.filters.Suppress;
 import android.support.test.runner.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
@@ -63,6 +64,7 @@ import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESUL
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
+@Suppress
 public class AllFormsWidgetTest {
 
     private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
@@ -71,14 +73,14 @@ public class AllFormsWidgetTest {
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
 
-    @Mock
-    private ActivityAvailability activityAvailability;
-
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
+
+    @Mock
+    private ActivityAvailability activityAvailability;
 
     //region Test prep.
     @BeforeClass
@@ -99,8 +101,9 @@ public class AllFormsWidgetTest {
 
     @Before
     public void prepareDependencies() {
-        activityTestRule.getActivity()
-                .setActivityAvailability(activityAvailability);
+        FormEntryActivity activity = activityTestRule.getActivity();
+        activity.setActivityAvailability(activityAvailability);
+        activity.setShouldOverrideAnimations(true);
     }
     //endregion
 
@@ -224,7 +227,7 @@ public class AllFormsWidgetTest {
         intending(allOf(hasAction(Intent.ACTION_VIEW), hasData(uri)))
                 .respondWith(okResult);
 
-        onView(withText("Open Url")).perform(click());
+        onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
     }
 
@@ -273,7 +276,8 @@ public class AllFormsWidgetTest {
 
     public void testExPrinterWidget() {
         onView(withText("Initiate Printing")).perform(click());
-
+        
+        intending(hasAction("org.opendatakit.sensors.ZebraPrinter"));
         intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
 
         // There is also a BroadcastIntent that sends the data but we don't

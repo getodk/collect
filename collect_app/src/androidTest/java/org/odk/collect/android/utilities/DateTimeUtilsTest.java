@@ -17,6 +17,7 @@
 package org.odk.collect.android.utilities;
 
 import android.content.Context;
+import android.support.test.filters.Suppress;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -47,6 +48,7 @@ public class DateTimeUtilsTest {
     }
 
     @Test
+    @Suppress
     public void getDateTimeLabelTest() {
         long dateInMilliseconds = 687967200000L; // 20 Oct 1991 14:00
 
