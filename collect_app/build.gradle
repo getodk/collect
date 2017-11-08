@@ -31,7 +31,7 @@ def getMasterCommitCount = { ->
         }
         return Integer.parseInt(stdout.toString().trim())
     } catch (ignored) {
-        return -1;
+        return -1
     }
 }
 
@@ -51,7 +51,7 @@ def getVersionName = { ->
         }
         return stdout.toString().trim()
     } catch (ignored) {
-        return null;
+        return null
     }
 }
 
@@ -203,6 +203,8 @@ dependencies {
     debugCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android', version: '1.5.4'
     // No-Op version of LeakCanary for release builds: no notifications, no analysis, nothing
     releaseCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    testCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    androidTestCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
     odkCollectReleaseCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
 
     // Testing-only dependencies

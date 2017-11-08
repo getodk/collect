@@ -276,7 +276,8 @@ public class AllFormsWidgetTest {
 
     public void testExPrinterWidget() {
         onView(withText("Initiate Printing")).perform(click());
-
+        
+        intending(hasAction("org.opendatakit.sensors.ZebraPrinter"));
         intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
 
         // There is also a BroadcastIntent that sends the data but we don't
