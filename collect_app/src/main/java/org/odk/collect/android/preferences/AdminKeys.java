@@ -58,8 +58,6 @@ public final class AdminKeys {
 
     private static final String KEY_ANALYTICS                   = "analytics";
 
-    private static final String KEY_TIMER_LOG_ENABLED           = "change_timer_log";
-
     /**
      * The admin preferences allow removing general preferences. This array contains
      * tuples of admin keys and the keys of general preferences that are removed if the admin
@@ -87,7 +85,6 @@ public final class AdminKeys {
 
             ag(KEY_SHOW_MAP_SDK,               PreferenceKeys.KEY_MAP_SDK),
             ag(KEY_SHOW_MAP_BASEMAP,           PreferenceKeys.KEY_MAP_BASEMAP),
-            ag(KEY_TIMER_LOG_ENABLED,          PreferenceKeys.KEY_TIMER_LOG_ENABLED),
 
             ag(KEY_ANALYTICS,                  PreferenceKeys.KEY_ANALYTICS)
     };
@@ -124,8 +121,7 @@ public final class AdminKeys {
             KEY_CONSTRAINT_BEHAVIOR,
             KEY_HIGH_RESOLUTION,
             KEY_IMAGE_SIZE,
-            KEY_INSTANCE_FORM_SYNC,
-            KEY_TIMER_LOG_ENABLED
+            KEY_INSTANCE_FORM_SYNC
     );
 
     static Collection<String> userInterfaceKeys = Arrays.asList(
