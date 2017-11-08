@@ -27,4 +27,6 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
     public StringData getNextAnswer() {
         return new StringData(RandomString.make());
     }
+
+
 }
