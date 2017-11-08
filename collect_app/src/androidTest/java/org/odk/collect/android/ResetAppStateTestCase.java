@@ -41,7 +41,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -72,8 +71,8 @@ public class ResetAppStateTestCase {
         resetAppState(Collections.singletonList(ResetUtility.ResetAction.RESET_PREFERENCES));
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-        assertNull(settings.getString(PreferenceKeys.KEY_USERNAME, null));
-        assertNull(settings.getString(PreferenceKeys.KEY_PASSWORD, null));
+        assertEquals(settings.getString(PreferenceKeys.KEY_USERNAME, ""), "");
+        assertEquals(settings.getString(PreferenceKeys.KEY_PASSWORD, ""), "");
         assertEquals(true, settings.getBoolean(AdminKeys.KEY_VIEW_SENT, true));
 
         assertEquals(0, getFormsCount());
