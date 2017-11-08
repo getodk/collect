@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets;
 
+import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
@@ -8,7 +9,9 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.odk.collect.android.TestCollect;
 import org.odk.collect.android.external.ExternalAppsUtil;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
@@ -32,6 +35,9 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
     @Mock
     private ExternalAppsUtil externalAppsUtil;
 
+    @Mock
+    private ActivityAvailability activityAvailability;
+
     @NonNull
     @Override
     public ExStringWidget createWidget() {
@@ -47,13 +53,21 @@ public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
+        TestCollect application = (TestCollect) RuntimeEnvironment.application;
+        application.setActivityAvailability(activityAvailability);
+
         when(formEntryPrompt.getAppearanceHint()).thenReturn("");
     }
 
     @Test
     public void whenLaunchIntentButtonIsClickedExternalActivityShouldBeLaunched() {
+        when(activityAvailability.isActivityAvailable(any(Intent.class)))
+                .thenReturn(true);
+
         String intentName = RandomString.make();
-        when(externalAppsUtil.extractIntentName(any(String.class))).thenReturn(intentName);
+        when(externalAppsUtil.extractIntentName(any(String.class)))
+                .thenReturn(intentName);
 
         ExStringWidget widget = getWidget();
         widget.getLaunchIntentButton().performClick();

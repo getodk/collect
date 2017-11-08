@@ -113,7 +113,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         this(context, prompt, new ExternalAppsUtil());
     }
 
-    public ExStringWidget(Context context, FormEntryPrompt prompt, @NonNull ExternalAppsUtil externalAppsUtil) {
+    public ExStringWidget(Context context, FormEntryPrompt prompt, @NonNull final ExternalAppsUtil externalAppsUtil) {
         super(context, prompt);
         this.externalAppsUtil = externalAppsUtil;
 
@@ -165,7 +165,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 Intent i = new Intent(intentName);
                 if (activityAvailability.isActivityAvailable(i)) {
                     try {
-                        ExternalAppsUtils.populateParameters(i, exParams,
+                        externalAppsUtil.populateParameters(i, exParams,
                                 getFormEntryPrompt().getIndex().getReference());
 
                         waitForData();
@@ -175,6 +175,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                         Timber.e(e);
                         onException(e.getMessage());
                     }
+
                 } else {
                     onException(errorString);
                 }
