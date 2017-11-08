@@ -764,7 +764,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
 
                 // check if root folder exists, if not then create one
-                driveHelper.getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
+                driveHelper.getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
 
                 uploadInstances(selection, selectionArgs, token, low, values.length);
                 counter++;

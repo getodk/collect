@@ -53,6 +53,7 @@ import com.google.api.services.drive.model.FileList;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.google.DriveHelper;
 import org.odk.collect.android.google.GoogleAccountsManager;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
@@ -60,6 +61,7 @@ import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.utilities.ToastUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -797,65 +799,24 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             for (int k = 0; k < fileItems.size(); k++) {
                 DriveListItem fileItem = fileItems.get(k);
 
-                FileOutputStream fileOutputStream = null;
                 try {
-                    com.google.api.services.drive.model.File df = driveService.files()
-                            .get(fileItem.getDriveId()).execute();
+                    driveHelper.downloadFile(fileItem.getDriveId(), fileItem.getName());
+                    results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
 
-                    fileOutputStream = new FileOutputStream(
-                            new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
-                    downloadFile(df).writeTo(fileOutputStream);
+                    String mediaDirName = driveHelper.getMediaDirName(fileItem.getName());
 
-                    String mediaDirName = fileItem.getName().substring(0, fileItem.getName().length() - 4) + "-media";
-
-                    String requestString = "'" + fileItem.getParentId() + "' in parents and trashed=false and name='" + mediaDirName + "'";
-                    Files.List request;
-                    List<com.google.api.services.drive.model.File> driveFileList = new ArrayList<>();
-
+                    String folderId;
                     try {
-                        request = driveService.files().list().setQ(requestString);
-                    } catch (IOException e) {
-                        Timber.e(e);
-                        results.put(fileItem.getName(), e.getMessage());
-                        return results;
-                    }
-                    do {
-                        try {
-                            FileList fa = request.execute();
-                            driveFileList.addAll(fa.getFiles());
-                            request.setPageToken(fa.getNextPageToken());
-                        } catch (Exception e) {
-                            Timber.e(e);
-                            results.put(fileItem.getName(), e.getMessage());
-                            return results;
-                        }
-                    } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-
-                    if (driveFileList.size() > 1) {
+                        folderId = driveHelper.getIDOfFolderWithName(mediaDirName, fileItem.getParentId(), false);
+                    } catch (MultipleFoldersFoundException exception) {
                         results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
                         return results;
-                    } else if (driveFileList.size() == 1) {
-                        requestString = "'" + driveFileList.get(0).getId() + "' in parents and trashed=false";
-                        List<com.google.api.services.drive.model.File> mediaFileList = new ArrayList<>();
+                    }
 
-                        try {
-                            request = driveService.files().list().setQ(requestString);
-                            do {
-                                try {
-                                    FileList fa = request.execute();
-                                    mediaFileList.addAll(fa.getFiles());
-                                    request.setPageToken(fa.getNextPageToken());
-                                } catch (Exception e) {
-                                    Timber.e(e);
-                                    results.put(fileItem.getName(), e.getMessage());
-                                    return results;
-                                }
-                            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                            results.put(fileItem.getName(), e.getMessage());
-                            return results;
-                        }
+                    if (folderId != null) {
+
+                        List<com.google.api.services.drive.model.File> mediaFileList;
+                        mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
 
                         File mediaDir = new File(Collect.FORMS_PATH + File.separator + mediaDirName);
                         if (!mediaDir.exists()) {
@@ -863,9 +824,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                         }
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                            fileOutputStream = new FileOutputStream(
-                                    new File(Collect.FORMS_PATH + File.separator + mediaDirName + File.separator + mediaFile.getName()));
-                            downloadFile(mediaFile).writeTo(fileOutputStream);
+                            driveHelper.downloadFile(mediaFile.getId(), mediaFile.getName());
                             results.put(mediaDirName + File.separator + mediaFile.getName(), Collect.getInstance().getString(R.string.success));
                         }
                     }
@@ -873,20 +832,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                     Timber.e(e);
                     results.put(fileItem.getName(), e.getMessage());
                     return results;
-                } finally {
-                    try {
-                        if (fileOutputStream != null) {
-                            fileOutputStream.close();
-                        }
-                    } catch (IOException e) {
-                        Timber.e(e, "Unable to close the file output stream");
-                    }
                 }
-
-                results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
-//                if (driveHelper.downloadFile(fileItem, results)) {
-//                    results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
-//                }
             }
             return results;
         }

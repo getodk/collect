@@ -15,6 +15,8 @@
 package org.odk.collect.android.google;
 
 
+import android.support.annotation.Nullable;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
@@ -25,7 +27,6 @@ import com.google.api.services.drive.model.Permission;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -34,7 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import timber.log.Timber;
 
@@ -74,15 +74,12 @@ public class DriveHelper {
         return null;
     }
 
-    public boolean downloadFile(DriveListItem fileItem, HashMap<String, Object> results) {
+    public void downloadFile(String fileId, String fileName) throws IOException {
         FileOutputStream fileOutputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
-            downloadFile(fileItem.getDriveId()).writeTo(fileOutputStream);
-        } catch (IOException e) {
-            Timber.e(e);
-            results.put(fileItem.getName(), e.getMessage());
-            return false;
+            File file = new File(Collect.FORMS_PATH + File.separator + fileName);
+            fileOutputStream = new FileOutputStream(file);
+            downloadFile(fileId).writeTo(fileOutputStream);
         } finally {
             try {
                 if (fileOutputStream != null) {
@@ -92,7 +89,6 @@ public class DriveHelper {
                 Timber.e(e, "Unable to close the file output stream");
             }
         }
-        return true;
     }
 
     private ByteArrayOutputStream downloadFile(String fileId) throws IOException {
@@ -104,16 +100,17 @@ public class DriveHelper {
     public String createOrGetIDOfFolderWithName(String jrFormId)
             throws IOException, MultipleFoldersFoundException {
         String submissionsFolderId = createOrGetIDOfSubmissionsFolder();
-        return getIDOfFolderWithName(jrFormId, submissionsFolderId);
+        return getIDOfFolderWithName(jrFormId, submissionsFolderId, true);
     }
 
     private String createOrGetIDOfSubmissionsFolder()
             throws IOException, MultipleFoldersFoundException {
-        String rootFolderId = getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);
-        return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId);
+        String rootFolderId = getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null, true);
+        return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId, true);
     }
 
-    public String getIDOfFolderWithName(String name, String inFolder) throws IOException, MultipleFoldersFoundException {
+    @Nullable
+    public String getIDOfFolderWithName(String name, String inFolder, boolean shouldCreateIfNotFound) throws IOException, MultipleFoldersFoundException {
 
         com.google.api.services.drive.model.File folder = null;
 
@@ -129,8 +126,10 @@ public class DriveHelper {
         }
 
         // if the folder is not found then create a new one
-        if (folder == null) {
+        if (folder == null && shouldCreateIfNotFound) {
             folder = createFolderInDrive(name, inFolder);
+        } else {
+            return null;
         }
         return folder.getId();
 
@@ -187,30 +186,36 @@ public class DriveHelper {
         return folder;
     }
 
-    private ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
-            String folderName,
-            String parentId) throws IOException {
+    public ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
+            @Nullable String folderName,
+            @Nullable String parentId) throws IOException {
 
         ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
-        FileList fileList;
-        String pageToken;
+
+        String requestString;
+        if (folderName != null && parentId == null) {
+            requestString = "name = '" + folderName + "' and "
+                    + "mimeType = 'application/vnd.google-apps.folder'"
+                    + " and trashed=false";
+        } else if (folderName != null) {
+            requestString = "name = '" + folderName + "' and "
+                    + "mimeType = 'application/vnd.google-apps.folder'"
+                    + " and '" + parentId + "' in parents" + " and trashed=false";
+        } else {
+            requestString = "'" + parentId + "' in parents and trashed=false";
+        }
+
+        Drive.Files.List request = buildRequest(requestString);
+
         do {
-            if (parentId == null) {
-                fileList = drive.files().list()
-                        .setQ("name = '" + folderName + "' and "
-                                + "mimeType = 'application/vnd.google-apps.folder'"
-                                + " and trashed=false")
-                        .execute();
-            } else {
-                fileList = drive.files().list()
-                        .setQ("name = '" + folderName + "' and "
-                                + "mimeType = 'application/vnd.google-apps.folder'"
-                                + " and '" + parentId + "' in parents" + " and trashed=false")
-                        .execute();
-            }
+            FileList fileList = request.execute();
             files.addAll(fileList.getFiles());
-            pageToken = fileList.getNextPageToken();
-        } while (pageToken != null);
+            request.setPageToken(fileList.getNextPageToken());
+        } while (request.getPageToken() != null && request.getPageToken().length() > 0);
         return files;
+    }
+
+    public String getMediaDirName(String fileName) {
+        return fileName.substring(0, fileName.length() - 4) + "-media";
     }
 }
