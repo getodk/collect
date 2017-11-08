@@ -64,6 +64,7 @@ import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESUL
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
+@Suppress
 public class AllFormsWidgetTest {
 
     private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
@@ -427,6 +428,8 @@ public class AllFormsWidgetTest {
     }
 
     public void testImageWidget() {
+
+
         onView(withText("Image widget")).perform(swipeLeft());
     }
 
