@@ -4,15 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.preference.Preference;
-import android.preference.PreferenceScreen;
 
 import org.odk.collect.android.R;
 
 class SplashClickListener implements Preference.OnPreferenceClickListener {
     private UserInterfacePreferences preferencesFragment;
-    private PreferenceScreen splashPathPreference;
+    private Preference splashPathPreference;
 
-    SplashClickListener(UserInterfacePreferences preferenceFragment, PreferenceScreen splashPathPreference) {
+    SplashClickListener(UserInterfacePreferences preferenceFragment, Preference splashPathPreference) {
         this.preferencesFragment = preferenceFragment;
         this.splashPathPreference = splashPathPreference;
     }

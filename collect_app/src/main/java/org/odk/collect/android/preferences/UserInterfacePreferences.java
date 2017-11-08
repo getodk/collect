@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -161,12 +160,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     private void initSplashPrefs() {
-        final PreferenceScreen pref = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+        final Preference pref = findPreference(KEY_SPLASH_PATH);
 
         if (pref != null) {
             pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-            pref.setSummary(pref.getSharedPreferences().getString(
-                    KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
+            pref.setSummary((String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH));
         }
     }
 
@@ -247,14 +245,8 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     void setSplashPath(String path) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_SPLASH_PATH, path);
-        editor.apply();
-
-        PreferenceScreen splashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-        String summary = splashPathPreference.getSharedPreferences().getString(
-                KEY_SPLASH_PATH, getString(R.string.default_splash_path));
-        splashPathPreference.setSummary(summary);
+        GeneralSharedPreferences.getInstance().save(KEY_SPLASH_PATH, path);
+        Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
+        splashPathPreference.setSummary(path);
     }
 }
