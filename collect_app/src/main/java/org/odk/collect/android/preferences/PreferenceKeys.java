@@ -3,6 +3,8 @@ package org.odk.collect.android.preferences;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 public final class PreferenceKeys {
@@ -106,6 +108,15 @@ public final class PreferenceKeys {
         hashMap.put(KEY_MAP_BASEMAP,                GOOGLE_MAPS_BASEMAP_DEFAULT);
         return hashMap;
     }
+
+    static Collection<String> keysWeShouldNotReset = Arrays.asList(
+            KEY_LAST_VERSION,
+            KEY_FIRST_RUN,
+            SHOULD_LOAD_DEFAULT_VALUES,
+            KEY_METADATA_MIGRATED,
+            KEY_AUTOSEND_WIFI,
+            KEY_AUTOSEND_NETWORK
+    );
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
 

@@ -96,10 +96,12 @@ public class GeneralSharedPreferences {
     }
 
     public void clear() {
-        sharedPreferences
-                .edit()
-                .clear()
-                .apply();
+        for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
+            String key = prefs.getKey();
+            if (!PreferenceKeys.keysWeShouldNotReset.contains(key)) {
+                reset(key);
+            }
+        }
     }
 
     public Map<String, ?> getAll() {
