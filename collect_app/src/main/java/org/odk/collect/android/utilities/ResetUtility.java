@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.InstancesDao;

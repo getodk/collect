@@ -94,7 +94,7 @@ public class ResetDialogPreference extends DialogPreference {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    List<Integer> failedResetActions = new ResetUtility().reset( resetActions);
+                    List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
                     hideProgressDialog();
                     handleResult(resetActions, failedResetActions);
                 }

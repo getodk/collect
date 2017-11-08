@@ -66,6 +66,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.SHOULD_LOAD_DEFAULT_VALUES;
 
 /**
  * The Open Data Kit Collect application.
@@ -88,8 +89,6 @@ public class Collect extends Application {
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
-
-    private static final String SHOULD_LOAD_DEFAULT_VALUES = "shouldLoadDefaultValues";
 
     public static String defaultSysLanguage;
     private static Collect singleton = null;

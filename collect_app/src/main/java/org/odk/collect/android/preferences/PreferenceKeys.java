@@ -74,6 +74,8 @@ public final class PreferenceKeys {
            static final String OSM_MAPS_BASEMAP_DEFAULT     = "mapquest_streets";
            static final String AUTOSEND_OFF                 = "off";
 
+    public static final String SHOULD_LOAD_DEFAULT_VALUES   = "shouldLoadDefaultValues";
+
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
 

@@ -37,8 +37,9 @@ public class LoadDefaultSharedPreferencesTest {
         GeneralSharedPreferences.getInstance().loadDefaultValues();
         HashMap<String, Object> defaultValues = PreferenceKeys.GENERAL_KEYS;
 
+        GeneralSharedPreferences generalSharedPreferences = GeneralSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllGeneralKeys()) {
-            assertEquals(GeneralSharedPreferences.getInstance().get(key), defaultValues.get(key));
+            assertEquals(generalSharedPreferences.get(key), defaultValues.get(key));
         }
     }
 
@@ -46,8 +47,9 @@ public class LoadDefaultSharedPreferencesTest {
     public void adminSharedPreferencesTest() {
         AdminSharedPreferences.getInstance().loadDefaultValues();
 
+        AdminSharedPreferences adminSharedPreferences = AdminSharedPreferences.getInstance();
         for (String key : SharedPreferencesUtils.getAllAdminKeys()) {
-            assertEquals(AdminSharedPreferences.getInstance().get(key), AdminSharedPreferences.getInstance().getDefault(key));
+            assertEquals(adminSharedPreferences.get(key), adminSharedPreferences.getDefault(key));
         }
     }
 }
