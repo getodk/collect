@@ -35,10 +35,10 @@ test:
     override:
         # Disable incremental dexing on all gradle commands to speed up clean builds
         # https://sites.google.com/a/android.com/tools/tech-docs/new-build-system/2-5-alpha-gradle-plugin/trying-gradle-plugin-2-5
-        - ./gradlew pmd -Pandroid.useDexArchive=false
-        - ./gradlew findbugs -Pandroid.useDexArchive=false
-        - ./gradlew lint -Pandroid.useDexArchive=false
-        - ./gradlew checkstyle -Pandroid.useDexArchive=false
+#        - ./gradlew pmd -Pandroid.useDexArchive=false
+#        - ./gradlew findbugs -Pandroid.useDexArchive=false
+#        - ./gradlew lint -Pandroid.useDexArchive=false
+#        - ./gradlew checkstyle -Pandroid.useDexArchive=false
 
         # SD card needed for circleci-android22 image
         # https://circleci.com/docs/1.0/android/
@@ -54,18 +54,21 @@ test:
         - ./gradlew connectedCheck -Pandroid.useDexArchive=false
 
     post:
-        - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
+#        - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
+#
+#        - mkdir -p $CIRCLE_TEST_REPORTS/lint
+#        - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
+#
+#        - mkdir -p $CIRCLE_TEST_REPORTS/findbugs
+#        - find . -type f -regex ".*/collect_app/build/reports/findbugs/findbugs.*" -exec cp {} $CIRCLE_TEST_REPORTS/findbugs/ \;
+#
+#        - mkdir -p $CIRCLE_TEST_REPORTS/pmd
+#        - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
 
-        - mkdir -p $CIRCLE_TEST_REPORTS/lint
-        - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
-
-        - mkdir -p $CIRCLE_TEST_REPORTS/findbugs
-        - find . -type f -regex ".*/collect_app/build/reports/findbugs/findbugs.*" -exec cp {} $CIRCLE_TEST_REPORTS/findbugs/ \;
-
-        - mkdir -p $CIRCLE_TEST_REPORTS/pmd
-        - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
+        - mkdir -p $CIRCLE_TEST_REPORTS/androidTests
+        - find . -type f -regex ".*/collect_app/build/reports/androidTests/connected*.*" -exec cp -r {} $CIRCLE_TEST_REPORTS/androidTests/ \;
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
-        - find . -type f -regex ".*/collect_app/build/reports/coverage/debug/report*.*" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
+        - find . -type f -regex ".*/collect_app/build/reports/tests/testDebugUnitTest*.*" -exec cp -r {} $CIRCLE_TEST_REPORTS/tests/ \;
 
         - bash <(curl -s https://codecov.io/bash)
