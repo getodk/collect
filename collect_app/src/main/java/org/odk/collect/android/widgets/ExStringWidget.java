@@ -306,4 +306,12 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     public Button getLaunchIntentButton() {
         return launchIntentButton;
     }
+
+    public EditText getAnswerText() {
+        return answer;
+    }
+
+    public Drawable getTextBackground() {
+        return textBackground;
+    }
 }
