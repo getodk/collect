@@ -20,6 +20,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
@@ -40,6 +41,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
+import org.odk.collect.android.external.ExternalAppsUtil;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.injection.DependencyProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
@@ -104,8 +106,16 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
     private ActivityAvailability activityAvailability;
 
+    @NonNull
+    private final ExternalAppsUtil externalAppsUtil;
+
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
+        this(context, prompt, new ExternalAppsUtil());
+    }
+
+    public ExStringWidget(Context context, FormEntryPrompt prompt, @NonNull ExternalAppsUtil externalAppsUtil) {
         super(context, prompt);
+        this.externalAppsUtil = externalAppsUtil;
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -137,7 +147,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
 
         String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
-        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
+        final String intentName = externalAppsUtil.extractIntentName(exSpec);
+
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
         final String buttonText;
         final String errorString;
@@ -289,5 +300,9 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         }
 
         this.activityAvailability = activityUtilProvider.provide();
+    }
+
+    public Button getLaunchIntentButton() {
+        return launchIntentButton;
     }
 }
