@@ -63,7 +63,7 @@ public class DateTimeUtilsTest {
         assertEquals("9 Tikimt 1984, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
 
         Locale.setDefault(Locale.ENGLISH);
-        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, false, context));
-        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), ethiopianDatePickerDetails, true, context));
+        assertEquals("9 Paopi 1708 (Oct 20, 1991)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), copticDatePickerDetails, false, context));
+        assertEquals("9 Paopi 1708, 14:00 (Oct 20, 1991, 14:00)", DateTimeUtils.getDateTimeLabel(new Date(dateInMilliseconds), copticDatePickerDetails, true, context));
     }
 }
