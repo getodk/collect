@@ -1,5 +1,7 @@
 Closes #
 
+#### Did you run the `check` gradle task and make sure there were no errors? (if the answer is no, the PR will be rejected unless it is a work in progress!)
+
 #### What has been done to verify that this works as intended?
 
 #### Why is this the best possible solution? Were any other approaches considered?
