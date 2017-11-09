@@ -115,6 +115,8 @@ public class WidgetFactory {
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
                         } else if (appearance.contains("url")) {        // smap change to contains rather than equals
                             questionWidget = new UrlWidget(context, fep);
+                        } else if (appearance.contains("graph")) {        // smap graph
+                            questionWidget = new SmapGraphWidget(context, fep);
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }
