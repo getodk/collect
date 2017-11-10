@@ -36,6 +36,11 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -51,6 +56,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -66,85 +72,48 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public class SmapGraphWidget extends QuestionWidget {
 
-    List<SelectChoice> items;
-    View center;
-    private EditText answerText;
     boolean readOnly = true;
-    private static final String ROWS = "rows";
 
     public SmapGraphWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(
-                prompt.getAppearanceHint());
-        if (xpathFuncExpr != null) {
-            items = ExternalDataUtil.populateExternalChoices(prompt, xpathFuncExpr);
-        } else {
-            items = prompt.getSelectChoices();
-        }
-
-
-        answerText = new EditText(context);
-        answerText.setId(ViewIds.generateViewId());
-
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
 
         TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
 
-        /*
-         * If a 'rows' attribute is on the input tag, set the minimum number of lines
-         * to display in the field to that value.
-         *
-         * I.e.,
-         * <input ref="foo" rows="5">
-         *   ...
-         * </input>
-         *
-         * will set the height of the EditText box to 5 rows high.
-         */
-        String height = prompt.getQuestion().getAdditionalAttribute(null, ROWS);
-        if (height != null && height.length() != 0) {
-            try {
-                int rows = Integer.parseInt(height);
-                answerText.setMinLines(rows);
-                answerText.setGravity(
-                        Gravity.TOP); // to write test starting at the top of the edit area
-            } catch (Exception e) {
-                Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
+        List<Entry> entries = new ArrayList<Entry>();
+        String s = prompt.getAnswerText();
+        if (s != null) {
+            String[] vArray = s.split(" ");
+            for(int i = 0; i < vArray.length; i++) {
+                try {
+                    entries.add(new Entry(i, Integer.parseInt(vArray[i])));
+                } catch (Exception e) {
+
+                }
             }
         }
 
-        params2.setMargins(7, 5, 7, 5);
-        answerText.setLayoutParams(params2);
+        // programmatically create a LineChart
+        LineChart chart = new LineChart(context);
+        chart.setMinimumHeight(800);
 
-        // capitalize the first letter of the sentence
-        answerText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
+        answerLayout.addView(chart);
+        addAnswerView(answerLayout);
 
-        // needed to make long read only text scroll
-        answerText.setHorizontallyScrolling(false);
-        answerText.setSingleLine(false);
+        LineDataSet dataSet = new LineDataSet(entries, "Label");
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+        chart.invalidate();
 
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            answerText.setText(s);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
-
-        if (!readOnly) {
-            answerText.setBackground(null);
-            answerText.setEnabled(false);
-            answerText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
-            answerText.setFocusable(false);
-        }
-
-        addAnswerView(answerText);
+        //addAnswerView(answerText);
     }
 
 
     @Override
     public void clearAnswer() {
-        answerText.setText(null);
+
     }
 
 
@@ -158,29 +127,12 @@ public class SmapGraphWidget extends QuestionWidget {
 
     @NonNull
     public String getAnswerText() {
-        return answerText.getText().toString();
+        return "";
     }
 
     @Override
     public void setFocus(Context context) {
-        // Put focus on text input field and display soft keyboard if appropriate.
-        answerText.requestFocus();
-        InputMethodManager inputManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (!readOnly) {
-            inputManager.showSoftInput(answerText, 0);
-            /*
-             * If you do a multi-question screen after a "add another group" dialog, this won't
-             * automatically pop up. It's an Android issue.
-             *
-             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and
-             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
-             * is focused before the dialog pops up, everything works fine. great.
-             */
-        } else {
-            inputManager.hideSoftInputFromWindow(answerText.getWindowToken(), 0);
-        }
+
     }
 
     @Override
@@ -191,14 +143,14 @@ public class SmapGraphWidget extends QuestionWidget {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        answerText.setOnLongClickListener(l);
+
     }
 
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        answerText.cancelLongPress();
+
     }
 
 }
