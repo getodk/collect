@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import android.annotation.TargetApi;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -8,10 +9,12 @@ import android.os.Build;
 
 import org.odk.collect.android.application.Collect;
 
+import timber.log.Timber;
+
 /**
  * Created by Akshay on 10/11/17.
  */
-
+@TargetApi(21)
 public class CameraUtils {
       public static boolean isFrontCameraAvailable() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -27,17 +30,18 @@ public class CameraUtils {
                 //For API Level >= 21
                 try {
                     //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
-                    CameraManager cManager = (CameraManager) Collect.getInstance()
+                    CameraManager cameraManager = (CameraManager) Collect.getInstance()
                             .getSystemService(Collect.getInstance().CAMERA_SERVICE);
-                    String[] cameraId = cManager.getCameraIdList();
+                    String[] cameraId = cameraManager.getCameraIdList();
                     for (int j = 0; j < cameraId.length; j++) {
-                        CameraCharacteristics characteristics = cManager.getCameraCharacteristics(cameraId[j]);
-                        int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
-                        if (cOrientation == CameraCharacteristics.LENS_FACING_FRONT)
+                        CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId[j]);
+                        if (characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
                             return true;
+                        }
                     }
                 } catch (CameraAccessException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
+                    return false;
                 }
             }
             return false; // No front-facing camera found

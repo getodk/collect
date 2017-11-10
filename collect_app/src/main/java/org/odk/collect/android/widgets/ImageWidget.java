@@ -25,7 +25,6 @@ import android.os.Build;
 import android.provider.MediaStore.Images;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -166,7 +165,7 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
         }
         errorTextView.setVisibility(View.GONE);
 
-        if(!CameraUtils.isFrontCameraAvailable()&&selfie) {
+        if (!CameraUtils.isFrontCameraAvailable() && selfie) {
             captureButton.setEnabled(false);
             errorTextView.setText(R.string.error_front_camera_unavailable);
             errorTextView.setVisibility(View.VISIBLE);
