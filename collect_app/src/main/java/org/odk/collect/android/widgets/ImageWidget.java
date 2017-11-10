@@ -25,6 +25,7 @@ import android.os.Build;
 import android.provider.MediaStore.Images;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -40,6 +41,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -79,12 +81,15 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
+
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
                         "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
+
+
                 Intent i;
                 if (selfie) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -109,8 +114,7 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
                 }
                 try {
                     waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i,RequestCodes.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found, "image capture"),
@@ -120,6 +124,7 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
 
             }
         });
+
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
@@ -145,7 +150,6 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
 
             }
         });
-
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -161,6 +165,12 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
             chooseButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
+
+        if(!CameraUtils.isFrontCameraAvailable()&&selfie) {
+            captureButton.setEnabled(false);
+            errorTextView.setText(R.string.error_front_camera_unavailable);
+            errorTextView.setVisibility(View.VISIBLE);
+        }
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
