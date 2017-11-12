@@ -32,6 +32,7 @@ public class CameraUtils {
                     //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
                     CameraManager cameraManager = (CameraManager) Collect.getInstance()
                             .getSystemService(Collect.getInstance().CAMERA_SERVICE);
+
                     String[] cameraId = cameraManager.getCameraIdList();
                     for (int j = 0; j < cameraId.length; j++) {
                         CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId[j]);
@@ -41,9 +42,10 @@ public class CameraUtils {
                     }
                 } catch (CameraAccessException e) {
                     Timber.e(e);
-                    return false;
+                } catch (NullPointerException e) {
+                    Timber.e(e);
                 }
             }
             return false; // No front-facing camera found
-        }
+      }
 }
