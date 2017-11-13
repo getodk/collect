@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.filters.Suppress;
 import android.support.test.runner.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
@@ -64,8 +63,7 @@ import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESUL
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
-@Suppress
-public class AllFormsWidgetTest {
+public class AllWidgetsFormTest {
 
     private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
