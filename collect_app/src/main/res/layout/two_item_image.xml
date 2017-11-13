@@ -53,6 +53,5 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:clickable="false"
-        android:focusable="false"
-        android:visibility="gone" />
+        android:focusable="false" />
 </RelativeLayout>
