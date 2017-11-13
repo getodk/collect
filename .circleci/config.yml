@@ -1,49 +1,76 @@
 # Reference used: https://circleci.com/docs/2.0/language-android
+# _JAVA_OPTIONS reference: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+#     - (Least invasive change to resolve out-of-memory error)
 
 version: 2
-
 jobs:
   build:
-    working_directory: ~/code
-
-    docker:
+      working_directory: ~/code
+      docker:
       - image: circleci/android:api-26-alpha
+      environment:
+          _JAVA_OPTIONS: "-Xmx1024m"
 
-    environment:
-      # https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-      # Least invasive change to resolve out-of-memory error
-      _JAVA_OPTIONS: "-Xmx1024m"
+      steps:
+          - checkout
+          - save_cache:
+              key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+              paths: ~/code
 
-    steps:
-      - checkout
+          - restore_cache:
+              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          - run:
+              name: Accept licenses
+              command: yes | sdkmanager --licenses || true
 
-      - run:
-          name: Accept licenses
-          command: yes | sdkmanager --licenses || true
+          - run:
+              name: Download Dependencies
+              command: ./gradlew androidDependencies
 
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
+          - save_cache:
+              paths: ~/code/.gradle
+              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
-      - save_cache:
-          paths:
-          - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          - run:
+              name: Run checks and unit tests
+              command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
 
-      - run:
-          name: Run checks and tests
-          command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
+          - store_artifacts:
+              path: collect_app/build/reports
+              destination: reports
 
-      - store_artifacts:
-          path: collect_app/build/reports
-          destination: reports
+          - store_test_results:
+              path: collect_app/build/test-results
 
-      - store_test_results:
-          path: collect_app/build/test-results
+          - run:
+              name: Send codecov results
+              command: bash <(curl -s https://codecov.io/bash)
 
-      - run:
-          name: Send codecov results
-          command: bash <(curl -s https://codecov.io/bash)
+          - run:
+              name: Assemble debug & test builds
+              command: |
+                  ./gradlew :app:assembleDebug -PdisablePreDex
+                  ./gradlew :app:assembleDebugTest -PdisablePreDex
+
+          - run:
+              name: Update and authorize gcloud
+              command: |
+                  sudo pip install -U crcmod
+                  echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/client-secret.json
+                  sudo /opt/google-cloud-sdk/bin/gcloud config set project api-project-322300403941
+                  sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update                   
+                  sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account firebase-adminsdk --key-file ${HOME}/client-secret.json
+
+          - run:
+              name: Run tests
+              command: |
+                  echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud firebase test android run \
+                  --app app/build/outputs/apk/app-debug.apk \
+                  --test app/build/outputs/apk/app-debug-test-unaligned.apk \
+                  --device model=Nexus5,version=22,locale=en,orientation=portrait
+                  --results-bucket odk-collect-test-results
+
+          - run:
+              name: Copy test results
+              command: sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U `sudo /opt/google-cloud-sdk/bin/gsutil ls gs://odk-collect-test-results | tail -1` $CIRCLE_TEST_REPORTS/tests | true
