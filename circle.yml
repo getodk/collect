@@ -55,6 +55,7 @@ test:
 
     post:
         - cp -r collect_app/build/reports/checkstyle $CIRCLE_TEST_REPORTS
+      #  - cp -r collect_app/build/reports/tests $CIRCLE_TEST_REPORTS
 
         - mkdir -p $CIRCLE_TEST_REPORTS/lint
         - find . -type f -regex ".*/collect_app/build/reports/lint-results-*.*" -exec cp {} $CIRCLE_TEST_REPORTS/lint/ \;
@@ -66,6 +67,6 @@ test:
         - find . -type f -regex ".*/collect_app/build/reports/pmd/pmd*.*" -exec cp {} $CIRCLE_TEST_REPORTS/pmd/ \;
 
         - mkdir -p $CIRCLE_TEST_REPORTS/tests
-        - find . -type f -regex ".*/collect_app/build/reports/coverage/debug/report*.*" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
+        - find . -type f -regex ".*/collect_app/build/reports/tests/testDebugUnitTest*.*" -exec cp {} $CIRCLE_TEST_REPORTS/tests/ \;
 
         - bash <(curl -s https://codecov.io/bash)
