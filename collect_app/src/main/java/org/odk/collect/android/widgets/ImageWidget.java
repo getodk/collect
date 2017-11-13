@@ -87,8 +87,6 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
                 Collect.getInstance().getActivityLogger().logInstanceAction(this, "captureButton",
                         "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
-
-
                 Intent i;
                 if (selfie) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -120,10 +118,8 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
                             Toast.LENGTH_SHORT).show();
                     cancelWaitingForData();
                 }
-
             }
         });
-
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
