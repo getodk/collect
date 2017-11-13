@@ -1,0 +1,49 @@
+# Reference used: https://circleci.com/docs/2.0/language-android
+
+version: 2
+
+jobs:
+  build:
+    working_directory: ~/code
+
+    docker:
+      - image: circleci/android:api-26-alpha
+
+    environment:
+      # https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+      # Least invasive change to resolve out-of-memory error
+      _JAVA_OPTIONS: "-Xmx1024m"
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+
+      - run:
+          name: Accept licenses
+          command: yes | sdkmanager --licenses || true
+
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+
+      - save_cache:
+          paths:
+          - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+
+      - run:
+          name: Run checks and tests
+          command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
+
+      - store_artifacts:
+          path: collect_app/build/reports
+          destination: reports
+
+      - store_test_results:
+          path: collect_app/build/test-results
+
+      - run:
+          name: Send codecov results
+          command: bash <(curl -s https://codecov.io/bash)
