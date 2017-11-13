@@ -205,7 +205,6 @@
   <string name="autosend">स्वतः भेजें</string>
   <string name="found_in_main">मुख्य मेनू से छुपाने के लिए अनचेक करें</string>
   <string name="found_in_settings">सामान्य सेटिंग्स से छुपाने के लिए अनचेक करें</string>
-  <string name="no_account">कोई अकाउंट नहीं</string>
   <string name="save_preferences">सेटिंग्स डिस्क पर संरक्षित करे</string>
   <string name="form_forward">आगामी</string>
   <string name="form_backward">पिछला</string>

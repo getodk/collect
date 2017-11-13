@@ -196,7 +196,6 @@
   <string name="autosend">Dërgo automatikisht</string>
   <string name="found_in_main">Hiq përzgjedhjen për ta fshehur nga Menuja Kryesore</string>
   <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
-  <string name="no_account">Nuk keni llogari</string>
   <string name="save_preferences">Ruaj parametrat në disk</string>
   <string name="form_forward">Tjetra</string>
   <string name="form_backward">Paraprake</string>

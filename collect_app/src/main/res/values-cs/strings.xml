@@ -191,7 +191,6 @@
   <string name="enter_admin_password">Zadejte administrátorské heslo</string>
   <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
-  <string name="no_account">Žádný účet</string>
   <string name="save_preferences">Uložit nastavení na Disk</string>
   <string name="form_forward">Další</string>
   <string name="form_backward">Předchozí</string>

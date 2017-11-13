@@ -188,7 +188,6 @@ Escolher Imagem</string>
   <string name="enter_admin_password">Digite a senha administrativa</string>
   <string name="found_in_main">Desmarque para esconder no Menu Principal</string>
   <string name="found_in_settings">Desmarque para não exibir nas Configurações Gerais  </string>
-  <string name="no_account">Sem conta</string>
   <string name="save_preferences">Salvar configurações no disco</string>
   <string name="form_forward">Próximo</string>
   <string name="form_backward">Anterior</string>

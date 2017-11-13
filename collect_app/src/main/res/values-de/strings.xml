@@ -205,7 +205,6 @@
   <string name="autosend">Auto-Send</string>
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
-  <string name="no_account">Kein Benutzerkonto</string>
   <string name="save_preferences">Einstellungen auf Speicherkarte speichern</string>
   <string name="form_forward">Weiter</string>
   <string name="form_backward">Zurück</string>
