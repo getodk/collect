@@ -527,5 +527,6 @@
   <string name="ethiopian_month_hamlie">Ḥamle</string>
   <string name="ethiopian_month_nehasie">Nähase</string>
   <string name="ethiopian_month_pagumien">Ṗagʷəmen</string>
-  <string name="ethiopian_date">%1$s (%2$s)</string>
+  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <string name="custom_date">%1$s (%2$s)</string>
 </resources>
