@@ -166,7 +166,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.GET_ACCOUNTS)) {
-                    Intent intentChooseAccount= credential.newChooseAccountIntent();
+                    Intent intentChooseAccount = credential.newChooseAccountIntent();
                     intentChooseAccount.putExtra("overrideTheme", 1);
                     intentChooseAccount.putExtra("overrideCustomTheme", 0);
                     startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
