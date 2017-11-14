@@ -7,7 +7,7 @@ jobs:
   build:
       working_directory: ~/code
       docker:
-      - image: saneandroid/odk-collect:0.0.1
+      - image: saneandroid/odk-collect:0.0.2
       environment:
           _JAVA_OPTIONS: "-Xmx1024m"
           GIT_COMMIT_ID: git describe --tags --dirty --always
