@@ -270,10 +270,8 @@ public class Collect extends Application {
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
-        if (shouldLoadDefaultValues()) {
-            GeneralSharedPreferences.getInstance().loadDefaultValues();
-            AdminSharedPreferences.getInstance().loadDefaultValues();
-        }
+        loadDefaultValuesIfNeeded();
+
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
 
@@ -363,5 +361,12 @@ public class Collect extends Application {
 
         FormController.initializeJavaRosa(mgr);
         activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+    }
+
+    private void loadDefaultValuesIfNeeded() {
+        if (shouldLoadDefaultValues()) {
+            GeneralSharedPreferences.getInstance().loadDefaultValues();
+            AdminSharedPreferences.getInstance().loadDefaultValues();
+        }
     }
 }

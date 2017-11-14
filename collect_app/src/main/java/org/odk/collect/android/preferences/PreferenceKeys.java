@@ -109,7 +109,7 @@ public final class PreferenceKeys {
         return hashMap;
     }
 
-    static Collection<String> keysWeShouldNotReset = Arrays.asList(
+    static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
             KEY_LAST_VERSION,
             KEY_FIRST_RUN,
             SHOULD_LOAD_DEFAULT_VALUES,
