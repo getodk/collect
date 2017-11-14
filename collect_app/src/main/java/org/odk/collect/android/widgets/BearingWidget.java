@@ -175,8 +175,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
             return false;
         }
-        ToastUtils.showShortToast("sensor is :" + isAccelerometerSensorAvailable + " magenticFeild " + isMagneticFieldSensorAvailable);
-
 
         return true;
     }
@@ -206,7 +204,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                         setFocus(getContext());
                         return true;
                     } else {
-                        ToastUtils.showShortToast("Invalid data input. Please Enter correct value.");
+                        ToastUtils.showShortToast(R.string.enter_correct_data);
                         return false;
                     }
                 }
