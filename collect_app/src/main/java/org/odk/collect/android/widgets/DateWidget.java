@@ -57,17 +57,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
     }
 
     @Override
-    protected void createWidget() {
-        super.createWidget();
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
-    }
-
-    @Override
     protected void setDateLabel() {
         isNullAnswer = false;
         dateTextView.setText(DateTimeUtils.getDateTimeLabel(

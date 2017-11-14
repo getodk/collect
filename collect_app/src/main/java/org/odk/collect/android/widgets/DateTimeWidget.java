@@ -148,4 +148,8 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
     public void setTimeWidget(TimeWidget timeWidget) {
         this.timeWidget = timeWidget;
     }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+    }
 }
