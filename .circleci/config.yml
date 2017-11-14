@@ -13,25 +13,26 @@ jobs:
           GIT_COMMIT_ID: git describe --tags --dirty --always
 
       steps:
-          - checkout
-          - save_cache:
-              key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-              paths: ~/code
+          run: echo $GCLOUD_SERVICE_KEY
+          # - checkout
+          # - save_cache:
+          #     key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          #     paths: ~/code
 
-          - restore_cache:
-              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          # - restore_cache:
+          #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
-          - run:
-              name: Accept licenses
-              command: yes | sdkmanager --licenses || true
+          # - run:
+          #     name: Accept licenses
+          #     command: yes | sdkmanager --licenses || true
 
-          - run:
-              name: Download Dependencies
-              command: ./gradlew androidDependencies
+          # - run:
+          #     name: Download Dependencies
+          #     command: ./gradlew androidDependencies
 
-          - save_cache:
-              paths: ~/code/.gradle
-              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          # - save_cache:
+          #     paths: ~/code/.gradle
+          #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
           # - run:
           #     name: Run checks and unit tests
@@ -54,27 +55,27 @@ jobs:
           #         ./gradlew :collect_app:assembleDebug -PdisablePreDex
           #         ./gradlew :collect_app:assembleDebugAndroidTest -PdisablePreDex
 
-          - run:
-              name: Update and authorize gcloud
-              command: |
-                  sudo pip install -U crcmod
-                  echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/client-secret.json
-                  sudo gcloud config set project api-project-322300403941
-                  sudo gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
+          # - run:
+          #     name: Update and authorize gcloud
+          #     command: |
+          #         sudo pip install -U crcmod
+          #         echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/client-secret.json
+          #         sudo gcloud config set project api-project-322300403941
+          #         sudo gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
 
-          - run:
-              name: Run tests
-              command: |
-                  echo "y" | sudo gcloud firebase test android run \
-                  --app collect_app/build/outputs/apk/collect-debug-{{ .Environment.GIT_COMMIT_ID }}.apk \
-                  --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
-                  --device model=Nexus5,version=22,locale=en,orientation=portrait \
-                  --results-bucket odk-collect-test-results
+          # - run:
+          #     name: Run tests
+          #     command: |
+          #         echo "y" | sudo gcloud firebase test android run \
+          #         --app collect_app/build/outputs/apk/collect-debug-{{ .Environment.GIT_COMMIT_ID }}.apk \
+          #         --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
+          #         --device model=Nexus5,version=22,locale=en,orientation=portrait \
+          #         --results-bucket odk-collect-test-results
 
-          - run: mkdir ~/test-results
-          - run:
-              name: Copy test results
-              command: sudo gsutil -m cp -r -U `sudo gsutil ls gs://odk-collect-test-results | tail -1` ~/test-results | true
+          # - run: mkdir ~/test-results
+          # - run:
+          #     name: Copy test results
+          #     command: sudo gsutil -m cp -r -U `sudo gsutil ls gs://odk-collect-test-results | tail -1` ~/test-results | true
 
-          - store_test_results:
-              path: ~/test-results
+          # - store_test_results:
+          #     path: ~/test-results
