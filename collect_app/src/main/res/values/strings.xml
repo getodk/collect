@@ -523,7 +523,7 @@
     <string name="image_size_very_small">Very small (640px)</string>
     <string name="image_size_original">Original size from camera (default)</string>
     <string name="image_size_dialog_title">Maximum pixels of the long edge of the image</string>
-    <string name="bearing_lack_of_sensors">Bearing cannot be collected: device is missing accelerometer, magnetic field sensor or both.\n Please manually enter sensor reading.</string>
+    <string name="bearing_lack_of_sensors">Bearing cannot be collected: device is missing accelerometer, magnetic field sensor or both.\n Please enter sensor reading manually.</string>
     <string name="ethiopian_month_meskerem">Meskerem</string>
     <string name="ethiopian_month_tikimt">Tikimt</string>
     <string name="ethiopian_month_hidar">Hidar</string>
