@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
@@ -9,7 +10,7 @@ import android.os.Build;
 import org.odk.collect.android.application.Collect;
 import timber.log.Timber;
 
-
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class CameraUtils {
       public static boolean isFrontCameraAvailable() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -27,11 +28,11 @@ public class CameraUtils {
                     //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
                     CameraManager cameraManager = (CameraManager) Collect.getInstance()
                             .getSystemService(Context.CAMERA_SERVICE);
-                    if(cameraManager != null) {
+                    if (cameraManager != null) {
                         String[] cameraId = cameraManager.getCameraIdList();
                         for (String id : cameraId) {
                             CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                            Integer facing=characteristics.get(CameraCharacteristics.LENS_FACING);
+                            Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
                             if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
                                 return true;
                             }
