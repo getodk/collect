@@ -65,7 +65,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerDisplay = getCenteredAnswerTextView();
         answerLayout.addView(answerDisplay);
-
         if (isSensorAvailable) {
             getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
             getBearingButton.setEnabled(!prompt.isReadOnly());
@@ -172,10 +171,14 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             isMagneticFieldSensorAvailable = true;
         }
 
-        if (!isAccelerometerSensorAvailable || ! isMagneticFieldSensorAvailable) {
+        if (!isAccelerometerSensorAvailable || !isMagneticFieldSensorAvailable) {
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
+            return false;
         }
-        return !(isAccelerometerSensorAvailable || isMagneticFieldSensorAvailable);
+        ToastUtils.showShortToast("sensor is :" + isAccelerometerSensorAvailable + " magenticFeild " + isMagneticFieldSensorAvailable);
+
+
+        return true;
     }
 
     private EditText getEditText() {
