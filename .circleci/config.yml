@@ -13,7 +13,7 @@ jobs:
           GIT_COMMIT_ID: git describe --tags --dirty --always
 
       steps:
-          - run: echo $GCLOUD_SERVICE_KEY
+          - run: echo {{ .Environment.GCLOUD_SERVICE_KEY }}
           # - checkout
           # - save_cache:
           #     key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
