@@ -64,7 +64,7 @@ jobs:
                   echo "y" | sudo gcloud firebase test android run \
                   --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always).apk \
                   --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
-                  --device model=Nexus5,version=22,locale=en,orientation=portrait \
+                  --device model=Nexus5,version=21,locale=en,orientation=portrait \
                   --results-bucket odk-collect-test-results
 
           - run: mkdir ~/test-results
