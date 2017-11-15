@@ -1,7 +1,4 @@
 # Reference used: https://circleci.com/docs/2.0/language-android
-# _JAVA_OPTIONS reference: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-#     - (Least invasive change to resolve out-of-memory error)
-
 version: 2
 jobs:
   build:
@@ -9,8 +6,8 @@ jobs:
       docker:
       - image: saneandroid/odk-collect:0.0.2
       environment:
+          # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
           _JAVA_OPTIONS: "-Xmx1024m"
-          GIT_COMMIT_ID: git describe --tags --dirty --always
 
       steps:
           - checkout
@@ -48,11 +45,11 @@ jobs:
           #     name: Send codecov results
           #     command: bash <(curl -s https://codecov.io/bash)
 
-          - run:
-              name: Assemble debug & test builds
-              command: |
-                  ./gradlew :collect_app:assembleDebug -PdisablePreDex
-                  ./gradlew :collect_app:assembleDebugAndroidTest -PdisablePreDex
+          # - run:
+          #     name: Assemble debug & test builds
+          #     command: |
+          #         ./gradlew :collect_app:assembleDebug -PdisablePreDex
+          #         ./gradlew :collect_app:assembleDebugAndroidTest -PdisablePreDex
 
           - run:
               name: Update and authorize gcloud
@@ -66,7 +63,7 @@ jobs:
               name: Run tests
               command: |
                   echo "y" | sudo gcloud firebase test android run \
-                  --app collect_app/build/outputs/apk/collect-debug-$GIT_COMMIT_ID.apk \
+                  --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always).apk \
                   --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
                   --device model=Nexus5,version=22,locale=en,orientation=portrait \
                   --results-bucket odk-collect-test-results
