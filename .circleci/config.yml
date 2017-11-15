@@ -54,9 +54,8 @@ jobs:
           - run:
               name: Update and authorize gcloud
               command: |
-                  sudo pip install -U crcmod
-                  echo $GCLOUD_SERVICE_KEY | base64 --decode > ~/client-secret.json
                   sudo gcloud config set project api-project-322300403941
+                  echo $GCLOUD_SERVICE_KEY | base64 --decode > ~/client-secret.json
                   sudo gcloud auth activate-service-account --key-file ~/client-secret.json
 
           - run:
