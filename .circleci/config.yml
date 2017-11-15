@@ -70,7 +70,9 @@ jobs:
           - run: mkdir ~/test-results
           - run:
               name: Copy test results
-              command: sudo gsutil -m cp -r -U `sudo gsutil ls gs://odk-collect-test-results | tail -1` ~/test-results | true
+              command: |
+                  sudo apt-get install gcc python-dev python-setuptools && sudo easy_install -U pip && sudo pip install -U crcmod
+                  sudo gsutil -m cp -r -U `sudo gsutil ls gs://odk-collect-test-results | tail -1` ~/test-results | true
 
           - store_test_results:
               path: ~/test-results
