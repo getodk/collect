@@ -1,49 +1,76 @@
 # Reference used: https://circleci.com/docs/2.0/language-android
-
 version: 2
-
 jobs:
   build:
-    working_directory: ~/code
+      working_directory: ~/code
+      docker:
+      - image: saneandroid/odk-collect:0.0.2
+      environment:
+          # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+          _JAVA_OPTIONS: "-Xmx1024m"
 
-    docker:
-      - image: circleci/android:api-26-alpha
+      steps:
+          - checkout
+          - save_cache:
+              key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+              paths: ~/code
 
-    environment:
-      # https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-      # Least invasive change to resolve out-of-memory error
-      _JAVA_OPTIONS: "-Xmx1024m"
+          - restore_cache:
+              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
-    steps:
-      - checkout
+          - run:
+              name: Accept licenses
+              command: yes | sdkmanager --licenses || true
 
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          - run:
+              name: Download Dependencies
+              command: ./gradlew androidDependencies
 
-      - run:
-          name: Accept licenses
-          command: yes | sdkmanager --licenses || true
+          - save_cache:
+              paths: ~/code/.gradle
+              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
 
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
+          # - run:
+          #     name: Run checks and unit tests
+          #     command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
 
-      - save_cache:
-          paths:
-          - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
+          # - store_artifacts:
+          #     path: collect_app/build/reports
+          #     destination: reports
 
-      - run:
-          name: Run checks and tests
-          command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
+          # - store_test_results:
+          #     path: collect_app/build/test-results
 
-      - store_artifacts:
-          path: collect_app/build/reports
-          destination: reports
+          # - run:
+          #     name: Send codecov results
+          #     command: bash <(curl -s https://codecov.io/bash)
 
-      - store_test_results:
-          path: collect_app/build/test-results
+          # - run:
+          #     name: Assemble debug & test builds
+          #     command: |
+          #         ./gradlew :collect_app:assembleDebug -PdisablePreDex
+          #         ./gradlew :collect_app:assembleDebugAndroidTest -PdisablePreDex
 
-      - run:
-          name: Send codecov results
-          command: bash <(curl -s https://codecov.io/bash)
+          - run:
+              name: Update and authorize gcloud
+              command: |
+                  sudo gcloud config set project api-project-322300403941
+                  echo $GCLOUD_SERVICE_KEY | base64 --decode > ~/client-secret.json
+                  sudo gcloud auth activate-service-account --key-file ~/client-secret.json
+
+          - run:
+              name: Run tests
+              command: |
+                  echo "y" | sudo gcloud firebase test android run \
+                  --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always).apk \
+                  --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
+                  --device model=Nexus5,version=21,locale=en,orientation=portrait \
+                  --results-bucket odk-collect-test-results
+
+          - run: mkdir ~/test-results
+          - run:
+              name: Copy test results
+              command: sudo gsutil -m cp -r -U `sudo gsutil ls gs://odk-collect-test-results | tail -1` ~/test-results | true
+
+          - store_test_results:
+              path: ~/test-results
