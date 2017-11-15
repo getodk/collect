@@ -71,7 +71,7 @@ jobs:
           - run:
               name: Copy test results
               command: |
-                  sudo apt-get install gcc python-dev python-setuptools && sudo easy_install -U pip && sudo pip install -U crcmod
+                  sudo apt-get install gcc python-dev python-setuptools && sudo easy_install -U pip && sudo pip uninstall crcmod && sudo pip install -U crcmod
                   sudo gsutil -m cp -r -U `sudo gsutil ls gs://opendatakit-collect-test-results | tail -1` ~/test-results | true
 
           - store_test_results:
