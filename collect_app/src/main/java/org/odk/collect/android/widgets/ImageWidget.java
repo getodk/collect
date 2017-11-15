@@ -40,7 +40,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.activities.CaptureSelfieActivityNewApi;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
@@ -161,10 +160,21 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
         }
         errorTextView.setVisibility(View.GONE);
 
-        if (!CameraUtils.isFrontCameraAvailable() && selfie) {
-            captureButton.setEnabled(false);
-            errorTextView.setText(R.string.error_front_camera_unavailable);
-            errorTextView.setVisibility(View.VISIBLE);
+
+        if (selfie) {
+            boolean isFrontCameraAvailable;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
+            } else {
+                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
+            }
+
+            if (!isFrontCameraAvailable) {
+                captureButton.setEnabled(false);
+                errorTextView.setText(R.string.error_front_camera_unavailable);
+                errorTextView.setVisibility(View.VISIBLE);
+            }
+
         }
 
         // retrieve answer from data model and update ui
