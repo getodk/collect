@@ -58,6 +58,8 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DATE:
                         if (appearance.contains("ethiopian")) {
                             questionWidget = new EthiopianDateWidget(context, fep);
+                        } else if (appearance.contains("coptic")) {
+                            questionWidget = new CopticDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }

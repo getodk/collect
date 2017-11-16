@@ -206,7 +206,6 @@
   <string name="autosend">Envío Automático</string>
   <string name="found_in_main">Desmarque para esconder del Menú Principal</string>
   <string name="found_in_settings">Desmarque para esconder de la Configuración General</string>
-  <string name="no_account">Sin cuenta</string>
   <string name="save_preferences">Guardar configuración en disco</string>
   <string name="form_forward">Sig.</string>
   <string name="form_backward">Ant.</string>

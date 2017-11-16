@@ -205,7 +205,6 @@
   <string name="autosend">Auto-Send</string>
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
-  <string name="no_account">Kein Benutzerkonto</string>
   <string name="save_preferences">Einstellungen auf Speicherkarte speichern</string>
   <string name="form_forward">Weiter</string>
   <string name="form_backward">Zurück</string>
@@ -527,5 +526,6 @@
   <string name="ethiopian_month_hamlie">Hamlie</string>
   <string name="ethiopian_month_nehasie">Nehasie</string>
   <string name="ethiopian_month_pagumien">Pagumien</string>
-  <string name="ethiopian_date">%1$s (%2$s)</string>
+  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <string name="custom_date">%1$s (%2$s)</string>
 </resources>
