@@ -225,6 +225,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton backButton;
 
     private Toolbar toolbar;
+    private ODKView odkView;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -1289,13 +1290,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
             case FormEntryController.EVENT_REPEAT:
-                ODKView odkv = null;
+                releaseOdkView();
                 // should only be a group here if the event_group is a field-list
                 try {
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkv = new ODKView(this, prompts, groups, advancingPage);
+                    odkView = new ODKView(this, prompts, groups, advancingPage);
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -1314,7 +1315,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // Makes a "clear answer" menu pop up on long-click
-                for (QuestionWidget qw : odkv.getWidgets()) {
+                for (QuestionWidget qw : odkView.getWidgets()) {
                     if (!qw.getFormEntryPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
@@ -1334,7 +1335,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     adjustBackNavigationButtonVisibility();
                     nextButton.setEnabled(true);
                 }
-                return odkv;
+                return odkView;
 
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                 createRepeatDialog();
@@ -1351,6 +1352,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     createErrorDialog(e.getCause().getMessage(), EXIT);
                 }
                 return createView(event, advancingPage);
+        }
+    }
+
+    private void releaseOdkView() {
+        if (odkView != null) {
+            odkView.releaseWidgetResources();
+            odkView = null;
         }
     }
 
@@ -2444,6 +2452,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveToDiskTask = null;
             }
         }
+        releaseOdkView();
 
         super.onDestroy();
 
