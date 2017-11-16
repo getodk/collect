@@ -36,7 +36,7 @@ jobs:
               name: Send codecov results
               command: bash <(curl -s https://codecov.io/bash)
           - run:
-              name: Assemble debug & test builds
+              name: Assemble debug and test builds
               command: |
                   ./gradlew :collect_app:assembleDebug -PdisablePreDex
                   ./gradlew :collect_app:assembleDebugAndroidTest -PdisablePreDex
