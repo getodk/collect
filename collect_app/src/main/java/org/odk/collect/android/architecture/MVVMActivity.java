@@ -22,10 +22,6 @@ import butterknife.Unbinder;
  * return the subclass you've created, and you'll have access to a persistent
  * VM in your onCreate thanks to Dagger.
  *
- * Also handles subclass and Fragment injection, just add {@link Inject} fields
- * to your Activity and have any Fragments you want injected implement the
- * {@link Injectable} interface.
- *
  * @param <V> The MVVMViewModel subclass this Activity should load.
  *
  */
@@ -47,7 +43,7 @@ public abstract class MVVMActivity<V extends MVVMViewModel>
         setContentView(getLayoutId());
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(getViewModelClass());
-        viewModel.create();
+        viewModel.create(getExtras());
 
         unbinder = ButterKnife.bind(this);
     }
@@ -69,7 +65,7 @@ public abstract class MVVMActivity<V extends MVVMViewModel>
     public V getViewModel() {
         if (viewModel == null) {
             viewModel = ViewModelProviders.of(this, viewModelFactory).get(getViewModelClass());
-            viewModel.create();
+            viewModel.create(getExtras());
         }
 
         return viewModel;
@@ -80,4 +76,9 @@ public abstract class MVVMActivity<V extends MVVMViewModel>
 
     @NonNull
     protected abstract Class<V> getViewModelClass();
+
+    @Nullable
+    private Bundle getExtras() {
+        return getIntent().getExtras();
+    }
 }

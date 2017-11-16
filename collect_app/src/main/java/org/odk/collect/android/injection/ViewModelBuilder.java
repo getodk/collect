@@ -3,8 +3,8 @@ package org.odk.collect.android.injection;
 import android.arch.lifecycle.ViewModel;
 
 import org.odk.collect.android.injection.config.architecture.ViewModelKey;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
 import org.odk.collect.android.location.GeoViewModel;
+import org.odk.collect.android.location.injection.GeoViewModelModule;
 
 import dagger.Binds;
 import dagger.Module;
@@ -17,12 +17,11 @@ import dagger.multibindings.IntoMap;
  * its injected into your injectable Activity's (see {@link ActivityBuilder}) `@Inject` annotated
  * ViewModel subclass field.
  */
-@Module
+@Module(includes = GeoViewModelModule.class)
 public abstract class ViewModelBuilder {
 
     @Binds
     @IntoMap
     @ViewModelKey(GeoViewModel.class)
-    @PerViewModel
     abstract ViewModel bindGeoViewModel(GeoViewModel geoViewModel);
 }

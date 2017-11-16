@@ -155,7 +155,7 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
          */
         private void fixSpinner(Context context, int year, int month, int dayOfMonth) {
             // The spinner vs not distinction probably started in lollipop but applying this
-            // for versions < nougat leads to a crash trying to get DatePickerSpinnerDelegate
+            // for versions < nougat leads to a crash trying to load DatePickerSpinnerDelegate
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
                 try {
                     // Get the theme's android:datePickerMode

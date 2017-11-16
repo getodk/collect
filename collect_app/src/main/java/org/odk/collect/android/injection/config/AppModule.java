@@ -1,5 +1,11 @@
 package org.odk.collect.android.injection.config;
 
+import android.app.Application;
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
@@ -20,6 +26,19 @@ class AppModule {
 
     @PerApplication
     @Provides
+    Collect provideApplication(Application application) {
+        return (Collect) application;
+    }
+
+
+    @PerApplication
+    @Provides
+    Context provideContext(Application application) {
+        return application;
+    }
+
+    @PerApplication
+    @Provides
     CredentialsProvider provideCredentialsProvider() {
         // retain credentials for 7 minutes...
         return new AgingCredentialsProvider(7 * 60 * 1000);
@@ -30,5 +49,11 @@ class AppModule {
     CookieStore provideCookieStore() {
         // share all session cookies across all sessions.
         return new BasicCookieStore();
+    }
+
+    @PerApplication
+    @Provides
+    ActivityLogger provideActivityLogger(@NonNull Collect collect) {
+        return collect.getActivityLogger();
     }
 }

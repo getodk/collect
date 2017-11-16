@@ -232,7 +232,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
         switch (requestCode) {
             case IMAGE_CHOOSER:
 
-                // get gp of chosen file
+                // load gp of chosen file
                 Uri selectedMedia = intent.getData();
                 String sourceMediaPath = MediaUtils.getPathFromUri(getActivity(), selectedMedia,
                         MediaStore.Images.Media.DATA);

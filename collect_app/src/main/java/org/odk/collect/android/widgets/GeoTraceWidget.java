@@ -38,7 +38,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
+ * GeoShapeTrace is the widget that allows the user to load Collect multiple GPS points based on the
  * locations.
  * <p>
  * Date

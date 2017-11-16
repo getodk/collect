@@ -178,7 +178,7 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
+        // load the file path and delete the file
         String name = binaryName;
         // clean up variables
         binaryName = null;

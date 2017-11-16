@@ -304,7 +304,7 @@ public class FormController {
     }
 
     /**
-     * @return an array of FormEntryCaptions for the current FormIndex. This is how we get group
+     * @return an array of FormEntryCaptions for the current FormIndex. This is how we load group
      * information Group 1 > Group 2> etc... The element at [size-1] is the current question
      * text, with group names decreasing in hierarchy until array element at [0] is the root
      */
@@ -313,7 +313,7 @@ public class FormController {
     }
 
     /**
-     * @return an array of FormEntryCaptions for the supplied FormIndex. This is how we get group
+     * @return an array of FormEntryCaptions for the supplied FormIndex. This is how we load group
      * information Group 1 > Group 2> etc... The element at [size-1] is the current question
      * text, with group names decreasing in hierarchy until array element at [0] is the root
      */
@@ -873,7 +873,7 @@ public class FormController {
                 questionList.toArray(questions);
             }
         } else {
-            // We have a quesion, so just get the one prompt
+            // We have a quesion, so just load the one prompt
             questions[0] = getQuestionPrompt();
         }
 

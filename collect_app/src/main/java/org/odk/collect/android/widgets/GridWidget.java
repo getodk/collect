@@ -262,7 +262,7 @@ public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
                 imageViews[i] = missingImage;
             }
 
-            // if we get a taller image/text, force all cells to be that height
+            // if we load a taller image/text, force all cells to be that height
             // could also set cell heights on a per-row basis if user feedback requests it.
             if (curHeight > maxCellHeight) {
                 maxCellHeight = curHeight;
