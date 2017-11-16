@@ -44,15 +44,15 @@ jobs:
               name: Authorize gcloud
               command: |
                   if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
-                    gcloud config set project api-project-322300403941;
+                    sudo gcloud config set project api-project-322300403941;
                     echo $GCLOUD_SERVICE_KEY | base64 --decode > ~/client-secret.json;
-                    gcloud auth activate-service-account --key-file ~/client-secret.json;
+                    sudo gcloud auth activate-service-account --key-file ~/client-secret.json;
                   fi
           - run:
               name: Run integration tests
               command: |
                   if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
-                    echo "y" | gcloud firebase test android run \
+                    echo "y" | sudo gcloud firebase test android run \
                     --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always).apk \
                     --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
                     --device model=Nexus5,version=21,locale=en,orientation=portrait \
@@ -64,7 +64,7 @@ jobs:
                   if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
                     mkdir ~/test-results;
                     sudo easy_install -U pip && sudo pip uninstall -y crcmod && sudo pip install -U crcmod;
-                    sudo gsutil -m cp -r -U `gsutil ls gs://opendatakit-collect-test-results | tail -1` ~/test-results | true;
+                    sudo gsutil -m cp -r -U `sudo gsutil ls gs://opendatakit-collect-test-results | tail -1` ~/test-results | true;
                   fi
           - store_test_results:
               path: ~/test-results
