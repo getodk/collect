@@ -116,7 +116,18 @@ public class WidgetFactory {
                         } else if (appearance.contains("url")) {        // smap change to contains rather than equals
                             questionWidget = new UrlWidget(context, fep);
                         } else if (appearance.contains("chart")) {        // smap chart
-                            questionWidget = new SmapGraphWidget(context, fep);
+                            String chartType = fep.getQuestion().getAdditionalAttribute(null, "chart_type");
+                            if(chartType == null) {
+                                chartType = "line";
+                            }
+                            if(chartType.equals("line")) {
+                                questionWidget = new SmapChartLineWidget(context, fep, appearance);
+                            } else if(chartType.equals("hori")){
+                                questionWidget = new SmapChartHorizontalBarWidget(context, fep, appearance);
+                            } else {
+                                questionWidget = new SmapChartLineWidget(context, fep, appearance);
+                            }
+
                         } else {
                             questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         }

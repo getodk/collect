@@ -16,50 +16,21 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.text.Selection;
-import android.text.method.TextKeyListener;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
-import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.odk.collect.android.R;
-import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSelectChoice;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ViewIds;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 /**
  * The Label Widget does not return an answer. The purpose of this widget is to be the top entry in
@@ -70,15 +41,12 @@ import timber.log.Timber;
  * @author Jeff Beorse
  */
 @SuppressLint("ViewConstructor")
-public class SmapGraphWidget extends QuestionWidget {
+public class SmapChartLineWidget extends SmapChartWidget {
 
     boolean readOnly = true;
 
-    public SmapGraphWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
-
-
-        TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
+    public SmapChartLineWidget(Context context, FormEntryPrompt prompt, String appearance) {
+        super(context, prompt, appearance);
 
         List<Entry> entries = new ArrayList<Entry>();
         String s = prompt.getAnswerText();
@@ -95,16 +63,13 @@ public class SmapGraphWidget extends QuestionWidget {
 
         // programmatically create a LineChart
         LineChart chart = new LineChart(context);
-        chart.setMinimumHeight(800);
+        addChart(chart);
 
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerLayout.addView(chart);
-        addAnswerView(answerLayout);
-
-        LineDataSet dataSet = new LineDataSet(entries, "Label");
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
+        if(entries.size() > 0) {
+            LineDataSet dataSet = new LineDataSet(entries, "Label");
+            LineData lineData = new LineData(dataSet);
+            chart.setData(lineData);
+        }
         chart.invalidate();
 
         //addAnswerView(answerText);
