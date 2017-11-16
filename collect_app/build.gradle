@@ -194,6 +194,7 @@ dependencies {
     implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.6.1') {
         exclude module: 'joda-time'
     }
+
     implementation group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
     implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
     implementation group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
@@ -218,6 +219,8 @@ dependencies {
     testImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
     androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
     odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+
+    implementation "android.arch.lifecycle:extensions:1.0.0"
 
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
