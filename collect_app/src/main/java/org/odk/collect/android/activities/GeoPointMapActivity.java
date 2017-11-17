@@ -257,7 +257,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         layers.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoPointMapActivity.this);
+                helper.showLayersDialog();
             }
         });
         zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);

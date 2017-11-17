@@ -183,7 +183,7 @@ public class GeoShapeGoogleMapActivity extends FragmentActivity implements Locat
         layersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoShapeGoogleMapActivity.this);
+                helper.showLayersDialog();
             }
         });
 

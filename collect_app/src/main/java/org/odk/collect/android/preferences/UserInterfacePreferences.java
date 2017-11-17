@@ -26,8 +26,11 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.google.common.collect.ObjectArrays;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 
@@ -178,46 +181,54 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             return;
         }
 
+        String[] onlineLayerEntryValues;
+        String[] onlineLayerEntries;
+
+        if (mapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
+            onlineLayerEntryValues = getResources().getStringArray(R.array.map_osm_basemap_selector_entry_values);
+            onlineLayerEntries = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
+        } else {
+            onlineLayerEntryValues = getResources().getStringArray(R.array.map_google_basemap_selector_entry_values);
+            onlineLayerEntries = getResources().getStringArray(R.array.map_google_basemap_selector_entries);
+        }
+        mapBasemap.setEntryValues(ObjectArrays.concat(onlineLayerEntryValues, MapHelper.getOfflineLayerListWithTags(), String.class));
+        mapBasemap.setEntries(ObjectArrays.concat(onlineLayerEntries, MapHelper.getOfflineLayerListWithTags(), String.class));
+
         mapSdk.setSummary(mapSdk.getEntry());
         mapSdk.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String[] onlineLayerEntryValues;
+                String[] onlineLayerEntries;
 
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 if (index == ARRAY_INDEX_GOOGLE_MAPS) {
-                    mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
+                    onlineLayerEntryValues = getResources().getStringArray(R.array.map_google_basemap_selector_entry_values);
+                    onlineLayerEntries = getResources().getStringArray(R.array.map_google_basemap_selector_entries);
                     mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
                 } else {
                     // Else its OSM Maps
-                    mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-                    mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
+                    onlineLayerEntryValues = getResources().getStringArray(R.array.map_osm_basemap_selector_entry_values);
+                    onlineLayerEntries = getResources().getStringArray(R.array.map_osm_basemap_selector_entries);
                     mapBasemap.setValue(OSM_MAPS_BASEMAP_DEFAULT);
-                    mapBasemap.setSummary(mapBasemap.getEntry());
                 }
 
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
+                mapBasemap.setEntryValues(ObjectArrays.concat(onlineLayerEntryValues, MapHelper.getOfflineLayerListWithTags(), String.class));
+                mapBasemap.setEntries(ObjectArrays.concat(onlineLayerEntries, MapHelper.getOfflineLayerListWithTags(), String.class));
+                mapBasemap.setSummary(mapBasemap.getEntry());
+
+                preference.setSummary(((ListPreference) preference).getEntries()[index]);
                 return true;
             }
         });
 
-        if (mapSdk.getValue().equals(OSM_BASEMAP_KEY)) {
-            mapBasemap.setEntryValues(R.array.map_osm_basemap_selector_entry_values);
-            mapBasemap.setEntries(R.array.map_osm_basemap_selector_entries);
-        } else {
-            mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
-            mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
-        }
         mapBasemap.setSummary(mapBasemap.getEntry());
         mapBasemap.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                String entry = (String) ((ListPreference) preference).getEntries()[index];
-                preference.setSummary(entry);
+                preference.setSummary(((ListPreference) preference).getEntries()[index]);
                 return true;
             }
         });

@@ -116,7 +116,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
             @Override
             public void onClick(View v) {
-                helper.showLayersDialog(GeoShapeOsmMapActivity.this);
+                helper.showLayersDialog();
 
             }
         });
