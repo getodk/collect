@@ -81,7 +81,7 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
 
         captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
-
+      
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
 
@@ -100,6 +100,23 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
             chooseButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
+
+
+        if (selfie) {
+            boolean isFrontCameraAvailable;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
+            } else {
+                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
+            }
+
+            if (!isFrontCameraAvailable) {
+                captureButton.setEnabled(false);
+                errorTextView.setText(R.string.error_front_camera_unavailable);
+                errorTextView.setVisibility(View.VISIBLE);
+            }
+
+        }
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();
