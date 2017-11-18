@@ -21,4 +21,8 @@ the License.
     <color name="grey">#757575</color>
     <color name="white">#ffffff</color>
 
+    <color name="red">#b71c1c</color>
+    <color name="yellow">#fdd835</color>
+    <color name="chrome">#f57f17</color>
+    <color name="light_green">#FF4CAF50</color>
 </resources>

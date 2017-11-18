@@ -257,6 +257,9 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.CaptureSelfieActivity" />
         <activity
             android:name=".activities.CaptureSelfieActivityNewApi" />
+
+        <activity android:name=".activities.CollectIntroActivity"
+            android:theme="@style/Theme.Intro" />
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true">

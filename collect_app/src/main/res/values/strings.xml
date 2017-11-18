@@ -552,4 +552,5 @@
     <string name="coptic_month_mesori">Mesori</string>
     <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
     <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
+    <string name="intro_fragment_message">Under development</string>
 </resources>

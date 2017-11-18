@@ -305,6 +305,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         updateButtons();
         setupGoogleAnalytics();
+
+        startActivity(new Intent(getApplicationContext(),CollectIntroActivity.class));
     }
 
     private void initToolbar() {
