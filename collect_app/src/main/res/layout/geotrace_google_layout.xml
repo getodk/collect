@@ -16,9 +16,7 @@
             android:paddingTop="5dip"
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
-            android:paddingBottom="5dip"
-
-            />
+            android:paddingBottom="5dip" />
 
     <fragment
         android:id="@+id/gmap"
