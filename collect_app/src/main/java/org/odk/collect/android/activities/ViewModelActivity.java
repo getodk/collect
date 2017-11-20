@@ -14,18 +14,27 @@ import android.support.v7.app.AppCompatActivity;
 import org.odk.collect.android.BR;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 
-public abstract class ViewModelActivity<VM extends ViewModel> extends AppCompatActivity {
+import dagger.android.AndroidInjection;
+
+public abstract class ViewModelActivity<VM extends ViewModel, VMF extends ViewModelProvider.Factory, DB extends ViewDataBinding>
+        extends AppCompatActivity {
 
     @Nullable
     private VM viewModel;
 
     @Nullable
-    private ViewDataBinding binding;
+    private DB binding;
+
+    @Inject
+    @Nullable
+    public VMF viewModelFactory;
 
     @Override
     protected void onCreate(@android.support.annotation.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidInjection.inject(this);
 
         this.binding = createBinding();
         this.viewModel = createViewModel();
@@ -51,7 +60,7 @@ public abstract class ViewModelActivity<VM extends ViewModel> extends AppCompatA
         return viewModel;
     }
 
-    public ViewDataBinding getBinding() {
+    public DB getBinding() {
         if (binding == null) {
             binding = createBinding();
         }
@@ -65,12 +74,7 @@ public abstract class ViewModelActivity<VM extends ViewModel> extends AppCompatA
     @NonNull
     protected abstract Class<VM> getViewModelClass();
 
-    @Nullable
-    protected ViewModelProvider.Factory getViewModelFactory() {
-        return null;
-    }
-
-    private ViewDataBinding createBinding() {
+    private DB createBinding() {
         if (binding != null) {
             return binding;
         }
@@ -96,10 +100,8 @@ public abstract class ViewModelActivity<VM extends ViewModel> extends AppCompatA
     }
 
     private ViewModelProvider getProvider() {
-        ViewModelProvider.Factory factory = getViewModelFactory();
-
-        return factory != null
-                ? ViewModelProviders.of(this, factory)
+        return viewModelFactory != null
+                ? ViewModelProviders.of(this, viewModelFactory)
                 : ViewModelProviders.of(this);
     }
 }

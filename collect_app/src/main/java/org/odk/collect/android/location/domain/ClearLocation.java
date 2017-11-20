@@ -1,6 +1,16 @@
 package org.odk.collect.android.location.domain;
 
+import org.odk.collect.android.injection.scopes.ActivityScope;
+
+import javax.inject.Inject;
+
+@ActivityScope
 public class ClearLocation {
+    @Inject
+    public ClearLocation() {
+
+    }
+
     public void clear() {
 
 //        if (marker != null) {

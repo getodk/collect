@@ -1,16 +1,13 @@
 package org.odk.collect.android.location;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ViewModelActivity;
+import org.odk.collect.android.databinding.ActivityGeoBinding;
+import org.odk.collect.android.location.injection.GeoViewModelFactory;
 
-public class GeoActivity extends ViewModelActivity<GeoViewModel> {
-    @Override
-    protected void onCreate(@android.support.annotation.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public class GeoActivity extends ViewModelActivity<GeoViewModel, GeoViewModelFactory, ActivityGeoBinding> {
 
     @Override
     protected void onDestroy() {

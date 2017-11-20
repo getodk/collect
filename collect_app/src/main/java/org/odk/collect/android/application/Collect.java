@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.application;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -40,6 +41,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.injection.DaggerAppComponent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
@@ -60,6 +62,11 @@ import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 import java.io.File;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
 import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
@@ -73,7 +80,7 @@ import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
  *
  * @author carlhartung
  */
-public class Collect extends Application {
+public class Collect extends Application implements HasActivityInjector {
 
     // Storage paths
     public static final String ODK_ROOT = Environment.getExternalStorageDirectory()
@@ -103,6 +110,9 @@ public class Collect extends Application {
     private FormController formController = null;
     private ExternalDataManager externalDataManager;
     private Tracker tracker;
+
+    @Inject
+    DispatchingAndroidInjector<Activity> androidInjector;
 
     public static Collect getInstance() {
         return singleton;
@@ -252,6 +262,11 @@ public class Collect extends Application {
         // It must be called before you save anything to SharedPreferences
         loadDefaultValuesIfNeeded();
 
+        DaggerAppComponent.builder()
+                .application(this)
+                .build()
+                .inject(this);
+
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         JodaTimeAndroid.init(this);
@@ -305,6 +320,7 @@ public class Collect extends Application {
         }
         return tracker;
     }
+
 
     private static class CrashReportingTree extends Timber.Tree {
         @Override
