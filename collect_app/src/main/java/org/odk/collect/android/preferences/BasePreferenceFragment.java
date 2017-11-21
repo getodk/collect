@@ -27,15 +27,7 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
         // removes disabled preferences if in general settings
         if (getActivity() instanceof PreferencesActivity) {
-            Bundle args = getArguments();
-            if (args != null) {
-                final boolean adminMode = getArguments().getBoolean(INTENT_KEY_ADMIN_MODE, false);
-                if (!adminMode) {
-                    removeAllDisabledPrefs();
-                }
-            } else {
-                removeAllDisabledPrefs();
-            }
+            removeAllDisabledPrefs();
         }
 
         super.onViewCreated(view, savedInstanceState);

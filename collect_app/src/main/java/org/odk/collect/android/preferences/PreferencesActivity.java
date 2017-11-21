@@ -41,28 +41,22 @@ public class PreferencesActivity extends PreferenceActivity {
 
         sharedPreferences = AdminSharedPreferences.getInstance();
 
-        final boolean adminMode = getIntent().getBooleanExtra(INTENT_KEY_ADMIN_MODE, false);
-
-        if (adminMode) {
-            loadHeadersFromResource(R.xml.general_preference_headers, target);
-        } else {
-
-            if (hasAtleastOneSettingEnabled(AdminKeys.serverKeys)) {
-                loadHeadersFromResource(R.xml.server_preference_headers, target);
-            }
-
-            if (hasAtleastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
-                loadHeadersFromResource(R.xml.user_interface_preference_headers, target);
-            }
-
-            if (hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {
-                loadHeadersFromResource(R.xml.form_management_preference_headers, target);
-            }
-
-            if (hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
-                loadHeadersFromResource(R.xml.user_device_identity_preference_header, target);
-            }
+        if (hasAtleastOneSettingEnabled(AdminKeys.serverKeys)) {
+            loadHeadersFromResource(R.xml.server_preference_headers, target);
         }
+
+        if (hasAtleastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
+            loadHeadersFromResource(R.xml.user_interface_preference_headers, target);
+        }
+
+        if (hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {
+            loadHeadersFromResource(R.xml.form_management_preference_headers, target);
+        }
+
+        if (hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
+            loadHeadersFromResource(R.xml.user_device_identity_preference_header, target);
+        }
+
     }
 
     @Override
