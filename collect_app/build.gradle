@@ -118,7 +118,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def file = output.outputFile
-            output.outputFile = new File(file.parent, file.name.replace("_app","").replace(".apk", "-" + defaultConfig.versionName + ".apk"))
+            output.outputFileName = new File(file.parent, file.name.replace("_app","").replace(".apk", "-" + defaultConfig.versionName + ".apk"))
         }
     }
 
@@ -144,6 +144,7 @@ android {
     dexOptions {
         javaMaxHeapSize '2048M'
     }
+    buildToolsVersion '26.0.2'
 }
 
 configurations.all {
