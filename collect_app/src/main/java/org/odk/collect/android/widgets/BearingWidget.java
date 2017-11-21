@@ -56,50 +56,56 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     private TextView answerDisplay;
     private boolean isSensorAvailable = false;
     private EditText manualDataEntry;
+    private LinearLayout answerLayout = new LinearLayout(getContext());
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         isSensorAvailable = checkForRequiredSensors();
-        LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerDisplay = getCenteredAnswerTextView();
-        answerLayout.addView(answerDisplay);
-        if (isSensorAvailable) {
-            getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
-            getBearingButton.setEnabled(!prompt.isReadOnly());
-            if (prompt.isReadOnly()) {
-                getBearingButton.setVisibility(View.GONE);
-            }
-            // when you press the button
-            getBearingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance()
-                            .getActivityLogger()
-                            .logInstanceAction(this, "recordBearing", "click",
-                                    getFormEntryPrompt().getIndex());
+
+        getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
+        getBearingButton.setEnabled(!prompt.isReadOnly());
+        if (prompt.isReadOnly()) {
+            getBearingButton.setVisibility(View.GONE);
+        }
+        // when you press the button
+        getBearingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance()
+                        .getActivityLogger()
+                        .logInstanceAction(this, "recordBearing", "click",
+                                getFormEntryPrompt().getIndex());
+
+                if (isSensorAvailable) {
                     Intent i;
                     i = new Intent(getContext(), BearingActivity.class);
 
                     waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
                             RequestCodes.BEARING_CAPTURE);
+                } else {
+                    getBearingButton.setEnabled(false);
+                    ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
+                    manualDataEntry = getEditText();
+                    manualDataEntry.setText(answerDisplay.getText().toString());
+                    answerLayout.addView(manualDataEntry);
                 }
-            });
-            answerLayout.addView(getBearingButton);
-        } else {
-            manualDataEntry = getEditText();
-            answerLayout.addView(manualDataEntry);
-        }
+
+            }
+        });
 
 
+        answerLayout.addView(getBearingButton);
+        answerLayout.addView(answerDisplay);
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-            if (isSensorAvailable) {
-                getBearingButton.setText(getContext().getString(R.string.replace_bearing));
-            } else {
-                manualDataEntry.setText(s);
+
+            getBearingButton.setText(getContext().getString(R.string.replace_bearing));
+            if (!isSensorAvailable && manualDataEntry != null) {
+                    manualDataEntry.setText(s);
             }
             setBinaryData(s);
         }
@@ -112,7 +118,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answerDisplay.setText(null);
         if (isSensorAvailable) {
             getBearingButton.setText(getContext().getString(R.string.get_bearing));
-        } else {
+        } else if (manualDataEntry != null) {
             manualDataEntry.setText(null);
         }
 
@@ -160,6 +166,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     }
 
     private boolean checkForRequiredSensors() {
+
         boolean isAccelerometerSensorAvailable = false;
         boolean isMagneticFieldSensorAvailable = false;
 
@@ -172,7 +179,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         }
 
         if (!isAccelerometerSensorAvailable || !isMagneticFieldSensorAvailable) {
-            ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
             return false;
         }
 
