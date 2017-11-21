@@ -355,4 +355,9 @@ public class Collect extends Application implements HasActivityInjector {
             AdminSharedPreferences.getInstance().loadDefaultValues();
         }
     }
+
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return androidInjector;
+    }
 }

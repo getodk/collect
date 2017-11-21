@@ -34,7 +34,7 @@ public abstract class ViewModelActivity<VM extends ViewModel, VMF extends ViewMo
     @Override
     protected void onCreate(@android.support.annotation.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        AndroidInjection.inject(this);
+        AndroidInjection.inject(this);
 
         this.binding = createBinding();
         this.viewModel = createViewModel();
