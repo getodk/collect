@@ -6,12 +6,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.injection.scopes.ActivityScope;
 import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 
+@ActivityScope
 public class SetupMap {
 
     @NonNull
@@ -24,6 +27,7 @@ public class SetupMap {
 
     private MarkerOptions markerOptions;
 
+    @Inject
     public SetupMap(@NonNull GeoActivity activity) {
         this.activity = activity;
     }

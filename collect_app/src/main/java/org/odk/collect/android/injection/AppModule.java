@@ -3,10 +3,11 @@ package org.odk.collect.android.injection;
 import android.support.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.injection.GeoActivityComponent;
 
 import dagger.Module;
 
-@Module
+@Module(subcomponents = GeoActivityComponent.class)
 public class AppModule {
 
     @NonNull

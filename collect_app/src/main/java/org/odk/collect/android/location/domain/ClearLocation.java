@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 @ActivityScope
 public class ClearLocation {
+
     @Inject
     public ClearLocation() {
 

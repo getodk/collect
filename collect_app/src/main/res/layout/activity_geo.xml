@@ -40,7 +40,7 @@
                 android:paddingBottom="3dip"
                 android:text="@string/please_wait_long"
                 android:textColor="#FFFFFF"
-                android:visibility="@{viewModel.status != null}"
+                app:isPresent="@{viewModel.status != null}"
                 tools:visibility="visible" />
 
             <fragment
@@ -68,10 +68,10 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.onReloadLocation()}"
                     android:padding="15dp"
                     android:src="@drawable/ic_add_location_black_36dp"
-                    android:visibility="@{viewModel.mode != GeoMode.SHAPE}"
-                    android:onClick="@{() -> viewModel.onReloadLocation()}"
+                    app:isPresent="@{viewModel.mode != GeoMode.SHAPE}"
                     tools:visibility="visible" />
 
                 <ImageButton
@@ -80,9 +80,9 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.onShowLocation()}"
                     android:padding="15dp"
-                    android:src="@drawable/ic_my_location_black_36dp"
-                    android:onClick="@{() -> viewModel.onShowLocation()}" />
+                    android:src="@drawable/ic_my_location_black_36dp" />
 
                 <ImageButton
                     android:id="@+id/layer_menu"
@@ -90,18 +90,18 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.onShowLayers()}"
                     android:padding="15dp"
-                    android:src="@drawable/ic_layers_black_36dp"
-                    android:onClick="@{() -> viewModel.onShowLayers()}" />
+                    android:src="@drawable/ic_layers_black_36dp" />
 
                 <ImageButton
                     android:id="@+id/clear"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
+                    android:onClick="@{() -> viewModel.onClear()}"
                     android:padding="15dp"
-                    android:src="@drawable/ic_delete_black_36dp"
-                    android:onClick="@{() -> viewModel.onClear()}" />
+                    android:src="@drawable/ic_delete_black_36dp" />
 
                 <ImageButton
                     android:id="@+id/accept_location"
@@ -109,9 +109,9 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:onClick="@{() -> viewModel.onAcceptLocation()}"
                     android:padding="15dp"
-                    android:src="@drawable/ic_save_black_36dp"
-                    android:onClick="@{() -> viewModel.onAcceptLocation()}" />
+                    android:src="@drawable/ic_save_black_36dp" />
             </LinearLayout>
         </ScrollView>
     </FrameLayout>

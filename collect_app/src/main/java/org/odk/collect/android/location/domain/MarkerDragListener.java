@@ -4,8 +4,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import org.odk.collect.android.injection.scopes.ActivityScope;
 
+import javax.inject.Inject;
+
+@ActivityScope
 public class MarkerDragListener implements GoogleMap.OnMarkerDragListener {
+
+    @Inject
+    public MarkerDragListener() {
+    }
 
     @Override
     public void onMarkerDragStart(Marker marker) {

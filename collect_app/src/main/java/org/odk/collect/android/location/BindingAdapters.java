@@ -1,9 +1,11 @@
 package org.odk.collect.android.location;
 
 import android.databinding.BindingAdapter;
+import android.view.View;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.w3c.dom.Text;
 
 import javax.annotation.Nullable;
 
@@ -28,5 +30,11 @@ public class BindingAdapters {
                 view.setText(R.string.geotrace_instruction);
                 break;
         }
+    }
+
+
+    @BindingAdapter("app:isPresent")
+    public static void setIsPresent(View view, boolean isPresent) {
+        view.setVisibility(isPresent ? View.VISIBLE: View.GONE);
     }
 }

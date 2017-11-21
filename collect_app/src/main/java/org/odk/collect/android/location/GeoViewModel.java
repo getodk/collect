@@ -17,13 +17,13 @@ import timber.log.Timber;
 public class GeoViewModel extends ViewModel {
 
     @NonNull
-    private final ObservableField<GeoProvider> provider = new ObservableField<>();
+    public final ObservableField<GeoProvider> provider = new ObservableField<>();
 
     @NonNull
-    private final ObservableField<GeoMode> mode = new ObservableField<>();
+    public final ObservableField<GeoMode> mode = new ObservableField<>();
 
     @NonNull
-    private final ObservableField<String> status = new ObservableField<>();
+    public final ObservableField<String> status = new ObservableField<>();
 
     @NonNull
     private final GetMap getMap;

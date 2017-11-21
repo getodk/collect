@@ -13,6 +13,7 @@ public class FloatTruncater {
 
     @Inject
     public FloatTruncater() {
+
     }
 
     @NonNull

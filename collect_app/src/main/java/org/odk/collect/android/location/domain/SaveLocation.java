@@ -9,9 +9,13 @@ import android.support.annotation.Nullable;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.scopes.ActivityScope;
+
+import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 
+@ActivityScope
 public class SaveLocation {
 
     @NonNull
@@ -22,6 +26,7 @@ public class SaveLocation {
 
     public boolean isFullLocation = false;
 
+    @Inject
     public SaveLocation(@NonNull Activity activity,
                         @NonNull LocationFormatter locationFormatter) {
         this.activity = activity;

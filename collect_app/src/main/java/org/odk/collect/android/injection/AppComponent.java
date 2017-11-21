@@ -10,8 +10,13 @@ import dagger.Component;
 import dagger.android.AndroidInjectionModule;
 
 @ApplicationScope
-@Component(modules = {AndroidInjectionModule.class, AppModule.class, ActivityBuilder.class})
+@Component(modules = {
+        AndroidInjectionModule.class,
+        AppModule.class,
+        ActivityBuilder.class
+})
 public interface AppComponent {
+
     @Component.Builder
     interface Builder {
 

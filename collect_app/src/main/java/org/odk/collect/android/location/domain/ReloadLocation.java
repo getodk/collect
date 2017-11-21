@@ -1,6 +1,17 @@
 package org.odk.collect.android.location.domain;
 
+import org.odk.collect.android.injection.scopes.ActivityScope;
+
+import javax.inject.Inject;
+
+@ActivityScope
 public class ReloadLocation {
+
+    @Inject
+    public ReloadLocation() {
+
+    }
+
     public void reload() {
 //        if (marker != null) {
 //            marker.remove();

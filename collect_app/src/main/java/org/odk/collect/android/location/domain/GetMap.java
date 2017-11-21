@@ -14,7 +14,6 @@ import javax.inject.Inject;
 /**
  * @author James Knight
  */
-
 @ActivityScope
 public class GetMap {
 
