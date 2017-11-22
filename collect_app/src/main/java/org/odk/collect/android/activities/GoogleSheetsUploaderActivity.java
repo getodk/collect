@@ -58,7 +58,8 @@ import static org.odk.collect.android.google.GoogleAccountsManager.REQUEST_ACCOU
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
 
 
-public class GoogleSheetsUploaderActivity extends AppCompatActivity implements InstanceUploaderListener {
+public class GoogleSheetsUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
+        GoogleAccountsManager.GoogleAccountSelectionListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int GOOGLE_USER_DIALOG = 3;
     private static final String ALERT_MSG = "alertmsg";
@@ -114,12 +115,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        accountsManager = new GoogleAccountsManager(this, new GoogleAccountsManager.GoogleAccountSelectionListener() {
-            @Override
-            public void accountSelected() {
-                getResultsFromApi();
-            }
-        });
+        accountsManager = new GoogleAccountsManager(this, this);
 
         getResultsFromApi();
     }
@@ -157,7 +153,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount();
+            accountsManager.chooseAccount(true);
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {
@@ -421,5 +417,10 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         // in interface, but not needed
+    }
+
+    @Override
+    public void googleAccountSelected() {
+        getResultsFromApi();
     }
 }

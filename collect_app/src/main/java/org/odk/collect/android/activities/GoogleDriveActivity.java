@@ -75,7 +75,8 @@ import timber.log.Timber;
 import static org.odk.collect.android.google.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class GoogleDriveActivity extends AppCompatActivity implements View.OnClickListener,
-        TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener {
+        TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener,
+        GoogleAccountsManager.GoogleAccountSelectionListener {
 
     public static final int AUTHORIZATION_REQUEST_CODE = 4322;
     private static final int PROGRESS_DIALOG = 1;
@@ -216,13 +217,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         searchButton = (ImageButton) findViewById(R.id.search_button);
         searchButton.setOnClickListener(this);
 
-        accountsManager = new GoogleAccountsManager(this, new GoogleAccountsManager.GoogleAccountSelectionListener() {
-            @Override
-            public void accountSelected() {
-                getResultsFromApi();
-            }
-        });
-
+        accountsManager = new GoogleAccountsManager(this, this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
     }
@@ -240,7 +235,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount();
+            accountsManager.chooseAccount(true);
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
@@ -612,6 +607,11 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 executeSearch();
                 break;
         }
+    }
+
+    @Override
+    public void googleAccountSelected() {
+        getResultsFromApi();
     }
 
     private class RetrieveDriveFileContentsAsyncTask extends

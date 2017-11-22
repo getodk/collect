@@ -771,7 +771,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         } catch (UserRecoverableAuthException e) {
             outcome = null;
-            accountsManager.getActivity().startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            if (accountsManager.getActivity() != null) {
+                accountsManager.getActivity().startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            }
         } catch (IOException | GoogleAuthException e) {
             Timber.e(e);
             authFailed = true;
