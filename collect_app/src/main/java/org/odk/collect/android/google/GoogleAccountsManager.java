@@ -18,6 +18,7 @@ package org.odk.collect.android.google;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.support.annotation.NonNull;
 
@@ -46,20 +47,20 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
-    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
+    public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
 
     private Context context;
     private Activity activity;
     private GoogleAccountCredential credential;
-    private PermissionsListener listener;
+    private GoogleAccountSelectionListener listener;
     private DriveHelper driveHelper;
     private SheetsHelper sheetsHelper;
 
     private HttpTransport transport = AndroidHttp.newCompatibleTransport();
     private JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-    public GoogleAccountsManager(Activity activity, PermissionsListener listener) {
+    public GoogleAccountsManager(Activity activity, GoogleAccountSelectionListener listener) {
         this.activity = activity;
         this.listener = listener;
 
@@ -106,8 +107,10 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 listener.accountSelected();
             } else {
                 // Start a dialog from which the user can choose an account
-                activity.startActivityForResult(credential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+                Intent intentChooseAccount = credential.newChooseAccountIntent();
+                intentChooseAccount.putExtra("overrideTheme", 1);
+                intentChooseAccount.putExtra("overrideCustomTheme", 0);
+                activity.startActivityForResult(intentChooseAccount, REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
@@ -175,7 +178,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return credential;
     }
 
-    public interface PermissionsListener {
+    public interface GoogleAccountSelectionListener {
         void accountSelected();
     }
 }

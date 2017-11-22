@@ -57,10 +57,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.google.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.google.GoogleAccountsManager.REQUEST_PERMISSION_GET_ACCOUNTS;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 
 public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {

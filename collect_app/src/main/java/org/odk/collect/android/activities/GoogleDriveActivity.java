@@ -216,7 +216,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         searchButton = (ImageButton) findViewById(R.id.search_button);
         searchButton.setOnClickListener(this);
 
-        accountsManager = new GoogleAccountsManager(this, new GoogleAccountsManager.PermissionsListener() {
+        accountsManager = new GoogleAccountsManager(this, new GoogleAccountsManager.GoogleAccountSelectionListener() {
             @Override
             public void accountSelected() {
                 getResultsFromApi();
@@ -241,8 +241,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
             accountsManager.chooseAccount();
-        } else if (!isDeviceOnline()) {
-            ToastUtils.showShortToast("No network connection available.");
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();
