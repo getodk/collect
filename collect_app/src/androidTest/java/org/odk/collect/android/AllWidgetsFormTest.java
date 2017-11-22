@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.Nullable;
+// import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -35,7 +35,7 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-import static android.app.Activity.RESULT_CANCELED;
+// import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -398,31 +398,31 @@ public class AllWidgetsFormTest {
     }
 
     public void testBearingWidget() {
-    //
-    //        intending(hasComponent(BearingActivity.class.getName()))
-    //                .respondWith(cancelledResult());
-    //
-    //        onView(withText("Record Bearing")).perform(click());
-    //        onView(withId(R.id.answer_text)).check(matches(withText("")));
-    //
-    //        double degrees = BearingActivity.normalizeDegrees(randomDecimal());
-    //        String bearing = BearingActivity.formatDegrees(degrees);
-    //
-    //        Intent data = new Intent();
-    //        data.putExtra(BEARING_RESULT, bearing);
-    //
-    //        intending(hasComponent(BearingActivity.class.getName()))
-    //                .respondWith(okResult(data));
-    //
-    //        onView(withText("Record Bearing")).perform(click());
-    //        onView(withId(R.id.answer_text))
-    //                .check(matches(allOf(isDisplayed(), withText(bearing))));
-    //
-    //        openWidgetList();
-    //        onView(withText("Bearing widget")).perform(click());
-    //
-    //        onView(withId(R.id.answer_text)).check(matches(withText(bearing)));
-    //
+        //
+        //        intending(hasComponent(BearingActivity.class.getName()))
+        //                .respondWith(cancelledResult());
+        //
+        //        onView(withText("Record Bearing")).perform(click());
+        //        onView(withId(R.id.answer_text)).check(matches(withText("")));
+        //
+        //        double degrees = BearingActivity.normalizeDegrees(randomDecimal());
+        //        String bearing = BearingActivity.formatDegrees(degrees);
+        //
+        //        Intent data = new Intent();
+        //        data.putExtra(BEARING_RESULT, bearing);
+        //
+        //        intending(hasComponent(BearingActivity.class.getName()))
+        //                .respondWith(okResult(data));
+        //
+        //        onView(withText("Record Bearing")).perform(click());
+        //        onView(withId(R.id.answer_text))
+        //                .check(matches(allOf(isDisplayed(), withText(bearing))));
+        //
+        //        openWidgetList();
+        //        onView(withText("Bearing widget")).perform(click());
+        //
+        //        onView(withId(R.id.answer_text)).check(matches(withText(bearing)));
+        //
         onView(withText("Bearing widget")).perform(swipeLeft());
     }
 
@@ -646,13 +646,13 @@ public class AllWidgetsFormTest {
         return decimalFormat.format(randomDecimal());
     }
 
-    private ActivityResult cancelledResult() {
-        return new ActivityResult(RESULT_CANCELED, null);
-    }
-
-    private ActivityResult okResult(@Nullable Intent data) {
-        return new ActivityResult(RESULT_OK, data);
-    }
+    //    private ActivityResult cancelledResult() {
+    //        return new ActivityResult(RESULT_CANCELED, null);
+    //    }
+    //
+    //    private ActivityResult okResult(@Nullable Intent data) {
+    //        return new ActivityResult(RESULT_OK, data);
+    //    }
 
     //endregion
 
