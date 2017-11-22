@@ -192,7 +192,6 @@
   <string name="enter_admin_password">ປ້ອນລະຫັດຜ່ານຜູ້ຄວບຄຸມລະບົບ</string>
   <string name="found_in_main">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກເມນູຫລັກ</string>
   <string name="found_in_settings">ຍົກເລີກການ​ເລືອກ​ ເພື່ອເຊື່ອງຈາກການຕັ້ງຄ່າທົ່ວໄປ</string>
-  <string name="no_account">ບໍ່ມີບັນຊີຜູ້ໃຊ້ງານ</string>
   <string name="save_preferences">ບັນທຶກການຕັ້ງຄ່າ</string>
   <string name="form_forward">ເລື່ອນຕໍ່ໄປ</string>
   <string name="form_backward">ເລື່ອນກັບຄືນໜ້າຜ່ານມາ</string>

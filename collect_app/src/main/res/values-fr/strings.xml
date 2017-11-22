@@ -205,7 +205,6 @@
   <string name="autosend">Envoi automatique</string>
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
-  <string name="no_account">Pas de compte</string>
   <string name="save_preferences">Enregistrer les paramètres sur le disque</string>
   <string name="form_forward">Suiv.</string>
   <string name="form_backward">Préc.</string>

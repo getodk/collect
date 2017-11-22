@@ -205,7 +205,6 @@
   <string name="autosend">Automaattinen lähetys</string>
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
-  <string name="no_account">Ei tiliä</string>
   <string name="save_preferences">Tallenna asetukset</string>
   <string name="form_forward">Seuraava</string>
   <string name="form_backward">Edellinen</string>
@@ -527,5 +526,6 @@
   <string name="ethiopian_month_hamlie">Ḥamle</string>
   <string name="ethiopian_month_nehasie">Nähase</string>
   <string name="ethiopian_month_pagumien">Ṗagʷəmen</string>
-  <string name="ethiopian_date">%1$s (%2$s)</string>
+  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <string name="custom_date">%1$s (%2$s)</string>
 </resources>

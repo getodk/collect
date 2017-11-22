@@ -95,6 +95,7 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
         // Release build for the original ODK Collect app
         odkCollectRelease {
@@ -103,11 +104,13 @@ android {
             }
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
         }
         debug {
             debuggable(true)
             // Allows AndroidTest JaCoCo reports to be generated
             testCoverageEnabled(true)
+            resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
     }
 

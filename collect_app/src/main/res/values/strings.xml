@@ -212,7 +212,6 @@
     <string name="autosend">Auto send</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
-    <string name="no_account">No account</string>
     <string name="save_preferences">Save Settings to Disk</string>
     <string name="form_forward">Next</string>
     <string name="form_backward">Prev</string>
@@ -477,6 +476,7 @@
     <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="share_qrcode">Share QR code</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
+    <string name="error_front_camera_unavailable">Front camera not available on this device</string>
     <string name="request_permission">This application needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
     <string name="invalid_range_widget">This widget has invalid parameters!</string>
@@ -537,6 +537,20 @@
     <string name="ethiopian_month_hamlie">Hamlie</string>
     <string name="ethiopian_month_nehasie">Nehasie</string>
     <string name="ethiopian_month_pagumien">Pagumien</string>
-    <string name="ethiopian_date">%1$s (%2$s)</string>
+    <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+    <string name="custom_date">%1$s (%2$s)</string>
+    <string name="coptic_month_thout">Thout</string>
+    <string name="coptic_month_paopi">Paopi</string>
+    <string name="coptic_month_hathor">Hathor</string>
+    <string name="coptic_month_koiak">Koiak</string>
+    <string name="coptic_month_tobi">Tobi</string>
+    <string name="coptic_month_meshir">Meshir</string>
+    <string name="coptic_month_paremhat">Paremhat</string>
+    <string name="coptic_month_parmouti">Parmouti</string>
+    <string name="coptic_month_pashons">Pashons</string>
+    <string name="coptic_month_paoni">Paoni</string>
+    <string name="coptic_month_epip">Epip</string>
+    <string name="coptic_month_mesori">Mesori</string>
+    <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
     <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 </resources>

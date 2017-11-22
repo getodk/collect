@@ -195,7 +195,6 @@
   <string name="change_admin_password">ადმინისტრატორის პაროლის შეცვლა</string>
   <string name="found_in_main">გამორთეთ მთავარი მენიუდან დასამალად</string>
   <string name="found_in_settings">გამორთეთ ძირითადი პარამეტრებიდან დასამალად</string>
-  <string name="no_account">ექაუნთი არ არსებობს</string>
   <string name="save_preferences">პარამეტრების დისკზე შენახვა</string>
   <string name="form_forward">შემდეგი</string>
   <string name="form_backward">წინა</string>

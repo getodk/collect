@@ -618,7 +618,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
 
     private class RetrieveDriveFileContentsAsyncTask extends
             AsyncTask<String, HashMap<String, Object>, HashMap<String, Object>> {
-
         private TaskListener listener;
 
         void setTaskListener(TaskListener tl) {
