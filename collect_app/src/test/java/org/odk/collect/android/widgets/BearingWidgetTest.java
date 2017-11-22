@@ -9,12 +9,16 @@ import org.junit.Before;
 import org.odk.collect.android.widgets.base.BinaryWidgetTest;
 import org.robolectric.RuntimeEnvironment;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Random;
+
 /**
  * @author James Knight
  */
 public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringData> {
 
-    private String barcodeData;
+    private String bearingData;
 
     @NonNull
     @Override
@@ -24,23 +28,30 @@ public class BearingWidgetTest extends BinaryWidgetTest<BearingWidget, StringDat
 
     @Override
     public Object createBinaryData(StringData answerData) {
-        return barcodeData;
+        return bearingData;
     }
 
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(barcodeData);
+        return new StringData(bearingData);
     }
 
     @Override
     public StringData getInitialAnswer() {
-        return new StringData(RandomString.make());
+        double d = random.nextDouble();
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        nf.setMaximumFractionDigits(3); // The Widget internally truncatest this further.
+        nf.setMaximumIntegerDigits(3);
+        nf.setGroupingUsed(false);
+
+        String formattedValue = nf.format(d);
+        return new StringData(formattedValue);
     }
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        barcodeData = RandomString.make();
+        bearingData = RandomString.make();
     }
 }
