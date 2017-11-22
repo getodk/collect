@@ -28,7 +28,6 @@ import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -185,7 +184,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     private EditText getEditText() {
@@ -208,7 +207,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String data = manualData.getText().toString();
-                if (isValidInput(Double.valueOf(data))) {
+                if (!data.equals("") && isValidInput(data)) {
                     answerDisplay.setText(manualData.getText().toString());
                     ToastUtils.showShortToast("Data entered : " + data);
                     return true;
@@ -218,11 +217,40 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                 }
             }
         });
+
+        manualData.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String s = manualData.getText().toString();
+                if (!s.equals("") && isValidInput(s)) {
+                    answerDisplay.setText(s);
+                } else {
+                    ToastUtils.showShortToast(R.string.enter_correct_data);
+                }
+            }
+        });
         return  manualData;
     }
 
-    private boolean isValidInput(double input) {
-        if (input >= 0 && input <= 360.0) {
+    private boolean isValidInput(String input) {
+        double d;
+        try {
+            d = Double.valueOf(input);
+        } catch (NumberFormatException e) {
+           return false;
+        }
+
+        if (d >= 0 && d <= 360.0) {
             return true;
         }
         return false;
