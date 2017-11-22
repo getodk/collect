@@ -2,27 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/form_entry">
         <CheckBoxPreference
-            android:defaultValue="true"
             android:key="access_settings"
             android:title="@string/general_preferences" />
         <CheckBoxPreference
-            android:defaultValue="true"
             android:key="change_language"
             android:title="@string/change_language" />
         <CheckBoxPreference
-            android:defaultValue="true"
             android:key="jump_to"
             android:title="@string/view_hierarchy" />
         <CheckBoxPreference
-            android:defaultValue="true"
             android:key="save_mid"
             android:title="@string/save_mid" />
         <CheckBoxPreference
-            android:defaultValue="true"
             android:key="save_as"
             android:title="@string/save_form_as" />
         <CheckBoxPreference
-            android:defaultValue="true"
             android:key="mark_as_finalized"
             android:title="@string/mark_finished" />
     </PreferenceCategory>

@@ -42,6 +42,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -65,6 +66,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.SHOULD_LOAD_DEFAULT_VALUES;
 
 /**
  * The Open Data Kit Collect application.
@@ -87,6 +89,7 @@ public class Collect extends Application {
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+
     public static String defaultSysLanguage;
     private static Collect singleton = null;
 
@@ -267,7 +270,8 @@ public class Collect extends Application {
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        loadDefaultValuesIfNeeded();
+
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
 
@@ -281,6 +285,15 @@ public class Collect extends Application {
         }
 
         setupLeakCanary();
+    }
+
+    // Default values should be loaded after a fresh installation or first app run after upgrading to the version in which the flag was introduced
+    private boolean shouldLoadDefaultValues() {
+        boolean firstAppRun = GeneralSharedPreferences.getInstance().getBoolean(SHOULD_LOAD_DEFAULT_VALUES, true);
+        if (firstAppRun) {
+            GeneralSharedPreferences.getInstance().save(SHOULD_LOAD_DEFAULT_VALUES, false);
+        }
+        return firstAppRun;
     }
 
     private void setupLeakCanary() {
@@ -342,5 +355,12 @@ public class Collect extends Application {
 
         FormController.initializeJavaRosa(mgr);
         activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+    }
+
+    private void loadDefaultValuesIfNeeded() {
+        if (shouldLoadDefaultValues()) {
+            GeneralSharedPreferences.getInstance().loadDefaultValues();
+            AdminSharedPreferences.getInstance().loadDefaultValues();
+        }
     }
 }

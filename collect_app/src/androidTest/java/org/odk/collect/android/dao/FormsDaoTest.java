@@ -279,7 +279,7 @@ public class FormsDaoTest {
                 ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
         );
 
-        List<Integer> failedResetActions = new ResetUtility().reset(Collect.getInstance(), resetActions);
+        List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 }
