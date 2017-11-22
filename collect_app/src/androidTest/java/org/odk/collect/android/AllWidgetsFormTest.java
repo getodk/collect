@@ -64,7 +64,7 @@ import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESUL
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
-public class AllFormsWidgetTest {
+public class AllWidgetsFormTest {
 
     private static final String ALL_WIDGETS_FORM = "all_widgets.xml";
     private static final String FORMS_DIRECTORY = "/odk/forms/";
