@@ -170,7 +170,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                 }
                 uriToUpdate.clear();
 
-                // Step 4: go through the newly-discovered files in xFormsToAdd and add them.
+                // Step 4: go through the newly-discovered files in xFormsToAdd and addSubscription them.
                 // This is slow because buildContentValues(...) is slow.
                 //
                 Collections.shuffle(formsToAdd); // Big win if multiple DiskSyncTasks running

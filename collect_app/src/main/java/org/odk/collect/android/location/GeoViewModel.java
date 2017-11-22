@@ -1,91 +1,45 @@
 package org.odk.collect.android.location;
 
-import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import org.odk.collect.android.location.domain.ClearLocation;
-import org.odk.collect.android.location.domain.GetMap;
-import org.odk.collect.android.location.domain.ReloadLocation;
-import org.odk.collect.android.location.domain.SaveLocation;
-import org.odk.collect.android.location.domain.SetupMap;
-import org.odk.collect.android.location.domain.ShowLayers;
-import org.odk.collect.android.location.domain.ShowLocation;
+import com.google.android.gms.maps.GoogleMap;
+import com.jakewharton.rxrelay2.PublishRelay;
 
-import timber.log.Timber;
+import org.odk.collect.android.location.domain.UpdateMap;
+import org.odk.collect.android.viewmodel.RxViewModel;
 
-public class GeoViewModel extends ViewModel {
+import javax.inject.Inject;
 
-    @NonNull
+import io.reactivex.Observable;
+
+public class GeoViewModel extends RxViewModel {
+
+    // Outputs:
     public final ObservableField<GeoProvider> provider = new ObservableField<>();
-
-    @NonNull
     public final ObservableField<GeoMode> mode = new ObservableField<>();
-
-    @NonNull
     public final ObservableField<String> status = new ObservableField<>();
 
-    @NonNull
-    private final GetMap getMap;
+    public final ObservableField<String> info = new ObservableField<>();
+
+    // Inputs:
+    private final PublishRelay<Object> acceptClicks = PublishRelay.create();
+    private final PublishRelay<Object> reloadClicks = PublishRelay.create();
+
 
     @NonNull
-    private final SetupMap setupMap;
+    private final UpdateMap updateMap;
 
-    @NonNull
-    private final ReloadLocation reloadLocation;
-
-    @NonNull
-    private final ShowLocation showLocation;
-
-    @NonNull
-    private final ShowLayers showLayers;
-
-    @NonNull
-    private final ClearLocation clearLocation;
-
-    @NonNull
-    private final SaveLocation saveLocation;
-
-    public GeoViewModel(@NonNull GetMap getMap,
-                        @NonNull SetupMap setupMap,
-                        @NonNull ReloadLocation reloadLocation,
-                        @NonNull ShowLocation showLocation,
-                        @NonNull ShowLayers showLayers,
-                        @NonNull ClearLocation clearLocation,
-                        @NonNull SaveLocation saveLocation) {
-
-        this.getMap = getMap;
-        this.setupMap = setupMap;
-        this.reloadLocation = reloadLocation;
-        this.showLocation = showLocation;
-        this.showLayers = showLayers;
-        this.clearLocation = clearLocation;
-        this.saveLocation = saveLocation;
+    @Inject
+    public GeoViewModel(@NonNull UpdateMap updateMap) {
+        this.updateMap = updateMap;
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        Timber.w("CLEARED!");
+    Observable<Object> observeAcceptLocation() {
+        return acceptClicks.hide();
     }
 
-    public void onReloadLocation() {
-        reloadLocation.reload();
-    }
-
-    public void onShowLocation() {
-        showLocation.showLocation();
-    }
-
-    public void onShowLayers() {
-        showLayers.showLayers();
-    }
-
-    public void onClear() {
-        clearLocation.clear();
-    }
-
-    public void onAcceptLocation() {
-        saveLocation.save(null);
+    Observable<Object> observeReloadMap(@NonNull final GoogleMap map) {
+        return Observable.just(map);
     }
 }

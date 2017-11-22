@@ -3,17 +3,18 @@ package org.odk.collect.android.location.domain;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.scopes.ActivityScope;
+import org.odk.collect.android.location.GeoActivity;
 
 import javax.inject.Inject;
 
-/**
- * @author James Knight
- */
+import io.reactivex.Single;
+
 @ActivityScope
 public class GetMap {
 
@@ -21,12 +22,21 @@ public class GetMap {
     private final FragmentManager fragmentManager;
 
     @Inject
-    public GetMap(@NonNull FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
+    GetMap(@NonNull GeoActivity geoActivity) {
+        this.fragmentManager = geoActivity.getSupportFragmentManager();
     }
 
-    public void getAsync(@NonNull OnMapReadyCallback onMapReadyCallback) {
-        SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.gmap);
-        mapFragment.getMapAsync(onMapReadyCallback);
+    public Single<GoogleMap> get() {
+        return Single.create(emitter -> {
+            SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.gmap);
+            mapFragment.getMapAsync(googleMap -> {
+                if (googleMap == null) {
+                    emitter.onError(new IllegalStateException("Couldn't get Google Map."));
+                    return;
+                }
+
+                emitter.onSuccess(googleMap);
+            });
+        });
     }
 }

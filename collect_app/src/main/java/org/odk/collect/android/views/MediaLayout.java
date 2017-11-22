@@ -426,7 +426,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // No picture
             dividerParams.addRule(RelativeLayout.BELOW, viewText.getId());
         } else {
-            Timber.e("Tried to add divider to uninitialized ATVWidget");
+            Timber.e("Tried to addSubscription divider to uninitialized ATVWidget");
             return;
         }
         addView(v, dividerParams);

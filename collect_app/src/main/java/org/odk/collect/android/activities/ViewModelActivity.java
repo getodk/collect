@@ -9,14 +9,16 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.BR;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public abstract class ViewModelActivity<VM extends ViewModel, VMF extends ViewModelProvider.Factory, DB extends ViewDataBinding>
         extends AppCompatActivity {
@@ -31,18 +33,23 @@ public abstract class ViewModelActivity<VM extends ViewModel, VMF extends ViewMo
     @Nullable
     public VMF viewModelFactory;
 
+    private CompositeDisposable compositeDisposable;
+
     @Override
-    protected void onCreate(@android.support.annotation.Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidInjection.inject(this);
 
-        this.binding = createBinding();
-        this.viewModel = createViewModel();
+        compositeDisposable = new CompositeDisposable();
+
+        binding = createBinding();
+        viewModel = createViewModel();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        compositeDisposable.dispose();
         viewModel = null;
 
         if (binding != null) {
@@ -68,6 +75,10 @@ public abstract class ViewModelActivity<VM extends ViewModel, VMF extends ViewMo
         return binding;
     }
 
+    protected void addSubscription(Disposable disposable) {
+        compositeDisposable.add(disposable);
+    }
+
     @LayoutRes
     protected abstract int getLayoutId();
 
@@ -86,7 +97,6 @@ public abstract class ViewModelActivity<VM extends ViewModel, VMF extends ViewMo
         if (viewModel != null) {
             return viewModel;
         }
-
 
         Class<VM> viewModelClass = getViewModelClass();
         ViewModelProvider viewModelProvider = getProvider();

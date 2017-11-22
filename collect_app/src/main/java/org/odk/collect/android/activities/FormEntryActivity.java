@@ -1320,7 +1320,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkView.getWidgets()) {
                     if (!qw.getFormEntryPrompt().isReadOnly()) {
-                        // If it's a StringWidget register all its elements apart from EditText as
+                        // If it's a StringWidget addSubscription all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
                         if (qw instanceof StringWidget) {
                             for (int i = 0; i < qw.getChildCount(); i++) {
@@ -1788,7 +1788,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         //
                         // When showNextView() popups an error dialog (because of a
                         // JavaRosaException)
-                        // the issue is that the "add new repeat dialog" is referenced by
+                        // the issue is that the "addSubscription new repeat dialog" is referenced by
                         // alertDialog
                         // like the error dialog. When the "no repeat" is clicked, the error dialog
                         // is shown. Android by default dismisses the dialogs when a button is

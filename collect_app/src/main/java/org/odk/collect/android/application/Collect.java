@@ -41,6 +41,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.injection.AppInjector;
 import org.odk.collect.android.injection.DaggerAppComponent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
@@ -259,13 +260,10 @@ public class Collect extends Application implements HasActivityInjector {
         super.onCreate();
         singleton = this;
 
+        AppInjector.init(this);
+
         // It must be called before you save anything to SharedPreferences
         loadDefaultValuesIfNeeded();
-
-        DaggerAppComponent.builder()
-                .application(this)
-                .build()
-                .inject(this);
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -357,7 +355,7 @@ public class Collect extends Application implements HasActivityInjector {
     }
 
     @Override
-    public AndroidInjector<Activity> activityInjector() {
+    public DispatchingAndroidInjector<Activity> activityInjector() {
         return androidInjector;
     }
 }

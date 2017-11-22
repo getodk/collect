@@ -8,10 +8,10 @@ import org.odk.collect.android.injection.scopes.ApplicationScope;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
+import dagger.android.support.AndroidSupportInjectionModule;
 
-@ApplicationScope
 @Component(modules = {
-        AndroidInjectionModule.class,
+        AndroidSupportInjectionModule.class,
         AppModule.class,
         ActivityBuilder.class
 })

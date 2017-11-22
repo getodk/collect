@@ -36,7 +36,7 @@ public class TimerSaveTask extends AsyncTask<TimerLogger.Event, Void, Void> {
             if (params.length > 0) {
                 for (TimerLogger.Event ev : params) {
                     fw.write(ev.toString() + "\n");
-                    Timber.i("Log audit Event: %s", ev.toString());
+                    Timber.i("Log audit Click: %s", ev.toString());
                 }
             }
         } catch (IOException e) {

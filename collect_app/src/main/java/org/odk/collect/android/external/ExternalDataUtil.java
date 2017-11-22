@@ -166,7 +166,7 @@ public final class ExternalDataUtil {
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
-                    // we can only add only the appropriate by querying the xPathFuncExpr.id.name
+                    // we can only addSubscription only the appropriate by querying the xPathFuncExpr.id.name
                     evaluationContext.addFunctionHandler(
                             new ExternalDataHandlerSearch(externalDataManager, displayColumns,
                                     value, imageColumn));

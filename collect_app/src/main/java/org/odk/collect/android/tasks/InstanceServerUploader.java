@@ -310,7 +310,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // find all files in parent directory
         File[] allFiles = instanceFile.getParentFile().listFiles();
 
-        // add media files
+        // addSubscription media files
         List<File> files = new ArrayList<File>();
         if (allFiles != null) {
             for (File f : allFiles) {
@@ -360,7 +360,7 @@ public class InstanceServerUploader extends InstanceUploader {
             // mime post
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
-            // add the submission file first...
+            // addSubscription the submission file first...
             FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
             builder.addPart("xml_submission_file", fb);
             Timber.i("added xml_submission_file: %s", submissionFile.getName());
@@ -527,7 +527,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     String urlString = c.isNull(subIdx)
                             ? getServerSubmissionURL() : c.getString(subIdx).trim();
 
-                    // add the deviceID to the request...
+                    // addSubscription the deviceID to the request...
                     try {
                         urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
                     } catch (UnsupportedEncodingException e) {

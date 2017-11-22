@@ -141,7 +141,7 @@ public class ExternalAnswerResolver extends DefaultAnswerResolver {
                                 return new SelectOneData(customSelectChoice.selection());
                             }
                             case Constants.CONTROL_SELECT_MULTI: {
-                                // we should create multiple selections and add them to the pile
+                                // we should create multiple selections and addSubscription them to the pile
                                 List<SelectChoice> customSelectChoices = createCustomSelectChoices(
                                         textVal);
                                 List<Selection> customSelections = new ArrayList<Selection>();

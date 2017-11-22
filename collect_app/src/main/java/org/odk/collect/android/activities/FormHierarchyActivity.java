@@ -339,7 +339,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                         // ignore group events
                         break;
                     case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                        // this would display the 'add new repeat' dialog
+                        // this would display the 'addSubscription new repeat' dialog
                         // ignore it.
                         break;
                     case FormEntryController.EVENT_REPEAT:

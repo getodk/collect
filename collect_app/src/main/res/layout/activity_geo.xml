@@ -29,8 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dip"
+                android:text="@{viewModel.info}"
                 android:textColor="#FFFFFF"
-                app:geoMode="@{viewModel.mode}"
                 tools:text="@string/geopoint_instruction" />
 
             <TextView
@@ -38,9 +38,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="3dip"
-                android:text="@string/please_wait_long"
+                android:text="@{viewModel.status}"
                 android:textColor="#FFFFFF"
                 app:isPresent="@{viewModel.status != null}"
+                tools:text="@string/please_wait_long"
                 tools:visibility="visible" />
 
             <fragment
@@ -68,7 +69,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:onClick="@{() -> viewModel.onReloadLocation()}"
                     android:padding="15dp"
                     android:src="@drawable/ic_add_location_black_36dp"
                     app:isPresent="@{viewModel.mode != GeoMode.SHAPE}"
@@ -80,7 +80,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:onClick="@{() -> viewModel.onShowLocation()}"
                     android:padding="15dp"
                     android:src="@drawable/ic_my_location_black_36dp" />
 
@@ -90,7 +89,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:onClick="@{() -> viewModel.onShowLayers()}"
                     android:padding="15dp"
                     android:src="@drawable/ic_layers_black_36dp" />
 
@@ -99,7 +97,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:onClick="@{() -> viewModel.onClear()}"
                     android:padding="15dp"
                     android:src="@drawable/ic_delete_black_36dp" />
 
@@ -109,7 +106,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:onClick="@{() -> viewModel.onAcceptLocation()}"
                     android:padding="15dp"
                     android:src="@drawable/ic_save_black_36dp" />
             </LinearLayout>

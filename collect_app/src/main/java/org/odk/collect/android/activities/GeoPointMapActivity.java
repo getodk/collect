@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,6 +45,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.android.spatial.MapHelper;
+import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.GeoPointWidget;
+
+import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
@@ -100,12 +107,37 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+
         if (savedInstanceState != null) {
             locationCount = savedInstanceState.getInt(LOCATION_COUNT);
         }
 
+        try {
+            setContentView(R.layout.geopoint_layout);
+
+        } catch (NoClassDefFoundError e) {
+            Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
+            finish();
+            return;
+        }
+
+        locationStatus = (TextView) findViewById(R.id.location_status);
+        locationInfo = (TextView) findViewById(R.id.location_info);
+        reloadLocation = (ImageButton) findViewById(R.id.reload_location);
+        showLocation = (ImageButton) findViewById(R.id.show_location);
+
         locationClient = LocationClients.clientForContext(this);
         locationClient.setListener(this);
+
+        isMapReady = false;
+        ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setupMap(googleMap);
+            }
+        });
     }
 
     @Override
@@ -122,6 +154,201 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
         Collect.getInstance().getActivityLogger().logOnStop(this);
         super.onStop();
+    }
+
+    public void returnLocation() {
+        Intent i = new Intent();
+        if (setClear || (readOnly && latLng == null)) {
+            i.putExtra(FormEntryActivity.LOCATION_RESULT, "");
+            setResult(RESULT_OK, i);
+
+        } else if (isDragged || readOnly || locationFromIntent) {
+            Timber.i("IsDragged !!!");
+            i.putExtra(
+                    FormEntryActivity.LOCATION_RESULT,
+                    latLng.latitude + " " + latLng.longitude + " "
+                            + 0 + " " + 0);
+            setResult(RESULT_OK, i);
+        } else if (location != null) {
+            Timber.i("IsNotDragged !!!");
+
+            i.putExtra(
+                    FormEntryActivity.LOCATION_RESULT,
+                    getResultString(location)
+            );
+            setResult(RESULT_OK, i);
+        }
+        finish();
+    }
+
+
+    public String getResultString(Location location) {
+        return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(), location.getAltitude(), location.getAccuracy());
+    }
+
+    private String truncateFloat(float f) {
+        return new DecimalFormat("#.##").format(f);
+    }
+
+    private void setupMap(GoogleMap googleMap) {
+        map = googleMap;
+        if (map == null) {
+            ToastUtils.showShortToast(R.string.google_play_services_error_occured);
+            finish();
+            return;
+        }
+        helper = new MapHelper(this, map);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+
+        markerOptions = new MarkerOptions();
+        helper = new MapHelper(this, map);
+
+
+        ImageButton acceptLocation = (ImageButton) findViewById(R.id.accept_location);
+
+        acceptLocation.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation",
+                        "OK");
+                returnLocation();
+            }
+        });
+
+        reloadLocation.setEnabled(false);
+        reloadLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (marker != null) {
+                    marker.remove();
+                }
+                latLng = null;
+                marker = null;
+                setClear = false;
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                markerOptions.position(latLng);
+                if (marker == null) {
+                    marker = map.addMarker(markerOptions);
+                    if (draggable && !readOnly) {
+                        marker.setDraggable(true);
+                    }
+                }
+                captureLocation = true;
+                isDragged = false;
+                zoomToPoint();
+            }
+        });
+
+        // Focuses on marked location
+        //showLocation.setClickable(false);
+        showLocation.setEnabled(false);
+        showLocation.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showZoomDialog();
+            }
+        });
+
+        // Menu Layer Toggle
+        ImageButton layers = (ImageButton) findViewById(R.id.layer_menu);
+        layers.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helper.showLayersDialog(GeoPointMapActivity.this);
+            }
+        });
+        zoomDialogView = getLayoutInflater().inflate(R.layout.geopoint_zoom_dialog, null);
+        zoomLocationButton = (Button) zoomDialogView.findViewById(R.id.zoom_location);
+        zoomLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomToLocation();
+                zoomDialog.dismiss();
+            }
+        });
+
+        zoomPointButton = (Button) zoomDialogView.findViewById(R.id.zoom_point);
+        zoomPointButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                zoomToPoint();
+                zoomDialog.dismiss();
+            }
+        });
+
+        ImageButton clearPointButton = (ImageButton) findViewById(R.id.clear);
+        clearPointButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (marker != null) {
+                    marker.remove();
+                }
+                if (location != null) {
+                    reloadLocation.setEnabled(true);
+                    // locationStatus.setVisibility(View.VISIBLE);
+                }
+                // reloadLocation.setEnabled(true);
+                locationInfo.setVisibility(View.VISIBLE);
+                locationStatus.setVisibility(View.VISIBLE);
+                latLng = null;
+                marker = null;
+                setClear = true;
+                isDragged = false;
+                captureLocation = false;
+                draggable = intentDraggable;
+                locationFromIntent = false;
+                overlayMyLocationLayers();
+            }
+        });
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null) {
+            if (intent.hasExtra(GeoPointWidget.DRAGGABLE_ONLY)) {
+                draggable = intent.getBooleanExtra(GeoPointWidget.DRAGGABLE_ONLY, false);
+                intentDraggable = draggable;
+                if (!intentDraggable) {
+                    // Not Draggable, set text for Map else leave as placement-map text
+                    locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
+                }
+            }
+
+            if (intent.hasExtra(GeoPointWidget.READ_ONLY)) {
+                readOnly = intent.getBooleanExtra(GeoPointWidget.READ_ONLY, false);
+                if (readOnly) {
+                    captureLocation = true;
+                    clearPointButton.setEnabled(false);
+                }
+            }
+
+            if (intent.hasExtra(GeoPointWidget.LOCATION)) {
+                double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
+                latLng = new LatLng(location[0], location[1]);
+                captureLocation = true;
+                reloadLocation.setEnabled(false);
+                draggable = false; // If data loaded, must clear first
+                locationFromIntent = true;
+
+            }
+        }
+        /*Zoom only if there's a previous location*/
+        if (latLng != null) {
+            locationInfo.setVisibility(View.GONE);
+            locationStatus.setVisibility(View.GONE);
+            showLocation.setEnabled(true);
+            markerOptions.position(latLng);
+            marker = map.addMarker(markerOptions);
+            captureLocation = true;
+            foundFirstLocation = true;
+            zoomToPoint();
+        }
+
+        helper.setBasemap();
+
+        isMapReady = true;
+        upMyLocationOverlayLayers();
     }
 
     private void upMyLocationOverlayLayers() {
@@ -194,6 +421,13 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
+        latLng = marker.getPosition();
+        isDragged = true;
+        captureLocation = true;
+        setClear = false;
+        map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(latLng, map.getCameraPosition().zoom));
+
     }
 
     @Override
@@ -347,9 +581,8 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
     }
 
     public String getAccuracyStringForLocation(Location location) {
-        return "";
-//        return getString(R.string.location_provider_accuracy, location.getProvider(),
-//                truncateFloat(location.getAccuracy()));
+        return getString(R.string.location_provider_accuracy, location.getProvider(),
+                truncateFloat(location.getAccuracy()));
     }
 
     public AlertDialog getZoomDialog() {

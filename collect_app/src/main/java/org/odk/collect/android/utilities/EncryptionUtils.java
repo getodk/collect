@@ -406,7 +406,7 @@ public class EncryptionUtils {
                     + ". Perhaps the file is locked?");
         }
 
-        // add elementSignatureSource for this file...
+        // addSubscription elementSignatureSource for this file...
         formInfo.appendFileSignatureSource(file);
 
         RandomAccessFile randomAccessFile = null;
