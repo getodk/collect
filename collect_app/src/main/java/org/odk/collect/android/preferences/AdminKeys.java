@@ -57,7 +57,7 @@ public final class AdminKeys {
     private static final String KEY_SHOW_MAP_BASEMAP            = "show_map_basemap";
 
     private static final String KEY_ANALYTICS                   = "analytics";
-    static final String KEY_MOVING_BACKWARDS                    = "moving_backwards";
+    public static final String KEY_MOVING_BACKWARDS             = "moving_backwards";
 
     /**
      * The admin preferences allow removing general preferences. This array contains
