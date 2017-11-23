@@ -51,12 +51,13 @@ public final class AdminKeys {
     private static final String KEY_AUTOSEND                    = "change_autosend";
 
     private static final String KEY_NAVIGATION                  = "change_navigation";
-    private static final String KEY_CONSTRAINT_BEHAVIOR         = "change_constraint_behavior";
+    static final String KEY_CONSTRAINT_BEHAVIOR                 = "change_constraint_behavior";
 
     private static final String KEY_SHOW_MAP_SDK                = "show_map_sdk";
     private static final String KEY_SHOW_MAP_BASEMAP            = "show_map_basemap";
 
     private static final String KEY_ANALYTICS                   = "analytics";
+    static final String KEY_MOVING_BACKWARDS                    = "moving_backwards";
 
     /**
      * The admin preferences allow removing general preferences. This array contains
@@ -102,7 +103,8 @@ public final class AdminKeys {
             KEY_ACCESS_SETTINGS  ,
             KEY_SAVE_AS          ,
             KEY_MARK_AS_FINALIZED,
-            KEY_CHANGE_ADMIN_PASSWORD
+            KEY_CHANGE_ADMIN_PASSWORD,
+            KEY_MOVING_BACKWARDS
     );
 
     static Collection<String> serverKeys = Collections.singletonList(

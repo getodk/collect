@@ -553,4 +553,9 @@
     <string name="coptic_month_mesori">Mesori</string>
     <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
     <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
+    <string name="moving_backwards_title">Moving backwards</string>
+    <string name="moving_backwards_summary">Allow moving backwards in forms</string>
+    <string name="moving_backwards_dialog_message">Configure the device to prevent users from bypassing this setting?\nThe list of changes are below:\n\n\u2022Disable Edit Saved Form\n\u2022Disable Save Form\n\u2022Disable Go To Prompt\n\u2022Set Constraint processing to Validate upon forward swipe</string>
+    <string name="moving_backwards_enabled_title">Moving backwards enabled!</string>
+    <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022Edit Saved Form\n\u2022Save Form\n\u2022Go To Prompt\n\u2022Constraint processing</string>
 </resources>

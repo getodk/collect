@@ -19,6 +19,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -33,14 +34,21 @@ import android.widget.EditText;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
+import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
+import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
+import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_IMPORT_SETTINGS;
-
+import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_CONSTRAINT_BEHAVIOR;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -57,6 +65,20 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
+
+        findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (((CheckBoxPreference) preference).isChecked()) {
+                    new MovingBackwardsDialog().show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
+                    return false;
+                } else {
+                    SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
+                    return true;
+                }
+            }
+        });
+
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
@@ -169,6 +191,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.main_menu_access_preferences);
+            findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
         }
 
         @Override
@@ -197,6 +220,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.user_settings_access_preferences);
+
+            findPreference(KEY_CONSTRAINT_BEHAVIOR).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
         }
 
         @Override
@@ -223,6 +248,9 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.form_entry_access_preferences);
+
+            findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
+            findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
         }
 
         @Override

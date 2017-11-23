@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,6 +30,12 @@ import java.io.ObjectOutputStream;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_CONSTRAINT_BEHAVIOR;
+
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
@@ -36,7 +43,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends CollectAbstractActivity {
+public class AdminPreferencesActivity extends CollectAbstractActivity implements MovingBackwardsDialog.MovingBackwardsDialogListener {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
@@ -81,5 +88,16 @@ public class AdminPreferencesActivity extends CollectAbstractActivity {
                     .add(android.R.id.content, new AdminPreferencesFragment(), TAG)
                     .commit();
         }
+    }
+
+    @Override
+    public void onMovingBackwardsDisabled() {
+        AdminSharedPreferences.getInstance().save(KEY_MOVING_BACKWARDS, false);
+        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
+        AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
+        AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
+        AdminSharedPreferences.getInstance().save(KEY_CONSTRAINT_BEHAVIOR, true);
+
+        recreate();
     }
 }
