@@ -175,7 +175,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     private EditText getEditText() {
