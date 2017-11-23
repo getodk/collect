@@ -18,22 +18,18 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.text.Editable;
-import android.text.InputFilter;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.TextView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -54,17 +50,19 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
     private Button getBearingButton;
-    private TextView answerDisplay;
     private boolean isSensorAvailable = false;
-    private EditText manualDataEntry;
+    private EditText answer;
     private LinearLayout answerLayout = new LinearLayout(getContext());
+    private Drawable textBackground;
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         isSensorAvailable = checkForRequiredSensors();
         answerLayout.setOrientation(LinearLayout.VERTICAL);
-        answerDisplay = getCenteredAnswerTextView();
+        answer = getEditText();
+        textBackground = answer.getBackground();
+        answer.setBackground(null);
 
         getBearingButton = getSimpleButton(getContext().getString(R.string.get_bearing));
         getBearingButton.setEnabled(!prompt.isReadOnly());
@@ -90,45 +88,38 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                 } else {
                     getBearingButton.setEnabled(false);
                     ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
-                    manualDataEntry = getEditText();
-                    manualDataEntry.setText(answerDisplay.getText().toString());
-                    manualDataEntry.requestFocus();
-                    answerLayout.addView(manualDataEntry);
+                    answer.setBackground(textBackground);
+                    answer.setFocusable(true);
+                    answer.setFocusableInTouchMode(true);
+                    answer.requestFocus();
                 }
-
             }
         });
 
-
         answerLayout.addView(getBearingButton);
-        answerLayout.addView(answerDisplay);
+        answerLayout.addView(answer);
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
 
             getBearingButton.setText(getContext().getString(R.string.replace_bearing));
-            if (!isSensorAvailable && manualDataEntry != null) {
-                manualDataEntry.setText(s);
+            if (!isSensorAvailable && answer != null) {
+                answer.setText(s);
             }
             setBinaryData(s);
         }
-
         addAnswerView(answerLayout);
     }
 
     @Override
     public void clearAnswer() {
-        answerDisplay.setText(null);
-        if (isSensorAvailable) {
-            getBearingButton.setText(getContext().getString(R.string.get_bearing));
-        } else if (manualDataEntry != null) {
-            manualDataEntry.setText(null);
-        }
-
+        answer.setText(null);
+        getBearingButton.setText(getContext().getString(R.string.get_bearing));
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String s = answerDisplay.getText().toString();
+        String s = answer.getText().toString();
+
         if (s.equals("")) {
             return null;
         } else {
@@ -146,7 +137,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
 
     @Override
     public void setBinaryData(Object answer) {
-        answerDisplay.setText((String) answer);
+        this.answer.setText((String) answer);
         cancelWaitingForData();
     }
 
@@ -155,7 +146,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         if (isSensorAvailable) {
             getBearingButton.setOnLongClickListener(l);
         }
-        answerDisplay.setOnLongClickListener(l);
+        answer.setOnLongClickListener(l);
     }
 
     @Override
@@ -164,7 +155,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         if (isSensorAvailable) {
             getBearingButton.cancelLongPress();
         }
-        answerDisplay.cancelLongPress();
+        answer.cancelLongPress();
     }
 
     private boolean checkForRequiredSensors() {
@@ -184,7 +175,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             return false;
         }
 
-        return true;
+        return false;
     }
 
     private EditText getEditText() {
@@ -193,67 +184,12 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         manualData.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         manualData.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         manualData.setKeyListener(new DigitsKeyListener(true, true));
-        manualData.setFocusable(true);
-        manualData.setFocusableInTouchMode(true);
-
+        manualData.setFocusable(false);
+        manualData.setFocusableInTouchMode(false);
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
-        final InputFilter[] fa = new InputFilter[1];
-        fa[0] = new InputFilter.LengthFilter(7);
-        manualData.setFilters(fa);
         manualData.setLayoutParams(params);
 
-        manualData.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String data = manualData.getText().toString();
-                if (!data.equals("") && isValidInput(data)) {
-                    answerDisplay.setText(manualData.getText().toString());
-                    ToastUtils.showShortToast("Data entered : " + data);
-                    return true;
-                } else {
-                    ToastUtils.showShortToast(R.string.enter_correct_data);
-                    return false;
-                }
-            }
-        });
-
-        manualData.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String s = manualData.getText().toString();
-                if (!s.equals("") && isValidInput(s)) {
-                    answerDisplay.setText(s);
-                } else {
-                    ToastUtils.showShortToast(R.string.enter_correct_data);
-                }
-            }
-        });
-        return  manualData;
+        return manualData;
     }
-
-    private boolean isValidInput(String input) {
-        double d;
-        try {
-            d = Double.valueOf(input);
-        } catch (NumberFormatException e) {
-           return false;
-        }
-
-        if (d >= 0 && d <= 360.0) {
-            return true;
-        }
-        return false;
-    }
-
 }
