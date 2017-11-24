@@ -553,4 +553,16 @@
     <string name="coptic_month_mesori">Mesori</string>
     <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
     <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
+    <string name="islamic_month_muḥarram">Muḥarram</string>
+    <string name="islamic_month_safar">Ṣafar</string>
+    <string name="islamic_month_rabiul_awwal">Rabī‘ al-awwal</string>
+    <string name="islamic_month_rabi_uthani">Rabī‘ ath-thānī</string>
+    <string name="islamic_month_jumadi_ul_awwal">Jumādá al-ūlá</string>
+    <string name="islamic_month_jumadi_uthani">Jumādá al-ākhirah</string>
+    <string name="islamic_month_rajab">Rajab</string>
+    <string name="islamic_month_shaban">Sha‘bān</string>
+    <string name="islamic_month_ramadan">Ramaḍān</string>
+    <string name="islamic_month_shawwal">Shawwāl</string>
+    <string name="islamic_month_zhul_qada">Dhū al-Qa‘dah</string>
+    <string name="islamic_month_zhul_hijja">Dhū al-Ḥijjah</string>
 </resources>

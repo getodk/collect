@@ -158,4 +158,18 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/coptic_month_mesori</item>
         <item>@string/coptic_month_pi_kogi_enavot</item>
     </string-array>
+    <string-array name="islamic_months">
+        <item>@string/islamic_month_muḥarram</item>
+        <item>@string/islamic_month_safar</item>
+        <item>@string/islamic_month_rabiul_awwal</item>
+        <item>@string/islamic_month_rabi_uthani</item>
+        <item>@string/islamic_month_jumadi_ul_awwal</item>
+        <item>@string/islamic_month_jumadi_uthani</item>
+        <item>@string/islamic_month_rajab</item>
+        <item>@string/islamic_month_shaban</item>
+        <item>@string/islamic_month_ramadan</item>
+        <item>@string/islamic_month_shawwal</item>
+        <item>@string/islamic_month_zhul_qada</item>
+        <item>@string/islamic_month_zhul_hijja</item>
+    </string-array>
 </resources>
