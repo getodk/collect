@@ -66,7 +66,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.SHOULD_LOAD_DEFAULT_VALUES;
 
 /**
  * The Open Data Kit Collect application.
@@ -287,15 +286,6 @@ public class Collect extends Application {
         setupLeakCanary();
     }
 
-    // Default values should be loaded after a fresh installation or first app run after upgrading to the version in which the flag was introduced
-    private boolean shouldLoadDefaultValues() {
-        boolean firstAppRun = GeneralSharedPreferences.getInstance().getBoolean(SHOULD_LOAD_DEFAULT_VALUES, true);
-        if (firstAppRun) {
-            GeneralSharedPreferences.getInstance().save(SHOULD_LOAD_DEFAULT_VALUES, false);
-        }
-        return firstAppRun;
-    }
-
     private void setupLeakCanary() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -358,7 +348,7 @@ public class Collect extends Application {
     }
 
     private void loadDefaultValuesIfNeeded() {
-        if (shouldLoadDefaultValues()) {
+        if (GeneralSharedPreferences.getInstance().getAll().isEmpty()) {
             GeneralSharedPreferences.getInstance().loadDefaultValues();
             AdminSharedPreferences.getInstance().loadDefaultValues();
         }
