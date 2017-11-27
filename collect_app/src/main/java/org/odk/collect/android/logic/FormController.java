@@ -1144,18 +1144,18 @@ public class FormController {
             // instance id...
             v = e.getChildrenWithName(INSTANCE_ID);
             if (v.size() == 1) {
-                StringData sa = (StringData) v.get(0).getValue();
+                IAnswerData sa = v.get(0).getValue();
                 if (sa != null) {
-                    instanceId = (String) sa.getValue();
+                    instanceId = sa.getDisplayText();
                 }
             }
 
             // instance name...
             v = e.getChildrenWithName(INSTANCE_NAME);
             if (v.size() == 1) {
-                StringData sa = (StringData) v.get(0).getValue();
+                IAnswerData sa = v.get(0).getValue();
                 if (sa != null) {
-                    instanceName = (String) sa.getValue();
+                    instanceName = sa.getDisplayText();
                 }
             }
 

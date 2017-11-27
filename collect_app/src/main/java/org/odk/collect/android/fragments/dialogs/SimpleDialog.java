@@ -22,6 +22,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+
+import timber.log.Timber;
 
 /**
  * This class might be used as an universal simple dialog. You can use it if you just need to
@@ -35,17 +38,36 @@ public class SimpleDialog extends DialogFragment {
     private static final String ICON_ID = "iconId";
     private static final String MESSAGE = "message";
     private static final String BUTTON_TITLE = "buttonTitle";
+    private static final String FINISH_ACTIVITY = "finishActivity";
 
-    public static SimpleDialog newInstance(String dialogTitle, int iconId, String message, String buttonTitle) {
+    public static SimpleDialog newInstance(String dialogTitle, int iconId, String message, String buttonTitle, boolean finishActivity) {
         Bundle bundle = new Bundle();
         bundle.putString(DIALOG_TITLE, dialogTitle);
         bundle.putInt(ICON_ID, iconId);
         bundle.putString(MESSAGE, message);
         bundle.putString(BUTTON_TITLE, buttonTitle);
+        bundle.putBoolean(FINISH_ACTIVITY, finishActivity);
 
         SimpleDialog dialogFragment = new SimpleDialog();
         dialogFragment.setArguments(bundle);
         return dialogFragment;
+    }
+
+    /*
+    We keep this just in case to avoid problems if someone tries to show a dialog after
+    the activity’s state have been saved. Basically it shouldn't take place since we should control
+    the activity state if we want to show a dialog (especially after long tasks).
+     */
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            manager
+                    .beginTransaction()
+                    .add(this, tag)
+                    .commit();
+        } catch (IllegalStateException e) {
+            Timber.w(e);
+        }
     }
 
     @Override
@@ -59,6 +81,9 @@ public class SimpleDialog extends DialogFragment {
                 .setPositiveButton(getArguments().getString(BUTTON_TITLE), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        if (getArguments().getBoolean(FINISH_ACTIVITY)) {
+                            getActivity().finish();
+                        }
                     }
                 })
                 .create();

@@ -205,7 +205,6 @@
   <string name="autosend">स्वतः भेजें</string>
   <string name="found_in_main">मुख्य मेनू से छुपाने के लिए अनचेक करें</string>
   <string name="found_in_settings">सामान्य सेटिंग्स से छुपाने के लिए अनचेक करें</string>
-  <string name="no_account">कोई अकाउंट नहीं</string>
   <string name="save_preferences">सेटिंग्स डिस्क पर संरक्षित करे</string>
   <string name="form_forward">आगामी</string>
   <string name="form_backward">पिछला</string>
@@ -420,6 +419,10 @@
   <string name="instance_scan_count">%1$dफॉर्म जोड दिया.</string>
   <string name="instance_sync">संरक्षित फॉर्म को फाइनल रूप में आयात करें</string>
   <string name="instance_sync_summary">संरक्षित फॉर्म इंस्टैंस फोल्डर से आयत करें  </string>
+  <string name="sort_by_name_asc">नाम, A-Z</string>
+  <string name="sort_by_name_desc">नाम, Z-A</string>
+  <string name="sort_by_date_asc">दिनांक, नयी पहले </string>
+  <string name="sort_by_status_desc">अवस्था, बिना फाइनल हुए शब्द</string>
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
   <string name="request_permissions_google_account">ODK कलेक्ट को रिक्त फॉर्म प्राप्त करने के लिए, और भरे गए फॉर्म सबमिट करने के लिए, आपके गूगल अकाउंट तक पहुंच की आवश्यकता है।</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>

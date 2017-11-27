@@ -191,7 +191,6 @@
   <string name="enter_admin_password">प्रशासक पासवर्ड हाल्नुहोस् </string>
   <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
   <string name="found_in_settings">जेनेरल सेटिंग मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
-  <string name="no_account">खाता छैन </string>
   <string name="save_preferences">सेटिङ्सलाई डिस्कमा सेभ गर्नुहोस्</string>
   <string name="form_forward">अघि</string>
   <string name="form_backward">पछि</string>

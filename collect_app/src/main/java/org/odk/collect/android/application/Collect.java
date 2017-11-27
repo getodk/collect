@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
+import com.squareup.leakcanary.LeakCanary;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -41,6 +42,7 @@ import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -86,6 +88,7 @@ public class Collect extends Application {
     public static final int DEFAULT_FONTSIZE_INT = 21;
     public static final String OFFLINE_LAYERS = ODK_ROOT + File.separator + "layers";
     public static final String SETTINGS = ODK_ROOT + File.separator + "settings";
+
     public static String defaultSysLanguage;
     private static Collect singleton = null;
 
@@ -266,7 +269,8 @@ public class Collect extends Application {
         new LocaleHelper().updateLocale(this);
         singleton = this;
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        loadDefaultValuesIfNeeded();
+
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
 
@@ -276,8 +280,18 @@ public class Collect extends Application {
         if (BuildConfig.BUILD_TYPE.equals("odkCollectRelease")) {
             Timber.plant(new CrashReportingTree());
         } else {
-            Timber.plant(new NotLoggingTree());
+            Timber.plant(new Timber.DebugTree());
         }
+
+        setupLeakCanary();
+    }
+
+    private void setupLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+        }
+        LeakCanary.install(this);
     }
 
     @Override
@@ -306,12 +320,6 @@ public class Collect extends Application {
         return tracker;
     }
 
-    private class NotLoggingTree extends Timber.Tree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-        }
-    }
-
     private static class CrashReportingTree extends Timber.Tree {
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
@@ -337,5 +345,12 @@ public class Collect extends Application {
 
         FormController.initializeJavaRosa(mgr);
         activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+    }
+
+    private void loadDefaultValuesIfNeeded() {
+        if (GeneralSharedPreferences.getInstance().getAll().isEmpty()) {
+            GeneralSharedPreferences.getInstance().loadDefaultValues();
+            AdminSharedPreferences.getInstance().loadDefaultValues();
+        }
     }
 }

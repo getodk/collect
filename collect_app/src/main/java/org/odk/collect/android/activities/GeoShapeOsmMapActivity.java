@@ -94,7 +94,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         clearButton = (ImageButton) findViewById(R.id.clear);
 
         map = (MapView) findViewById(R.id.geoshape_mapview);
-        helper = new MapHelper(this, map, GeoShapeOsmMapActivity.this);
+        helper = new MapHelper(this, map, this);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMapListener(mapViewListener);

@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -23,11 +22,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceServerUploader;
@@ -48,21 +47,18 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends AppCompatActivity implements InstanceUploaderListener,
+public class InstanceUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
 
     private static final String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
-    private static final String ALERT_SHOWING = "alertshowing";
     private static final String TO_SEND = "tosend";
 
     private ProgressDialog progressDialog;
-    private AlertDialog alertDialog;
 
     private String alertMsg;
-    private boolean alertShowing;
 
     private InstanceServerUploader instanceServerUploader;
 
@@ -79,7 +75,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         Timber.i("onCreate: %s", ((savedInstanceState == null) ? "creating" : "re-initializing"));
 
         alertMsg = getString(R.string.please_wait);
-        alertShowing = false;
 
         uploadedInstances = new HashMap<String, String>();
 
@@ -89,9 +84,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(ALERT_MSG)) {
                 alertMsg = savedInstanceState.getString(ALERT_MSG);
-            }
-            if (savedInstanceState.containsKey(ALERT_SHOWING)) {
-                alertShowing = savedInstanceState.getBoolean(ALERT_SHOWING, false);
             }
 
             url = savedInstanceState.getString(AUTH_URI);
@@ -126,8 +118,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
             instanceServerUploader = new InstanceServerUploader();
 
             // register this activity with the new uploader task
-            instanceServerUploader.setUploaderListener(InstanceUploaderActivity.this);
-
+            instanceServerUploader.setUploaderListener(this);
             instanceServerUploader.execute(instancesToSend);
         }
     }
@@ -144,37 +135,21 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         if (instanceServerUploader != null) {
             instanceServerUploader.setUploaderListener(this);
         }
-        if (alertShowing) {
-            createAlertDialog(alertMsg);
-        }
         super.onResume();
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, alertMsg);
-        outState.putBoolean(ALERT_SHOWING, alertShowing);
         outState.putString(AUTH_URI, url);
         outState.putLongArray(TO_SEND, ArrayUtils.toPrimitive(instancesToSend));
     }
-
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return instanceServerUploader;
     }
-
-    @Override
-    protected void onPause() {
-        Timber.i("onPause: Pausing upload of %d instances!", instancesToSend.length);
-        super.onPause();
-        if (alertDialog != null && alertDialog.isShowing()) {
-            alertDialog.dismiss();
-        }
-    }
-
 
     @Override
     protected void onStop() {
@@ -200,7 +175,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         } catch (Exception e) {
             // tried to close a dialog not open. don't care.
         }
-
 
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
@@ -264,7 +238,12 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         if (message.length() == 0) {
             message.append(getString(R.string.no_forms_uploaded));
         }
-        createAlertDialog(message.toString().trim());
+
+        if (!isInstanceStateSaved()) {
+            createUploadInstancesResultDialog(message.toString().trim());
+        } else {
+            finish();
+        }
     }
 
     private String localizeDefaultAggregateSuccessfulText(String text) {
@@ -279,7 +258,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         progressDialog.setMessage(alertMsg);
     }
-
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -320,7 +298,6 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         return null;
     }
 
-
     @Override
     public void authRequest(Uri url, HashMap<String, String> doneSoFar) {
         if (progressDialog.isShowing()) {
@@ -357,33 +334,15 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         showDialog(AUTH_DIALOG);
     }
 
+    private void createUploadInstancesResultDialog(String message) {
+        Collect.getInstance().getActivityLogger().logAction(this, "createUploadInstancesResultDialog", "show");
 
-    private void createAlertDialog(String message) {
-        Collect.getInstance().getActivityLogger().logAction(this, "createAlertDialog", "show");
+        String dialogTitle = getString(R.string.upload_results);
+        int iconID = android.R.drawable.ic_dialog_info;
+        String buttonTitle = getString(R.string.ok);
 
-        alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(getString(R.string.upload_results));
-        alertDialog.setMessage(message);
-        DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE: // ok
-                        Collect.getInstance().getActivityLogger().logAction(this,
-                                "createAlertDialog", "OK");
-                        // always exit this activity since it has no interface
-                        alertShowing = false;
-                        finish();
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(getString(R.string.ok), quitListener);
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        alertShowing = true;
-        alertMsg = message;
-        alertDialog.show();
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, message, buttonTitle, true);
+        simpleDialog.show(getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
     }
 
     @Override
@@ -392,7 +351,7 @@ public class InstanceUploaderActivity extends AppCompatActivity implements Insta
         instanceServerUploader = new InstanceServerUploader();
 
         // register this activity with the new uploader task
-        instanceServerUploader.setUploaderListener(InstanceUploaderActivity.this);
+        instanceServerUploader.setUploaderListener(this);
         instanceServerUploader.execute(instancesToSend);
     }
 

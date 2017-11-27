@@ -18,9 +18,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +36,7 @@ import timber.log.Timber;
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends AppCompatActivity {
+public class AdminPreferencesActivity extends CollectAbstractActivity {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 

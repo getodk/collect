@@ -205,7 +205,6 @@
   <string name="autosend">自動送信</string>
   <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
-  <string name="no_account">アカウントがありません</string>
   <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
   <string name="form_backward">前へ</string>
@@ -487,6 +486,7 @@
   <string name="form_submission_category">フォーム送信</string>
   <string name="form_filling_category">フォーム入力</string>
   <string name="high_resolution_title">高解像度ビデオ</string>
+  <string name="image_size_title">画像サイズ</string>
   <string name="form_import_category">フォームインポート</string>
   <string name="user_and_device_identity_title">ユーザーとデバイスの識別</string>
   <string name="constraint_behavior_title">処理の制約</string>
@@ -506,4 +506,11 @@
   <string name="deleting_form_dialog_update_message">フォーム削除中: %1$d / %2$d </string>
   <string name="search">検索</string>
   <string name="null_intent_value">外部アプリケーションが、期待した情報を提供しませんでした。</string>
+  <string name="image_size_large">大 (3072px)</string>
+  <string name="image_size_medium">中 (2048px)</string>
+  <string name="image_size_small">小 (1024px)</string>
+  <string name="image_size_very_small">極小 (640px)</string>
+  <string name="image_size_original">カメラの元のサイズ (デフォルト)</string>
+  <string name="image_size_dialog_title">画像の長辺の最大ピクセル数</string>
+  <string name="bearing_lack_of_sensors">挙動を収集できません: デバイスに加速度センサー、磁場センサー、またはその両方がありません。</string>
 </resources>

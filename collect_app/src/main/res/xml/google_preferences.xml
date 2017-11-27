@@ -3,7 +3,7 @@
     <PreferenceCategory
         android:key="@string/google_preferences"
         android:title="@string/google_preferences">
-        <ListPreference
+        <Preference
             android:key="selected_google_account"
             android:title="@string/selected_google_account_text" />
         <EditTextPreference

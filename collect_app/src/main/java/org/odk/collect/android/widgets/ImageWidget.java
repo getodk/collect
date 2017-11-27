@@ -77,8 +77,9 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
         errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
+
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,19 +110,17 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
                 }
                 try {
                     waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CAPTURE);
+                    ((Activity) getContext()).startActivityForResult(i,RequestCodes.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
                             getContext().getString(R.string.activity_not_found, "image capture"),
                             Toast.LENGTH_SHORT).show();
                     cancelWaitingForData();
                 }
-
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +144,6 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
 
             }
         });
-
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -161,6 +159,23 @@ public class ImageWidget extends QuestionWidget implements BaseImageWidget {
             chooseButton.setVisibility(View.GONE);
         }
         errorTextView.setVisibility(View.GONE);
+
+
+        if (selfie) {
+            boolean isFrontCameraAvailable;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                isFrontCameraAvailable = CaptureSelfieActivityNewApi.isFrontCameraAvailable();
+            } else {
+                isFrontCameraAvailable = CaptureSelfieActivity.isFrontCameraAvailable();
+            }
+
+            if (!isFrontCameraAvailable) {
+                captureButton.setEnabled(false);
+                errorTextView.setText(R.string.error_front_camera_unavailable);
+                errorTextView.setVisibility(View.VISIBLE);
+            }
+
+        }
 
         // retrieve answer from data model and update ui
         binaryName = prompt.getAnswerText();

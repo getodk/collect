@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -84,6 +85,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
+import org.odk.collect.android.injection.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -99,6 +101,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
@@ -139,6 +142,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 public class FormEntryActivity extends AppCompatActivity implements AnimationListener,
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
+        DependencyProvider<ActivityAvailability>,
         CustomDatePickerDialog.CustomDatePickerDialogListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
@@ -179,6 +183,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
+
+    public static final String EXTRA_TESTING_PATH = "testingPath";
 
     private static final int PROGRESS_DIALOG = 1;
     private static final int SAVING_DIALOG = 2;
@@ -230,6 +236,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private FormsDao formsDao;
 
     private Bundle state;
+
+    @NonNull
+    private ActivityAvailability activityAvailability = new ActivityAvailability(this);
+
+    private boolean shouldOverrideAnimations = false;
 
     /**
      * Called when the activity is first created.
@@ -366,7 +377,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     uriMimeType = getContentResolver().getType(uri);
                 }
 
-                if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
+                if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
+                    formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
+
+                } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
@@ -1555,6 +1569,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // complete setup for animations...
         inAnimation.setAnimationListener(this);
         outAnimation.setAnimationListener(this);
+
+        if (shouldOverrideAnimations) {
+            inAnimation.setDuration(0);
+            outAnimation.setDuration(0);
+        }
 
         // drop keyboard before transition...
         if (currentView != null) {
@@ -2942,6 +2961,19 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return (ODKView) currentView;
         }
         return null;
+    }
+
+    @Override
+    public ActivityAvailability provide() {
+        return activityAvailability;
+    }
+
+    public void setActivityAvailability(@NonNull ActivityAvailability activityAvailability) {
+        this.activityAvailability = activityAvailability;
+    }
+
+    public void setShouldOverrideAnimations(boolean shouldOverrideAnimations) {
+        this.shouldOverrideAnimations = shouldOverrideAnimations;
     }
 
     /**
