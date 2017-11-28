@@ -154,12 +154,13 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
     public void initAccountPreferences() {
         accountsManager = new GoogleAccountsManager(this, this);
+        accountsManager.disableAutoChooseAccount();
 
         selectedGoogleAccountPreference.setSummary(accountsManager.getGoogleAccountName());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                accountsManager.chooseAccount(false);
+                accountsManager.chooseAccount();
                 return true;
             }
         });

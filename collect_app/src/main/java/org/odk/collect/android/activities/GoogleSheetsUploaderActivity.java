@@ -153,7 +153,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount(true);
+            accountsManager.chooseAccount();
         } else if (!isDeviceOnline()) {
             ToastUtils.showShortToast("No network connection available.");
         } else {

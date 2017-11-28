@@ -236,7 +236,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
      */
     private void getResultsFromApi() {
         if (!accountsManager.isGoogleAccountSelected()) {
-            accountsManager.chooseAccount(true);
+            accountsManager.chooseAccount();
         } else {
             if (isDeviceOnline()) {
                 toDownload.clear();

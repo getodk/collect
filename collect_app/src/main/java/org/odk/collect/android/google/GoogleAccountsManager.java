@@ -67,6 +67,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private HttpTransport transport = AndroidHttp.newCompatibleTransport();
     private JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
+    private boolean autoChooseAccount = true;
+
     public GoogleAccountsManager(@NonNull Activity activity, GoogleAccountSelectionListener listener) {
         this.activity = activity;
         this.listener = listener;
@@ -110,10 +112,11 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 requestCode, permissions, grantResults, this);
     }
 
-    public void chooseAccount(boolean shouldUseSavedAccount) {
+    public void chooseAccount() {
         if (EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS)) {
 
-            if (shouldUseSavedAccount) {
+            // auto selects the google account saved in preferences
+            if (autoChooseAccount) {
                 String accountName = getGoogleAccountName();
                 if (!accountName.isEmpty()) {
                     selectAccount(accountName);
@@ -206,6 +209,10 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     public GoogleAccountCredential getCredentials() {
         return credential;
+    }
+
+    public void disableAutoChooseAccount() {
+        this.autoChooseAccount = false;
     }
 
     public interface GoogleAccountSelectionListener {
