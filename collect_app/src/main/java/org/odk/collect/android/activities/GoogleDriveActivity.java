@@ -218,7 +218,8 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
         searchButton = (ImageButton) findViewById(R.id.search_button);
         searchButton.setOnClickListener(this);
 
-        accountsManager = new GoogleAccountsManager(this, this);
+        accountsManager = new GoogleAccountsManager(this);
+        accountsManager.setListener(this);
         driveHelper = accountsManager.getDriveHelper();
         getResultsFromApi();
     }

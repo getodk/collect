@@ -57,10 +57,12 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private Fragment fragment;
     @Nullable
     private Activity activity;
+    @Nullable
+    private GoogleAccountSelectionListener listener;
 
     private Context context;
     private GoogleAccountCredential credential;
-    private GoogleAccountSelectionListener listener;
+
     private DriveHelper driveHelper;
     private SheetsHelper sheetsHelper;
 
@@ -69,17 +71,13 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     private boolean autoChooseAccount = true;
 
-    public GoogleAccountsManager(@NonNull Activity activity, GoogleAccountSelectionListener listener) {
+    public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
-        this.listener = listener;
-
         initCredentials(activity);
     }
 
-    public GoogleAccountsManager(@NonNull Fragment fragment, GoogleAccountSelectionListener listener) {
+    public GoogleAccountsManager(@NonNull Fragment fragment) {
         this.fragment = fragment;
-        this.listener = listener;
-
         initCredentials(fragment.getActivity());
     }
 
@@ -97,7 +95,9 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
-        listener.googleAccountSelected();
+        if (listener != null) {
+            listener.googleAccountSelected();
+        }
     }
 
     @Override
@@ -154,7 +154,9 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     private void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
-        listener.googleAccountSelected();
+        if (listener != null) {
+            listener.googleAccountSelected();
+        }
     }
 
     public boolean isGoogleAccountSelected() {
@@ -213,6 +215,10 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     public void disableAutoChooseAccount() {
         this.autoChooseAccount = false;
+    }
+
+    public void setListener(@Nullable GoogleAccountSelectionListener listener) {
+        this.listener = listener;
     }
 
     public interface GoogleAccountSelectionListener {

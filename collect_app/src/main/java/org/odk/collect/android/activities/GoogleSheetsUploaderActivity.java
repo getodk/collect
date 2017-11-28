@@ -115,7 +115,8 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);
         }
 
-        accountsManager = new GoogleAccountsManager(this, this);
+        accountsManager = new GoogleAccountsManager(this);
+        accountsManager.setListener(this);
 
         getResultsFromApi();
     }
