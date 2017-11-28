@@ -16,7 +16,6 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -46,7 +45,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -65,6 +63,8 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
 
 /**
@@ -114,15 +114,7 @@ public class Collect extends Application {
             return Collect.DEFAULT_FONTSIZE_INT;
         }
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(instance);
-        if (settings == null) {
-            return Collect.DEFAULT_FONTSIZE_INT;
-        }
-
-        String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
-                Collect.DEFAULT_FONTSIZE);
-
-        return Integer.parseInt(questionFont);
+        return Integer.parseInt(String.valueOf(GeneralSharedPreferences.getInstance().get(KEY_FONT_SIZE)));
     }
 
     /**
@@ -251,15 +243,13 @@ public class Collect extends Application {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void showKeyboard(View view) {
-        view.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
+        singleton = this;
+
+        // It must be called before you save anything to SharedPreferences
+        loadDefaultValuesIfNeeded();
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -267,9 +257,6 @@ public class Collect extends Application {
 
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
-        singleton = this;
-
-        loadDefaultValuesIfNeeded();
 
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
@@ -300,8 +287,7 @@ public class Collect extends Application {
 
         //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
-        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
+        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().getBoolean(KEY_APP_LANGUAGE, false);
         if (!isUsingSysLanguage) {
             new LocaleHelper().updateLocale(this);
         }
