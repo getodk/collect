@@ -15,6 +15,7 @@
 package org.odk.collect.android.google;
 
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -25,16 +26,15 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.utilities.FileUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -43,12 +43,22 @@ import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_
 
 public class DriveHelper {
 
-    private Drive drive;
+    private final Drive drive;
 
-    DriveHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
+    DriveHelper(@NonNull GoogleAccountCredential credential,
+                @NonNull HttpTransport transport,
+                @NonNull JsonFactory jsonFactory) {
         drive = new Drive.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
+    }
+
+    /**
+     * Constructs a new DriveHelper with the provided Drive Service.
+     * This Constructor should only be used for testing.
+     */
+    DriveHelper(@NonNull Drive drive) {
+        this.drive = drive;
     }
 
     /**
@@ -74,12 +84,9 @@ public class DriveHelper {
         return null;
     }
 
-    public void downloadFile(String fileId, String fileName) throws IOException {
-        FileOutputStream fileOutputStream = null;
+    public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
         try {
-            File file = new File(Collect.FORMS_PATH + File.separator + fileName);
-            fileOutputStream = new FileOutputStream(file);
-            downloadFile(fileId).writeTo(fileOutputStream);
+            drive.files().get(fileId).executeMediaAndDownloadTo(fileOutputStream);
         } finally {
             try {
                 if (fileOutputStream != null) {
@@ -89,12 +96,6 @@ public class DriveHelper {
                 Timber.e(e, "Unable to close the file output stream");
             }
         }
-    }
-
-    private ByteArrayOutputStream downloadFile(String fileId) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
-        return outputStream;
     }
 
     public String createOrGetIDOfFolderWithName(String jrFormId)
@@ -109,34 +110,46 @@ public class DriveHelper {
         return getIDOfFolderWithName(GOOGLE_DRIVE_SUBFOLDER, rootFolderId, true);
     }
 
+    /**
+     * Searches for the folder saved in google drive with the given name and returns it's id
+     *
+     * @param name                   The name of the folder saved in google drive
+     * @param inFolder               The id of the folder containing the given folder
+     * @param shouldCreateIfNotFound If the given folder is not found then this parameter decides
+     *                               whether to create a new folder with the given name or not
+     */
     @Nullable
-    public String getIDOfFolderWithName(String name, String inFolder, boolean shouldCreateIfNotFound) throws IOException, MultipleFoldersFoundException {
+    public String getIDOfFolderWithName(@NonNull String name, @Nullable String inFolder, boolean shouldCreateIfNotFound)
+            throws IOException, MultipleFoldersFoundException {
 
-        com.google.api.services.drive.model.File folder = null;
+        String id = null;
 
         // check if the folder exists
-        ArrayList<com.google.api.services.drive.model.File> files = getFilesFromDrive(name, inFolder);
+        List<com.google.api.services.drive.model.File> files = getFilesFromDrive(name, inFolder);
 
-        for (com.google.api.services.drive.model.File file : files) {
-            if (folder == null) {
-                folder = file;
-            } else {
-                throw new MultipleFoldersFoundException("Multiple \"" + name + "\" folders found");
-            }
+        if (files.size() > 1) {
+            throw new MultipleFoldersFoundException("Multiple \"" + name + "\" folders found");
         }
 
-        // if the folder is not found then create a new one
-        if (folder == null && shouldCreateIfNotFound) {
-            folder = createFolderInDrive(name, inFolder);
-        } else {
-            return null;
+        if (files.size() == 1) {
+            id = files.get(0).getId();
+        } else if (files.size() == 0 && shouldCreateIfNotFound) {
+            id = createFolderInDrive(name, inFolder).getId();
         }
-        return folder.getId();
 
+        return id;
     }
 
-    public String uploadFileToDrive(String mediaName, String destinationFolderID,
-                                    File toUpload) throws IOException {
+    /**
+     * Upload a file to google drive
+     *
+     * @param mediaName           The name of the uploaded file
+     * @param destinationFolderID Id of the folder into which the file has to be uploaded
+     * @param toUpload            The file which is to be uploaded
+     * @return id of the file if uploaded successfully
+     */
+    public String uploadFileToDrive(String mediaName, String destinationFolderID, File toUpload)
+            throws IOException {
 
         //adding meta-data to the file
         com.google.api.services.drive.model.File fileMetadata =
@@ -156,8 +169,15 @@ public class DriveHelper {
                 .getId();
     }
 
-    private com.google.api.services.drive.model.File createFolderInDrive(String folderName,
-                                                                         String parentId)
+    /**
+     * Creates a new folder in google drive
+     *
+     * @param folderName The name of the new folder
+     * @param parentId   The id of the folder in which we want to create the new folder
+     * @return the folder object if created successfully
+     */
+    private com.google.api.services.drive.model.File createFolderInDrive(@NonNull String folderName,
+                                                                         @Nullable String parentId)
             throws IOException {
 
         //creating a new folder
@@ -186,11 +206,18 @@ public class DriveHelper {
         return folder;
     }
 
-    public ArrayList<com.google.api.services.drive.model.File> getFilesFromDrive(
+    /**
+     * Fetches the list of files from google drive for a given folder.
+     *
+     * @param folderName (optional) The name of folder whose files are to be fetched
+     *                   If folderName is null then all files are fetched from the drive
+     * @param parentId   (optional) The id of the parent folder containing the given folder
+     */
+    public List<com.google.api.services.drive.model.File> getFilesFromDrive(
             @Nullable String folderName,
             @Nullable String parentId) throws IOException {
 
-        ArrayList<com.google.api.services.drive.model.File> files = new ArrayList<>();
+        List<com.google.api.services.drive.model.File> files = new ArrayList<>();
 
         String requestString;
         if (folderName != null && parentId == null) {

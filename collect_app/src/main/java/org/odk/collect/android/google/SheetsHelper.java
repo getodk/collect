@@ -15,6 +15,8 @@
 package org.odk.collect.android.google;
 
 
+import android.support.annotation.NonNull;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -34,13 +36,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SheetsHelper {
-    private Sheets sheets;
+
+    private final Sheets sheets;
 
     SheetsHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
         // Initialize sheets service
         sheets = new Sheets.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
+    }
+
+    /**
+     * Constructs a new SheetsHelper with the provided Sheets Service.
+     * This Constructor should only be used for testing.
+     */
+    SheetsHelper(@NonNull Sheets sheets) {
+        this.sheets = sheets;
     }
 
     public void resizeSpreadSheet(String spreadsheetId, int sheetId, int columnSize) throws IOException {
@@ -105,10 +116,13 @@ public class SheetsHelper {
      * to modify the given spreadsheetId. If yes, then returns complete spreadsheet
      * otherwise throws exception
      */
-    public Spreadsheet checkPermissions(String spreadsheetId) throws IOException {
+    public Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
 
         /*
          * Read permission check
+         *
+         * To check read permissions, we are trying to fetch the complete spreadsheet using the
+         * given spreadsheet id
          */
 
         // fetching the google spreadsheet
@@ -121,6 +135,9 @@ public class SheetsHelper {
 
         /*
          * Write permission check
+         *
+         * To check write permissions, we are trying to overwrite the name of the spreadsheet with
+         * the same name
          *
          * Todo 22/3/17 Find a better way to check the write permissions
          */

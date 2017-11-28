@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
+import timber.log.Timber;
 
 public class GoogleAccountsManager implements EasyPermissions.PermissionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -163,7 +164,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
             try {
                 connectionResult.startResolutionForResult(activity, RESOLVE_CONNECTION_REQUEST_CODE);
             } catch (IntentSender.SendIntentException e) {
-                // Unable to resolve, message user appropriately
+                Timber.e(e);
             }
         } else {
             GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();

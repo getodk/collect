@@ -62,6 +62,7 @@ import org.odk.collect.android.logic.DriveListItem;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -797,7 +798,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 DriveListItem fileItem = fileItems.get(k);
 
                 try {
-                    driveHelper.downloadFile(fileItem.getDriveId(), fileItem.getName());
+                    downloadFile(fileItem.getDriveId(), fileItem.getName());
                     results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
 
                     String mediaDirName = driveHelper.getMediaDirName(fileItem.getName());
@@ -821,7 +822,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                         }
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                            driveHelper.downloadFile(mediaFile.getId(), mediaFile.getName());
+                            downloadFile(mediaFile.getId(), fileItem.getName());
                             results.put(mediaDirName + File.separator + mediaFile.getName(), Collect.getInstance().getString(R.string.success));
                         }
                     }
@@ -832,6 +833,12 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             return results;
+        }
+
+        private void downloadFile(String fileId, String fileName) throws IOException {
+            File file = new File(Collect.FORMS_PATH + File.separator + fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            driveHelper.downloadFile(fileId, fileOutputStream);
         }
 
         @Override

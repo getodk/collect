@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.tasks;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -187,7 +188,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(urlString);
 
-                Spreadsheet spreadsheet = sheetsHelper.checkPermissions(spreadsheetId);
+                Spreadsheet spreadsheet = sheetsHelper.getSpreadsheet(spreadsheetId);
                 sheetId = spreadsheet.getSheets().get(0).getProperties().getSheetId();
                 sheetName = spreadsheet.getSheets().get(0).getProperties().getTitle();
             } catch (GoogleJsonResponseException e) {
@@ -771,8 +772,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         } catch (UserRecoverableAuthException e) {
             outcome = null;
-            if (accountsManager.getActivity() != null) {
-                accountsManager.getActivity().startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+            Activity activity = accountsManager.getActivity();
+            if (activity != null) {
+                activity.startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
             }
         } catch (IOException | GoogleAuthException e) {
             Timber.e(e);
