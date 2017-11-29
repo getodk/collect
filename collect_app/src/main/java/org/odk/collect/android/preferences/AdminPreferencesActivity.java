@@ -30,12 +30,6 @@ import java.io.ObjectOutputStream;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.AdminKeys.KEY_CONSTRAINT_BEHAVIOR;
-
 /**
  * Handles admin preferences, which are password-protectable and govern which app features and
  * general preferences the end user of the app will be able to see.
@@ -92,12 +86,7 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     public void onMovingBackwardsDisabled() {
-        AdminSharedPreferences.getInstance().save(KEY_MOVING_BACKWARDS, false);
-        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
-        AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
-        AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
-        AdminSharedPreferences.getInstance().save(KEY_CONSTRAINT_BEHAVIOR, true);
-
-        recreate();
+        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getFragmentManager().findFragmentByTag(TAG);
+        fragment.onMovingBackwardsDisabled();
     }
 }

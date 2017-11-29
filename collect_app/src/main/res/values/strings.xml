@@ -558,4 +558,6 @@
     <string name="moving_backwards_dialog_message">Configure the device to prevent users from bypassing this setting?\nThe list of changes are below:\n\n\u2022Disable Edit Saved Form\n\u2022Disable Save Form\n\u2022Disable Go To Prompt\n\u2022Set Constraint processing to Validate upon forward swipe</string>
     <string name="moving_backwards_enabled_title">Moving backwards enabled!</string>
     <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022Edit Saved Form\n\u2022Save Form\n\u2022Go To Prompt\n\u2022Constraint processing</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

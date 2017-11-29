@@ -267,4 +267,14 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             }
         }
     }
+
+    public void onMovingBackwardsDisabled() {
+        AdminSharedPreferences.getInstance().save(KEY_MOVING_BACKWARDS, false);
+        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
+        AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
+        AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
+        AdminSharedPreferences.getInstance().save(KEY_CONSTRAINT_BEHAVIOR, true);
+
+        ((CheckBoxPreference) findPreference(KEY_MOVING_BACKWARDS)).setChecked(false);
+    }
 }
