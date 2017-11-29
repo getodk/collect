@@ -287,7 +287,7 @@ public class Collect extends Application {
 
         //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
-        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().getBoolean(KEY_APP_LANGUAGE, false);
+        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().get(KEY_APP_LANGUAGE).equals("");
         if (!isUsingSysLanguage) {
             new LocaleHelper().updateLocale(this);
         }
