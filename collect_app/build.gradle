@@ -163,12 +163,12 @@ allprojects {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation group: 'com.android.support', name: 'support-v13', version: '27.0.1'
-    implementation group: 'com.android.support', name: 'customtabs', version: '27.0.1'
-    implementation group: 'com.android.support', name: 'design', version: '27.0.1'
-    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.0.1'
-    implementation group: 'com.android.support', name: 'design', version: '27.0.1'
-    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.0.1'
+    implementation group: 'com.android.support', name: 'support-v13', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'customtabs', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'design', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'design', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.0.2'
     implementation group: 'com.android.support', name: 'multidex', version: '1.0.2'
     implementation group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
     implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
@@ -186,7 +186,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
     implementation (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.6.1') {
@@ -215,9 +215,9 @@ dependencies {
 
     // Testing-only dependencies
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.11.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.12.0'
     testImplementation group: 'org.robolectric', name: 'robolectric', version: '3.5.1'
-    testImplementation group: 'org.robolectric', name: 'shadows-multidex', version: '3.3.2'
+    testImplementation group: 'org.robolectric', name: 'shadows-multidex', version: '3.5.1'
 
     androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
     androidTestImplementation(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
