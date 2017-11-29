@@ -70,6 +70,8 @@ public final class PreferenceKeys {
     static final String OSM_BASEMAP_KEY                     = "osmdroid";
     static final String OSM_MAPS_BASEMAP_DEFAULT            = "mapquest_streets";
 
+    public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
+
     private static HashMap<String, Object> getHashMap() {
         HashMap<String, Object> hashMap = new HashMap<>();
         // aggregate_preferences.xml
@@ -117,5 +119,4 @@ public final class PreferenceKeys {
     );
 
     public static final HashMap<String, Object> GENERAL_KEYS = getHashMap();
-
 }

@@ -82,6 +82,8 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     private Button zoomPointButton;
     private Button zoomLocationButton;
 
+    private Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -248,9 +250,6 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         update_polygon();
         map.getOverlays().remove(overlayEvents);
     }
-
-
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     private Runnable centerAroundFix = new Runnable() {
         public void run() {

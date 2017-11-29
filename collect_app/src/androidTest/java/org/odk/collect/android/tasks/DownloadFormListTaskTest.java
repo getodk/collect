@@ -14,6 +14,35 @@ import static org.odk.collect.android.test.TestUtils.assertMatches;
 
 public class DownloadFormListTaskTest extends MockedServerTest {
 
+    private static final String RESPONSE = join(
+            "HTTP/1.1 200 OK\r",
+            "X-OpenRosa-Version: 1.0\r",
+            "X-OpenRosa-Accept-Content-Length: 10485760\r",
+            "Content-Type: text/xml; charset=utf-8\r",
+            "X-Cloud-Trace-Context: cb84da0bfcb4da37910faf33b10ca190;o=1\r",
+            "Date: Tue, 18 Apr 2017 15:45:03 GMT\r",
+            "Server: Google Frontend\r",
+            "Content-Length: 2235\r",
+            "Alt-Svc: quic=\":443\"; ma=2592000; v=\"37,36,35\"\r",
+            "Connection: close\r",
+            "\r",
+            "<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">",
+            "<xform><formID>one</formID>",
+            "<name>The First Form</name>",
+            "<majorMinorVersion></majorMinorVersion>",
+            "<version></version>",
+            "<hash>md5:b71c92bec48730119eab982044a8adff</hash>",
+            "<downloadUrl>https://example.com/formXml?formId=one</downloadUrl>",
+            "</xform>",
+            "<xform><formID>two</formID>",
+            "<name>The Second Form</name>",
+            "<majorMinorVersion></majorMinorVersion>",
+            "<version></version>",
+            "<hash>md5:4428adffbbec48771c9230119eab9820</hash>",
+            "<downloadUrl>https://example.com/formXml?formId=two</downloadUrl>",
+            "</xform>",
+            "</xforms>");
+
     @Test
     public void shouldProcessAndReturnAFormList() throws Exception {
         // given
@@ -51,33 +80,4 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         assertEquals("two", f2.formID);
         assertNull(f2.formVersion);
     }
-
-    private static final String RESPONSE = join(
-        "HTTP/1.1 200 OK\r",
-        "X-OpenRosa-Version: 1.0\r",
-        "X-OpenRosa-Accept-Content-Length: 10485760\r",
-        "Content-Type: text/xml; charset=utf-8\r",
-        "X-Cloud-Trace-Context: cb84da0bfcb4da37910faf33b10ca190;o=1\r",
-        "Date: Tue, 18 Apr 2017 15:45:03 GMT\r",
-        "Server: Google Frontend\r",
-        "Content-Length: 2235\r",
-        "Alt-Svc: quic=\":443\"; ma=2592000; v=\"37,36,35\"\r",
-        "Connection: close\r",
-        "\r",
-        "<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">",
-        "<xform><formID>one</formID>",
-        "<name>The First Form</name>",
-        "<majorMinorVersion></majorMinorVersion>",
-        "<version></version>",
-        "<hash>md5:b71c92bec48730119eab982044a8adff</hash>",
-        "<downloadUrl>https://example.com/formXml?formId=one</downloadUrl>",
-        "</xform>",
-        "<xform><formID>two</formID>",
-        "<name>The Second Form</name>",
-        "<majorMinorVersion></majorMinorVersion>",
-        "<version></version>",
-        "<hash>md5:4428adffbbec48771c9230119eab9820</hash>",
-        "<downloadUrl>https://example.com/formXml?formId=two</downloadUrl>",
-        "</xform>",
-        "</xforms>");
 }

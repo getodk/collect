@@ -84,6 +84,13 @@ public class FormController {
      */
     private TimerLogger timerLogger;
 
+    private static boolean isJavaRosaInitialized = false;
+
+    private File mediaFolder;
+    private File instancePath;
+    private FormEntryController formEntryController;
+    private FormIndex indexWaitingForData = null;
+
     /**
      * OpenRosa metadata of a form instance.
      *
@@ -104,8 +111,6 @@ public class FormController {
         }
     }
 
-    private static boolean isJavaRosaInitialized = false;
-
     /**
      * Isolate the initialization of JavaRosa into one method, called first
      * by the Collect Application.  Called subsequently whenever the Preferences
@@ -125,11 +130,6 @@ public class FormController {
         org.javarosa.core.services.PropertyManager
                 .setPropertyManager(mgr);
     }
-
-    private File mediaFolder;
-    private File instancePath;
-    private FormEntryController formEntryController;
-    private FormIndex indexWaitingForData = null;
 
     public FormController(File mediaFolder, FormEntryController fec, File instancePath) {
         this.mediaFolder = mediaFolder;

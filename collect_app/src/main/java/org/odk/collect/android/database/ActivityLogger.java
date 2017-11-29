@@ -44,25 +44,6 @@ import timber.log.Timber;
  */
 public final class ActivityLogger {
 
-    private static class DatabaseHelper extends SQLiteOpenHelper {
-
-        DatabaseHelper() {
-            super(new DatabaseContext(Collect.LOG_PATH), DATABASE_NAME, null, DATABASE_VERSION);
-            new File(Collect.LOG_PATH).mkdirs();
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(DATABASE_CREATE);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
-            onCreate(db);
-        }
-    }
-
     /**
      * The minimum delay, in milliseconds, for a scroll action to be considered new.
      */
@@ -112,6 +93,11 @@ public final class ActivityLogger {
     // action is logged.
     private LinkedList<ContentValues> scrollActions = new LinkedList<ContentValues>();
 
+    // cached to improve logging performance...
+    // only access these through getXPath(FormIndex index);
+    private FormIndex cachedXPathIndex = null;
+    private String cachedXPathValue = null;
+
     public ActivityLogger(String deviceId) {
         this.deviceId = deviceId;
         loggingEnabled = new File(Collect.LOG_PATH, ENABLE_LOGGING).exists();
@@ -135,11 +121,6 @@ public final class ActivityLogger {
             isOpen = false;
         }
     }
-
-    // cached to improve logging performance...
-    // only access these through getXPath(FormIndex index);
-    private FormIndex cachedXPathIndex = null;
-    private String cachedXPathValue = null;
 
     // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
     // DO NOT CALL THIS OUTSIDE OF synchronized(scrollActions) !!!!
@@ -290,5 +271,24 @@ public final class ActivityLogger {
             instancePath = getInstancePath(formController);
         }
         log(t.getClass().getName(), context, action, instancePath, index, null, null);
+    }
+
+    private static class DatabaseHelper extends SQLiteOpenHelper {
+
+        DatabaseHelper() {
+            super(new DatabaseContext(Collect.LOG_PATH), DATABASE_NAME, null, DATABASE_VERSION);
+            new File(Collect.LOG_PATH).mkdirs();
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            db.execSQL(DATABASE_CREATE);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+            onCreate(db);
+        }
     }
 }

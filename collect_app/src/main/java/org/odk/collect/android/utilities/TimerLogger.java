@@ -1,4 +1,3 @@
-
 package org.odk.collect.android.utilities;
 
 import android.os.AsyncTask;
@@ -27,132 +26,6 @@ import static org.odk.collect.android.logic.FormController.AUDIT_FILE_NAME;
  */
 public class TimerLogger {
 
-    public enum EventTypes {
-        FEC,                // FEC, Real type defined in FormEntryController
-        FORM_START,         // Start filling in the form
-        FORM_EXIT,          // Exit the form
-        FORM_RESUME,        // Resume filling in the form after previously exiting
-        FORM_SAVE,          // Save the form
-        FORM_FINALIZE,      // Finalize the form
-        HIERARCHY,          // Jump to a question
-        SAVE_ERROR,         // Error in save
-        FINALIZE_ERROR,     // Error in finalize
-        CONSTRAINT_ERROR,   // Constraint or missing answer error on save
-        DELETE_REPEAT       // Delete a repeat group
-    }
-
-    public class Event {
-
-        long start;
-        EventTypes eventType;
-        int fecType;
-        String node;
-
-        long end;
-        boolean endTimeSet;
-
-        /*
-         * Create a new event
-         */
-        Event(long start, EventTypes eventType, int fecType, String node, boolean advancingPage) {
-            this.start = start;
-            this.eventType = eventType;
-            this.fecType = fecType;
-            this.node = node;
-
-            end = 0;
-            endTimeSet = false;
-        }
-
-        /*
-         * Return true if this is a view type event
-         *  Hierarchy Jump
-         *  Question
-         *  Prompt for repeat
-         */
-        private boolean isIntervalViewEvent() {
-            return eventType == EventTypes.FEC
-                    && (fecType == FormEntryController.EVENT_QUESTION
-                    || fecType == FormEntryController.EVENT_GROUP
-                    || fecType == FormEntryController.EVENT_END_OF_FORM
-                    || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT);
-        }
-
-        /*
-         * Mark the end of an interval event
-         */
-        public void setEnd(long endTime) {
-
-            if (!endTimeSet && isIntervalViewEvent()) {
-                this.end = endTime;
-                this.endTimeSet = true;
-            }
-
-        }
-
-        /*
-         * convert the event into a record to write to the CSV file
-         */
-        public String toString() {
-            String textValue;
-            switch (eventType) {
-                case FEC:
-                    switch (fecType) {
-                        case FormEntryController.EVENT_QUESTION:
-                            textValue = "question";
-                            break;
-                        case FormEntryController.EVENT_GROUP:
-                            textValue = "group questions";
-                            break;
-                        case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            textValue = "add repeat";
-                            break;
-                        case FormEntryController.EVENT_END_OF_FORM:
-                            textValue = "end screen";
-                            break;
-                        default:
-                            textValue = "Unknown FEC: " + fecType;
-                    }
-                    break;
-                case FORM_START:
-                    textValue = "form start";
-                    break;
-                case FORM_EXIT:
-                    textValue = "form exit";
-                    break;
-                case FORM_RESUME:
-                    textValue = "form resume";
-                    break;
-                case FORM_SAVE:
-                    textValue = "form save";
-                    break;
-                case FORM_FINALIZE:
-                    textValue = "form finalize";
-                    break;
-                case HIERARCHY:
-                    textValue = "jump";
-                    break;
-                case SAVE_ERROR:
-                    textValue = "save error";
-                    break;
-                case FINALIZE_ERROR:
-                    textValue = "finalize error";
-                    break;
-                case CONSTRAINT_ERROR:
-                    textValue = "constraint error";
-                    break;
-                case DELETE_REPEAT:
-                    textValue = "delete repeat";
-                    break;
-                default:
-                    textValue = "Unknown Event Type: " + eventType;
-                    break;
-            }
-            return textValue + "," + node + "," + start + ","
-                    + (end != 0 ? end : "");
-        }
-    }
-
     private static AsyncTask saveTask = null;
     private ArrayList<Event> events = null;
     private String filename = null;
@@ -160,7 +33,6 @@ public class TimerLogger {
     private long surveyOpenTime = 0;
     private long surveyOpenElapsedTime = 0;
     private boolean timerEnabled = false;              // Set true of the timer logger is enabled
-
 
     public TimerLogger(File instanceFile, FormController formController) {
 
@@ -179,7 +51,6 @@ public class TimerLogger {
             events = new ArrayList<>();
         }
     }
-
 
     public void setPath(String instancePath) {
         if (timerEnabled) {
@@ -308,4 +179,129 @@ public class TimerLogger {
         return surveyOpenTime + (SystemClock.elapsedRealtime() - surveyOpenElapsedTime);
     }
 
+    public enum EventTypes {
+        FEC,                // FEC, Real type defined in FormEntryController
+        FORM_START,         // Start filling in the form
+        FORM_EXIT,          // Exit the form
+        FORM_RESUME,        // Resume filling in the form after previously exiting
+        FORM_SAVE,          // Save the form
+        FORM_FINALIZE,      // Finalize the form
+        HIERARCHY,          // Jump to a question
+        SAVE_ERROR,         // Error in save
+        FINALIZE_ERROR,     // Error in finalize
+        CONSTRAINT_ERROR,   // Constraint or missing answer error on save
+        DELETE_REPEAT       // Delete a repeat group
+    }
+
+    public class Event {
+
+        long start;
+        EventTypes eventType;
+        int fecType;
+        String node;
+
+        long end;
+        boolean endTimeSet;
+
+        /*
+         * Create a new event
+         */
+        Event(long start, EventTypes eventType, int fecType, String node, boolean advancingPage) {
+            this.start = start;
+            this.eventType = eventType;
+            this.fecType = fecType;
+            this.node = node;
+
+            end = 0;
+            endTimeSet = false;
+        }
+
+        /*
+         * Return true if this is a view type event
+         *  Hierarchy Jump
+         *  Question
+         *  Prompt for repeat
+         */
+        private boolean isIntervalViewEvent() {
+            return eventType == EventTypes.FEC
+                    && (fecType == FormEntryController.EVENT_QUESTION
+                    || fecType == FormEntryController.EVENT_GROUP
+                    || fecType == FormEntryController.EVENT_END_OF_FORM
+                    || fecType == FormEntryController.EVENT_PROMPT_NEW_REPEAT);
+        }
+
+        /*
+         * Mark the end of an interval event
+         */
+        public void setEnd(long endTime) {
+
+            if (!endTimeSet && isIntervalViewEvent()) {
+                this.end = endTime;
+                this.endTimeSet = true;
+            }
+
+        }
+
+        /*
+         * convert the event into a record to write to the CSV file
+         */
+        public String toString() {
+            String textValue;
+            switch (eventType) {
+                case FEC:
+                    switch (fecType) {
+                        case FormEntryController.EVENT_QUESTION:
+                            textValue = "question";
+                            break;
+                        case FormEntryController.EVENT_GROUP:
+                            textValue = "group questions";
+                            break;
+                        case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+                            textValue = "add repeat";
+                            break;
+                        case FormEntryController.EVENT_END_OF_FORM:
+                            textValue = "end screen";
+                            break;
+                        default:
+                            textValue = "Unknown FEC: " + fecType;
+                    }
+                    break;
+                case FORM_START:
+                    textValue = "form start";
+                    break;
+                case FORM_EXIT:
+                    textValue = "form exit";
+                    break;
+                case FORM_RESUME:
+                    textValue = "form resume";
+                    break;
+                case FORM_SAVE:
+                    textValue = "form save";
+                    break;
+                case FORM_FINALIZE:
+                    textValue = "form finalize";
+                    break;
+                case HIERARCHY:
+                    textValue = "jump";
+                    break;
+                case SAVE_ERROR:
+                    textValue = "save error";
+                    break;
+                case FINALIZE_ERROR:
+                    textValue = "finalize error";
+                    break;
+                case CONSTRAINT_ERROR:
+                    textValue = "constraint error";
+                    break;
+                case DELETE_REPEAT:
+                    textValue = "delete repeat";
+                    break;
+                default:
+                    textValue = "Unknown Event Type: " + eventType;
+                    break;
+            }
+            return textValue + "," + node + "," + start + ","
+                    + (end != 0 ? end : "");
+        }
+    }
 }

@@ -35,11 +35,11 @@ public class NumberPickerDialog extends DialogFragment {
     public static final String DISPLAYED_VALUES = "displayedValues";
     public static final String PROGRESS = "progress";
 
+    private NumberPickerListener listener;
+
     public interface NumberPickerListener {
         void onNumberPickerValueSelected(int widgetId, int value);
     }
-
-    private NumberPickerListener listener;
 
     public static NumberPickerDialog newInstance(int widgetId, String[] displayedValues, int progress) {
         Bundle bundle = new Bundle();
