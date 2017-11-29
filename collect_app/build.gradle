@@ -162,10 +162,14 @@ allprojects {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.3.1'
-    compile group: 'com.android.support', name: 'design', version: '25.3.1'
-    compile group: 'com.android.support', name: 'cardview-v7', version: '25.3.1'
-    compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
+
+    compile group: 'com.android.support', name: 'appcompat-v7', version: '27.0.1'
+    compile group: 'com.android.support', name: 'cardview-v7', version: '27.0.1'
+    compile group: 'com.android.support', name: 'customtabs', version: '27.0.1'
+    compile group: 'com.android.support', name: 'design', version: '27.0.1'
+    compile group: 'com.android.support', name: 'support-v13', version: '27.0.1'
+
+    compile group: 'com.android.support', name: 'multidex', version: '1.0.2'
     compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
     compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
     compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
@@ -195,11 +199,8 @@ dependencies {
     compile(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
     compile group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
-    compile group: 'com.android.support', name: 'customtabs', version: '25.3.1'
-    compile group: 'com.android.support', name: 'design', version: '25.3.1'
     compile group: 'com.google.zxing', name: 'core', version: '3.3.0'
     compile group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
-    compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
     compile group: 'net.danlew', name: 'android.joda', version: '2.9.9'
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
