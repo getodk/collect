@@ -72,7 +72,7 @@ import timber.log.Timber;
  */
 public class InstanceServerUploader extends InstanceUploader {
 
-    private static enum ContentTypeMapping {
+    private enum ContentTypeMapping {
         XML("xml",  ContentType.TEXT_XML),
       _3GPP("3gpp", ContentType.create("audio/3gpp")),
        _3GP("3gp",  ContentType.create("video/3gpp")),

@@ -4,7 +4,7 @@ jobs:
   build:
       working_directory: ~/code
       docker:
-      - image: saneandroid/odk-collect:0.0.2
+      - image: opendatakit/collect-build:1.0.0
       environment:
           # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
           _JAVA_OPTIONS: "-Xmx1024m"

@@ -3,13 +3,9 @@ package org.odk.collect.android.utilities;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.BuildConfig;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.xml",
-        packageName = "org.odk.collect")
 public class TextUtilsTest {
 
     /**

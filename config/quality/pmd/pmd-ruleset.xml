@@ -95,6 +95,7 @@
         <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
         <exclude name="AssignmentToNonFinalStatic" />
         <exclude name="OptimizableToArrayCall" />
+        <exclude name="AccessorMethodGeneration" />
     </rule>
     <rule ref="rulesets/java/optimizations.xml">
         <exclude name="LocalVariableCouldBeFinal" />
