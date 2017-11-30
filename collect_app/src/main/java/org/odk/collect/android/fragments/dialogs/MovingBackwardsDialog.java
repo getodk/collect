@@ -30,7 +30,7 @@ public class MovingBackwardsDialog extends DialogFragment {
     public static final String MOVING_BACKWARDS_DIALOG_TAG = "movingBackwardsDialogTag";
 
     public interface MovingBackwardsDialogListener {
-        void onMovingBackwardsDisabled();
+        void preventOtherWaysOfEditingForm();
     }
 
     private MovingBackwardsDialogListener listener;
@@ -48,13 +48,12 @@ public class MovingBackwardsDialog extends DialogFragment {
         setCancelable(false);
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.moving_backwards_title)
-                .setMessage(R.string.moving_backwards_dialog_message)
+                .setTitle(R.string.moving_backwards_disabled_title)
+                .setMessage(R.string.moving_backwards_disabled_message)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        listener.onMovingBackwardsDisabled();
-                        dismiss();
+                        listener.preventOtherWaysOfEditingForm();
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

@@ -31,11 +31,6 @@
 
     <PreferenceCategory android:title="@string/user_access_control">
 
-        <CheckBoxPreference
-            android:key="moving_backwards"
-            android:title="@string/moving_backwards_title"
-            android:summary="@string/moving_backwards_summary" />
-
         <PreferenceScreen
             android:key="main_menu"
             android:summary="@string/main_menu_settings_summary"

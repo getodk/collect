@@ -85,8 +85,8 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    public void onMovingBackwardsDisabled() {
+    public void preventOtherWaysOfEditingForm() {
         AdminPreferencesFragment fragment = (AdminPreferencesFragment) getFragmentManager().findFragmentByTag(TAG);
-        fragment.onMovingBackwardsDisabled();
+        fragment.preventOtherWaysOfEditingForm();
     }
 }

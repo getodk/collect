@@ -49,6 +49,7 @@ import static org.odk.collect.android.preferences.AdminKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 
 public class AdminPreferencesFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -65,20 +66,6 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
-
-        findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (((CheckBoxPreference) preference).isChecked()) {
-                    new MovingBackwardsDialog().show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
-                    return false;
-                } else {
-                    SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-                    return true;
-                }
-            }
-        });
-
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
@@ -191,7 +178,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.main_menu_access_preferences);
-            findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
+            findPreference(KEY_EDIT_SAVED).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         @Override
@@ -221,7 +208,7 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
             addPreferencesFromResource(R.xml.user_settings_access_preferences);
 
-            findPreference(KEY_CONSTRAINT_BEHAVIOR).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
+            findPreference(KEY_CONSTRAINT_BEHAVIOR).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         @Override
@@ -249,8 +236,20 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
             addPreferencesFromResource(R.xml.form_entry_access_preferences);
 
-            findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
-            findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS));
+            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (((CheckBoxPreference) preference).isChecked()) {
+                        new MovingBackwardsDialog().show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
+                    } else {
+                        SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
+                        onMovingBackwardsEnabled();
+                    }
+                    return true;
+                }
+            });
+            findPreference(KEY_JUMP_TO).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+            findPreference(KEY_SAVE_MID).setEnabled((Boolean) AdminSharedPreferences.getInstance().get(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
         }
 
         @Override
@@ -266,15 +265,30 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
                 toolbar.setTitle(R.string.admin_preferences);
             }
         }
+
+        private void preventOtherWaysOfEditingForm() {
+            AdminSharedPreferences.getInstance().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
+            AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
+            AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
+            AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
+            AdminSharedPreferences.getInstance().save(KEY_CONSTRAINT_BEHAVIOR, true);
+
+            findPreference(KEY_JUMP_TO).setEnabled(false);
+            findPreference(KEY_SAVE_MID).setEnabled(false);
+
+            ((CheckBoxPreference) findPreference(KEY_JUMP_TO)).setChecked(false);
+            ((CheckBoxPreference) findPreference(KEY_SAVE_MID)).setChecked(false);
+        }
+
+        private void onMovingBackwardsEnabled() {
+            AdminSharedPreferences.getInstance().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+            findPreference(KEY_JUMP_TO).setEnabled(true);
+            findPreference(KEY_SAVE_MID).setEnabled(true);
+        }
     }
 
-    public void onMovingBackwardsDisabled() {
-        AdminSharedPreferences.getInstance().save(KEY_MOVING_BACKWARDS, false);
-        AdminSharedPreferences.getInstance().save(KEY_EDIT_SAVED, false);
-        AdminSharedPreferences.getInstance().save(KEY_SAVE_MID, false);
-        AdminSharedPreferences.getInstance().save(KEY_JUMP_TO, false);
-        AdminSharedPreferences.getInstance().save(KEY_CONSTRAINT_BEHAVIOR, true);
-
-        ((CheckBoxPreference) findPreference(KEY_MOVING_BACKWARDS)).setChecked(false);
+    public void preventOtherWaysOfEditingForm() {
+        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(android.R.id.content);
+        fragment.preventOtherWaysOfEditingForm();
     }
 }
