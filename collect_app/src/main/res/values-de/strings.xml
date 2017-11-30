@@ -513,19 +513,19 @@
   <string name="image_size_original">Originalgröße von der Kamera (Standard)</string>
   <string name="image_size_dialog_title">Max. Anzahl Pixel der langen Seite des Bildes</string>
   <string name="bearing_lack_of_sensors">Kompass-Peilung konnte nicht erfasst werden: Gerät besitzt keinen Kompass oder Beschleunigungssensor.</string>
-  <string name="ethiopian_month_meskerem">Meskerem</string>
-  <string name="ethiopian_month_tikimt">Tikimt</string>
-  <string name="ethiopian_month_hidar">Hidar</string>
-  <string name="ethiopian_month_tahsas">Tahsas</string>
-  <string name="ethiopian_month_tir">Tir</string>
-  <string name="ethiopian_month_yekatit">Yekatit</string>
-  <string name="ethiopian_month_megabit">Megabit</string>
-  <string name="ethiopian_month_miazia">Miazia</string>
-  <string name="ethiopian_month_ginbot">Ginbot</string>
-  <string name="ethiopian_month_senie">Senie</string>
-  <string name="ethiopian_month_hamlie">Hamlie</string>
-  <string name="ethiopian_month_nehasie">Nehasie</string>
-  <string name="ethiopian_month_pagumien">Pagumien</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
   <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
   <string name="custom_date">%1$s (%2$s)</string>
 </resources>
