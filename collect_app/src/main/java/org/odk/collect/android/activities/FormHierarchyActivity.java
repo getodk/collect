@@ -365,7 +365,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
-                        String repeatLabel = mIndent + fc.getLongText() + " " + (fc.getMultiplicity() + 1);
+                        String repeatLabel = mIndent + fc.getLongText();
                         if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
                             formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
                             FormEntryCaption fc2 = formController.getCaptionPrompt();
@@ -373,6 +373,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
                                 repeatLabel = fc2.getLongText();
                             }
                         }
+                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
                         h.addChild(new HierarchyElement(repeatLabel, null, null, Color.WHITE, CHILD, fc.getIndex()));
