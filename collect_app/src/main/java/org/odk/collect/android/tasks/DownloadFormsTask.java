@@ -106,7 +106,7 @@ public class DownloadFormsTask extends
             }
 
             String tempMediaPath = null;
-            String finalMediaPath = null;
+            final String finalMediaPath;
             FileResult fileResult = null;
             try {
                 // get the xml file
@@ -149,25 +149,30 @@ public class DownloadFormsTask extends
                 message += msg;
             }
 
-            try {
-                if (fileResult != null) {
+            Map<String, String> parsedFields = null;
+            if (fileResult != null) {
+                try {
                     final long start = System.currentTimeMillis();
-                    Timber.i("Starting an extra parse to check for a bad submission URL. %s",
-                            fileResult.file.getAbsolutePath());
-                    // todo can we avoid this extra parse? It can run a long time.
-                    checkForBadSubmissionUrl(fileResult);
+                    Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
+                    parsedFields = FileUtils.parseXML(fileResult.file);
                     Timber.i("Parse finished in %.3f seconds.",
                             (System.currentTimeMillis() - start) / 1000F);
+                } catch (RuntimeException e) {
+                    message += e.getMessage();
                 }
-            } catch (IllegalArgumentException e) {
-                message += e.getMessage();
             }
 
-            if (!isCancelled() && message.length() == 0 && fileResult != null) {
+            if (!isCancelled() && message.isEmpty() && parsedFields != null) {
+                final String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
+                if (submission != null && !UrlUtils.isValidUrl(submission)) {
+                    message += Collect.getInstance().getString(R.string.xform_parse_error,
+                            fileResult.file.getName(), "submission url");
+                }
+
                 // install everything
                 UriResult uriResult = null;
                 try {
-                    uriResult = findExistingOrCreateNewUri(fileResult.getFile());
+                    uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
                     Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
 
                     // move the media files in the media folder
@@ -203,25 +208,6 @@ public class DownloadFormsTask extends
         return result;
     }
 
-    private void checkForBadSubmissionUrl(FileResult fileResult) throws IllegalArgumentException {
-        if (fileResult != null) {
-            File form = fileResult.getFile();
-            HashMap<String, String> fields;
-            try {
-                fields = FileUtils.parseXML(form);
-            } catch (RuntimeException e) {
-                throw new IllegalArgumentException(form.getName() + " :: " + e.toString());
-            }
-
-            String submission = fields.get(FileUtils.SUBMISSIONURI);
-            if (submission != null && !UrlUtils.isValidUrl(submission)) {
-                throw new IllegalArgumentException(
-                        Collect.getInstance().getString(R.string.xform_parse_error,
-                                form.getName(), "submission url"));
-            }
-        }
-    }
-
     private void saveResult(HashMap<FormDetails, String> result, FormDetails fd, String message) {
         if (message.equalsIgnoreCase("")) {
             message = Collect.getInstance().getString(R.string.success);
@@ -255,16 +241,17 @@ public class DownloadFormsTask extends
      * Checks a form file whether it is a new one or if it matches an old one.
      *
      * @param formFile the form definition file
+     * @param formInfo the parse results
      * @return a {@link org.odk.collect.android.tasks.DownloadFormsTask.UriResult} object
      * @throws TaskCancelledException if the user cancels the task during the download.
      */
-    private UriResult findExistingOrCreateNewUri(File formFile) throws TaskCancelledException {
+    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) throws TaskCancelledException {
         Cursor cursor = null;
-        Uri uri = null;
+        final Uri uri;
         String mediaPath;
-        boolean isNew;
+        final boolean isNew;
 
-        String formFilePath = formFile.getAbsolutePath();
+        final String formFilePath = formFile.getAbsolutePath();
         mediaPath = FileUtils.constructMediaPath(formFilePath);
         FileUtils.checkMediaPath(new File(mediaPath));
 
@@ -279,12 +266,6 @@ public class DownloadFormsTask extends
 
                 v.put(FormsColumns.FORM_FILE_PATH, formFilePath);
                 v.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
-
-                Timber.w("Parsing document %s", formFile.getAbsolutePath());
-                final long start = System.currentTimeMillis();
-                Map<String, String> formInfo = FileUtils.parseXML(formFile);
-                Timber.i("Parse finished in %.3f seconds.",
-                        (System.currentTimeMillis() - start) / 1000F);
 
                 if (isCancelled()) {
                     throw new TaskCancelledException(formFile, "Form " + formFile.getName()
