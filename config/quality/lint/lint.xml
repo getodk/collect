@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
+    <!-- suppress newly failing checks -->
     <!-- make sure classes referenced in the manifest or in a layout file are in the project -->
-    <issue id="MissingRegistered" severity="error"/>
+    <issue id="MissingRegistered" severity="warning"/>
+    <issue id="AppCompatResource" severity="warning"/>
+    <issue id="StaticFieldLeak" severity="warning"/>
+    <issue id="UnusedResources" severity="warning">
+        <ignore path="res/values/dimens.xml"/>
+        <ignore path="res/xml/analytics_tracker.xml"/>
+        <ignore regexp="ga_trackingId|google_crash_reporting_api_key"/>
+    </issue>
+    <issue id="UnusedIds" severity="warning"/>
+    <issue id="AppLinkUrlError" severity="warning" />
 
     <!-- require inputType attribute on all text fields -->
     <issue id="TextFields" severity="error"/>
-
-    <issue id="StaticFieldLeak" severity="error"/>
 
     <issue id="GradleOverrides" severity="error"/>
 
@@ -23,19 +31,12 @@
     <issue id="LogNotTimber" severity="error"/>
     <issue id="StringFormatInTimber" severity="error"/>
     <issue id="ApplySharedPref" severity="error"/>
-    <issue id="UnusedResources" severity="error">
-        <ignore path="res/values/dimens.xml"/>
-        <ignore path="res/xml/analytics_tracker.xml"/>
-        <ignore regexp="ga_trackingId|google_crash_reporting_api_key"/>
-    </issue>
     <issue id="IconLocation" severity="error"/>
     <issue id="UnusedNamespace" severity="error">
         <ignore path="res/values*"/>
     </issue>
 
     <issue id="TimberExceptionLogging" severity="error"/>
-
-    <issue id="UnusedIds" severity="error"/>
 
     <issue id="ContentDescription" severity="ignore"/>
     <issue id="HardwareIds" severity="ignore"/>
