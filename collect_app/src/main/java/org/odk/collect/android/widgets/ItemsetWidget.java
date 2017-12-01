@@ -122,7 +122,7 @@ public class ItemsetWidget extends QuestionWidget implements
                 nodesetStr.lastIndexOf(']'));
 
         StringBuilder selection = new StringBuilder();
-        // addSubscription the list name as the first argument, which will always be there
+        // add the list name as the first argument, which will always be there
         selection.append("list_name=?");
 
         // check to see if there are any arguments
@@ -295,7 +295,7 @@ public class ItemsetWidget extends QuestionWidget implements
 
                         buttons.add(rb);
 
-                        // have to addSubscription it to the radiogroup before checking it,
+                        // have to add it to the radiogroup before checking it,
                         // else it lets two buttons be checked...
                         if (currentAnswer != null
                                 && val.compareTo(currentAnswer) == 0) {
@@ -327,7 +327,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         }
 
                         if (!c.isLast()) {
-                            // Last, addSubscription the dividing line (except for the last element)
+                            // Last, add the dividing line (except for the last element)
                             ImageView divider = new ImageView(getContext());
                             divider.setBackgroundResource(android.R.drawable.divider_horizontal_bright);
 

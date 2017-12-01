@@ -78,7 +78,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                     return currentStatus;
                 }
 
-                // Build the list of potential path that we need to addSubscription to the content provider
+                // Build the list of potential path that we need to add to the content provider
                 for (File instanceDir : instanceFolders) {
                     File instanceFile = new File(instanceDir, instanceDir.getName() + ".xml");
                     if (instanceFile.exists() && instanceFile.canRead()) {
@@ -130,7 +130,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         PreferenceKeys.KEY_INSTANCE_SYNC, true);
 
                 int counter = 0;
-                // Begin parsing and addSubscription them to the content provider
+                // Begin parsing and add them to the content provider
                 for (String candidateInstance : candidateInstances) {
                     String instanceFormId = getFormIdFromInstance(candidateInstance);
                     // only process if we can find the id from the instance file
@@ -153,7 +153,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String jrVersion = formCursor.getString(formCursor.getColumnIndex(FormsColumns.JR_VERSION));
                                 String formName = formCursor.getString(formCursor.getColumnIndex(FormsColumns.DISPLAY_NAME));
 
-                                // addSubscription missing fields into content values
+                                // add missing fields into content values
                                 ContentValues values = new ContentValues();
                                 values.put(InstanceColumns.INSTANCE_FILE_PATH, candidateInstance);
                                 values.put(InstanceColumns.SUBMISSION_URI, submissionUri);

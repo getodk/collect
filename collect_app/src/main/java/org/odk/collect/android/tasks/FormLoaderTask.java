@@ -137,7 +137,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         externalDataManager = new ExternalDataManagerImpl(formMediaDir);
 
-        // addSubscription external data function handlers
+        // add external data function handlers
         ExternalDataHandler externalDataHandlerPull = new ExternalDataHandlerPull(
                 externalDataManager);
         formDef.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
@@ -300,7 +300,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                         readFile = true;
                     }
                 } else {
-                    // new csv, addSubscription it
+                    // new csv, add it
                     readFile = true;
                 }
                 c.close();
@@ -614,7 +614,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                             csv.getAbsolutePath());
                     continue;
                 }
-                // addSubscription the rest of the lines to the specified database
+                // add the rest of the lines to the specified database
                 // nextLine[] is an array of values from the line
                 // System.out.println(nextLine[4] + "etc...");
                 if (lineNumber == 2) {

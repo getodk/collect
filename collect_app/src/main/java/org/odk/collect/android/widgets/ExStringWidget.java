@@ -244,7 +244,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 answer.requestFocus();
                 inputManager.showSoftInput(answer, 0);
             /*
-             * If you do a multi-question screen after a "addSubscription another group" dialog, this won't
+             * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
              *
              * That is, if I have an edit text in an activity, and pop a dialog, and in that

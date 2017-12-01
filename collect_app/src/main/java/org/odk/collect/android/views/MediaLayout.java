@@ -253,7 +253,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                                     } catch (InvalidReferenceException e) {
                                         Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                                     } catch (ActivityNotFoundException e) {
-                                        Timber.d(e, "No Activity found to save due to %s", e.getMessage());
+                                        Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
                                         ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
                                                 "view image"));
                                     }
@@ -426,7 +426,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // No picture
             dividerParams.addRule(RelativeLayout.BELOW, viewText.getId());
         } else {
-            Timber.e("Tried to addDisposable divider to uninitialized ATVWidget");
+            Timber.e("Tried to add divider to uninitialized ATVWidget");
             return;
         }
         addView(v, dividerParams);

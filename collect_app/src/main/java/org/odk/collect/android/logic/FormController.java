@@ -57,7 +57,7 @@ import timber.log.Timber;
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
  * javarosa as the form engine, you should only need to replace the methods in this file. Also, we
  * haven't wrapped every method provided by FormEntryController, only the ones we've needed so far.
- * Feel free to addSubscription more as necessary.
+ * Feel free to add more as necessary.
  *
  * @author carlhartung
  */
@@ -402,7 +402,7 @@ public class FormController {
         } else if (event == FormEntryController.EVENT_REPEAT) {
             return repeatIsFieldList(index);
         } else {
-            // right now we only test Questions and Groups. Should we also save
+            // right now we only test Questions and Groups. Should we also handle
             // repeats?
             return false;
         }

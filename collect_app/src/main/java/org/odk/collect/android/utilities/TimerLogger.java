@@ -105,7 +105,7 @@ public class TimerLogger {
                             textValue = "group questions";
                             break;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            textValue = "addDisposable repeat";
+                            textValue = "add repeat";
                             break;
                         case FormEntryController.EVENT_END_OF_FORM:
                             textValue = "end screen";
@@ -145,7 +145,7 @@ public class TimerLogger {
                     textValue = "delete repeat";
                     break;
                 default:
-                    textValue = "Unknown Click Type: " + eventType;
+                    textValue = "Unknown Event Type: " + eventType;
                     break;
             }
             return textValue + "," + node + "," + start + ","
@@ -198,8 +198,8 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
-            Timber.i("Click recorded: %s : %s", eventType, fecType);
-            // Calculate the time and addDisposable the event to the events array
+            Timber.i("Event recorded: %s : %s", eventType, fecType);
+            // Calculate the time and add the event to the events array
             long start = getEventTime();
 
             // Set the node value from the question reference
@@ -269,7 +269,7 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
-            // Calculate the time and addDisposable the event to the events array
+            // Calculate the time and add the event to the events array
             long end = getEventTime();
             for (Event ev : events) {
                 ev.setEnd(end);
@@ -292,7 +292,7 @@ public class TimerLogger {
             events = new ArrayList<>();
 
         } else {
-            Timber.i("Queueing Timer Click");
+            Timber.i("Queueing Timer Event");
         }
     }
 

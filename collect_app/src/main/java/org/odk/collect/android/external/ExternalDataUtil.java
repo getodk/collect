@@ -166,7 +166,7 @@ public final class ExternalDataUtil {
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
-                    // we can only addSubscription only the appropriate by querying the xPathFuncExpr.id.name
+                    // we can only add only the appropriate by querying the xPathFuncExpr.id.name
                     evaluationContext.addFunctionHandler(
                             new ExternalDataHandlerSearch(externalDataManager, displayColumns,
                                     value, imageColumn));
@@ -192,7 +192,7 @@ public final class ExternalDataUtil {
     }
 
     /**
-     * We could simple return new String(displayColumns + "," + valueColumn) but we want to save
+     * We could simple return new String(displayColumns + "," + valueColumn) but we want to handle
      * the cases
      * where the displayColumns (valueColumn) contain more commas than needed, in the middle, start
      * or end.

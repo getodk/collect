@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.activities.FormEntryActivity.LOCATION_RESULT;
 import static org.odk.collect.android.location.activities.GeoPointActivityTest.newMockLocation;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -93,13 +94,13 @@ public class GeoPointMapActivityTest {
 
         activity.getZoomDialog().dismiss();
 
-//        activity.returnLocation();
+        activity.returnLocation();
         assertTrue(shadowActivity.isFinishing());
 
         assertEquals(shadowActivity.getResultCode(), RESULT_OK);
 
         Intent resultIntent = shadowActivity.getResultIntent();
-//        assertEquals(resultIntent.getStringExtra(LOCATION_RESULT), activity.getResultString(location));
+        assertEquals(resultIntent.getStringExtra(LOCATION_RESULT), activity.getResultString(location));
     }
 
     @Test

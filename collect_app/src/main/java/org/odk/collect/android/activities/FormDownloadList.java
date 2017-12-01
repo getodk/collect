@@ -649,7 +649,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             String dialogTitle = getString(R.string.load_remote_form_error);
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
-            // Everything worked. Clear the list and addSubscription the results.
+            // Everything worked. Clear the list and add the results.
             formNamesAndURLs = result;
 
             formList.clear();

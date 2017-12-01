@@ -305,7 +305,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
             progressDialog.dismiss();
         }
 
-        // addSubscription our list of completed uploads to "completed"
+        // add our list of completed uploads to "completed"
         // and remove them from our toSend list.
         ArrayList<Long> workingSet = new ArrayList<Long>();
         Collections.addAll(workingSet, instancesToSend);

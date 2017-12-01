@@ -11,7 +11,7 @@ public class ViewIds {
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     /**
-     * Generates a unique integer ID for a MVVMView.
+     * Generates a unique integer ID for a View.
      * Falls back to the system provided {@link View#generateViewId()} when possible.
      *
      * @return A unique integer ID.
@@ -28,7 +28,7 @@ public class ViewIds {
      * This is a line-for-line copy of the built-in, post API 17 {@link View#generateViewId()}.
      * A bit odd, but what the system uses internally for generating unique IDs.
      *
-     * @return A unique integer ID to be used for a MVVMView.
+     * @return A unique integer ID to be used for a View.
      */
     private static int generateViewIdPre17() {
         while (true) {

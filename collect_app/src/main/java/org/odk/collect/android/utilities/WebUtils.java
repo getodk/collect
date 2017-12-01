@@ -116,7 +116,7 @@ public final class WebUtils {
 
     /**
      * Remove all credentials for accessing the specified host and, if the
-     * username is not null or blank then addSubscription a (username, password) credential
+     * username is not null or blank then add a (username, password) credential
      * for accessing this host.
      */
     public static void addCredentials(String username, String password,
@@ -217,7 +217,7 @@ public final class WebUtils {
                 .setConnectTimeout(timeout)
                 // support authenticating
                 .setAuthenticationEnabled(true)
-                // support redirecting to save http: => https: transition
+                // support redirecting to handle http: => https: transition
                 .setRedirectsEnabled(true)
                 .setMaxRedirects(1)
                 .setCircularRedirectsAllowed(true)
@@ -236,7 +236,7 @@ public final class WebUtils {
      * Utility to ensure that the entity stream of a response is drained of
      * bytes.
      * Apparently some servers require that we manually read all data from the
-     * stream to allow its re-use.  Please addSubscription more details or bug ID here if
+     * stream to allow its re-use.  Please add more details or bug ID here if
      * you know them.
      */
     public static void discardEntityBytes(HttpResponse response) {

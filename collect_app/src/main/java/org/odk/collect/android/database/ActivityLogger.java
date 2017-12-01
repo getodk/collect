@@ -192,7 +192,7 @@ public final class ActivityLogger {
         synchronized (scrollActions) {
             long timeStamp = Calendar.getInstance().getTimeInMillis();
 
-            // Check to see if we can addSubscription this scroll action to the previous action.
+            // Check to see if we can add this scroll action to the previous action.
             if (!scrollActions.isEmpty()) {
                 ContentValues lastCv = scrollActions.get(scrollActions.size() - 1);
                 long oldTimeStamp = lastCv.getAsLong(TIMESTAMP);

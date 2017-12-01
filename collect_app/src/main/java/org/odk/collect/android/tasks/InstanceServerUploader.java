@@ -222,7 +222,7 @@ public class InstanceServerUploader extends InstanceUploader {
                         }
                     }
                 } else {
-                    // may be a server that does not save
+                    // may be a server that does not handle
                     WebUtils.discardEntityBytes(response);
 
                     Timber.w("Status code on Head request: %d", statusCode);
@@ -310,7 +310,7 @@ public class InstanceServerUploader extends InstanceUploader {
         // find all files in parent directory
         File[] allFiles = instanceFile.getParentFile().listFiles();
 
-        // addSubscription media files
+        // add media files
         List<File> files = new ArrayList<File>();
         if (allFiles != null) {
             for (File f : allFiles) {
@@ -360,7 +360,7 @@ public class InstanceServerUploader extends InstanceUploader {
             // mime post
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
-            // addSubscription the submission file first...
+            // add the submission file first...
             FileBody fb = new FileBody(submissionFile, ContentType.TEXT_XML);
             builder.addPart("xml_submission_file", fb);
             Timber.i("added xml_submission_file: %s", submissionFile.getName());
@@ -527,7 +527,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     String urlString = c.isNull(subIdx)
                             ? getServerSubmissionURL() : c.getString(subIdx).trim();
 
-                    // addSubscription the deviceID to the request...
+                    // add the deviceID to the request...
                     try {
                         urlString += "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8");
                     } catch (UnsupportedEncodingException e) {

@@ -9,10 +9,6 @@ import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertTrue;
 
-/**
- * @author James Knight
- */
-
 @RunWith(AndroidJUnit4.class)
 public class GeoActivityTest {
 

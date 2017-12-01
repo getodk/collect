@@ -78,7 +78,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         // Disable the Scroll Bar
         setHorizontalScrollBarEnabled(false);
-        // Make sure that the Tab Strips fills this MVVMView
+        // Make sure that the Tab Strips fills this View
         setFillViewport(true);
 
         titleOffset = (int) (TITLE_OFFSET_DIPS * getResources().getDisplayMetrics().density);

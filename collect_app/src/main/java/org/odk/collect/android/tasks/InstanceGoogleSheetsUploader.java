@@ -378,7 +378,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         boolean emptyheaders = true;
 
         // go through headers
-        // if they're empty, resize and addSubscription
+        // if they're empty, resize and add
         if (headerFeed != null) {
             for (Object c : headerFeed) {
                 if (c != null) {
@@ -390,7 +390,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         if (emptyheaders) {
             // if the headers were empty, resize the spreadsheet
-            // and addSubscription the headers
+            // and add the headers
 
             //resizing the spreadsheet
             SheetProperties sheetProperties = new SheetProperties()
@@ -561,7 +561,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         // if we get here.. all has matched
         // so write the values
 
-        // addSubscription photos to answer set
+        // add photos to answer set
         for (String key : uploadedMedia.keySet()) {
             String url = uploadedMedia.get(key);
             answersToUpload.put(key, url);

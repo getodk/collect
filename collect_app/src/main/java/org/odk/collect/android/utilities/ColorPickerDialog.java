@@ -143,7 +143,7 @@ public class ColorPickerDialog extends Dialog {
                 index++;
             }
 
-            // Initializes the Paint that will draw the MVVMView
+            // Initializes the Paint that will draw the View
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setTextAlign(Paint.Align.CENTER);
             paint.setTextSize(12);

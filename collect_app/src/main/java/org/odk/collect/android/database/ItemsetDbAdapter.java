@@ -105,7 +105,7 @@ public class ItemsetDbAdapter {
 
         for (String column : columns) {
             if (!column.isEmpty()) {
-                // addSubscription double quotes in case the column is of label:lang
+                // add double quotes in case the column is of label:lang
                 sb
                         .append(" , \"")
                         .append(column)

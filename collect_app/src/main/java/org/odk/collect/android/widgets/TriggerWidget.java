@@ -31,7 +31,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ViewIds;
 
 /**
- * Widget that allows user to scan barcodes and addSubscription them to the form.
+ * Widget that allows user to scan barcodes and add them to the form.
  *
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */

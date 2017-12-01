@@ -141,7 +141,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
             int columnIndex = cursor.getColumnIndex(DELETED_DATE);
             cursor.close();
 
-            // Only addSubscription the column if it doesn't already exist
+            // Only add the column if it doesn't already exist
             if (columnIndex == -1) {
                 db.execSQL("ALTER TABLE " + INSTANCES_TABLE_NAME + " ADD COLUMN "
                         + DELETED_DATE + " date;");

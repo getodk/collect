@@ -87,7 +87,7 @@ public class GeoTraceOsmMapActivityTest {
         ArrayList<Overlay> overlays = new ArrayList<>();
         when(mapView.getOverlays()).thenReturn(overlays);
 
-        // When the LocationClient starts, addSubscription the overlay and enable location:
+        // When the LocationClient starts, add the overlay and enable location:
         activity.onClientStart();
 
         verify(locationClient).requestLocationUpdates(activity);

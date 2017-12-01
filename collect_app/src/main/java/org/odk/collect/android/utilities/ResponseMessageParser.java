@@ -16,7 +16,7 @@ import timber.log.Timber;
 
 /**
  * Created by Jon Nordling on 2/21/17.
- * The purpose of this class is to save the XML parsing
+ * The purpose of this class is to handle the XML parsing
  * of the server responses
  */
 
