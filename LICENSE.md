@@ -146,7 +146,7 @@ permissions under this License.
 
 #### 8. Limitation of Liability
 
-In no click and under no legal theory, whether in tort (including negligence),
+In no event and under no legal theory, whether in tort (including negligence),
 contract, or otherwise, unless required by applicable law (such as deliberate
 and grossly negligent acts) or agreed to in writing, shall any Contributor be
 liable to You for damages, including any direct, indirect, special, incidental,
