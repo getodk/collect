@@ -31,7 +31,7 @@ import org.odk.collect.android.R;
 public class DialogUtils {
 
     /**
-     * List MVVMView used with actions
+     * List View used with actions
      * @param context UI Context (Activity/Fragment)
      * @return ListView with white divider between items to prevent accidental taps
      */

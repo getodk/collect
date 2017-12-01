@@ -56,8 +56,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -152,7 +152,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        //MVVMView sent forms
+        //View sent forms
         viewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -610,7 +610,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Timber.w("Cannot update \"MVVMView Sent\" button label since the database is closed. "
+            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }
     }
