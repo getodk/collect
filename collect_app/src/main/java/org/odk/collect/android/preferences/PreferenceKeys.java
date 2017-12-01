@@ -55,7 +55,6 @@ public final class PreferenceKeys {
     // other keys
     public static final String KEY_LAST_VERSION             = "lastVersion";
     public static final String KEY_FIRST_RUN                = "firstRun";
-    public static final String SHOULD_LOAD_DEFAULT_VALUES   = "shouldLoadDefaultValues";
     /** Whether any existing username and email values have been migrated to form metadata */
     static final String KEY_METADATA_MIGRATED               = "metadata_migrated";
     static final String KEY_AUTOSEND_WIFI                   = "autosend_wifi";
@@ -112,7 +111,6 @@ public final class PreferenceKeys {
     static final Collection<String> KEYS_WE_SHOULD_NOT_RESET = Arrays.asList(
             KEY_LAST_VERSION,
             KEY_FIRST_RUN,
-            SHOULD_LOAD_DEFAULT_VALUES,
             KEY_METADATA_MIGRATED,
             KEY_AUTOSEND_WIFI,
             KEY_AUTOSEND_NETWORK

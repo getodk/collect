@@ -16,7 +16,6 @@ package org.odk.collect.android.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -33,6 +32,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -46,7 +46,6 @@ import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -65,8 +64,9 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_USERNAME;
 import static org.odk.collect.android.logic.PropertyManager.SCHEME_USERNAME;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_USERNAME;
-import static org.odk.collect.android.preferences.PreferenceKeys.SHOULD_LOAD_DEFAULT_VALUES;
 
 /**
  * The Open Data Kit Collect application.
@@ -115,15 +115,7 @@ public class Collect extends Application {
             return Collect.DEFAULT_FONTSIZE_INT;
         }
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(instance);
-        if (settings == null) {
-            return Collect.DEFAULT_FONTSIZE_INT;
-        }
-
-        String questionFont = settings.getString(PreferenceKeys.KEY_FONT_SIZE,
-                Collect.DEFAULT_FONTSIZE);
-
-        return Integer.parseInt(questionFont);
+        return Integer.parseInt(String.valueOf(GeneralSharedPreferences.getInstance().get(KEY_FONT_SIZE)));
     }
 
     /**
@@ -252,15 +244,13 @@ public class Collect extends Application {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void showKeyboard(View view) {
-        view.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
+        singleton = this;
+
+        // It must be called before you save anything to SharedPreferences
+        loadDefaultValuesIfNeeded();
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -268,9 +258,6 @@ public class Collect extends Application {
 
         defaultSysLanguage = Locale.getDefault().getLanguage();
         new LocaleHelper().updateLocale(this);
-        singleton = this;
-
-        loadDefaultValuesIfNeeded();
 
         FormMetadataMigrator.migrate(PreferenceManager.getDefaultSharedPreferences(this));
         AutoSendPreferenceMigrator.migrate();
@@ -287,21 +274,11 @@ public class Collect extends Application {
         setupLeakCanary();
     }
 
-    // Default values should be loaded after a fresh installation or first app run after upgrading to the version in which the flag was introduced
-    private boolean shouldLoadDefaultValues() {
-        boolean firstAppRun = GeneralSharedPreferences.getInstance().getBoolean(SHOULD_LOAD_DEFAULT_VALUES, true);
-        if (firstAppRun) {
-            GeneralSharedPreferences.getInstance().save(SHOULD_LOAD_DEFAULT_VALUES, false);
-        }
-        return firstAppRun;
-    }
-
-    private void setupLeakCanary() {
+    protected RefWatcher setupLeakCanary() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
+            return RefWatcher.DISABLED;
         }
-        LeakCanary.install(this);
+        return LeakCanary.install(this);
     }
 
     @Override
@@ -310,8 +287,7 @@ public class Collect extends Application {
 
         //noinspection deprecation
         defaultSysLanguage = newConfig.locale.getLanguage();
-        boolean isUsingSysLanguage = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(PreferenceKeys.KEY_APP_LANGUAGE, "").equals("");
+        boolean isUsingSysLanguage = GeneralSharedPreferences.getInstance().get(KEY_APP_LANGUAGE).equals("");
         if (!isUsingSysLanguage) {
             new LocaleHelper().updateLocale(this);
         }
@@ -358,7 +334,7 @@ public class Collect extends Application {
     }
 
     private void loadDefaultValuesIfNeeded() {
-        if (shouldLoadDefaultValues()) {
+        if (GeneralSharedPreferences.getInstance().getAll().isEmpty()) {
             GeneralSharedPreferences.getInstance().loadDefaultValues();
             AdminSharedPreferences.getInstance().loadDefaultValues();
         }

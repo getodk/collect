@@ -4,7 +4,7 @@ jobs:
   build:
       working_directory: ~/code
       docker:
-      - image: saneandroid/odk-collect:0.0.2
+      - image: opendatakit/collect-build:1.0.0
       environment:
           # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
           _JAVA_OPTIONS: "-Xmx1024m"
@@ -50,10 +50,12 @@ jobs:
                   fi
           - run:
               name: Run integration tests
+              # if the file fails to copy, it's likely because --abbrev=9 doesn't match the
+              # real hash length anymore.
               command: |
                   if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
                     echo "y" | sudo gcloud firebase test android run \
-                    --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always).apk \
+                    --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always --abbrev=9).apk \
                     --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
                     --device model=Nexus5,version=21,locale=en,orientation=portrait \
                     --results-bucket opendatakit-collect-test-results; \

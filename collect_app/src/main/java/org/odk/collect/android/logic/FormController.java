@@ -425,6 +425,13 @@ public class FormController {
                 && indexIsInFieldList()));
     }
 
+    public boolean isCurrentQuestionFirstInForm() throws JavaRosaException {
+        FormIndex originalFormIndex = getFormIndex();
+        boolean firstQuestion = (stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM);
+        jumpToIndex(originalFormIndex);
+        return firstQuestion;
+    }
+
     /**
      * Attempts to save answer into the given FormIndex into the data model.
      */
