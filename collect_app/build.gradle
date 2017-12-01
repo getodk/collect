@@ -146,7 +146,6 @@ android {
         javaMaxHeapSize '2048M'
     }
 
-    buildToolsVersion '26.0.2'
     testOptions.unitTests.includeAndroidResources true
 }
 
