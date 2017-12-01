@@ -85,7 +85,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -709,7 +709,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  * be in: /sdcard/odk/instances/[current instnace]/something.jpg so
                  * we move it there before inserting it into the content provider.
                  * Once the android image capture bug gets fixed, (read, we move on
-                 * from Android 1.6) we want to handle images the audio and video
+                 * from Android 1.6) we want to save images the audio and video
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
@@ -763,7 +763,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  * /sdcard/odk/instances/[current instnace]/something.jpg so we move
                  * it there before inserting it into the content provider. Once the
                  * android image capture bug gets fixed, (read, we move on from
-                 * Android 1.6) we want to handle images the audio and video
+                 * Android 1.6) we want to save images the audio and video
                  */
 
                 showDialog(SAVING_IMAGE_DIALOG);
@@ -1085,7 +1085,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             createDeleteRepeatConfirmDialog();
         } else {
             /*
-            * We don't have the right view here, so we store the View's ID as the
+            * We don't have the right view here, so we store the MVVMView's ID as the
             * item ID and loop through the possible views to find the one the user
             * clicked on.
             */
@@ -1144,10 +1144,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Creates a view given the View type and an event
+     * Creates a view given the MVVMView type and an event
      *
      * @param advancingPage -- true if this results from advancing through the form
-     * @return newly created View
+     * @return newly created MVVMView
      */
     private View createView(int event, boolean advancingPage) {
         FormController formController = Collect.getInstance()
@@ -1320,7 +1320,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // Makes a "clear answer" menu pop up on long-click
                 for (QuestionWidget qw : odkView.getWidgets()) {
                     if (!qw.getFormEntryPrompt().isReadOnly()) {
-                        // If it's a StringWidget addSubscription all its elements apart from EditText as
+                        // If it's a StringWidget addDisposable all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
                         if (qw instanceof StringWidget) {
                             for (int i = 0; i < qw.getChildCount(); i++) {
@@ -1540,7 +1540,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Displays the View specified by the parameter 'next', animating both the
+     * Displays the MVVMView specified by the parameter 'next', animating both the
      * current view and next appropriately given the AnimationType. Also updates
      * the progress bar.
      */
@@ -1788,7 +1788,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         //
                         // When showNextView() popups an error dialog (because of a
                         // JavaRosaException)
-                        // the issue is that the "addSubscription new repeat dialog" is referenced by
+                        // the issue is that the "addDisposable new repeat dialog" is referenced by
                         // alertDialog
                         // like the error dialog. When the "no repeat" is clicked, the error dialog
                         // is shown. Android by default dismisses the dialogs when a button is

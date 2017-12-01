@@ -222,7 +222,7 @@ public class InstanceServerUploader extends InstanceUploader {
                         }
                     }
                 } else {
-                    // may be a server that does not handle
+                    // may be a server that does not save
                     WebUtils.discardEntityBytes(response);
 
                     Timber.w("Status code on Head request: %d", statusCode);

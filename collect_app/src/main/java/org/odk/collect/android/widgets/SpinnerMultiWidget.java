@@ -87,7 +87,7 @@ public class SpinnerMultiWidget extends QuestionWidget implements MultiChoiceWid
         alertBuilder = new AlertDialog.Builder(context);
         button = getSimpleButton(context.getString(R.string.select_answer));
 
-        // Build View
+        // Build MVVMView
         for (int i = 0; i < items.size(); i++) {
             answerItems[i] = prompt.getSelectChoiceText(items.get(i));
         }

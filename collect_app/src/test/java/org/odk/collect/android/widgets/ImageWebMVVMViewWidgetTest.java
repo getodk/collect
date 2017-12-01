@@ -17,14 +17,14 @@ import static org.mockito.Mockito.when;
 /**
  * @author James Knight
  */
-public class ImageWebViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
+public class ImageWebMVVMViewWidgetTest extends FileWidgetTest<ImageWebViewWidget> {
 
     @Mock
     File file;
 
     private String fileName = null;
 
-    public ImageWebViewWidgetTest() {
+    public ImageWebMVVMViewWidgetTest() {
         super();
     }
 

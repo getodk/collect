@@ -402,7 +402,7 @@ public class FormController {
         } else if (event == FormEntryController.EVENT_REPEAT) {
             return repeatIsFieldList(index);
         } else {
-            // right now we only test Questions and Groups. Should we also handle
+            // right now we only test Questions and Groups. Should we also save
             // repeats?
             return false;
         }

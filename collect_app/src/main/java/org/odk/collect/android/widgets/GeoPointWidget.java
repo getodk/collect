@@ -152,7 +152,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
         });
 
         // finish complex layout
-        // control what gets shown with setVisibility(View.GONE)
+        // control what gets shown with setVisibility(MVVMView.GONE)
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(getLocationButton);
@@ -181,7 +181,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
             // hide the view button
             viewButton.setVisibility(View.GONE);
             if (readOnly) {
-                //READ_ONLY View
+                //READ_ONLY MVVMView
                 getLocationButton.setText(
                         getContext().getString(R.string.geopoint_view_read_only));
             } else {

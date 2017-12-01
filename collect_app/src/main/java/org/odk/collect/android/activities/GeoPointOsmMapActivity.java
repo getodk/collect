@@ -230,7 +230,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
                 marker.remove(map);
                 if (location != null) {
                     reloadLocationButton.setEnabled(true);
-                    //locationStatus.setVisibility(View.VISIBLE);
+                    //locationStatus.setVisibility(MVVMView.VISIBLE);
                 }
                 locationStatus.setVisibility(View.VISIBLE);
                 map.getOverlays().remove(marker);

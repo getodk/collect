@@ -62,7 +62,7 @@ public class CustomTabHelper {
         // Get default VIEW intent handler that can view a web url.
         Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.test-url.com"));
 
-        // Get all apps that can handle VIEW intents.
+        // Get all apps that can save VIEW intents.
         PackageManager pm = context.getPackageManager();
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
         List<String> packagesSupportingCustomTabs = new ArrayList<>();

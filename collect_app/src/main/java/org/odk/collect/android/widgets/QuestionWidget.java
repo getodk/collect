@@ -46,7 +46,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
@@ -257,7 +257,7 @@ public abstract class QuestionWidget
 
     /*
      * Add a Views containing the question text, audio (if applicable), and image (if applicable).
-     * To satisfy the RelativeLayout constraints, we addSubscription the audio first if it exists, then the
+     * To satisfy the RelativeLayout constraints, we addDisposable the audio first if it exists, then the
      * TextView to fit the rest of the space, then the image if applicable.
      */
     /*
@@ -266,7 +266,7 @@ public abstract class QuestionWidget
      */
     protected void addQuestionMediaLayout(View v) {
         if (v == null) {
-            Timber.e("cannot addSubscription a null view as questionMediaLayout");
+            Timber.e("cannot addDisposable a null view as questionMediaLayout");
             return;
         }
         // default for questionmedialayout
@@ -298,7 +298,7 @@ public abstract class QuestionWidget
      */
     protected void addHelpTextView(View v) {
         if (v == null) {
-            Timber.e("cannot addSubscription a null view as helpTextView");
+            Timber.e("cannot addDisposable a null view as helpTextView");
             return;
         }
 
@@ -341,10 +341,10 @@ public abstract class QuestionWidget
      */
     protected void addAnswerView(View v) {
         if (v == null) {
-            Timber.e("cannot addSubscription a null view as an answerView");
+            Timber.e("cannot addDisposable a null view as an answerView");
             return;
         }
-        // default place to addSubscription answer
+        // default place to addDisposable answer
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);

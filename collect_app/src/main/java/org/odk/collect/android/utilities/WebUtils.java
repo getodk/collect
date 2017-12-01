@@ -217,7 +217,7 @@ public final class WebUtils {
                 .setConnectTimeout(timeout)
                 // support authenticating
                 .setAuthenticationEnabled(true)
-                // support redirecting to handle http: => https: transition
+                // support redirecting to save http: => https: transition
                 .setRedirectsEnabled(true)
                 .setMaxRedirects(1)
                 .setCircularRedirectsAllowed(true)

@@ -165,6 +165,7 @@ allprojects {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation group: 'com.android.support.constraint', name: 'constraint-layout', version: '1.0.2'
     implementation group: 'com.android.support', name: 'support-v13', version: '27.0.2'
     implementation group: 'com.android.support', name: 'customtabs', version: '27.0.2'
     implementation group: 'com.android.support', name: 'design', version: '27.0.2'
@@ -224,15 +225,21 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
-    compile 'com.google.dagger:dagger-android:2.11'
-    compile 'com.google.dagger:dagger-android-support:2.11' // if you use the support libraries
+    implementation 'com.google.dagger:dagger-android:2.11'
+    implementation 'com.google.dagger:dagger-android-support:2.11' // if you use the support libraries
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
-    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Testing-only dependencies
     testImplementation group: 'junit', name: 'junit', version: '4.12'

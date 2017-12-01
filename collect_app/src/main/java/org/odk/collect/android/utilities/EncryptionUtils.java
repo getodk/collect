@@ -459,7 +459,7 @@ public class EncryptionUtils {
                 continue; // don't touch instance file
             }
             if (f.isDirectory()) {
-                continue; // don't handle directories
+                continue; // don't save directories
             }
             if (!f.getName().endsWith(".enc")) {
                 // not an encrypted file -- delete it!
@@ -489,7 +489,7 @@ public class EncryptionUtils {
                 continue; // handled last
             }
             if (f.isDirectory()) {
-                continue; // don't handle directories
+                continue; // don't save directories
             }
             if (f.getName().startsWith(".")) {
                 continue; // MacOSX garbage

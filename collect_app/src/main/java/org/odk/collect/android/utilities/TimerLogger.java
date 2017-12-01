@@ -105,7 +105,7 @@ public class TimerLogger {
                             textValue = "group questions";
                             break;
                         case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                            textValue = "addSubscription repeat";
+                            textValue = "addDisposable repeat";
                             break;
                         case FormEntryController.EVENT_END_OF_FORM:
                             textValue = "end screen";
@@ -199,7 +199,7 @@ public class TimerLogger {
         if (timerEnabled) {
 
             Timber.i("Click recorded: %s : %s", eventType, fecType);
-            // Calculate the time and addSubscription the event to the events array
+            // Calculate the time and addDisposable the event to the events array
             long start = getEventTime();
 
             // Set the node value from the question reference
@@ -269,7 +269,7 @@ public class TimerLogger {
 
         if (timerEnabled) {
 
-            // Calculate the time and addSubscription the event to the events array
+            // Calculate the time and addDisposable the event to the events array
             long end = getEventTime();
             for (Event ev : events) {
                 ev.setEnd(end);

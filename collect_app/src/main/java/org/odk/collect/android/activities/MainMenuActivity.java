@@ -152,7 +152,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        //View sent forms
+        //MVVMView sent forms
         viewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -610,7 +610,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         } else {
             viewSentFormsButton.setText(getString(R.string.view_sent_forms));
-            Timber.w("Cannot update \"View Sent\" button label since the database is closed. "
+            Timber.w("Cannot update \"MVVMView Sent\" button label since the database is closed. "
                     + "Perhaps the app is running in the background?");
         }
     }

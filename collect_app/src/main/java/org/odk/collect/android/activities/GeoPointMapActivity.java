@@ -288,7 +288,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
                 }
                 if (location != null) {
                     reloadLocation.setEnabled(true);
-                    // locationStatus.setVisibility(View.VISIBLE);
+                    // locationStatus.setVisibility(MVVMView.VISIBLE);
                 }
                 // reloadLocation.setEnabled(true);
                 locationInfo.setVisibility(View.VISIBLE);

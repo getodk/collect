@@ -192,7 +192,7 @@ public final class ExternalDataUtil {
     }
 
     /**
-     * We could simple return new String(displayColumns + "," + valueColumn) but we want to handle
+     * We could simple return new String(displayColumns + "," + valueColumn) but we want to save
      * the cases
      * where the displayColumns (valueColumn) contain more commas than needed, in the middle, start
      * or end.

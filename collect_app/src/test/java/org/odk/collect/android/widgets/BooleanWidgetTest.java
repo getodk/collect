@@ -21,7 +21,7 @@ public class BooleanWidgetTest extends WidgetTest {
         return new BooleanWidget(RuntimeEnvironment.application, formEntryPrompt);
     }
 
-    // BooleanWidgets always return a non-null answer, so we need to handle these tests manually:
+    // BooleanWidgets always return a non-null answer, so we need to save these tests manually:
 
     @Override
     public void getAnswerShouldReturnNullIfPromptDoesNotHaveExistingAnswer() {
