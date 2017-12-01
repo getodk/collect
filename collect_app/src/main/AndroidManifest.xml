@@ -41,14 +41,16 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <!-- Get permission for reliable local dispatching on non-Google Play devices. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus"
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
         android:required="false" />
-    <uses-feature android:name="android.hardware.screen.portrait"
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
         android:required="false" />
 
     <uses-feature
@@ -126,8 +128,8 @@ the specific language governing permissions and limitations under the License.
             android:taskAffinity="" />
         <activity
             android:name=".activities.DrawActivity"
-            android:screenOrientation="landscape"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activities.OpenSourceLicensesActivity"
             android:label="@string/all_open_source_licenses" />
@@ -188,15 +190,16 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name" />
         <activity
             android:name=".preferences.AboutPreferencesActivity"
-            android:theme="@style/AppTheme.SettingsTheme"
-            android:label="@string/app_name" />
-        <activity android:name=".preferences.PreferencesActivity"
-            android:theme="@style/AppTheme.SettingsTheme"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.SettingsTheme" />
+        <activity
+            android:name=".preferences.PreferencesActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.SettingsTheme" />
         <activity
             android:name=".preferences.AdminPreferencesActivity"
-            android:theme="@style/AppTheme.SettingsTheme"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.SettingsTheme" />
         <activity
             android:name=".activities.FormHierarchyActivity"
             android:label="@string/app_name" />
@@ -253,10 +256,9 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.CaptureSelfieActivity" />
-        <activity
-            android:name=".activities.CaptureSelfieActivityNewApi" />
+        <activity android:name=".activities.CaptureSelfieActivity" />
+        <activity android:name=".activities.CaptureSelfieActivityNewApi" />
+
         <receiver
             android:name=".receivers.NetworkReceiver"
             android:enabled="true">
@@ -293,7 +295,7 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="firebase_crash_collection_enabled"
-            android:value="@bool/FIREBASE_CRASH_ENABLED"/>
+            android:value="@bool/FIREBASE_CRASH_ENABLED" />
 
         <uses-library
             android:name="com.google.android.maps"
