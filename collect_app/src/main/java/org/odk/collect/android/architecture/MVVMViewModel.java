@@ -4,6 +4,10 @@ import android.arch.lifecycle.ViewModel;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+/**
+ * A {@link ViewModel} subclass that provides an 'onCreate' method for simplifying
+ * subscription timing.
+ */
 public class MVVMViewModel extends ViewModel {
 
     private boolean wasCreated = false;
@@ -18,7 +22,7 @@ public class MVVMViewModel extends ViewModel {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void onCreate() {
+    protected void onCreate() {
 
     }
 }

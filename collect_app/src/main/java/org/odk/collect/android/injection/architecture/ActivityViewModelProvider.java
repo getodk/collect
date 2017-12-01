@@ -5,11 +5,15 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.FragmentActivity;
 
-import org.odk.collect.android.injection.scopes.ActivityScope;
+import org.odk.collect.android.injection.scopes.PerActivity;
 
 import javax.inject.Inject;
 
-@ActivityScope
+/**
+ * Creates a ViewModelProvider for fetching ViewModel's for
+ * an Activity.
+ */
+@PerActivity
 public class ActivityViewModelProvider {
 
     private final ViewModelProvider viewModelProvider;

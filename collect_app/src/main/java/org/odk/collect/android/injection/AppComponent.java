@@ -3,13 +3,15 @@ package org.odk.collect.android.injection;
 import android.app.Application;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.scopes.ApplicationScope;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.AndroidInjectionModule;
 import dagger.android.support.AndroidSupportInjectionModule;
 
+/**
+ * Primary module, bootstraps the injection system and
+ * injects the main Collect instance here.
+ */
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         AppModule.class,

@@ -11,6 +11,10 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 
+/**
+ * Module for generating injected ViewModel objects.
+ * To add new VMs, copy the format for GeoViewModel below.
+ */
 @Module
 public abstract class ViewModelModule {
     @Binds

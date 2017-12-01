@@ -13,6 +13,19 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
+/**
+ * A new Activity base class that uses Dagger to bootstrap VM creation.
+ *
+ * Create a new {@link MVVMViewModel} subclass, override getViewModelClass() to
+ * return the subclass you've created, and you'll have access to a persistent
+ * VM in your onCreate thanks to Dagger.
+ *
+ * Also handles subclass and Fragment injection, just add {@link Inject} fields
+ * to your Activity and have any Fragments you want injected implement the
+ * {@link org.odk.collect.android.injection.Injectable} interface.
+ *
+ * @param <VM>
+ */
 public abstract class MVVMActivity<VM extends MVVMViewModel>
         extends AppCompatActivity {
 
@@ -42,8 +55,13 @@ public abstract class MVVMActivity<VM extends MVVMViewModel>
         viewModel = null;
     }
 
-    @Nullable
+    @NonNull
     public VM getViewModel() {
+        if (viewModel == null) {
+            viewModel = fetchViewModel();
+            viewModel.create();
+        }
+
         return viewModel;
     }
 
