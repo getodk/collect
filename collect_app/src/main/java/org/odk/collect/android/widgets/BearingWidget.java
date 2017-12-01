@@ -50,7 +50,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class BearingWidget extends QuestionWidget implements BinaryWidget {
     private Button getBearingButton;
-    private boolean isSensorAvailable = false;
+    private boolean isSensorAvailable;
     private EditText answer;
     private LinearLayout answerLayout = new LinearLayout(getContext());
     private Drawable textBackground;
@@ -79,9 +79,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                                 getFormEntryPrompt().getIndex());
 
                 if (isSensorAvailable) {
-                    Intent i;
-                    i = new Intent(getContext(), BearingActivity.class);
-
+                    Intent i = new Intent(getContext(), BearingActivity.class);
                     waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
                             RequestCodes.BEARING_CAPTURE);
@@ -100,7 +98,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         answerLayout.addView(answer);
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
-
             getBearingButton.setText(getContext().getString(R.string.replace_bearing));
             if (!isSensorAvailable && answer != null) {
                 answer.setText(s);
