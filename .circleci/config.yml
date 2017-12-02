@@ -54,7 +54,7 @@ jobs:
                   if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
                     echo "y" | sudo gcloud firebase test android run \
                     --app collect_app/build/outputs/apk/debug/collect-debug-$(git describe --tags --dirty --always).apk \
-                    --test collect_app/build/outputs/apk/androidTest/collect_app-debug-androidTest.apk \
+                    --test collect_app/build/outputs/apk/androidTest/debug/collect_app-debug-androidTest.apk \
                     --device model=Nexus5,version=21,locale=en,orientation=portrait \
                     --results-bucket opendatakit-collect-test-results; \
                   fi
