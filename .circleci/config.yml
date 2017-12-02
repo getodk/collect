@@ -50,13 +50,11 @@ jobs:
                   fi
           - run:
               name: Run integration tests
-              # if the file fails to copy, it's likely because --abbrev=9 doesn't match the
-              # real hash length anymore.
               command: |
                   if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
                     echo "y" | sudo gcloud firebase test android run \
-                    --app collect_app/build/outputs/apk/collect-debug-$(git describe --tags --dirty --always --abbrev=9).apk \
-                    --test collect_app/build/outputs/apk/collect_app-debug-androidTest.apk \
+                    --app collect_app/build/outputs/apk/debug/collect-debug-$(git describe --tags --dirty --always).apk \
+                    --test collect_app/build/outputs/apk/androidTest/collect_app-debug-androidTest.apk \
                     --device model=Nexus5,version=21,locale=en,orientation=portrait \
                     --results-bucket opendatakit-collect-test-results; \
                   fi
