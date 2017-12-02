@@ -20,21 +20,18 @@ import android.content.Context;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.fragments.dialogs.EthiopianDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
-/**
- * @author Grzegorz Orczykowski (gorczykowski@soldevelo.com)
- */
-public class EthiopianDateWidget extends AbstractDateWidget {
+public class IslamicDateWidget extends AbstractDateWidget {
 
-    public EthiopianDateWidget(Context context, FormEntryPrompt prompt) {
+    public IslamicDateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }
 
     protected void showDatePickerDialog() {
-        EthiopianDatePickerDialog ethiopianDatePickerDialog = EthiopianDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-        ethiopianDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
+        IslamicDatePickerDialog islamicDatePickerDialog = IslamicDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+        islamicDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }
