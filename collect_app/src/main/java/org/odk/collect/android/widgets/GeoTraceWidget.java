@@ -26,18 +26,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoTraceGoogleMapActivity;
 import org.odk.collect.android.activities.GeoTraceOsmMapActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * GeoShapeTrace is the widget that allows the user to get Collect multiple GPS points based on the
@@ -75,13 +74,8 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
 
             @Override
             public void onClick(View v) {
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController != null) {
-                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
-                }
-
+                waitForData();
                 startGeoTraceActivity();
-
             }
         });
 
@@ -121,7 +115,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
         if (s.length() != 0) {
             i.putExtra(TRACE_LOCATION, s);
         }
-        ((Activity) getContext()).startActivityForResult(i, FormEntryActivity.GEOTRACE_CAPTURE);
+        ((Activity) getContext()).startActivityForResult(i, RequestCodes.GEOTRACE_CAPTURE);
     }
 
     private void updateButtonLabelsAndVisibility(boolean dataAvailable) {
@@ -136,28 +130,7 @@ public class GeoTraceWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText(answer.toString());
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(null);
-        }
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return false;
-        }
-
-        FormIndex indexWaitingForData = formController.getIndexWaitingForData();
-
-        return formEntryPrompt.getIndex().equals(
-                indexWaitingForData);
+        cancelWaitingForData();
     }
 
     @Override

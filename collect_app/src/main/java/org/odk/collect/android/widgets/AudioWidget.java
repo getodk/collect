@@ -33,15 +33,16 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.MediaUtil;
+import org.odk.collect.android.widgets.interfaces.FileWidget;
 
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -65,7 +66,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
     private Button chooseButton;
 
     private String binaryName;
-    private String instanceFolder;
 
     public AudioWidget(Context context, FormEntryPrompt prompt) {
         this(context, prompt, new FileUtil(), new MediaUtil());
@@ -77,15 +77,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         this.fileUtil = fileUtil;
         this.mediaUtil = mediaUtil;
 
-        final FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            Timber.e("Started AudioWidget with null FormController.");
-            return;
-        }
-
-        instanceFolder = formController.getInstancePath().getParent();
-
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_audio));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_audio), R.id.capture_audio);
         captureButton.setEnabled(!prompt.isReadOnly());
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +85,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "captureButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 Intent i = new Intent(
                         android.provider.MediaStore.Audio.Media.RECORD_SOUND_ACTION);
                 i.putExtra(
@@ -101,24 +93,22 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                         android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                                 .toString());
                 try {
-                    formController
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
+                    waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.AUDIO_CAPTURE);
+                            RequestCodes.AUDIO_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "audio capture"), Toast.LENGTH_SHORT)
                             .show();
-                    formController
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
         });
 
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_sound), R.id.choose_sound);
         chooseButton.setEnabled(!prompt.isReadOnly());
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,36 +116,34 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "chooseButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 try {
-                    formController
-                            .setIndexWaitingForData(formEntryPrompt.getIndex());
+                    waitForData();
                     ((Activity) getContext()).startActivityForResult(i,
-                            FormEntryActivity.AUDIO_CHOOSER);
+                            RequestCodes.AUDIO_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             getContext(),
                             getContext().getString(R.string.activity_not_found,
                                     "choose audio"), Toast.LENGTH_SHORT).show();
-                    formController
-                            .setIndexWaitingForData(null);
+                    cancelWaitingForData();
                 }
 
             }
         });
 
-        playButton = getSimpleButton(getContext().getString(R.string.play_audio));
+        playButton = getSimpleButton(getContext().getString(R.string.play_audio), R.id.play_audio);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "playButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 Intent i = new Intent("android.intent.action.VIEW");
-                File f = new File(instanceFolder + File.separator
+                File f = new File(getInstanceFolder() + File.separator
                         + binaryName);
                 i.setDataAndType(Uri.fromFile(f), "audio/*");
                 try {
@@ -187,7 +175,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         addAnswerView(answerLayout);
 
         // and hide the capture and choose button if read-only
-        if (formEntryPrompt.isReadOnly()) {
+        if (getFormEntryPrompt().isReadOnly()) {
             captureButton.setVisibility(View.GONE);
             chooseButton.setVisibility(View.GONE);
         }
@@ -201,7 +189,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         binaryName = null;
         // delete from media provider
         int del = mediaUtil.deleteAudioFileFromMediaProvider(
-                instanceFolder + File.separator + name);
+                getInstanceFolder() + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
@@ -268,7 +256,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
             Timber.e("Inserting Audio file FAILED");
         }
 
-        cancelWaitingForBinaryData();
+        cancelWaitingForData();
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {
@@ -277,7 +265,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
 
     private String getDestinationPathFromSourcePath(@NonNull String sourcePath) {
         String extension = sourcePath.substring(sourcePath.lastIndexOf('.'));
-        return instanceFolder + File.separator
+        return getInstanceFolder() + File.separator
                 + fileUtil.getRandomFilename() + extension;
     }
 
@@ -287,25 +275,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         InputMethodManager inputManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
     }
 
     @Override

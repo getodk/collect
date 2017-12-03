@@ -205,7 +205,6 @@
   <string name="autosend">Automaattinen lähetys</string>
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
-  <string name="no_account">Ei tiliä</string>
   <string name="save_preferences">Tallenna asetukset</string>
   <string name="form_forward">Seuraava</string>
   <string name="form_backward">Edellinen</string>
@@ -445,7 +444,7 @@
   <string name="select_time">Valitse aika</string>
   <string name="no_date_selected">Päivämäärä valitsematta</string>
   <string name="no_time_selected">Aika valitsematta</string>
-  <string name="import_settings">Tuonti/vienti-asetukset</string>
+  <string name="import_settings">Tuo/vie asetuksia</string>
   <string name="qr_code">QR-koodi</string>
   <string name="scan_qrcode">Skannaa koodi toiselta laitteelta</string>
   <string name="successfully_imported_settings">Asetukset haettu onnistuneesti</string>
@@ -455,14 +454,14 @@
   <string name="turn_on_flashlight">Taskulamppu päälle</string>
   <string name="turn_off_flashlight">Taskulamppu pois</string>
   <string name="qrcode_with_both_passwords">Tämä QR-koodi sisältää pääkäyttäjä- ja palvelinsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanat)</string>
-  <string name="qrcode_without_passwords">Tämä QR-koodi ei sisällä pääkäyttäjä- ja palvelinsalasanasi.  \n(Napauta lisääksesi salasanat)</string>
+  <string name="qrcode_without_passwords">Tämä QR-koodi ei sisällä pääkäyttäjä- tai palvelinsalasanaasi.  \n(Napauta lisääksesi salasanat)</string>
   <string name="qrcode_with_admin_password">Tämä QR-koodi sisältää pääkäyttäjäsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanan)</string>
   <string name="qrcode_with_server_password">Tämä QR-koodi sisältää palvelinsalasanasi. Ole hyvä ja käsittele varoen. \n(Napauta poistaaksesi salasanan)</string>
-  <string name="import_export_settings">Tuonti/vienti-asetukset</string>
+  <string name="import_export_settings">Tuo/vie asetuksia</string>
   <string name="qrcode_scanner_prompt">Aseta QR-koodi suorakaiteen sisään</string>
   <string name="barcode_scanner_prompt">Aseta viivakoodi suorakaiteen sisään</string>
   <string name="server_password">Palvelinsalasana</string>
-  <string name="include_password_dialog">Koodiin säsiltyvät salasanat</string>
+  <string name="include_password_dialog">Koodiin sisältyvät salasanat</string>
   <string name="generate">Luo</string>
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
   <string name="share_qrcode">Jaa QR-koodi</string>
@@ -487,6 +486,7 @@
   <string name="form_submission_category">Lomakkeen lähetys</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
   <string name="high_resolution_title">Korkean resoluution video</string>
+  <string name="image_size_title">Kuvakoko</string>
   <string name="form_import_category">Lomakkeen tuonti</string>
   <string name="user_and_device_identity_title">Käyttäjän ja laitteen tunnistaminen</string>
   <string name="constraint_behavior_title">Rajoitusten käsittely</string>
@@ -506,4 +506,26 @@
   <string name="deleting_form_dialog_update_message">Poistetaan lomake %1$d / %2$d </string>
   <string name="search">Etsi</string>
   <string name="null_intent_value">Ulkoinen sovellus ei toimittanut odotettua tietoa.</string>
+  <string name="image_size_large">Suuri (3072 pikseliä)</string>
+  <string name="image_size_medium">Keskisuuri (2048 pikseliä)</string>
+  <string name="image_size_small">Pieni (1024 pikseliä)</string>
+  <string name="image_size_very_small">Hyvin pieni (640 pikseliä)</string>
+  <string name="image_size_original">Kameran alkuperäinen koko (oletus)</string>
+  <string name="image_size_dialog_title">Maksimipikselit kuvan pitkältä reunalta</string>
+  <string name="bearing_lack_of_sensors">Suuntimaa ei voida hakea: laitteesta puuttuu kiihtyvyysanturi, magneettikenttäanturi tai molemmat.</string>
+  <string name="ethiopian_month_1">Mäskäräm</string>
+  <string name="ethiopian_month_2">Ṭəqəmt</string>
+  <string name="ethiopian_month_3">Ḫədar</string>
+  <string name="ethiopian_month_4">Taḫśaś</string>
+  <string name="ethiopian_month_5">Ṭərr</string>
+  <string name="ethiopian_month_6">Yäkatit</string>
+  <string name="ethiopian_month_7">Mägabit</string>
+  <string name="ethiopian_month_8">Miyazya</string>
+  <string name="ethiopian_month_9">Gənbo</string>
+  <string name="ethiopian_month_10">Säne</string>
+  <string name="ethiopian_month_11">Ḥamle</string>
+  <string name="ethiopian_month_12">Nähase</string>
+  <string name="ethiopian_month_13">Ṗagʷəmen</string>
+  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <string name="custom_date">%1$s (%2$s)</string>
 </resources>

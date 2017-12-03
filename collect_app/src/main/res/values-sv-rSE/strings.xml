@@ -205,7 +205,6 @@
   <string name="autosend">Skicka automatiskt</string>
   <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
-  <string name="no_account">Inget konto</string>
   <string name="save_preferences">Spara inställningar till disk</string>
   <string name="form_forward">Nästa</string>
   <string name="form_backward">Föregående</string>

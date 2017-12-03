@@ -115,7 +115,7 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         }
 
         if (helper == null) {
-            helper = new MapHelper(this, mapView, GeoTraceOsmMapActivity.this);
+            helper = new MapHelper(this, mapView, this);
         }
 
         if (myLocationOverlay == null) {
@@ -735,9 +735,8 @@ public class GeoTraceOsmMapActivity extends Activity implements IRegisterReceive
         @Override
         public void onMarkerDrag(Marker marker) {
             update_polygon();
-
+            marker.setSubDescription("0.0");
         }
-
     };
 
     private void showClearDialog() {

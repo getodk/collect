@@ -37,26 +37,27 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
 
 import java.io.File;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Signature widget.
  *
  * @author BehrAtherton@gmail.com
  */
-public class SignatureWidget extends QuestionWidget implements FileWidget {
+public class SignatureWidget extends QuestionWidget implements BaseImageWidget {
 
     private Button signButton;
     private String binaryName;
-    private String instanceFolder;
 
     @Nullable
     private ImageView imageView;
@@ -65,9 +66,6 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
 
     public SignatureWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
-
-        instanceFolder =
-                Collect.getInstance().getFormController().getInstancePath().getParent();
 
         errorTextView = new TextView(context);
         errorTextView.setId(ViewIds.generateViewId());
@@ -81,7 +79,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "signButton", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 launchSignatureActivity();
             }
         });
@@ -103,39 +101,31 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
 
         // Only add the imageView if the user has signed
         if (binaryName != null) {
-            imageView = new ImageView(getContext());
-            imageView.setId(ViewIds.generateViewId());
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             int screenWidth = metrics.widthPixels;
             int screenHeight = metrics.heightPixels;
 
-            File f = new File(instanceFolder + File.separator + binaryName);
+            File f = new File(getInstanceFolder() + File.separator + binaryName);
 
+            Bitmap bmp = null;
             if (f.exists()) {
-                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+                bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
                 }
-                imageView.setImageBitmap(bmp);
-            } else {
-                imageView.setImageBitmap(null);
             }
 
-            imageView.setPadding(10, 10, 10, 10);
-            imageView.setAdjustViewBounds(true);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
-                            "click", formEntryPrompt.getIndex());
-                    launchSignatureActivity();
-                }
-            });
-
+            imageView = getAnswerImageView(bmp);
             answerLayout.addView(imageView);
         }
         addAnswerView(answerLayout);
+    }
 
+    @Override
+    public void onImageClick() {
+        Collect.getInstance().getActivityLogger().logInstanceAction(this, "viewImage",
+                "click", getFormEntryPrompt().getIndex());
+        launchSignatureActivity();
     }
 
     private void launchSignatureActivity() {
@@ -144,21 +134,21 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
         i.putExtra(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE);
         // copy...
         if (binaryName != null) {
-            File f = new File(instanceFolder + File.separator + binaryName);
+            File f = new File(getInstanceFolder() + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
         i.putExtra(DrawActivity.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Collect.TMPFILE_PATH)));
 
         try {
-            Collect.getInstance().getFormController().setIndexWaitingForData(formEntryPrompt.getIndex());
+            waitForData();
             ((Activity) getContext()).startActivityForResult(i,
-                    FormEntryActivity.SIGNATURE_CAPTURE);
+                    RequestCodes.SIGNATURE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
                     getContext().getString(R.string.activity_not_found, "signature capture"),
                     Toast.LENGTH_SHORT).show();
-            Collect.getInstance().getFormController().setIndexWaitingForData(null);
+            cancelWaitingForData();
         }
     }
 
@@ -170,7 +160,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
         binaryName = null;
         // delete from media provider
         int del = MediaUtils.deleteImageFileFromMediaProvider(
-                instanceFolder + File.separator + name);
+                getInstanceFolder() + File.separator + name);
         Timber.i("Deleted %d rows from media content provider", del);
     }
 
@@ -229,7 +219,7 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
 
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -238,17 +228,6 @@ public class SignatureWidget extends QuestionWidget implements FileWidget {
         InputMethodManager inputManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController().getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override

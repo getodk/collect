@@ -41,7 +41,7 @@ public class IntegerWidget extends StringWidget {
         super(context, prompt, readOnlyOverride, true);
 
         EditText answerText = getAnswerTextField();
-        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
@@ -73,7 +73,7 @@ public class IntegerWidget extends StringWidget {
     }
 
     private Integer getIntegerAnswerValue() {
-        IAnswerData dataHolder = formEntryPrompt.getAnswerValue();
+        IAnswerData dataHolder = getFormEntryPrompt().getAnswerValue();
         Integer d = null;
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();

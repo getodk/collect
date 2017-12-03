@@ -22,6 +22,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -38,16 +42,23 @@ import android.widget.TextView;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.injection.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import timber.log.Timber;
 
@@ -55,23 +66,35 @@ public abstract class QuestionWidget
         extends RelativeLayout
         implements Widget, AudioPlayListener {
 
-    protected final int questionFontsize;
-    protected final int answerFontsize;
-    protected FormEntryPrompt formEntryPrompt;
-    protected MediaLayout questionMediaLayout;
-    protected MediaPlayer player;
-    protected int playColor = Color.BLUE;
-    protected int playBackgroundColor = Color.WHITE;
-    private TextView helpTextView;
+    private static final int DEFAULT_PLAY_COLOR = Color.BLUE;
+    private static final int DEFAULT_PLAY_BACKGROUND_COLOR = Color.WHITE;
+
+    private final int questionFontSize;
+    private final FormEntryPrompt formEntryPrompt;
+    private final MediaLayout questionMediaLayout;
+    private MediaPlayer player;
+    private final TextView helpTextView;
+
+    private Bundle state;
+
+    private int playColor = DEFAULT_PLAY_COLOR;
+    private int playBackgroundColor = DEFAULT_PLAY_BACKGROUND_COLOR;
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
+        if (context instanceof FormEntryActivity) {
+            state = ((FormEntryActivity) context).getState();
+        }
+
+        if (context instanceof DependencyProvider) {
+            injectDependencies((DependencyProvider) context);
+        }
 
         player = new MediaPlayer();
-        player.setOnCompletionListener(new OnCompletionListener() {
+        getPlayer().setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                questionMediaLayout.resetTextFormatting();
+                getQuestionMediaLayout().resetTextFormatting();
                 mediaPlayer.reset();
             }
 
@@ -86,8 +109,7 @@ public abstract class QuestionWidget
             }
         });
 
-        questionFontsize = Collect.getQuestionFontsize();
-        answerFontsize = questionFontsize + 2;
+        questionFontSize = Collect.getQuestionFontsize();
 
         formEntryPrompt = prompt;
 
@@ -97,15 +119,25 @@ public abstract class QuestionWidget
         questionMediaLayout = createQuestionMediaLayout(prompt);
         helpTextView = createHelpText(prompt);
 
-        addQuestionMediaLayout(questionMediaLayout);
-        addHelpTextView(helpTextView);
+        addQuestionMediaLayout(getQuestionMediaLayout());
+        addHelpTextView(getHelpTextView());
     }
+
+    /** Releases resources held by this widget */
+    public void release() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+    }
+
+    protected void injectDependencies(DependencyProvider dependencyProvider) {}
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
         // Add the text view. Textview always exists, regardless of whether there's text.
         TextView questionText = new TextView(getContext());
-        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+        questionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize());
         questionText.setTypeface(null, Typeface.BOLD);
         questionText.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         questionText.setPadding(0, 0, 0, 7);
@@ -127,7 +159,7 @@ public abstract class QuestionWidget
         String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
 
         // Create the layout for audio, image, text
-        MediaLayout questionMediaLayout = new MediaLayout(getContext(), player);
+        MediaLayout questionMediaLayout = new MediaLayout(getContext(), getPlayer());
         questionMediaLayout.setId(ViewIds.generateViewId()); // assign random id
         questionMediaLayout.setAVT(prompt.getIndex(), "", questionText, audioURI, imageURI, videoURI,
                 bigImageURI);
@@ -141,7 +173,7 @@ public abstract class QuestionWidget
                 Timber.e(e, "Argument %s is incorrect", playColorString);
             }
         }
-        questionMediaLayout.setPlayTextColor(playColor);
+        questionMediaLayout.setPlayTextColor(getPlayColor());
 
         String playBackgroundColorString = prompt.getFormElement().getAdditionalAttribute(null,
                 "playBackgroundColor");
@@ -152,7 +184,7 @@ public abstract class QuestionWidget
                 Timber.e(e, "Argument %s is incorrect", playBackgroundColorString);
             }
         }
-        questionMediaLayout.setPlayTextBackgroundColor(playBackgroundColor);
+        questionMediaLayout.setPlayTextBackgroundColor(getPlayBackgroundColor());
 
         return questionMediaLayout;
     }
@@ -166,10 +198,10 @@ public abstract class QuestionWidget
     }
 
     public void playVideo() {
-        questionMediaLayout.playVideo();
+        getQuestionMediaLayout().playVideo();
     }
 
-    public FormEntryPrompt getPrompt() {
+    public FormEntryPrompt getFormEntryPrompt() {
         return formEntryPrompt;
     }
 
@@ -246,6 +278,19 @@ public abstract class QuestionWidget
         addView(v, params);
     }
 
+    public Bundle getState() {
+        return state;
+    }
+
+    public Bundle getCurrentState() {
+        saveState();
+        return state;
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    protected void saveState() {
+        state = new Bundle();
+    }
 
     /**
      * Add a TextView containing the help text to the default location.
@@ -261,7 +306,7 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, questionMediaLayout.getId());
+        params.addRule(RelativeLayout.BELOW, getQuestionMediaLayout().getId());
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
     }
@@ -272,7 +317,7 @@ public abstract class QuestionWidget
 
         if (s != null && !s.equals("")) {
             helpText.setId(ViewIds.generateViewId());
-            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 3);
+            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getQuestionFontSize() - 3);
             //noinspection ResourceType
             helpText.setPadding(0, -5, 0, 7);
             // wrap to the widget of view
@@ -303,10 +348,10 @@ public abstract class QuestionWidget
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        if (helpTextView.getVisibility() == View.VISIBLE) {
-            params.addRule(RelativeLayout.BELOW, helpTextView.getId());
+        if (getHelpTextView().getVisibility() == View.VISIBLE) {
+            params.addRule(RelativeLayout.BELOW, getHelpTextView().getId());
         } else {
-            params.addRule(RelativeLayout.BELOW, questionMediaLayout.getId());
+            params.addRule(RelativeLayout.BELOW, getQuestionMediaLayout().getId());
         }
         params.setMargins(10, 0, 10, 0);
         addView(v, params);
@@ -318,11 +363,11 @@ public abstract class QuestionWidget
      */
     public void cancelLongPress() {
         super.cancelLongPress();
-        if (questionMediaLayout != null) {
-            questionMediaLayout.cancelLongPress();
+        if (getQuestionMediaLayout() != null) {
+            getQuestionMediaLayout().cancelLongPress();
         }
-        if (helpTextView != null) {
-            helpTextView.cancelLongPress();
+        if (getHelpTextView() != null) {
+            getHelpTextView().cancelLongPress();
         }
     }
 
@@ -330,35 +375,34 @@ public abstract class QuestionWidget
      * Prompts with items must override this
      */
     public void playAllPromptText() {
-        questionMediaLayout.playAudio();
+        getQuestionMediaLayout().playAudio();
     }
 
     public void resetQuestionTextColor() {
-        questionMediaLayout.resetTextFormatting();
+        getQuestionMediaLayout().resetTextFormatting();
     }
 
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
-            if (player.isPlaying()) {
-                player.stop();
-                player.reset();
-            }
+            stopAudio();
         }
     }
 
     public void stopAudio() {
-        if (player.isPlaying()) {
+        if (player != null && player.isPlaying()) {
+            Timber.i("stopAudio " + player);
             player.stop();
             player.reset();
         }
     }
 
-    protected Button getSimpleButton(String text) {
+    protected Button getSimpleButton(String text, @IdRes int withId) {
         Button button = new Button(getContext());
-        button.setId(ViewIds.generateViewId());
+
+        button.setId(withId);
         button.setText(text);
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         button.setPadding(20, 20, 20, 20);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -368,19 +412,48 @@ public abstract class QuestionWidget
         return button;
     }
 
+    protected Button getSimpleButton(@IdRes int id) {
+        return getSimpleButton(null, id);
+    }
+
+    protected Button getSimpleButton(String text) {
+        return getSimpleButton(text, R.id.simple_button);
+    }
+
     protected TextView getCenteredAnswerTextView() {
         TextView textView = getAnswerTextView();
         textView.setGravity(Gravity.CENTER);
+
         return textView;
     }
 
     protected TextView getAnswerTextView() {
         TextView textView = new TextView(getContext());
-        textView.setId(ViewIds.generateViewId());
+
+        textView.setId(R.id.answer_text);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
+
         return textView;
+    }
+
+    protected ImageView getAnswerImageView(Bitmap bitmap) {
+        final QuestionWidget questionWidget = this;
+        ImageView imageView = new ImageView(getContext());
+        imageView.setId(ViewIds.generateViewId());
+        imageView.setPadding(10, 10, 10, 10);
+        imageView.setAdjustViewBounds(true);
+        imageView.setImageBitmap(bitmap);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (questionWidget instanceof BaseImageWidget) {
+                    ((BaseImageWidget) questionWidget).onImageClick();
+                }
+            }
+        });
+        return imageView;
     }
 
     /**
@@ -407,5 +480,104 @@ public abstract class QuestionWidget
                 Timber.e(e);
             }
         }
+    }
+
+    //region Data waiting
+
+    @Override
+    public final void waitForData() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
+    }
+
+    @Override
+    public final void cancelWaitingForData() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return;
+        }
+
+        formController.setIndexWaitingForData(null);
+    }
+
+    @Override
+    public final boolean isWaitingForData() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return false;
+        }
+
+        FormIndex index = getFormEntryPrompt().getIndex();
+        return index.equals(formController.getIndexWaitingForData());
+    }
+
+    //region Accessors
+
+    @Nullable
+    public final String getInstanceFolder() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        FormController formController = collect.getFormController();
+        if (formController == null) {
+            return null;
+        }
+
+        return formController.getInstancePath().getParent();
+    }
+
+    @NonNull
+    public final ActivityLogger getActivityLogger() {
+        Collect collect = Collect.getInstance();
+        if (collect == null) {
+            throw new IllegalStateException("Collect application instance is null.");
+        }
+
+        return collect.getActivityLogger();
+    }
+
+    public int getQuestionFontSize() {
+        return questionFontSize;
+    }
+
+    public int getAnswerFontSize() {
+        return questionFontSize + 2;
+    }
+
+    public MediaLayout getQuestionMediaLayout() {
+        return questionMediaLayout;
+    }
+
+    public MediaPlayer getPlayer() {
+        return player;
+    }
+
+    public int getPlayColor() {
+        return playColor;
+    }
+
+    public int getPlayBackgroundColor() {
+        return playBackgroundColor;
     }
 }

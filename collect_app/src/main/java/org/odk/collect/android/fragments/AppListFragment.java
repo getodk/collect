@@ -213,21 +213,15 @@ abstract class AppListFragment extends ListFragment {
     }
 
     /**
-     * Returns the IDs of the checked items, using the ListView of this activity.
+     * Returns the IDs of the checked items, as an array of Long
      */
-    protected long[] getCheckedIds() {
-        return getCheckedIds(getListView());
-    }
-
-    /**
-     * Returns the IDs of the checked items, using the ListView provided
-     */
-    protected long[] getCheckedIds(ListView lv) {
+    protected Long[] getCheckedIdObjects() {
         // This method could be simplified by using getCheckedItemIds, if one ensured that
         // IDs were “stable” (see the getCheckedItemIds doc).
+        ListView lv = getListView();
         int itemCount = lv.getCount();
         int checkedItemCount = lv.getCheckedItemCount();
-        long[] checkedIds = new long[checkedItemCount];
+        Long[] checkedIds = new Long[checkedItemCount];
         int resultIndex = 0;
         for (int posIdx = 0; posIdx < itemCount; posIdx++) {
             if (lv.isItemChecked(posIdx)) {
@@ -236,18 +230,6 @@ abstract class AppListFragment extends ListFragment {
             }
         }
         return checkedIds;
-    }
-
-    /**
-     * Returns the IDs of the checked items, as an array of Long
-     */
-    protected Long[] getCheckedIdObjects() {
-        long[] checkedIds = getCheckedIds();
-        Long[] checkedIdObjects = new Long[checkedIds.length];
-        for (int i = 0; i < checkedIds.length; i++) {
-            checkedIdObjects[i] = checkedIds[i];
-        }
-        return checkedIdObjects;
     }
 
     protected int getCheckedCount() {

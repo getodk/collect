@@ -49,6 +49,7 @@ import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceGoogleSheetsUploader;
+import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.util.Collections;
@@ -111,12 +112,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
         Intent intent = getIntent();
         selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
 
-        instancesToSend = new Long[(selectedInstanceIDs == null) ? 0 : selectedInstanceIDs.length];
-        if (selectedInstanceIDs != null) {
-            for (int i = 0; i < selectedInstanceIDs.length; ++i) {
-                instancesToSend[i] = selectedInstanceIDs[i];
-            }
-        }
+        instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
@@ -138,7 +134,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private void runTask() {
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, GoogleSheetsUploaderActivity.this);
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, this);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -199,9 +195,10 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        credential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+                Intent intentChooseAccount = credential.newChooseAccountIntent();
+                intentChooseAccount.putExtra("overrideTheme", 1);
+                intentChooseAccount.putExtra("overrideCustomTheme", 0);
+                startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog

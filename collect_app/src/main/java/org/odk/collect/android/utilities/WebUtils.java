@@ -75,18 +75,18 @@ public final class WebUtils {
 
     private static final String USER_AGENT_HEADER = "User-Agent";
 
-    public static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
-    public static final String OPEN_ROSA_VERSION = "1.0";
+    private static final String OPEN_ROSA_VERSION_HEADER = "X-OpenRosa-Version";
+    private static final String OPEN_ROSA_VERSION = "1.0";
     private static final String DATE_HEADER = "Date";
 
-    public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+    private static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
     public static final int CONNECTION_TIMEOUT = 30000;
 
     public static final String ACCEPT_ENCODING_HEADER = "Accept-Encoding";
     public static final String GZIP_CONTENT_ENCODING = "gzip";
 
-    public static final List<AuthScope> buildAuthScopes(String host) {
-        List<AuthScope> asList = new ArrayList<AuthScope>();
+    private static List<AuthScope> buildAuthScopes(String host) {
+        List<AuthScope> asList = new ArrayList<>();
 
         AuthScope a;
         // allow digest auth on any port...
@@ -101,31 +101,10 @@ public final class WebUtils {
         return asList;
     }
 
-    public static final void clearAllCredentials() {
-        CredentialsProvider credsProvider = Collect.getInstance()
-                .getCredentialsProvider();
-        Timber.i("clearAllCredentials");
-        credsProvider.clear();
-    }
-
-    public static final boolean hasCredentials(String userEmail, String host) {
-        CredentialsProvider credsProvider = Collect.getInstance()
-                .getCredentialsProvider();
-        List<AuthScope> asList = buildAuthScopes(host);
-        boolean hasCreds = true;
-        for (AuthScope a : asList) {
-            Credentials c = credsProvider.getCredentials(a);
-            if (c == null) {
-                hasCreds = false;
-            }
-        }
-        return hasCreds;
-    }
-
     /**
      * Remove all credentials for accessing the specified host.
      */
-    public static final void clearHostCredentials(String host) {
+    public static void clearHostCredentials(String host) {
         CredentialsProvider credsProvider = Collect.getInstance()
                 .getCredentialsProvider();
         Timber.i("clearHostCredentials: %s", host);
@@ -140,7 +119,7 @@ public final class WebUtils {
      * username is not null or blank then add a (username, password) credential
      * for accessing this host.
      */
-    public static final void addCredentials(String username, String password,
+    public static void addCredentials(String username, String password,
             String host) {
         // to ensure that this is the only authentication available for this
         // host...
@@ -152,7 +131,7 @@ public final class WebUtils {
         }
     }
 
-    private static final void addCredentials(Credentials c, String host) {
+    private static void addCredentials(Credentials c, String host) {
         CredentialsProvider credsProvider = Collect.getInstance()
                 .getCredentialsProvider();
         List<AuthScope> asList = buildAuthScopes(host);
@@ -161,7 +140,7 @@ public final class WebUtils {
         }
     }
 
-    public static final void enablePreemptiveBasicAuth(
+    public static void enablePreemptiveBasicAuth(
             HttpContext localContext, String host) {
         AuthCache ac = (AuthCache) localContext
                 .getAttribute(HttpClientContext.AUTH_CACHE);
@@ -178,7 +157,7 @@ public final class WebUtils {
         }
     }
 
-    private static final void setCollectHeaders(HttpRequest req) {
+    private static void setCollectHeaders(HttpRequest req) {
         String userAgent = String.format("%s %s/%s",
                 System.getProperty("http.agent"),
                 BuildConfig.APPLICATION_ID,
@@ -186,7 +165,7 @@ public final class WebUtils {
         req.setHeader(USER_AGENT_HEADER, userAgent);
     }
 
-    private static final void setOpenRosaHeaders(HttpRequest req) {
+    private static void setOpenRosaHeaders(HttpRequest req) {
         req.setHeader(OPEN_ROSA_VERSION_HEADER, OPEN_ROSA_VERSION);
         GregorianCalendar g = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         g.setTime(new Date());
@@ -194,14 +173,14 @@ public final class WebUtils {
                 DateFormat.format("E, dd MMM yyyy hh:mm:ss zz", g).toString());
     }
 
-    public static final HttpHead createOpenRosaHttpHead(Uri u) {
+    public static HttpHead createOpenRosaHttpHead(Uri u) {
         HttpHead req = new HttpHead(URI.create(u.toString()));
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
         return req;
     }
 
-    public static final HttpGet createOpenRosaHttpGet(URI uri) {
+    public static HttpGet createOpenRosaHttpGet(URI uri) {
         HttpGet req = new HttpGet();
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
@@ -209,7 +188,7 @@ public final class WebUtils {
         return req;
     }
 
-    public static final HttpPost createOpenRosaHttpPost(Uri u) {
+    public static HttpPost createOpenRosaHttpPost(Uri u) {
         HttpPost req = new HttpPost(URI.create(u.toString()));
         setCollectHeaders(req);
         setOpenRosaHeaders(req);
@@ -223,7 +202,7 @@ public final class WebUtils {
      *
      * @return HttpClient properly configured.
      */
-    public static final synchronized HttpClient createHttpClient(int timeout) {
+    public static synchronized HttpClient createHttpClient(int timeout) {
         // configure connection
         SocketConfig socketConfig = SocketConfig.copy(SocketConfig.DEFAULT).setSoTimeout(
                 2 * timeout)
@@ -260,7 +239,7 @@ public final class WebUtils {
      * stream to allow its re-use.  Please add more details or bug ID here if
      * you know them.
      */
-    public static final void discardEntityBytes(HttpResponse response) {
+    public static void discardEntityBytes(HttpResponse response) {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             InputStream is = null;

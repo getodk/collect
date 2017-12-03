@@ -77,7 +77,7 @@ public class BooleanWidget extends QuestionWidget {
         booleanButton = new CheckBox(getContext());
         booleanButton.setId(ViewIds.generateViewId());
         booleanButton.setText(getContext().getString(R.string.trigger));
-        booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        booleanButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         booleanButton.setEnabled(!prompt.isReadOnly());
         addAnswerView(booleanButton);
     }

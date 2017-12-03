@@ -24,16 +24,18 @@ import org.javarosa.core.model.osm.OSMTag;
 import org.javarosa.core.model.osm.OSMTagItem;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import org.opendatakit.httpclientandroidlib.entity.ContentType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
@@ -108,7 +110,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         } else {
             launchOpenMapKitButton.setText(getContext().getString(R.string.capture_osm));
         }
-        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         launchOpenMapKitButton.setPadding(20, 20, 20, 20);
         launchOpenMapKitButton.setEnabled(!prompt.isReadOnly());
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -122,7 +124,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
                 launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "launchOpenMapKitButton",
-                        "click", formEntryPrompt.getIndex());
+                        "click", getFormEntryPrompt().getIndex());
                 errorTextView.setVisibility(View.GONE);
                 launchOpenMapKit();
             }
@@ -199,17 +201,10 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
             //launch activity if it is safe
             if (isIntentSafe) {
                 // notify that the form is waiting for data
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController == null) {
-                    Timber.w("FormController is null when trying to call setIndexWaitingForData.");
-                    return;
-                }
+                waitForData();
 
-                formController.setIndexWaitingForData(
-                        formEntryPrompt.getIndex());
                 // launch
-                ((Activity) ctx).startActivityForResult(launchIntent,
-                        FormEntryActivity.OSM_CAPTURE);
+                ((Activity) ctx).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
             } else {
                 errorTextView.setVisibility(View.VISIBLE);
             }
@@ -237,25 +232,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         osmFileNameHeaderTextView.setVisibility(View.VISIBLE);
         osmFileNameTextView.setVisibility(View.VISIBLE);
 
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
+        cancelWaitingForData();
     }
 
     @Override

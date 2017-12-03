@@ -48,7 +48,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget = new StringWidget(context, fep, readOnlyOverride);
+        final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -56,7 +56,15 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(context, fep);
+                        if (appearance.contains("ethiopian")) {
+                            questionWidget = new EthiopianDateWidget(context, fep);
+                        } else if (appearance.contains("coptic")) {
+                            questionWidget = new CopticDateWidget(context, fep);
+                        } else if (appearance.contains("islamic")) {
+                            questionWidget = new IslamicDateWidget(context, fep);
+                        } else {
+                            questionWidget = new DateWidget(context, fep);
+                        }
                         break;
                     case Constants.DATATYPE_TIME:
                         questionWidget = new TimeWidget(context, fep);
@@ -113,6 +121,9 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_BOOLEAN:
                         questionWidget = new BooleanWidget(context, fep);
+                        break;
+                    default:
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
                 break;
@@ -223,9 +234,16 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DECIMAL:
                         questionWidget = new RangeDecimalWidget(context, fep);
                         break;
+                    default:
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                        break;
                 }
+                break;
+            default:
+                questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
         }
         return questionWidget;
     }
+
 }

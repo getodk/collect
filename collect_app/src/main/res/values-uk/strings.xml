@@ -205,7 +205,6 @@
   <string name="autosend">Автоматичне надсилання</string>
   <string name="found_in_main">Зніміть позначку щоб прибрати з Головного меню</string>
   <string name="found_in_settings">Зніміть позначку щоб прибрати з Загальні Налаштування</string>
-  <string name="no_account">Відсутній обліковий запис</string>
   <string name="save_preferences">Зберегти налаштування на диск</string>
   <string name="form_forward">Далі</string>
   <string name="form_backward">Назад</string>
@@ -487,6 +486,7 @@
   <string name="form_submission_category">Відправка анкети</string>
   <string name="form_filling_category">Заповнення анкети</string>
   <string name="high_resolution_title">Відео високої роздільної здатності</string>
+  <string name="image_size_title">Розмір зображення</string>
   <string name="form_import_category">Імпорт анкети</string>
   <string name="user_and_device_identity_title">Ідентифікація користувача та пристрою</string>
   <string name="constraint_behavior_title">Обробка обмежень</string>
@@ -506,4 +506,11 @@
   <string name="deleting_form_dialog_update_message">Видалення анкет: %1$d з %2$d</string>
   <string name="search">Пошук</string>
   <string name="null_intent_value">Зовнішня програма не надала інформацію, що очікувалась.</string>
+  <string name="image_size_large">Великий (3072px)</string>
+  <string name="image_size_medium">Середній (2048px)</string>
+  <string name="image_size_small">Маленький (1024px)</string>
+  <string name="image_size_very_small">Дуже маленький (640px)</string>
+  <string name="image_size_original">Розмір визначений камерою (за замовчуванням)</string>
+  <string name="image_size_dialog_title">Максимальна кількість пікселів по довгій стороні малюнку</string>
+  <string name="bearing_lack_of_sensors">Неможливо записати пеленг: у пристрої відсутній акселерометр, сенсор магнітного поля чи обидва.</string>
 </resources>

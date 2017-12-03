@@ -205,7 +205,6 @@
   <string name="autosend">Auto-Send</string>
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
-  <string name="no_account">Kein Benutzerkonto</string>
   <string name="save_preferences">Einstellungen auf Speicherkarte speichern</string>
   <string name="form_forward">Weiter</string>
   <string name="form_backward">Zurück</string>
@@ -487,6 +486,7 @@
   <string name="form_submission_category">Formulareinsendung</string>
   <string name="form_filling_category">Formulareingabe</string>
   <string name="high_resolution_title">HD-Video</string>
+  <string name="image_size_title">Bildgröße</string>
   <string name="form_import_category">Formular-Import</string>
   <string name="user_and_device_identity_title">Benutzer- und Geräteidentität</string>
   <string name="constraint_behavior_title">Validierung</string>
@@ -506,4 +506,26 @@
   <string name="deleting_form_dialog_update_message">Lösche Formular: %1$d von %2$d</string>
   <string name="search">Suche</string>
   <string name="null_intent_value">Die externe Applikation hat die erwartete Information nicht geliefert.</string>
+  <string name="image_size_large">Groß (3072px)</string>
+  <string name="image_size_medium">Mittel (2048px)</string>
+  <string name="image_size_small">Klein (1024px)</string>
+  <string name="image_size_very_small">Sehr klein (640px)</string>
+  <string name="image_size_original">Originalgröße von der Kamera (Standard)</string>
+  <string name="image_size_dialog_title">Max. Anzahl Pixel der langen Seite des Bildes</string>
+  <string name="bearing_lack_of_sensors">Kompass-Peilung konnte nicht erfasst werden: Gerät besitzt keinen Kompass oder Beschleunigungssensor.</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
+  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <string name="custom_date">%1$s (%2$s)</string>
 </resources>

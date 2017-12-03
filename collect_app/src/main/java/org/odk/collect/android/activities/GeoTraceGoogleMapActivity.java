@@ -143,10 +143,10 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             return;
         }
 
-        helper = new MapHelper(GeoTraceGoogleMapActivity.this, map);
+        helper = new MapHelper(this, map);
         map.setMyLocationEnabled(true);
-        map.setOnMapLongClickListener(GeoTraceGoogleMapActivity.this);
-        map.setOnMarkerDragListener(GeoTraceGoogleMapActivity.this);
+        map.setOnMapLongClickListener(this);
+        map.setOnMarkerDragListener(this);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
@@ -335,6 +335,9 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
             polylineOptions.add(point);
             MarkerOptions markerOptions = new MarkerOptions().position(point).draggable(true);
             Marker marker = map.addMarker(markerOptions);
+            String alt = sp[2].replace(" ", "");
+            String acc = sp[3].replace(" ", "");
+            marker.setSnippet(alt + ";" + acc);
             markerArray.add(marker);
         }
         polyline = map.addPolyline(polylineOptions);
@@ -382,9 +385,10 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         for (int i = 0; i < markerArray.size(); i++) {
             String lat = Double.toString(markerArray.get(i).getPosition().latitude);
             String lng = Double.toString(markerArray.get(i).getPosition().longitude);
-            String alt = "0.0";
-            String acu = "0.0";
-            tempString = tempString + lat + " " + lng + " " + alt + " " + acu + ";";
+            String altAcc = markerArray.get(i).getSnippet();
+            String alt = altAcc.substring(0, altAcc.indexOf(';'));
+            String accu = altAcc.substring(altAcc.indexOf(';') + 1, altAcc.length());
+            tempString = tempString + lat + " " + lng + " " + alt + " " + accu + ";";
         }
         return tempString;
     }
@@ -584,6 +588,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
         LatLng latLng = new LatLng(curLocation.getLatitude(), curLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).draggable(true);
         Marker marker = map.addMarker(markerOptions);
+        marker.setSnippet(curLocation.getAltitude() + ";" + curLocation.getAccuracy());
         markerArray.add(marker);
         if (polyline == null) {
             polylineOptions.add(latLng);
@@ -642,6 +647,7 @@ public class GeoTraceGoogleMapActivity extends FragmentActivity implements Locat
     @Override
     public void onMarkerDragEnd(Marker marker) {
         update_polyline();
+        marker.setSnippet("0.0;0.0");
     }
 
     private void showPolygonErrorDialog() {

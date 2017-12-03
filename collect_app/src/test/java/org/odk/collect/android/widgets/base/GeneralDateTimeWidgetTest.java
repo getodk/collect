@@ -2,7 +2,7 @@ package org.odk.collect.android.widgets.base;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.joda.time.DateTime;
-import org.odk.collect.android.widgets.Widget;
+import org.odk.collect.android.widgets.interfaces.Widget;
 
 /**
  * @author James Knight

@@ -18,6 +18,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -29,9 +31,11 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * BearingWidget is the widget that allows the user to get a compass heading.
@@ -68,19 +72,17 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                 Collect.getInstance()
                         .getActivityLogger()
                         .logInstanceAction(this, "recordBearing", "click",
-                                formEntryPrompt.getIndex());
+                                getFormEntryPrompt().getIndex());
                 Intent i;
                 i = new Intent(getContext(), BearingActivity.class);
 
-                FormController formController = Collect.getInstance().getFormController();
-                if (formController != null) {
-                    formController.setIndexWaitingForData(formEntryPrompt.getIndex());
-                }
-
+                waitForData();
                 ((Activity) getContext()).startActivityForResult(i,
-                        FormEntryActivity.BEARING_CAPTURE);
+                        RequestCodes.BEARING_CAPTURE);
             }
         });
+
+        checkForRequiredSensors();
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -117,26 +119,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         answerDisplay.setText((String) answer);
-        cancelWaitingForBinaryData();
-    }
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
-
-        formController.setIndexWaitingForData(null);
+        cancelWaitingForData();
     }
 
     @Override
@@ -150,5 +133,23 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         super.cancelLongPress();
         getBearingButton.cancelLongPress();
         answerDisplay.cancelLongPress();
+    }
+
+    private void checkForRequiredSensors() {
+        boolean isAccelerometerSensorAvailable = false;
+        boolean isMagneticFieldSensorAvailable = false;
+
+        SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            isAccelerometerSensorAvailable = true;
+        }
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
+            isMagneticFieldSensorAvailable = true;
+        }
+
+        if (!isAccelerometerSensorAvailable || ! isMagneticFieldSensorAvailable) {
+            getBearingButton.setEnabled(false);
+            ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
+        }
     }
 }

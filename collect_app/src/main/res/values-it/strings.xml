@@ -204,7 +204,6 @@
   <string name="change_admin_password">Cambia la password di amministratore</string>
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
-  <string name="no_account">Nessun account</string>
   <string name="save_preferences">Salvataggio Impostazioni su Disco</string>
   <string name="form_forward">Prossimo</string>
   <string name="form_backward">Precedente</string>
@@ -364,6 +363,7 @@
   <string name="selected_answer">Selezionato: %s</string>
   <string name="version_number">Versione: %s</string>
   <string name="odk_website">Visitare il sito web ODK</string>
+  <string name="odk_forum">Collegati al forum di ODK</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->

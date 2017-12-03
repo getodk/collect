@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
@@ -42,12 +41,17 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.ObjectUtils;
 import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * <p>Launch an external app to supply a string value. If the app
@@ -98,6 +102,8 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     private Button launchIntentButton;
     private Drawable textBackground;
 
+    private ActivityAvailability activityAvailability;
+
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -107,7 +113,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         // set text formatting
         answer = new EditText(context);
         answer.setId(ViewIds.generateViewId());
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
@@ -125,7 +131,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             answer.setText(s);
         }
 
-        if (formEntryPrompt.isReadOnly() || hasExApp) {
+        if (getFormEntryPrompt().isReadOnly() || hasExApp) {
             answer.setFocusable(false);
             answer.setEnabled(false);
         }
@@ -135,28 +141,23 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
         final String buttonText;
         final String errorString;
-        String v = formEntryPrompt.getSpecialFormQuestionText("buttonText");
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-        v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
+        v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
         errorString = (v != null) ? v : context.getString(R.string.no_app);
 
         launchIntentButton = getSimpleButton(buttonText);
-        launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
+        launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
         launchIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(intentName);
-                if (isActivityAvailable(i)) {
+                if (activityAvailability.isActivityAvailable(i)) {
                     try {
                         ExternalAppsUtils.populateParameters(i, exParams,
-                                formEntryPrompt.getIndex().getReference());
+                                getFormEntryPrompt().getIndex().getReference());
 
-                        FormController formController = Collect.getInstance().getFormController();
-                        if (formController == null) {
-                            return;
-                        }
-
-                        formController.setIndexWaitingForData(formEntryPrompt.getIndex());
+                        waitForData();
                         fireActivity(i);
 
                     } catch (ExternalParamsException e) {
@@ -170,7 +171,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
             private void onException(String toastText) {
                 hasExApp = false;
-                if (!formEntryPrompt.isReadOnly()) {
+                if (!getFormEntryPrompt().isReadOnly()) {
                     answer.setBackground(textBackground);
                     answer.setFocusable(true);
                     answer.setFocusableInTouchMode(true);
@@ -178,7 +179,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
                 }
                 launchIntentButton.setEnabled(false);
                 launchIntentButton.setFocusable(false);
-                cancelWaitingForBinaryData();
+                cancelWaitingForData();
 
                 Toast.makeText(getContext(),
                         toastText, Toast.LENGTH_SHORT)
@@ -197,11 +198,11 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", formEntryPrompt.getAnswerText());
+        i.putExtra("value", getFormEntryPrompt().getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), formEntryPrompt.getIndex());
+                i.getAction(), getFormEntryPrompt().getIndex());
         ((Activity) getContext()).startActivityForResult(i,
-                FormEntryActivity.EX_STRING_CAPTURE);
+                RequestCodes.EX_STRING_CAPTURE);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
 
-        cancelWaitingForBinaryData();
+        cancelWaitingForData();
     }
 
     @Override
@@ -239,7 +240,7 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
-            if (!formEntryPrompt.isReadOnly()) {
+            if (!getFormEntryPrompt().isReadOnly()) {
                 answer.requestFocus();
                 inputManager.showSoftInput(answer, 0);
             /*
@@ -255,23 +256,6 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
             } else {
                 inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
             }
-        }
-    }
-
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        return formController != null
-                && formEntryPrompt.getIndex().equals(formController.getIndexWaitingForData());
-
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(null);
         }
     }
 
@@ -294,10 +278,16 @@ public class ExStringWidget extends QuestionWidget implements BinaryWidget {
         launchIntentButton.cancelLongPress();
     }
 
-    private boolean isActivityAvailable(Intent intent) {
-        return getContext()
-                .getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-                .size() > 0;
+    @Override
+    protected void injectDependencies(DependencyProvider dependencyProvider) {
+        DependencyProvider<ActivityAvailability> activityUtilProvider =
+                ObjectUtils.uncheckedCast(dependencyProvider);
+
+        if (activityUtilProvider == null) {
+            Timber.e("DependencyProvider doesn't provide ActivityAvailability.");
+            return;
+        }
+
+        this.activityAvailability = activityUtilProvider.provide();
     }
 }
