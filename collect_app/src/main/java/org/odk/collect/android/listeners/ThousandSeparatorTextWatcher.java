@@ -5,6 +5,8 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -36,77 +38,37 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     }
 
     @Override
-    public void afterTextChanged(Editable editable) {
-        try
-        {
-            editText.removeTextChangedListener(this);
-            String value = editText.getText().toString();
+    public void afterTextChanged(Editable s) {
+        editText.removeTextChangedListener(this);
 
+        try {
+            String originalString = s.toString();
 
-            if (value != null && !value.equals(""))
-            {
-
-                if(value.startsWith(".")){
-                    editText.setText("0.");
-                }
-                if(value.startsWith("0") && !value.startsWith("0.")){
-                    editText.setText("");
-                }
-
-                String str = editText.getText().toString().replaceAll(thousandSeparator, "");
-                if (!value.equals(""))
-                    editText.setText(getDecimalFormattedString(str));
-                editText.setSelection(editText.getText().toString().length());
+            Long longVal;
+            if (originalString.contains(thousandSeparator)) {
+                originalString = originalString.replaceAll(thousandSeparator, "");
             }
-            editText.addTextChangedListener(this);
+            longVal = Long.parseLong(originalString);
+
+            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+            formatter.applyPattern("#,###.##");
+            String formattedString = formatter.format(longVal);
+
+            //setting text after format to EditText
+            editText.setText(formattedString);
+            editText.setSelection(editText.getText().length());
+
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
         }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            editText.addTextChangedListener(this);
-        }
+
+        editText.addTextChangedListener(this);
     }
 
-    public static String getDecimalFormattedString(String value)
-    {
-        StringTokenizer lst = new StringTokenizer(value, ".");
-        String str1 = value;
-        String str2 = "";
-        if (lst.countTokens() > 1)
-        {
-            str1 = lst.nextToken();
-            str2 = lst.nextToken();
-        }
-        String str3 = "";
-        int i = 0;
-        int j = -1 + str1.length();
-        if (str1.charAt( -1 + str1.length()) == '.')
-        {
-            j--;
-            str3 = ".";
-        }
-        for (int k = j;; k--)
-        {
-            if (k < 0)
-            {
-                if (str2.length() > 0)
-                    str3 = str3 + "." + str2;
-                return str3;
-            }
-            if (i == 3)
-            {
-                str3 = thousandSeparator + str3;
-                i = 0;
-            }
-            str3 = str1.charAt(k) + str3;
-            i++;
-        }
-
-    }
     /*
     * Returns the string back after removing all the thousand separators.
     * */
-    public static String trimCommaOfString(String string) {
+    public static String getOriginalString(String string) {
         //String returnString;
         if(string.contains(thousandSeparator)){
             return string.replace(thousandSeparator,"");}

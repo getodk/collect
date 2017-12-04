@@ -26,6 +26,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -53,6 +54,9 @@ public class DecimalWidget extends StringWidget {
 
         // only numbers are allowed
         answerText.setKeyListener(new DigitsKeyListener(true, true));
+
+        //thousand separator
+        answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
 
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
