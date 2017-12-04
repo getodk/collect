@@ -227,7 +227,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                     if (!isNewerFormVersionAvailable && manifestUrl != null) {
                         List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
                         if (newMediaFiles != null) {
-                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, newMediaFiles);
+                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
                         }
                     }
                 }
@@ -395,7 +395,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     private boolean isNewerFormVersionAvailable(String formId, String formVersion) {
         boolean isNewerFormAvailable;
-        Integer localFormVersion = new FormsDao().getFormVersionForFormId(formId);
+        Integer localFormVersion = new FormsDao().getNewestFormVersionForFormId(formId);
         if (localFormVersion == null) {
             isNewerFormAvailable = formVersion != null;
         } else {
@@ -405,8 +405,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         return isNewerFormAvailable;
     }
 
-    private boolean areNewerMediaFilesAvailable(String formId, List<MediaFile> newMediaFiles) {
-        String mediaDirPath = new FormsDao().getFormMediaPathForFormId(formId);
+    private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
+        String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
         return !areMediaFilesIdentical(newMediaFiles, mediaDirPath);
     }
 

@@ -25,6 +25,7 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,25 +69,44 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
-    public Integer getFormVersionForFormId(String formId) {
-        Integer formVersion = null;
+    public Integer getNewestFormVersionForFormId(String formId) {
+        List<Integer> formVersions = new ArrayList<>();
         Cursor cursor = getFormsCursorForFormId(formId);
+
         if (cursor != null) {
             try {
-                if (cursor.moveToFirst()) {
+                while (cursor.moveToNext()) {
                     int formVersionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION);
-                    formVersion = cursor.getString(formVersionColumnIndex) == null ? null : Integer.valueOf(cursor.getString(formVersionColumnIndex));
+                    if (cursor.getString(formVersionColumnIndex) != null) {
+                        formVersions.add(Integer.valueOf(cursor.getString(formVersionColumnIndex)));
+                    }
                 }
             } finally {
                 cursor.close();
             }
         }
-        return formVersion;
+
+        Collections.sort(formVersions);
+        return formVersions.size() > 0 ? formVersions.get(formVersions.size() - 1) : null;
     }
 
-    public String getFormMediaPathForFormId(String formId) {
+    public String getFormMediaPath(String formId, String formVersion) {
         String formMediaPath = null;
-        Cursor cursor = getFormsCursorForFormId(formId);
+
+        String[] selectionArgs;
+        String selection;
+
+        if (formVersion == null) {
+            selectionArgs = new String[]{formId};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + " IS NULL";
+        } else {
+            selectionArgs = new String[]{formId, formVersion};
+            selection = FormsProviderAPI.FormsColumns.JR_FORM_ID + "=? AND "
+                    + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
+        }
+
+        Cursor cursor = getFormsCursor(selection, selectionArgs);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {

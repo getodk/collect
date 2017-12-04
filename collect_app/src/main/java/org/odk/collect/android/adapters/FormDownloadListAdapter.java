@@ -61,10 +61,10 @@ public class FormDownloadListAdapter extends ArrayAdapter {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.two_item_multiple_choice, parent, false);
 
-            holder.text1 = (TextView) row.findViewById(R.id.text1);
-            holder.text2 = (TextView) row.findViewById(R.id.text2);
-            holder.updateWarning = (TextView) row.findViewById(R.id.update_warning);
-            holder.checkBox = (CheckBox) row.findViewById(R.id.checkbox);
+            holder.text1 = row.findViewById(R.id.text1);
+            holder.text2 = row.findViewById(R.id.text2);
+            holder.updateWarning = row.findViewById(R.id.update_warning);
+            holder.checkBox = row.findViewById(R.id.checkbox);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -77,11 +77,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         boolean areNewerMediaFilesAvailable = formNamesAndURLs.get(filteredFormList.get(position).get(FORM_ID_KEY)).areNewerMediaFilesAvailable();
 
         holder.updateWarning.setVisibility(isNewerFormVersionAvailable || areNewerMediaFilesAvailable ? View.VISIBLE : View.GONE);
-        if (isNewerFormVersionAvailable) {
-            holder.updateWarning.setText(R.string.newer_version_of_this_form_is_available);
-        } else if (areNewerMediaFilesAvailable) {
-            holder.updateWarning.setText(R.string.newer_versions_of_media_files_are_available);
-        }
+
         return row;
     }
 }
