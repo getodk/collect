@@ -23,7 +23,6 @@ import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
@@ -45,6 +44,7 @@ public class DriveHelper {
 
     private final static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final Drive drive;
+    private final DriveService driveService;
 
     DriveHelper(@NonNull GoogleAccountCredential credential,
                 @NonNull HttpTransport transport,
@@ -52,24 +52,24 @@ public class DriveHelper {
         drive = new Drive.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
+
+        driveService = new DriveService(drive);
     }
 
     /**
      * Constructs a new DriveHelper with the provided Drive Service.
      * This Constructor should only be used for testing.
      */
-    DriveHelper(@NonNull Drive drive) {
+    DriveHelper(@NonNull Drive drive, DriveService driveService) {
         this.drive = drive;
+        this.driveService = driveService;
     }
 
     /**
      * Returns id of the root folder or null
      */
     public String getRootFolderId() throws IOException {
-        return drive.files()
-                .get("root")
-                .setFields("id")
-                .execute().getId();
+        return driveService.getFileId("root", "id");
     }
 
     @Nullable
@@ -77,11 +77,7 @@ public class DriveHelper {
         Drive.Files.List request = null;
         if (query != null) {
             try {
-                request = drive.files()
-                        .list()
-                        .setQ(query)
-                        .setFields(fields);
-
+                request = driveService.generateRequest(query, fields);
             } catch (IOException e) {
                 Timber.e(e);
             }
@@ -91,7 +87,7 @@ public class DriveHelper {
 
     public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
         try {
-            drive.files().get(fileId).executeMediaAndDownloadTo(fileOutputStream);
+            driveService.downloadFile(fileId, fileOutputStream);
         } finally {
             try {
                 if (fileOutputStream != null) {
@@ -157,21 +153,15 @@ public class DriveHelper {
             throws IOException {
 
         //adding meta-data to the file
-        com.google.api.services.drive.model.File fileMetadata =
-                new com.google.api.services.drive.model.File()
-                        .setName(mediaName)
-                        .setViewersCanCopyContent(true)
-                        .setParents(Collections.singletonList(destinationFolderID));
+        com.google.api.services.drive.model.File fileMetadata = createNewFile(
+                mediaName,
+                null,
+                destinationFolderID);
+        String mimeType = FileUtils.getMimeType(toUpload.getPath());
+        String fields = "id, parents";
+        FileContent mediaContent = new FileContent(mimeType, toUpload);
 
-        String type = FileUtils.getMimeType(toUpload.getPath());
-        FileContent mediaContent = new FileContent(type, toUpload);
-
-        return drive.files()
-                .create(fileMetadata, mediaContent)
-                .setFields("id, parents")
-                .setIgnoreDefaultVisibility(true)
-                .execute()
-                .getId();
+        return driveService.uploadFile(fileMetadata, mediaContent, fields);
     }
 
     /**
@@ -190,7 +180,7 @@ public class DriveHelper {
         fileMetadata = createNewFile(folderName, FOLDER_MIME_TYPE, parentId);
 
         // make api call using drive service to create the folder on google drive
-        String newFolderId = createFile(fileMetadata);
+        String newFolderId = driveService.createFile(fileMetadata, "id");
 
         //adding the permissions to folder
         setSharingPermissions(newFolderId);
@@ -206,28 +196,21 @@ public class DriveHelper {
      * @param parentId the id of the parent directory
      * @return new {@link com.google.api.services.drive.model.File} object
      */
-    private com.google.api.services.drive.model.File createNewFile(String name, String mimeType, String parentId) {
-        com.google.api.services.drive.model.File file =
-                new com.google.api.services.drive.model.File()
-                        .setName(name)
-                        .setMimeType(mimeType);
+    private com.google.api.services.drive.model.File createNewFile(@NonNull String name,
+                                                                   @Nullable String mimeType,
+                                                                   @Nullable String parentId) {
+        com.google.api.services.drive.model.File file;
+        file = new com.google.api.services.drive.model.File()
+                .setName(name)
+                .setViewersCanCopyContent(true);
+
+        if (mimeType != null) {
+            file.setMimeType(mimeType);
+        }
         if (parentId != null) {
             file.setParents(Collections.singletonList(parentId));
         }
         return file;
-    }
-
-    /**
-     * Uses drive service to create file in google drive
-     *
-     * @param file which is to be created
-     * @return id of the generated file
-     */
-    private String createFile(com.google.api.services.drive.model.File file) throws IOException {
-        return drive.files().create(file)
-                .setFields("id")
-                .execute()
-                .getId();
     }
 
     /**
@@ -239,9 +222,7 @@ public class DriveHelper {
                 .setType("anyone")
                 .setRole("reader");
 
-        drive.permissions().create(folderId, sharePermission)
-                .setFields("id")
-                .execute();
+        driveService.setPermission(folderId, "id", sharePermission);
     }
 
     /**
@@ -262,11 +243,7 @@ public class DriveHelper {
         Drive.Files.List request = buildRequest(requestString, fields);
 
         if (request != null) {
-            do {
-                FileList fileList = request.execute();
-                files.addAll(fileList.getFiles());
-                request.setPageToken(fileList.getNextPageToken());
-            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+            driveService.fetchAllFiles(request, files);
         }
         return files;
     }
@@ -291,7 +268,7 @@ public class DriveHelper {
         }
 
         // this query prevents from searching the deleted files
-        queryList.add("trashed=false");
+        queryList.add("trashed = false");
 
         StringBuilder query = new StringBuilder(queryList.get(0));
         for (int i = 1; i < queryList.size(); i++) {
@@ -303,5 +280,10 @@ public class DriveHelper {
 
     public String getMediaDirName(String fileName) {
         return fileName.substring(0, fileName.length() - 4) + "-media";
+    }
+
+    public void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files)
+            throws IOException {
+        driveService.fetchFilesForCurrentPage(request, files);
     }
 }

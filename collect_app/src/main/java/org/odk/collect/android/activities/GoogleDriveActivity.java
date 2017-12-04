@@ -48,7 +48,6 @@ import android.widget.TextView;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.FileList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
@@ -657,7 +656,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             if (params.length == 2) {
                 // TODO: *.xml or .xml or xml
                 // then search mimetype
-                query = "fullText contains '" + params[1] + "' and trashed=false";
+                query = "fullText contains '" + params[1] + "'";
             }
 
             // SharedWithMe, and root:
@@ -681,9 +680,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                 do {
                     try {
                         driveFileListPage = new ArrayList<>();
-                        FileList fileList = request.execute();
-                        driveFileListPage.addAll(fileList.getFiles());
-                        request.setPageToken(fileList.getNextPageToken());
+                        driveHelper.fetchFilesForCurrentPage(request, driveFileListPage);
 
                         HashMap<String, Object> nextPage = new HashMap<>();
                         nextPage.put(PARENT_ID_KEY, parentId);
