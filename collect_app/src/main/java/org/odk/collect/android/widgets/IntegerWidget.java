@@ -38,7 +38,9 @@ import java.util.Locale;
 @SuppressLint("ViewConstructor")
 public class IntegerWidget extends StringWidget {
 
-    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    boolean useThousandSeparator;
+
+    public IntegerWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, true);
 
         EditText answerText = getAnswerTextField();
@@ -49,8 +51,12 @@ public class IntegerWidget extends StringWidget {
         answerText.setHorizontallyScrolling(false);
         answerText.setSingleLine(false);
 
+        this.useThousandSeparator = useThousandSeparator;
+
         //thousand separator
-        answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+        }
 
         // only allows numbers and no periods
         answerText.setKeyListener(new DigitsKeyListener(true, false));
@@ -95,7 +101,11 @@ public class IntegerWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
+        String s = getAnswerTextField().getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
+        }
+
         if (s.isEmpty()) {
             return null;
 

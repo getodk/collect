@@ -42,7 +42,15 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
                     editText.setText("0.");
                 }
                 if (value.startsWith("0") && !value.startsWith("0.")) {
-                    editText.setText("");
+                    int index = 0;
+                    while (index < value.length() && value.charAt(index) == '0') {
+                        index++;
+                    }
+                    String newValue = Character.toString(value.charAt(0));
+                    if (index != 0) {
+                        newValue = value.charAt(0) + value.substring(index);
+                    }
+                    editText.setText(newValue);
                 }
                 String str = editText.getText().toString().replaceAll(thousandSeparator, "");
                 if (!value.equals("")) {

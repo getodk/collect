@@ -39,7 +39,9 @@ import java.util.Locale;
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {
 
-    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    boolean useThousandSeparator;
+
+    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, true);
 
         // formatting
@@ -55,8 +57,11 @@ public class DecimalWidget extends StringWidget {
         // only numbers are allowed
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
+        this.useThousandSeparator = useThousandSeparator;
         //thousand separator
-        answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+        }
 
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
@@ -107,14 +112,17 @@ public class DecimalWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
+        String s = getAnswerTextField().getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
+        }
+
         if (s.isEmpty()) {
             return null;
 
         } else {
             try {
                 return new DecimalData(Double.parseDouble(s));
-
             } catch (Exception numberFormatException) {
                 return null;
             }

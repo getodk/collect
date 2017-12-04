@@ -75,14 +75,24 @@ public class WidgetFactory {
                         } else if (appearance.equals("bearing")) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousand-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            useThousandSeparator = true;
+                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith("ex:")) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
-                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousand-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            useThousandSeparator = true;
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -112,7 +122,12 @@ public class WidgetFactory {
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.equals("numbers")) {
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousand-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            useThousandSeparator = true;
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,useThousandSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {

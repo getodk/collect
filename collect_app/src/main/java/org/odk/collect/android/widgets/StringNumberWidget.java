@@ -35,7 +35,9 @@ import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
 @SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
 
-    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    boolean useThousandSeparator;
+
+    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, true);
 
         EditText answerTextField = getAnswerTextField();
@@ -47,8 +49,12 @@ public class StringNumberWidget extends StringWidget {
         answerTextField.setHorizontallyScrolling(false);
         answerTextField.setSingleLine(false);
 
+        this.useThousandSeparator = useThousandSeparator;
+
         // thousand separator
-        answerTextField.addTextChangedListener(new ThousandSeparatorTextWatcher(answerTextField));
+        if (useThousandSeparator) {
+            answerTextField.addTextChangedListener(new ThousandSeparatorTextWatcher(answerTextField));
+        }
 
         answerTextField.setKeyListener(new DigitsKeyListener() {
             @Override
@@ -82,7 +88,11 @@ public class StringNumberWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerText());
+        String s = getAnswerText();
+
+        if (useThousandSeparator) {
+            s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerText());
+        }
 
         if (s.isEmpty()) {
             return null;
