@@ -162,7 +162,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         boolean usedSavepoint = false;
 
         try {
-            Timber.i("Initializing form");
+            Timber.i("Initializing form.");
             final long start = System.currentTimeMillis();
             usedSavepoint = initializeForm(formDef, fec);
             Timber.i("Form initialized in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
