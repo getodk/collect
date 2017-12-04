@@ -25,6 +25,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
 
 /**
  * Widget that restricts values to integers.
@@ -45,6 +46,9 @@ public class StringNumberWidget extends StringWidget {
         // needed to make long readonly text scroll
         answerTextField.setHorizontallyScrolling(false);
         answerTextField.setSingleLine(false);
+
+        // thousand separator
+        answerTextField.addTextChangedListener(new ThousandSeparatorTextWatcher(answerTextField));
 
         answerTextField.setKeyListener(new DigitsKeyListener() {
             @Override

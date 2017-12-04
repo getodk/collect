@@ -39,30 +39,73 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        editText.removeTextChangedListener(this);
+        try
+        {
+            editText.removeTextChangedListener(this);
+            String value = editText.getText().toString();
 
-        try {
-            String originalString = s.toString();
 
-            Long longVal;
-            if (originalString.contains(thousandSeparator)) {
-                originalString = originalString.replaceAll(thousandSeparator, "");
+            if (value != null && !value.equals(""))
+            {
+
+                if(value.startsWith(".")){
+                    editText.setText("0.");
+                }
+                if(value.startsWith("0") && !value.startsWith("0.")){
+                    editText.setText("");
+
+                }
+
+
+                String str = editText.getText().toString().replaceAll(thousandSeparator, "");
+                if (!value.equals(""))
+                    editText.setText(getDecimalFormattedString(str));
+                editText.setSelection(editText.getText().toString().length());
             }
-            longVal = Long.parseLong(originalString);
+            editText.addTextChangedListener(this);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            editText.addTextChangedListener(this);
+        }
+    }
 
-            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-            formatter.applyPattern("#,###.##");
-            String formattedString = formatter.format(longVal);
-
-            //setting text after format to EditText
-            editText.setText(formattedString);
-            editText.setSelection(editText.getText().length());
-
-        } catch (NumberFormatException nfe) {
-            nfe.printStackTrace();
+    public static String getDecimalFormattedString(String value)
+    {
+        StringTokenizer lst = new StringTokenizer(value, ".");
+        String str1 = value;
+        String str2 = "";
+        if (lst.countTokens() > 1)
+        {
+            str1 = lst.nextToken();
+            str2 = lst.nextToken();
+        }
+        String str3 = "";
+        int i = 0;
+        int j = -1 + str1.length();
+        if (str1.charAt( -1 + str1.length()) == '.')
+        {
+            j--;
+            str3 = ".";
+        }
+        for (int k = j;; k--)
+        {
+            if (k < 0)
+            {
+                if (str2.length() > 0)
+                    str3 = str3 + "." + str2;
+                return str3;
+            }
+            if (i == 3)
+            {
+                str3 = thousandSeparator + str3;
+                i = 0;
+            }
+            str3 = str1.charAt(k) + str3;
+            i++;
         }
 
-        editText.addTextChangedListener(this);
     }
 
     /*
