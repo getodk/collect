@@ -187,6 +187,18 @@ public class FormsDaoTest {
         assertEquals("Widgets2", forms.get(0).getJrFormId());
     }
 
+    @Test
+    public void getFormVersionForFormIdTest() {
+        String formVersion = formsDao.getFormMediaPathForFormId("Birds");
+        assertEquals("3", formVersion);
+    }
+
+    @Test
+    public void getFormMediaPathForFormIdTest() {
+        String mediaPath = formsDao.getFormMediaPathForFormId("Birds");
+        assertEquals(Collect.FORMS_PATH + "/Birds-media", mediaPath);
+    }
+
     private void fillDatabase() throws IOException {
         assertTrue(new File(Collect.FORMS_PATH + "/Biggest N of Set.xml").createNewFile());
         Form form1 = new Form.Builder()
@@ -206,6 +218,7 @@ public class FormsDaoTest {
                 .displayName("Birds")
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
                 .jrFormId("Birds")
+                .jrVersion("3")
                 .date(1487782404899L)
                 .formMediaPath(Collect.FORMS_PATH + "/Birds-media")
                 .formFilePath(Collect.FORMS_PATH + "/Birds.xml")

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import okhttp3.mockwebserver.RecordedRequest;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.test.TestUtils.assertMatches;
@@ -41,6 +42,9 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         assertNull(f1.getManifestUrl());
         assertEquals("one", f1.getFormID());
         assertNull(f1.getFormVersion());
+        assertFalse(f1.isNewerFormVersionAvailable());
+        assertFalse(f1.areNewerMediaFilesAvailable());
+
 
         // and
         FormDetails f2 = fetched.get("two");
@@ -50,6 +54,8 @@ public class DownloadFormListTaskTest extends MockedServerTest {
         assertNull(f2.getManifestUrl());
         assertEquals("two", f2.getFormID());
         assertNull(f2.getFormVersion());
+        assertFalse(f1.isNewerFormVersionAvailable());
+        assertFalse(f1.areNewerMediaFilesAvailable());
     }
 
     private static final String RESPONSE = join(
