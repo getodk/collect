@@ -98,7 +98,7 @@ public class DownloadFormsTask extends
         final HashMap<FormDetails, String> result = new HashMap<>();
 
         for (FormDetails fd : toDownload) {
-            publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
+            publishProgress(fd.getFormName(), String.valueOf(count), String.valueOf(total));
 
             String message = "";
 
@@ -112,9 +112,9 @@ public class DownloadFormsTask extends
             try {
                 // get the xml file
                 // if we've downloaded a duplicate, this gives us the file
-                fileResult = downloadXform(fd.formName, fd.downloadUrl);
+                fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl());
 
-                if (fd.manifestUrl != null) {
+                if (fd.getManifestUrl() != null) {
                     // use a temporary media path until everything is ok.
                     tempMediaPath = new File(Collect.CACHE_PATH,
                             String.valueOf(System.currentTimeMillis())).getAbsolutePath();
@@ -126,7 +126,7 @@ public class DownloadFormsTask extends
                         message += error;
                     }
                 } else {
-                    Timber.i("No Manifest for: %s", fd.formName);
+                    Timber.i("No Manifest for: %s", fd.getFormName());
                 }
             } catch (TaskCancelledException e) {
                 Timber.i(e);
@@ -570,11 +570,11 @@ public class DownloadFormsTask extends
     private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
             FormDetails fd, int count,
             int total) throws Exception {
-        if (fd.manifestUrl == null) {
+        if (fd.getManifestUrl() == null) {
             return null;
         }
 
-        publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.formName),
+        publishProgress(Collect.getInstance().getString(R.string.fetching_manifest, fd.getFormName()),
                 String.valueOf(count), String.valueOf(total));
 
         List<MediaFile> files = new ArrayList<MediaFile>();
@@ -584,13 +584,13 @@ public class DownloadFormsTask extends
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
-                WebUtils.getXmlDocument(fd.manifestUrl, localContext, httpclient);
+                WebUtils.getXmlDocument(fd.getManifestUrl(), localContext, httpclient);
 
         if (result.errorMessage != null) {
             return result.errorMessage;
         }
 
-        String errMessage = Collect.getInstance().getString(R.string.access_error, fd.manifestUrl);
+        String errMessage = Collect.getInstance().getString(R.string.access_error, fd.getManifestUrl());
 
         if (!result.isOpenRosaResponse) {
             errMessage += Collect.getInstance().getString(R.string.manifest_server_error);
@@ -688,7 +688,7 @@ public class DownloadFormsTask extends
                 ++mediaCount;
                 publishProgress(
                         Collect.getInstance().getString(R.string.form_download_progress,
-                                fd.formName,
+                                fd.getFormName(),
                                 String.valueOf(mediaCount), String.valueOf(files.size())),
                                 String.valueOf(count),String.valueOf(total));
                 //try {

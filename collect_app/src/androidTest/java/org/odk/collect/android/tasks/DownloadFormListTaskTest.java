@@ -35,21 +35,21 @@ public class DownloadFormListTaskTest extends MockedServerTest {
 
         // and
         FormDetails f1 = fetched.get("one");
-        assertNull(f1.errorStr);
-        assertEquals("The First Form", f1.formName);
-        assertEquals("https://example.com/formXml?formId=one", f1.downloadUrl);
-        assertNull(f1.manifestUrl);
-        assertEquals("one", f1.formID);
-        assertNull(f1.formVersion);
+        assertNull(f1.getErrorStr());
+        assertEquals("The First Form", f1.getFormName());
+        assertEquals("https://example.com/formXml?formId=one", f1.getDownloadUrl());
+        assertNull(f1.getManifestUrl());
+        assertEquals("one", f1.getFormID());
+        assertNull(f1.getFormVersion());
 
         // and
         FormDetails f2 = fetched.get("two");
-        assertNull(f2.errorStr);
-        assertEquals("The Second Form", f2.formName);
-        assertEquals("https://example.com/formXml?formId=two", f2.downloadUrl);
-        assertNull(f2.manifestUrl);
-        assertEquals("two", f2.formID);
-        assertNull(f2.formVersion);
+        assertNull(f2.getErrorStr());
+        assertEquals("The Second Form", f2.getFormName());
+        assertEquals("https://example.com/formXml?formId=two", f2.getDownloadUrl());
+        assertNull(f2.getManifestUrl());
+        assertEquals("two", f2.getFormID());
+        assertNull(f2.getFormVersion());
     }
 
     private static final String RESPONSE = join(

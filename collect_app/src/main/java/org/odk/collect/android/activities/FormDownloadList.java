@@ -272,7 +272,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         if (detail != null) {
             Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
-                    detail.downloadUrl);
+                    detail.getDownloadUrl());
         } else {
             Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                     "<missing form detail>");
@@ -551,7 +551,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         try {
             formCursor = new FormsDao().getFormsCursorForFormId(formId);
             // form does not already exist locally or a newer version of this form is available or newer versions of media files are available
-            return formCursor.getCount() == 0 || formNamesAndURLs.get(formId).isNewerFormVersionAvailable || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable;
+            return formCursor.getCount() == 0 || formNamesAndURLs.get(formId).isNewerFormVersionAvailable() || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable();
         } finally {
             if (formCursor != null) {
                 formCursor.close();
@@ -600,7 +600,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             // Download failed
             String dialogMessage =
                     getString(R.string.list_failed_with_error,
-                            result.get(DownloadFormListTask.DL_ERROR_MSG).errorStr);
+                            result.get(DownloadFormListTask.DL_ERROR_MSG).getErrorStr());
             String dialogTitle = getString(R.string.load_remote_form_error);
             createAlertDialog(dialogTitle, dialogMessage, DO_NOT_EXIT);
         } else {
@@ -614,13 +614,13 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 String formDetailsKey = ids.get(i);
                 FormDetails details = formNamesAndURLs.get(formDetailsKey);
                 HashMap<String, String> item = new HashMap<String, String>();
-                item.put(FORMNAME, details.formName);
+                item.put(FORMNAME, details.getFormName());
                 item.put(FORMID_DISPLAY,
-                        ((details.formVersion == null) ? "" : (getString(R.string.version) + " "
-                                + details.formVersion + " ")) + "ID: " + details.formID);
+                        ((details.getFormVersion() == null) ? "" : (getString(R.string.version) + " "
+                                + details.getFormVersion() + " ")) + "ID: " + details.getFormID());
                 item.put(FORMDETAIL_KEY, formDetailsKey);
-                item.put(FORM_ID_KEY, details.formID);
-                item.put(FORM_VERSION_KEY, details.formVersion);
+                item.put(FORM_ID_KEY, details.getFormID());
+                item.put(FORM_VERSION_KEY, details.getFormVersion());
 
                 // Insert the new form in alphabetical order.
                 if (formList.size() == 0) {
@@ -630,7 +630,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                     for (j = 0; j < formList.size(); j++) {
                         HashMap<String, String> compareMe = formList.get(j);
                         String name = compareMe.get(FORMNAME);
-                        if (name.compareTo(formNamesAndURLs.get(ids.get(i)).formName) > 0) {
+                        if (name.compareTo(formNamesAndURLs.get(ids.get(i)).getFormName()) > 0) {
                             break;
                         }
                     }
@@ -704,10 +704,10 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         Set<FormDetails> keys = result.keySet();
         StringBuilder b = new StringBuilder();
         for (FormDetails k : keys) {
-            b.append(k.formName + " ("
-                    + ((k.formVersion != null)
-                    ? (this.getString(R.string.version) + ": " + k.formVersion + " ")
-                    : "") + "ID: " + k.formID + ") - " + result.get(k));
+            b.append(k.getFormName() + " ("
+                    + ((k.getFormVersion() != null)
+                    ? (this.getString(R.string.version) + ": " + k.getFormVersion() + " ")
+                    : "") + "ID: " + k.getFormID() + ") - " + result.get(k));
             b.append("\n\n");
         }
 
