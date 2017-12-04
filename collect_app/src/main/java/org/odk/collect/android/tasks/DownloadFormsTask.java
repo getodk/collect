@@ -27,6 +27,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
@@ -79,7 +80,7 @@ public class DownloadFormsTask extends
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
             "http://openrosa.org/xforms/xformsManifest";
 
-    private boolean isXformsManifestNamespacedElement(Element e) {
+    public static boolean isXformsManifestNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
@@ -566,20 +567,6 @@ public class DownloadFormsTask extends
         }
     }
 
-    private static class MediaFile {
-        final String filename;
-        final String hash;
-        final String downloadUrl;
-
-
-        MediaFile(String filename, String hash, String downloadUrl) {
-            this.filename = filename;
-            this.hash = hash;
-            this.downloadUrl = downloadUrl;
-        }
-    }
-
-
     private String downloadManifestAndMediaFiles(String tempMediaPath, String finalMediaPath,
             FormDetails fd, int count,
             int total) throws Exception {
@@ -705,20 +692,20 @@ public class DownloadFormsTask extends
                                 String.valueOf(mediaCount), String.valueOf(files.size())),
                                 String.valueOf(count),String.valueOf(total));
                 //try {
-                File finalMediaFile = new File(finalMediaDir, toDownload.filename);
-                File tempMediaFile = new File(tempMediaDir, toDownload.filename);
+                File finalMediaFile = new File(finalMediaDir, toDownload.getFilename());
+                File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
 
                 if (!finalMediaFile.exists()) {
-                    downloadFile(tempMediaFile, toDownload.downloadUrl);
+                    downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
-                    String downloadFileHash = toDownload.hash.substring(MD5_COLON_PREFIX.length());
+                    String downloadFileHash = toDownload.getHash().substring(MD5_COLON_PREFIX.length());
 
                     if (!currentFileHash.contentEquals(downloadFileHash)) {
                         // if the hashes match, it's the same file
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
-                        downloadFile(tempMediaFile, toDownload.downloadUrl);
+                        downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                     } else {
                         // exists, and the hash is the same
                         // no need to download it again

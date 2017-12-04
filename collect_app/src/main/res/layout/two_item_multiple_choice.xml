@@ -51,6 +51,14 @@ the specific language governing permissions and limitations under the License. -
             android:textAppearance="?android:attr/textAppearanceSmall"
             tools:text="text2" />
 
+        <TextView
+            android:id="@+id/update_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4CAF50"
+            android:layout_below="@+id/text2"
+            android:visibility="gone" />
+
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"

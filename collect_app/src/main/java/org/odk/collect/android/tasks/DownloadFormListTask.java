@@ -22,15 +22,21 @@ import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.logic.MediaFile;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.DocumentFetchResult;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -214,8 +220,19 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                     R.string.parse_openrosa_formlist_failed, error)));
                     return formList;
                 }
+                boolean isNewerFormVersionAvailable = false;
+                boolean areNewerMediaFilesAvailable = false;
+                if (isThisFormAlreadyDownloaded(formId)) {
+                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(formId, version);
+                    if (!isNewerFormVersionAvailable && manifestUrl != null) {
+                        List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
+                        if (newMediaFiles != null) {
+                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, newMediaFiles);
+                        }
+                    }
+                }
                 formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
-                        (version != null) ? version : majorMinorVersion));
+                        (version != null) ? version : majorMinorVersion, isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
             }
         } else {
             // Aggregate 0.9.x mode...
@@ -259,7 +276,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         return formList;
                     }
                     formList.put(formName,
-                            new FormDetails(formName, downloadUrl, null, formId, null));
+                            new FormDetails(formName, downloadUrl, null, formId, null, false, false));
 
                     formId = null;
                 }
@@ -268,6 +285,166 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         return formList;
     }
 
+    private boolean isThisFormAlreadyDownloaded(String formId) {
+        return new FormsDao().getFormsCursorForFormId(formId).getCount() > 0;
+    }
+
+    private List<MediaFile> downloadMediaFileList(String manifestUrl) {
+        if (manifestUrl == null) {
+            return null;
+        }
+
+        // get shared HttpContext so that authentication and cookies are retained.
+        HttpContext localContext = Collect.getInstance().getHttpContext();
+
+        HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
+
+        DocumentFetchResult result =
+                WebUtils.getXmlDocument(manifestUrl, localContext, httpclient);
+
+        if (result.errorMessage != null) {
+            return null;
+        }
+
+        String errMessage = Collect.getInstance().getString(R.string.access_error, manifestUrl);
+
+        if (!result.isOpenRosaResponse) {
+            errMessage += Collect.getInstance().getString(R.string.manifest_server_error);
+            Timber.e(errMessage);
+            return null;
+        }
+
+        // Attempt OpenRosa 1.0 parsing
+        Element manifestElement = result.doc.getRootElement();
+        if (!manifestElement.getName().equals("manifest")) {
+            errMessage +=
+                    Collect.getInstance().getString(R.string.root_element_error,
+                            manifestElement.getName());
+            Timber.e(errMessage);
+            return null;
+        }
+        String namespace = manifestElement.getNamespace();
+        if (!DownloadFormsTask.isXformsManifestNamespacedElement(manifestElement)) {
+            errMessage += Collect.getInstance().getString(R.string.root_namespace_error, namespace);
+            Timber.e(errMessage);
+            return null;
+        }
+        int elements = manifestElement.getChildCount();
+        List<MediaFile> files = new ArrayList<>();
+        for (int i = 0; i < elements; ++i) {
+            if (manifestElement.getType(i) != Element.ELEMENT) {
+                // e.g., whitespace (text)
+                continue;
+            }
+            Element mediaFileElement = manifestElement.getElement(i);
+            if (!DownloadFormsTask.isXformsManifestNamespacedElement(mediaFileElement)) {
+                // someone else's extension?
+                continue;
+            }
+            String name = mediaFileElement.getName();
+            if (name.equalsIgnoreCase("mediaFile")) {
+                String filename = null;
+                String hash = null;
+                String downloadUrl = null;
+                // don't process descriptionUrl
+                int childCount = mediaFileElement.getChildCount();
+                for (int j = 0; j < childCount; ++j) {
+                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
+                        // e.g., whitespace (text)
+                        continue;
+                    }
+                    Element child = mediaFileElement.getElement(j);
+                    if (!DownloadFormsTask.isXformsManifestNamespacedElement(child)) {
+                        // someone else's extension?
+                        continue;
+                    }
+                    String tag = child.getName();
+                    switch (tag) {
+                        case "filename":
+                            filename = XFormParser.getXMLText(child, true);
+                            if (filename != null && filename.length() == 0) {
+                                filename = null;
+                            }
+                            break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
+                        case "downloadUrl":
+                            downloadUrl = XFormParser.getXMLText(child, true);
+                            if (downloadUrl != null && downloadUrl.length() == 0) {
+                                downloadUrl = null;
+                            }
+                            break;
+                    }
+                }
+                if (filename == null || downloadUrl == null || hash == null) {
+                    errMessage +=
+                            Collect.getInstance().getString(R.string.manifest_tag_error,
+                                    Integer.toString(i));
+                    Timber.e(errMessage);
+                    return null;
+                }
+                files.add(new MediaFile(filename, hash, downloadUrl));
+            }
+        }
+        return files;
+    }
+
+    private boolean isNewerFormVersionAvailable(String formId, String formVersion) {
+        boolean isNewerFormAvailable;
+        Integer localFormVersion = new FormsDao().getFormVersionForFormId(formId);
+        if (localFormVersion == null) {
+            isNewerFormAvailable = formVersion != null;
+        } else {
+            isNewerFormAvailable = Integer.parseInt(formVersion) > localFormVersion;
+        }
+
+        return isNewerFormAvailable;
+    }
+
+    private boolean areNewerMediaFilesAvailable(String formId, List<MediaFile> newMediaFiles) {
+        String mediaDirPath = new FormsDao().getFormMediaPathForFormId(formId);
+        return !areMediaFilesIdentical(newMediaFiles, mediaDirPath);
+    }
+
+    private boolean areMediaFilesIdentical(List<MediaFile> newMediaFiles, String mediaDirPath) {
+        boolean result = true;
+
+        if (newMediaFiles != null) {
+            List<File> localMediaFiles = FileUtils.getAllFormMediaFiles(mediaDirPath);
+            if (localMediaFiles != null) {
+                if (localMediaFiles.size() == newMediaFiles.size()) {
+                    for (MediaFile mediaFile : newMediaFiles) {
+                        File file = getFileByName(localMediaFiles, mediaFile.getFilename());
+                        String mediaFileHash = mediaFile.getHash();
+                        mediaFileHash = mediaFileHash.substring(4, mediaFileHash.length());
+                        if (!mediaFileHash.equals(FileUtils.getMd5Hash(file))) {
+                            result = false;
+                        }
+                    }
+                } else {
+                    result = false;
+                }
+            } else if (!newMediaFiles.isEmpty()) {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    private File getFileByName(List<File> files, String fileName) {
+        for (File file : files) {
+            if (file.getName().equals(fileName)) {
+                return file;
+            }
+        }
+
+        return null;
+    }
 
     @Override
     protected void onPostExecute(HashMap<String, FormDetails> value) {

@@ -33,16 +33,15 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -89,11 +88,11 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private static final String FORMLIST = "formlist";
     private static final String SELECTED_FORMS = "selectedForms";
 
-    private static final String FORMNAME = "formname";
+    public static final String FORMNAME = "formname";
     private static final String FORMDETAIL_KEY = "formdetailkey";
-    private static final String FORMID_DISPLAY = "formiddisplay";
+    public static final String FORMID_DISPLAY = "formiddisplay";
 
-    private static final String FORM_ID_KEY = "formid";
+    public static final String FORM_ID_KEY = "formid";
     private static final String FORM_VERSION_KEY = "formversion";
 
     private String alertMsg;
@@ -109,7 +108,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
     private Button toggleButton;
 
     private HashMap<String, FormDetails> formNamesAndURLs = new HashMap<String, FormDetails>();
-    private SimpleAdapter formListAdapter;
     private ArrayList<HashMap<String, String>> formList;
     private ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
     private LinkedHashSet<String> selectedForms = new LinkedHashSet<>();
@@ -235,18 +233,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             downloadFormList();
         }
 
-        String[] data = new String[]{
-                FORMNAME, FORMID_DISPLAY, FORMDETAIL_KEY
-        };
-        int[] view = new int[]{
-                R.id.text1, R.id.text2
-        };
-
-        formListAdapter =
-                new SimpleAdapter(this, filteredFormList, R.layout.two_item_multiple_choice, data, view);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
-        listView.setAdapter(formListAdapter);
+        listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
 
         sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
@@ -443,7 +432,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             filteredFormList.addAll(formList);
         }
         sortList();
-        formListAdapter.notifyDataSetChanged();
+        listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
 
         checkPreviouslyCheckedItems();
     }
@@ -552,20 +541,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         super.onPause();
     }
 
-    /**
-     * Determines if a local form on the device is superseded by a given version (of the same form
-     * presumably available
-     * on the server).
-     *
-     * @param formId        the form to be checked. A form with this ID may or may not reside on the
-     *                      local device.
-     * @param latestVersion the version against which the local form (if any) is tested.
-     * @return true if a form with id <code>formId</code> exists on the local device and its version
-     * is less than
-     * <code>latestVersion</code>.
-     */
-    public static boolean isLocalFormSuperseded(String formId, String latestVersion) {
-
+    public boolean isLocalFormSuperseded(String formId) {
         if (formId == null) {
             Timber.e("isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
             return true;
@@ -574,29 +550,8 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         Cursor formCursor = null;
         try {
             formCursor = new FormsDao().getFormsCursorForFormId(formId);
-            if (formCursor.getCount() == 0) {
-                // form does not already exist locally
-                return true;
-            }
-            formCursor.moveToFirst();
-            int idxJrVersion = formCursor.getColumnIndex(FormsColumns.JR_VERSION);
-            if (formCursor.isNull(idxJrVersion)) {
-                // any non-null version on server is newer
-                return (latestVersion != null);
-            }
-            String jrVersion = formCursor.getString(idxJrVersion);
-            // apparently, the isNull() predicate above is not respected on all Android OSes???
-            if (jrVersion == null && latestVersion == null) {
-                return false;
-            }
-            if (jrVersion == null) {
-                return true;
-            }
-            if (latestVersion == null) {
-                return false;
-            }
-            // if what we have is less, then the server is newer
-            return (jrVersion.compareTo(latestVersion) < 0);
+            // form does not already exist locally or a newer version of this form is available or newer versions of media files are available
+            return formCursor.getCount() == 0 || formNamesAndURLs.get(formId).isNewerFormVersionAvailable || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable;
         } finally {
             if (formCursor != null) {
                 formCursor.close();
@@ -614,7 +569,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         ListView ls = listView;
         for (int idx = 0; idx < filteredFormList.size(); idx++) {
             HashMap<String, String> item = filteredFormList.get(idx);
-            if (isLocalFormSuperseded(item.get(FORM_ID_KEY), item.get(FORM_VERSION_KEY))) {
+            if (isLocalFormSuperseded(item.get(FORM_ID_KEY))) {
                 ls.setItemChecked(idx, true);
                 selectedForms.add(item.get(FORMDETAIL_KEY));
             }
@@ -685,7 +640,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             filteredFormList.addAll(formList);
             updateAdapter();
             selectSupersededForms();
-            formListAdapter.notifyDataSetChanged();
             downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
             toggleButtonLabel(toggleButton, listView);
         }

@@ -29,6 +29,8 @@ public class FormDetails implements Serializable {
     public final String manifestUrl;
     public final String formID;
     public final String formVersion;
+    public boolean isNewerFormVersionAvailable;
+    public boolean areNewerMediaFilesAvailable;
 
 
     public FormDetails(String error) {
@@ -41,13 +43,15 @@ public class FormDetails implements Serializable {
     }
 
 
-    public FormDetails(String name, String url, String manifest, String id, String version) {
+    public FormDetails(String name, String url, String manifest, String id, String version, boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
         manifestUrl = manifest;
         downloadUrl = url;
         formName = name;
         formID = id;
         formVersion = version;
         errorStr = null;
+        this.isNewerFormVersionAvailable = isNewerFormVersionAvailable;
+        this.areNewerMediaFilesAvailable = areNewerMediaFilesAvailable;
     }
 
 }

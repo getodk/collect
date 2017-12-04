@@ -68,6 +68,38 @@ public class FormsDao {
         return getFormsCursor(null, selection, selectionArgs, null);
     }
 
+    public Integer getFormVersionForFormId(String formId) {
+        Integer formVersion = null;
+        Cursor cursor = getFormsCursorForFormId(formId);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int formVersionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION);
+                    formVersion = cursor.getString(formVersionColumnIndex) == null ? null : Integer.valueOf(cursor.getString(formVersionColumnIndex));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return formVersion;
+    }
+
+    public String getFormMediaPathForFormId(String formId) {
+        String formMediaPath = null;
+        Cursor cursor = getFormsCursorForFormId(formId);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int formMediaPathColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_MEDIA_PATH);
+                    formMediaPath = cursor.getString(formMediaPathColumnIndex);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return formMediaPath;
+    }
+
     public Cursor getFormsCursorForFormFilePath(String formFIlePath) {
         String selection = FormsProviderAPI.FormsColumns.FORM_FILE_PATH + "=?";
         String[] selectionArgs = {formFIlePath};
