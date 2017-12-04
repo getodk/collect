@@ -107,7 +107,7 @@ public class DecimalWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = getAnswerTextField().getText().toString();
+        String s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
         if (s.isEmpty()) {
             return null;
 

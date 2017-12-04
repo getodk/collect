@@ -82,7 +82,7 @@ public class StringNumberWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = getAnswerText();
+        String s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerText());
 
         if (s.isEmpty()) {
             return null;
