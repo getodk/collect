@@ -42,7 +42,7 @@ import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_
 
 public class DriveHelper {
 
-    private final static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
+    private static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final Drive drive;
     private final DriveService driveService;
 
