@@ -1,70 +1,85 @@
-# Reference used: https://circleci.com/docs/2.0/language-android
 version: 2
 jobs:
   build:
-      working_directory: ~/code
-      docker:
-      - image: opendatakit/collect-build:1.0.0
-      environment:
-          # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
-          _JAVA_OPTIONS: "-Xmx1024m"
-      steps:
-          - checkout
-          - save_cache:
-              key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-              paths: ~/code
-          - restore_cache:
-              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-          - run:
-              name: Accept licenses
-              command: yes | sdkmanager --licenses || true
-          - run:
-              name: Download dependencies
-              command: ./gradlew androidDependencies
-          - save_cache:
-              paths: ~/code/.gradle
-              key: jars-{{ checksum "build.gradle" }}-{{ checksum  "collect_app/build.gradle" }}
-          - run:
-              name: Run checks and unit tests
-              command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
-          - store_artifacts:
-              path: collect_app/build/reports
-              destination: reports
-          - store_test_results:
-              path: collect_app/build/test-results
-          - run:
-              name: Send codecov results
-              command: bash <(curl -s https://codecov.io/bash)
-          - run:
-              name: Assemble debug and test builds
-              command: |
-                  ./gradlew :collect_app:assembleDebug -PdisablePreDex
-                  ./gradlew :collect_app:assembleDebugAndroidTest -PdisablePreDex
-          - run:
-              name: Authorize gcloud
-              command: |
-                  if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
-                    sudo gcloud config set project api-project-322300403941;
-                    echo $GCLOUD_SERVICE_KEY | base64 --decode > ~/client-secret.json;
-                    sudo gcloud auth activate-service-account --key-file ~/client-secret.json;
-                  fi
-          - run:
-              name: Run integration tests
-              command: |
-                  if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
-                    echo "y" | sudo gcloud firebase test android run \
-                    --app collect_app/build/outputs/apk/debug/collect-debug-$(git describe --tags --dirty --always).apk \
-                    --test collect_app/build/outputs/apk/androidTest/debug/collect_app-debug-androidTest.apk \
-                    --device model=Nexus5,version=21,locale=en,orientation=portrait \
-                    --results-bucket opendatakit-collect-test-results; \
-                  fi
-          - run:
-              name: Copy integration test results
-              command: |
-                  if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" && "$CIRCLE_BRANCH" == "master" ]]; then \
-                    mkdir ~/test-results;
-                    sudo easy_install -U pip && sudo pip uninstall -y crcmod && sudo pip install -U crcmod;
-                    sudo gsutil -m cp -r -U `sudo gsutil ls gs://opendatakit-collect-test-results | tail -1` ~/test-results | true;
-                  fi
-          - store_test_results:
-              path: ~/test-results
+    working_directory: ~/src
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+        # Least invasive change to resolve out-of-memory error: https://discuss.circleci.com/t/circle-ci-v2-and-android-memory-issues/11207/9
+        _JAVA_OPTIONS: "-Xmx1024m"
+    steps:
+        - checkout
+        - restore_cache:
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - run:
+            name: Accept licenses
+            command: yes | sdkmanager --licenses || true
+        - run:
+            name: Download dependencies
+            command: ./gradlew androidDependencies
+        - save_cache:
+            paths: ~/src/.gradle
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum "collect_app/build.gradle" }}
+        - run:
+            name: Run checks and unit tests
+            command: ./gradlew pmd checkstyle lint findbugs testDebugUnitTest
+        - store_artifacts:
+            path: collect_app/build/reports
+            destination: reports
+        - store_test_results:
+            path: collect_app/build/test-results
+        - run:
+            name: Assemble debug and test builds
+            command: |
+                ./gradlew assembleDebug -PdisablePreDex
+                ./gradlew assembleDebugAndroidTest -PdisablePreDex
+        - persist_to_workspace:
+            root: ~/src
+            paths:
+              - collect_app/build/outputs/apk/*
+  test:
+    working_directory: ~/src
+    docker:
+      - image: google/cloud-sdk:latest
+    steps:
+      - attach_workspace:
+          at: ~/src
+      - run:
+          name: Authorize gcloud
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              gcloud config set project api-project-322300403941
+              echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
+              gcloud auth activate-service-account --key-file client-secret.json
+            fi
+      - run:
+          name: Run integration tests
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              echo "y" | gcloud firebase test android run \
+              --app collect_app/build/outputs/apk/debug/*.apk \
+              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --device model=Nexus5,version=21,locale=en,orientation=portrait \
+              --results-bucket opendatakit-collect-test-results
+            fi
+      - run:
+          name: Copy integration test results
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "opendatakit" ]]; then \
+              mkdir test-results
+              gsutil -m cp -r -U `gsutil ls gs://opendatakit-collect-test-results | tail -1` test-results | true
+            fi
+      - store_test_results:
+          path: test-results
+workflows:
+  version: 2
+  build_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+          # We'd like to also filter by username and remove the if/fi above, but username filtering is not supported in CircleCI
+          filters:
+            branches:
+              only: master
