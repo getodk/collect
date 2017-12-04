@@ -43,6 +43,7 @@ import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_
 
 public class DriveHelper {
 
+    private final static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final Drive drive;
 
     DriveHelper(@NonNull GoogleAccountCredential credential,
@@ -71,17 +72,21 @@ public class DriveHelper {
                 .execute().getId();
     }
 
-    public Drive.Files.List buildRequest(String query) {
-        try {
-            return drive.files()
-                    .list()
-                    .setQ(query)
-                    .setFields("nextPageToken, files(modifiedTime, id, name, mimeType)");
+    @Nullable
+    public Drive.Files.List buildRequest(String query, String fields) {
+        Drive.Files.List request = null;
+        if (query != null) {
+            try {
+                request = drive.files()
+                        .list()
+                        .setQ(query)
+                        .setFields(fields);
 
-        } catch (IOException e) {
-            Timber.e(e);
+            } catch (IOException e) {
+                Timber.e(e);
+            }
         }
-        return null;
+        return request;
     }
 
     public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
@@ -134,7 +139,7 @@ public class DriveHelper {
         if (files.size() == 1) {
             id = files.get(0).getId();
         } else if (files.size() == 0 && shouldCreateIfNotFound) {
-            id = createFolderInDrive(name, inFolder).getId();
+            id = createFolderInDrive(name, inFolder);
         }
 
         return id;
@@ -174,36 +179,69 @@ public class DriveHelper {
      *
      * @param folderName The name of the new folder
      * @param parentId   The id of the folder in which we want to create the new folder
-     * @return the folder object if created successfully
+     * @return id of the folder object if created successfully
      */
-    private com.google.api.services.drive.model.File createFolderInDrive(@NonNull String folderName,
-                                                                         @Nullable String parentId)
+    private String createFolderInDrive(@NonNull String folderName,
+                                       @Nullable String parentId)
             throws IOException {
+        com.google.api.services.drive.model.File fileMetadata;
 
-        //creating a new folder
-        com.google.api.services.drive.model.File fileMetadata = new
-                com.google.api.services.drive.model.File();
-        fileMetadata.setName(folderName);
-        fileMetadata.setMimeType("application/vnd.google-apps.folder");
-        if (parentId != null) {
-            fileMetadata.setParents(Collections.singletonList(parentId));
-        }
+        //creating a new folder object using the data
+        fileMetadata = createNewFile(folderName, FOLDER_MIME_TYPE, parentId);
 
-        com.google.api.services.drive.model.File folder;
-        folder = drive.files().create(fileMetadata)
-                .setFields("id")
-                .execute();
+        // make api call using drive service to create the folder on google drive
+        String newFolderId = createFile(fileMetadata);
 
         //adding the permissions to folder
+        setSharingPermissions(newFolderId);
+
+        return newFolderId;
+    }
+
+    /**
+     * Create a new {@link com.google.api.services.drive.model.File} object
+     *
+     * @param name     the name of the file
+     * @param mimeType mime type of the file
+     * @param parentId the id of the parent directory
+     * @return new {@link com.google.api.services.drive.model.File} object
+     */
+    private com.google.api.services.drive.model.File createNewFile(String name, String mimeType, String parentId) {
+        com.google.api.services.drive.model.File file =
+                new com.google.api.services.drive.model.File()
+                        .setName(name)
+                        .setMimeType(mimeType);
+        if (parentId != null) {
+            file.setParents(Collections.singletonList(parentId));
+        }
+        return file;
+    }
+
+    /**
+     * Uses drive service to create file in google drive
+     *
+     * @param file which is to be created
+     * @return id of the generated file
+     */
+    private String createFile(com.google.api.services.drive.model.File file) throws IOException {
+        return drive.files().create(file)
+                .setFields("id")
+                .execute()
+                .getId();
+    }
+
+    /**
+     * Sets read permission for anyone to the drive folder so that anyone who has the link
+     * to the file can access it
+     */
+    private void setSharingPermissions(String folderId) throws IOException {
         Permission sharePermission = new Permission()
                 .setType("anyone")
                 .setRole("reader");
 
-        drive.permissions().create(folder.getId(), sharePermission)
+        drive.permissions().create(folderId, sharePermission)
                 .setFields("id")
                 .execute();
-
-        return folder;
     }
 
     /**
@@ -219,27 +257,48 @@ public class DriveHelper {
 
         List<com.google.api.services.drive.model.File> files = new ArrayList<>();
 
-        String requestString;
-        if (folderName != null && parentId == null) {
-            requestString = "name = '" + folderName + "' and "
-                    + "mimeType = 'application/vnd.google-apps.folder'"
-                    + " and trashed=false";
-        } else if (folderName != null) {
-            requestString = "name = '" + folderName + "' and "
-                    + "mimeType = 'application/vnd.google-apps.folder'"
-                    + " and '" + parentId + "' in parents" + " and trashed=false";
-        } else {
-            requestString = "'" + parentId + "' in parents and trashed=false";
+        String requestString = generateSearchQuery(folderName, parentId, FOLDER_MIME_TYPE);
+        String fields = "nextPageToken, files(modifiedTime, id, name, mimeType)";
+        Drive.Files.List request = buildRequest(requestString, fields);
+
+        if (request != null) {
+            do {
+                FileList fileList = request.execute();
+                files.addAll(fileList.getFiles());
+                request.setPageToken(fileList.getNextPageToken());
+            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+        }
+        return files;
+    }
+
+    @Nullable
+    private String generateSearchQuery(@Nullable String folderName,
+                                       @Nullable String parentId,
+                                       @Nullable String mimeType) {
+        List<String> queryList = new ArrayList<>();
+        if (folderName != null) {
+            queryList.add(String.format("name = '%s'", folderName));
+        }
+        if (mimeType != null) {
+            queryList.add(String.format("mimeType = '%s'", mimeType));
+        }
+        if (parentId != null) {
+            queryList.add(String.format("'%s' in parents", parentId));
         }
 
-        Drive.Files.List request = buildRequest(requestString);
+        if (queryList.isEmpty()) {
+            return null;
+        }
 
-        do {
-            FileList fileList = request.execute();
-            files.addAll(fileList.getFiles());
-            request.setPageToken(fileList.getNextPageToken());
-        } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-        return files;
+        // this query prevents from searching the deleted files
+        queryList.add("trashed=false");
+
+        StringBuilder query = new StringBuilder(queryList.get(0));
+        for (int i = 1; i < queryList.size(); i++) {
+            query.append(" and ").append(queryList.get(i));
+        }
+
+        return query.toString();
     }
 
     public String getMediaDirName(String fileName) {

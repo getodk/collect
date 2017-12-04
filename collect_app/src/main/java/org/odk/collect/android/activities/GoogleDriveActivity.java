@@ -612,7 +612,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void googleAccountSelected() {
+    public void onGoogleAccountSelected(String accountName) {
         getResultsFromApi();
     }
 
@@ -669,29 +669,32 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             }
 
             query += " and trashed=false";
-            Drive.Files.List request = driveHelper.buildRequest(query);
+
+            String fields = "nextPageToken, files(modifiedTime, id, name, mimeType)";
+            Drive.Files.List request = driveHelper.buildRequest(query, fields);
 
             HashMap<String, Object> results = new HashMap<>();
             results.put(PARENT_ID_KEY, parentId);
             results.put(CURRENT_ID_KEY, currentDir);
-            do {
-                try {
-                    FileList fa = request.execute();
-                    List<com.google.api.services.drive.model.File> driveFileListPage =
-                            new ArrayList<>();
+            if (request != null) {
+                List<com.google.api.services.drive.model.File> driveFileListPage;
+                do {
+                    try {
+                        driveFileListPage = new ArrayList<>();
+                        FileList fileList = request.execute();
+                        driveFileListPage.addAll(fileList.getFiles());
+                        request.setPageToken(fileList.getNextPageToken());
 
-                    driveFileListPage.addAll(fa.getFiles());
-                    request.setPageToken(fa.getNextPageToken());
-                    HashMap<String, Object> nextPage = new HashMap<>();
-                    nextPage.put(PARENT_ID_KEY, parentId);
-                    nextPage.put(CURRENT_ID_KEY, currentDir);
-                    nextPage.put(FILE_LIST_KEY, driveFileListPage);
-                    publishProgress(nextPage);
-                } catch (IOException e) {
-                    Timber.e(e, "Exception thrown while accessing the file list");
-                }
-            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
-
+                        HashMap<String, Object> nextPage = new HashMap<>();
+                        nextPage.put(PARENT_ID_KEY, parentId);
+                        nextPage.put(CURRENT_ID_KEY, currentDir);
+                        nextPage.put(FILE_LIST_KEY, driveFileListPage);
+                        publishProgress(nextPage);
+                    } catch (IOException e) {
+                        Timber.e(e, "Exception thrown while accessing the file list");
+                    }
+                } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+            }
             return results;
 
         }

@@ -123,7 +123,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
                     return;
                 }
                 GoogleAccountsManager accountsManager = new GoogleAccountsManager(Collect.getInstance());
-                accountsManager.getCredentials().setSelectedAccountName(googleUsername);
+                accountsManager.getCredential().setSelectedAccountName(googleUsername);
                 instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(accountsManager);
                 instanceGoogleSheetsUploader.setUploaderListener(this);
                 instanceGoogleSheetsUploader.execute(toSendArray);

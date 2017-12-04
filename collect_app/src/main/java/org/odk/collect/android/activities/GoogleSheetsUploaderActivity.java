@@ -421,7 +421,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     }
 
     @Override
-    public void googleAccountSelected() {
+    public void onGoogleAccountSelected(String accountName) {
         getResultsFromApi();
     }
 }

@@ -353,8 +353,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     @Override
-    public void googleAccountSelected() {
-        String accountName = accountsManager.getCredentials().getSelectedAccountName();
+    public void onGoogleAccountSelected(String accountName) {
         selectedGoogleAccountPreference.setSummary(accountName);
     }
 }

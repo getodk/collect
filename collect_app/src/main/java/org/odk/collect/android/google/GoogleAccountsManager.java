@@ -66,27 +66,42 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private DriveHelper driveHelper;
     private SheetsHelper sheetsHelper;
 
-    private HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    private JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    private HttpTransport transport;
+    private JsonFactory jsonFactory;
 
     private boolean autoChooseAccount = true;
+    private GeneralSharedPreferences preferences;
+    private boolean hasPermissions;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
-        initCredentials(activity);
+        initCredential(activity);
     }
 
     public GoogleAccountsManager(@NonNull Fragment fragment) {
         this.fragment = fragment;
-        initCredentials(fragment.getActivity());
+        initCredential(fragment.getActivity());
     }
 
     public GoogleAccountsManager(@NonNull Context context) {
-        initCredentials(context);
+        initCredential(context);
     }
 
-    private void initCredentials(Context context) {
+    /**
+     * This constructor should be used only for testing purposes
+     */
+    public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
+                                 @NonNull GeneralSharedPreferences preferences) {
+        this.credential = credential;
+        this.preferences = preferences;
+    }
+
+    private void initCredential(Context context) {
         this.context = context;
+
+        transport = AndroidHttp.newCompatibleTransport();
+        jsonFactory = JacksonFactory.getDefaultInstance();
+        preferences = GeneralSharedPreferences.getInstance();
 
         credential = GoogleAccountCredential
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
@@ -96,7 +111,20 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
         if (listener != null) {
-            listener.googleAccountSelected();
+            listener.onGoogleAccountSelected(getSelectedAccountName());
+        }
+    }
+
+    private String getSelectedAccountName() {
+        return getCredential().getSelectedAccountName();
+    }
+
+    public void setSelectedAccountName(String accountName) {
+        if (accountName != null) {
+            GeneralSharedPreferences
+                    .getInstance()
+                    .save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            selectAccount(accountName);
         }
     }
 
@@ -113,31 +141,34 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public void chooseAccount() {
-        if (EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS)) {
-
-            // auto selects the google account saved in preferences
-            if (autoChooseAccount) {
-                String accountName = getGoogleAccountName();
-                if (!accountName.isEmpty()) {
-                    selectAccount(accountName);
-                    return;
-                }
+        if (hasPermissions()) {
+            String accountName = getGoogleAccountName();
+            if (autoChooseAccount && !accountName.isEmpty()) {
+                selectAccount(accountName);
+            } else {
+                showAccountPickerDialog();
             }
+        }
+    }
 
-            showAccountPickerDialog();
+    private boolean hasPermissions() {
+        if (hasPermissions) {
+            return true;
+        }
 
-        } else {
+        hasPermissions = EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
+
+        if (!hasPermissions) {
             EasyPermissions.requestPermissions(
                     context,
                     context.getString(R.string.request_permissions_google_account),
                     REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
         }
+        return hasPermissions;
     }
 
     public String getGoogleAccountName() {
-        return (String) GeneralSharedPreferences
-                .getInstance()
-                .get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
     }
 
     private void showAccountPickerDialog() {
@@ -155,7 +186,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
         if (listener != null) {
-            listener.googleAccountSelected();
+            listener.onGoogleAccountSelected(accountName);
         }
     }
 
@@ -190,15 +221,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return sheetsHelper;
     }
 
-    public void setSelectedAccountName(String accountName) {
-        if (accountName != null) {
-            GeneralSharedPreferences
-                    .getInstance()
-                    .save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-            selectAccount(accountName);
-        }
-    }
-
     @Nullable
     public Activity getActivity() {
         return activity;
@@ -209,7 +231,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return context;
     }
 
-    public GoogleAccountCredential getCredentials() {
+    public GoogleAccountCredential getCredential() {
         return credential;
     }
 
@@ -222,6 +244,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public interface GoogleAccountSelectionListener {
-        void googleAccountSelected();
+        void onGoogleAccountSelected(String accountName);
     }
 }

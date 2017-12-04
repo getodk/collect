@@ -759,7 +759,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 selectionBuf.append(")");
                 String selection = selectionBuf.toString();
 
-                String token = accountsManager.getCredentials().getToken();
+                String token = accountsManager.getCredential().getToken();
 
                 //Immediately invalidate so we get a different one if we have to try again
                 GoogleAuthUtil.invalidateToken(accountsManager.getContext(), token);
