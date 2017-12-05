@@ -475,7 +475,7 @@ public abstract class QuestionWidget
             public void run() {
                 view.setClickable(true);
             }
-        },1000);
+        }, 500);
     }
 
     /**
