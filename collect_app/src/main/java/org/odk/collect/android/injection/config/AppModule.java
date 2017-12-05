@@ -1,5 +1,9 @@
 package org.odk.collect.android.injection.config;
 
+import android.support.annotation.NonNull;
+
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.injection.ViewModelBuilder;
 import org.odk.collect.android.injection.config.architecture.ViewModelFactoryModule;
 import org.odk.collect.android.injection.config.scopes.PerApplication;
@@ -30,5 +34,11 @@ class AppModule {
     CookieStore provideCookieStore() {
         // share all session cookies across all sessions.
         return new BasicCookieStore();
+    }
+
+    @PerApplication
+    @Provides
+    ActivityLogger provideActivityLogger(@NonNull Collect collect) {
+        return collect.getActivityLogger();
     }
 }

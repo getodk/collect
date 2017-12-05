@@ -228,7 +228,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         final File cachedForm = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
         if (cachedForm.exists()) {
-            Timber.i("Attempting to load %s from cached file: %s.",
+            Timber.i("Attempting to get %s from cached file: %s.",
                     formXml.getName(), cachedForm.getAbsolutePath());
             final long start = System.currentTimeMillis();
             final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
@@ -248,7 +248,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FileInputStream fis = null;
         // no binary, read from xml
         try {
-            Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
+            Timber.i("Attempting to get from: %s", formXml.getAbsolutePath());
             final long start = System.currentTimeMillis();
             fis = new FileInputStream(formXml);
             FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
