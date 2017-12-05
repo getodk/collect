@@ -13,7 +13,7 @@ import dagger.android.AndroidInjection;
 public abstract class InjectableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         AndroidInjection.inject(this);
+        super.onCreate(savedInstanceState);
     }
 }

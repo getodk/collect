@@ -2,7 +2,6 @@ package org.odk.collect.android.injection.config.architecture;
 
 
 import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 
 import dagger.Binds;
 import dagger.Module;
