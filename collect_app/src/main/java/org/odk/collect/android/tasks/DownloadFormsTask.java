@@ -168,56 +168,48 @@ public class DownloadFormsTask extends
                     message += Collect.getInstance().getString(R.string.xform_parse_error,
                             fileResult.file.getName(), "submission url");
                 }
-
-                // install everything
-                UriResult uriResult = null;
-                try {
-                    uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
-                    Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
-
-                    // move the media files in the media folder
-                    if (tempMediaPath != null) {
-                        File formMediaPath = new File(uriResult.getMediaPath());
-                        FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
-                    }
-                } catch (IOException e) {
-                    Timber.e(e);
-
-                    if (uriResult != null && uriResult.isNew() && fileResult.isNew()) {
-                        // this means we should delete the entire form together with the metadata
-                        Uri uri = uriResult.getUri();
-                        Timber.w("The form is new. We should delete the entire form.");
-                        int deletedCount = Collect.getInstance().getContentResolver().delete(uri,
-                                null, null);
-                        Timber.w("Deleted %d rows using uri %s", deletedCount, uri.toString());
-                    }
-
-                    cleanUp(fileResult, null, tempMediaPath);
-                } catch (TaskCancelledException e) {
-                    Timber.i(e);
-                    cleanUp(fileResult, e.getFile(), tempMediaPath);
-                }
+                installEverything(tempMediaPath, fileResult, parsedFields);
             } else {
                 cleanUp(fileResult, null, tempMediaPath);
             }
 
             count++;
-            saveResult(result, fd, message);
+            result.put(fd, message.isEmpty() ? "Success" : message);
         }
 
         return result;
     }
 
-    private void saveResult(HashMap<FormDetails, String> result, FormDetails fd, String message) {
-        if (message.equalsIgnoreCase("")) {
-            message = Collect.getInstance().getString(R.string.success);
+    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
+        UriResult uriResult = null;
+        try {
+            uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields);
+            Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
+
+            // move the media files in the media folder
+            if (tempMediaPath != null) {
+                File formMediaPath = new File(uriResult.getMediaPath());
+                FileUtils.moveMediaFiles(tempMediaPath, formMediaPath);
+            }
+        } catch (IOException e) {
+            Timber.e(e);
+
+            if (uriResult != null && uriResult.isNew() && fileResult.isNew()) {
+                // this means we should delete the entire form together with the metadata
+                Uri uri = uriResult.getUri();
+                Timber.w("The form is new. We should delete the entire form.");
+                int deletedCount = Collect.getInstance().getContentResolver().delete(uri,
+                        null, null);
+                Timber.w("Deleted %d rows using uri %s", deletedCount, uri.toString());
+            }
+
+            cleanUp(fileResult, null, tempMediaPath);
+        } catch (TaskCancelledException e) {
+            Timber.i(e);
+            cleanUp(fileResult, e.getFile(), tempMediaPath);
         }
-        result.put(fd, message);
     }
 
-    /**
-     * Some clean up
-     */
     private void cleanUp(FileResult fileResult, File fileOnCancel, String tempMediaPath) {
         if (fileResult == null) {
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
