@@ -188,12 +188,6 @@ public class FormsDaoTest {
     }
 
     @Test
-    public void getBiggestFormVersionForFormIdTest() {
-        Integer formVersion = formsDao.getNewestFormVersionForFormId("Birds");
-        assertEquals(4, formVersion.intValue());
-    }
-
-    @Test
     public void getFormMediaPathTest() {
         String mediaPath = formsDao.getFormMediaPath("Birds", "4");
         assertEquals(Collect.FORMS_PATH + "/Birds_4-media", mediaPath);

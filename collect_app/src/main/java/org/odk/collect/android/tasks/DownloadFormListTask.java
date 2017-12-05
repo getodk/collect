@@ -150,6 +150,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 String description = null;
                 String downloadUrl = null;
                 String manifestUrl = null;
+                String hash = null;
                 // don't process descriptionUrl
                 int fieldCount = xformElement.getChildCount();
                 for (int j = 0; j < fieldCount; ++j) {
@@ -206,6 +207,12 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                 manifestUrl = null;
                             }
                             break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
                     }
                 }
                 if (formId == null || downloadUrl == null || formName == null) {
@@ -223,7 +230,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 boolean isNewerFormVersionAvailable = false;
                 boolean areNewerMediaFilesAvailable = false;
                 if (isThisFormAlreadyDownloaded(formId)) {
-                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(formId, version);
+                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
                     if (!isNewerFormVersionAvailable && manifestUrl != null) {
                         List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
                         if (newMediaFiles != null) {
@@ -393,16 +400,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         return files;
     }
 
-    private boolean isNewerFormVersionAvailable(String formId, String formVersion) {
-        boolean isNewerFormAvailable = false;
-        Integer localFormVersion = new FormsDao().getNewestFormVersionForFormId(formId);
-        if (localFormVersion == null) {
-            isNewerFormAvailable = formVersion != null;
-        } else if (formVersion != null) {
-            isNewerFormAvailable = Integer.parseInt(formVersion) > localFormVersion;
-        }
-
-        return isNewerFormAvailable;
+    private boolean isNewerFormVersionAvailable(String md5Hash) {
+        return new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {

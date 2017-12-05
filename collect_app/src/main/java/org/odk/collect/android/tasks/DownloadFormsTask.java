@@ -699,7 +699,7 @@ public class DownloadFormsTask extends
                     downloadFile(tempMediaFile, toDownload.getDownloadUrl());
                 } else {
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
-                    String downloadFileHash = toDownload.getHash().substring(MD5_COLON_PREFIX.length());
+                    String downloadFileHash = getMd5Hash(toDownload.getHash());
 
                     if (!currentFileHash.contentEquals(downloadFileHash)) {
                         // if the hashes match, it's the same file
@@ -749,4 +749,7 @@ public class DownloadFormsTask extends
         }
     }
 
+    static String getMd5Hash(String hash) {
+        return hash.substring(MD5_COLON_PREFIX.length());
+    }
 }

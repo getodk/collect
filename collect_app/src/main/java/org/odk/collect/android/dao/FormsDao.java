@@ -25,7 +25,6 @@ import org.odk.collect.android.dto.Form;
 import org.odk.collect.android.provider.FormsProviderAPI;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,27 +66,6 @@ public class FormsDao {
         String[] selectionArgs = {formId};
 
         return getFormsCursor(null, selection, selectionArgs, null);
-    }
-
-    public Integer getNewestFormVersionForFormId(String formId) {
-        List<Integer> formVersions = new ArrayList<>();
-        Cursor cursor = getFormsCursorForFormId(formId);
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    int formVersionColumnIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION);
-                    if (cursor.getString(formVersionColumnIndex) != null) {
-                        formVersions.add(Integer.valueOf(cursor.getString(formVersionColumnIndex)));
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-
-        Collections.sort(formVersions);
-        return formVersions.size() > 0 ? formVersions.get(formVersions.size() - 1) : null;
     }
 
     public String getFormMediaPath(String formId, String formVersion) {
