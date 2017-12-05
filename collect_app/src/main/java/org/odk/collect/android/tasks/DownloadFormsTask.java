@@ -103,7 +103,8 @@ public class DownloadFormsTask extends
         for (FormDetails fd : toDownload) {
             try {
                 String message = processOneForm(total, count++, fd);
-                result.put(fd, message.isEmpty() ? "Success" : message);
+                result.put(fd, message.isEmpty() ?
+                        Collect.getInstance().getString(R.string.success) : message);
             } catch (CancelDownloads cd) {
                 break;
             }
