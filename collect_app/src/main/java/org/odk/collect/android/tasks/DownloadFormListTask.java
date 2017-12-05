@@ -394,11 +394,11 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     }
 
     private boolean isNewerFormVersionAvailable(String formId, String formVersion) {
-        boolean isNewerFormAvailable;
+        boolean isNewerFormAvailable = false;
         Integer localFormVersion = new FormsDao().getNewestFormVersionForFormId(formId);
         if (localFormVersion == null) {
             isNewerFormAvailable = formVersion != null;
-        } else {
+        } else if (formVersion != null) {
             isNewerFormAvailable = Integer.parseInt(formVersion) > localFormVersion;
         }
 
