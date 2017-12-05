@@ -164,7 +164,9 @@ public class InstanceServerUploader extends InstanceUploader {
                 WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
             }
 
-            // we need to issue a head request
+            // Issue a head request to confirm the server is an OpenRosa server and see if auth
+            // is required
+            // http://docs.opendatakit.org/openrosa-form-submission/#extended-transmission-considerations
             HttpHead httpHead = WebUtils.createOpenRosaHttpHead(submissionUri);
 
             // prepare response
