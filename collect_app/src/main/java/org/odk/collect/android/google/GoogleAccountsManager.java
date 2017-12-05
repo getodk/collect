@@ -71,7 +71,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     private boolean autoChooseAccount = true;
     private GeneralSharedPreferences preferences;
-    private boolean hasPermissions;
+    private Intent intentChooseAccount;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
@@ -91,9 +91,11 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
      * This constructor should be used only for testing purposes
      */
     public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
-                                 @NonNull GeneralSharedPreferences preferences) {
+                                 @NonNull GeneralSharedPreferences preferences,
+                                 @NonNull Intent intentChooseAccount) {
         this.credential = credential;
         this.preferences = preferences;
+        this.intentChooseAccount = intentChooseAccount;
     }
 
     private void initCredential(Context context) {
@@ -106,6 +108,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         credential = GoogleAccountCredential
                 .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff());
+
+        intentChooseAccount = credential.newChooseAccountIntent();
     }
 
     @Override
@@ -121,9 +125,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     public void setSelectedAccountName(String accountName) {
         if (accountName != null) {
-            GeneralSharedPreferences
-                    .getInstance()
-                    .save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             selectAccount(accountName);
         }
     }
@@ -151,28 +153,30 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    private boolean hasPermissions() {
-        if (hasPermissions) {
-            return true;
-        }
-
-        hasPermissions = EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
-
+    public boolean hasPermissions() {
+        boolean hasPermissions = checkAccountPermission();
         if (!hasPermissions) {
-            EasyPermissions.requestPermissions(
-                    context,
-                    context.getString(R.string.request_permissions_google_account),
-                    REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
+            requestAccountPermission();
         }
         return hasPermissions;
+    }
+
+    public void requestAccountPermission() {
+        EasyPermissions.requestPermissions(
+                context,
+                context.getString(R.string.request_permissions_google_account),
+                REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
+    }
+
+    public boolean checkAccountPermission() {
+        return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
     }
 
     public String getGoogleAccountName() {
         return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
     }
 
-    private void showAccountPickerDialog() {
-        Intent intentChooseAccount = credential.newChooseAccountIntent();
+    public void showAccountPickerDialog() {
         intentChooseAccount.putExtra("overrideTheme", 1);
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
@@ -183,7 +187,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    private void selectAccount(String accountName) {
+    public void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
         if (listener != null) {
             listener.onGoogleAccountSelected(accountName);
@@ -235,8 +239,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return credential;
     }
 
-    public void disableAutoChooseAccount() {
-        this.autoChooseAccount = false;
+    public void setAutoChooseAccount(boolean value) {
+        autoChooseAccount = value;
     }
 
     public void setListener(@Nullable GoogleAccountSelectionListener listener) {
