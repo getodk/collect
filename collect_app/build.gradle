@@ -216,6 +216,10 @@ dependencies {
     testCompile group: 'org.robolectric', name: 'robolectric', version: '3.4'
     testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.3.2'
 
+    // power mock (for mocking final methods which is not handled by mockito)
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.4'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.3'
+
     androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
     androidTestCompile(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
