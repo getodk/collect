@@ -175,17 +175,26 @@ public class DownloadFormsTask extends
             }
         }
 
+        boolean installed = false;
+
         if (!isCancelled() && message.isEmpty() && parsedFields != null) {
-            final String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
-            if (submission != null && !UrlUtils.isValidUrl(submission)) {
+            if (isSubmissionOk(parsedFields)) {
+                installEverything(tempMediaPath, fileResult, parsedFields);
+                installed = true;
+            } else {
                 message += Collect.getInstance().getString(R.string.xform_parse_error,
                         fileResult.file.getName(), "submission url");
             }
-            installEverything(tempMediaPath, fileResult, parsedFields);
-        } else {
+        }
+        if (!installed) {
             cleanUp(fileResult, null, tempMediaPath);
         }
         return message;
+    }
+
+    private boolean isSubmissionOk(Map<String, String> parsedFields) {
+        String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
+        return submission == null || UrlUtils.isValidUrl(submission);
     }
 
     private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
