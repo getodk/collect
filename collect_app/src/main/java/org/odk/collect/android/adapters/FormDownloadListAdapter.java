@@ -49,7 +49,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
     private class ViewHolder {
         TextView text1;
         TextView text2;
-        TextView updateWarning;
+        TextView updateInfo;
         CheckBox checkBox;
     }
 
@@ -63,7 +63,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
 
             holder.text1 = row.findViewById(R.id.text1);
             holder.text2 = row.findViewById(R.id.text2);
-            holder.updateWarning = row.findViewById(R.id.update_warning);
+            holder.updateInfo = row.findViewById(R.id.update_info);
             holder.checkBox = row.findViewById(R.id.checkbox);
             row.setTag(holder);
         } else {
@@ -76,7 +76,7 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         boolean isNewerFormVersionAvailable = formNamesAndURLs.get(filteredFormList.get(position).get(FORM_ID_KEY)).isNewerFormVersionAvailable();
         boolean areNewerMediaFilesAvailable = formNamesAndURLs.get(filteredFormList.get(position).get(FORM_ID_KEY)).areNewerMediaFilesAvailable();
 
-        holder.updateWarning.setVisibility(isNewerFormVersionAvailable || areNewerMediaFilesAvailable ? View.VISIBLE : View.GONE);
+        holder.updateInfo.setVisibility(isNewerFormVersionAvailable || areNewerMediaFilesAvailable ? View.VISIBLE : View.GONE);
 
         return row;
     }

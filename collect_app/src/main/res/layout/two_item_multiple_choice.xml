@@ -52,7 +52,7 @@ the specific language governing permissions and limitations under the License. -
             tools:text="text2" />
 
         <TextView
-            android:id="@+id/update_warning"
+            android:id="@+id/update_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -60,7 +60,7 @@ the specific language governing permissions and limitations under the License. -
             android:layout_below="@+id/text2"
             android:layout_toLeftOf="@+id/checkbox"
             android:layout_toStartOf="@+id/checkbox"
-            android:text="@string/newer_version_of_form_warning"
+            android:text="@string/newer_version_of_form_info"
             android:visibility="gone"
             android:textColor="#4CAF50" />
 
