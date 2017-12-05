@@ -68,6 +68,10 @@ import timber.log.Timber;
 public class DownloadFormsTask extends
         AsyncTask<ArrayList<FormDetails>, String, HashMap<FormDetails, String>> {
 
+    class CancelDownloads extends Exception {
+        CancelDownloads() {
+        }
+    }
 
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
@@ -97,87 +101,103 @@ public class DownloadFormsTask extends
         final HashMap<FormDetails, String> result = new HashMap<>();
 
         for (FormDetails fd : toDownload) {
-            publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
-
-            String message = "";
-
-            if (isCancelled()) {
-                break;
-            }
-
-            String tempMediaPath = null;
-            final String finalMediaPath;
-            FileResult fileResult = null;
             try {
-                // get the xml file
-                // if we've downloaded a duplicate, this gives us the file
-                fileResult = downloadXform(fd.formName, fd.downloadUrl);
-
-                if (fd.manifestUrl != null) {
-                    // use a temporary media path until everything is ok.
-                    tempMediaPath = new File(Collect.CACHE_PATH,
-                            String.valueOf(System.currentTimeMillis())).getAbsolutePath();
-                    finalMediaPath = FileUtils.constructMediaPath(
-                            fileResult.getFile().getAbsolutePath());
-                    String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
-                            count, total);
-                    if (error != null) {
-                        message += error;
-                    }
-                } else {
-                    Timber.i("No Manifest for: %s", fd.formName);
-                }
-            } catch (TaskCancelledException e) {
-                Timber.i(e);
-                cleanUp(fileResult, e.getFile(), tempMediaPath);
-
-                // do not download additional forms.
+                String message = processOneForm(total, count++, fd);
+                result.put(fd, message.isEmpty() ? "Success" : message);
+            } catch (CancelDownloads cd) {
                 break;
-            } catch (Exception e) {
-                String msg = e.getMessage();
-                if (msg == null) {
-                    msg = e.toString();
-                }
-                Timber.e(msg);
-
-                if (e.getCause() != null) {
-                    msg = e.getCause().getMessage();
-                    if (msg == null) {
-                        msg = e.getCause().toString();
-                    }
-                }
-                message += msg;
             }
-
-            Map<String, String> parsedFields = null;
-            if (fileResult != null) {
-                try {
-                    final long start = System.currentTimeMillis();
-                    Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
-                    parsedFields = FileUtils.parseXML(fileResult.file);
-                    Timber.i("Parse finished in %.3f seconds.",
-                            (System.currentTimeMillis() - start) / 1000F);
-                } catch (RuntimeException e) {
-                    message += e.getMessage();
-                }
-            }
-
-            if (!isCancelled() && message.isEmpty() && parsedFields != null) {
-                final String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
-                if (submission != null && !UrlUtils.isValidUrl(submission)) {
-                    message += Collect.getInstance().getString(R.string.xform_parse_error,
-                            fileResult.file.getName(), "submission url");
-                }
-                installEverything(tempMediaPath, fileResult, parsedFields);
-            } else {
-                cleanUp(fileResult, null, tempMediaPath);
-            }
-
-            count++;
-            result.put(fd, message.isEmpty() ? "Success" : message);
         }
 
         return result;
+    }
+
+    /**
+     * Processes one form download.
+     *
+     * @param total the total number of forms being downloaded by this task
+     * @param count the number of this form
+     * @param fd    the FormDetails
+     * @return an empty string for success, or a nonblank string with one or more error messages
+     * @throws CancelDownloads to signal that form downloading is to be canceled
+     */
+    private String processOneForm(int total, int count, FormDetails fd) throws CancelDownloads {
+        publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
+
+        String message = "";
+
+        if (isCancelled()) {
+            throw new CancelDownloads();
+        }
+
+        String tempMediaPath = null;
+        final String finalMediaPath;
+        FileResult fileResult = null;
+        try {
+            // get the xml file
+            // if we've downloaded a duplicate, this gives us the file
+            fileResult = downloadXform(fd.formName, fd.downloadUrl);
+
+            if (fd.manifestUrl != null) {
+                // use a temporary media path until everything is ok.
+                tempMediaPath = new File(Collect.CACHE_PATH,
+                        String.valueOf(System.currentTimeMillis())).getAbsolutePath();
+                finalMediaPath = FileUtils.constructMediaPath(
+                        fileResult.getFile().getAbsolutePath());
+                String error = downloadManifestAndMediaFiles(tempMediaPath, finalMediaPath, fd,
+                        count, total);
+                if (error != null) {
+                    message += error;
+                }
+            } else {
+                Timber.i("No Manifest for: %s", fd.formName);
+            }
+        } catch (TaskCancelledException e) {
+            Timber.i(e);
+            cleanUp(fileResult, e.getFile(), tempMediaPath);
+
+            // do not download additional forms.
+            throw new CancelDownloads();
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg == null) {
+                msg = e.toString();
+            }
+            Timber.e(msg);
+
+            if (e.getCause() != null) {
+                msg = e.getCause().getMessage();
+                if (msg == null) {
+                    msg = e.getCause().toString();
+                }
+            }
+            message += msg;
+        }
+
+        Map<String, String> parsedFields = null;
+        if (fileResult != null) {
+            try {
+                final long start = System.currentTimeMillis();
+                Timber.w("Parsing document %s", fileResult.file.getAbsolutePath());
+                parsedFields = FileUtils.parseXML(fileResult.file);
+                Timber.i("Parse finished in %.3f seconds.",
+                        (System.currentTimeMillis() - start) / 1000F);
+            } catch (RuntimeException e) {
+                message += e.getMessage();
+            }
+        }
+
+        if (!isCancelled() && message.isEmpty() && parsedFields != null) {
+            final String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
+            if (submission != null && !UrlUtils.isValidUrl(submission)) {
+                message += Collect.getInstance().getString(R.string.xform_parse_error,
+                        fileResult.file.getName(), "submission url");
+            }
+            installEverything(tempMediaPath, fileResult, parsedFields);
+        } else {
+            cleanUp(fileResult, null, tempMediaPath);
+        }
+        return message;
     }
 
     private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
