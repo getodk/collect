@@ -159,19 +159,7 @@ public class DownloadFormsTask extends
             // do not download additional forms.
             throw new CancelDownloads();
         } catch (Exception e) {
-            String msg = e.getMessage();
-            if (msg == null) {
-                msg = e.toString();
-            }
-            Timber.e(msg);
-
-            if (e.getCause() != null) {
-                msg = e.getCause().getMessage();
-                if (msg == null) {
-                    msg = e.getCause().toString();
-                }
-            }
-            message += msg;
+            message += getExceptionMessage(e);
         }
 
         Map<String, String> parsedFields = null;
@@ -247,6 +235,22 @@ public class DownloadFormsTask extends
         if (tempMediaPath != null) {
             FileUtils.purgeMediaPath(tempMediaPath);
         }
+    }
+
+    private String getExceptionMessage(Exception e) {
+        String msg = e.getMessage();
+        if (msg == null) {
+            msg = e.toString();
+        }
+        Timber.e(msg);
+
+        if (e.getCause() != null) {
+            msg = e.getCause().getMessage();
+            if (msg == null) {
+                msg = e.getCause().toString();
+            }
+        }
+        return msg;
     }
 
     /**
