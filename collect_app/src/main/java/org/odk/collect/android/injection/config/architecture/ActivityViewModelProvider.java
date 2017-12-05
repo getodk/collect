@@ -1,17 +1,17 @@
-package org.odk.collect.android.injection.architecture;
+package org.odk.collect.android.injection.config.architecture;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.FragmentActivity;
 
-import org.odk.collect.android.injection.scopes.PerActivity;
+import org.odk.collect.android.injection.config.scopes.PerActivity;
 
 import javax.inject.Inject;
 
 /**
- * Creates a ViewModelProvider for fetching ViewModel's for
- * an Activity.
+ * Creates a ViewModelProvider for fetching ViewModels for an Activity.
+ * Don't modify unless absolutely necessary.
  */
 @PerActivity
 public class ActivityViewModelProvider {

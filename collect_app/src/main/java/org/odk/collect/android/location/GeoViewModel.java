@@ -3,7 +3,7 @@ package org.odk.collect.android.location;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
-import org.odk.collect.android.injection.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerViewModel;
 
 import javax.inject.Inject;
 

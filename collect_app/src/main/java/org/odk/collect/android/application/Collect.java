@@ -41,21 +41,19 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.injection.AppInjector;
+import org.odk.collect.android.injection.config.DaggerAppComponent;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.AutoSendPreferenceMigrator;
 import org.odk.collect.android.preferences.FormMetadataMigrator;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.AgingCredentialsProvider;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.PRNGFixes;
 import org.opendatakit.httpclientandroidlib.client.CookieStore;
 import org.opendatakit.httpclientandroidlib.client.CredentialsProvider;
 import org.opendatakit.httpclientandroidlib.client.protocol.HttpClientContext;
-import org.opendatakit.httpclientandroidlib.impl.client.BasicCookieStore;
 import org.opendatakit.httpclientandroidlib.protocol.BasicHttpContext;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
@@ -99,10 +97,11 @@ public class Collect extends Application implements HasActivityInjector {
     public static String defaultSysLanguage;
     private static Collect singleton = null;
 
-    // share all session cookies across all sessions...
-    private CookieStore cookieStore = new BasicCookieStore();
-    // retain credentials for 7 minutes...
-    private CredentialsProvider credsProvider = new AgingCredentialsProvider(7 * 60 * 1000);
+    @Inject
+    protected CookieStore cookieStore;
+    @Inject
+    protected CredentialsProvider credsProvider;
+
     private ActivityLogger activityLogger;
 
     @Nullable
@@ -258,7 +257,10 @@ public class Collect extends Application implements HasActivityInjector {
         super.onCreate();
         singleton = this;
 
-        AppInjector.init(this);
+        DaggerAppComponent.builder()
+                .application(this)
+                .build()
+                .inject(this);
 
         // It must be called before you save anything to SharedPreferences
         loadDefaultValuesIfNeeded();

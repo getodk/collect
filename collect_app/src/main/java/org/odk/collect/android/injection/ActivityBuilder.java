@@ -1,16 +1,22 @@
 package org.odk.collect.android.injection;
 
-import org.odk.collect.android.injection.scopes.PerActivity;
+import android.app.Activity;
+
+import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
 
 import dagger.Module;
 
 /**
- * Module for creating injectable Activity subclasses.
- * To add more injectable Activities, copy the GeoActivity format below.
+ * Module for binding injectable Activities.
+ * <p>
+ * To make your Activity injectable, copy the GeoActivity binding below to match your Activity.
+ * <p>
+ * If you don't want to override InjectableActivity, make sure you call
+ * {@link dagger.android.AndroidInjection#inject(Activity)} in your Activity's onCreate.
  */
 @Module
-abstract class ActivityBuilder {
+public abstract class ActivityBuilder {
 
     @PerActivity
     abstract GeoActivity bindGeoActivity();

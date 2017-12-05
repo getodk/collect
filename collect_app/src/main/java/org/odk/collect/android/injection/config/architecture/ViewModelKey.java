@@ -1,4 +1,4 @@
-package org.odk.collect.android.injection.keys;
+package org.odk.collect.android.injection.config.architecture;
 
 
 import android.arch.lifecycle.ViewModel;
