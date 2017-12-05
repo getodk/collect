@@ -187,6 +187,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
+    implementation group: 'com.evernote', name: 'android-job', version: '1.2.1'
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
     implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
     implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'

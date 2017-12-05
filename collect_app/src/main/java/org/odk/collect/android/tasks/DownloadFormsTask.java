@@ -749,7 +749,7 @@ public class DownloadFormsTask extends
         }
     }
 
-    static String getMd5Hash(String hash) {
+    public static String getMd5Hash(String hash) {
         return hash.substring(MD5_COLON_PREFIX.length());
     }
 }
