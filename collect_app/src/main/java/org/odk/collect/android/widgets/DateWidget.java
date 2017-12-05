@@ -54,7 +54,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         super(context, prompt);
     }
 
-    @Override
     protected void showDatePickerDialog() {
         datePickerDialog = new FixedDatePickerDialog(getContext(), getTheme(), this);
         datePickerDialog.show();
