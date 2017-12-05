@@ -8,6 +8,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.CopticChronology;
 import org.joda.time.chrono.EthiopicChronology;
+import org.joda.time.chrono.IslamicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 
@@ -46,9 +47,12 @@ public class DateTimeUtils {
         if (datePickerDetails.isEthiopianType()) {
             customDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
             monthArray = context.getResources().getStringArray(R.array.ethiopian_months);
-        } else {
+        } else if (datePickerDetails.isCopticType()) {
             customDate = new DateTime(date).withChronology(CopticChronology.getInstance());
             monthArray = context.getResources().getStringArray(R.array.coptic_months);
+        } else {
+            customDate = new DateTime(date).withChronology(IslamicChronology.getInstance());
+            monthArray = context.getResources().getStringArray(R.array.islamic_months);
         }
 
         String day = datePickerDetails.isSpinnerMode() ? customDate.getDayOfMonth() + " " : "";
@@ -97,6 +101,9 @@ public class DateTimeUtils {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("coptic")) {
                 datePickerType = DatePickerDetails.DatePickerType.COPTIC;
+                datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
+            } else if (appearance.contains("islamic")) {
+                datePickerType = DatePickerDetails.DatePickerType.ISLAMIC;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("no-calendar")) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;

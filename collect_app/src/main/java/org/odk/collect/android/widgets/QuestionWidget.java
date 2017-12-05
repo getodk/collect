@@ -74,7 +74,7 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private final MediaPlayer player;
+    private MediaPlayer player;
     private final TextView helpTextView;
 
     private Bundle state;
@@ -102,7 +102,7 @@ public abstract class QuestionWidget
 
         });
 
-        getPlayer().setOnErrorListener(new MediaPlayer.OnErrorListener() {
+        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
@@ -123,6 +123,14 @@ public abstract class QuestionWidget
 
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextView(getHelpTextView());
+    }
+
+    /** Releases resources held by this widget */
+    public void release() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
     }
 
     protected void injectDependencies(DependencyProvider dependencyProvider) {}
@@ -379,17 +387,15 @@ public abstract class QuestionWidget
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
-            if (getPlayer().isPlaying()) {
-                getPlayer().stop();
-                getPlayer().reset();
-            }
+            stopAudio();
         }
     }
 
     public void stopAudio() {
-        if (getPlayer().isPlaying()) {
-            getPlayer().stop();
-            getPlayer().reset();
+        if (player != null && player.isPlaying()) {
+            Timber.i("stopAudio " + player);
+            player.stop();
+            player.reset();
         }
     }
 

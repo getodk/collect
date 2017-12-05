@@ -48,6 +48,10 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
         String appearance = prompt.getQuestion().getAppearanceAttr();
         if (appearance != null && appearance.contains("ethiopian")) {
             dateWidget = new EthiopianDateWidget(context, prompt);
+        } else if (appearance != null && appearance.contains("coptic")) {
+            dateWidget = new CopticDateWidget(context, prompt);
+        } else if (appearance != null && appearance.contains("islamic")) {
+            dateWidget = new IslamicDateWidget(context, prompt);
         } else {
             dateWidget = new DateWidget(context, prompt);
         }

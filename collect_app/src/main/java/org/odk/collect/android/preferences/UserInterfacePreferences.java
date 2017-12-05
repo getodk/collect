@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -37,7 +36,6 @@ import java.util.TreeMap;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static org.odk.collect.android.preferences.PreferenceKeys.ARRAY_INDEX_GOOGLE_MAPS;
 import static org.odk.collect.android.preferences.PreferenceKeys.GOOGLE_MAPS_BASEMAP_DEFAULT;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FONT_SIZE;
@@ -161,12 +159,11 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     private void initSplashPrefs() {
-        final PreferenceScreen pref = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
+        final Preference pref = findPreference(KEY_SPLASH_PATH);
 
         if (pref != null) {
             pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-            pref.setSummary(pref.getSharedPreferences().getString(
-                    KEY_SPLASH_PATH, getString(R.string.default_splash_path)));
+            pref.setSummary((String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH));
         }
     }
 
@@ -185,7 +182,7 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
-                if (index == ARRAY_INDEX_GOOGLE_MAPS) {
+                if (index == 0) {
                     mapBasemap.setEntryValues(R.array.map_google_basemap_selector_entry_values);
                     mapBasemap.setEntries(R.array.map_google_basemap_selector_entries);
                     mapBasemap.setValue(GOOGLE_MAPS_BASEMAP_DEFAULT);
@@ -247,14 +244,8 @@ public class UserInterfacePreferences extends BasePreferenceFragment {
     }
 
     void setSplashPath(String path) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_SPLASH_PATH, path);
-        editor.apply();
-
-        PreferenceScreen splashPathPreference = (PreferenceScreen) findPreference(KEY_SPLASH_PATH);
-        String summary = splashPathPreference.getSharedPreferences().getString(
-                KEY_SPLASH_PATH, getString(R.string.default_splash_path));
-        splashPathPreference.setSummary(summary);
+        GeneralSharedPreferences.getInstance().save(KEY_SPLASH_PATH, path);
+        Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
+        splashPathPreference.setSummary(path);
     }
 }

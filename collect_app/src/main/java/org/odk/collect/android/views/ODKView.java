@@ -448,4 +448,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         widgets.get(0).stopAudio();
     }
 
+    /**
+     * Releases widget resources, such as {@link android.media.MediaPlayer}s
+     */
+    public void releaseWidgetResources() {
+        for (QuestionWidget w : widgets) {
+            w.release();
+        }
+    }
 }

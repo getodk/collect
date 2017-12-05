@@ -20,18 +20,18 @@ import android.content.Context;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
+import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
 
 import static org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog.DATE_PICKER_DIALOG;
 
-public class CopticDateWidget extends AbstractDateWidget {
+public class IslamicDateWidget extends AbstractDateWidget {
 
-    public CopticDateWidget(Context context, FormEntryPrompt prompt) {
+    public IslamicDateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
     }
-  
+
     protected void showDatePickerDialog() {
-        CopticDatePickerDialog copticDatePickerDialog = CopticDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
-        copticDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
+        IslamicDatePickerDialog islamicDatePickerDialog = IslamicDatePickerDialog.newInstance(getFormEntryPrompt().getIndex(), date, datePickerDetails);
+        islamicDatePickerDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), DATE_PICKER_DIALOG);
     }
 }
