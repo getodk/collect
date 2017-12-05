@@ -17,6 +17,7 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     private DecimalFormat df;
     private EditText editText;
     private static String thousandSeparator;
+    private int cursorPosition,beforeLength,afterLength;
 
     public ThousandSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
@@ -26,7 +27,15 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        cursorPosition = editText.getSelectionStart()-1;
+        final StringBuilder sb = new StringBuilder(charSequence.length());
+        sb.append(charSequence);
+        String beforeString = sb.toString();
+
+        //saving length after removing separators
+        beforeLength = ThousandSeparatorTextWatcher.getOriginalString(beforeString).length();
+    }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -55,8 +64,14 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
                 String str = editText.getText().toString().replaceAll(thousandSeparator, "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
+                    afterLength = str.length();
                 }
                 editText.setSelection(editText.getText().toString().length());
+            }
+
+            //setting the cursor back to where it was
+            if (beforeLength > afterLength) {
+                editText.setSelection(cursorPosition);
             }
             editText.addTextChangedListener(this);
         } catch (Exception ex) {

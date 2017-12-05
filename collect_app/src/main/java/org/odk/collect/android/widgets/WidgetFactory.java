@@ -79,7 +79,6 @@ public class WidgetFactory {
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
                             }
-                            useThousandSeparator = true;
                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,useThousandSeparator);
                         }
                         break;
@@ -91,7 +90,6 @@ public class WidgetFactory {
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
                             }
-                            useThousandSeparator = true;
                             questionWidget = new IntegerWidget(context, fep, readOnlyOverride,useThousandSeparator);
                         }
                         break;
@@ -126,7 +124,6 @@ public class WidgetFactory {
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
                             }
-                            useThousandSeparator = true;
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,useThousandSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
