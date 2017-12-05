@@ -170,7 +170,7 @@ public class InstanceServerUploader extends InstanceUploader {
             HttpHead httpHead = WebUtils.createOpenRosaHttpHead(submissionUri);
 
             // prepare response
-            HttpResponse response = null;
+            final HttpResponse response;
             try {
                 Timber.i("Issuing HEAD request for %s to: %s", id, submissionUri.toString());
 
