@@ -35,21 +35,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_ROOT_FOLDER;
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_DRIVE_SUBFOLDER;
 
 public class DriveHelper {
 
     private static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-    private final Drive drive;
     private final DriveService driveService;
 
     DriveHelper(@NonNull GoogleAccountCredential credential,
                 @NonNull HttpTransport transport,
                 @NonNull JsonFactory jsonFactory) {
-        drive = new Drive.Builder(transport, jsonFactory, credential)
+        Drive drive = new Drive.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
 
@@ -60,8 +57,7 @@ public class DriveHelper {
      * Constructs a new DriveHelper with the provided Drive Service.
      * This Constructor should only be used for testing.
      */
-    DriveHelper(@NonNull Drive drive, DriveService driveService) {
-        this.drive = drive;
+    DriveHelper(DriveService driveService) {
         this.driveService = driveService;
     }
 
@@ -73,29 +69,18 @@ public class DriveHelper {
     }
 
     @Nullable
-    public Drive.Files.List buildRequest(String query, String fields) {
-        Drive.Files.List request = null;
-        if (query != null) {
-            try {
-                request = driveService.generateRequest(query, fields);
-            } catch (IOException e) {
-                Timber.e(e);
-            }
+    public Drive.Files.List buildRequest(String query, String fields) throws IOException {
+        if (query != null && fields != null) {
+            return driveService.generateRequest(query, fields);
         }
-        return request;
+        return null;
     }
 
-    public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
+    public void downloadFile(@NonNull String fileId, @NonNull FileOutputStream fileOutputStream) throws IOException {
         try {
             driveService.downloadFile(fileId, fileOutputStream);
         } finally {
-            try {
-                if (fileOutputStream != null) {
-                    fileOutputStream.close();
-                }
-            } catch (IOException e) {
-                Timber.e(e, "Unable to close the file output stream");
-            }
+            fileOutputStream.close();
         }
     }
 
@@ -249,18 +234,18 @@ public class DriveHelper {
     }
 
     @Nullable
-    private String generateSearchQuery(@Nullable String folderName,
-                                       @Nullable String parentId,
-                                       @Nullable String mimeType) {
+    public String generateSearchQuery(@Nullable String folderName,
+                                      @Nullable String parentId,
+                                      @Nullable String mimeType) {
         List<String> queryList = new ArrayList<>();
         if (folderName != null) {
             queryList.add(String.format("name = '%s'", folderName));
         }
-        if (mimeType != null) {
-            queryList.add(String.format("mimeType = '%s'", mimeType));
-        }
         if (parentId != null) {
             queryList.add(String.format("'%s' in parents", parentId));
+        }
+        if (mimeType != null) {
+            queryList.add(String.format("mimeType = '%s'", mimeType));
         }
 
         if (queryList.isEmpty()) {
@@ -278,8 +263,8 @@ public class DriveHelper {
         return query.toString();
     }
 
-    public String getMediaDirName(String fileName) {
-        return fileName.substring(0, fileName.length() - 4) + "-media";
+    public String getMediaDirName(@NonNull String fileName) {
+        return fileName.substring(0, fileName.lastIndexOf('.')) + "-media";
     }
 
     public void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files)

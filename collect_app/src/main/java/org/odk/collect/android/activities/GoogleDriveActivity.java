@@ -113,7 +113,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
     private GoogleAccountsManager accountsManager;
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.google_drive));
         setSupportActionBar(toolbar);
     }
@@ -670,7 +670,12 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             query += " and trashed=false";
 
             String fields = "nextPageToken, files(modifiedTime, id, name, mimeType)";
-            Drive.Files.List request = driveHelper.buildRequest(query, fields);
+            Drive.Files.List request = null;
+            try {
+                request = driveHelper.buildRequest(query, fields);
+            } catch (IOException e) {
+                Timber.e(e);
+            }
 
             HashMap<String, Object> results = new HashMap<>();
             results.put(PARENT_ID_KEY, parentId);
@@ -836,7 +841,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
             return results;
         }
 
-        private void downloadFile(String fileId, String fileName) throws IOException {
+        private void downloadFile(@NonNull String fileId, String fileName) throws IOException {
             File file = new File(Collect.FORMS_PATH + File.separator + fileName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             driveHelper.downloadFile(fileId, fileOutputStream);
