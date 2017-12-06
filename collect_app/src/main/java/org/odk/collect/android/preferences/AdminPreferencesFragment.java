@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -36,11 +37,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.ShowQRCodeFragment;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.tasks.PollServerForFormUpdatesSyncJob;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_READABLE;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
+import static org.odk.collect.android.preferences.AdminKeys.CHECK_FOR_FORM_UPDATE_AUTOMATICALLY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_EDIT_SAVED;
@@ -66,6 +69,8 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
 
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
+        initCheckForFormUpdateAutomatically();
+
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
@@ -166,6 +171,25 @@ public class AdminPreferencesFragment extends BasePreferenceFragment implements 
         }
 
         return true;
+    }
+
+    private void initCheckForFormUpdateAutomatically() {
+        final ListPreference pref = (ListPreference) findPreference(CHECK_FOR_FORM_UPDATE_AUTOMATICALLY);
+
+        if (pref != null) {
+            pref.setSummary(pref.getEntry());
+            pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    CharSequence entry = ((ListPreference) preference).getEntries()[index];
+                    preference.setSummary(entry);
+                    PollServerForFormUpdatesSyncJob.schedulePeriodicJob((String) newValue);
+                    return true;
+                }
+            });
+        }
     }
 
     public static class MainMenuAccessPreferences extends BasePreferenceFragment {

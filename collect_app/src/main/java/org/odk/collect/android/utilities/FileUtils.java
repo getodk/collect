@@ -39,7 +39,10 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -495,5 +498,11 @@ public class FileUtils {
         }
 
         return bitmap;
+    }
+
+    public static List<File> getAllFormMediaFiles(String mediaFilesDir) {
+        List<File> mediaFiles = new ArrayList<>();
+        Collections.addAll(mediaFiles, new File(mediaFilesDir).listFiles());
+        return mediaFiles;
     }
 }

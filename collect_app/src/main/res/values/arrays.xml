@@ -172,4 +172,18 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/islamic_month_11</item>
         <item>@string/islamic_month_12</item>
     </string-array>
+    <string-array name="check_for_form_update_automatically_entry_values">
+        <item>@string/never_value</item>
+        <item>@string/every_fifteen_minutes_value</item>
+        <item>@string/every_one_hour_value</item>
+        <item>@string/every_six_hours_value</item>
+        <item>@string/every_one_day_value</item>
+    </string-array>
+    <string-array name="check_for_form_update_automatically_entries">
+        <item>@string/never</item>
+        <item>@string/every_fifteen_minutes</item>
+        <item>@string/every_one_hour</item>
+        <item>@string/every_six_hours</item>
+        <item>@string/every_one_day</item>
+    </string-array>
 </resources>

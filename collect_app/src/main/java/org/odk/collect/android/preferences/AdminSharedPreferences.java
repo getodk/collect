@@ -17,6 +17,7 @@ package org.odk.collect.android.preferences;
 import org.odk.collect.android.application.Collect;
 
 import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
+import static org.odk.collect.android.preferences.AdminKeys.CHECK_FOR_FORM_UPDATE_AUTOMATICALLY;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
@@ -46,10 +47,13 @@ public class AdminSharedPreferences {
     }
 
     public Object getDefault(String key) {
-        if (key.equals(KEY_ADMIN_PW)) {
-            return "";
-        } else {
-            return true;
+        switch (key) {
+            case KEY_ADMIN_PW:
+                return "";
+            case CHECK_FOR_FORM_UPDATE_AUTOMATICALLY:
+                return "never";
+            default:
+                return true;
         }
     }
 
