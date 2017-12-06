@@ -64,6 +64,10 @@ public class IntegerWidget extends StringWidget {
         // ints can only hold 2,147,483,648. we allow 999,999,999
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(9);
+        if (useThousandSeparator) {
+            //11 since for a nine digit number , their will be 2 separators.
+            fa[0] = new InputFilter.LengthFilter(11);
+        }
         answerText.setFilters(fa);
 
         if (prompt.isReadOnly()) {
