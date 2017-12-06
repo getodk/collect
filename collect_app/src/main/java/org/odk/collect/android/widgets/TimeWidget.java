@@ -24,7 +24,6 @@ import android.os.Build;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -37,6 +36,7 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -50,7 +50,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class TimeWidget extends QuestionWidget implements TimePickerDialog.OnTimeSetListener {
+public class TimeWidget extends QuestionWidget implements ButtonWidget, TimePickerDialog.OnTimeSetListener {
     private TimePickerDialog timePickerDialog;
 
     private Button timeButton;
@@ -114,17 +114,6 @@ public class TimeWidget extends QuestionWidget implements TimePickerDialog.OnTim
     private void createTimeButton() {
         timeButton = getSimpleButton(getContext().getString(R.string.select_time));
         timeButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        timeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (nullAnswer) {
-                    setTimeToCurrent();
-                } else {
-                    updateTime(hourOfDay, minuteOfHour, true);
-                }
-                timePickerDialog.show();
-            }
-        });
     }
 
     private void addViews() {
@@ -195,6 +184,16 @@ public class TimeWidget extends QuestionWidget implements TimePickerDialog.OnTim
         this.minuteOfHour = minute;
 
         setTimeLabel();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        if (nullAnswer) {
+            setTimeToCurrent();
+        } else {
+            updateTime(hourOfDay, minuteOfHour, true);
+        }
+        timePickerDialog.show();
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {

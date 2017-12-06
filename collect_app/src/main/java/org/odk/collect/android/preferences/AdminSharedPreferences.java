@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.preferences;
 
-
 import org.odk.collect.android.application.Collect;
 
+import static org.odk.collect.android.preferences.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.AdminPreferencesFragment.ADMIN_PREFERENCES;
 
@@ -36,7 +36,6 @@ public class AdminSharedPreferences {
         }
         return instance;
     }
-
 
     public Object get(String key) {
         if (key.equals(KEY_ADMIN_PW)) {
@@ -75,4 +74,17 @@ public class AdminSharedPreferences {
         editor.apply();
     }
 
+    private void clear() {
+        sharedPreferences
+                .edit()
+                .clear()
+                .apply();
+    }
+
+    public void loadDefaultValues() {
+        clear();
+        for (String key : ALL_KEYS) {
+            save(key, getDefault(key));
+        }
+    }
 }

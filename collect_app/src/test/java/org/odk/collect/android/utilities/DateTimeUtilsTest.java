@@ -44,6 +44,9 @@ public class DateTimeUtilsTest {
     private DatePickerDetails coptic;
     private DatePickerDetails copticMonthYear;
     private DatePickerDetails copticYear;
+    private DatePickerDetails islamic;
+    private DatePickerDetails islamicMonthYear;
+    private DatePickerDetails islamicYear;
 
     @Before
     public void setUp() {
@@ -57,6 +60,9 @@ public class DateTimeUtilsTest {
         coptic = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.SPINNERS);
         copticMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         copticYear = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.YEAR);
+        islamic = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
+        islamicMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        islamicYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -111,5 +117,16 @@ public class DateTimeUtilsTest {
         assertEquals(copticYear, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "year coptic";
         assertEquals(copticYear, DateTimeUtils.getDatePickerDetails(appearance));
+
+        appearance = "islamic";
+        assertEquals(islamic, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Islamic month-year";
+        assertEquals(islamicMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year islamic";
+        assertEquals(islamicMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Islamic year";
+        assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year islamic";
+        assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
     }
 }

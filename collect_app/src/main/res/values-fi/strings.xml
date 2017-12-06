@@ -513,19 +513,19 @@
   <string name="image_size_original">Kameran alkuperäinen koko (oletus)</string>
   <string name="image_size_dialog_title">Maksimipikselit kuvan pitkältä reunalta</string>
   <string name="bearing_lack_of_sensors">Suuntimaa ei voida hakea: laitteesta puuttuu kiihtyvyysanturi, magneettikenttäanturi tai molemmat.</string>
-  <string name="ethiopian_month_meskerem">Mäskäräm</string>
-  <string name="ethiopian_month_tikimt">Ṭəqəmt</string>
-  <string name="ethiopian_month_hidar">Ḫədar</string>
-  <string name="ethiopian_month_tahsas">Taḫśaś</string>
-  <string name="ethiopian_month_tir">Ṭərr</string>
-  <string name="ethiopian_month_yekatit">Yäkatit</string>
-  <string name="ethiopian_month_megabit">Mägabit</string>
-  <string name="ethiopian_month_miazia">Miyazya</string>
-  <string name="ethiopian_month_ginbot">Gənbo</string>
-  <string name="ethiopian_month_senie">Säne</string>
-  <string name="ethiopian_month_hamlie">Ḥamle</string>
-  <string name="ethiopian_month_nehasie">Nähase</string>
-  <string name="ethiopian_month_pagumien">Ṗagʷəmen</string>
+  <string name="ethiopian_month_1">Mäskäräm</string>
+  <string name="ethiopian_month_2">Ṭəqəmt</string>
+  <string name="ethiopian_month_3">Ḫədar</string>
+  <string name="ethiopian_month_4">Taḫśaś</string>
+  <string name="ethiopian_month_5">Ṭərr</string>
+  <string name="ethiopian_month_6">Yäkatit</string>
+  <string name="ethiopian_month_7">Mägabit</string>
+  <string name="ethiopian_month_8">Miyazya</string>
+  <string name="ethiopian_month_9">Gənbo</string>
+  <string name="ethiopian_month_10">Säne</string>
+  <string name="ethiopian_month_11">Ḥamle</string>
+  <string name="ethiopian_month_12">Nähase</string>
+  <string name="ethiopian_month_13">Ṗagʷəmen</string>
   <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
   <string name="custom_date">%1$s (%2$s)</string>
 </resources>

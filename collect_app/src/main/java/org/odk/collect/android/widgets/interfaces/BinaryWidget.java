@@ -19,6 +19,6 @@ package org.odk.collect.android.widgets.interfaces;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public interface BinaryWidget extends Widget {
+public interface BinaryWidget extends ButtonWidget {
     void setBinaryData(Object answer);
 }
