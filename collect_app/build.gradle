@@ -238,9 +238,6 @@ dependencies {
 
     androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
     androidTestImplementation(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
-
-    androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
-    androidTestCompile(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
