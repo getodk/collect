@@ -239,14 +239,10 @@ public class DownloadFormsTask extends
             Timber.w("The user cancelled (or an exception happened) the download of a form at the "
                     + "very beginning.");
         } else {
-            if (fileResult.getFile() != null) {
-                FileUtils.deleteAndReport(fileResult.getFile());
-            }
+            FileUtils.deleteAndReport(fileResult.getFile());
         }
 
-        if (fileOnCancel != null) {
-            FileUtils.deleteAndReport(fileOnCancel);
-        }
+        FileUtils.deleteAndReport(fileOnCancel);
 
         if (tempMediaPath != null) {
             FileUtils.purgeMediaPath(tempMediaPath);
