@@ -28,8 +28,6 @@ import static org.mockito.Mockito.verify;
 @RunWith(PowerMockRunner.class)
 public class DriveHelperTest {
 
-    private final String rootId = "root_id";
-
     @Mock
     private DriveService mockedDriveService;
     @Mock
@@ -49,6 +47,8 @@ public class DriveHelperTest {
 
     @Test
     public void getRootIdTest() throws IOException {
+        String rootId = "root_id";
+
         doReturn(rootId).when(mockedDriveService).getFileId("root", "id");
         assertEquals(rootId, driveHelper.getRootFolderId());
     }
@@ -58,6 +58,7 @@ public class DriveHelperTest {
         String query = "some query";
         String fields = "some fields";
         doReturn(mockedRequest).when(mockedDriveService).generateRequest(anyString(), anyString());
+
         assertNull(driveHelper.buildRequest(null, null));
         assertNull(driveHelper.buildRequest(query, null));
         assertNull(driveHelper.buildRequest(null, fields));
