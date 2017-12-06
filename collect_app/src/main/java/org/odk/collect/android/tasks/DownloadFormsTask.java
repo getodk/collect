@@ -332,7 +332,8 @@ public class DownloadFormsTask extends
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url) throws Exception {
+    private FileResult downloadXform(String formName, String url)
+            throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
@@ -392,7 +393,8 @@ public class DownloadFormsTask extends
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    private void downloadFile(File file, String downloadUrl) throws Exception {
+    private void downloadFile(File file, String downloadUrl)
+            throws IOException, TaskCancelledException, URISyntaxException, Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
                 new File(Collect.CACHE_PATH));
 
