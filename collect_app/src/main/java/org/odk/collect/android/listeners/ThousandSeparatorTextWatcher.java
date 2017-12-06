@@ -7,6 +7,8 @@ import android.widget.EditText;
 import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 
+import timber.log.Timber;
+
 /**
  * Created by srv_twry on 4/12/17.
  * The custom TextWatcher that automatically adds thousand separators in EditText.
@@ -79,7 +81,7 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
             }
             editText.addTextChangedListener(this);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Timber.e(ex);
             editText.addTextChangedListener(this);
         }
     }
