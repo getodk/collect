@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
@@ -66,6 +67,9 @@ public class DecimalWidget extends StringWidget {
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);
+        if (useThousandSeparator) {
+            fa[0] = new InputFilter.LengthFilter(19);
+        }
         answerText.setFilters(fa);
 
         Double d = getDoubleAnswerValue();
@@ -107,6 +111,15 @@ public class DecimalWidget extends StringWidget {
             }
         }
         return d;
+    }
+
+    @NonNull
+    @Override
+    public String getAnswerText() {
+        if (useThousandSeparator) {
+            return ThousandSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+        }
+        return super.getAnswerText();
     }
 
     @Override

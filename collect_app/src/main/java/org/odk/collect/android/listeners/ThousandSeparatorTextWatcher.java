@@ -31,8 +31,8 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        cursorPosition = editText.getSelectionStart();
+    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+        cursorPosition = editText.getText().toString().length() - editText.getSelectionStart();
         final StringBuilder sb = new StringBuilder(charSequence.length());
         sb.append(charSequence);
         String beforeString = sb.toString();
@@ -74,10 +74,8 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
             }
 
             //setting the cursor back to where it was
-            if (beforeLength > afterLength) {
-                editText.setSelection(cursorPosition - 1);
-            } else if (beforeLength < afterLength) {
-                editText.setSelection(cursorPosition + 1);
+            if (beforeLength != afterLength) {
+                editText.setSelection(editText.getText().toString().length() - cursorPosition);
             }
             editText.addTextChangedListener(this);
         } catch (Exception ex) {

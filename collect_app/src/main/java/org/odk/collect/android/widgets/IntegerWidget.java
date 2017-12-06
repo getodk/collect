@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
@@ -100,6 +101,15 @@ public class IntegerWidget extends StringWidget {
             }
         }
         return d;
+    }
+
+    @NonNull
+    @Override
+    public String getAnswerText() {
+        if (useThousandSeparator) {
+            return ThousandSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+        }
+        return super.getAnswerText();
     }
 
     @Override
