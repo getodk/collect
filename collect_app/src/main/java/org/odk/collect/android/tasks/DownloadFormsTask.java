@@ -24,7 +24,6 @@ import org.kxml2.kdom.Element;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
-import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -68,11 +67,6 @@ import timber.log.Timber;
 public class DownloadFormsTask extends
         AsyncTask<ArrayList<FormDetails>, String, HashMap<FormDetails, String>> {
 
-    class CancelDownloads extends Exception {
-        CancelDownloads() {
-        }
-    }
-
     private static final String MD5_COLON_PREFIX = "md5:";
     private static final String TEMP_DOWNLOAD_EXTENSION = ".tempDownload";
 
@@ -87,6 +81,19 @@ public class DownloadFormsTask extends
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 
+    private class TaskCancelledException extends Exception {
+        private final File file;
+
+        TaskCancelledException(File file) {
+            super("Task was cancelled during processing of " + file);
+            this.file = file;
+        }
+
+        TaskCancelledException() {
+            super("Task was cancelled");
+            this.file = null;
+        }
+    }
 
     @Override
     protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
@@ -105,7 +112,7 @@ public class DownloadFormsTask extends
                 String message = processOneForm(total, count++, fd);
                 result.put(fd, message.isEmpty() ?
                         Collect.getInstance().getString(R.string.success) : message);
-            } catch (CancelDownloads cd) {
+            } catch (TaskCancelledException cd) {
                 break;
             }
         }
@@ -120,15 +127,14 @@ public class DownloadFormsTask extends
      * @param count the number of this form
      * @param fd    the FormDetails
      * @return an empty string for success, or a nonblank string with one or more error messages
-     * @throws CancelDownloads to signal that form downloading is to be canceled
+     * @throws TaskCancelledException to signal that form downloading is to be canceled
      */
-    private String processOneForm(int total, int count, FormDetails fd) throws CancelDownloads {
+    private String processOneForm(int total, int count, FormDetails fd) throws TaskCancelledException {
         publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
-
         String message = "";
 
         if (isCancelled()) {
-            throw new CancelDownloads();
+            throw new TaskCancelledException();
         }
 
         String tempMediaPath = null;
@@ -154,11 +160,11 @@ public class DownloadFormsTask extends
                 Timber.i("No Manifest for: %s", fd.formName);
             }
         } catch (TaskCancelledException e) {
-            Timber.i(e);
-            cleanUp(fileResult, e.getFile(), tempMediaPath);
+            Timber.i(e.getMessage());
+            cleanUp(fileResult, e.file, tempMediaPath);
 
             // do not download additional forms.
-            throw new CancelDownloads();
+            throw e;
         } catch (Exception e) {
             message += getExceptionMessage(e);
         }
@@ -223,8 +229,8 @@ public class DownloadFormsTask extends
 
             cleanUp(fileResult, null, tempMediaPath);
         } catch (TaskCancelledException e) {
-            Timber.i(e);
-            cleanUp(fileResult, e.getFile(), tempMediaPath);
+            Timber.i(e.getMessage());
+            cleanUp(fileResult, e.file, tempMediaPath);
         }
     }
 
@@ -271,7 +277,8 @@ public class DownloadFormsTask extends
      * @return a {@link org.odk.collect.android.tasks.DownloadFormsTask.UriResult} object
      * @throws TaskCancelledException if the user cancels the task during the download.
      */
-    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo) throws TaskCancelledException {
+    private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo)
+            throws TaskCancelledException {
         Cursor cursor = null;
         final Uri uri;
         String mediaPath;
@@ -294,8 +301,7 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.FORM_MEDIA_PATH, mediaPath);
 
                 if (isCancelled()) {
-                    throw new TaskCancelledException(formFile, "Form " + formFile.getName()
-                            + " was cancelled while it was being parsed.");
+                    throw new TaskCancelledException(formFile);
                 }
 
                 v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
@@ -380,14 +386,12 @@ public class DownloadFormsTask extends
         return new FileResult(f, isNew);
     }
 
-
     /**
      * Common routine to download a document from the downloadUrl and save the contents in the file
      * 'file'. Shared by media file download and form file download.
      * <p>
      * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
-     * is okay,
-     * so that garbage is not left over on cancel.
+     * is okay, so that garbage is not left over on cancel.
      *
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
@@ -408,18 +412,15 @@ public class DownloadFormsTask extends
 
         // WiFi network connections can be renegotiated during a large form download sequence.
         // This will cause intermittent download failures.  Silently retry once after each
-        // failure.  Only if there are two consecutive failures, do we abort.
+        // failure.  Only if there are two consecutive failures do we abort.
         boolean success = false;
         int attemptCount = 0;
         final int MAX_ATTEMPT_COUNT = 2;
         while (!success && ++attemptCount <= MAX_ATTEMPT_COUNT) {
-
             if (isCancelled()) {
-                throw new TaskCancelledException(tempFile,
-                        "Cancelled before requesting " + tempFile.getAbsolutePath());
-            } else {
-                Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
+                throw new TaskCancelledException(tempFile);
             }
+            Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
 
             // get shared HttpContext so that authentication and cookies are retained.
             HttpContext localContext = Collect.getInstance().getHttpContext();
@@ -506,8 +507,7 @@ public class DownloadFormsTask extends
 
             if (isCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
-                throw new TaskCancelledException(tempFile,
-                        "Cancelled downloading of " + tempFile.getAbsolutePath());
+                throw new TaskCancelledException(tempFile);
             }
         }
 
