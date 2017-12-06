@@ -119,7 +119,7 @@ public class WidgetFactory {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.equals("numbers")) {
+                        } else if (appearance.contains("numbers")) {
                             boolean useThousandSeparator = false;
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
