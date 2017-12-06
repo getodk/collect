@@ -95,7 +95,7 @@ public class ItemsetDbAdapter {
     public boolean createTable(String formHash, String pathHash, String[] columns, String path) {
         StringBuilder sb = new StringBuilder();
 
-        // get md5 of the path to itemset.csv, which is unique per form
+        // load md5 of the path to itemset.csv, which is unique per form
         // the md5 is easier to use because it doesn't have chars like '/'
 
         sb.append("create table ")
@@ -214,7 +214,7 @@ public class ItemsetDbAdapter {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            Timber.e(e, "Unable to get MD5 algorithm due to : %s ", e.getMessage());
+            Timber.e(e, "Unable to load MD5 algorithm due to : %s ", e.getMessage());
             return null;
         }
 

@@ -8,13 +8,15 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.architecture.rx.RxMVVMActivity;
 import org.odk.collect.android.location.usecases.CurrentMap;
-import org.odk.collect.android.location.usecases.GetMap;
+import org.odk.collect.android.location.usecases.LoadMap;
 import org.odk.collect.android.location.usecases.OnMapError;
 import org.odk.collect.android.location.usecases.SaveAnswer;
 
@@ -27,7 +29,7 @@ import timber.log.Timber;
 public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleMap.OnMapLongClickListener {
 
     @Inject
-    protected GetMap getMap;
+    protected LoadMap loadMap;
 
     @Inject
     protected CurrentMap currentMap;
@@ -61,23 +63,38 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        getMap.get()
+        loadMap.load()
                 .compose(bindToLifecycle())
-                .subscribe(this::onMapReady,
-                        onMapError::onError);
+                .subscribe(this::onMapReady, onMapError::onError);
 
         getViewModel().isPauseVisible()
                 .compose(bindToLifecycle())
                 .map(isVisible -> isVisible ? View.VISIBLE : View.GONE)
-                .subscribe(pauseButton::setVisibility);
+                .subscribe(pauseButton::setVisibility, Timber::e);
 
         getViewModel().isReloadEnabled()
                 .compose(bindToLifecycle())
-                .subscribe(addButton::setEnabled);
+                .subscribe(addButton::setEnabled, Timber::e);
 
         getViewModel().isShowEnabled()
                 .compose(bindToLifecycle())
-                .subscribe(showButton::setEnabled);
+                .subscribe(showButton::setEnabled, Timber::e);
+
+        getViewModel().shouldZoomToLatLng()
+                .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
+                .subscribe(this::updateCamera, Timber::e);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getViewModel().startWatchingLocation();
+    }
+
+    @Override
+    protected void onStop() {
+        getViewModel().stopWatchingLocation();
+        super.onStop();
     }
 
     @Override
@@ -93,42 +110,27 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
 
     @OnClick(R.id.add_button)
     protected void onAddClick() {
-        getViewModel().addLocation()
-                .compose(bindToLifecycle())
-                .doOnError(Timber::e)
-                .subscribe();
+        getViewModel().addLocation();
     }
 
     @OnClick(R.id.pause_button)
     protected void onPauseClick() {
-        getViewModel().pause()
-                .compose(bindToLifecycle())
-                .doOnError(Timber::e)
-                .subscribe();
+        getViewModel().pause();
     }
 
     @OnClick(R.id.show_button)
     protected void onShowClick() {
-        getViewModel().showLocation()
-                .compose(bindToLifecycle())
-                .doOnError(Timber::e)
-                .subscribe();
+        getViewModel().showLocation();
     }
 
     @OnClick(R.id.layers_button)
     protected void onLayersClick() {
-        getViewModel().showLayers()
-                .compose(bindToLifecycle())
-                .doOnError(Timber::e)
-                .subscribe();
+        getViewModel().showLayers();
     }
 
     @OnClick(R.id.clear_button)
     protected void onClearClick() {
-        getViewModel().clearLocation()
-                .compose(bindToLifecycle())
-                .doOnError(Timber::e)
-                .subscribe();
+        getViewModel().clearLocation();
     }
 
     @OnClick(R.id.save_button)
@@ -138,24 +140,20 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
                 .subscribe(saveAnswer::save, Timber::e, this::finish);
     }
 
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        getViewModel().setLocationAtLatLng(latLng);
+    }
+
     private void onMapReady(@NonNull GoogleMap googleMap) {
         googleMap.setOnMapLongClickListener(this);
         currentMap.update(googleMap);
     }
 
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-//        this.latLng = latLng;
-//        if (marker == null) {
-//            markerOptions.position(latLng);
-//            marker = map.addMarker(markerOptions);
-//        } else {
-//            marker.setPosition(latLng);
-//        }
-//        enableShowLocation(true);
-//        marker.setDraggable(true);
-//        isDragged = true;
-//        setClear = false;
-//        captureLocation = true;
+    private void updateCamera(@NonNull CameraUpdate cameraUpdate) {
+        currentMap.get()
+                .compose(bindToLifecycle())
+                .subscribe(googleMap -> googleMap.animateCamera(cameraUpdate),
+                        Timber::e);
     }
 }

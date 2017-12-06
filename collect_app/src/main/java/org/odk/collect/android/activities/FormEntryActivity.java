@@ -85,7 +85,6 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -101,14 +100,15 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.tasks.SaveResult;
 import org.odk.collect.android.tasks.SaveToDiskTask;
+import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -272,11 +272,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         inAnimation = null;
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
-        questionHolder = (LinearLayout) findViewById(R.id.questionholder);
+        questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
 
-        nextButton = (ImageButton) findViewById(R.id.form_forward_button);
+        nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,7 +285,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         });
 
-        backButton = (ImageButton) findViewById(R.id.form_back_button);
+        backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,7 +341,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return;
         }
 
-        // Check to see if this is a screen flip or a new form get.
+        // Check to see if this is a screen flip or a new form load.
         Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             formLoaderTask = (FormLoaderTask) data;
@@ -353,13 +353,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    // we need to launch the form loader to get the form
+                    // we need to launch the form loader to load the form
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
                             startingXPath, waitingXPath);
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "formReloaded", formPath);
-                    // TODO: this doesn' work (dialog does not get removed):
+                    // TODO: this doesn' work (dialog does not load removed):
                     // showDialog(PROGRESS_DIALOG);
                     // show dialog before we execute...
                     formLoaderTask.execute(formPath);
@@ -384,7 +384,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                    // get the formId and version for this instance...
+                    // load the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
                     {
@@ -563,7 +563,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.loading_form));
         setSupportActionBar(toolbar);
     }
@@ -892,7 +892,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void saveAudioVideoAnswer(Uri media) {
-        // For audio/video capture/chooser, we get the URI from the content
+        // For audio/video capture/chooser, we load the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
         // content provider.
@@ -903,7 +903,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Refreshes the current view. the controller and the displayed view can get
+     * Refreshes the current view. the controller and the displayed view can load
      * out of sync due to dialogs and restarts caused by screen orientation
      * changes, so they're resynchronized here.
      */
@@ -1169,8 +1169,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 formController.getFormTitle()));
 
                 // checkbox for if finished or ready to send
-                final CheckBox instanceComplete = ((CheckBox) endView
-                        .findViewById(R.id.mark_finished));
+                final CheckBox instanceComplete = endView
+                        .findViewById(R.id.mark_finished);
                 instanceComplete.setChecked(isInstanceComplete(true));
 
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
@@ -1178,7 +1178,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
+                final EditText saveAs = endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1222,7 +1222,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.VISIBLE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
@@ -1246,7 +1246,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     // revisions
                     // display only the name, not the prompt, and disable edits
                     saveName = formController.getSubmissionMetadata().instanceName;
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
@@ -1256,7 +1256,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // override the visibility settings based upon admin preferences
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
                     saveAs.setVisibility(View.GONE);
-                    TextView sa = (TextView) endView
+                    TextView sa = endView
                             .findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                 }
@@ -1417,7 +1417,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            // get constraint behavior preference value with appropriate default
+            // load constraint behavior preference value with appropriate default
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
@@ -1718,7 +1718,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         View view = inflater.inflate(R.layout.toast_view, null);
 
         // set the text in the view
-        TextView tv = (TextView) view.findViewById(R.id.message);
+        TextView tv = view.findViewById(R.id.message);
         tv.setText(message);
 
         Toast t = new Toast(this);
@@ -2710,7 +2710,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
-                // get constraint behavior preference value with appropriate default
+                // load constraint behavior preference value with appropriate default
                 String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                         .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
@@ -2720,7 +2720,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 } else {
-                    // otherwise, we can get the proper toast(s) by saving with constraint check
+                    // otherwise, we can load the proper toast(s) by saving with constraint check
                     saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
                 }
 
@@ -2750,7 +2750,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (formController != null) {
             // if we're at the end of the form, then check the preferences
             if (end) {
-                // First get the value from the preferences
+                // First load the value from the preferences
                 complete = (boolean) GeneralSharedPreferences
                         .getInstance()
                         .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);

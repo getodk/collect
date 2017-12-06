@@ -51,7 +51,7 @@ public class UrlUtils {
                     urlString = cursor.isNull(subIdx) ? null : cursor.getString(subIdx);
 
                     // if we didn't find one in the content provider,
-                    // try to get from settings
+                    // try to load from settings
                     if (urlString == null) {
                         urlString = (String) GeneralSharedPreferences.getInstance()
                                 .get(PreferenceKeys.KEY_GOOGLE_SHEETS_URL);
@@ -74,7 +74,7 @@ public class UrlUtils {
             int start = urlString.indexOf(googleHeader) + googleHeader.length();
             int end = urlString.indexOf('/', start);
             if (end == -1) {
-                // if there wasn't a "/", just try to get the end
+                // if there wasn't a "/", just try to load the end
                 end = urlString.length();
             }
             if (start == -1 || end == -1) {

@@ -38,7 +38,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
+ * Widget that allows the user to launch OpenMapKit to load an OSM Feature with a
  * predetermined set of tags that are edited in the application.
  *
  * @author Nicholas Hallahan nhallahan@spatialdev.com
@@ -91,7 +91,7 @@ public class OSMWidget extends QuestionWidget implements BinaryWidget {
         // Determine the tags required
         osmRequiredTags = prompt.getQuestion().getOsmTags();
 
-        // If an OSM File has already been saved, get the name.
+        // If an OSM File has already been saved, load the name.
         osmFileName = prompt.getAnswerText();
 
         // Setup Launch OpenMapKit Button

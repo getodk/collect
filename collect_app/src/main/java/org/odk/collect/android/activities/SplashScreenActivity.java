@@ -74,18 +74,18 @@ public class SplashScreenActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
 
-        // get the shared preferences object
+        // load the shared preferences object
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sharedPreferences.edit();
 
-        // get the package info object with version number
+        // load the package info object with version number
         PackageInfo packageInfo = null;
         try {
             packageInfo =
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            Timber.e(e, "Unable to get package info");
+            Timber.e(e, "Unable to load package info");
         }
 
         boolean firstRun = sharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
@@ -168,8 +168,8 @@ public class SplashScreenActivity extends Activity {
     private void startSplashScreen(String path) {
 
         // add items to the splash screen here. makes things less distracting.
-        ImageView iv = (ImageView) findViewById(R.id.splash);
-        LinearLayout ll = (LinearLayout) findViewById(R.id.splash_default);
+        ImageView iv = findViewById(R.id.splash);
+        LinearLayout ll = findViewById(R.id.splash_default);
 
         File f = new File(path);
         if (f.exists()) {

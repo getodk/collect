@@ -260,7 +260,7 @@ public class ItemsetWidget extends QuestionWidget implements
                         String label;
                         String val;
 
-                        // try to get the value associated with the label:lang
+                        // try to load the value associated with the label:lang
                         // string if that doen't exist, then just use label
                         String lang = "";
                         if (formController.getLanguages() != null

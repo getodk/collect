@@ -129,7 +129,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         alertMsg = getString(R.string.please_wait);
 
-        downloadButton = (Button) findViewById(R.id.add_button);
+        downloadButton = findViewById(R.id.add_button);
         downloadButton.setEnabled(listView.getCheckedItemCount() > 0);
         downloadButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -141,7 +141,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
         });
 
-        toggleButton = (Button) findViewById(R.id.toggle_button);
+        toggleButton = findViewById(R.id.toggle_button);
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +156,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
             }
         });
 
-        Button refreshButton = (Button) findViewById(R.id.refresh_button);
+        Button refreshButton = findViewById(R.id.refresh_button);
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,7 +231,7 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
                 downloadFormsTask = null;
             }
         } else if (formNamesAndURLs.isEmpty() && getLastNonConfigurationInstance() == null) {
-            // first time, so get the formlist
+            // first time, so load the formlist
             downloadFormList();
         }
 

@@ -80,14 +80,14 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         // <formname, details>
         HashMap<String, FormDetails> formList = new HashMap<String, FormDetails>();
 
-        // get shared HttpContext so that authentication and cookies are retained.
+        // load shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
         DocumentFetchResult result =
                 WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
 
-        // If we can't get the document, return the error, cancel the task
+        // If we can't load the document, return the error, cancel the task
         if (result.errorMessage != null) {
             if (result.responseCode == 401) {
                 formList.put(DL_AUTH_REQUIRED, new FormDetails(result.errorMessage));

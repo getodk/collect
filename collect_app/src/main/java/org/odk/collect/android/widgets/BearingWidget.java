@@ -38,7 +38,7 @@ import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * BearingWidget is the widget that allows the user to get a compass heading.
+ * BearingWidget is the widget that allows the user to load a compass heading.
  *
  * @author Carl Hartung (chartung@nafundi.com)
  */

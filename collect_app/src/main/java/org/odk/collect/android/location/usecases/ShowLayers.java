@@ -17,16 +17,16 @@ public class ShowLayers {
     private final Context context;
 
     @NonNull
-    private final GetMap getMap;
+    private final LoadMap loadMap;
 
     @Inject
-    public ShowLayers(@NonNull Context context, @NonNull GetMap getMap) {
+    public ShowLayers(@NonNull Context context, @NonNull LoadMap loadMap) {
         this.context = context;
-        this.getMap = getMap;
+        this.loadMap = loadMap;
     }
 
     private Completable show() {
-        return getMap.get()
+        return loadMap.load()
                 .map(googleMap -> new MapHelper(context, googleMap))
                 .flatMapCompletable(mapHelper -> {
                     mapHelper.showLayersDialog(context);

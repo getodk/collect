@@ -244,7 +244,7 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
 
     @Override
     public void deleteFile() {
-        // get the file path and delete the file
+        // load the file path and delete the file
         String name = binaryName;
         // clean up variables
         binaryName = null;

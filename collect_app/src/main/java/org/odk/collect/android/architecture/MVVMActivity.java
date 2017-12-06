@@ -22,7 +22,7 @@ import butterknife.Unbinder;
  * return the subclass you've created, and you'll have access to a persistent
  * VM in your onCreate thanks to Dagger.
  *
- * @param <V> The MVVMViewModel subclass this Activity should get.
+ * @param <V> The MVVMViewModel subclass this Activity should load.
  *
  */
 public abstract class MVVMActivity<V extends MVVMViewModel>

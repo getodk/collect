@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 
 @PerActivity
-public class GetMap {
+public class LoadMap {
 
     @NonNull
     private final FragmentManager fragmentManager;
@@ -23,14 +23,14 @@ public class GetMap {
     private final SupportMapFragment mapFragment;
 
     @Inject
-    GetMap(@NonNull FragmentManager fragmentManager,
-           @NonNull SupportMapFragment mapFragment) {
+    LoadMap(@NonNull FragmentManager fragmentManager,
+            @NonNull SupportMapFragment mapFragment) {
 
         this.fragmentManager = fragmentManager;
         this.mapFragment = mapFragment;
     }
 
-    public Single<GoogleMap> get() {
+    public Single<GoogleMap> load() {
         return Single.create(emitter -> {
             mapFragment.getMapAsync(googleMap -> {
                 googleMap.setMyLocationEnabled(true);

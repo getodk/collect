@@ -12,6 +12,7 @@ import org.odk.collect.android.spatial.MapHelper;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 @PerActivity
 public class CurrentMap {
@@ -38,6 +39,11 @@ public class CurrentMap {
     @NonNull
     public Observable<MapHelper> observeHelper() {
         return helperRelay.hide();
+    }
+
+    @NonNull
+    public Single<GoogleMap> get() {
+        return mapRelay.firstOrError();
     }
 
     public void update(@NonNull GoogleMap googleMap) {

@@ -45,7 +45,7 @@ import java.text.DecimalFormat;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * GeoPointWidget is the widget that allows the user to get GPS readings.
+ * GeoPointWidget is the widget that allows the user to load GPS readings.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -193,7 +193,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 }
             }
         } else {
-            // if it is read-only, hide the get-location button...
+            // if it is read-only, hide the load-location button...
             if (readOnly) {
                 getLocationButton.setVisibility(View.GONE);
             } else {

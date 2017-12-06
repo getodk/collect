@@ -11,7 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class GeoModule {
+public class GeoActivityModule {
 
     @Provides
     @PerActivity

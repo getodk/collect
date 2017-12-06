@@ -73,7 +73,7 @@ public class DaylightSavingTest {
         DateTimeWidget dateTimeWidget = prepareDateTimeWidget(2017, 3, 26, 2, 30);
 
         /*
-         * We would get crash in this place using old approach {@link org.joda.time.DateTime} instead of
+         * We would load crash in this place using old approach {@link org.joda.time.DateTime} instead of
          * {@link org.joda.time.LocalDateTime}
          */
         dateTimeWidget.getAnswer();
@@ -86,7 +86,7 @@ public class DaylightSavingTest {
         DateWidget dateWidget = prepareDateWidget(1960, 0, 1);
 
         /*
-         * We would get crash in this place using old approach {@link org.joda.time.DateTime} instead of
+         * We would load crash in this place using old approach {@link org.joda.time.DateTime} instead of
          * {@link org.joda.time.LocalDateTime}
          */
         dateWidget.getAnswer();
