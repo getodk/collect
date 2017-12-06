@@ -11,10 +11,6 @@ public class TestGoogleAccountSelectionListener implements GoogleAccountsManager
     @Nullable
     private String accountName;
 
-    public void reset() {
-        accountName = null;
-    }
-
     @Override
     public void onGoogleAccountSelected(String accountName) {
         this.accountName = accountName;

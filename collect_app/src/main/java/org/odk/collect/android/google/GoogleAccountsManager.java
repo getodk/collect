@@ -112,21 +112,17 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         intentChooseAccount = credential.newChooseAccountIntent();
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        if (listener != null) {
-            listener.onGoogleAccountSelected(getSelectedAccountName());
-        }
-    }
-
-    private String getSelectedAccountName() {
-        return getCredential().getSelectedAccountName();
-    }
-
     public void setSelectedAccountName(String accountName) {
         if (accountName != null) {
             preferences.save(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             selectAccount(accountName);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        if (listener != null) {
+            listener.onGoogleAccountSelected(credential.getSelectedAccountName());
         }
     }
 
@@ -144,7 +140,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
 
     public void chooseAccount() {
         if (hasPermissions()) {
-            String accountName = getGoogleAccountName();
+            String accountName = getSelectedAccount();
             if (autoChooseAccount && !accountName.isEmpty()) {
                 selectAccount(accountName);
             } else {
@@ -172,7 +168,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
     }
 
-    public String getGoogleAccountName() {
+    public String getSelectedAccount() {
         return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
     }
 
@@ -239,8 +235,8 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return credential;
     }
 
-    public void setAutoChooseAccount(boolean value) {
-        autoChooseAccount = value;
+    public void disableAutoChooseAccount() {
+        autoChooseAccount = false;
     }
 
     public void setListener(@Nullable GoogleAccountSelectionListener listener) {
