@@ -469,7 +469,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * @param formDef serialized FormDef file
      * @return {@link FormDef} object
      */
-    static FormDef deserializeFormDef(File formDef) {
+    public static FormDef deserializeFormDef(File formDef) {
 
         // TODO: any way to remove reliance on jrsp?
         FileInputStream fis = null;
@@ -500,7 +500,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
      * @param cachePath the path to the cache
      * @return whether the file was added to the cache
      */
-    static boolean cacheFormDefIfNew(FormDef fd, String filepath, String cachePath) {
+    public static boolean cacheFormDefIfNew(FormDef fd, String filepath, String cachePath) {
         String hash = FileUtils.getMd5Hash(new File(filepath));
         File formDef = new File(cachePath + File.separator + hash + ".formdef");
 
