@@ -5,12 +5,12 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import java.text.DecimalFormat;
-import java.util.StringTokenizer;
 
 import timber.log.Timber;
 
 /**
  * Created by srv_twry on 4/12/17.
+ * Source: https://stackoverflow.com/a/34265406/137744
  * The custom TextWatcher that automatically adds thousand separators in EditText.
  */
 
@@ -19,26 +19,20 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     private DecimalFormat df;
     private EditText editText;
     private static String thousandSeparator;
+    private static String decimalMarker;
     private int cursorPosition;
-    private int beforeLength;
-    private int afterLength;
 
     public ThousandSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
         df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
+        decimalMarker = Character.toString(df.getDecimalFormatSymbols().getDecimalSeparator());
     }
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
         cursorPosition = editText.getText().toString().length() - editText.getSelectionStart();
-        final StringBuilder sb = new StringBuilder(charSequence.length());
-        sb.append(charSequence);
-        String beforeString = sb.toString();
-
-        //saving length after removing separators
-        beforeLength = ThousandSeparatorTextWatcher.getOriginalString(beforeString).length();
     }
 
     @Override
@@ -51,10 +45,11 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
             String value = editText.getText().toString();
 
             if (value != null && !value.equals("")) {
-                if (value.startsWith(".")) {
-                    editText.setText("0.");
+                if (value.startsWith(decimalMarker)) {
+                    String text = "0" + decimalMarker;
+                    editText.setText(text);
                 }
-                if (value.startsWith("0") && !value.startsWith("0.")) {
+                if (value.startsWith("0") && !value.startsWith("0" + decimalMarker)) {
                     int index = 0;
                     while (index < value.length() && value.charAt(index) == '0') {
                         index++;
@@ -68,15 +63,12 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
                 String str = editText.getText().toString().replaceAll(thousandSeparator, "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
-                    afterLength = str.length();
                 }
                 editText.setSelection(editText.getText().toString().length());
             }
 
             //setting the cursor back to where it was
-            if (beforeLength != afterLength) {
-                editText.setSelection(editText.getText().toString().length() - cursorPosition);
-            }
+            editText.setSelection(editText.getText().toString().length() - cursorPosition);
             editText.addTextChangedListener(this);
         } catch (Exception ex) {
             Timber.e(ex);
@@ -84,47 +76,39 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
         }
     }
 
-    public static String getDecimalFormattedString(String value) {
-        StringTokenizer lst = new StringTokenizer(value, ".");
-        String str1 = value;
-        String str2 = "";
-        if (lst.countTokens() > 1) {
-            str1 = lst.nextToken();
-            str2 = lst.nextToken();
+    private static String getDecimalFormattedString(String value) {
+
+        String[] splitValue = value.split("\\.");
+        String beforeDecimal = value;
+        String afterDecimal = null;
+        String finalResult = "";
+
+        if (splitValue.length == 2) {
+            beforeDecimal = splitValue[0];
+            afterDecimal = splitValue[1];
         }
-        String str3 = "";
-        int i = 0;
-        int j = -1 + str1.length();
-        if (str1.charAt(-1 + str1.length()) == '.') {
-            j--;
-            str3 = ".";
-        }
-        for (int k = j;; k--) {
-            if (k < 0) {
-                if (str2.length() > 0) {
-                    str3 = str3 + "." + str2;
-                }
-                return str3;
+
+        int count = 0;
+        for (int i = beforeDecimal.length() - 1; i >= 0 ; i--) {
+            finalResult = beforeDecimal.charAt(i) + finalResult;
+            count++;
+            if (count == 3 && i > 0) {
+                finalResult = thousandSeparator + finalResult;
+                count = 0;
             }
-            if (i == 3) {
-                str3 = thousandSeparator + str3;
-                i = 0;
-            }
-            str3 = str1.charAt(k) + str3;
-            i++;
         }
+
+        if (afterDecimal != null) {
+            finalResult = finalResult + decimalMarker + afterDecimal;
+        }
+
+        return finalResult;
     }
 
     /*
     * Returns the string back after removing all the thousand separators.
     * */
     public static String getOriginalString(String string) {
-        //String returnString;
-        if (string.contains(thousandSeparator)) {
-            return string.replace(thousandSeparator,"");
-        } else {
-            return string;
-        }
-
+        return string.replace(thousandSeparator,"");
     }
 }

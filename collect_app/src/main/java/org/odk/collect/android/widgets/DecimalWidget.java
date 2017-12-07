@@ -59,7 +59,6 @@ public class DecimalWidget extends StringWidget {
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
         this.useThousandSeparator = useThousandSeparator;
-        //thousand separator
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
         }
@@ -127,7 +126,7 @@ public class DecimalWidget extends StringWidget {
         clearFocus();
         String s = getAnswerTextField().getText().toString();
         if (useThousandSeparator) {
-            s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
+            s = ThousandSeparatorTextWatcher.getOriginalString(s);
         }
 
         if (s.isEmpty()) {

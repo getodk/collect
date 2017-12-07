@@ -50,8 +50,6 @@ public class StringNumberWidget extends StringWidget {
         answerTextField.setSingleLine(false);
 
         this.useThousandSeparator = useThousandSeparator;
-
-        // thousand separator
         if (useThousandSeparator) {
             answerTextField.addTextChangedListener(new ThousandSeparatorTextWatcher(answerTextField));
         }
@@ -91,7 +89,7 @@ public class StringNumberWidget extends StringWidget {
         String s = getAnswerText();
 
         if (useThousandSeparator) {
-            s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerText());
+            s = ThousandSeparatorTextWatcher.getOriginalString(s);
         }
 
         if (s.isEmpty()) {

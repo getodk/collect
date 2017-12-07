@@ -53,8 +53,6 @@ public class IntegerWidget extends StringWidget {
         answerText.setSingleLine(false);
 
         this.useThousandSeparator = useThousandSeparator;
-
-        //thousand separator
         if (useThousandSeparator) {
             answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
         }
@@ -117,7 +115,7 @@ public class IntegerWidget extends StringWidget {
         clearFocus();
         String s = getAnswerTextField().getText().toString();
         if (useThousandSeparator) {
-            s = ThousandSeparatorTextWatcher.getOriginalString(getAnswerTextField().getText().toString());
+            s = ThousandSeparatorTextWatcher.getOriginalString(s);
         }
 
         if (s.isEmpty()) {
