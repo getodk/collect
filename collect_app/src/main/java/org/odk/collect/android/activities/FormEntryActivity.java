@@ -129,6 +129,7 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -191,6 +192,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
+    private boolean allowMovingBackwards;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -225,6 +227,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private ImageButton backButton;
 
     private Toolbar toolbar;
+    private ODKView odkView;
 
     enum AnimationType {
         LEFT, RIGHT, FADE
@@ -301,6 +304,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
             showNavigationButtons = true;
         }
+        allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
         if (savedInstanceState != null) {
             state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
@@ -1281,7 +1285,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         });
 
                 if (showNavigationButtons) {
-                    backButton.setEnabled(true);
+                    backButton.setEnabled(allowMovingBackwards);
                     nextButton.setEnabled(false);
                 }
 
@@ -1289,13 +1293,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             case FormEntryController.EVENT_QUESTION:
             case FormEntryController.EVENT_GROUP:
             case FormEntryController.EVENT_REPEAT:
-                ODKView odkv = null;
+                releaseOdkView();
                 // should only be a group here if the event_group is a field-list
                 try {
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
-                    odkv = new ODKView(this, prompts, groups, advancingPage);
+                    odkView = new ODKView(this, prompts, groups, advancingPage);
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -1314,7 +1318,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // Makes a "clear answer" menu pop up on long-click
-                for (QuestionWidget qw : odkv.getWidgets()) {
+                for (QuestionWidget qw : odkView.getWidgets()) {
                     if (!qw.getFormEntryPrompt().isReadOnly()) {
                         // If it's a StringWidget register all its elements apart from EditText as
                         // we want to enable paste option after long click on the EditText
@@ -1334,7 +1338,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     adjustBackNavigationButtonVisibility();
                     nextButton.setEnabled(true);
                 }
-                return odkv;
+                return odkView;
 
             case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
                 createRepeatDialog();
@@ -1354,6 +1358,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         }
     }
 
+    private void releaseOdkView() {
+        if (odkView != null) {
+            odkView.releaseWidgetResources();
+            odkView = null;
+        }
+    }
+
     /**
      * Disables the back button if it is first question....
      */
@@ -1361,14 +1372,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance().getFormController();
         try {
             FormIndex originalFormIndex = formController.getFormIndex();
-            boolean firstQuestion = formController.stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM;
-            backButton.setEnabled(!firstQuestion);
+            backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
             if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                backButton.setEnabled(true);
+                backButton.setEnabled(allowMovingBackwards);
             }
             formController.jumpToIndex(originalFormIndex);
         } catch (JavaRosaException e) {
-            backButton.setEnabled(true);
+            backButton.setEnabled(allowMovingBackwards);
             Timber.e(e);
         }
     }
@@ -1478,50 +1488,54 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * model without checking constraints.
      */
     private void showPreviousView() {
-        state = null;
-        try {
-            FormController formController = Collect.getInstance().getFormController();
-            if (formController != null) {
-                // The answer is saved on a back swipe, but question constraints are
-                // ignored.
-                if (formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
+        if (allowMovingBackwards) {
+            state = null;
+            try {
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    // The answer is saved on a back swipe, but question constraints are
+                    // ignored.
+                    if (formController.currentPromptIsQuestion()) {
+                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    }
 
-                if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                    int event = formController.stepToPreviousScreenEvent();
+                    if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                        int event = formController.stepToPreviousScreenEvent();
 
-                    // If we are the begining of the form, lets revert our actions and ignore
-                    // this swipe
-                    if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                        event = formController.stepToNextScreenEvent();
+                        // If we are the begining of the form, lets revert our actions and ignore
+                        // this swipe
+                        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                            event = formController.stepToNextScreenEvent();
+                            beenSwiped = false;
+
+                            if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                                // Returning here prevents the same view sliding when user is on the first screen
+                                return;
+                            }
+                        }
+
+                        if (event == FormEntryController.EVENT_GROUP
+                                || event == FormEntryController.EVENT_QUESTION) {
+                            // create savepoint
+                            if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+                                nonblockingCreateSavePointData();
+                            }
+                        }
+                        formController.getTimerLogger().exitView();    // Close timer events
+                        View next = createView(event, false);
+                        showView(next, AnimationType.LEFT);
+                    } else {
                         beenSwiped = false;
-
-                        if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                            // Returning here prevents the same view sliding when user is on the first screen
-                            return;
-                        }
                     }
-
-                    if (event == FormEntryController.EVENT_GROUP
-                            || event == FormEntryController.EVENT_QUESTION) {
-                        // create savepoint
-                        if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                            nonblockingCreateSavePointData();
-                        }
-                    }
-                    formController.getTimerLogger().exitView();    // Close timer events
-                    View next = createView(event, false);
-                    showView(next, AnimationType.LEFT);
                 } else {
-                    beenSwiped = false;
+                    Timber.w("FormController has a null value");
                 }
-            } else {
-                Timber.w("FormController has a null value");
+            } catch (JavaRosaException e) {
+                Timber.e(e);
+                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
             }
-        } catch (JavaRosaException e) {
-            Timber.e(e);
-            createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+        } else {
+            beenSwiped = false;
         }
     }
 
@@ -2444,6 +2458,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 saveToDiskTask = null;
             }
         }
+        releaseOdkView();
 
         super.onDestroy();
 

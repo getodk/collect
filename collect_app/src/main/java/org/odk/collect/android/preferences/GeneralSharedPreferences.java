@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.preferences;
 
-
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
@@ -97,12 +96,22 @@ public class GeneralSharedPreferences {
     }
 
     public void clear() {
-        editor
-                .clear()
-                .apply();
+        for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
+            String key = prefs.getKey();
+            if (!PreferenceKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
+                reset(key);
+            }
+        }
     }
 
     public Map<String, ?> getAll() {
         return sharedPreferences.getAll();
+    }
+
+    public void loadDefaultValues() {
+        clear();
+        for (Map.Entry<String, Object> keyValuePair : PreferenceKeys.GENERAL_KEYS.entrySet()) {
+            save(keyValuePair.getKey(), keyValuePair.getValue());
+        }
     }
 }

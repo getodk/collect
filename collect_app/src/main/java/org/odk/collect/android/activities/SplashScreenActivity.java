@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
@@ -43,6 +44,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SPLASH_PATH;
 
 public class SplashScreenActivity extends Activity {
 
@@ -88,9 +91,7 @@ public class SplashScreenActivity extends Activity {
         boolean firstRun = sharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);
         boolean showSplash =
                 sharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_SPLASH, false);
-        String splashPath =
-                sharedPreferences.getString(PreferenceKeys.KEY_SPLASH_PATH,
-                        getString(R.string.default_splash_path));
+        String splashPath = (String) GeneralSharedPreferences.getInstance().get(KEY_SPLASH_PATH);
 
         // if you've increased version code, then update the version number and set firstRun to true
         if (sharedPreferences.getLong(PreferenceKeys.KEY_LAST_VERSION, 0)

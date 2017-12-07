@@ -32,6 +32,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         isInstanceStateSaved = true;
+        super.onSaveInstanceState(outState);
     }
 
     public boolean isInstanceStateSaved() {

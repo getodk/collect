@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply from: '../config/quality.gradle'
 
 import com.android.ddmlib.DdmPreferences
+
 DdmPreferences.setTimeOut(60000)
 
 ant.condition(property: 'os', value: 'windows') {
@@ -62,8 +63,8 @@ if (secretsFile.exists()) {
 }
 
 android {
-    compileSdkVersion(25)
-    buildToolsVersion('26.0.1')
+    compileSdkVersion(27)
+    buildToolsVersion('26.0.2')
 
     defaultConfig {
         applicationId('org.odk.collect.android')
@@ -74,6 +75,7 @@ android {
         testInstrumentationRunner('android.support.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        archivesBaseName = 'collect'
     }
 
     signingConfigs {
@@ -116,9 +118,13 @@ android {
 
     // https://stackoverflow.com/a/27119543/152938
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def file = output.outputFile
-            output.outputFile = new File(file.parent, file.name.replace("_app","").replace(".apk", "-" + defaultConfig.versionName + ".apk"))
+        variant.outputs.all { output ->
+            outputFileName = new File(outputFileName.replace(".apk", "-${defaultConfig.versionName}.apk"))
+        }
+    }
+    testVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = new File(outputFileName.replace(".apk", "-${defaultConfig.versionName}.apk"))
         }
     }
 
@@ -144,6 +150,8 @@ android {
     dexOptions {
         javaMaxHeapSize '2048M'
     }
+
+    testOptions.unitTests.includeAndroidResources true
 }
 
 configurations.all {
@@ -161,77 +169,85 @@ allprojects {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.3.1'
-    compile group: 'com.android.support', name: 'design', version: '25.3.1'
-    compile group: 'com.android.support', name: 'cardview-v7', version: '25.3.1'
-    compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
-    compile group: 'com.google.android.gms', name: 'play-services-location', version: '10.0.1'
-    compile (group: 'com.google.code.gson', name: 'gson', version: '2.6.2'){
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation group: 'com.android.support', name: 'support-v13', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'customtabs', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'design', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'design', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'cardview-v7', version: '27.0.2'
+    implementation group: 'com.android.support', name: 'multidex', version: '1.0.2'
+    implementation group: 'com.google.android.gms', name: 'play-services-analytics', version: '10.0.1'
+    implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '10.0.1'
+    implementation group: 'com.google.android.gms', name: 'play-services-maps', version: '10.0.1'
+    implementation group: 'com.google.android.gms', name: 'play-services-location', version: '10.0.1'
+    implementation(group: 'com.google.code.gson', name: 'gson', version: '2.6.2') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile group: 'com.google.firebase', name: 'firebase-core', version: '10.0.1'
-    compile group: 'com.google.firebase', name: 'firebase-crash', version: '10.0.1'
-    compile (group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0') {
+    implementation group: 'com.google.firebase', name: 'firebase-core', version: '10.0.1'
+    implementation group: 'com.google.firebase', name: 'firebase-crash', version: '10.0.1'
+    implementation(group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile (group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0') {
+    implementation(group: 'com.google.oauth-client', name: 'google-oauth-client', version: '1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
 
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
-    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
-    compile (group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.6.1') {
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'net.sf.kxml', name: 'kxml2', version: '2.3.0'
+    implementation group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
+    implementation(group: 'org.opendatakit', name: 'opendatakit-javarosa', version: '2.6.1') {
         exclude module: 'joda-time'
     }
-    compile group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
-    compile group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
-    compile group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
-    compile(group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0') { exclude group: 'org.apache.httpcomponents' }
-    compile(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') { exclude group: 'org.apache.httpcomponents' }
-    compile(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') { exclude group: 'org.apache.httpcomponents' }
-    compile group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
-    compile group: 'com.android.support', name: 'customtabs', version: '25.3.1'
-    compile group: 'com.android.support', name: 'design', version: '25.3.1'
-    compile group: 'com.google.zxing', name: 'core', version: '3.3.0'
-    compile group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
-    compile group: 'com.android.support', name: 'support-v13', version: '25.3.1'
-    compile group: 'net.danlew', name: 'android.joda', version: '2.9.9'
+    implementation group: 'org.osmdroid', name: 'osmdroid-android', version: '5.6.4'
+    implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.6.1-RC1'
+    implementation group: 'pub.devrel', name: 'easypermissions', version: '0.2.1'
+    implementation(group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation(group: 'com.google.apis', name: 'google-api-services-drive', version: 'v3-rev64-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation(group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev463-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation group: 'com.jakewharton.timber', name: 'timber', version: '4.5.1'
+    implementation group: 'com.google.zxing', name: 'core', version: '3.3.0'
+    implementation group: 'com.journeyapps', name: 'zxing-android-embedded', version: '3.5.0'
+    implementation group: 'net.danlew', name: 'android.joda', version: '2.9.9'
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
-    debugCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android', version: '1.5.4'
+    debugImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android', version: '1.5.4'
     // No-Op version of LeakCanary for release builds: no notifications, no analysis, nothing
-    releaseCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
-    testCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
-    androidTestCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
-    odkCollectReleaseCompile group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    releaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    testImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+
+    implementation "android.arch.lifecycle:extensions:1.0.0"
 
     // Testing-only dependencies
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.8.47'
-    testCompile group: 'org.robolectric', name: 'robolectric', version: '3.4'
-    testCompile group: 'org.robolectric', name: 'shadows-multidex', version: '3.3.2'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.12.0'
+    testImplementation group: 'org.robolectric', name: 'robolectric', version: '3.5.1'
+    testImplementation group: 'org.robolectric', name: 'shadows-multidex', version: '3.5.1'
 
-    androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
-    androidTestCompile(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
+    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
+    androidTestImplementation(group: 'com.android.support.test', name: 'runner', version: '1.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestCompile(group: 'com.android.support.test.espresso', name: 'espresso-core', version: '3.0.1') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    }
-
-    androidTestCompile(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: '3.0.1')  {
+    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-core', version: '3.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    androidTestCompile group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.9.0'
+    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: '3.0.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
+
+    androidTestImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: '3.9.0'
 }
 
 // Must be at bottom to prevent dependency collisions

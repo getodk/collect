@@ -69,6 +69,7 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         if (prompt.isReadOnly()) {
             getBearingButton.setVisibility(View.GONE);
         }
+
         // when you press the button
         getBearingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +95,19 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             }
         });
 
+        answerDisplay = getCenteredAnswerTextView();
+
+        String s = prompt.getAnswerText();
+        if (s != null && !s.equals("")) {
+            getBearingButton.setText(getContext().getString(
+                    R.string.replace_bearing));
+            setBinaryData(s);
+        }
+
+        checkForRequiredSensors();
+
+        LinearLayout answerLayout = new LinearLayout(getContext());
+        answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(getBearingButton);
         answerLayout.addView(answer);
         String s = prompt.getAnswerText();
@@ -188,5 +202,19 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
         manualData.setLayoutParams(params);
 
         return manualData;
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "recordBearing", "click",
+                        getFormEntryPrompt().getIndex());
+        Intent i;
+        i = new Intent(getContext(), BearingActivity.class);
+
+        waitForData();
+        ((Activity) getContext()).startActivityForResult(i,
+                RequestCodes.BEARING_CAPTURE);
     }
 }
