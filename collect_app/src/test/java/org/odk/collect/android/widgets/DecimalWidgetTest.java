@@ -33,7 +33,7 @@ public class DecimalWidgetTest extends QuestionWidgetTest<DecimalWidget, Decimal
     @NonNull
     @Override
     public DecimalWidget createWidget() {
-        return new DecimalWidget(RuntimeEnvironment.application, formEntryPrompt, false,false);
+        return new DecimalWidget(RuntimeEnvironment.application, formEntryPrompt, false, false);
     }
 
     @NonNull

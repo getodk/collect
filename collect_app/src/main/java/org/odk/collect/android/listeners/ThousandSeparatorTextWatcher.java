@@ -106,7 +106,7 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     }
 
     /*
-    * Returns the string back after removing all the thousand separators.
+    * Returns the string after removing all the thousands separators.
     * */
     public static String getOriginalString(String string) {
         return string.replace(thousandSeparator,"");
