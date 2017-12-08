@@ -32,7 +32,9 @@ public class FormDetails implements Serializable {
         errorStr = error;
     }
 
-    public FormDetails(String formName, String downloadUrl, String manifestUrl, String formID, String formVersion, boolean isNewerFormVersionAvailable, boolean areNewerMediaFilesAvailable) {
+    public FormDetails(String formName, String downloadUrl, String manifestUrl, String formID,
+                       String formVersion, boolean isNewerFormVersionAvailable,
+                       boolean areNewerMediaFilesAvailable) {
         this.formName = formName;
         this.downloadUrl = downloadUrl;
         this.manifestUrl = manifestUrl;

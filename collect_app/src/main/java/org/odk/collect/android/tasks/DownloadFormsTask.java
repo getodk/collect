@@ -78,7 +78,7 @@ public class DownloadFormsTask extends
     private static final String NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =
             "http://openrosa.org/xforms/xformsManifest";
 
-    public static boolean isXformsManifestNamespacedElement(Element e) {
+    static boolean isXformsManifestNamespacedElement(Element e) {
         return e.getNamespace().equalsIgnoreCase(NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST);
     }
 

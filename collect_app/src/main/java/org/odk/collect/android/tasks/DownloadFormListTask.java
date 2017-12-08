@@ -405,8 +405,6 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
-        boolean result = false;
-
         if (newMediaFiles != null) {
             String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
             List<File> localMediaFiles = FileUtils.getAllFormMediaFiles(mediaDirPath);
@@ -417,20 +415,18 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                         String mediaFileHash = mediaFile.getHash();
                         mediaFileHash = mediaFileHash.substring(4, mediaFileHash.length());
                         if (!mediaFileHash.equals(FileUtils.getMd5Hash(file))) {
-                            result = true;
-                            break;
+                            return true;
                         }
                     } else {
-                        result = true;
-                        break;
+                        return true;
                     }
                 }
             } else if (!newMediaFiles.isEmpty()) {
-                result = true;
+                return true;
             }
         }
 
-        return result;
+        return false;
     }
 
     private File getFileByName(List<File> files, String fileName) {

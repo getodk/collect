@@ -550,8 +550,9 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
         Cursor formCursor = null;
         try {
             formCursor = new FormsDao().getFormsCursorForFormId(formId);
-            // form does not already exist locally or a newer version of this form is available or newer versions of media files are available
-            return formCursor.getCount() == 0 || formNamesAndURLs.get(formId).isNewerFormVersionAvailable() || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable();
+            return formCursor.getCount() == 0 // form does not already exist locally
+                    || formNamesAndURLs.get(formId).isNewerFormVersionAvailable() // or a newer version of this form is available
+                    || formNamesAndURLs.get(formId).areNewerMediaFilesAvailable(); // or newer versions of media files are available
         } finally {
             if (formCursor != null) {
                 formCursor.close();
