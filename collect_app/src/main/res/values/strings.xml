@@ -427,8 +427,8 @@
     <string name="exit">Exit</string>
     <string name="instance_scan_completed">Finished scanning.</string>
     <string name="instance_scan_count">%1$d forms added.</string>
-    <string name="instance_sync">Import saved forms as finalized</string>
-    <string name="instance_sync_summary">Imports saved forms from instances folder</string>
+    <string name="instance_sync">Finalize forms on import</string>
+    <string name="instance_sync_summary">Affects forms added directly to instances folder.</string>
     <string name="sort_by_name_asc">Name, A-Z</string>
     <string name="sort_by_name_desc">Name, Z-A</string>
     <string name="sort_by_date_asc">Date, newest first</string>
