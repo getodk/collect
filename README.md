@@ -86,6 +86,8 @@ The best way to help us test is to build from source! If you aren't a developer 
 
 Testing checklists can be found on the [Collect testing plan](https://docs.google.com/spreadsheets/d/1ITmOW2MFs_8-VM6MTwganTRWDjpctz9CI8QKojXrnjE/edit?usp=sharing).
 
+If you have finished testing a pull request, please use a template from [Testing result templates](TESTING_RESULT_TEMPLATES.md) to report your insights.
+
 ## Downloading builds
 Per-commit debug builds can be found on [CircleCI](https://circleci.com/gh/opendatakit/collect). Login with your GitHub account, click the build you'd like, then find the APK in the Artifacts tab.
 
