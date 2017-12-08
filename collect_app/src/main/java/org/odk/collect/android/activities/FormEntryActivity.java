@@ -1431,8 +1431,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
-            if (formController.currentPromptIsQuestion()) {
-
+            if (formController != null && formController.currentPromptIsQuestion()) {
                 // if constraint behavior says we should validate on swipe, do so
                 if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
