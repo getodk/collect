@@ -996,11 +996,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_HIERARCHY_VIEW");
-                if (formController.currentPromptIsQuestion()) {
+                if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                if (formController != null) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
+                            0, null, false, true);
+                }
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
