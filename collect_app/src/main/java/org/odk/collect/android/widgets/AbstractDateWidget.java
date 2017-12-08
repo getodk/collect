@@ -108,6 +108,11 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
         cancelWaitingForData();
     }
 
+    @Override
+    public void onButtonClick(int buttonId) {
+        showDatePickerDialog();
+    }
+
     public boolean isDayHidden() {
         return datePickerDetails.isMonthYearMode() || datePickerDetails.isYearMode();
     }

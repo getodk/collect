@@ -36,13 +36,14 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 import java.math.BigDecimal;
 
 import timber.log.Timber;
 
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
-public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSeekBarChangeListener {
+public abstract class RangeWidget extends QuestionWidget implements ButtonWidget, SeekBar.OnSeekBarChangeListener {
 
     private static final String VERTICAL_APPEARANCE = "vertical";
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
@@ -111,6 +112,11 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
     @Override
     public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return suppressFlingGesture;
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        showNumberPickerDialog();
     }
 
     private void setUpLayoutElements() {
@@ -220,12 +226,7 @@ public abstract class RangeWidget extends QuestionWidget implements SeekBar.OnSe
 
         } else if (appearance.contains(PICKER_APPEARANCE)) {
             pickerButton = getSimpleButton(getContext().getString(R.string.select_value));
-            pickerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showNumberPickerDialog();
-                }
-            });
+
             answerTextView = getAnswerTextView();
             isPickerAppearance = true;
 

@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -30,6 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.CustomTabHelper;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
 /**
  * Widget that allows user to open URLs from within the form
@@ -37,7 +37,7 @@ import org.odk.collect.android.utilities.CustomTabHelper;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 @SuppressLint("ViewConstructor")
-public class UrlWidget extends QuestionWidget {
+public class UrlWidget extends QuestionWidget implements ButtonWidget {
 
     private Uri uri;
     private Button openUrlButton;
@@ -49,22 +49,6 @@ public class UrlWidget extends QuestionWidget {
 
         openUrlButton = getSimpleButton(context.getString(R.string.open_url));
         openUrlButton.setEnabled(!prompt.isReadOnly());
-        openUrlButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "openUrl", "click",
-                                getFormEntryPrompt().getIndex());
-
-                if (!isUrlEmpty(stringAnswer)) {
-                    customTabHelper.bindCustomTabsService(getContext(), null);
-                    customTabHelper.openUri(getContext(), uri);
-                } else {
-                    Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         stringAnswer = getCenteredAnswerTextView();
 
@@ -125,6 +109,21 @@ public class UrlWidget extends QuestionWidget {
         super.onDetachedFromWindow();
         if (customTabHelper.getServiceConnection() != null) {
             getContext().unbindService(customTabHelper.getServiceConnection());
+        }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "openUrl", "click",
+                        getFormEntryPrompt().getIndex());
+
+        if (!isUrlEmpty(stringAnswer)) {
+            customTabHelper.bindCustomTabsService(getContext(), null);
+            customTabHelper.openUri(getContext(), uri);
+        } else {
+            Toast.makeText(getContext(), "No URL set", Toast.LENGTH_SHORT).show();
         }
     }
 }
