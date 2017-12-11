@@ -65,23 +65,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             setBinaryData(s);
         }
 
-        // when you press the button
-        getBearingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "recordBearing", "click",
-                                getFormEntryPrompt().getIndex());
-                Intent i;
-                i = new Intent(getContext(), BearingActivity.class);
-
-                waitForData();
-                ((Activity) getContext()).startActivityForResult(i,
-                        RequestCodes.BEARING_CAPTURE);
-            }
-        });
-
         checkForRequiredSensors();
 
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -151,5 +134,19 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             getBearingButton.setEnabled(false);
             ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
         }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "recordBearing", "click",
+                        getFormEntryPrompt().getIndex());
+        Intent i;
+        i = new Intent(getContext(), BearingActivity.class);
+
+        waitForData();
+        ((Activity) getContext()).startActivityForResult(i,
+                RequestCodes.BEARING_CAPTURE);
     }
 }

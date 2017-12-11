@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.logic;
 
+import android.support.annotation.Nullable;
+
 import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -127,6 +129,7 @@ public class FormController {
     }
 
     private File mediaFolder;
+    @Nullable
     private File instancePath;
     private FormEntryController formEntryController;
     private FormIndex indexWaitingForData = null;
@@ -145,6 +148,7 @@ public class FormController {
         return mediaFolder;
     }
 
+    @Nullable
     public File getInstancePath() {
         return instancePath;
     }
@@ -423,6 +427,13 @@ public class FormController {
                 || ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
                 && indexIsInFieldList()));
+    }
+
+    public boolean isCurrentQuestionFirstInForm() throws JavaRosaException {
+        FormIndex originalFormIndex = getFormIndex();
+        boolean firstQuestion = (stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM);
+        jumpToIndex(originalFormIndex);
+        return firstQuestion;
     }
 
     /**

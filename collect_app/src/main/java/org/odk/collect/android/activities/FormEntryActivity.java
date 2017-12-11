@@ -129,6 +129,7 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static org.odk.collect.android.preferences.AdminKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
@@ -191,6 +192,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     private static final int SAVING_IMAGE_DIALOG = 3;
 
     private boolean autoSaved;
+    private boolean allowMovingBackwards;
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
@@ -302,6 +304,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (navigation.contains(PreferenceKeys.NAVIGATION_BUTTONS)) {
             showNavigationButtons = true;
         }
+        allowMovingBackwards = (boolean) AdminSharedPreferences.getInstance().get(KEY_MOVING_BACKWARDS);
         if (savedInstanceState != null) {
             state = savedInstanceState;
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
@@ -585,8 +588,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance()
                 .getFormController();
         if (formController != null) {
-            outState.putString(KEY_INSTANCEPATH, formController
-                    .getInstancePath().getAbsolutePath());
+            if (formController.getInstancePath() != null) {
+                outState.putString(KEY_INSTANCEPATH, formController
+                        .getInstancePath().getAbsolutePath());
+            }
             outState.putString(KEY_XPATH,
                     formController.getXPath(formController.getFormIndex()));
             FormIndex waiting = formController.getIndexWaitingForData();
@@ -993,11 +998,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         .getActivityLogger()
                         .logInstanceAction(this, "onOptionsItemSelected",
                                 "MENU_HIERARCHY_VIEW");
-                if (formController.currentPromptIsQuestion()) {
+                if (formController != null && formController.currentPromptIsQuestion()) {
                     saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
                 }
 
-                formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY, 0, null, false, true);
+                if (formController != null) {
+                    formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.HIERARCHY,
+                            0, null, false, true);
+                }
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
@@ -1028,7 +1036,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
         // controls to save data from)
-        if (formController.currentPromptIsQuestion() && getCurrentViewIfODKView() != null) {
+        if (formController != null && formController.currentPromptIsQuestion()
+                && getCurrentViewIfODKView() != null) {
             HashMap<FormIndex, IAnswerData> answers = getCurrentViewIfODKView()
                     .getAnswers();
             try {
@@ -1194,10 +1203,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
-                    String uriMimeType = getContentResolver().getType(getIntent().getData());
+                    String uriMimeType = null;
+                    Uri instanceUri = getIntent().getData();
+                    if (instanceUri != null) {
+                        uriMimeType = getContentResolver().getType(instanceUri);
+                    }
+
                     if (saveName == null && uriMimeType != null
                             && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                        Uri instanceUri = getIntent().getData();
                         Cursor instance = null;
                         try {
                             instance = getContentResolver().query(instanceUri,
@@ -1282,7 +1295,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         });
 
                 if (showNavigationButtons) {
-                    backButton.setEnabled(true);
+                    backButton.setEnabled(allowMovingBackwards);
                     nextButton.setEnabled(false);
                 }
 
@@ -1369,14 +1382,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance().getFormController();
         try {
             FormIndex originalFormIndex = formController.getFormIndex();
-            boolean firstQuestion = formController.stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM;
-            backButton.setEnabled(!firstQuestion);
+            backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
             if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                backButton.setEnabled(true);
+                backButton.setEnabled(allowMovingBackwards);
             }
             formController.jumpToIndex(originalFormIndex);
         } catch (JavaRosaException e) {
-            backButton.setEnabled(true);
+            backButton.setEnabled(allowMovingBackwards);
             Timber.e(e);
         }
     }
@@ -1419,8 +1431,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
-            if (formController.currentPromptIsQuestion()) {
-
+            if (formController != null && formController.currentPromptIsQuestion()) {
                 // if constraint behavior says we should validate on swipe, do so
                 if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
@@ -1486,50 +1497,54 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * model without checking constraints.
      */
     private void showPreviousView() {
-        state = null;
-        try {
-            FormController formController = Collect.getInstance().getFormController();
-            if (formController != null) {
-                // The answer is saved on a back swipe, but question constraints are
-                // ignored.
-                if (formController.currentPromptIsQuestion()) {
-                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
-                }
+        if (allowMovingBackwards) {
+            state = null;
+            try {
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    // The answer is saved on a back swipe, but question constraints are
+                    // ignored.
+                    if (formController.currentPromptIsQuestion()) {
+                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    }
 
-                if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                    int event = formController.stepToPreviousScreenEvent();
+                    if (formController.getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                        int event = formController.stepToPreviousScreenEvent();
 
-                    // If we are the begining of the form, lets revert our actions and ignore
-                    // this swipe
-                    if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                        event = formController.stepToNextScreenEvent();
+                        // If we are the begining of the form, lets revert our actions and ignore
+                        // this swipe
+                        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                            event = formController.stepToNextScreenEvent();
+                            beenSwiped = false;
+
+                            if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+                                // Returning here prevents the same view sliding when user is on the first screen
+                                return;
+                            }
+                        }
+
+                        if (event == FormEntryController.EVENT_GROUP
+                                || event == FormEntryController.EVENT_QUESTION) {
+                            // create savepoint
+                            if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+                                nonblockingCreateSavePointData();
+                            }
+                        }
+                        formController.getTimerLogger().exitView();    // Close timer events
+                        View next = createView(event, false);
+                        showView(next, AnimationType.LEFT);
+                    } else {
                         beenSwiped = false;
-
-                        if (event != FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
-                            // Returning here prevents the same view sliding when user is on the first screen
-                            return;
-                        }
                     }
-
-                    if (event == FormEntryController.EVENT_GROUP
-                            || event == FormEntryController.EVENT_QUESTION) {
-                        // create savepoint
-                        if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                            nonblockingCreateSavePointData();
-                        }
-                    }
-                    formController.getTimerLogger().exitView();    // Close timer events
-                    View next = createView(event, false);
-                    showView(next, AnimationType.LEFT);
                 } else {
-                    beenSwiped = false;
+                    Timber.w("FormController has a null value");
                 }
-            } else {
-                Timber.w("FormController has a null value");
+            } catch (JavaRosaException e) {
+                Timber.e(e);
+                createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
             }
-        } catch (JavaRosaException e) {
-            Timber.e(e);
-            createErrorDialog(e.getCause().getMessage(), DO_NOT_EXIT);
+        } else {
+            beenSwiped = false;
         }
     }
 
@@ -2248,11 +2263,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                         .logInstanceAction(this,
                                                 "onCreateDialog.PROGRESS_DIALOG", "cancel");
                                 dialog.dismiss();
-                                formLoaderTask.setFormLoaderListener(null);
-                                FormLoaderTask t = formLoaderTask;
-                                formLoaderTask = null;
-                                t.cancel(true);
-                                t.destroy();
+
+                                if (formLoaderTask != null) {
+                                    formLoaderTask.setFormLoaderListener(null);
+                                    FormLoaderTask t = formLoaderTask;
+                                    formLoaderTask = null;
+                                    t.cancel(true);
+                                    t.destroy();
+                                }
                                 finish();
                             }
                         };

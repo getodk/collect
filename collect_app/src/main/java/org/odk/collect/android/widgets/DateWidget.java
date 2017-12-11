@@ -31,11 +31,9 @@ import android.widget.DatePicker;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.DateTimeUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Date;
 
 import timber.log.Timber;
 
@@ -56,25 +54,6 @@ public class DateWidget extends AbstractDateWidget implements DatePickerDialog.O
         super(context, prompt);
     }
 
-    @Override
-    protected void createWidget() {
-        super.createWidget();
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
-    }
-
-    @Override
-    protected void setDateLabel() {
-        isNullAnswer = false;
-        dateTextView.setText(DateTimeUtils.getDateTimeLabel(
-                (Date) getAnswer().getValue(), datePickerDetails, false, getContext()));
-    }
-
-    @Override
     protected void showDatePickerDialog() {
         datePickerDialog = new FixedDatePickerDialog(getContext(), getTheme(), this);
         datePickerDialog.show();
