@@ -55,7 +55,7 @@ public class FormsDaoTest {
     public void getAllFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor();
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(6, forms.size());
+        assertEquals(7, forms.size());
 
         assertEquals("Biggest N of Set", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(0).getDisplaySubtext());
@@ -90,7 +90,7 @@ public class FormsDaoTest {
     public void getFormsCursorTest() {
         Cursor cursor = formsDao.getFormsCursor(null, null, null, null);
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(6, forms.size());
+        assertEquals(7, forms.size());
 
         assertEquals("Biggest N of Set", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(0).getDisplaySubtext());
@@ -114,7 +114,7 @@ public class FormsDaoTest {
 
         cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
         forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(6, forms.size());
+        assertEquals(7, forms.size());
 
         assertEquals("Widgets", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(0).getDisplaySubtext());
