@@ -80,7 +80,7 @@ public class FormsDaoTest {
     public void getFormsCursorForFormIdTest() {
         Cursor cursor = formsDao.getFormsCursorForFormId("Birds");
         List<Form> forms = formsDao.getFormsFromCursor(cursor);
-        assertEquals(1, forms.size());
+        assertEquals(2, forms.size());
 
         assertEquals("Birds", forms.get(0).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(0).getDisplaySubtext());
@@ -110,6 +110,9 @@ public class FormsDaoTest {
         assertEquals("sample", forms.get(5).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:55", forms.get(5).getDisplaySubtext());
 
+        assertEquals("Birds", forms.get(6).getDisplayName());
+        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(6).getDisplaySubtext());
+
         String sortOrder = FormsProviderAPI.FormsColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
 
         cursor = formsDao.getFormsCursor(null, null, null, sortOrder);
@@ -131,8 +134,11 @@ public class FormsDaoTest {
         assertEquals("Birds", forms.get(4).getDisplayName());
         assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(4).getDisplaySubtext());
 
-        assertEquals("Biggest N of Set", forms.get(5).getDisplayName());
-        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(5).getDisplaySubtext());
+        assertEquals("Birds", forms.get(5).getDisplayName());
+        assertEquals("Added on Wed, Feb 22, 2017 at 17:53", forms.get(5).getDisplaySubtext());
+
+        assertEquals("Biggest N of Set", forms.get(6).getDisplayName());
+        assertEquals("Added on Wed, Feb 22, 2017 at 15:21", forms.get(6).getDisplaySubtext());
 
 
         String selection = FormsProviderAPI.FormsColumns.DISPLAY_NAME + "=?";
