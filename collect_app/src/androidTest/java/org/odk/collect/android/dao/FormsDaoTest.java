@@ -187,6 +187,12 @@ public class FormsDaoTest {
         assertEquals("Widgets2", forms.get(0).getJrFormId());
     }
 
+    @Test
+    public void getFormMediaPathTest() {
+        String mediaPath = formsDao.getFormMediaPath("Birds", "4");
+        assertEquals(Collect.FORMS_PATH + "/Birds_4-media", mediaPath);
+    }
+
     private void fillDatabase() throws IOException {
         assertTrue(new File(Collect.FORMS_PATH + "/Biggest N of Set.xml").createNewFile());
         Form form1 = new Form.Builder()
@@ -206,6 +212,7 @@ public class FormsDaoTest {
                 .displayName("Birds")
                 .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
                 .jrFormId("Birds")
+                .jrVersion("3")
                 .date(1487782404899L)
                 .formMediaPath(Collect.FORMS_PATH + "/Birds-media")
                 .formFilePath(Collect.FORMS_PATH + "/Birds.xml")
@@ -265,6 +272,20 @@ public class FormsDaoTest {
                 .build();
 
         formsDao.saveForm(formsDao.getValuesFromFormObject(form6));
+
+        assertTrue(new File(Collect.FORMS_PATH + "/Birds_4.xml").createNewFile());
+        Form form7 = new Form.Builder()
+                .displayName("Birds")
+                .displaySubtext("Added on Wed, Feb 22, 2017 at 17:53")
+                .jrFormId("Birds")
+                .jrVersion("4")
+                .date(1512390303610L)
+                .formMediaPath(Collect.FORMS_PATH + "/Birds_4-media")
+                .formFilePath(Collect.FORMS_PATH + "/Birds.xml")
+                .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4cd980d50f884362afba842cbff3a775.formdef")
+                .build();
+
+        formsDao.saveForm(formsDao.getValuesFromFormObject(form7));
     }
 
     @After
