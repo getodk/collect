@@ -119,6 +119,8 @@ import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -572,9 +574,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Create save-points asynchronously in order to not affect swiping performance
      * on larger forms.
      */
-    private void nonblockingCreateSavePointData() {
+    private void nonblockingCreateSavePointData(FormIndex formIndex) {
         try {
-            SavePointTask savePointTask = new SavePointTask(this);
+            SavePointTask savePointTask = new SavePointTask(this, formIndex);
             savePointTask.execute();
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
@@ -600,7 +602,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         formController.getXPath(waiting));
             }
             // save the instance to a temp path...
-            nonblockingCreateSavePointData();
+            nonblockingCreateSavePointData(allowMovingBackwards ? null : formController.getFormIndex());
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
@@ -1466,7 +1468,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 case FormEntryController.EVENT_GROUP:
                     // create a savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        nonblockingCreateSavePointData();
+                        nonblockingCreateSavePointData(null);
                     }
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
@@ -1527,7 +1529,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 || event == FormEntryController.EVENT_QUESTION) {
                             // create savepoint
                             if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                                nonblockingCreateSavePointData();
+                                nonblockingCreateSavePointData(null);
                             }
                         }
                         formController.getTimerLogger().exitView();    // Close timer events
@@ -2062,27 +2064,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * exit'
      */
     private void removeTempInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = Collect.getInstance().getFormController();
 
         // attempt to remove any scratch file
-        File temp = SaveToDiskTask.savepointFile(formController
-                .getInstancePath());
+        File temp = SaveToDiskTask.savepointFile(formController.getInstancePath());
         if (temp.exists()) {
             temp.delete();
         }
 
-        boolean erase = false;
-        {
-            Cursor c = null;
-            try {
-                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                        .getAbsolutePath());
-                erase = (c.getCount() < 1);
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
+        File tempIndexFile = SaveToDiskTask.savepointIndexFile(formController.getInstancePath());
+        if (tempIndexFile.exists()) {
+            tempIndexFile.delete();
+        }
+
+        boolean erase;
+
+        Cursor c = null;
+        try {
+            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                    .getAbsolutePath());
+            erase = c.getCount() < 1;
+        } finally {
+            if (c != null) {
+                c.close();
             }
         }
 
@@ -2639,6 +2643,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
+
+                if (!allowMovingBackwards) {
+                    FormIndex formIndex = FileUtils.loadFormIndex();
+                    if (formIndex != null) {
+                        formController.jumpToIndex(formIndex);
+                        refreshCurrentView();
+                        return;
+                    }
+                }
 
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);

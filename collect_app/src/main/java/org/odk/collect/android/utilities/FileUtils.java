@@ -18,12 +18,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.javarosa.core.model.FormIndex;
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.tasks.SaveToDiskTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.FileNameMap;
@@ -504,5 +507,16 @@ public class FileUtils {
         List<File> mediaFiles = new ArrayList<>();
         Collections.addAll(mediaFiles, new File(mediaFilesDir).listFiles());
         return mediaFiles;
+    }
+
+    public static FormIndex loadFormIndex() {
+        try {
+            File instancePath = Collect.getInstance().getFormController().getInstancePath();
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.savepointIndexFile(instancePath)));
+            return (FormIndex) ois.readObject();
+        } catch(Exception e) {
+            Timber.e(e);
+        }
+        return null;
     }
 }
