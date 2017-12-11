@@ -281,7 +281,7 @@ public class FormsDaoTest {
                 .jrVersion("4")
                 .date(1512390303610L)
                 .formMediaPath(Collect.FORMS_PATH + "/Birds_4-media")
-                .formFilePath(Collect.FORMS_PATH + "/Birds.xml")
+                .formFilePath(Collect.FORMS_PATH + "/Birds_4.xml")
                 .jrCacheFilePath(Collect.ODK_ROOT + "/.cache/4cd980d50f884362afba842cbff3a775.formdef")
                 .build();
 
