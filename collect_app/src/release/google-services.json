@@ -1,27 +1,32 @@
 {
   "project_info": {
-    "project_number": "322300403941",
-    "project_id": "api-project-322300403941"
+    "project_number": "895206029843",
+    "project_id": "opendatakit-collect-forks"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:322300403941:android:5e1d7c3c296329e8",
+        "mobilesdk_app_id": "1:895206029843:android:5e1d7c3c296329e8",
         "android_client_info": {
           "package_name": "org.odk.collect.android"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "895206029843-btufcdli1qptfd4sjrq5f0vdacsg68fj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDzdzuFvfI_BgaMAbIOBpfrVG3AIwhGIP8"
+          "current_key": "AIzaSyAD_MRym4ELgrqCJ4IGkPAdkfPXYX1WDeI"
         }
       ],
       "services": {
         "analytics_service": {
           "status": 2,
           "analytics_property": {
-            "tracking_id": ""
+            "tracking_id": "UA-111083836-1"
           }
         },
         "appinvite_service": {
