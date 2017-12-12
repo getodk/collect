@@ -55,14 +55,12 @@ public class DriveHelperTest {
 
     @Test
     public void buildRequestTest() throws IOException {
-        String query = "some query";
-        String fields = "some fields";
         doReturn(mockedRequest).when(mockedDriveService).generateRequest(anyString(), anyString());
 
         assertNull(driveHelper.buildRequest(null, null));
-        assertNull(driveHelper.buildRequest(query, null));
-        assertNull(driveHelper.buildRequest(null, fields));
-        assertNotNull(driveHelper.buildRequest(query, fields));
+        assertNull(driveHelper.buildRequest("some query", null));
+        assertNull(driveHelper.buildRequest(null, "some fields"));
+        assertNotNull(driveHelper.buildRequest("some query", "some fields"));
     }
 
     @Test
@@ -76,28 +74,22 @@ public class DriveHelperTest {
 
     @Test
     public void generateSearchQueryTest() {
-        String folderName = "sample-folder";
-        String parentId = "some-parent-id";
-        String mimeType = "xml-mime-type";
-
-        String result;
-
-        result = driveHelper.generateSearchQuery(null, null, null);
+        String result = driveHelper.generateSearchQuery(null, null, null);
         assertNull(result);
 
-        result = driveHelper.generateSearchQuery(folderName, null, null);
+        result = driveHelper.generateSearchQuery("sample-folder", null, null);
         assertEquals("name = 'sample-folder' and trashed = false", result);
 
-        result = driveHelper.generateSearchQuery(null, parentId, null);
+        result = driveHelper.generateSearchQuery(null, "some-parent-id", null);
         assertEquals("'some-parent-id' in parents and trashed = false", result);
 
-        result = driveHelper.generateSearchQuery(null, null, mimeType);
+        result = driveHelper.generateSearchQuery(null, null, "xml-mime-type");
         assertEquals("mimeType = 'xml-mime-type' and trashed = false", result);
 
-        result = driveHelper.generateSearchQuery(folderName, null, mimeType);
+        result = driveHelper.generateSearchQuery("sample-folder", null, "xml-mime-type");
         assertEquals("name = 'sample-folder' and mimeType = 'xml-mime-type' and trashed = false", result);
 
-        result = driveHelper.generateSearchQuery(folderName, parentId, mimeType);
+        result = driveHelper.generateSearchQuery("sample-folder", "some-parent-id", "xml-mime-type");
         assertEquals("name = 'sample-folder' and 'some-parent-id' in parents and mimeType = 'xml-mime-type' and trashed = false", result);
     }
 
