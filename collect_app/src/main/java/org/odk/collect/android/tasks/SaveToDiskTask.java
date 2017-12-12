@@ -417,7 +417,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         //        return false;
     }
 
-    static void exportFormIndexToFile(FormIndex formIndex, File savepointIndexFile) {
+    public static void exportFormIndexToFile(FormIndex formIndex, File savepointIndexFile) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(savepointIndexFile));
             oos.writeObject(formIndex);
