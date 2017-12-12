@@ -1,11 +1,15 @@
 package org.odk.collect.android.google;
 
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.Permission;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.FileOutputStream;
@@ -14,7 +18,9 @@ import java.io.IOException;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -26,6 +32,7 @@ import static org.mockito.Mockito.verify;
  */
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(File.class)
 public class DriveHelperTest {
 
     @Mock
@@ -35,14 +42,9 @@ public class DriveHelperTest {
 
     private DriveHelper driveHelper;
 
-    private void stubDriveService() throws IOException {
-
-    }
-
     @Before
     public void setup() throws IOException {
         driveHelper = spy(new DriveHelper(mockedDriveService));
-        stubDriveService();
     }
 
     @Test
@@ -101,5 +103,39 @@ public class DriveHelperTest {
         assertEquals(expected, driveHelper.getMediaDirName("sample-file.extension"));
         assertEquals(expected, driveHelper.getMediaDirName("sample-file.123"));
         assertEquals(expected, driveHelper.getMediaDirName("sample-file.docx"));
+    }
+
+    @Test
+    public void getFilesFromDriveTest() throws IOException {
+        doReturn(mockedRequest).when(mockedDriveService).generateRequest(anyString(), anyString());
+
+        driveHelper.getFilesFromDrive(anyString(), anyString());
+        verify(mockedDriveService, times(1)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
+
+        clearInvocations(mockedDriveService);
+
+        driveHelper.getFilesFromDrive(null, null);
+        verify(mockedDriveService, times(1)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
+    }
+
+    @Test
+    public void createNewFileTest() {
+        assertNotNull(driveHelper.createNewFile(anyString(), anyString(), anyString()));
+        assertNotNull(driveHelper.createNewFile("file name", null, null));
+    }
+
+    @Test
+    public void createFolderInDriveTest() throws IOException {
+        File file = driveHelper.createNewFile("filename", DriveHelper.FOLDER_MIME_TYPE, "parentId");
+        doReturn("new_folder_id").when(mockedDriveService).createFile(file, "id");
+
+        String folderId = driveHelper.createFolderInDrive("filename", "parentId");
+        assertEquals("new_folder_id", folderId);
+
+        Permission permission = new Permission()
+                .setType("anyone")
+                .setRole("reader");
+
+        verify(mockedDriveService, times(1)).setPermission("new_folder_id", "id", permission);
     }
 }
