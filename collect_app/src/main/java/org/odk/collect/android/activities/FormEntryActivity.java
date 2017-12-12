@@ -119,8 +119,6 @@ import org.odk.collect.android.widgets.StringWidget;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;

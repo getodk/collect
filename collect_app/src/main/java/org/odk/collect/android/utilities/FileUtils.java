@@ -514,7 +514,7 @@ public class FileUtils {
             File instancePath = Collect.getInstance().getFormController().getInstancePath();
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.savepointIndexFile(instancePath)));
             return (FormIndex) ois.readObject();
-        } catch(Exception e) {
+        } catch (Exception e) {
             Timber.e(e);
         }
         return null;

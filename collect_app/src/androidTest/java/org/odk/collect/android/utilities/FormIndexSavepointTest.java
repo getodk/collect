@@ -23,7 +23,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.SaveToDiskTask;

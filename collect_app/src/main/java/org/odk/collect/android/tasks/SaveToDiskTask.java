@@ -423,7 +423,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             oos.writeObject(formIndex);
             oos.flush();
             oos.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             Timber.e(e);
         }
     }
