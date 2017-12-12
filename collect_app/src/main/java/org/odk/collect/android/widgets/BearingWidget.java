@@ -52,14 +52,16 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     private Button getBearingButton;
     private boolean isSensorAvailable;
     private EditText answer;
-    private LinearLayout answerLayout = new LinearLayout(getContext());
     private Drawable textBackground;
 
     public BearingWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
         isSensorAvailable = checkForRequiredSensors();
+
+        LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
+
         answer = getEditText();
         textBackground = answer.getBackground();
         answer.setBackground(null);
@@ -70,46 +72,9 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
             getBearingButton.setVisibility(View.GONE);
         }
 
-        // when you press the button
-        getBearingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "recordBearing", "click",
-                                getFormEntryPrompt().getIndex());
-
-                if (isSensorAvailable) {
-                    Intent i = new Intent(getContext(), BearingActivity.class);
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.BEARING_CAPTURE);
-                } else {
-                    getBearingButton.setEnabled(false);
-                    ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
-                    answer.setBackground(textBackground);
-                    answer.setFocusable(true);
-                    answer.setFocusableInTouchMode(true);
-                    answer.requestFocus();
-                }
-            }
-        });
-
-        answerDisplay = getCenteredAnswerTextView();
-
-        String s = prompt.getAnswerText();
-        if (s != null && !s.equals("")) {
-            getBearingButton.setText(getContext().getString(
-                    R.string.replace_bearing));
-            setBinaryData(s);
-        }
-
-        checkForRequiredSensors();
-
-        LinearLayout answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(getBearingButton);
         answerLayout.addView(answer);
+
         String s = prompt.getAnswerText();
         if (s != null && !s.equals("")) {
             getBearingButton.setText(getContext().getString(R.string.replace_bearing));
@@ -210,11 +175,19 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
                 .getActivityLogger()
                 .logInstanceAction(this, "recordBearing", "click",
                         getFormEntryPrompt().getIndex());
-        Intent i;
-        i = new Intent(getContext(), BearingActivity.class);
 
-        waitForData();
-        ((Activity) getContext()).startActivityForResult(i,
-                RequestCodes.BEARING_CAPTURE);
+        if (isSensorAvailable) {
+            Intent i = new Intent(getContext(), BearingActivity.class);
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.BEARING_CAPTURE);
+        } else {
+            getBearingButton.setEnabled(false);
+            ToastUtils.showLongToast(R.string.bearing_lack_of_sensors);
+            answer.setBackground(textBackground);
+            answer.setFocusable(true);
+            answer.setFocusableInTouchMode(true);
+            answer.requestFocus();
+        }
     }
 }
