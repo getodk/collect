@@ -573,4 +573,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="newer_version_of_a_form_info">This is an updated version of a form you already have!</string>
+    <string name="check_for_form_updates_periodically">Check for updates periodically</string>
+    <string name="never">Never</string>
+    <string name="every_fifteen_minutes">Every fifteen minutes</string>
+    <string name="every_one_hour">Every one hour</string>
+    <string name="every_six_hours">Every six hours</string>
+    <string name="every_one_day">Every one day</string>
+    <string name="form_updates_available">There are form updates available</string>
 </resources>
