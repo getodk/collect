@@ -87,7 +87,7 @@ public class FormIndexSavepointTest {
         assertFormIndex(originalFormIndex, readFormIndex);
     }
 
-    private static void assertFormIndex(FormIndex expected, FormIndex actual) {
+    private void assertFormIndex(FormIndex expected, FormIndex actual) {
         assertEquals(expected, actual);
         assertEquals(expected.getReference(), actual.getReference());
     }
