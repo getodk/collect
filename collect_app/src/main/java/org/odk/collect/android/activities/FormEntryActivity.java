@@ -2070,7 +2070,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             temp.delete();
         }
 
-        File tempIndexFile = SaveToDiskTask.savepointIndexFile(formController.getInstancePath());
+        File tempIndexFile = SaveToDiskTask.savepointFormIndexIndexFile(formController.getInstancePath());
         if (tempIndexFile.exists()) {
             tempIndexFile.delete();
         }
@@ -2643,7 +2643,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // we've just loaded a saved form, so start in the hierarchy view
 
                 if (!allowMovingBackwards) {
-                    FormIndex formIndex = FileUtils.loadFormIndex();
+                    FormIndex formIndex = FileUtils.loadFormIndexFromFile();
                     if (formIndex != null) {
                         formController.jumpToIndex(formIndex);
                         refreshCurrentView();

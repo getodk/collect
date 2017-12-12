@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.FileNameMap;
@@ -509,10 +510,21 @@ public class FileUtils {
         return mediaFiles;
     }
 
-    public static FormIndex loadFormIndex() {
+    public static void exportFormIndexToFile(FormIndex formIndex, File savepointIndexFile) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(savepointIndexFile));
+            oos.writeObject(formIndex);
+            oos.flush();
+            oos.close();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    public static FormIndex loadFormIndexFromFile() {
         try {
             File instancePath = Collect.getInstance().getFormController().getInstancePath();
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.savepointIndexFile(instancePath)));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.savepointFormIndexIndexFile(instancePath)));
             return (FormIndex) ois.readObject();
         } catch (Exception e) {
             Timber.e(e);

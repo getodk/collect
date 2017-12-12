@@ -25,6 +25,7 @@ import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
 
@@ -74,8 +75,8 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
                 SaveToDiskTask.exportXmlFile(payload, temp.getAbsolutePath());
 
                 if (formIndex != null) {
-                    File tempIndex = SaveToDiskTask.savepointIndexFile(formController.getInstancePath());
-                    SaveToDiskTask.exportFormIndexToFile(formIndex, tempIndex);
+                    File tempIndex = SaveToDiskTask.savepointFormIndexIndexFile(formController.getInstancePath());
+                    FileUtils.exportFormIndexToFile(formIndex, tempIndex);
                 }
 
                 long end = System.currentTimeMillis();

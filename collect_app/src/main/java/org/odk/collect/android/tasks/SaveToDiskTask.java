@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.R;
@@ -36,10 +35,8 @@ import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformatio
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 
 import timber.log.Timber;
@@ -132,7 +129,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
             // attempt to remove any scratch file
             File shadowInstance = savepointFile(formController.getInstancePath());
-            File shadowFormIndex = savepointIndexFile(formController.getInstancePath());
+            File shadowFormIndex = savepointFormIndexIndexFile(formController.getInstancePath());
             if (shadowInstance.exists()) {
                 FileUtils.deleteAndReport(shadowInstance);
                 FileUtils.deleteAndReport(shadowFormIndex);
@@ -245,9 +242,9 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     /**
-     * Return the name of the savepoint index file for a given instance.
+     * Return the name of the savepoint formIndex file for a given instance.
      */
-    public static File savepointIndexFile(File instancePath) {
+    public static File savepointFormIndexIndexFile(File instancePath) {
         File tempDir = new File(Collect.CACHE_PATH);
         return new File(tempDir, instancePath.getName() + ".index");
     }
@@ -415,17 +412,6 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
         //        }
         //
         //        return false;
-    }
-
-    public static void exportFormIndexToFile(FormIndex formIndex, File savepointIndexFile) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(savepointIndexFile));
-            oos.writeObject(formIndex);
-            oos.flush();
-            oos.close();
-        } catch (Exception e) {
-            Timber.e(e);
-        }
     }
 
     @Override
