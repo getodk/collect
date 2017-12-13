@@ -79,7 +79,8 @@ public class WidgetFactory {
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
                             }
-                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,useThousandSeparator);
+                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
@@ -90,7 +91,8 @@ public class WidgetFactory {
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
                             }
-                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,useThousandSeparator);
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -124,7 +126,8 @@ public class WidgetFactory {
                             if (appearance.contains("thousand-sep")) {
                                 useThousandSeparator = true;
                             }
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,useThousandSeparator);
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {

@@ -45,21 +45,6 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
             String value = editText.getText().toString();
 
             if (value != null && !value.equals("")) {
-                if (value.startsWith(decimalMarker)) {
-                    String text = "0" + decimalMarker;
-                    editText.setText(text);
-                }
-                if (value.startsWith("0") && !value.startsWith("0" + decimalMarker)) {
-                    int index = 0;
-                    while (index < value.length() && value.charAt(index) == '0') {
-                        index++;
-                    }
-                    String newValue = Character.toString(value.charAt(0));
-                    if (index != 0) {
-                        newValue = value.charAt(0) + value.substring(index);
-                    }
-                    editText.setText(newValue);
-                }
                 String str = editText.getText().toString().replaceAll(thousandSeparator, "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));

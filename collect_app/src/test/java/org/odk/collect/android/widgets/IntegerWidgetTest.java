@@ -22,7 +22,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     public IntegerWidget createWidget() {
         Random random = new Random();
         boolean useThousandSeparator = random.nextBoolean();
-        return new IntegerWidget(RuntimeEnvironment.application, formEntryPrompt, false,useThousandSeparator);
+        return new IntegerWidget(RuntimeEnvironment.application, formEntryPrompt, false, useThousandSeparator);
     }
 
     @NonNull

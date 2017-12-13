@@ -25,7 +25,7 @@ public class StringNumberWidgetTest
     public StringNumberWidget createWidget() {
         Random random = new Random();
         boolean useThousandSeparator = random.nextBoolean();
-        return new StringNumberWidget(RuntimeEnvironment.application, formEntryPrompt, false,useThousandSeparator);
+        return new StringNumberWidget(RuntimeEnvironment.application, formEntryPrompt, false, useThousandSeparator);
     }
 
     @NonNull
