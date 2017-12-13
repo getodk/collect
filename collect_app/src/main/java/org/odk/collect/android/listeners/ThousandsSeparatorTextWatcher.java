@@ -62,7 +62,6 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
     }
 
     private static String getDecimalFormattedString(String value) {
-
         String[] splitValue = value.split("\\.");
         String beforeDecimal = value;
         String afterDecimal = null;

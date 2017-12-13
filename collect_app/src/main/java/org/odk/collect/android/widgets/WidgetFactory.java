@@ -76,7 +76,7 @@ public class WidgetFactory {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousand-sep")) {
+                            if (appearance.contains("thousands-sep")) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
@@ -88,7 +88,7 @@ public class WidgetFactory {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousand-sep")) {
+                            if (appearance.contains("thousands-sep")) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
@@ -123,7 +123,7 @@ public class WidgetFactory {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.contains("numbers")) {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousand-sep")) {
+                            if (appearance.contains("thousands-sep")) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
