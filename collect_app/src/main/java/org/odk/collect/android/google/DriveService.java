@@ -16,15 +16,15 @@ import java.util.List;
  * @author Shobhit Agarwal
  */
 
-public class DriveService {
+class DriveService {
 
     private final Drive drive;
 
-    public DriveService(Drive drive) {
+    DriveService(Drive drive) {
         this.drive = drive;
     }
 
-    public String getFileId(String fileId, String fields) throws IOException {
+    String getFileId(String fileId, String fields) throws IOException {
         return drive.files()
                 .get(fileId)
                 .setFields(fields)
@@ -32,20 +32,20 @@ public class DriveService {
                 .getId();
     }
 
-    public Drive.Files.List generateRequest(String query, String fields) throws IOException {
+    Drive.Files.List generateRequest(String query, String fields) throws IOException {
         return drive.files()
                 .list()
                 .setQ(query)
                 .setFields(fields);
     }
 
-    public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
+    void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
         drive.files()
                 .get(fileId)
                 .executeMediaAndDownloadTo(fileOutputStream);
     }
 
-    public String uploadFile(File metadata, FileContent fileContent, String fields) throws IOException {
+    String uploadFile(File metadata, FileContent fileContent, String fields) throws IOException {
         return drive.files()
                 .create(metadata, fileContent)
                 .setFields(fields)
@@ -54,7 +54,7 @@ public class DriveService {
                 .getId();
     }
 
-    public String createFile(File file, String fields) throws IOException {
+    String createFile(File file, String fields) throws IOException {
         return drive.files()
                 .create(file)
                 .setFields(fields)
@@ -62,20 +62,20 @@ public class DriveService {
                 .getId();
     }
 
-    public void setPermission(String folderId, String fields, Permission permission) throws IOException {
+    void setPermission(String folderId, String fields, Permission permission) throws IOException {
         drive.permissions()
                 .create(folderId, permission)
                 .setFields(fields)
                 .execute();
     }
 
-    public void fetchAllFiles(Drive.Files.List request, List<File> files) throws IOException {
+    void fetchAllFiles(Drive.Files.List request, List<File> files) throws IOException {
         do {
             fetchFilesForCurrentPage(request, files);
         } while (request.getPageToken() != null && request.getPageToken().length() > 0);
     }
 
-    public void fetchFilesForCurrentPage(Drive.Files.List request, List<File> files) throws IOException {
+    void fetchFilesForCurrentPage(Drive.Files.List request, List<File> files) throws IOException {
         FileList fileList = request.execute();
         files.addAll(fileList.getFiles());
         request.setPageToken(fileList.getNextPageToken());

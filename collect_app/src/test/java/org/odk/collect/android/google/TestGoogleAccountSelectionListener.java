@@ -17,7 +17,7 @@ public class TestGoogleAccountSelectionListener implements GoogleAccountsManager
     }
 
     @Nullable
-    public String getAccountName() {
+    String getAccountName() {
         return accountName;
     }
 }

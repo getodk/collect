@@ -59,19 +59,18 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private Activity activity;
     @Nullable
     private GoogleAccountSelectionListener listener;
-
-    private Context context;
-    private GoogleAccountCredential credential;
-
-    private DriveHelper driveHelper;
-    private SheetsHelper sheetsHelper;
-
+    @Nullable
     private HttpTransport transport;
+    @Nullable
     private JsonFactory jsonFactory;
 
-    private boolean autoChooseAccount = true;
-    private GeneralSharedPreferences preferences;
     private Intent intentChooseAccount;
+    private Context context;
+    private DriveHelper driveHelper;
+    private SheetsHelper sheetsHelper;
+    private GoogleAccountCredential credential;
+    private GeneralSharedPreferences preferences;
+    private boolean autoChooseAccount = true;
 
     public GoogleAccountsManager(@NonNull Activity activity) {
         this.activity = activity;
@@ -90,15 +89,15 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     /**
      * This constructor should be used only for testing purposes
      */
-    public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
-                                 @NonNull GeneralSharedPreferences preferences,
-                                 @NonNull Intent intentChooseAccount) {
+    GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
+                          @NonNull GeneralSharedPreferences preferences,
+                          @NonNull Intent intentChooseAccount) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
     }
 
-    private void initCredential(Context context) {
+    private void initCredential(@NonNull Context context) {
         this.context = context;
 
         transport = AndroidHttp.newCompatibleTransport();
@@ -149,7 +148,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    public boolean hasPermissions() {
+    private boolean hasPermissions() {
         boolean hasPermissions = checkAccountPermission();
         if (!hasPermissions) {
             requestAccountPermission();
@@ -157,14 +156,14 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return hasPermissions;
     }
 
-    public void requestAccountPermission() {
+    void requestAccountPermission() {
         EasyPermissions.requestPermissions(
                 context,
                 context.getString(R.string.request_permissions_google_account),
                 REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
     }
 
-    public boolean checkAccountPermission() {
+    boolean checkAccountPermission() {
         return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
     }
 
@@ -172,7 +171,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
     }
 
-    public void showAccountPickerDialog() {
+    void showAccountPickerDialog() {
         intentChooseAccount.putExtra("overrideTheme", 1);
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
@@ -183,7 +182,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    public void selectAccount(String accountName) {
+    void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
         if (listener != null) {
             listener.onGoogleAccountSelected(accountName);
@@ -208,7 +207,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public DriveHelper getDriveHelper() {
-        if (driveHelper == null) {
+        if (driveHelper == null && transport != null && jsonFactory != null) {
             driveHelper = new DriveHelper(credential, transport, jsonFactory);
         }
         return driveHelper;

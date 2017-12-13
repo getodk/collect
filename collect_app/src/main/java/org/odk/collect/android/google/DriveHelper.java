@@ -40,7 +40,7 @@ import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.GOOGLE_
 
 public class DriveHelper {
 
-    public static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
+    static final String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
     private final DriveService driveService;
 
     DriveHelper(@NonNull GoogleAccountCredential credential,
@@ -156,8 +156,8 @@ public class DriveHelper {
      * @param parentId   The id of the folder in which we want to create the new folder
      * @return id of the folder object if created successfully
      */
-    public String createFolderInDrive(@NonNull String folderName,
-                                       @Nullable String parentId)
+    String createFolderInDrive(@NonNull String folderName,
+                               @Nullable String parentId)
             throws IOException {
         com.google.api.services.drive.model.File fileMetadata;
 
@@ -181,9 +181,9 @@ public class DriveHelper {
      * @param parentId the id of the parent directory
      * @return new {@link com.google.api.services.drive.model.File} object
      */
-    public com.google.api.services.drive.model.File createNewFile(@NonNull String name,
-                                                                  @Nullable String mimeType,
-                                                                  @Nullable String parentId) {
+    com.google.api.services.drive.model.File createNewFile(@NonNull String name,
+                                                           @Nullable String mimeType,
+                                                           @Nullable String parentId) {
         com.google.api.services.drive.model.File file;
         file = new com.google.api.services.drive.model.File()
                 .setName(name)
@@ -234,9 +234,9 @@ public class DriveHelper {
     }
 
     @Nullable
-    public String generateSearchQuery(@Nullable String folderName,
-                                      @Nullable String parentId,
-                                      @Nullable String mimeType) {
+    String generateSearchQuery(@Nullable String folderName,
+                               @Nullable String parentId,
+                               @Nullable String mimeType) {
         List<String> queryList = new ArrayList<>();
         if (folderName != null) {
             queryList.add(String.format("name = '%s'", folderName));
