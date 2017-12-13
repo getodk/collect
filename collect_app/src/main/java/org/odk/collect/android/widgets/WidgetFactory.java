@@ -122,12 +122,12 @@ public class WidgetFactory {
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.contains("numbers")) {
-                            boolean useThousandSeparator = false;
+                            boolean useThousandsSeparator = false;
                             if (appearance.contains("thousands-sep")) {
-                                useThousandSeparator = true;
+                                useThousandsSeparator = true;
                             }
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
-                                    useThousandSeparator);
+                                    useThousandsSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
