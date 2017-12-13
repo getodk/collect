@@ -2065,15 +2065,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormController formController = Collect.getInstance().getFormController();
 
         // attempt to remove any scratch file
-        File temp = SaveToDiskTask.savepointFile(formController.getInstancePath());
-        if (temp.exists()) {
-            temp.delete();
-        }
-
-        File tempIndexFile = SaveToDiskTask.savepointFormIndexIndexFile(formController.getInstancePath());
-        if (tempIndexFile.exists()) {
-            tempIndexFile.delete();
-        }
+        File tempInstanceFile = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
+        File tempIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
+        FileUtils.deleteAndReport(tempInstanceFile);
+        FileUtils.deleteAndReport(tempIndexFile);
 
         boolean erase;
 

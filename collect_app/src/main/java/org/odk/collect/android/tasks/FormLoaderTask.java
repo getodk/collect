@@ -317,7 +317,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         boolean usedSavepoint = false;
         if (instancePath != null) {
             File instance = new File(instancePath);
-            final File shadowInstance = SaveToDiskTask.savepointFile(instance);
+            final File shadowInstance = SaveToDiskTask.getSavepointFile(instance.getName());
             if (shadowInstance.exists() && (shadowInstance.lastModified()
                     > instance.lastModified())) {
                 // the savepoint is newer than the saved value of the instance.

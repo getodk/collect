@@ -49,7 +49,7 @@ public class FormIndexSavepointTest {
     @Test
     public void testBeginningOfForm() {
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();
-        File tempIndex = SaveToDiskTask.savepointFormIndexIndexFile(instancePath);
+        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
         FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
 
         FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
@@ -59,7 +59,7 @@ public class FormIndexSavepointTest {
     @Test
     public void testEndOfForm() {
         FormIndex originalFormIndex = FormIndex.createEndOfFormIndex();
-        File tempIndex = SaveToDiskTask.savepointFormIndexIndexFile(instancePath);
+        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
         FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
 
         FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
@@ -69,7 +69,7 @@ public class FormIndexSavepointTest {
     @Test
     public void testNullReference() {
         FormIndex originalFormIndex = new FormIndex(1, 2, null);
-        File tempIndex = SaveToDiskTask.savepointFormIndexIndexFile(instancePath);
+        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
         FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
 
         FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
@@ -80,7 +80,7 @@ public class FormIndexSavepointTest {
     public void testNonNullReference() {
         TreeReference treeReference = TreeReference.rootRef();
         FormIndex originalFormIndex = new FormIndex(1, 2, treeReference);
-        File tempIndex = SaveToDiskTask.savepointFormIndexIndexFile(instancePath);
+        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
         FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
 
         FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();

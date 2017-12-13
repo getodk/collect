@@ -63,7 +63,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
 
             try {
                 FormController formController = Collect.getInstance().getFormController();
-                File temp = SaveToDiskTask.savepointFile(formController.getInstancePath());
+                File temp = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
                 ByteArrayPayload payload = formController.getFilledInFormXml();
 
                 if (priority < lastPriorityUsed) {
@@ -75,7 +75,7 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
                 SaveToDiskTask.exportXmlFile(payload, temp.getAbsolutePath());
 
                 if (formIndex != null) {
-                    File tempIndex = SaveToDiskTask.savepointFormIndexIndexFile(formController.getInstancePath());
+                    File tempIndex = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
                     FileUtils.exportFormIndexToFile(formIndex, tempIndex);
                 }
 

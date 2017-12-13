@@ -523,8 +523,11 @@ public class FileUtils {
 
     public static FormIndex loadFormIndexFromFile() {
         try {
-            File instancePath = Collect.getInstance().getFormController().getInstancePath();
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.savepointFormIndexIndexFile(instancePath)));
+            String instanceName = Collect.getInstance()
+                    .getFormController()
+                    .getInstancePath()
+                    .getName();
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveToDiskTask.getFormIndexFile(instanceName)));
             return (FormIndex) ois.readObject();
         } catch (Exception e) {
             Timber.e(e);
