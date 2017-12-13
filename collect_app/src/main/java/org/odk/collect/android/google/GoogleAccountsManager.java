@@ -138,22 +138,16 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     }
 
     public void chooseAccount() {
-        if (hasPermissions()) {
+        if (checkAccountPermission()) {
             String accountName = getSelectedAccount();
             if (autoChooseAccount && !accountName.isEmpty()) {
                 selectAccount(accountName);
             } else {
                 showAccountPickerDialog();
             }
-        }
-    }
-
-    private boolean hasPermissions() {
-        boolean hasPermissions = checkAccountPermission();
-        if (!hasPermissions) {
+        } else {
             requestAccountPermission();
         }
-        return hasPermissions;
     }
 
     void requestAccountPermission() {
@@ -163,6 +157,9 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
                 REQUEST_PERMISSION_GET_ACCOUNTS, Manifest.permission.GET_ACCOUNTS);
     }
 
+    /**
+     * Returns true if has accounts permission otherwise false
+     */
     boolean checkAccountPermission() {
         return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
     }
