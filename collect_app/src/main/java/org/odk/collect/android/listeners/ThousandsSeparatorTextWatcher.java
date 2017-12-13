@@ -15,8 +15,6 @@ import timber.log.Timber;
  */
 
 public class ThousandsSeparatorTextWatcher implements TextWatcher {
-
-    private DecimalFormat df;
     private EditText editText;
     private static String thousandSeparator;
     private static String decimalMarker;
@@ -24,7 +22,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
 
     public ThousandsSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
-        df = new DecimalFormat("#,###.##");
+        DecimalFormat df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
         decimalMarker = Character.toString(df.getDecimalFormatSymbols().getDecimalSeparator());
