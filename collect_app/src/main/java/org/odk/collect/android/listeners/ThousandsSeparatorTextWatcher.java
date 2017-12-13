@@ -14,7 +14,7 @@ import timber.log.Timber;
  * The custom TextWatcher that automatically adds thousand separators in EditText.
  */
 
-public class ThousandSeparatorTextWatcher implements TextWatcher {
+public class ThousandsSeparatorTextWatcher implements TextWatcher {
 
     private DecimalFormat df;
     private EditText editText;
@@ -22,7 +22,7 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     private static String decimalMarker;
     private int cursorPosition;
 
-    public ThousandSeparatorTextWatcher(EditText editText) {
+    public ThousandsSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
         df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);

@@ -27,7 +27,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -60,7 +60,7 @@ public class DecimalWidget extends StringWidget {
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
         // only 15 characters allowed
@@ -116,7 +116,7 @@ public class DecimalWidget extends StringWidget {
     @Override
     public String getAnswerText() {
         if (useThousandSeparator) {
-            return ThousandSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+            return ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText());
         }
         return super.getAnswerText();
     }
@@ -126,7 +126,7 @@ public class DecimalWidget extends StringWidget {
         clearFocus();
         String s = getAnswerTextField().getText().toString();
         if (useThousandSeparator) {
-            s = ThousandSeparatorTextWatcher.getOriginalString(s);
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
         }
 
         if (s.isEmpty()) {

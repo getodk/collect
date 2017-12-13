@@ -25,7 +25,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 /**
  * Widget that restricts values to integers.
@@ -51,7 +51,7 @@ public class StringNumberWidget extends StringWidget {
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
-            answerTextField.addTextChangedListener(new ThousandSeparatorTextWatcher(answerTextField));
+            answerTextField.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerTextField));
         }
 
         answerTextField.setKeyListener(new DigitsKeyListener() {
@@ -89,7 +89,7 @@ public class StringNumberWidget extends StringWidget {
         String s = getAnswerText();
 
         if (useThousandSeparator) {
-            s = ThousandSeparatorTextWatcher.getOriginalString(s);
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
         }
 
         if (s.isEmpty()) {
