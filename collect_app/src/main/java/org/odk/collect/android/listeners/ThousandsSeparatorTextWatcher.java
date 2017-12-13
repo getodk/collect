@@ -44,7 +44,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
             editText.removeTextChangedListener(this);
             String value = editText.getText().toString();
 
-            if (value != null && !value.equals("")) {
+            if (!value.equals("")) {
                 String str = editText.getText().toString().replaceAll(thousandSeparator, "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
