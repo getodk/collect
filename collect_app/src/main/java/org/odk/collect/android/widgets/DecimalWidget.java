@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Selection;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -38,7 +40,9 @@ import java.util.Locale;
 @SuppressLint("ViewConstructor")
 public class DecimalWidget extends StringWidget {
 
-    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    boolean useThousandSeparator;
+
+    public DecimalWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, true);
 
         // formatting
@@ -54,9 +58,17 @@ public class DecimalWidget extends StringWidget {
         // only numbers are allowed
         answerText.setKeyListener(new DigitsKeyListener(true, true));
 
+        this.useThousandSeparator = useThousandSeparator;
+        if (useThousandSeparator) {
+            answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+        }
+
         // only 15 characters allowed
         InputFilter[] fa = new InputFilter[1];
         fa[0] = new InputFilter.LengthFilter(15);
+        if (useThousandSeparator) {
+            fa[0] = new InputFilter.LengthFilter(19);
+        }
         answerText.setFilters(fa);
 
         Double d = getDoubleAnswerValue();
@@ -100,17 +112,29 @@ public class DecimalWidget extends StringWidget {
         return d;
     }
 
+    @NonNull
+    @Override
+    public String getAnswerText() {
+        if (useThousandSeparator) {
+            return ThousandSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+        }
+        return super.getAnswerText();
+    }
+
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
         String s = getAnswerTextField().getText().toString();
+        if (useThousandSeparator) {
+            s = ThousandSeparatorTextWatcher.getOriginalString(s);
+        }
+
         if (s.isEmpty()) {
             return null;
 
         } else {
             try {
                 return new DecimalData(Double.parseDouble(s));
-
             } catch (Exception numberFormatException) {
                 return null;
             }
