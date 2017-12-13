@@ -184,6 +184,12 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_CANCELED) {
+            Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
+            finish();
+        }
+
         switch (requestCode) {
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
@@ -197,10 +203,6 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                     getResultsFromApi();
                 }
                 break;
-        }
-        if (resultCode == RESULT_CANCELED) {
-            Timber.d("AUTHORIZE_DRIVE_ACCESS failed, asking to choose new account:");
-            finish();
         }
     }
 
