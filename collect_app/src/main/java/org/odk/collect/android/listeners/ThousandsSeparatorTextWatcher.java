@@ -14,17 +14,15 @@ import timber.log.Timber;
  * The custom TextWatcher that automatically adds thousand separators in EditText.
  */
 
-public class ThousandSeparatorTextWatcher implements TextWatcher {
-
-    private DecimalFormat df;
+public class ThousandsSeparatorTextWatcher implements TextWatcher {
     private EditText editText;
     private static String thousandSeparator;
     private static String decimalMarker;
     private int cursorPosition;
 
-    public ThousandSeparatorTextWatcher(EditText editText) {
+    public ThousandsSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
-        df = new DecimalFormat("#,###.##");
+        DecimalFormat df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
         decimalMarker = Character.toString(df.getDecimalFormatSymbols().getDecimalSeparator());
@@ -44,7 +42,7 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
             editText.removeTextChangedListener(this);
             String value = editText.getText().toString();
 
-            if (value != null && !value.equals("")) {
+            if (!value.equals("")) {
                 String str = editText.getText().toString().replaceAll(thousandSeparator, "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
@@ -62,7 +60,6 @@ public class ThousandSeparatorTextWatcher implements TextWatcher {
     }
 
     private static String getDecimalFormattedString(String value) {
-
         String[] splitValue = value.split("\\.");
         String beforeDecimal = value;
         String afterDecimal = null;

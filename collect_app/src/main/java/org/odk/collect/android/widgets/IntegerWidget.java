@@ -27,7 +27,7 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.ThousandSeparatorTextWatcher;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 import java.util.Locale;
 
@@ -54,7 +54,7 @@ public class IntegerWidget extends StringWidget {
 
         this.useThousandSeparator = useThousandSeparator;
         if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandSeparatorTextWatcher(answerText));
+            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
         }
 
         // only allows numbers and no periods
@@ -105,7 +105,7 @@ public class IntegerWidget extends StringWidget {
     @Override
     public String getAnswerText() {
         if (useThousandSeparator) {
-            return ThousandSeparatorTextWatcher.getOriginalString(super.getAnswerText());
+            return ThousandsSeparatorTextWatcher.getOriginalString(super.getAnswerText());
         }
         return super.getAnswerText();
     }
@@ -115,7 +115,7 @@ public class IntegerWidget extends StringWidget {
         clearFocus();
         String s = getAnswerTextField().getText().toString();
         if (useThousandSeparator) {
-            s = ThousandSeparatorTextWatcher.getOriginalString(s);
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
         }
 
         if (s.isEmpty()) {

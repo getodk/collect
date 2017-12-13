@@ -76,7 +76,7 @@ public class WidgetFactory {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousand-sep")) {
+                            if (appearance.contains("thousands-sep")) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
@@ -88,7 +88,7 @@ public class WidgetFactory {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
                             boolean useThousandSeparator = false;
-                            if (appearance.contains("thousand-sep")) {
+                            if (appearance.contains("thousands-sep")) {
                                 useThousandSeparator = true;
                             }
                             questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
@@ -122,12 +122,12 @@ public class WidgetFactory {
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
                         } else if (appearance.contains("numbers")) {
-                            boolean useThousandSeparator = false;
-                            if (appearance.contains("thousand-sep")) {
-                                useThousandSeparator = true;
+                            boolean useThousandsSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandsSeparator = true;
                             }
                             questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
-                                    useThousandSeparator);
+                                    useThousandsSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
