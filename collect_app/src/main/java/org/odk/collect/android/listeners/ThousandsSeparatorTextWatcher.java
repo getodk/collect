@@ -17,7 +17,9 @@ import timber.log.Timber;
 public class ThousandsSeparatorTextWatcher implements TextWatcher {
     private EditText editText;
     private static String thousandSeparator;
+    private static String thousandSeparatorWithEscape;
     private static String decimalMarker;
+    private static String decimalMarkerWithEscape;
     private int cursorPosition;
 
     public ThousandsSeparatorTextWatcher(EditText editText) {
@@ -26,6 +28,8 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
         decimalMarker = Character.toString(df.getDecimalFormatSymbols().getDecimalSeparator());
+        thousandSeparatorWithEscape = '\\' + thousandSeparator;
+        decimalMarkerWithEscape = '\\' + decimalMarker;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
             String value = editText.getText().toString();
 
             if (!value.equals("")) {
-                String str = editText.getText().toString().replaceAll(thousandSeparator, "");
+                String str = editText.getText().toString().replaceAll(thousandSeparatorWithEscape, "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
                 }
@@ -60,7 +64,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
     }
 
     private static String getDecimalFormattedString(String value) {
-        String[] splitValue = value.split("\\.");
+        String[] splitValue = value.split(decimalMarkerWithEscape);
         String beforeDecimal = value;
         String afterDecimal = null;
         String finalResult = "";
