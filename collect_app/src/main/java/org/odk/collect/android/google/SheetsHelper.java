@@ -21,7 +21,6 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.SheetProperties;
@@ -36,22 +35,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SheetsHelper {
-
-    private final Sheets sheets;
+    private final SheetsService sheetsService;
 
     SheetsHelper(GoogleAccountCredential credential, HttpTransport transport, JsonFactory jsonFactory) {
         // Initialize sheets service
-        sheets = new Sheets.Builder(transport, jsonFactory, credential)
+        Sheets sheets = new Sheets.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
+
+        sheetsService = new SheetsService(sheets);
     }
 
     /**
      * Constructs a new SheetsHelper with the provided Sheets Service.
      * This Constructor should only be used for testing.
      */
-    SheetsHelper(@NonNull Sheets sheets) {
-        this.sheets = sheets;
+    SheetsHelper(@NonNull SheetsService sheetsService) {
+        this.sheetsService = sheetsService;
     }
 
     public void resizeSpreadSheet(String spreadsheetId, int sheetId, int columnSize) throws IOException {
@@ -74,21 +74,14 @@ public class SheetsHelper {
         requests.add(new Request().setUpdateSheetProperties(updateSheetPropertyRequest));
 
         // send the API request
-        sheets.spreadsheets()
-                .batchUpdate(
-                        spreadsheetId,
-                        new BatchUpdateSpreadsheetRequest().setRequests(requests)
-                ).execute();
+        sheetsService.batchUpdate(spreadsheetId, requests);
     }
 
     /**
      * Inserts a new row in the given sheet of the spreadsheet
      */
     public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
-        sheets.spreadsheets().values()
-                .append(spreadsheetId, sheetName, row)
-                .setIncludeValuesInResponse(true)
-                .setValueInputOption("USER_ENTERED").execute();
+        sheetsService.insertRow(spreadsheetId, sheetName, row);
     }
 
     /**
@@ -104,10 +97,7 @@ public class SheetsHelper {
      * For more info   :   https://developers.google.com/sheets/api/reference/rest/
      */
     public List<List<Object>> getHeaderFeed(String spreadsheetId, String sheetName) throws IOException {
-        ValueRange response = sheets.spreadsheets()
-                .values()
-                .get(spreadsheetId, sheetName)
-                .execute();
+        ValueRange response = sheetsService.getSpreadsheet(spreadsheetId, sheetName);
         return response.getValues();
     }
 
@@ -126,10 +116,7 @@ public class SheetsHelper {
          */
 
         // fetching the google spreadsheet
-        Spreadsheet spreadsheet = sheets.spreadsheets()
-                .get(spreadsheetId)
-                .setIncludeGridData(false)
-                .execute();
+        Spreadsheet spreadsheet = sheetsService.getSpreadsheet(spreadsheetId);
 
         String spreadsheetFileName = spreadsheet.getProperties().getTitle();
 
@@ -154,10 +141,7 @@ public class SheetsHelper {
                                 .setFields("title")));
 
         // updating the spreadsheet with the given id
-        sheets.spreadsheets()
-                .batchUpdate(spreadsheetId, new BatchUpdateSpreadsheetRequest()
-                        .setRequests(requests))
-                .execute();
+        sheetsService.batchUpdate(spreadsheetId, requests);
         return spreadsheet;
     }
 }
