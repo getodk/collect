@@ -22,7 +22,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
 
     public ThousandsSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
-        DecimalFormat df = new DecimalFormat("#,###.##");
+        DecimalFormat df = new DecimalFormat();
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
     }
