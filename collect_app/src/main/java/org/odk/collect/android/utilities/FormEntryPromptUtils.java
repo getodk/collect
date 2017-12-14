@@ -23,6 +23,8 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class FormEntryPromptUtils {
@@ -39,6 +41,20 @@ public class FormEntryPromptUtils {
         if (data instanceof DateData) {
             return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
                     DateTimeUtils.getDatePickerDetails(appearance), false, context);
+        }
+
+        if (appearance != null && appearance.contains("thousands-sep")) {
+            try {
+                final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
+
+                DecimalFormat df = new DecimalFormat();
+                df.setGroupingSize(3);
+                df.setGroupingUsed(true);
+                df.setMaximumFractionDigits(Integer.MAX_VALUE);
+                return df.format(answerAsDecimal);
+            } catch (NumberFormatException e) {
+                return fep.getAnswerText();
+            }
         }
 
         return fep.getAnswerText();
