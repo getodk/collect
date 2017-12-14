@@ -182,8 +182,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("Inserting Audio file FAILED");
         }
-
-        cancelWaitingForData();
     }
 
     private String getSourcePathFromUri(@NonNull Uri uri) {

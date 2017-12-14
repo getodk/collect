@@ -319,6 +319,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 if (binaryWidget.isWaitingForData()) {
                     try {
                         binaryWidget.setBinaryData(answer);
+                        binaryWidget.cancelWaitingForData();
                     } catch (Exception e) {
                         Timber.e(e);
                         ToastUtils.showLongToast(getContext().getString(R.string.error_attaching_binary_file,

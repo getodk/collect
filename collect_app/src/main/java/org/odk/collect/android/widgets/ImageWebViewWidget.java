@@ -254,8 +254,6 @@ public class ImageWebViewWidget extends QuestionWidget implements FileWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override
