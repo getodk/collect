@@ -25,6 +25,11 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
         DecimalFormat df = new DecimalFormat();
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
+
+        // The decimal marker is always "." (see DecimalWidget) so avoid it as thousands separator
+        if (thousandSeparator.equals(".")) {
+            thousandSeparator = " ";
+        }
     }
 
     @Override

@@ -54,9 +54,14 @@ public class FormEntryPromptUtils {
                 df.setMaximumFractionDigits(Integer.MAX_VALUE);
 
                 // Use . as decimal marker for consistency with DecimalWidget
-                DecimalFormatSymbols periodAlways = new DecimalFormatSymbols();
-                periodAlways.setDecimalSeparator('.');
-                df.setDecimalFormatSymbols(periodAlways);
+                DecimalFormatSymbols customFormat = new DecimalFormatSymbols();
+                customFormat.setDecimalSeparator('.');
+
+                if (df.getDecimalFormatSymbols().getGroupingSeparator() == '.') {
+                    customFormat.setGroupingSeparator(' ');
+                }
+
+                df.setDecimalFormatSymbols(customFormat);
 
                 return df.format(answerAsDecimal);
             } catch (NumberFormatException e) {
