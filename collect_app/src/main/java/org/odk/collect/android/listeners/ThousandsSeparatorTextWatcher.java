@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
@@ -43,7 +44,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
             String value = editText.getText().toString();
 
             if (!value.equals("")) {
-                String str = editText.getText().toString().replaceAll(thousandSeparator, "");
+                String str = editText.getText().toString().replaceAll(Pattern.quote(thousandSeparator), "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
                 }
