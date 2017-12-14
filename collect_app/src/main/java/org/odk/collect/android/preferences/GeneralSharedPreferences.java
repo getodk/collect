@@ -108,10 +108,14 @@ public class GeneralSharedPreferences {
         return sharedPreferences.getAll();
     }
 
-    public void loadDefaultValues() {
+    public void loadDefaultPreferences() {
         clear();
+        reloadPreferences();
+    }
+
+    public void reloadPreferences() {
         for (Map.Entry<String, Object> keyValuePair : PreferenceKeys.GENERAL_KEYS.entrySet()) {
-            save(keyValuePair.getKey(), keyValuePair.getValue());
+            save(keyValuePair.getKey(), get(keyValuePair.getKey()));
         }
     }
 }

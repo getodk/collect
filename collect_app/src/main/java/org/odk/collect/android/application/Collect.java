@@ -249,8 +249,7 @@ public class Collect extends Application {
         super.onCreate();
         singleton = this;
 
-        // It must be called before you save anything to SharedPreferences
-        loadDefaultValuesIfNeeded();
+        reloadSharedPreferences();
 
         PRNGFixes.apply();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -333,10 +332,9 @@ public class Collect extends Application {
         activityLogger = new ActivityLogger(mgr.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
     }
 
-    private void loadDefaultValuesIfNeeded() {
-        if (GeneralSharedPreferences.getInstance().getAll().isEmpty()) {
-            GeneralSharedPreferences.getInstance().loadDefaultValues();
-            AdminSharedPreferences.getInstance().loadDefaultValues();
-        }
+    // This method reloads shared preferences in order to load default values for new preferences
+    private void reloadSharedPreferences() {
+        GeneralSharedPreferences.getInstance().reloadPreferences();
+        AdminSharedPreferences.getInstance().reloadPreferences();
     }
 }
