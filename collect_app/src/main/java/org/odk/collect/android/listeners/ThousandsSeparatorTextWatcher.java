@@ -18,7 +18,6 @@ import timber.log.Timber;
 public class ThousandsSeparatorTextWatcher implements TextWatcher {
     private EditText editText;
     private static String thousandSeparator;
-    private static String decimalMarker;
     private int cursorPosition;
 
     public ThousandsSeparatorTextWatcher(EditText editText) {
@@ -26,7 +25,6 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
         DecimalFormat df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
-        decimalMarker = Character.toString(df.getDecimalFormatSymbols().getDecimalSeparator());
     }
 
     @Override
@@ -61,7 +59,10 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
     }
 
     private static String getDecimalFormattedString(String value) {
-        String[] splitValue = value.split("\\.");
+        // Always use a period because keyboard isn't localized. See DecimalWidget.
+        String decimalMarker = ".";
+
+        String[] splitValue = value.split(Pattern.quote(decimalMarker));
         String beforeDecimal = value;
         String afterDecimal = null;
         String finalResult = "";

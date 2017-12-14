@@ -25,6 +25,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Date;
 
 public class FormEntryPromptUtils {
@@ -51,6 +52,12 @@ public class FormEntryPromptUtils {
                 df.setGroupingSize(3);
                 df.setGroupingUsed(true);
                 df.setMaximumFractionDigits(Integer.MAX_VALUE);
+
+                // Use . as decimal marker for consistency with DecimalWidget
+                DecimalFormatSymbols periodAlways = new DecimalFormatSymbols();
+                periodAlways.setDecimalSeparator('.');
+                df.setDecimalFormatSymbols(periodAlways);
+
                 return df.format(answerAsDecimal);
             } catch (NumberFormatException e) {
                 return fep.getAnswerText();
