@@ -29,6 +29,13 @@
         android:key="import_settings"
         android:title="@string/import_settings" />
 
+    <ListPreference
+        android:dialogTitle="@string/check_for_form_updates_periodically"
+        android:entries="@array/check_for_form_updates_periodically_entries"
+        android:entryValues="@array/check_for_form_updates_periodically_entry_values"
+        android:key="check_for_form_updates_periodically"
+        android:title="@string/check_for_form_updates_periodically" />
+
     <PreferenceCategory android:title="@string/user_access_control">
 
         <PreferenceScreen
