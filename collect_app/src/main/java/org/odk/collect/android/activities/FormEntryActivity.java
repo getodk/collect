@@ -101,6 +101,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
@@ -144,7 +145,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        CustomDatePickerDialog.CustomDatePickerDialogListener {
+        CustomDatePickerDialog.CustomDatePickerDialogListener, SaveFormIndexTask.SaveFormIndexListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -576,6 +577,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             SavePointTask savePointTask = new SavePointTask(this);
             savePointTask.execute();
+
+            if (!allowMovingBackwards) {
+                new SaveFormIndexTask(this, Collect.getInstance().getFormController().getFormIndex()).execute();
+            }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
         }
@@ -2062,27 +2067,24 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * exit'
      */
     private void removeTempInstance() {
-        FormController formController = Collect.getInstance()
-                .getFormController();
+        FormController formController = Collect.getInstance().getFormController();
 
         // attempt to remove any scratch file
-        File temp = SaveToDiskTask.savepointFile(formController
-                .getInstancePath());
-        if (temp.exists()) {
-            temp.delete();
-        }
+        File tempInstanceFile = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
+        File tempIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
+        FileUtils.deleteAndReport(tempInstanceFile);
+        FileUtils.deleteAndReport(tempIndexFile);
 
-        boolean erase = false;
-        {
-            Cursor c = null;
-            try {
-                c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
-                        .getAbsolutePath());
-                erase = (c.getCount() < 1);
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
+        boolean erase;
+
+        Cursor c = null;
+        try {
+            c = new InstancesDao().getInstancesCursorForFilePath(formController.getInstancePath()
+                    .getAbsolutePath());
+            erase = c.getCount() < 1;
+        } finally {
+            if (c != null) {
+                c.close();
             }
         }
 
@@ -2640,6 +2642,15 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (!showFirst) {
                 // we've just loaded a saved form, so start in the hierarchy view
 
+                if (!allowMovingBackwards) {
+                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                    if (formIndex != null) {
+                        formController.jumpToIndex(formIndex);
+                        refreshCurrentView();
+                        return;
+                    }
+                }
+
                 Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
@@ -2955,6 +2966,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onSavePointError(String errorMessage) {
+        if (errorMessage != null && errorMessage.trim().length() > 0) {
+            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
+        }
+    }
+
+    @Override
+    public void onSaveFormIndexError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
         }

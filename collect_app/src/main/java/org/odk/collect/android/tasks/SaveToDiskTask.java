@@ -128,10 +128,10 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             exportData(markCompleted);
 
             // attempt to remove any scratch file
-            File shadowInstance = savepointFile(formController.getInstancePath());
-            if (shadowInstance.exists()) {
-                FileUtils.deleteAndReport(shadowInstance);
-            }
+            File shadowInstance = getSavepointFile(formController.getInstancePath().getName());
+            File shadowFormIndex = getFormIndexFile(formController.getInstancePath().getName());
+            FileUtils.deleteAndReport(shadowInstance);
+            FileUtils.deleteAndReport(shadowFormIndex);
 
             saveResult.setSaveResult(save ? SAVED_AND_EXIT : SAVED, markCompleted);
         } catch (EncryptionException e) {
@@ -232,11 +232,19 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     }
 
     /**
-     * Return the name of the savepoint file for a given instance.
+     * Return the savepoint file for a given instance.
      */
-    public static File savepointFile(File instancePath) {
+    public static File getSavepointFile(String instanceName) {
         File tempDir = new File(Collect.CACHE_PATH);
-        return new File(tempDir, instancePath.getName() + ".save");
+        return new File(tempDir, instanceName + ".save");
+    }
+
+    /**
+     * Return the formIndex file for a given instance.
+     */
+    public static File getFormIndexFile(String instanceName) {
+        File tempDir = new File(Collect.CACHE_PATH);
+        return new File(tempDir, instanceName + ".index");
     }
 
     /**
