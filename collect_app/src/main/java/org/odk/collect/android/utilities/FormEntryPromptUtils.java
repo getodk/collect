@@ -30,12 +30,14 @@ public class FormEntryPromptUtils {
     public static String getAnswerText(FormEntryPrompt fep, Context context) {
         IAnswerData data = fep.getAnswerValue();
         String text;
+        final String appearance = fep.getQuestion().getAppearanceAttr();
+        
         if (data instanceof DateTimeData) {
             text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), true, context);
+                    DateTimeUtils.getDatePickerDetails(appearance), true, context);
         } else if (data instanceof DateData) {
             text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), false, context);
+                    DateTimeUtils.getDatePickerDetails(appearance), false, context);
         } else {
             text = fep.getAnswerText();
         }
