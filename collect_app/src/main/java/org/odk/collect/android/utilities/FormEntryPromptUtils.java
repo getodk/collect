@@ -23,23 +23,40 @@ import org.javarosa.core.model.data.DateTimeData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class FormEntryPromptUtils {
 
     public static String getAnswerText(FormEntryPrompt fep, Context context) {
         IAnswerData data = fep.getAnswerValue();
-        String text;
+        final String appearance = fep.getQuestion().getAppearanceAttr();
+
         if (data instanceof DateTimeData) {
-            text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), true, context);
-        } else if (data instanceof DateData) {
-            text = DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
-                    DateTimeUtils.getDatePickerDetails(fep.getQuestion().getAppearanceAttr()), false, context);
-        } else {
-            text = fep.getAnswerText();
+            return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeUtils.getDatePickerDetails(appearance), true, context);
         }
 
-        return text;
+        if (data instanceof DateData) {
+            return DateTimeUtils.getDateTimeLabel((Date) data.getValue(),
+                    DateTimeUtils.getDatePickerDetails(appearance), false, context);
+        }
+
+        if (data != null && appearance != null && appearance.contains("thousands-sep")) {
+            try {
+                final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
+
+                DecimalFormat df = new DecimalFormat();
+                df.setGroupingSize(3);
+                df.setGroupingUsed(true);
+                df.setMaximumFractionDigits(Integer.MAX_VALUE);
+                return df.format(answerAsDecimal);
+            } catch (NumberFormatException e) {
+                return fep.getAnswerText();
+            }
+        }
+
+        return fep.getAnswerText();
     }
 }
