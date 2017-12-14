@@ -101,6 +101,7 @@ import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.tasks.SavePointTask;
@@ -144,7 +145,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         FormLoaderListener, FormSavedListener, AdvanceToNextListener,
         OnGestureListener, SavePointListener, NumberPickerDialog.NumberPickerListener,
         DependencyProvider<ActivityAvailability>,
-        CustomDatePickerDialog.CustomDatePickerDialogListener {
+        CustomDatePickerDialog.CustomDatePickerDialogListener, SaveFormIndexTask.SaveFormIndexListener {
 
     // save with every swipe forward or back. Timings indicate this takes .25
     // seconds.
@@ -572,10 +573,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
      * Create save-points asynchronously in order to not affect swiping performance
      * on larger forms.
      */
-    private void nonblockingCreateSavePointData(FormIndex formIndex) {
+    private void nonblockingCreateSavePointData() {
         try {
-            SavePointTask savePointTask = new SavePointTask(this, formIndex);
+            SavePointTask savePointTask = new SavePointTask(this);
             savePointTask.execute();
+
+            if (!allowMovingBackwards) {
+                new SaveFormIndexTask(this, Collect.getInstance().getFormController().getFormIndex()).execute();
+            }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
         }
@@ -600,7 +605,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         formController.getXPath(waiting));
             }
             // save the instance to a temp path...
-            nonblockingCreateSavePointData(allowMovingBackwards ? null : formController.getFormIndex());
+            nonblockingCreateSavePointData();
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
@@ -1466,7 +1471,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 case FormEntryController.EVENT_GROUP:
                     // create a savepoint
                     if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                        nonblockingCreateSavePointData(null);
+                        nonblockingCreateSavePointData();
                     }
                     next = createView(event, true);
                     showView(next, AnimationType.RIGHT);
@@ -1527,7 +1532,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 || event == FormEntryController.EVENT_QUESTION) {
                             // create savepoint
                             if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
-                                nonblockingCreateSavePointData(null);
+                                nonblockingCreateSavePointData();
                             }
                         }
                         formController.getTimerLogger().exitView();    // Close timer events
@@ -2638,7 +2643,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // we've just loaded a saved form, so start in the hierarchy view
 
                 if (!allowMovingBackwards) {
-                    FormIndex formIndex = FileUtils.loadFormIndexFromFile();
+                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
                     if (formIndex != null) {
                         formController.jumpToIndex(formIndex);
                         refreshCurrentView();
@@ -2961,6 +2966,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
     @Override
     public void onSavePointError(String errorMessage) {
+        if (errorMessage != null && errorMessage.trim().length() > 0) {
+            ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
+        }
+    }
+
+    @Override
+    public void onSaveFormIndexError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
             ToastUtils.showLongToast(getString(R.string.save_point_error, errorMessage));
         }

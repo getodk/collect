@@ -16,78 +16,69 @@
 
 package org.odk.collect.android.utilities;
 
-import android.support.test.runner.AndroidJUnit4;
-
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FormIndexSavepointTest {
 
     private File instancePath;
+    @Mock
+    private FormController formController;
 
     @Before
     public void setUp() {
         instancePath = new File(Collect.INSTANCES_PATH + File.separator + "test.xml");
-        FormController formController = mock(FormController.class);
         when(formController.getInstancePath()).thenReturn(instancePath);
         Collect.getInstance().setFormController(formController);
     }
 
     @Test
-    public void testBeginningOfForm() {
+    public void saveAndReadFormIndexTest1() {
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();
         File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
-        FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
+        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
 
-        FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
-        assertFormIndex(originalFormIndex, readFormIndex);
+        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
+        assertFormIndexesEqual(originalFormIndex, readFormIndex);
     }
 
     @Test
-    public void testEndOfForm() {
-        FormIndex originalFormIndex = FormIndex.createEndOfFormIndex();
-        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
-        FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
-
-        FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
-        assertFormIndex(originalFormIndex, readFormIndex);
-    }
-
-    @Test
-    public void testNullReference() {
+    public void saveAndReadFormIndexTest2() {
         FormIndex originalFormIndex = new FormIndex(1, 2, null);
         File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
-        FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
+        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
 
-        FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
-        assertFormIndex(originalFormIndex, readFormIndex);
+        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
+        assertFormIndexesEqual(originalFormIndex, readFormIndex);
     }
 
     @Test
-    public void testNonNullReference() {
+    public void saveAndReadFormIndexTest3() {
         TreeReference treeReference = TreeReference.rootRef();
         FormIndex originalFormIndex = new FormIndex(1, 2, treeReference);
         File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
-        FileUtils.exportFormIndexToFile(originalFormIndex, tempIndex);
+        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
 
-        FormIndex readFormIndex = FileUtils.loadFormIndexFromFile();
-        assertFormIndex(originalFormIndex, readFormIndex);
+        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
+        assertFormIndexesEqual(originalFormIndex, readFormIndex);
     }
 
-    private void assertFormIndex(FormIndex expected, FormIndex actual) {
+    private void assertFormIndexesEqual(FormIndex expected, FormIndex actual) {
         assertEquals(expected, actual);
         assertEquals(expected.getReference(), actual.getReference());
     }
