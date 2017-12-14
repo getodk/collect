@@ -43,7 +43,7 @@ public class FormEntryPromptUtils {
                     DateTimeUtils.getDatePickerDetails(appearance), false, context);
         }
 
-        if (appearance != null && appearance.contains("thousands-sep")) {
+        if (data != null && appearance != null && appearance.contains("thousands-sep")) {
             try {
                 final BigDecimal answerAsDecimal = new BigDecimal(fep.getAnswerText());
 
