@@ -337,16 +337,13 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 } catch (RuntimeException e) {
                     Timber.e(e);
 
-                    // SCTO-633
-                    if (usedSavepoint
-                            && !(e.getCause() instanceof XPathTypeMismatchException)) {
-                        // this means that the .save file is corrupted or 0-sized, so
-                        // don't use it.
+                    // Skip a savepoint file that is corrupted or 0-sized
+                    if (usedSavepoint && !(e.getCause() instanceof XPathTypeMismatchException)) {
                         usedSavepoint = false;
                         instancePath = null;
                         formDef.initialize(true, instanceInit);
                     } else {
-                        // this means that the saved instance is corrupted.
+                        // The saved instance is corrupted.
                         throw e;
                     }
                 }
