@@ -105,7 +105,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
             date = (LocalDateTime) answer;
             setDateLabel();
         }
-        cancelWaitingForData();
     }
 
     @Override

@@ -213,8 +213,6 @@ public class DrawWidget extends QuestionWidget implements BaseImageWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override

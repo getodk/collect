@@ -89,7 +89,6 @@ public class BarcodeWidget extends QuestionWidget implements BinaryWidget {
             response = response.replaceAll("\\p{C}", "");
         }
         stringAnswer.setText(response);
-        cancelWaitingForData();
     }
 
     @Override

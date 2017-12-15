@@ -243,8 +243,6 @@ public class AlignedImageWidget extends QuestionWidget implements BaseImageWidge
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override

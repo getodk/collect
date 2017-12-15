@@ -136,7 +136,6 @@ public class DateTimeWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         dateWidget.setBinaryData(answer);
-        cancelWaitingForData();
     }
 
     public AbstractDateWidget getDateWidget() {

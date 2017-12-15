@@ -114,7 +114,6 @@ public class BearingWidget extends QuestionWidget implements BinaryWidget {
     @Override
     public void setBinaryData(Object answer) {
         this.answer.setText((String) answer);
-        cancelWaitingForData();
     }
 
     @Override
