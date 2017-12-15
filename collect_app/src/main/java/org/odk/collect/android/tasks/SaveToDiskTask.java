@@ -232,7 +232,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
     /**
      * Return the savepoint file for a given instance.
      */
-    public static File getSavepointFile(String instanceName) {
+    static File getSavepointFile(String instanceName) {
         File tempDir = new File(Collect.CACHE_PATH);
         return new File(tempDir, instanceName + ".save");
     }
