@@ -6,27 +6,33 @@ import android.support.annotation.Nullable;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
+import com.heinrichreimersoftware.materialintro.slide.Slide;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.introfragments.FillBlankForm;
+import org.odk.collect.android.introfragments.Welcome;
 
 /**
- * Created by ash on 18/11/17.
+ * Created on 18/11/17.
  */
 
 public class CollectIntroActivity  extends IntroActivity {
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(new SimpleSlide.Builder()
-                .title(R.string.app_name)
-                .description("Welcome to ODK Collect.\nData collection made easier")
+        final Slide welcomeSlide;
+        welcomeSlide = new FragmentSlide.Builder()
                 .background(R.color.grey)
-                .scrollable(false)
-                .build());
+                .fragment(Welcome.newInstance())
+                .build();
+
+        addSlide(welcomeSlide);
 
         addSlide(new SimpleSlide.Builder()
-                .title("Step intro_1.")
+                .title("Step 1")
                 .description("Setup server configuration\nGo to Settings->General settings->Server")
                 .image(R.drawable.intro_1)
                 .background(R.color.red)
@@ -34,7 +40,7 @@ public class CollectIntroActivity  extends IntroActivity {
                 .build());
 
         addSlide(new SimpleSlide.Builder()
-                .title("Step 2.\nDownload Forms")
+                .title("Step 2\nDownload Forms")
                 .description("Select the forms and store on phone.")
                 .image(R.drawable.intro_2)
                 .background(R.color.tintColor)
@@ -42,17 +48,17 @@ public class CollectIntroActivity  extends IntroActivity {
                 .build());
 
 
-        addSlide(new SimpleSlide.Builder()
-                .title("Step 3.")
-                .description("Fill forms")
-                .image(R.drawable.intro_3)
+        final Slide fillBlankFormSlide;
+        fillBlankFormSlide = new FragmentSlide.Builder()
+                .background(R.color.grey)
+                .fragment(FillBlankForm.newInstance())
                 .background(R.color.light_green)
-                .scrollable(false)
-                .build());
+                .build();
 
+        addSlide(fillBlankFormSlide);
 
         addSlide(new SimpleSlide.Builder()
-                .title("Step 4.")
+                .title("Step 4")
                 .description("Send Forms")
                 .image(R.drawable.intro_4)
                 .background(R.color.chrome)
@@ -63,14 +69,11 @@ public class CollectIntroActivity  extends IntroActivity {
         addSlide(new SimpleSlide.Builder()
                 .title("Participate")
                 .description("Slack : https://opendatakit.slack.com/messages\nForum : https://forum.opendatakit.org/\nGithub : https://github.com/opendatakit/collect")
-                .background(R.color.yellow)
+                .background(R.color.maroon)
                 .scrollable(false)
                 .build());
 
-        addSlide(new FragmentSlide.Builder()
-                .background(R.color.yellow)
-                .fragment(R.layout.intro_layout_1,R.style.AppThemeBase)
-                .build());
+
     }
 
 

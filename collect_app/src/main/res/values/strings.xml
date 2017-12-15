@@ -552,5 +552,9 @@
     <string name="coptic_month_mesori">Mesori</string>
     <string name="coptic_month_pi_kogi_enavot">Pi Kogi Enavot</string>
     <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
-    <string name="intro_fragment_message">Under development</string>
+    <string name="intro_welcome_message">Welcome to ODK Collect</string>
+    <string name="show_intro">View Introduction</string>
+    <string name="intro_show_at_app_launch">Show at app launch</string>
+    <string name="intro_fill_blank_form">Fill Blank Form</string>
+    <string name="intro_step_3">Step 3</string>
 </resources>

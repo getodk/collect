@@ -31,4 +31,9 @@ limitations under the License.
         android:title="@string/admin_preferences"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_show_intro"
+        android:title="@string/show_intro"
+        app:showAsAction="never"/>
+
 </menu>

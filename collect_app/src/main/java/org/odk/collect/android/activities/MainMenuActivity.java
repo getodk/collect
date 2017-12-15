@@ -305,8 +305,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
         updateButtons();
         setupGoogleAnalytics();
-
-        startActivity(new Intent(getApplicationContext(),CollectIntroActivity.class));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean(PreferenceKeys.KEY_SHOW_INTRO, true)) {
+            startActivity(new Intent(getApplicationContext(),CollectIntroActivity.class));
+        }
     }
 
     private void initToolbar() {
@@ -461,6 +463,10 @@ public class MainMenuActivity extends AppCompatActivity {
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "createAdminPasswordDialog", "show");
                 }
+                return true;
+
+            case R.id.menu_show_intro:
+                startActivity(new Intent(getApplicationContext(),CollectIntroActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

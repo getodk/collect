@@ -8,6 +8,8 @@ import java.util.HashMap;
 public final class PreferenceKeys {
     public static final String KEY_LAST_VERSION             = "lastVersion";
     public static final String KEY_FIRST_RUN                = "firstRun";
+    public static final String KEY_SHOW_INTRO               = "showIntro";
+
     public static final String KEY_SHOW_SPLASH              = "showSplash";
     public static final String KEY_SPLASH_PATH              = "splashPath";
     public static final String KEY_FONT_SIZE                = "font_size";
