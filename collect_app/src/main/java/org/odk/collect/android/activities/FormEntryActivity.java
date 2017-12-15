@@ -2062,18 +2062,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         alertDialog.show();
     }
 
-    /**
-     * this method cleans up unneeded files when the user selects 'discard and
-     * exit'
-     */
+    // Cleanup when user exits a form without saving
     private void removeTempInstance() {
         FormController formController = Collect.getInstance().getFormController();
 
-        // attempt to remove any scratch file
-        File tempInstanceFile = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
-        File tempIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
-        FileUtils.deleteAndReport(tempInstanceFile);
-        FileUtils.deleteAndReport(tempIndexFile);
+        if (formController != null && formController.getInstancePath() != null) {
+            SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
+        }
 
         boolean erase;
 
