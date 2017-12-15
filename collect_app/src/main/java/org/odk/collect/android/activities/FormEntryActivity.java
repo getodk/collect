@@ -579,7 +579,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
-                new SaveFormIndexTask(this, Collect.getInstance().getFormController().getFormIndex()).execute();
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                }
             }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
