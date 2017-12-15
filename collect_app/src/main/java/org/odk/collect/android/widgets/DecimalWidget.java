@@ -75,6 +75,7 @@ public class DecimalWidget extends StringWidget {
 
         if (d != null) {
             // truncate to 15 digits max in US locale
+            // use US locale because DigitsKeyListener can't be localized before API 26
             NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
             nf.setMaximumFractionDigits(15);
             nf.setMaximumIntegerDigits(15);

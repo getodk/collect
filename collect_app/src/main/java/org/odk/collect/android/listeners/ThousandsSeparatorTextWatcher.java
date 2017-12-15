@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
@@ -17,15 +18,18 @@ import timber.log.Timber;
 public class ThousandsSeparatorTextWatcher implements TextWatcher {
     private EditText editText;
     private static String thousandSeparator;
-    private static String decimalMarker;
     private int cursorPosition;
 
     public ThousandsSeparatorTextWatcher(EditText editText) {
         this.editText = editText;
-        DecimalFormat df = new DecimalFormat("#,###.##");
+        DecimalFormat df = new DecimalFormat();
         df.setDecimalSeparatorAlwaysShown(true);
         thousandSeparator = Character.toString(df.getDecimalFormatSymbols().getGroupingSeparator());
-        decimalMarker = Character.toString(df.getDecimalFormatSymbols().getDecimalSeparator());
+
+        // The decimal marker is always "." (see DecimalWidget) so avoid it as thousands separator
+        if (thousandSeparator.equals(".")) {
+            thousandSeparator = " ";
+        }
     }
 
     @Override
@@ -43,7 +47,7 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
             String value = editText.getText().toString();
 
             if (!value.equals("")) {
-                String str = editText.getText().toString().replaceAll(thousandSeparator, "");
+                String str = editText.getText().toString().replaceAll(Pattern.quote(thousandSeparator), "");
                 if (!value.equals("")) {
                     editText.setText(getDecimalFormattedString(str));
                 }
@@ -60,7 +64,10 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
     }
 
     private static String getDecimalFormattedString(String value) {
-        String[] splitValue = value.split("\\.");
+        // Always use a period because keyboard isn't localized. See DecimalWidget.
+        String decimalMarker = ".";
+
+        String[] splitValue = value.split(Pattern.quote(decimalMarker));
         String beforeDecimal = value;
         String afterDecimal = null;
         String finalResult = "";
