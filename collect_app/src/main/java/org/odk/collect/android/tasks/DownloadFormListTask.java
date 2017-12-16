@@ -423,6 +423,11 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     }
 
     private boolean isMediaFileAlreadyDownloaded(List<File> localMediaFiles, MediaFile newMediaFile) {
+        // TODO Zip files are ignored we should find a way to take them into account too
+        if (newMediaFile.getFilename().endsWith(".zip")) {
+            return true;
+        }
+        
         String mediaFileHash = newMediaFile.getHash();
         mediaFileHash = mediaFileHash.substring(4, mediaFileHash.length());
         for (File localMediaFile : localMediaFiles) {
