@@ -240,4 +240,5 @@
   <string name="phone_number">Nambari ya simu</string>
   <string name="select_date">Changua tarehe</string>
   <string name="select_time">Chagua wakati</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

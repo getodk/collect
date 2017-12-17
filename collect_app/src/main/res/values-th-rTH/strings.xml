@@ -382,4 +382,5 @@
   <string name="select_time">เลือกเวลา</string>
   <string name="no_date_selected">ยังไม่ได้เลือกวันที่</string>
   <string name="no_time_selected">ยังไม่ได้เลือกเวลา</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">Mostra a senha</string>
   <string name="activity_not_found">Não foi encontrada nenhuma atividade por ser tratada: %s</string>
   <string name="add_another">Adicionar Grupo</string>
   <string name="add_another_repeat">Adicionar outro \"%s\" grupo?</string>
@@ -101,6 +102,7 @@
   <string name="send_data">Enviar Formulário Finalizado</string>
   <string name="send_data_button">Enviar formulário finalizado (%s)</string>
   <string name="send_selected_data">Enviar selecionado</string>
+  <string name="view_sent_forms">Ver Formulário Enviado</string>
   <string name="server_requires_auth">Servidor Requer Autenticação</string>
   <string name="server_url">Servidor URL</string>
   <string name="server_preferences">Servidor</string>
@@ -182,6 +184,7 @@ Escolher Imagem</string>
   <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="save_mid">Mid-form saving</string>
   <string name="enter_new_password">Digite a nova senha</string>
+  <string name="admin_password">Senha Administrativa</string>
   <string name="admin_password_changed">Senha administrativa alterada com sucesso</string>
   <string name="admin_password_disabled">Senha administrativa desabilitada</string>
   <string name="admin_password_incorrect">Lamento, senha incorreta!</string>
@@ -252,9 +255,11 @@ Escolher Imagem</string>
   <string name="change_server_url">Servidor URL</string>
   <string name="no_blank_search">O campo de busca não pode estar em branco.</string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="map_preferences">Cartografia</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>
