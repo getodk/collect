@@ -48,7 +48,7 @@ public class DriveHelperTest {
     }
 
     @Test
-    public void getRootIdTest() throws IOException {
+    public void getRootIdShouldReturnTheProperRootFolderId() throws IOException {
         String rootId = "root_id";
 
         doReturn(rootId).when(mockedDriveService).getFileId("root", "id");

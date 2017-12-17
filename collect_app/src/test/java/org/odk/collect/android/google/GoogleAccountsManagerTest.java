@@ -150,7 +150,7 @@ public class GoogleAccountsManagerTest {
     }
 
     @Test
-    public void permissionsNotAvailableTest() {
+    public void shouldRequestForPermissionIfPermissionNotGivenTest() {
         stubAccountPermission(false);
         stubSavedAccount(expectedAccount);
         googleAccountsManager.chooseAccount();
@@ -163,7 +163,7 @@ public class GoogleAccountsManagerTest {
     }
 
     @Test
-    public void checkSelectedAccountName() {
+    public void accountNameShouldBeSetProperlyIfPermissionsGivenAndAutoSelectEnabledTest() {
         stubAccountPermission(true);
         stubSavedAccount(expectedAccount);
         googleAccountsManager.chooseAccount();
