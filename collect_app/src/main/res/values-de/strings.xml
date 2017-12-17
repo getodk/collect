@@ -128,7 +128,6 @@
   <string name="select_another_image">Anderes Bild auswählen</string>
   <string name="use_odk_default">Standardbild verwenden</string>
   <string name="change_splash_path">Bild ändern</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>
   <string name="change_protocol">Server-Plattform</string>
@@ -206,7 +205,6 @@
   <string name="autosend">Auto-Send</string>
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
-  <string name="no_account">Kein Benutzerkonto</string>
   <string name="save_preferences">Einstellungen auf Speicherkarte speichern</string>
   <string name="form_forward">Weiter</string>
   <string name="form_backward">Zurück</string>
@@ -271,7 +269,7 @@
   <string name="invalid_oauth">Ungültiger OAuth2-Token</string>
   <string name="google_repeat_error">Wiederholungen werden zur Zeit von Google Sheets nicht unterstützt.</string>
   <string name="media_upload_error">Nicht vorhandenes Foto konnte nicht hochgeladen werden: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK Auto-Send Authentifizierungsfehler, bitte überprüfen Sie ihre Einstellungen</string>
+  <string name="odk_auth_auth_fail">Auto-Send-Authentifizierungsfehler, bitte überprüfen Sie Ihre Einstellungen.</string>
   <string name="odk_auto_note">ODK Auto-Send Benachrichtigung</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
   <string name="delete_after_send">Löschen nach dem Senden</string>
@@ -280,7 +278,6 @@
   <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
   <string name="no_blank_search">Suchfeld darf nicht leer sein.</string>
   <string name="google_sheets_url">Ersatzspeicherort-URL</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="sheets_max_columns">Max. Anzahl an Spalten ist 255. Ihr Formular hat %s Spalten. Tabelle konnte nicht hochgeladen werden.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
@@ -422,14 +419,12 @@
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
   <string name="instance_sync">Gespeicherte Formulare als vollständig importieren</string>
   <string name="instance_sync_summary">Importiert gespeicherte Formulare aus dem Ordner instances</string>
-  <string name="sort_by_name_asc">Nach Name, A-Z</string>
-  <string name="sort_by_name_desc">Nach Name, Z-A</string>
-  <string name="sort_by_date_asc">Nach Datum, neuestes zuerst</string>
-  <string name="sort_by_date_desc">Nach Datum, ältestes zuerst</string>
-  <string name="sort_by_status_asc">Nach Status, vollständig zuerst</string>
-  <string name="sort_by_status_desc">Nach Status, unvollständig zuerst</string>
-  <string name="sorting_menu_open">Sortier-Menü öffnen</string>
-  <string name="sorting_menu_close">Sortier-Menü schließen</string>
+  <string name="sort_by_name_asc">Name, A-Z</string>
+  <string name="sort_by_name_desc">Name, Z-A</string>
+  <string name="sort_by_date_asc">Datum, neuestes zuerst</string>
+  <string name="sort_by_date_desc">Datum, ältestes zuerst</string>
+  <string name="sort_by_status_asc">Status, vollständig zuerst</string>
+  <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
   <string name="sort_the_list">Die Liste sortieren</string>
   <string name="request_permissions_google_account">ODK Collect benötigt Zugriff auf Ihr Google-Konto um leere Formulare zu laden und ausgefüllte Formulare hochzuladen.</string>
   <string name="filter_the_list">Liste filtern</string>
@@ -464,6 +459,7 @@
   <string name="qrcode_with_server_password">Dieser QR-Code enthält ihr Server-Passwort. \n(Hier berühren um das Passwort zu entfernen)</string>
   <string name="import_export_settings">Import/Export Einstellungen</string>
   <string name="qrcode_scanner_prompt">Positionieren Sie den QR-Code innerhalb des Rechtecks</string>
+  <string name="barcode_scanner_prompt">Positionieren Sie den Barcode innerhalb des Rechtecks.</string>
   <string name="server_password">Server-Passwort</string>
   <string name="include_password_dialog">Passwörter im Code enthalten</string>
   <string name="generate">Generieren</string>
@@ -480,7 +476,7 @@
   <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
   <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>
   <string name="user_access_control">Benutzerzugriffskontrolle</string>
-  <string name="autosend_selector_title">Autosend</string>
+  <string name="autosend_selector_title">Auto-Send</string>
   <string name="off">Aus</string>
   <string name="wifi_autosend">Nur WLAN</string>
   <string name="cellular_autosend">Nur Mobilfunk</string>
@@ -490,6 +486,7 @@
   <string name="form_submission_category">Formulareinsendung</string>
   <string name="form_filling_category">Formulareingabe</string>
   <string name="high_resolution_title">HD-Video</string>
+  <string name="image_size_title">Bildgröße</string>
   <string name="form_import_category">Formular-Import</string>
   <string name="user_and_device_identity_title">Benutzer- und Geräteidentität</string>
   <string name="constraint_behavior_title">Validierung</string>
@@ -498,4 +495,37 @@
   <string name="type">Typ</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
+  <string name="not_supported_offline_layer_format">Das ausgewählte Offline-Layer benutzt das PBF-Format, das nicht unterstützt wird.</string>
+  <string name="invalid_email_address">Ungültige E-Mail-Adresse!</string>
+  <string name="sort_by">Sortieren nach</string>
+  <string name="server">Server</string>
+  <string name="select_value">Wert auswählen</string>
+  <string name="edit_value">Wert bearbeiten</string>
+  <string name="no_value_selected">Kein Wert ausgewählt</string>
+  <string name="form_delete_message">Ausgewählte Formulare löschen</string>
+  <string name="deleting_form_dialog_update_message">Lösche Formular: %1$d von %2$d</string>
+  <string name="search">Suche</string>
+  <string name="null_intent_value">Die externe Applikation hat die erwartete Information nicht geliefert.</string>
+  <string name="image_size_large">Groß (3072px)</string>
+  <string name="image_size_medium">Mittel (2048px)</string>
+  <string name="image_size_small">Klein (1024px)</string>
+  <string name="image_size_very_small">Sehr klein (640px)</string>
+  <string name="image_size_original">Originalgröße von der Kamera (Standard)</string>
+  <string name="image_size_dialog_title">Max. Anzahl Pixel der langen Seite des Bildes</string>
+  <string name="bearing_lack_of_sensors">Kompass-Peilung konnte nicht erfasst werden: Gerät besitzt keinen Kompass oder Beschleunigungssensor.</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
+  <!-- Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order -->
+  <string name="custom_date">%1$s (%2$s)</string>
 </resources>

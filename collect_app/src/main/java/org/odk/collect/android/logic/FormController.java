@@ -14,7 +14,9 @@
 
 package org.odk.collect.android.logic;
 
+import android.support.annotation.Nullable;
 
+import org.javarosa.core.model.CoreModelModule;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -31,6 +33,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.PrototypeManager;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.core.util.JavaRosaCoreModule;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -41,13 +44,13 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.views.ODKView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 import timber.log.Timber;
@@ -76,6 +79,12 @@ public class FormController {
      * Non OpenRosa metadata tag names
      */
     private static final String AUDIT = "audit";
+    public static final String AUDIT_FILE_NAME = "audit.csv";
+
+    /*
+     * Store the timerLogger object with the form controller state
+     */
+    private TimerLogger timerLogger;
 
     /**
      * OpenRosa metadata of a form instance.
@@ -90,44 +99,12 @@ public class FormController {
         public final String instanceName;
         public final boolean audit;
 
-        InstanceMetadata(String instanceId, String instanceName, boolean audit) {
+        public InstanceMetadata(String instanceId, String instanceName, boolean audit) {
             this.instanceId = instanceId;
             this.instanceName = instanceName;
             this.audit = audit;
         }
     }
-
-    /**
-     * Classes needed to serialize objects. Need to put anything from JR in here.
-     */
-    private static final String[] SERIALIABLE_CLASSES = {
-            "org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
-            "org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
-            "org.javarosa.core.model.FormDef",
-            "org.javarosa.core.model.SubmissionProfile", // CoreModelModule
-            "org.javarosa.core.model.QuestionDef", // CoreModelModule
-            "org.javarosa.core.model.GroupDef", // CoreModelModule
-            "org.javarosa.core.model.instance.FormInstance", // CoreModelModule
-            "org.javarosa.core.model.data.BooleanData", // CoreModelModule
-            "org.javarosa.core.model.data.DateData", // CoreModelModule
-            "org.javarosa.core.model.data.DateTimeData", // CoreModelModule
-            "org.javarosa.core.model.data.DecimalData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoPointData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoShapeData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoTraceData", // CoreModelModule
-            "org.javarosa.core.model.data.IntegerData", // CoreModelModule
-            "org.javarosa.core.model.data.LongData", // CoreModelModule
-            "org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectOneData", // CoreModelModule
-            "org.javarosa.core.model.data.StringData", // CoreModelModule
-            "org.javarosa.core.model.data.TimeData", // CoreModelModule
-            "org.javarosa.core.model.data.UncastData", // CoreModelModule
-            "org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
-            "org.javarosa.core.model.Action", // CoreModelModule
-            "org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
-    };
 
     private static boolean isJavaRosaInitialized = false;
 
@@ -138,13 +115,9 @@ public class FormController {
      */
     public static synchronized void initializeJavaRosa(IPropertyManager mgr) {
         if (!isJavaRosaInitialized) {
-            // need a list of classes that formdef uses
-            // unfortunately, the JR registerModule() functions do more than this.
-            // register just the classes that would have been registered by:
-            // new JavaRosaCoreModule().registerModule();
-            // new CoreModelModule().registerModule();
-            // replace with direct call to PrototypeManager
-            PrototypeManager.registerPrototypes(SERIALIABLE_CLASSES);
+            // Register prototypes for classes that FormDef uses
+            PrototypeManager.registerPrototypes(JavaRosaCoreModule.classNames);
+            PrototypeManager.registerPrototypes(CoreModelModule.classNames);
             new XFormsModule().registerModule();
 
             isJavaRosaInitialized = true;
@@ -156,6 +129,7 @@ public class FormController {
     }
 
     private File mediaFolder;
+    @Nullable
     private File instancePath;
     private FormEntryController formEntryController;
     private FormIndex indexWaitingForData = null;
@@ -174,6 +148,7 @@ public class FormController {
         return mediaFolder;
     }
 
+    @Nullable
     public File getInstancePath() {
         return instancePath;
     }
@@ -188,6 +163,17 @@ public class FormController {
 
     public FormIndex getIndexWaitingForData() {
         return indexWaitingForData;
+    }
+
+    public TimerLogger getTimerLogger() {
+        if (timerLogger == null) {
+            setTimerLogger(new TimerLogger(getInstancePath(), this));
+        }
+        return timerLogger;
+    }
+
+    private void setTimerLogger(TimerLogger logger) {
+        timerLogger = logger;
     }
 
     /**
@@ -443,6 +429,13 @@ public class FormController {
                 && indexIsInFieldList()));
     }
 
+    public boolean isCurrentQuestionFirstInForm() throws JavaRosaException {
+        FormIndex originalFormIndex = getFormIndex();
+        boolean firstQuestion = (stepToPreviousScreenEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM);
+        jumpToIndex(originalFormIndex);
+        return firstQuestion;
+    }
+
     /**
      * Attempts to save answer into the given FormIndex into the data model.
      */
@@ -462,7 +455,7 @@ public class FormController {
      * @return ANSWER_OK and leave index unchanged or change index to bad value and return error
      * type.
      */
-    public int validateAnswers(Boolean markCompleted) throws JavaRosaException {
+    public int validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
             this.jumpToIndex(outcome.failedPrompt);
@@ -690,12 +683,10 @@ public class FormController {
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
-    public FailedConstraint saveAllScreenAnswers(LinkedHashMap<FormIndex, IAnswerData> answers,
-            boolean evaluateConstraints) throws JavaRosaException {
+    public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers,
+                                                 boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
-            Iterator<FormIndex> it = answers.keySet().iterator();
-            while (it.hasNext()) {
-                FormIndex index = it.next();
+            for (FormIndex index : answers.keySet()) {
                 // Within a group, you can only save for question events
                 if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
                     int saveStatus;
@@ -710,7 +701,7 @@ public class FormController {
                     }
                 } else {
                     Timber.w("Attempted to save an index referencing something other than a question: %s",
-                                    index.getReference().toString());
+                            index.getReference().toString());
                 }
             }
         }
@@ -929,7 +920,7 @@ public class FormController {
                     EvaluationContext ec = new EvaluationContext(form.getEvaluationContext(),
                             treeElement.getRef());
                     Object value = xpathRequiredMsg.eval(form.getMainInstance(), ec);
-                    if (value != "") {
+                    if (!value.equals("")) {
                         return (String) value;
                     }
                     return null;
@@ -967,9 +958,7 @@ public class FormController {
 
         FormEntryCaption[] v = getCaptionHierarchy();
         FormEntryCaption[] groups = new FormEntryCaption[v.length - lastquestion];
-        for (int i = 0; i < v.length - lastquestion; i++) {
-            groups[i] = v[i];
-        }
+        System.arraycopy(v, 0, groups, 0, v.length - lastquestion);
         return groups;
     }
 
@@ -1166,18 +1155,18 @@ public class FormController {
             // instance id...
             v = e.getChildrenWithName(INSTANCE_ID);
             if (v.size() == 1) {
-                StringData sa = (StringData) v.get(0).getValue();
+                IAnswerData sa = v.get(0).getValue();
                 if (sa != null) {
-                    instanceId = (String) sa.getValue();
+                    instanceId = sa.getDisplayText();
                 }
             }
 
             // instance name...
             v = e.getChildrenWithName(INSTANCE_NAME);
             if (v.size() == 1) {
-                StringData sa = (StringData) v.get(0).getValue();
+                IAnswerData sa = v.get(0).getValue();
                 if (sa != null) {
-                    instanceName = (String) sa.getValue();
+                    instanceName = sa.getDisplayText();
                 }
             }
 
@@ -1185,8 +1174,10 @@ public class FormController {
             v = e.getChildrenWithName(AUDIT);
             if (v.size() == 1) {
                 audit = true;
+                IAnswerData answerData = new StringData();
+                answerData.setValue(AUDIT_FILE_NAME);
+                v.get(0).setValue(answerData);
             }
-
         }
 
         return new InstanceMetadata(instanceId, instanceName, audit);

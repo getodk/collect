@@ -239,7 +239,7 @@ public class Camera2Fragment extends Fragment
         @Override
         public void onImageAvailable(ImageReader reader) {
             try {
-                backgroundHandler.post(new ImageSaver(reader.acquireNextImage(), getActivity()));
+                backgroundHandler.post(new ImageSaver(reader.acquireNextImage()));
             } catch (IllegalStateException e) {
                 Timber.e(e);
             }
@@ -477,12 +477,8 @@ public class Camera2Fragment extends Fragment
 
                 int[] afAvailableModes = characteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
 
-                if (afAvailableModes.length == 0 || (afAvailableModes.length == 1
-                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF)) {
-                    autoFocusSupported = false;
-                } else {
-                    autoFocusSupported = true;
-                }
+                autoFocusSupported = !(afAvailableModes.length == 0 || (afAvailableModes.length == 1
+                        && afAvailableModes[0] == CameraMetadata.CONTROL_AF_MODE_OFF));
 
                 StreamConfigurationMap map = characteristics.get(
                         CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
@@ -806,6 +802,8 @@ public class Camera2Fragment extends Fragment
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
                     unlockFocus();
+                    activity.setResult(Activity.RESULT_OK);
+                    activity.finish();
                 }
             };
 
@@ -878,11 +876,8 @@ public class Camera2Fragment extends Fragment
          */
         private final Image image;
 
-        private Activity activity;
-
-        public ImageSaver(Image image, Activity activity) {
+        ImageSaver(Image image) {
             this.image = image;
-            this.activity = activity;
         }
 
         @Override
@@ -901,9 +896,6 @@ public class Camera2Fragment extends Fragment
             } catch (IOException e) {
                 Timber.e(e);
             }
-
-            activity.setResult(Activity.RESULT_OK);
-            activity.finish();
         }
     }
 

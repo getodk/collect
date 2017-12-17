@@ -121,7 +121,6 @@
   <string name="select_another_image">სხვა სურათების არჩევა</string>
   <string name="use_odk_default">გამოიყენე დეფოლტ-სურათი</string>
   <string name="change_splash_path">სურათის შეცვლა</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">ცვლილებების შენახვა</string>
   <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>
   <string name="change_protocol">სერვერის პლატფორმა</string>
@@ -194,10 +193,8 @@
   <string name="admin_password_incorrect">უკაცრავად, პაროლი არასწორია!</string>
   <string name="enter_admin_password">შეიყვანეთ ადმინისტრატორის პაროლი</string>
   <string name="change_admin_password">ადმინისტრატორის პაროლის შეცვლა</string>
-  <string name="autosend">ავტომატური გაგზავნა</string>
   <string name="found_in_main">გამორთეთ მთავარი მენიუდან დასამალად</string>
   <string name="found_in_settings">გამორთეთ ძირითადი პარამეტრებიდან დასამალად</string>
-  <string name="no_account">ექაუნთი არ არსებობს</string>
   <string name="save_preferences">პარამეტრების დისკზე შენახვა</string>
   <string name="form_forward">შემდეგი</string>
   <string name="form_backward">წინა</string>
@@ -227,7 +224,6 @@
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
   <string name="change_server_url">სერვერის ვებ-მისამართი</string>
   <string name="no_blank_search">საძიებო ველი არ უნდა იყოს ცარიელი!</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

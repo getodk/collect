@@ -14,11 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.TypedValue;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.List;
@@ -63,7 +66,8 @@ import timber.log.Timber;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class GridWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class GridWidget extends QuestionWidget implements MultiChoiceWidget {
 
     // The RGB value for the orange background
     public static final int orangeRedVal = 255;
@@ -94,12 +98,13 @@ public class GridWidget extends QuestionWidget {
     // Whether to advance immediately after the image is clicked
     boolean quickAdvance;
 
-    AdvanceToNextListener listener;
+    @Nullable
+    private AdvanceToNextListener listener;
 
     int resizeWidth;
 
     public GridWidget(Context context, FormEntryPrompt prompt, int numColumns,
-            final boolean quickAdvance) {
+                      final boolean quickAdvance) {
         super(context, prompt);
 
         // SurveyCTO-added support for dynamic select content (from .csv files)
@@ -110,8 +115,10 @@ public class GridWidget extends QuestionWidget {
         } else {
             items = prompt.getSelectChoices();
         }
-        formEntryPrompt = prompt;
-        listener = (AdvanceToNextListener) context;
+
+        if (context instanceof AdvanceToNextListener) {
+            listener = (AdvanceToNextListener) context;
+        }
 
         selected = new boolean[items.size()];
         choices = new String[items.size()];
@@ -138,6 +145,10 @@ public class GridWidget extends QuestionWidget {
                     - (IMAGE_PADDING + SPACING) * (numColumns + 1)) / numColumns);
         }
 
+        if (prompt.isReadOnly()) {
+            gridview.setEnabled(false);
+        }
+
         // Build view
         for (int i = 0; i < items.size(); i++) {
             SelectChoice sc = items.get(i);
@@ -149,7 +160,7 @@ public class GridWidget extends QuestionWidget {
                     prompt.getSpecialFormSelectChoiceText(sc, FormEntryCaption.TEXT_FORM_AUDIO);
             if (audioURI != null) {
                 audioHandlers[i] = new AudioHandler(prompt.getIndex(), sc.getValue(), audioURI,
-                        player);
+                        getPlayer());
             } else {
                 audioHandlers[i] = null;
             }
@@ -169,7 +180,9 @@ public class GridWidget extends QuestionWidget {
 
                 String imageFilename;
                 try {
-                    imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                    imageFilename = ReferenceManager.instance()
+                            .DeriveReference(imageURI).getLocalURI();
+
                     final File imageFile = new File(imageFilename);
                     if (imageFile.exists()) {
                         Bitmap b =
@@ -219,7 +232,7 @@ public class GridWidget extends QuestionWidget {
                 choices[i] = prompt.getSelectChoiceText(sc);
 
                 TextView missingImage = new TextView(getContext());
-                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+                missingImage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 missingImage.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 missingImage.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 
@@ -298,11 +311,13 @@ public class GridWidget extends QuestionWidget {
                 selected[position] = true;
                 Collect.getInstance().getActivityLogger().logInstanceAction(this,
                         "onItemClick.select",
-                        items.get(position).getValue(), formEntryPrompt.getIndex());
+                        items.get(position).getValue(), getFormEntryPrompt().getIndex());
                 imageViews[position].setBackgroundColor(Color.rgb(orangeRedVal, orangeGreenVal,
                         orangeBlueVal));
-                if (quickAdvance) {
+
+                if (quickAdvance && listener != null) {
                     listener.advance();
+
                 } else if (audioHandlers[position] != null) {
                     audioHandlers[position].playAudio(getContext());
                 }
@@ -326,7 +341,7 @@ public class GridWidget extends QuestionWidget {
         }
 
         // Use the custom image adapter and initialize the grid view
-        ImageAdapter ia = new ImageAdapter(getContext(), choices);
+        ImageAdapter ia = new ImageAdapter(choices);
         gridview.setAdapter(ia);
         addAnswerView(gridview);
     }
@@ -363,31 +378,51 @@ public class GridWidget extends QuestionWidget {
 
     }
 
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        gridview.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        gridview.cancelLongPress();
+    }
+
+    @Override
+    public int getChoiceCount() {
+        return selected.length;
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        for (int i = 0; i < selected.length; i++) {
+            selected[i] = false;
+        }
+
+        selected[choiceIndex] = isSelected;
+    }
+
     // Custom image adapter. Most of the code is copied from
     // media layout for using a picture.
     private class ImageAdapter extends BaseAdapter {
         private String[] choices;
 
-
-        public ImageAdapter(Context c, String[] choices) {
+        ImageAdapter(String[] choices) {
             this.choices = choices;
         }
-
 
         public int getCount() {
             return choices.length;
         }
 
-
         public Object getItem(int position) {
             return null;
         }
 
-
         public long getItemId(int position) {
             return 0;
         }
-
 
         // create a new ImageView for each item referenced by the Adapter
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -397,18 +432,5 @@ public class GridWidget extends QuestionWidget {
                 return convertView;
             }
         }
-    }
-
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        gridview.setOnLongClickListener(l);
-    }
-
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        gridview.cancelLongPress();
     }
 }

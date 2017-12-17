@@ -39,7 +39,10 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -57,8 +60,7 @@ public class FileUtils {
     public static final String SUBMISSIONURI = "submission";
     public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey";
 
-    public static String getMimeType(String fileUrl)
-            throws java.io.IOException {
+    public static String getMimeType(String fileUrl) throws IOException {
         FileNameMap fileNameMap = URLConnection.getFileNameMap();
         return fileNameMap.getContentTypeFor(fileUrl);
     }
@@ -128,56 +130,49 @@ public class FileUtils {
         }
     }
 
+    static int bufSize = 16 * 1024; // May be set by unit test
+
     public static String getMd5Hash(File file) {
+        final InputStream is;
         try {
-            // CTS (6/15/2010) : stream file through digest instead of handing it the byte[]
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            int chunkSize = 256;
-
-            byte[] chunk = new byte[chunkSize];
-
-            // Get the size of the file
-            long llength = file.length();
-
-            if (llength > Integer.MAX_VALUE) {
-                Timber.e("File %s is too large", file.getName());
-                return null;
-            }
-
-            int length = (int) llength;
-
-            InputStream is = null;
             is = new FileInputStream(file);
 
-            int l = 0;
-            for (l = 0; l + chunkSize < length; l += chunkSize) {
-                is.read(chunk, 0, chunkSize);
-                md.update(chunk, 0, chunkSize);
+        } catch (FileNotFoundException e) {
+            Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            return null;
+
+        }
+
+        return getMd5Hash(is);
+    }
+
+    public static String getMd5Hash(InputStream is) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            final byte[] buffer = new byte[bufSize];
+
+            while (true) {
+                int result = is.read(buffer, 0, bufSize);
+                if (result == -1) {
+                    break;
+                }
+                md.update(buffer, 0, result);
             }
 
-            int remaining = length - l;
-            if (remaining > 0) {
-                is.read(chunk, 0, remaining);
-                md.update(chunk, 0, remaining);
-            }
-            byte[] messageDigest = md.digest();
-
-            BigInteger number = new BigInteger(1, messageDigest);
-            String md5 = number.toString(16);
+            String md5 = new BigInteger(1, md.digest()).toString(16);
             while (md5.length() < 32) {
                 md5 = "0" + md5;
             }
+
             is.close();
             return md5;
 
-        } catch (NoSuchAlgorithmException | IOException e) {
-            if (e instanceof NoSuchAlgorithmException) {
-                Timber.e(e);
-            } else if (e instanceof FileNotFoundException) {
-                Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
-            } else {
-                Timber.e(e, "Problem reading file %s", file.getAbsolutePath());
-            }
+        } catch (NoSuchAlgorithmException e) {
+            Timber.e(e);
+            return null;
+
+        } catch (IOException e) {
+            Timber.e(e, "Problem reading file.");
             return null;
         }
     }
@@ -187,7 +182,7 @@ public class FileUtils {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+        getBitmap(f.getAbsolutePath(), o);
 
         int heightScale = o.outHeight / screenHeight;
         int widthScale = o.outWidth / screenWidth;
@@ -201,7 +196,7 @@ public class FileUtils {
         options.inInputShareable = true;
         options.inPurgeable = true;
         options.inSampleSize = scale;
-        Bitmap b = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        Bitmap b = getBitmap(f.getAbsolutePath(), options);
         if (b != null) {
             Timber.i("Screen is %dx%d.  Image has been scaled down by %d to %dx%d",
                     screenHeight, screenWidth, scale, b.getHeight(), b.getWidth());
@@ -218,13 +213,13 @@ public class FileUtils {
         // Determine image size of f
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(f.getAbsolutePath(), o);
+        getBitmap(f.getAbsolutePath(), o);
 
         // Load full size bitmap image
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inInputShareable = true;
         options.inPurgeable = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        Bitmap bitmap = getBitmap(f.getAbsolutePath(), options);
 
         // Figure out scale
         double heightScale = ((double) (o.outHeight)) / screenHeight;
@@ -297,8 +292,8 @@ public class FileUtils {
     }
 
     public static HashMap<String, String> parseXML(File xmlFile) {
-        HashMap<String, String> fields = new HashMap<String, String>();
-        InputStream is;
+        final HashMap<String, String> fields = new HashMap<String, String>();
+        final InputStream is;
         try {
             is = new FileInputStream(xmlFile);
         } catch (FileNotFoundException e1) {
@@ -314,78 +309,73 @@ public class FileUtils {
             isr = new InputStreamReader(is);
         }
 
-        if (isr != null) {
-
-            Document doc;
+        final Document doc;
+        try {
+            doc = XFormParser.getXMLDocument(isr);
+        } catch (IOException e) {
+            Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
+            throw new IllegalStateException("Unable to parse XML document", e);
+        } finally {
             try {
-                doc = XFormParser.getXMLDocument(isr);
+                isr.close();
             } catch (IOException e) {
-                Timber.e(e, "Unable to parse XML document %s", xmlFile.getAbsolutePath());
-                throw new IllegalStateException("Unable to parse XML document", e);
-            } finally {
-                try {
-                    isr.close();
-                } catch (IOException e) {
-                    Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
-                }
+                Timber.w("%s error closing from reader", xmlFile.getAbsolutePath());
             }
-
-            String xforms = "http://www.w3.org/2002/xforms";
-            String html = doc.getRootElement().getNamespace();
-
-            Element head = doc.getRootElement().getElement(html, "head");
-            Element title = head.getElement(html, "title");
-            if (title != null) {
-                fields.put(TITLE, XFormParser.getXMLText(title, true));
-            }
-
-            Element model = getChildElement(head, "model");
-            Element cur = getChildElement(model, "instance");
-
-            int idx = cur.getChildCount();
-            int i;
-            for (i = 0; i < idx; ++i) {
-                if (cur.isText(i)) {
-                    continue;
-                }
-                if (cur.getType(i) == Node.ELEMENT) {
-                    break;
-                }
-            }
-
-            if (i < idx) {
-                cur = cur.getElement(i); // this is the first data element
-                String id = cur.getAttributeValue(null, "id");
-                String xmlns = cur.getNamespace();
-
-                String version = cur.getAttributeValue(null, "version");
-                String uiVersion = cur.getAttributeValue(null, "uiVersion");
-                if (uiVersion != null) {
-                    // pre-OpenRosa 1.0 variant of spec
-                    Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
-                            version);
-                }
-
-                fields.put(FORMID, (id == null) ? xmlns : id);
-                fields.put(VERSION, (version == null) ? null : version);
-            } else {
-                throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
-            }
-            try {
-                Element submission = model.getElement(xforms, "submission");
-                String submissionUri = submission.getAttributeValue(null, "action");
-                fields.put(SUBMISSIONURI, (submissionUri == null) ? null : submissionUri);
-                String base64RsaPublicKey = submission.getAttributeValue(null,
-                        "base64RsaPublicKey");
-                fields.put(BASE64_RSA_PUBLIC_KEY,
-                        (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
-                                ? null : base64RsaPublicKey.trim());
-            } catch (Exception e) {
-                Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
-                // and that's totally fine.
-            }
-
         }
+
+        final String xforms = "http://www.w3.org/2002/xforms";
+        final String html = doc.getRootElement().getNamespace();
+
+        final Element head = doc.getRootElement().getElement(html, "head");
+        final Element title = head.getElement(html, "title");
+        if (title != null) {
+            fields.put(TITLE, XFormParser.getXMLText(title, true));
+        }
+
+        final Element model = getChildElement(head, "model");
+        Element cur = getChildElement(model, "instance");
+
+        final int idx = cur.getChildCount();
+        int i;
+        for (i = 0; i < idx; ++i) {
+            if (cur.isText(i)) {
+                continue;
+            }
+            if (cur.getType(i) == Node.ELEMENT) {
+                break;
+            }
+        }
+
+        if (i < idx) {
+            cur = cur.getElement(i); // this is the first data element
+            final String id = cur.getAttributeValue(null, "id");
+
+            final String version = cur.getAttributeValue(null, "version");
+            final String uiVersion = cur.getAttributeValue(null, "uiVersion");
+            if (uiVersion != null) {
+                // pre-OpenRosa 1.0 variant of spec
+                Timber.e("Obsolete use of uiVersion -- IGNORED -- only using version: %s",
+                        version);
+            }
+
+            fields.put(FORMID, (id == null) ? cur.getNamespace() : id);
+            fields.put(VERSION, (version == null) ? null : version);
+        } else {
+            throw new IllegalStateException(xmlFile.getAbsolutePath() + " could not be parsed");
+        }
+        try {
+            final Element submission = model.getElement(xforms, "submission");
+            fields.put(SUBMISSIONURI, submission.getAttributeValue(null, "action"));
+            final String base64RsaPublicKey = submission.getAttributeValue(null,
+                    "base64RsaPublicKey");
+            fields.put(BASE64_RSA_PUBLIC_KEY,
+                    (base64RsaPublicKey == null || base64RsaPublicKey.trim().length() == 0)
+                            ? null : base64RsaPublicKey.trim());
+        } catch (Exception e) {
+            Timber.i("XML file %s does not have a submission element", xmlFile.getAbsolutePath());
+            // and that's totally fine.
+        }
+
         return fields;
     }
 
@@ -417,7 +407,7 @@ public class FileUtils {
     }
 
     public static String constructMediaPath(String formFilePath) {
-        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf("."));
+        String pathNoExtension = formFilePath.substring(0, formFilePath.lastIndexOf('.'));
         return pathNoExtension + "-media";
     }
 
@@ -468,5 +458,51 @@ public class FileUtils {
             }
             deleteAndReport(tempMediaFolder);
         }
+    }
+
+    public static void saveBitmapToFile(Bitmap bitmap, String path) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(path);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                Timber.e(e);
+            }
+        }
+    }
+
+    /*
+    This method is used to avoid OutOfMemoryError exception during loading an image.
+    If the exception occurs we catch it and try to load a smaller image.
+     */
+    public static Bitmap getBitmap(String path, BitmapFactory.Options originalOptions) {
+        BitmapFactory.Options newOptions = new BitmapFactory.Options();
+        newOptions.inSampleSize = originalOptions.inSampleSize;
+        if (newOptions.inSampleSize <= 0) {
+            newOptions.inSampleSize = 1;
+        }
+        Bitmap bitmap;
+        try {
+            bitmap = BitmapFactory.decodeFile(path, originalOptions);
+        } catch (OutOfMemoryError e) {
+            Timber.i(e);
+            newOptions.inSampleSize++;
+            return getBitmap(path, newOptions);
+        }
+
+        return bitmap;
+    }
+
+    public static List<File> getAllFormMediaFiles(String mediaFilesDir) {
+        List<File> mediaFiles = new ArrayList<>();
+        Collections.addAll(mediaFiles, new File(mediaFilesDir).listFiles());
+        return mediaFiles;
     }
 }

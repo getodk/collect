@@ -82,7 +82,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -90,9 +89,9 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_ACCOUNT_PICKER;
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_AUTHORIZATION;
-import static org.odk.collect.android.tasks.GoogleSheetsAbstractUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
+import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 public class GoogleDriveActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener,
@@ -169,7 +168,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
             ArrayList<DriveListItem> dl = savedInstanceState
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
-            adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image, dl);
+            adapter = new FileArrayAdapter(this, R.layout.two_item_image, dl);
             listView.setAdapter(adapter);
             adapter.setEnabled(true);
         } else {
@@ -245,8 +244,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-        driveService = new com.google.api.services.drive.Drive.Builder(
-                transport, jsonFactory, credential)
+        driveService = new Drive.Builder(transport, jsonFactory, credential)
                 .setApplicationName("ODK-Collect")
                 .build();
 
@@ -365,9 +363,10 @@ public class GoogleDriveActivity extends AppCompatActivity implements
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        credential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+                Intent intentChooseAccount = credential.newChooseAccountIntent();
+                intentChooseAccount.putExtra("overrideTheme", 1);
+                intentChooseAccount.putExtra("overrideCustomTheme", 0);
+                startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
@@ -596,10 +595,10 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         return getFileTask;
     }
 
-    private Stack<String> buildPath(String[] path) {
+    private Stack<String> buildPath(String[] paths) {
         Stack<String> pathStack = new Stack<String>();
-        for (int i = 0; i < path.length; i++) {
-            pathStack.push(path[i]);
+        for (String path : paths) {
+            pathStack.push(path);
         }
         return pathStack;
     }
@@ -618,7 +617,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
 
         String parentId = (String) results.get(PARENT_ID_KEY);
-        String currentDir = (String) results.get(CURRENT_ID_KEY);
 
         if (myDrive) {
             rootButton.setText(getString(R.string.go_shared));
@@ -675,10 +673,8 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
 
         StringBuilder sb = new StringBuilder();
-        Iterator<String> it = results.keySet().iterator();
 
-        while (it.hasNext()) {
-            String id = it.next();
+        for (String id : results.keySet()) {
             sb.append(id + " :: " + results.get(id) + "\n\n");
         }
         if (sb.length() > 1) {
@@ -704,7 +700,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         setProgressBarIndeterminateVisibility(true);
         adapter = null;
         retrieveDriveFileContentsAsyncTask = new RetrieveDriveFileContentsAsyncTask();
-        retrieveDriveFileContentsAsyncTask.setTaskListener(GoogleDriveActivity.this);
+        retrieveDriveFileContentsAsyncTask.setTaskListener(this);
         if (query != null) {
             retrieveDriveFileContentsAsyncTask.execute(dir, query);
         } else {
@@ -954,6 +950,70 @@ public class GoogleDriveActivity extends AppCompatActivity implements
                     fileOutputStream = new FileOutputStream(
                             new File(Collect.FORMS_PATH + File.separator + fileItem.getName()));
                     downloadFile(df).writeTo(fileOutputStream);
+
+                    String mediaDirName = fileItem.getName().substring(0, fileItem.getName().length() - 4) + "-media";
+
+                    String requestString = "'" + fileItem.getParentId() + "' in parents and trashed=false and name='" + mediaDirName + "'";
+                    Files.List request;
+                    List<com.google.api.services.drive.model.File> driveFileList = new ArrayList<>();
+
+                    try {
+                        request = driveService.files().list().setQ(requestString);
+                    } catch (IOException e) {
+                        Timber.e(e);
+                        results.put(fileItem.getName(), e.getMessage());
+                        return results;
+                    }
+                    do {
+                        try {
+                            FileList fa = request.execute();
+                            driveFileList.addAll(fa.getFiles());
+                            request.setPageToken(fa.getNextPageToken());
+                        } catch (Exception e) {
+                            Timber.e(e);
+                            results.put(fileItem.getName(), e.getMessage());
+                            return results;
+                        }
+                    } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+
+                    if (driveFileList.size() > 1) {
+                        results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
+                        return results;
+                    } else if (driveFileList.size() == 1) {
+                        requestString = "'" + driveFileList.get(0).getId() + "' in parents and trashed=false";
+                        List<com.google.api.services.drive.model.File> mediaFileList = new ArrayList<>();
+
+                        try {
+                            request = driveService.files().list().setQ(requestString);
+                            do {
+                                try {
+                                    FileList fa = request.execute();
+                                    mediaFileList.addAll(fa.getFiles());
+                                    request.setPageToken(fa.getNextPageToken());
+                                } catch (Exception e) {
+                                    Timber.e(e);
+                                    results.put(fileItem.getName(), e.getMessage());
+                                    return results;
+                                }
+                            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+                        } catch (Exception e) {
+                            Timber.e(e);
+                            results.put(fileItem.getName(), e.getMessage());
+                            return results;
+                        }
+
+                        File mediaDir = new File(Collect.FORMS_PATH + File.separator + mediaDirName);
+                        if (!mediaDir.exists()) {
+                            mediaDir.mkdir();
+                        }
+
+                        for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
+                            fileOutputStream = new FileOutputStream(
+                                    new File(Collect.FORMS_PATH + File.separator + mediaDirName + File.separator + mediaFile.getName()));
+                            downloadFile(mediaFile).writeTo(fileOutputStream);
+                            results.put(mediaDirName + File.separator + mediaFile.getName(), Collect.getInstance().getString(R.string.success));
+                        }
+                    }
                 } catch (Exception e) {
                     Timber.e(e);
                     results.put(fileItem.getName(), e.getMessage());

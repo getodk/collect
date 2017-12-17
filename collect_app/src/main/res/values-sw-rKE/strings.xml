@@ -116,7 +116,6 @@
   <string name="select_another_image">Chagua Picha nyingine</string>
   <string name="use_odk_default">Tumia picha ya kawaida</string>
   <string name="change_splash_path">Badilisha picha</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>
   <string name="change_protocol">Jukwaa</string>
@@ -186,9 +185,7 @@
   <string name="admin_password_disabled">Password ya msimamizi imefungwa</string>
   <string name="admin_password_incorrect">Samahani, password si sawa</string>
   <string name="enter_admin_password">Weka password ya msimamizi</string>
-  <string name="autosend">Tuma moja kwa moja</string>
   <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
-  <string name="no_account">Hakuna akaunti</string>
   <string name="save_preferences">Hifadhi mazingira kwa diski</string>
   <string name="form_forward">Ijayo</string>
   <string name="form_backward">iliyopita</string>
@@ -227,11 +224,20 @@
   <string name="survey_saving_finalizing_message">Tamatisho la takwimu kwa kadi ya SD…</string>
   <string name="survey_saving_encrypting_message">usimbaji fiche wa takwimu…</string>
   <string name="high_resolution_summary">Ezesha kurekodi video za mwonekano wa hali ya juu</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
+  <string name="streets">Barabara</string>
+  <string name="start">Anza</string>
+  <string name="dialog_continue">Endelea</string>
+  <string name="clear">Futa</string>
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="sort_by_name_asc">Jina, A-Z</string>
+  <string name="sort_by_name_desc">Jina, Z-A</string>
+  <string name="language">Lugha</string>
+  <string name="phone_number">Nambari ya simu</string>
+  <string name="select_date">Changua tarehe</string>
+  <string name="select_time">Chagua wakati</string>
 </resources>

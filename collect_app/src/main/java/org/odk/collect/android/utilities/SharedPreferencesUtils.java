@@ -121,7 +121,7 @@ public class SharedPreferencesUtils {
             }
         }
 
-        AuthDialogUtility.setWebCredentialsFromPreferences(context);
+        AuthDialogUtility.setWebCredentialsFromPreferences();
         AutoSendPreferenceMigrator.migrate(generalPrefsJson);
 
         //settings import confirmation toast
@@ -163,13 +163,13 @@ public class SharedPreferencesUtils {
         return res;
     }
 
-    private Collection<String> getAllGeneralKeys() {
+    public static Collection<String> getAllGeneralKeys() {
         Collection<String> keys = new HashSet<>(GENERAL_KEYS.keySet());
         keys.add(KEY_PASSWORD);
         return keys;
     }
 
-    private Collection<String> getAllAdminKeys() {
+    public static Collection<String> getAllAdminKeys() {
         Collection<String> keys = new HashSet<>(ALL_KEYS);
         keys.add(KEY_ADMIN_PW);
         return keys;

@@ -116,80 +116,31 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     /**
      * Initialize {@link FormEntryController} with {@link FormDef} from binary or
-     * from XML. If given an instance, it will be used to fill the {@link FormDef}
-     * .
+     * from XML. If given an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
     protected FECWrapper doInBackground(String... path) {
-        FormDef fd = null;
-        FileInputStream fis = null;
         errorMsg = null;
 
-        String formPath = path[0];
+        final String formPath = path[0];
+        final File formXml = new File(formPath);
 
-        File formXml = new File(formPath);
-        String formHash = FileUtils.getMd5Hash(formXml);
-        File formBin = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
+        final FormDef formDef = createFormDefFromCacheOrXml(formPath, formXml);
 
-        publishProgress(
-                Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
-
-
-        //    FormDef.setDefaultEventNotifier(new EventNotifier() {
-        //
-        //      @Override
-        //      public void publishEvent(Event event) {
-        //        Log.d("FormDef", event.asLogLine());
-        //      }
-        //    });
-
-        if (formBin.exists()) {
-            // if we have binary, deserialize binary
-            Timber.i("Attempting to load %s from cached file: %s",
-                    formXml.getName(), formBin.getAbsolutePath());
-            fd = deserializeFormDef(formBin);
-            if (fd == null) {
-                // some error occured with deserialization. Remove the file, and make a
-                // new .formdef
-                // from xml
-                Timber.w("Deserialization FAILED!  Deleting cache file: %s",
-                        formBin.getAbsolutePath());
-                formBin.delete();
-            }
-        }
-        if (fd == null) {
-            // no binary, read from xml
-            try {
-                Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
-                fis = new FileInputStream(formXml);
-                fd = XFormUtils.getFormFromInputStream(fis);
-                if (fd == null) {
-                    errorMsg = "Error reading XForm file";
-                } else {
-                    serializeFormDef(fd, formPath);
-                }
-            } catch (Exception e) {
-                Timber.e(e);
-                errorMsg = e.getMessage();
-            } finally {
-                IOUtils.closeQuietly(fis);
-            }
-        }
-
-        if (errorMsg != null || fd == null) {
+        if (errorMsg != null || formDef == null) {
             return null;
         }
 
         // set paths to /sdcard/odk/forms/formfilename-media/
-        String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
-        File formMediaDir = new File(formXml.getParent(), formFileName + "-media");
+        final String formFileName = formXml.getName().substring(0, formXml.getName().lastIndexOf("."));
+        final File formMediaDir = new File(formXml.getParent(), formFileName + "-media");
 
         externalDataManager = new ExternalDataManagerImpl(formMediaDir);
 
         // add external data function handlers
         ExternalDataHandler externalDataHandlerPull = new ExternalDataHandlerPull(
                 externalDataManager);
-        fd.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
+        formDef.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
 
         try {
             loadExternalData(formMediaDir);
@@ -205,51 +156,16 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // create FormEntryController from formdef
-        FormEntryModel fem = new FormEntryModel(fd);
-        FormEntryController fec = new FormEntryController(fem);
+        final FormEntryModel fem = new FormEntryModel(formDef);
+        final FormEntryController fec = new FormEntryController(fem);
 
         boolean usedSavepoint = false;
 
         try {
-            // import existing data into formdef
-            if (instancePath != null) {
-                File instance = new File(instancePath);
-                File shadowInstance = SaveToDiskTask.savepointFile(instance);
-                if (shadowInstance.exists() && (shadowInstance.lastModified()
-                        > instance.lastModified())) {
-                    // the savepoint is newer than the saved value of the instance.
-                    // use it.
-                    usedSavepoint = true;
-                    instance = shadowInstance;
-                    Timber.w("Loading instance from shadow file: %s", shadowInstance.getAbsolutePath());
-                }
-                if (instance.exists()) {
-                    // This order is important. Import data, then initialize.
-                    try {
-                        importData(instance, fec);
-                        fd.initialize(false, new InstanceInitializationFactory());
-                    } catch (RuntimeException e) {
-                        Timber.e(e);
-
-                        // SCTO-633
-                        if (usedSavepoint
-                                && !(e.getCause() instanceof XPathTypeMismatchException)) {
-                            // this means that the .save file is corrupted or 0-sized, so
-                            // don't use it.
-                            usedSavepoint = false;
-                            instancePath = null;
-                            fd.initialize(true, new InstanceInitializationFactory());
-                        } else {
-                            // this means that the saved instance is corrupted.
-                            throw e;
-                        }
-                    }
-                } else {
-                    fd.initialize(true, new InstanceInitializationFactory());
-                }
-            } else {
-                fd.initialize(true, new InstanceInitializationFactory());
-            }
+            Timber.i("Initializing form.");
+            final long start = System.currentTimeMillis();
+            usedSavepoint = initializeForm(formDef, fec);
+            Timber.i("Form initialized in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
         } catch (RuntimeException e) {
             Timber.e(e);
             if (e.getCause() instanceof XPathTypeMismatchException) {
@@ -268,24 +184,112 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // Remove previous forms
-        ReferenceManager._().clearSession();
+        ReferenceManager.instance().clearSession();
 
+        processItemSets(formMediaDir);
+
+        // This should get moved to the Application Class
+        if (ReferenceManager.instance().getFactories().length == 0) {
+            // this is /sdcard/odk
+            ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+        }
+
+        // Set jr://... to point to /sdcard/odk/forms/filename-media/
+        ReferenceManager.instance().addSessionRootTranslator(
+                new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager.instance().addSessionRootTranslator(
+                new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager.instance().addSessionRootTranslator(
+                new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
+        ReferenceManager.instance().addSessionRootTranslator(
+                new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
+
+        final FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
+                : new File(instancePath));
+        if (xpath != null) {
+            // we are resuming after having terminated -- set index to this
+            // position...
+            FormIndex idx = fc.getIndexFromXPath(xpath);
+            fc.jumpToIndex(idx);
+        }
+        if (waitingXPath != null) {
+            FormIndex idx = fc.getIndexFromXPath(waitingXPath);
+            fc.setIndexWaitingForData(idx);
+        }
+        data = new FECWrapper(fc, usedSavepoint);
+        return data;
+    }
+
+    private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
+        final String formHash = FileUtils.getMd5Hash(formXml);
+
+        publishProgress(
+                Collect.getInstance().getString(R.string.survey_loading_reading_form_message));
+
+        final File cachedForm = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
+        if (cachedForm.exists()) {
+            Timber.i("Attempting to load %s from cached file: %s.",
+                    formXml.getName(), cachedForm.getAbsolutePath());
+            final long start = System.currentTimeMillis();
+            final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
+            if (deserializedFormDef != null) {
+                Timber.i("Loaded in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
+
+                return deserializedFormDef;
+            }
+
+            // An error occurred with deserialization. Remove the file, and make a
+            // new .formdef from xml.
+            Timber.w("Deserialization FAILED! Deleting cache file: %s",
+                    cachedForm.getAbsolutePath());
+            cachedForm.delete();
+        }
+
+        FileInputStream fis = null;
+        // no binary, read from xml
+        try {
+            Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
+            final long start = System.currentTimeMillis();
+            fis = new FileInputStream(formXml);
+            FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
+            if (formDefFromXml == null) {
+                errorMsg = "Error reading XForm file";
+            } else {
+                Timber.i("Loaded in %.3f seconds. Now saving to cache.",
+                        (System.currentTimeMillis() - start) / 1000F);
+                final long start2 = System.currentTimeMillis();
+                boolean saved = cacheFormDefIfNew(formDefFromXml, formPath);
+                Timber.i((saved ? "Saved" : "Found existing cached form") + " in %.3f seconds.",
+                        (System.currentTimeMillis() - start2) / 1000F);
+                return formDefFromXml;
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+            errorMsg = e.getMessage();
+        } finally {
+            IOUtils.closeQuietly(fis);
+        }
+
+        return null;
+    }
+
+    private void processItemSets(File formMediaDir) {
         // for itemsets.csv, we only check to see if the itemset file has been
         // updated
-        File csv = new File(formMediaDir.getAbsolutePath() + "/" + ITEMSETS_CSV);
+        final File csv = new File(formMediaDir.getAbsolutePath() + "/" + ITEMSETS_CSV);
         String csvmd5 = null;
         if (csv.exists()) {
             csvmd5 = FileUtils.getMd5Hash(csv);
             boolean readFile = false;
-            ItemsetDbAdapter ida = new ItemsetDbAdapter();
+            final ItemsetDbAdapter ida = new ItemsetDbAdapter();
             ida.open();
             // get the database entry (if exists) for this itemsets.csv, based
             // on the path
-            Cursor c = ida.getItemsets(csv.getAbsolutePath());
+            final Cursor c = ida.getItemsets(csv.getAbsolutePath());
             if (c != null) {
                 if (c.getCount() == 1) {
                     c.moveToFirst(); // should be only one, ever, if any
-                    String oldmd5 = c.getString(c.getColumnIndex("hash"));
+                    final String oldmd5 = c.getString(c.getColumnIndex("hash"));
                     if (oldmd5.equals(csvmd5)) {
                         // they're equal, do nothing
                     } else {
@@ -306,45 +310,50 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 readCSV(csv, csvmd5, ItemsetDbAdapter.getMd5FromString(csv.getAbsolutePath()));
             }
         }
+    }
 
-        // This should get moved to the Application Class
-        if (ReferenceManager._().getFactories().length == 0) {
-            // this is /sdcard/odk
-            ReferenceManager._().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
+    private boolean initializeForm(FormDef formDef, FormEntryController fec) {
+        final InstanceInitializationFactory instanceInit = new InstanceInitializationFactory();
+        boolean usedSavepoint = false;
+        if (instancePath != null) {
+            File instance = new File(instancePath);
+            final File shadowInstance = SaveToDiskTask.getSavepointFile(instance.getName());
+            if (shadowInstance.exists() && (shadowInstance.lastModified()
+                    > instance.lastModified())) {
+                // the savepoint is newer than the saved value of the instance.
+                // use it.
+                usedSavepoint = true;
+                instance = shadowInstance;
+                Timber.w("Loading instance from shadow file: %s", shadowInstance.getAbsolutePath());
+            }
+            if (instance.exists()) {
+                // This order is important. Import data, then initialize.
+                try {
+                    importData(instance, fec);
+                    formDef.initialize(false, instanceInit);
+                } catch (RuntimeException e) {
+                    Timber.e(e);
+
+                    // SCTO-633
+                    if (usedSavepoint
+                            && !(e.getCause() instanceof XPathTypeMismatchException)) {
+                        // this means that the .save file is corrupted or 0-sized, so
+                        // don't use it.
+                        usedSavepoint = false;
+                        instancePath = null;
+                        formDef.initialize(true, instanceInit);
+                    } else {
+                        // this means that the saved instance is corrupted.
+                        throw e;
+                    }
+                }
+            } else {
+                formDef.initialize(true, instanceInit);
+            }
+        } else {
+            formDef.initialize(true, instanceInit);
         }
-
-        // Set jr://... to point to /sdcard/odk/forms/filename-media/
-        ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://images/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://image/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://audio/", "jr://file/forms/" + formFileName + "-media/"));
-        ReferenceManager._().addSessionRootTranslator(
-                new RootTranslator("jr://video/", "jr://file/forms/" + formFileName + "-media/"));
-
-        // clean up vars
-        fis = null;
-        fd = null;
-        formBin = null;
-        formXml = null;
-        formPath = null;
-
-        FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
-                : new File(instancePath));
-        if (xpath != null) {
-            // we are resuming after having terminated -- set index to this
-            // position...
-            FormIndex idx = fc.getIndexFromXPath(xpath);
-            fc.jumpToIndex(idx);
-        }
-        if (waitingXPath != null) {
-            FormIndex idx = fc.getIndexFromXPath(waitingXPath);
-            fc.setIndexWaitingForData(idx);
-        }
-        data = new FECWrapper(fc, usedSavepoint);
-        return data;
-
+        return usedSavepoint;
     }
 
     @SuppressWarnings("unchecked")
@@ -412,7 +421,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
     }
 
-    public boolean importData(File instanceFile, FormEntryController fec) {
+    private void importData(File instanceFile, FormEntryController fec) {
+        Timber.i("Importing data");
         publishProgress(
                 Collect.getInstance().getString(R.string.survey_loading_reading_data_message));
 
@@ -426,33 +436,31 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
             Timber.e("Saved form instance does not match template form definition");
-            return false;
-        } else {
-            // populate the data model
-            TreeReference tr = TreeReference.rootRef();
-            tr.add(templateRoot.getName(), TreeReference.INDEX_UNBOUND);
-
-            // Here we set the Collect's implementation of the IAnswerResolver.
-            // We set it back to the default after select choices have been populated.
-            XFormParser.setAnswerResolver(new ExternalAnswerResolver());
-            templateRoot.populate(savedRoot, fec.getModel().getForm());
-            XFormParser.setAnswerResolver(new DefaultAnswerResolver());
-
-            // populated model to current form
-            fec.getModel().getForm().getInstance().setRoot(templateRoot);
-
-            // fix any language issues
-            // :
-            // http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
-            if (fec.getModel().getLanguages() != null) {
-                fec.getModel().getForm()
-                        .localeChanged(fec.getModel().getLanguage(),
-                                fec.getModel().getForm().getLocalizer());
-            }
-
-            return true;
-
+            return;
         }
+
+        // populate the data model
+        TreeReference tr = TreeReference.rootRef();
+        tr.add(templateRoot.getName(), TreeReference.INDEX_UNBOUND);
+
+        // Here we set the Collect's implementation of the IAnswerResolver.
+        // We set it back to the default after select choices have been populated.
+        XFormParser.setAnswerResolver(new ExternalAnswerResolver());
+        templateRoot.populate(savedRoot, fec.getModel().getForm());
+        XFormParser.setAnswerResolver(new DefaultAnswerResolver());
+
+        // populated model to current form
+        fec.getModel().getForm().getInstance().setRoot(templateRoot);
+
+        // fix any language issues
+        // :
+        // http://bitbucket.org/javarosa/main/issue/5/itext-n-appearing-in-restored-instances
+        if (fec.getModel().getLanguages() != null) {
+            fec.getModel().getForm()
+                    .localeChanged(fec.getModel().getLanguage(),
+                            fec.getModel().getForm().getLocalizer());
+        }
+        Timber.i("Done importing data");
     }
 
     /**
@@ -485,28 +493,29 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     /**
-     * Write the FormDef to the file system as a binary blog.
+     * Serializes a FormDef and saves it to the cache, if it is not already cached.
      *
-     * @param filepath path to the form file
+     * @param fd       the FormDef
+     * @param filepath where to save the serialized FormDef
+     * @return whether the file was added to the cache
      */
-    public void serializeFormDef(FormDef fd, String filepath) {
-        // calculate unique md5 identifier
+    private boolean cacheFormDefIfNew(FormDef fd, String filepath) {
         String hash = FileUtils.getMd5Hash(new File(filepath));
         File formDef = new File(Collect.CACHE_PATH + File.separator + hash + ".formdef");
 
-        // formdef does not exist, create one.
-        if (!formDef.exists()) {
-            FileOutputStream fos;
-            try {
-                fos = new FileOutputStream(formDef);
-                DataOutputStream dos = new DataOutputStream(fos);
-                fd.writeExternal(dos);
-                dos.flush();
-                dos.close();
-            } catch (IOException e) {
-                Timber.e(e);
-            }
+        if (formDef.exists()) {
+            return false;
         }
+
+        try {
+            DataOutputStream dos = new DataOutputStream(new FileOutputStream(formDef));
+            fd.writeExternal(dos);
+            dos.flush();
+            dos.close();
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+        return true;
     }
 
     @Override
@@ -550,7 +559,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     public boolean hasUsedSavepoint() {
-        return (data != null) ? data.hasUsedSavepoint() : false;
+        return (data != null) && data.hasUsedSavepoint();
     }
 
     public void destroy() {

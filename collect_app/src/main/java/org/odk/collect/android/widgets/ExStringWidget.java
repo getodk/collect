@@ -14,17 +14,17 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.method.TextKeyListener;
 import android.text.method.TextKeyListener.Capitalize;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,26 +40,32 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.ObjectUtils;
+import org.odk.collect.android.utilities.ViewIds;
+import org.odk.collect.android.widgets.interfaces.BinaryWidget;
 
 import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * <p>Launch an external app to supply a string value. If the app
  * does not launch, enable the text area for regular data entry.</p>
- *
+ * <p>
  * <p>The default button text is "Launch"
- *
+ * <p>
  * <p>You may override the button text and the error text that is
  * displayed when the app is missing by using jr:itext() values.
- *
+ * <p>
  * <p>To use this widget, define an appearance on the &lt;input/&gt;
  * tag that begins "ex:" and then contains the intent action to lauch.
- *
+ * <p>
  * <p>e.g.,
- *
+ * <p>
  * <pre>
  * &lt;input appearance="ex:change.uw.android.TEXTANSWER" ref="/form/passPhrase" &gt;
  * </pre>
@@ -87,14 +93,15 @@ import timber.log.Timber;
  *
  * @author mitchellsundt@gmail.com
  */
-public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
+@SuppressLint("ViewConstructor")
+public class ExStringWidget extends QuestionWidget implements BinaryWidget {
 
-
+    protected EditText answer;
     private boolean hasExApp = true;
     private Button launchIntentButton;
     private Drawable textBackground;
 
-    protected EditText answer;
+    private ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -104,11 +111,12 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
 
         // set text formatting
         answer = new EditText(context);
-        answer.setId(QuestionWidget.newUniqueId());
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
+        answer.setId(ViewIds.generateViewId());
+        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         answer.setLayoutParams(params);
         textBackground = answer.getBackground();
         answer.setBackground(null);
+        answer.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
 
         // capitalize nothing
         answer.setKeyListener(new TextKeyListener(Capitalize.NONE, false));
@@ -122,73 +130,16 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             answer.setText(s);
         }
 
-        if (formEntryPrompt.isReadOnly()) {
-            answer.setBackground(null);
-        }
-
-        if (formEntryPrompt.isReadOnly() || hasExApp) {
+        if (getFormEntryPrompt().isReadOnly() || hasExApp) {
             answer.setFocusable(false);
-            answer.setClickable(false);
+            answer.setEnabled(false);
         }
 
-        String exSpec = prompt.getAppearanceHint().replaceFirst("^ex[:]", "");
-        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
-        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
-        final String buttonText;
-        final String errorString;
-        String v = formEntryPrompt.getSpecialFormQuestionText("buttonText");
-        buttonText = (v != null) ? v : context.getString(R.string.launch_app);
-        v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : context.getString(R.string.no_app);
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
+        String buttonText = (v != null) ? v : context.getString(R.string.launch_app);
 
-        // set button formatting
-        launchIntentButton = new Button(getContext());
-        launchIntentButton.setId(QuestionWidget.newUniqueId());
-        launchIntentButton.setText(buttonText);
-        launchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        launchIntentButton.setPadding(20, 20, 20, 20);
-        launchIntentButton.setEnabled(!formEntryPrompt.isReadOnly());
-        launchIntentButton.setLayoutParams(params);
-
-        launchIntentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(intentName);
-                if (isActivityAvailable(i)) {
-                    try {
-                        ExternalAppsUtils.populateParameters(i, exParams,
-                                formEntryPrompt.getIndex().getReference());
-
-                        Collect.getInstance().getFormController().setIndexWaitingForData(
-                                formEntryPrompt.getIndex());
-                        fireActivity(i);
-                    } catch (ExternalParamsException e) {
-                        Timber.e(e);
-                        onException(e.getMessage());
-                    }
-                } else {
-                    onException(errorString);
-                }
-            }
-
-            private void onException(String toastText) {
-                hasExApp = false;
-                if (!formEntryPrompt.isReadOnly()) {
-                    answer.setBackground(textBackground);
-                    answer.setFocusable(true);
-                    answer.setFocusableInTouchMode(true);
-                    answer.setClickable(true);
-                }
-                launchIntentButton.setEnabled(false);
-                launchIntentButton.setFocusable(false);
-                Collect.getInstance().getFormController().setIndexWaitingForData(null);
-                Toast.makeText(getContext(),
-                        toastText, Toast.LENGTH_SHORT)
-                        .show();
-                ExStringWidget.this.answer.requestFocus();
-                Timber.e(toastText);
-            }
-        });
+        launchIntentButton = getSimpleButton(buttonText);
+        launchIntentButton.setEnabled(!getFormEntryPrompt().isReadOnly());
 
         // finish complex layout
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -199,11 +150,11 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     }
 
     protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra("value", formEntryPrompt.getAnswerText());
+        i.putExtra("value", getFormEntryPrompt().getAnswerText());
         Collect.getInstance().getActivityLogger().logInstanceAction(this, "launchIntent",
-                i.getAction(), formEntryPrompt.getIndex());
+                i.getAction(), getFormEntryPrompt().getIndex());
         ((Activity) getContext()).startActivityForResult(i,
-                FormEntryActivity.EX_STRING_CAPTURE);
+                RequestCodes.EX_STRING_CAPTURE);
     }
 
     @Override
@@ -215,22 +166,17 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     @Override
     public IAnswerData getAnswer() {
         String s = answer.getText().toString();
-        if (s == null || s.equals("")) {
-            return null;
-        } else {
-            return new StringData(s);
-        }
+        return !s.isEmpty() ? new StringData(s) : null;
     }
 
 
     /**
-     * Allows answer to be set externally in {@Link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormEntryActivity}.
      */
     @Override
     public void setBinaryData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         this.answer.setText(stringData == null ? null : stringData.getValue().toString());
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
@@ -244,7 +190,7 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
-            if (!formEntryPrompt.isReadOnly()) {
+            if (!getFormEntryPrompt().isReadOnly()) {
                 answer.requestFocus();
                 inputManager.showSoftInput(answer, 0);
             /*
@@ -261,18 +207,6 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
                 inputManager.hideSoftInputFromWindow(answer.getWindowToken(), 0);
             }
         }
-    }
-
-
-    @Override
-    public boolean isWaitingForBinaryData() {
-        return formEntryPrompt.getIndex().equals(
-                Collect.getInstance().getFormController().getIndexWaitingForData());
-    }
-
-    @Override
-    public void cancelWaitingForBinaryData() {
-        Collect.getInstance().getFormController().setIndexWaitingForData(null);
     }
 
     @Override
@@ -294,10 +228,62 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         launchIntentButton.cancelLongPress();
     }
 
-    private boolean isActivityAvailable(Intent intent) {
-        return getContext()
-                .getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-                .size() > 0;
+    @Override
+    protected void injectDependencies(DependencyProvider dependencyProvider) {
+        DependencyProvider<ActivityAvailability> activityUtilProvider =
+                ObjectUtils.uncheckedCast(dependencyProvider);
+
+        if (activityUtilProvider == null) {
+            Timber.e("DependencyProvider doesn't provide ActivityAvailability.");
+            return;
+        }
+
+        this.activityAvailability = activityUtilProvider.provide();
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        String exSpec = getFormEntryPrompt().getAppearanceHint().replaceFirst("^ex[:]", "");
+        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
+        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
+        final String errorString;
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
+        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
+
+        Intent i = new Intent(intentName);
+        if (activityAvailability.isActivityAvailable(i)) {
+            try {
+                ExternalAppsUtils.populateParameters(i, exParams,
+                        getFormEntryPrompt().getIndex().getReference());
+
+                waitForData();
+                fireActivity(i);
+
+            } catch (ExternalParamsException e) {
+                Timber.e(e);
+                onException(e.getMessage());
+            }
+        } else {
+            onException(errorString);
+        }
+    }
+
+    private void onException(String toastText) {
+        hasExApp = false;
+        if (!getFormEntryPrompt().isReadOnly()) {
+            answer.setBackground(textBackground);
+            answer.setFocusable(true);
+            answer.setFocusableInTouchMode(true);
+            answer.setEnabled(true);
+        }
+        launchIntentButton.setEnabled(false);
+        launchIntentButton.setFocusable(false);
+        cancelWaitingForData();
+
+        Toast.makeText(getContext(),
+                toastText, Toast.LENGTH_SHORT)
+                .show();
+        this.answer.requestFocus();
+        Timber.e(toastText);
     }
 }

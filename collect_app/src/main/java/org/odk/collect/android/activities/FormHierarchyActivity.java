@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.GroupDef;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -285,7 +286,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                     // We have left the current group
                     if (repeatGroupRef == null) {
                         // We are done.
-                        break event_search;
+                        break;
                     } else {
                         // exit the inner repeat group
                         repeatGroupRef = null;
@@ -308,7 +309,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                         if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
                             // show the question if it is an editable field.
                             // or if it is read-only and the label is not blank.
-                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp);
+                            String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this);
                             formList.add(
                                     new HierarchyElement(fp.getLongText(), answerDisplay, null,
                                             Color.WHITE, QUESTION, fp.getIndex()));
@@ -343,11 +344,18 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
                                             COLLAPSED, fc.getIndex());
                             formList.add(group);
                         }
+                        String repeatLabel = mIndent + fc.getLongText();
+                        if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
+                            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                            FormEntryCaption fc2 = formController.getCaptionPrompt();
+                            if (fc2.getLongText() != null) {
+                                repeatLabel = fc2.getLongText();
+                            }
+                        }
+                        repeatLabel += " (" + (fc.getMultiplicity() + 1) + ")";
                         // Add this group name to the drop down list for this repeating group.
                         HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
-                                .getIndex()));
+                        h.addChild(new HierarchyElement(repeatLabel, null, null, Color.WHITE, CHILD, fc.getIndex()));
                         break;
                 }
                 event =

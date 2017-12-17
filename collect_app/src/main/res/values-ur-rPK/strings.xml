@@ -116,7 +116,6 @@
   <string name="select_another_image">دوسری تصویر کا ینتخاب کریں۔</string>
   <string name="use_odk_default">Default  تصویر کو استعمال کریں</string>
   <string name="change_splash_path">عکس بدل دیں</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="change_formlist_url">فارم لیسٹ کا راستہ (ملحقہ ہو آر ایل)</string>
   <string name="change_protocol">پلیٹ فارم</string>
@@ -182,10 +181,8 @@
   <string name="admin_password_disabled">منتظم کا شناختے لفظ غیر موءثر کیا گیا۔</string>
   <string name="admin_password_incorrect">معافی، شناختی لفظ ٹھیک نہیں ہے</string>
   <string name="enter_admin_password">منتظم کا شناختی لفظ درج کریں</string>
-  <string name="autosend">خودبخود بھیجو</string>
   <string name="found_in_main">غیر نشان شدہ کرکے مرکزی فہرست میں چھپا لیں</string>
   <string name="found_in_settings">نشانی ہٹاکر عمومی سیٹنگز سے ہٹا دیں۔</string>
-  <string name="no_account">اکاونٹ نہیں ہے</string>
   <string name="save_preferences">سیٹنگزڈسک میں محفوظ کریں۔</string>
   <string name="form_forward">اگلا</string>
   <string name="form_backward">پچھلا</string>
@@ -200,7 +197,6 @@
   <string name="constraint_behavior_on_finalize">توثیق کو حتمی ہونے تک موءخر کردیں</string>
   <string name="view_change_location">مقام کو ملاحظہ کریں یا تبدیلکریں۔</string>
   <string name="change_server_url">یو آر ایل (URL)</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

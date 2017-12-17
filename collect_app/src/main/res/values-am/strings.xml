@@ -1,15 +1,34 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="show_password">የይለፍ ቃሉን አሳይ</string>
+  <string name="enter_data">ባዶዉን ቅጽ ሙላ</string>
+  <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
+  <string name="get_forms">አድስ ቅጽ</string>
+  <string name="manage_files">የተሞላዉን ቅጽ ያጥፉ</string>
+  <string name="send_data">የተጠናቆ የተሞላዉን  ቅጽ ይላኩ</string>
+  <string name="view_sent_forms">- ተሞልቶ የተላከዉን  ቅጽ ይመልከቱ</string>
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="ethiopian_month_1">መስከረም</string>
+  <string name="ethiopian_month_2">ጥቅምት</string>
+  <string name="ethiopian_month_3">ኅዳር</string>
+  <string name="ethiopian_month_4">ታኅሣሥ</string>
+  <string name="ethiopian_month_5">ጥር</string>
+  <string name="ethiopian_month_6">የካቲት</string>
+  <string name="ethiopian_month_7">መጋቢት</string>
+  <string name="ethiopian_month_8">ሚያዝያ</string>
+  <string name="ethiopian_month_9">ግንቦት</string>
+  <string name="ethiopian_month_10">ሰኔ</string>
+  <string name="ethiopian_month_11">ሐምሌ</string>
+  <string name="ethiopian_month_12">ነሐሴ</string>
+  <string name="ethiopian_month_13">ጳጐሜን</string>
 </resources>

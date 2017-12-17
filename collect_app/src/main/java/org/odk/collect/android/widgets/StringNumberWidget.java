@@ -14,34 +14,47 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.method.DigitsKeyListener;
 import android.util.TypedValue;
+import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher;
 
 /**
  * Widget that restricts values to integers.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
+@SuppressLint("ViewConstructor")
 public class StringNumberWidget extends StringWidget {
 
-    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride) {
+    boolean useThousandSeparator;
+
+    public StringNumberWidget(Context context, FormEntryPrompt prompt, boolean readOnlyOverride, boolean useThousandSeparator) {
         super(context, prompt, readOnlyOverride, true);
 
-        answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontsize);
-        answer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
+        EditText answerTextField = getAnswerTextField();
+
+        answerTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerTextField.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 
         // needed to make long readonly text scroll
-        answer.setHorizontallyScrolling(false);
-        answer.setSingleLine(false);
+        answerTextField.setHorizontallyScrolling(false);
+        answerTextField.setSingleLine(false);
 
-        answer.setKeyListener(new DigitsKeyListener() {
+        this.useThousandSeparator = useThousandSeparator;
+        if (useThousandSeparator) {
+            answerTextField.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerTextField));
+        }
+
+        answerTextField.setKeyListener(new DigitsKeyListener() {
             @Override
             protected char[] getAcceptedChars() {
                 return new char[]{
@@ -62,8 +75,8 @@ public class StringNumberWidget extends StringWidget {
         }
 
         if (s != null) {
-            answer.setText(s);
-            Selection.setSelection(answer.getText(), answer.getText().toString().length());
+            answerTextField.setText(s);
+            Selection.setSelection(answerTextField.getText(), answerTextField.getText().toString().length());
         }
 
         setupChangeListener();
@@ -73,8 +86,13 @@ public class StringNumberWidget extends StringWidget {
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        String s = answer.getText().toString();
-        if (s == null || s.equals("")) {
+        String s = getAnswerText();
+
+        if (useThousandSeparator) {
+            s = ThousandsSeparatorTextWatcher.getOriginalString(s);
+        }
+
+        if (s.isEmpty()) {
             return null;
         } else {
             try {

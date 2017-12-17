@@ -118,7 +118,6 @@
   <string name="select_another_image">Chọn ảnh khác</string>
   <string name="use_odk_default">Chọn ảnh mặc định</string>
   <string name="change_splash_path">Đổi ảnh</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">Lưu thay đổi</string>
   <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
   <string name="change_protocol">Nền tảng máy chủ</string>
@@ -188,10 +187,8 @@
   <string name="admin_password_disabled">Admin password disabled</string>
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
-  <string name="autosend">Auto Send</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="no_account">No account</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
   <string name="form_backward">Prev</string>
@@ -202,7 +199,6 @@
   <string name="launch_printer">Initiate Printing</string>
   <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
   <string name="change_server_url">Địa chỉ máy chủ</string>
-  <string name="default_google_sheets_url"></string>
   <!--Geo string added in feature-geofeatures branch-->
   <!--&lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

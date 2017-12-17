@@ -14,12 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -34,6 +33,8 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
+import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,8 @@ import java.util.List;
  *
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SpinnerMultiWidget extends QuestionWidget {
+@SuppressLint("ViewConstructor")
+public class SpinnerMultiWidget extends QuestionWidget implements ButtonWidget, MultiChoiceWidget {
 
     List<SelectChoice> items;
 
@@ -68,7 +70,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
     // Displays the current selections below the button
     TextView selectionText;
 
-
     @SuppressWarnings("unchecked")
     public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
         super(context, prompt);
@@ -82,66 +83,25 @@ public class SpinnerMultiWidget extends QuestionWidget {
             items = prompt.getSelectChoices();
         }
 
-        formEntryPrompt = prompt;
-
         selections = new boolean[items.size()];
         answerItems = new CharSequence[items.size()];
         alertBuilder = new AlertDialog.Builder(context);
-        button = new Button(context);
-        selectionText = new TextView(getContext());
+        button = getSimpleButton(context.getString(R.string.select_answer));
 
         // Build View
         for (int i = 0; i < items.size(); i++) {
             answerItems[i] = prompt.getSelectChoiceText(items.get(i));
         }
 
-        selectionText.setText(context.getString(R.string.selected));
-        selectionText.setTextColor(Color.BLACK);
-        selectionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
+        selectionText = getAnswerTextView();
         selectionText.setVisibility(View.GONE);
 
-        button.setText(context.getString(R.string.select_answer));
-        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize);
-        button.setPadding(0, 0, 0, 7);
-
-        // Give the button a click listener. This defines the alert as well. All the
-        // click and selection behavior is defined here.
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                alertBuilder.setTitle(formEntryPrompt.getQuestionText()).setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                List<String> selectedValues = new ArrayList<>();
-
-                                for (int i = 0; i < selections.length; i++) {
-                                    if (selections[i]) {
-                                        selectedValues.add(answerItems[i].toString());
-                                    }
-                                }
-
-                                selectionText.setText(String.format(context.getString(R.string.selected_answer),
-                                        TextUtils.join(", ", selectedValues)));
-                                selectionText.setVisibility(View.VISIBLE);
-                            }
-                        });
-
-                alertBuilder.setMultiChoiceItems(answerItems, selections,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which,
-                                                boolean isChecked) {
-                                selections[which] = isChecked;
-                            }
-                        });
-                AlertDialog alert = alertBuilder.create();
-                alert.show();
-            }
-        });
+        if (prompt.isReadOnly()) {
+            button.setEnabled(false);
+        }
 
         // Fill in previous answers
-        List<Selection> ve = new ArrayList<Selection>();
+        List<Selection> ve = new ArrayList<>();
         if (prompt.getAnswerValue() != null) {
             ve = (List<Selection>) prompt.getAnswerValue().getValue();
         }
@@ -172,11 +132,10 @@ public class SpinnerMultiWidget extends QuestionWidget {
         addAnswerView(answerLayout);
     }
 
-
     @Override
     public IAnswerData getAnswer() {
         clearFocus();
-        List<Selection> vc = new ArrayList<Selection>();
+        List<Selection> vc = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             if (selections[i]) {
                 SelectChoice sc = items.get(i);
@@ -191,7 +150,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void clearAnswer() {
         selectionText.setText(R.string.selected);
@@ -200,7 +158,6 @@ public class SpinnerMultiWidget extends QuestionWidget {
             selections[i] = false;
         }
     }
-
 
     @Override
     public void setFocus(Context context) {
@@ -211,12 +168,10 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
     }
 
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         button.setOnLongClickListener(l);
     }
-
 
     @Override
     public void cancelLongPress() {
@@ -224,4 +179,45 @@ public class SpinnerMultiWidget extends QuestionWidget {
         button.cancelLongPress();
     }
 
+    @Override
+    public int getChoiceCount() {
+        return selections.length;
+    }
+
+    @Override
+    public void setChoiceSelected(int choiceIndex, boolean isSelected) {
+        selections[choiceIndex] = isSelected;
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        alertBuilder.setTitle(getFormEntryPrompt().getQuestionText()).setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        List<String> selectedValues = new ArrayList<>();
+
+                        for (int i = 0; i < selections.length; i++) {
+                            if (selections[i]) {
+                                selectedValues.add(answerItems[i].toString());
+                            }
+                        }
+
+                        selectionText.setText(String.format(getContext().getString(R.string.selected_answer),
+                                TextUtils.join(", ", selectedValues)));
+                        selectionText.setVisibility(View.VISIBLE);
+                    }
+                });
+
+        alertBuilder.setMultiChoiceItems(answerItems, selections,
+                new DialogInterface.OnMultiChoiceClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which,
+                                        boolean isChecked) {
+                        selections[which] = isChecked;
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
 }

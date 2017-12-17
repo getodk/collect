@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -42,7 +43,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.utilities.ViewIds;
 
 import java.io.File;
 
@@ -95,6 +96,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             // (it's a spanned thing...)
             viewText.setText(viewText.getText().toString());
             viewText.setTextColor(playTextColor);
+            viewText.setBackgroundColor(playBackgroundTextColor);
             audioButton.playAudio();
         }
     }
@@ -113,7 +115,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
      */
     public void resetTextFormatting() {
         // first set it to defaults
-        viewText.setTextColor(Color.BLACK);
+        viewText.setTextColor(ContextCompat.getColor(context, R.color.primaryTextColor));
         // then set the text to our original (brings back any html formatting)
         viewText.setText(originalText);
     }
@@ -123,7 +125,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             String videoFilename = "";
             try {
                 videoFilename =
-                        ReferenceManager._().DeriveReference(videoURI).getLocalURI();
+                        ReferenceManager.instance().DeriveReference(videoURI).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e, "Invalid reference exception due to %s ", e.getMessage());
             }
@@ -155,7 +157,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
         this.index = index;
         viewText = text;
         originalText = text.getText();
-        viewText.setId(QuestionWidget.newUniqueId());
+        viewText.setId(ViewIds.generateViewId());
         this.videoURI = videoURI;
 
         // Layout configurations for our elements in the relative layout
@@ -166,7 +168,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                         LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams imageParams =
-                new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                         LayoutParams.WRAP_CONTENT);
         RelativeLayout.LayoutParams videoParams =
                 new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -180,7 +182,7 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
             audioButton.setPadding(22, 12, 22, 12);
             audioButton.setBackgroundColor(Color.LTGRAY);
             audioButton.setOnClickListener(this);
-            audioButton.setId(QuestionWidget.newUniqueId()); // random ID to be used by the
+            audioButton.setId(ViewIds.generateViewId()); // random ID to be used by the
             // relative layout.
         } else {
             // No audio file specified, so ignore.
@@ -206,17 +208,17 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                 }
 
             });
-            videoButton.setId(QuestionWidget.newUniqueId());
+            videoButton.setId(ViewIds.generateViewId());
         } else {
             // No video file specified, so ignore.
         }
 
         // Now set up the image view
         String errorMsg = null;
-        final int imageId = QuestionWidget.newUniqueId();
+        final int imageId = ViewIds.generateViewId();
         if (imageURI != null) {
             try {
-                String imageFilename = ReferenceManager._().DeriveReference(imageURI).getLocalURI();
+                String imageFilename = ReferenceManager.instance().DeriveReference(imageURI).getLocalURI();
                 final File imageFile = new File(imageFilename);
                 if (imageFile.exists()) {
                     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -230,32 +232,41 @@ public class MediaLayout extends RelativeLayout implements OnClickListener {
                         imageView.setImageBitmap(b);
                         imageView.setId(imageId);
 
-                        if (bigImageURI != null) {
-                            imageView.setOnClickListener(new OnClickListener() {
-                                String bigImageFilename = ReferenceManager._()
-                                        .DeriveReference(bigImageURI).getLocalURI();
-                                File bigImage = new File(bigImageFilename);
-
-
-                                @Override
-                                public void onClick(View v) {
+                        imageView.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (bigImageURI != null) {
                                     Collect.getInstance().getActivityLogger().logInstanceAction(
-                                            this, "onClick",
-                                            "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
-                                            MediaLayout.this.index);
-
-                                    Intent i = new Intent("android.intent.action.VIEW");
-                                    i.setDataAndType(Uri.fromFile(bigImage), "image/*");
+                                        this, "onClick",
+                                        "showImagePromptBigImage" + MediaLayout.this.selectionDesignator,
+                                        MediaLayout.this.index);
+                                    
                                     try {
+                                        File bigImage = new File(ReferenceManager
+                                                .instance()
+                                                .DeriveReference(bigImageURI)
+                                                .getLocalURI());
+
+                                        Intent i = new Intent("android.intent.action.VIEW");
+                                        i.setDataAndType(Uri.fromFile(bigImage), "image/*");
                                         getContext().startActivity(i);
+                                    } catch (InvalidReferenceException e) {
+                                        Timber.e(e, "Invalid image reference due to %s ", e.getMessage());
                                     } catch (ActivityNotFoundException e) {
                                         Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
                                         ToastUtils.showShortToast(getContext().getString(R.string.activity_not_found,
-                                                        "view image"));
+                                                "view image"));
+                                    }
+                                } else {
+                                    if (viewText instanceof RadioButton) {
+                                        ((RadioButton) viewText).setChecked(true);
+                                    } else if (viewText instanceof CheckBox) {
+                                        CheckBox checkbox = (CheckBox) viewText;
+                                        checkbox.setChecked(!checkbox.isChecked());
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
                     } else {
                         // Loading the image failed, so it's likely a bad file.
                         errorMsg = getContext().getString(R.string.file_invalid, imageFile);

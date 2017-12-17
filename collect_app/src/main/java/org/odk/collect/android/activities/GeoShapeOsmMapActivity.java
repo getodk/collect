@@ -67,12 +67,12 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
     public static final int stroke_width = 5;
     public String finalReturnString;
     private MapEventsOverlay overlayEvents;
-    private boolean clearButtonTest = false;
+    private boolean clearButtonTest;
     private ImageButton clearButton;
-    public Boolean gpsStatus = true;
+    public boolean gpsStatus = true;
     private ImageButton locationButton;
     public MyLocationNewOverlay myLocationOverlay;
-    public Boolean dataLoaded = false;
+    public boolean dataLoaded;
 
     private MapHelper helper;
 
@@ -92,7 +92,7 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
         clearButton = (ImageButton) findViewById(R.id.clear);
 
         map = (MapView) findViewById(R.id.geoshape_mapview);
-        helper = new MapHelper(this, map, GeoShapeOsmMapActivity.this);
+        helper = new MapHelper(this, map, this);
         map.setMultiTouchControls(true);
         map.setBuiltInZoomControls(true);
         map.setMapListener(mapViewListener);
@@ -210,14 +210,14 @@ public class GeoShapeOsmMapActivity extends Activity implements IRegisterReceive
 
     @Override
     protected void onPause() {
-        super.onPause();
         disableMyLocation();
+        super.onPause();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
         disableMyLocation();
+        super.onStop();
     }
 
 

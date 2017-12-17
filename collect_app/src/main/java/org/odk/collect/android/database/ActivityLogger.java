@@ -20,6 +20,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.application.Collect;
@@ -28,6 +29,8 @@ import org.odk.collect.android.logic.FormController;
 import java.io.File;
 import java.util.Calendar;
 import java.util.LinkedList;
+
+import timber.log.Timber;
 
 /**
  * Log all user interface activity into a SQLite database. Logging is disabled by default.
@@ -41,10 +44,10 @@ import java.util.LinkedList;
  */
 public final class ActivityLogger {
 
-    private static class DatabaseHelper extends ODKSQLiteOpenHelper {
+    private static class DatabaseHelper extends SQLiteOpenHelper {
 
         DatabaseHelper() {
-            super(Collect.LOG_PATH, DATABASE_NAME, null, DATABASE_VERSION);
+            super(new DatabaseContext(Collect.LOG_PATH), DATABASE_NAME, null, DATABASE_VERSION);
             new File(Collect.LOG_PATH).mkdirs();
         }
 
@@ -128,7 +131,7 @@ public final class ActivityLogger {
             database = databaseHelper.getWritableDatabase();
             isOpen = true;
         } catch (SQLiteException e) {
-            System.err.println("Error: " + e.getMessage());
+            Timber.e(e);
             isOpen = false;
         }
     }
@@ -246,7 +249,7 @@ public final class ActivityLogger {
                     database.insert(DATABASE_TABLE, null, cv);
                 }
             } catch (SQLiteConstraintException e) {
-                System.err.println("Error: " + e.getMessage());
+                Timber.e(e);
             }
         }
     }

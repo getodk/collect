@@ -128,7 +128,6 @@
   <string name="select_another_image">別の画像を選択</string>
   <string name="use_odk_default">デフォルト画像を使用</string>
   <string name="change_splash_path">画像を変更</string>
-  <string name="app_url">http://opendatakit.org</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
   <string name="change_protocol">プラットフォーム</string>
@@ -206,7 +205,6 @@
   <string name="autosend">自動送信</string>
   <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
-  <string name="no_account">アカウントがありません</string>
   <string name="save_preferences">設定をディスクに保存する</string>
   <string name="form_forward">次へ</string>
   <string name="form_backward">前へ</string>
@@ -271,7 +269,7 @@
   <string name="invalid_oauth">OAuth 2 トークンが正しくありません</string>
   <string name="google_repeat_error">この時点では Google スプレッドシートで繰り返しはサポートされていません。</string>
   <string name="media_upload_error">写真が存在しないため、アップロードできませんでした: %1$s</string>
-  <string name="odk_auth_auth_fail">ODK 自動送信で認証に失敗しました。設定が正しいことを確認してください</string>
+  <string name="odk_auth_auth_fail">ODK 自動送信の認証に失敗しました。設定が正しいことを確認してください</string>
   <string name="odk_auto_note">ODK 自動送信通知</string>
   <string name="notification_error">通知テキストの表示中にエラー</string>
   <string name="delete_after_send">送信後に削除</string>
@@ -280,7 +278,6 @@
   <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="no_blank_search">検索フィールドは空にできません。</string>
   <string name="google_sheets_url">フォールバック送信 URL</string>
-  <string name="default_google_sheets_url"></string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="sheets_max_columns">列の最大数は 255 ですが、フォームは %s あります。スプレッドシートにアップロードできません。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
@@ -428,8 +425,6 @@
   <string name="sort_by_date_desc">日付順、古いものが最初</string>
   <string name="sort_by_status_asc">ステータス順、確定済が最初</string>
   <string name="sort_by_status_desc">ステータス順、未確定が最初</string>
-  <string name="sorting_menu_open">並び替えメニューを開く</string>
-  <string name="sorting_menu_close">並び替えメニューを閉じる</string>
   <string name="sort_the_list">一覧の並び替え</string>
   <string name="request_permissions_google_account">ODK Collect は、空白のフォームを取得して、入力フォームを送信するために、Google アカウントへのアクセスが必要です。</string>
   <string name="filter_the_list">一覧をフィルター</string>
@@ -464,6 +459,7 @@
   <string name="qrcode_with_server_password">この QR コードにはサーバーのパスワードが含まれています。 \n(タップするとパスワードを削除します)</string>
   <string name="import_export_settings">設定をインポート/エクスポート</string>
   <string name="qrcode_scanner_prompt">四角の中に QR コードを入れてください</string>
+  <string name="barcode_scanner_prompt">四角の中にバーコードを入れてください</string>
   <string name="server_password">サーバーパスワード</string>
   <string name="include_password_dialog">パスワードがコードに含まれます</string>
   <string name="generate">生成</string>
@@ -490,6 +486,7 @@
   <string name="form_submission_category">フォーム送信</string>
   <string name="form_filling_category">フォーム入力</string>
   <string name="high_resolution_title">高解像度ビデオ</string>
+  <string name="image_size_title">画像サイズ</string>
   <string name="form_import_category">フォームインポート</string>
   <string name="user_and_device_identity_title">ユーザーとデバイスの識別</string>
   <string name="constraint_behavior_title">処理の制約</string>
@@ -498,4 +495,22 @@
   <string name="type">種類</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
+  <string name="not_supported_offline_layer_format">選択されたオフラインレイヤーファイルは、サポートされていない PBF フォーマットを使用しています!</string>
+  <string name="invalid_email_address">メールアドレスが無効です!</string>
+  <string name="sort_by">並び順</string>
+  <string name="server">サーバー</string>
+  <string name="select_value">値を選択</string>
+  <string name="edit_value">値を編集</string>
+  <string name="no_value_selected">値が選択されていません</string>
+  <string name="form_delete_message">選択したフォームを削除中</string>
+  <string name="deleting_form_dialog_update_message">フォーム削除中: %1$d / %2$d </string>
+  <string name="search">検索</string>
+  <string name="null_intent_value">外部アプリケーションが、期待した情報を提供しませんでした。</string>
+  <string name="image_size_large">大 (3072px)</string>
+  <string name="image_size_medium">中 (2048px)</string>
+  <string name="image_size_small">小 (1024px)</string>
+  <string name="image_size_very_small">極小 (640px)</string>
+  <string name="image_size_original">カメラの元のサイズ (デフォルト)</string>
+  <string name="image_size_dialog_title">画像の長辺の最大ピクセル数</string>
+  <string name="bearing_lack_of_sensors">挙動を収集できません: デバイスに加速度センサー、磁場センサー、またはその両方がありません。</string>
 </resources>

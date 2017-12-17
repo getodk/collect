@@ -38,7 +38,7 @@ public class WidgetFactory {
      * @param readOnlyOverride a flag to be ORed with JR readonly attribute.
      */
     public static QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context,
-            boolean readOnlyOverride) {
+                                                        boolean readOnlyOverride) {
 
         // get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
@@ -48,7 +48,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget;
+        final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -56,7 +56,15 @@ public class WidgetFactory {
                         questionWidget = new DateTimeWidget(context, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(context, fep);
+                        if (appearance.contains("ethiopian")) {
+                            questionWidget = new EthiopianDateWidget(context, fep);
+                        } else if (appearance.contains("coptic")) {
+                            questionWidget = new CopticDateWidget(context, fep);
+                        } else if (appearance.contains("islamic")) {
+                            questionWidget = new IslamicDateWidget(context, fep);
+                        } else {
+                            questionWidget = new DateWidget(context, fep);
+                        }
                         break;
                     case Constants.DATATYPE_TIME:
                         questionWidget = new TimeWidget(context, fep);
@@ -67,14 +75,24 @@ public class WidgetFactory {
                         } else if (appearance.equals("bearing")) {
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith("ex:")) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
-                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -103,8 +121,13 @@ public class WidgetFactory {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.startsWith("ex:")) {
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.equals("numbers")) {
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
+                        } else if (appearance.contains("numbers")) {
+                            boolean useThousandsSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandsSeparator = true;
+                            }
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
+                                    useThousandsSeparator);
                         } else if (appearance.equals("url")) {
                             questionWidget = new UrlWidget(context, fep);
                         } else {
@@ -152,7 +175,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -190,7 +213,7 @@ public class WidgetFactory {
                     int numColumns = -1;
                     try {
                         String firstWord = appearance.split("\\s+")[0];
-                        int idx = firstWord.indexOf("-");
+                        int idx = firstWord.indexOf('-');
                         if (idx != -1) {
                             numColumns =
                                     Integer.parseInt(firstWord.substring(idx + 1));
@@ -209,6 +232,8 @@ public class WidgetFactory {
                     questionWidget = new ListMultiWidget(context, fep, true);
                 } else if (appearance.startsWith("label")) {
                     questionWidget = new LabelWidget(context, fep);
+                } else if (appearance.contains("autocomplete")) {
+                    questionWidget = new SelectMultipleAutocompleteWidget(context, fep);
                 } else {
                     questionWidget = new SelectMultiWidget(context, fep);
                 }

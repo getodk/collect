@@ -14,10 +14,12 @@
 
 package org.odk.collect.android.preferences;
 
-
 import android.preference.PreferenceManager;
 
 import org.odk.collect.android.application.Collect;
+
+import java.util.Map;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -50,7 +52,7 @@ public class GeneralSharedPreferences {
             Timber.e("Default for %s not found", key);
         }
 
-        if (defaultValue == null || defaultValue == "" || defaultValue instanceof String) {
+        if (defaultValue == null || defaultValue instanceof String) {
             value = sharedPreferences.getString(key, (String) defaultValue);
         } else if (defaultValue instanceof Boolean) {
             value = sharedPreferences.getBoolean(key, (Boolean) defaultValue);
@@ -71,7 +73,7 @@ public class GeneralSharedPreferences {
 
     public void save(String key, Object value) {
         editor = sharedPreferences.edit();
-        if (value == null || value == "" || value instanceof String) {
+        if (value == null || value instanceof String) {
             editor.putString(key, (String) value);
         } else if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);
@@ -81,11 +83,39 @@ public class GeneralSharedPreferences {
             editor.putInt(key, (Integer) value);
         } else if (value instanceof Float) {
             editor.putFloat(key, (Float) value);
+        } else if (value instanceof Set) {
+            editor.putStringSet(key, (Set<String>) value);
+        } else {
+            throw new RuntimeException("Unhandled preference value type: " + value);
         }
         editor.apply();
     }
 
     public boolean getBoolean(String key, boolean value) {
         return sharedPreferences.getBoolean(key, value);
+    }
+
+    public void clear() {
+        for (Map.Entry<String, ?> prefs : getAll().entrySet()) {
+            String key = prefs.getKey();
+            if (!PreferenceKeys.KEYS_WE_SHOULD_NOT_RESET.contains(key)) {
+                reset(key);
+            }
+        }
+    }
+
+    public Map<String, ?> getAll() {
+        return sharedPreferences.getAll();
+    }
+
+    public void loadDefaultPreferences() {
+        clear();
+        reloadPreferences();
+    }
+
+    public void reloadPreferences() {
+        for (Map.Entry<String, Object> keyValuePair : PreferenceKeys.GENERAL_KEYS.entrySet()) {
+            save(keyValuePair.getKey(), get(keyValuePair.getKey()));
+        }
     }
 }

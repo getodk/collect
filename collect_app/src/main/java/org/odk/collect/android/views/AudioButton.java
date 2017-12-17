@@ -72,7 +72,7 @@ public class AudioButton extends AppCompatImageButton {
 
             String audioFilename = "";
             try {
-                audioFilename = ReferenceManager._().DeriveReference(uri).getLocalURI();
+                audioFilename = ReferenceManager.instance().DeriveReference(uri).getLocalURI();
             } catch (InvalidReferenceException e) {
                 Timber.e(e);
             }
@@ -93,7 +93,7 @@ public class AudioButton extends AppCompatImageButton {
                 mediaPlayer.start();
             } catch (IOException e) {
                 String errorMsg = c.getString(R.string.audio_file_invalid, audioFilename);
-                Timber.e(e, errorMsg);
+                Timber.e(errorMsg);
                 ToastUtils.showLongToast(errorMsg);
             }
 
