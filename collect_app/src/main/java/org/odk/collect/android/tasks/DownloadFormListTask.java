@@ -409,15 +409,8 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
             List<File> localMediaFiles = FileUtils.getAllFormMediaFiles(mediaDirPath);
             if (localMediaFiles != null) {
-                for (MediaFile mediaFile : newMediaFiles) {
-                    File file = getFileByName(localMediaFiles, mediaFile.getFilename());
-                    if (file != null) {
-                        String mediaFileHash = mediaFile.getHash();
-                        mediaFileHash = mediaFileHash.substring(4, mediaFileHash.length());
-                        if (!mediaFileHash.equals(FileUtils.getMd5Hash(file))) {
-                            return true;
-                        }
-                    } else {
+                for (MediaFile newMediaFile : newMediaFiles) {
+                    if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
                         return true;
                     }
                 }
@@ -429,14 +422,20 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         return false;
     }
 
-    private File getFileByName(List<File> files, String fileName) {
-        for (File file : files) {
-            if (file.getName().equals(fileName)) {
-                return file;
+    private boolean isMediaFileAlreadyDownloaded(List<File> localMediaFiles, MediaFile newMediaFile) {
+        // TODO Zip files are ignored we should find a way to take them into account too
+        if (newMediaFile.getFilename().endsWith(".zip")) {
+            return true;
+        }
+        
+        String mediaFileHash = newMediaFile.getHash();
+        mediaFileHash = mediaFileHash.substring(4, mediaFileHash.length());
+        for (File localMediaFile : localMediaFiles) {
+            if (mediaFileHash.equals(FileUtils.getMd5Hash(localMediaFile))) {
+                return true;
             }
         }
-
-        return null;
+        return false;
     }
 
     @Override
