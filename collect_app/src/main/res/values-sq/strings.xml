@@ -380,8 +380,6 @@
   <string name="exit">Dil</string>
   <string name="instance_scan_completed">Skanimi përfundoi</string>
   <string name="instance_scan_count">%1$d formë/a u shtuan.</string>
-  <string name="instance_sync">Importo formularët e ruajtur si të finalizuar</string>
-  <string name="instance_sync_summary">Importon formularët e ruajtur nga instances folder</string>
   <string name="sort_the_list">Rendit listën</string>
   <string name="request_permissions_google_account">ODK Collect ka nevojë të aksesojë loogarinë tuaj në Google në mënyrë që të marrë formularë bosh dhe të ngarkojë formularë të plotësuar</string>
   <string name="filter_the_list">Filtro listën</string>
@@ -451,4 +449,5 @@
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
   <string name="not_supported_offline_layer_format">Shtresa offline që përzgjodhët përdor format PBF, i cili nuk është i suportuar.</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -417,8 +417,6 @@
   <string name="exit">Keluar</string>
   <string name="instance_scan_completed">Pemindaian selesai.</string>
   <string name="instance_scan_count">%1$d formulir ditambahkan.</string>
-  <string name="instance_sync">Impor formulir selesai tersimpan</string>
-  <string name="instance_sync_summary">Impor formulir tersimpan di folder instances</string>
   <string name="sort_the_list">Urutkan daftar</string>
   <string name="request_permissions_google_account">ODK Collect membutuhkan akses akun Google anda untuk mendapatkan formulir kosong dan mengirimkan isi formulir.</string>
   <string name="filter_the_list">Pilah daftar</string>
@@ -488,4 +486,5 @@
   <string name="form_entry">Centang disembunyikan saat Isi Formulir</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
   <string name="not_supported_offline_layer_format">Berkas offline layer menggunakan format PBF yang tidak didukung!</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>
