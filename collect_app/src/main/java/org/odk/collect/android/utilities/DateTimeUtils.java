@@ -85,8 +85,11 @@ public class DateTimeUtils {
 
     public static LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime date) {
         final DateTimeZone dtz = DateTimeZone.getDefault();
-        while (dtz.isLocalDateTimeGap(date)) {
-            date = date.plusMinutes(1);
+
+        if (dtz != null) {
+            while (dtz.isLocalDateTimeGap(date)) {
+                date = date.plusMinutes(1);
+            }
         }
         return date;
     }
