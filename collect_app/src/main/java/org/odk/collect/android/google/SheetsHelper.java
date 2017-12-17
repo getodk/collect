@@ -55,6 +55,13 @@ public class SheetsHelper {
     }
 
     public void resizeSpreadSheet(String spreadsheetId, int sheetId, int columnSize) throws IOException {
+        if (sheetId < 0) {
+            throw new IllegalArgumentException("Sheet Id should be greater than or equal to 0");
+        }
+
+        if (columnSize < 1) {
+            throw new IllegalArgumentException("Column size should be greater than 0");
+        }
 
         // create grid properties with the new column size
         GridProperties gridProperties = new GridProperties().setColumnCount(columnSize);
@@ -81,6 +88,10 @@ public class SheetsHelper {
      * Inserts a new row in the given sheet of the spreadsheet
      */
     public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+        if (row == null) {
+            throw new IllegalArgumentException("ValueRange cannot be null");
+        }
+
         sheetsService.insertRow(spreadsheetId, sheetName, row);
     }
 

@@ -29,14 +29,14 @@ import java.util.List;
  * @author Shobhit Agarwal
  */
 
-public class SheetsService {
+class SheetsService {
     private final Sheets sheets;
 
-    public SheetsService(Sheets sheets) {
+    SheetsService(Sheets sheets) {
         this.sheets = sheets;
     }
 
-    public void batchUpdate(String spreadsheetId, List<Request> requests) throws IOException {
+    void batchUpdate(String spreadsheetId, List<Request> requests) throws IOException {
         sheets.spreadsheets()
                 .batchUpdate(
                         spreadsheetId,
@@ -44,21 +44,21 @@ public class SheetsService {
                 ).execute();
     }
 
-    public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+    void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
         sheets.spreadsheets().values()
                 .append(spreadsheetId, sheetName, row)
                 .setIncludeValuesInResponse(true)
                 .setValueInputOption("USER_ENTERED").execute();
     }
 
-    public ValueRange getSpreadsheet(String spreadsheetId, String sheetName) throws IOException {
+    ValueRange getSpreadsheet(String spreadsheetId, String sheetName) throws IOException {
         return sheets.spreadsheets()
                 .values()
                 .get(spreadsheetId, sheetName)
                 .execute();
     }
 
-    public Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
+    Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
         return sheets.spreadsheets()
                 .get(spreadsheetId)
                 .setIncludeGridData(false)

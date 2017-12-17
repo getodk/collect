@@ -43,7 +43,7 @@ public class DriveHelperTest {
     private DriveHelper driveHelper;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         driveHelper = spy(new DriveHelper(mockedDriveService));
     }
 
