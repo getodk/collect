@@ -53,7 +53,6 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1002;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 5555;
 
-    private static final int THEME_DARK_ACCOUNT_PICKER = 0;
     private static final int THEME_LIGHT_ACCOUNT_PICKER = 1;
 
     @Nullable
