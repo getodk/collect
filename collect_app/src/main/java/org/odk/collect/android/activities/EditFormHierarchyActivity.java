@@ -16,7 +16,6 @@
 package org.odk.collect.android.activities;
 
 
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,12 +32,6 @@ import java.util.ArrayList;
 import timber.log.Timber;
 
 public class EditFormHierarchyActivity extends FormHierarchyActivity {
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
