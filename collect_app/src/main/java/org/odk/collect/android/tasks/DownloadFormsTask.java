@@ -27,6 +27,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.exception.TaskCancelledException;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
+import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
@@ -105,6 +106,9 @@ public class DownloadFormsTask extends
 
         final HashMap<FormDetails, String> result = new HashMap<>();
 
+        String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
+                .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);        // smap
+
         for (FormDetails fd : toDownload) {
             publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
 
@@ -120,7 +124,7 @@ public class DownloadFormsTask extends
             try {
                 // get the xml file
                 // if we've downloaded a duplicate, this gives us the file
-                fileResult = downloadXform(fd.formName, fd.downloadUrl);
+                fileResult = downloadXform(fd.formName, fd.downloadUrl + "&deviceID=" + deviceId);  // smap add device id to request
 
                 if (fd.manifestUrl != null) {
                     // use a temporary media path until everything is ok.

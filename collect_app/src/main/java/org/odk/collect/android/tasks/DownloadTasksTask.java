@@ -565,7 +565,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
 
         TaskResponse updateResponse = new TaskResponse();
-        updateResponse.forms = tr.forms;
+        //updateResponse.forms = tr.forms;
         
         // Add device id to response
         updateResponse.deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
