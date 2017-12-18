@@ -94,7 +94,7 @@ public class ResetDialogPreference extends DialogPreference {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    List<Integer> failedResetActions = new ResetUtility().reset(getContext(), resetActions);
+                    List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
                     hideProgressDialog();
                     handleResult(resetActions, failedResetActions);
                 }
@@ -179,7 +179,9 @@ public class ResetDialogPreference extends DialogPreference {
                 resultMessage.append("\n\n");
             }
         }
-        showResultDialog(String.valueOf(resultMessage));
+        if (!((AdminPreferencesActivity) getContext()).isInstanceStateSaved()) {
+            showResultDialog(String.valueOf(resultMessage));
+        }
     }
 
     private void showResultDialog(final String resultMessage) {
@@ -187,7 +189,7 @@ public class ResetDialogPreference extends DialogPreference {
         int iconID = android.R.drawable.ic_dialog_info;
         String buttonTitle = getContext().getString(R.string.ok);
 
-        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle);
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle, false);
 
         try {
             simpleDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);

@@ -185,7 +185,6 @@
   <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
   <string name="found_in_settings">Uncheck to hide from General Settings</string>
-  <string name="no_account">No account</string>
   <string name="save_preferences">Save Settings to Disk</string>
   <string name="form_forward">Next</string>
   <string name="form_backward">Prev</string>
@@ -201,4 +200,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

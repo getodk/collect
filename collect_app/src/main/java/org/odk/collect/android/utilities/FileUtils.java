@@ -39,7 +39,10 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -131,16 +134,23 @@ public class FileUtils {
     static int bufSize = 16 * 1024; // May be set by unit test
 
     public static String getMd5Hash(File file) {
+        final InputStream is;
+        try {
+            is = new FileInputStream(file);
+
+        } catch (FileNotFoundException e) {
+            Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
+            return null;
+
+        }
+
+        return getMd5Hash(is);
+    }
+
+    public static String getMd5Hash(InputStream is) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             final byte[] buffer = new byte[bufSize];
-
-            if (file.length() > Integer.MAX_VALUE) {
-                Timber.e("File %s is too large", file.getName());
-                return null;
-            }
-
-            final InputStream is = new FileInputStream(file);
 
             while (true) {
                 int result = is.read(buffer, 0, bufSize);
@@ -154,17 +164,16 @@ public class FileUtils {
             while (md5.length() < 32) {
                 md5 = "0" + md5;
             }
+
             is.close();
             return md5;
 
-        } catch (NoSuchAlgorithmException | IOException e) {
-            if (e instanceof NoSuchAlgorithmException) {
-                Timber.e(e);
-            } else if (e instanceof FileNotFoundException) {
-                Timber.e(e, "Cache file %s not found", file.getAbsolutePath());
-            } else {
-                Timber.e(e, "Problem reading file %s", file.getAbsolutePath());
-            }
+        } catch (NoSuchAlgorithmException e) {
+            Timber.e(e);
+            return null;
+
+        } catch (IOException e) {
+            Timber.e(e, "Problem reading file.");
             return null;
         }
     }
@@ -492,5 +501,11 @@ public class FileUtils {
         }
 
         return bitmap;
+    }
+
+    public static List<File> getAllFormMediaFiles(String mediaFilesDir) {
+        List<File> mediaFiles = new ArrayList<>();
+        Collections.addAll(mediaFiles, new File(mediaFilesDir).listFiles());
+        return mediaFiles;
     }
 }

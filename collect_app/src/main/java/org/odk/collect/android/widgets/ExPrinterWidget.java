@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -30,7 +29,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
-
 
 /**
  * <p>Use the ODK Sensors framework to print data to a connected printer.</p>
@@ -122,32 +120,9 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
     public ExPrinterWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
-        String appearance = prompt.getAppearanceHint();
-        String[] attrs = appearance.split(":");
-        final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
-                ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
-        final String buttonText;
-        final String errorString;
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
-        buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
-        v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
-        errorString = (v != null) ? v : context.getString(R.string.no_printer);
-
+        String buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
         launchIntentButton = getSimpleButton(buttonText);
-        launchIntentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    waitForData();
-                    firePrintingActivity(intentName);
-                } catch (ActivityNotFoundException e) {
-                    cancelWaitingForData();
-                    Toast.makeText(getContext(),
-                            errorString, Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        });
 
         if (prompt.isReadOnly()) {
             launchIntentButton.setEnabled(false);
@@ -224,7 +199,6 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
      */
     @Override
     public void setBinaryData(Object answer) {
-        cancelWaitingForData();
     }
 
     @Override
@@ -250,4 +224,23 @@ public class ExPrinterWidget extends QuestionWidget implements BinaryWidget {
     }
 
 
+    @Override
+    public void onButtonClick(int buttonId) {
+        String appearance = getFormEntryPrompt().getAppearanceHint();
+        String[] attrs = appearance.split(":");
+        final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
+                ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
+        final String errorString;
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
+        errorString = (v != null) ? v : getContext().getString(R.string.no_printer);
+        try {
+            waitForData();
+            firePrintingActivity(intentName);
+        } catch (ActivityNotFoundException e) {
+            cancelWaitingForData();
+            Toast.makeText(getContext(),
+                    errorString, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
 }

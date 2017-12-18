@@ -134,7 +134,7 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
     private void runTask() {
         instanceGoogleSheetsUploader = (InstanceGoogleSheetsUploader) getLastCustomNonConfigurationInstance();
         if (instanceGoogleSheetsUploader == null) {
-            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, GoogleSheetsUploaderActivity.this);
+            instanceGoogleSheetsUploader = new InstanceGoogleSheetsUploader(credential, this);
 
             // ensure we have a google account selected
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -195,9 +195,10 @@ public class GoogleSheetsUploaderActivity extends AppCompatActivity implements I
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        credential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+                Intent intentChooseAccount = credential.newChooseAccountIntent();
+                intentChooseAccount.putExtra("overrideTheme", 1);
+                intentChooseAccount.putExtra("overrideCustomTheme", 0);
+                startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog

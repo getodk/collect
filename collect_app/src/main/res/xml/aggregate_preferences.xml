@@ -5,7 +5,6 @@
         android:key="@string/server_preferences"
         android:title="@string/server_preferences">
         <EditTextPreference
-            android:defaultValue="@string/default_server_url"
             android:dialogTitle="@string/change_server_url"
             android:inputType="textNoSuggestions"
             android:key="server_url"

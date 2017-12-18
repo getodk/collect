@@ -48,7 +48,7 @@ public class WidgetFactory {
         // for now, all appearance tags are in english...
         appearance = appearance.toLowerCase(Locale.ENGLISH);
 
-        QuestionWidget questionWidget = new StringWidget(context, fep, readOnlyOverride);
+        final QuestionWidget questionWidget;
         switch (fep.getControlType()) {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
@@ -58,6 +58,10 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DATE:
                         if (appearance.contains("ethiopian")) {
                             questionWidget = new EthiopianDateWidget(context, fep);
+                        } else if (appearance.contains("coptic")) {
+                            questionWidget = new CopticDateWidget(context, fep);
+                        } else if (appearance.contains("islamic")) {
+                            questionWidget = new IslamicDateWidget(context, fep);
                         } else {
                             questionWidget = new DateWidget(context, fep);
                         }
@@ -71,14 +75,24 @@ public class WidgetFactory {
                         } else if (appearance.contains("bearing")) {    // smap change to contains rather than equals
                             questionWidget = new BearingWidget(context, fep);
                         } else {
-                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            questionWidget = new DecimalWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith("ex:")) {
                             questionWidget = new ExIntegerWidget(context, fep);
                         } else {
-                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride);
+                            boolean useThousandSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandSeparator = true;
+                            }
+                            questionWidget = new IntegerWidget(context, fep, readOnlyOverride,
+                                    useThousandSeparator);
                         }
                         break;
                     case Constants.DATATYPE_GEOPOINT:
@@ -111,9 +125,14 @@ public class WidgetFactory {
                             questionWidget = new ExPrinterWidget(context, fep);
                         } else if (appearance.contains("ex:")) {          // smap change to contains rather than equals
                             questionWidget = new ExStringWidget(context, fep);
-                        } else if (appearance.contains("numbers")) {     // smap change to contains rather than equals
-                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride);
-                        } else if (appearance.contains("url")) {        // smap change to contains rather than equals
+                        } else if (appearance.contains("numbers")) {
+                            boolean useThousandsSeparator = false;
+                            if (appearance.contains("thousands-sep")) {
+                                useThousandsSeparator = true;
+                            }
+                            questionWidget = new StringNumberWidget(context, fep, readOnlyOverride,
+                                    useThousandsSeparator);
+                        } else if (appearance.contains("url")) {    // smap change to contains rather than equals
                             questionWidget = new UrlWidget(context, fep);
                         } else if (appearance.contains("chart")) {        // smap chart
                             String chartType = fep.getQuestion().getAdditionalAttribute(null, "chart_type");
@@ -134,6 +153,9 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_BOOLEAN:
                         questionWidget = new BooleanWidget(context, fep);
+                        break;
+                    default:
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
                         break;
                 }
                 break;
@@ -244,9 +266,16 @@ public class WidgetFactory {
                     case Constants.DATATYPE_DECIMAL:
                         questionWidget = new RangeDecimalWidget(context, fep);
                         break;
+                    default:
+                        questionWidget = new StringWidget(context, fep, readOnlyOverride);
+                        break;
                 }
+                break;
+            default:
+                questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
         }
         return questionWidget;
     }
+
 }

@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -62,14 +61,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
         answerDisplay = getCenteredAnswerTextView();
 
         createShapeButton = getSimpleButton(getContext().getString(R.string.get_shape));
-        createShapeButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                waitForData();
-                startGeoShapeActivity();
-            }
-        });
 
         if (prompt.isReadOnly()) {
             createShapeButton.setEnabled(false);
@@ -123,8 +114,6 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public void setBinaryData(Object answer) {
         String s = answer.toString();
         answerDisplay.setText(s);
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -153,5 +142,11 @@ public class GeoShapeWidget extends QuestionWidget implements BinaryWidget {
     public void setOnLongClickListener(OnLongClickListener l) {
         createShapeButton.setOnLongClickListener(l);
         answerDisplay.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        waitForData();
+        startGeoShapeActivity();
     }
 }

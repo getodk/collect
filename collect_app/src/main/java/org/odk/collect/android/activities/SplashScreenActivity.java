@@ -46,9 +46,7 @@ import timber.log.Timber;
 
 public class SplashScreenActivity extends Activity {
 
-    @SuppressWarnings("rawtypes")
-    private Class mNextActivity = SmapMain.class;       // smap
-    private int mSplashTimeout = 3000; // milliseconds
+    private static final int mSplashTimeout = 2000; // milliseconds
     private static final boolean EXIT = true;
 
     private int imageMaxWidth;
@@ -118,7 +116,7 @@ public class SplashScreenActivity extends Activity {
     private void endSplashScreen() {
 
         // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, mNextActivity));
+        startActivity(new Intent(SplashScreenActivity.this, mNextActivity));  //smap
         finish();
     }
 

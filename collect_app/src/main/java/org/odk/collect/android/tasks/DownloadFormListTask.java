@@ -25,15 +25,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebUtils;
-
-import android.content.SharedPreferences;
-import android.net.Uri;                     // smap
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
@@ -90,17 +83,6 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
-
-        // ---------------- Smap Start
-        // Add credentials
-        String username = settings.getString(PreferenceKeys.KEY_USERNAME, null);
-        String password = settings.getString(PreferenceKeys.KEY_PASSWORD, null);
-
-        if(username != null && password != null) {
-        	Uri u = Uri.parse(downloadListUrl);
-        	WebUtils.addCredentials(username, password, u.getHost());
-        }
-        // Smap End
 
         DocumentFetchResult result =
                 WebUtils.getXmlDocument(downloadListUrl, localContext, httpclient);
@@ -232,7 +214,19 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                     R.string.parse_openrosa_formlist_failed, error)));
                     return formList;
                 }
-                formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId, (version != null) ? version : majorMinorVersion, false));  // smap add tasks_only=false
+                boolean isNewerFormVersionAvailable = false;
+                boolean areNewerMediaFilesAvailable = false;
+                if (isThisFormAlreadyDownloaded(formId)) {
+                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
+                    if (!isNewerFormVersionAvailable && manifestUrl != null) {
+                        List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
+                        if (newMediaFiles != null) {
+                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
+                        }
+                    }
+                }
+                formList.put(formId, new FormDetails(formName, downloadUrl, manifestUrl, formId,
+                        (version != null) ? version : majorMinorVersion, false, isNewerFormVersionAvailable, areNewerMediaFilesAvailable));
             }
         } else {
             // Aggregate 0.9.x mode...

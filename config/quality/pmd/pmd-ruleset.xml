@@ -95,6 +95,7 @@
         <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
         <exclude name="AssignmentToNonFinalStatic" />
         <exclude name="OptimizableToArrayCall" />
+        <exclude name="AccessorMethodGeneration" />
     </rule>
     <rule ref="rulesets/java/optimizations.xml">
         <exclude name="LocalVariableCouldBeFinal" />
@@ -119,9 +120,8 @@
         <exclude name="LooseCoupling" />
     </rule>
     <rule ref="rulesets/java/unnecessary.xml" >
+        <!-- Decided not to use in #1519 -->
         <exclude name="UselessParentheses" />
-        <exclude name="UnnecessaryFinalModifier" />
-        <exclude name="UselessQualifiedThis" />
     </rule>
     <rule ref="rulesets/java/codesize.xml">
         <exclude name="CyclomaticComplexity" />

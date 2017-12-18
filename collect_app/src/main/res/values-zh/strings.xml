@@ -185,7 +185,6 @@
   <string name="enter_admin_password">输入管理员密码</string>
   <string name="found_in_main">不选中以从主菜单中隐藏</string>
   <string name="found_in_settings">不选中以从设置中隐藏</string>
-  <string name="no_account">没有账户</string>
   <string name="save_preferences">保存设置到磁盘</string>
   <string name="form_forward">下一个</string>
   <string name="form_backward">上一个</string>
@@ -210,4 +209,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

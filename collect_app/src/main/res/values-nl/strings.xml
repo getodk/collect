@@ -191,7 +191,6 @@
   <string name="enter_admin_password">Geef admin wachtwoord</string>
   <string name="found_in_main">Uitvinken om te verbergen in hoofdmenu</string>
   <string name="found_in_settings">Uitvinken om te verbergen in algemene instellingen</string>
-  <string name="no_account">Geen account</string>
   <string name="save_preferences">Bewaar instellingen op schijf</string>
   <string name="form_forward">Verder</string>
   <string name="form_backward">Terug</string>
@@ -255,4 +254,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

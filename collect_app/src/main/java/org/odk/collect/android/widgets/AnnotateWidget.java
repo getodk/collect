@@ -71,6 +71,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
 
     private TextView errorTextView;
 
+    private int screenOrientation;
+
     public AnnotateWidget(Context context, FormEntryPrompt prompt) {
         super(context, prompt);
 
@@ -78,75 +80,13 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
         errorTextView.setId(ViewIds.generateViewId());
         errorTextView.setText(R.string.selected_invalid_image);
 
-        captureButton = getSimpleButton(getContext().getString(R.string.capture_image));
+        captureButton = getSimpleButton(getContext().getString(R.string.capture_image), R.id.capture_image);
         captureButton.setEnabled(!prompt.isReadOnly());
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "captureButton", "click",
-                                getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                Intent i = new Intent(
-                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                // We give the camera an absolute filename/path where to put the
-                // picture because of bug:
-                // http://code.google.com/p/android/issues/detail?id=1480
-                // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-                // 2010, G1 phones only run 1.6. Without specifying the path the
-                // images returned by the camera in 1.6 (and earlier) are ~1/4
-                // the size. boo.
 
-                // if this gets modified, the onActivityResult in
-                // FormEntyActivity will also need to be updated.
-                i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(new File(Collect.TMPFILE_PATH)));
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "image capture"), Toast.LENGTH_SHORT)
-                            .show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
-
-        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
+        chooseButton = getSimpleButton(getContext().getString(R.string.choose_image), R.id.choose_image);
         chooseButton.setEnabled(!prompt.isReadOnly());
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance()
-                        .getActivityLogger()
-                        .logInstanceAction(this, "chooseButton", "click",
-                                getFormEntryPrompt().getIndex());
-                errorTextView.setVisibility(View.GONE);
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.setType("image/*");
 
-                try {
-                    waitForData();
-                    ((Activity) getContext()).startActivityForResult(i,
-                            RequestCodes.IMAGE_CHOOSER);
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(
-                            getContext(),
-                            getContext().getString(R.string.activity_not_found,
-                                    "choose image"), Toast.LENGTH_SHORT).show();
-                    cancelWaitingForData();
-                }
-
-            }
-        });
-
-        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image));
+        annotateButton = getSimpleButton(getContext().getString(R.string.markup_image), R.id.markup_image);
         annotateButton.setEnabled(false);
         annotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +142,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
                         screenHeight, screenWidth);
                 if (bmp == null) {
                     errorTextView.setVisibility(View.VISIBLE);
+                } else if (bmp.getHeight() > bmp.getWidth()) {
+                    screenOrientation = 1; // portrait
                 }
             }
             imageView = getAnswerImageView(bmp);
@@ -228,8 +170,8 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
             File f = new File(getInstanceFolder() + File.separator + binaryName);
             i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(f));
         }
-        i.putExtra(DrawActivity.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        i.putExtra(DrawActivity.SCREEN_ORIENTATION, screenOrientation);
 
         try {
             waitForData();
@@ -314,8 +256,6 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
         } else {
             Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
         }
-
-        cancelWaitingForData();
     }
 
     @Override
@@ -344,6 +284,74 @@ public class AnnotateWidget extends QuestionWidget implements BaseImageWidget {
         annotateButton.cancelLongPress();
         if (imageView != null) {
             imageView.cancelLongPress();
+        }
+    }
+
+    @Override
+    public void onButtonClick(int buttonId) {
+        switch (buttonId) {
+            case R.id.capture_image:
+                captureImage();
+                break;
+            case R.id.choose_image:
+                chooseImage();
+                break;
+        }
+    }
+
+    private void captureImage() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "captureButton", "click",
+                        getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        Intent i = new Intent(
+                android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        // We give the camera an absolute filename/path where to put the
+        // picture because of bug:
+        // http://code.google.com/p/android/issues/detail?id=1480
+        // The bug appears to be fixed in Android 2.0+, but as of feb 2,
+        // 2010, G1 phones only run 1.6. Without specifying the path the
+        // images returned by the camera in 1.6 (and earlier) are ~1/4
+        // the size. boo.
+
+        // if this gets modified, the onActivityResult in
+        // FormEntyActivity will also need to be updated.
+        i.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(Collect.TMPFILE_PATH)));
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "image capture"), Toast.LENGTH_SHORT)
+                    .show();
+            cancelWaitingForData();
+        }
+    }
+
+    private void chooseImage() {
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "chooseButton", "click",
+                        getFormEntryPrompt().getIndex());
+        errorTextView.setVisibility(View.GONE);
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.setType("image/*");
+
+        try {
+            waitForData();
+            ((Activity) getContext()).startActivityForResult(i,
+                    RequestCodes.IMAGE_CHOOSER);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(
+                    getContext(),
+                    getContext().getString(R.string.activity_not_found,
+                            "choose image"), Toast.LENGTH_SHORT).show();
+            cancelWaitingForData();
         }
     }
 }

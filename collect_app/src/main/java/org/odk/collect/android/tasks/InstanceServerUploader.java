@@ -72,22 +72,22 @@ import timber.log.Timber;
  */
 public class InstanceServerUploader extends InstanceUploader {
 
-    private static enum ContentTypeMapping {
-        XML("xml", ContentType.TEXT_XML),
-        _3GPP("3gpp", ContentType.create("audio/3gpp")),
-        _3GP("3gp", ContentType.create("video/3gpp")),
-        AVI("avi", ContentType.create("video/avi")),
-        AMR("amr", ContentType.create("audio/amr")),
-        CSV("csv", ContentType.create("text/csv")),
-        JPG("jpg", ContentType.create("image/jpeg")),
-        MP3("mp3", ContentType.create("audio/mp3")),
-        MP4("mp4", ContentType.create("video/mp4")),
-        OGA("oga", ContentType.create("audio/ogg")),
-        OGG("ogg", ContentType.create("audio/ogg")),
-        OGV("ogv", ContentType.create("video/ogg")),
-        WAV("wav", ContentType.create("audio/wav")),
-        WEBM("webm", ContentType.create("video/webm")),
-        XLS("xls", ContentType.create("application/vnd.ms-excel"));
+    private enum ContentTypeMapping {
+        XML("xml",  ContentType.TEXT_XML),
+      _3GPP("3gpp", ContentType.create("audio/3gpp")),
+       _3GP("3gp",  ContentType.create("video/3gpp")),
+        AVI("avi",  ContentType.create("video/avi")),
+        AMR("amr",  ContentType.create("audio/amr")),
+        CSV("csv",  ContentType.create("text/csv")),
+        JPG("jpg",  ContentType.create("image/jpeg")),
+        MP3("mp3",  ContentType.create("audio/mp3")),
+        MP4("mp4",  ContentType.create("video/mp4")),
+        OGA("oga",  ContentType.create("audio/ogg")),
+        OGG("ogg",  ContentType.create("audio/ogg")),
+        OGV("ogv",  ContentType.create("video/ogg")),
+        WAV("wav",  ContentType.create("audio/wav")),
+       WEBM("webm", ContentType.create("video/webm")),
+        XLS("xls",  ContentType.create("application/vnd.ms-excel"));
 
         private String extension;
         private ContentType contentType;
@@ -141,27 +141,27 @@ public class InstanceServerUploader extends InstanceUploader {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());    // smap
         File instanceFile = new File(instanceFilePath);
         ContentValues cv = new ContentValues();
-        Uri u = Uri.parse(urlString);
+        Uri submissionUri = Uri.parse(urlString);
         HttpClient httpclient = WebUtils.createHttpClient(CONNECTION_TIMEOUT);
 
         ResponseMessageParser messageParser = null;
         boolean openRosaServer = false;
-        if (uriRemap.containsKey(u)) {
+        if (uriRemap.containsKey(submissionUri)) {
             // we already issued a head request and got a response,
             // so we know the proper URL to send the submission to
             // and the proper scheme. We also know that it was an
             // OpenRosa compliant server.
             openRosaServer = true;
-            u = uriRemap.get(u);
+            submissionUri = uriRemap.get(submissionUri);
 
             // if https then enable preemptive basic auth...
-            //if ( u.getScheme().equals("https") ) {	smap
-            //	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            //if (submissionUri.getScheme().equals("https")) {		// smap commented out
+           //     WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
             //}
 
-            Timber.i("Using Uri remap for submission %s. Now: %s", id, u.toString());
+            Timber.i("Using Uri remap for submission %s. Now: %s", id, submissionUri.toString());
         } else {
-            if (u.getHost() == null) {
+            if (submissionUri.getHost() == null) {
                 Timber.i("Host name may not be null");
                 outcome.results.put(id, fail + "Host name may not be null");
                 cv.put(InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
@@ -170,17 +170,19 @@ public class InstanceServerUploader extends InstanceUploader {
             }
 
             // if https then enable preemptive basic auth...
-            //if ( u.getScheme() != null && u.getScheme().equals("https") ) { smap
-            //	WebUtils.enablePreemptiveBasicAuth(localContext, u.getHost());
+            //if (submissionUri.getScheme() != null && submissionUri.getScheme().equals("https")) {	// smap
+            //    WebUtils.enablePreemptiveBasicAuth(localContext, submissionUri.getHost());
             //}
 
-            // we need to issue a head request
-            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(u);
+            // Issue a head request to confirm the server is an OpenRosa server and see if auth
+            // is required
+            // http://docs.opendatakit.org/openrosa-form-submission/#extended-transmission-considerations
+            HttpHead httpHead = WebUtils.createOpenRosaHttpHead(submissionUri);
 
             // prepare response
-            HttpResponse response = null;
+            final HttpResponse response;
             try {
-                Timber.i("Issuing HEAD request for %s to: %s", id, u.toString());
+                Timber.i("Issuing HEAD request for %s to: %s", id, submissionUri.toString());
 
                 response = httpclient.execute(httpHead, localContext);
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -212,16 +214,16 @@ public class InstanceServerUploader extends InstanceUploader {
                         try {
                             Uri newURI = Uri.parse(
                                     URLDecoder.decode(locations[0].getValue(), "utf-8"));
-                            if (u.getHost().equalsIgnoreCase(newURI.getHost())) {
+                            if (submissionUri.getHost().equalsIgnoreCase(newURI.getHost())) {
                                 openRosaServer = true;
                                 // trust the server to tell us a new location
                                 // ... and possibly to use https instead.
-                                uriRemap.put(u, newURI);
-                                u = newURI;
+                                uriRemap.put(submissionUri, newURI);
+                                submissionUri = newURI;
                                 // Start Smap
                                 String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                                         .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
-                                u = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
+                                subissionUri = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
                                 // End Smap
                             } else {
                                 // Don't follow a redirection attempt to a different host.
@@ -432,7 +434,7 @@ public class InstanceServerUploader extends InstanceUploader {
                 }
             }
 
-            HttpPost httppost = WebUtils.createOpenRosaHttpPost(u);
+            HttpPost httppost = WebUtils.createOpenRosaHttpPost(submissionUri);
             httppost.setHeader("form_status", status);                        // smap add form_status header
             // Start Smap - Add the location trigger and comments if they exist
             if (location_trigger != null) {
@@ -459,7 +461,7 @@ public class InstanceServerUploader extends InstanceUploader {
             HttpResponse response;
 
             try {
-                Timber.i("Issuing POST request for %s to: %s", id, u.toString());
+                Timber.i("Issuing POST request for %s to: %s", id, submissionUri.toString());
                 response = httpclient.execute(httppost, localContext);
                 int responseCode = response.getStatusLine().getStatusCode();
                 HttpEntity httpEntity = response.getEntity();

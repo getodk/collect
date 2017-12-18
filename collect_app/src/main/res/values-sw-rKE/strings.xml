@@ -186,7 +186,6 @@
   <string name="admin_password_incorrect">Samahani, password si sawa</string>
   <string name="enter_admin_password">Weka password ya msimamizi</string>
   <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
-  <string name="no_account">Hakuna akaunti</string>
   <string name="save_preferences">Hifadhi mazingira kwa diski</string>
   <string name="form_forward">Ijayo</string>
   <string name="form_backward">iliyopita</string>
@@ -241,4 +240,5 @@
   <string name="phone_number">Nambari ya simu</string>
   <string name="select_date">Changua tarehe</string>
   <string name="select_time">Chagua wakati</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -34,24 +34,35 @@ import static org.junit.Assert.assertEquals;
 @Config(constants = BuildConfig.class)
 public class DateTimeUtilsTest {
 
-    private DatePickerDetails gregorianCalendar;
+    private DatePickerDetails gregorian;
     private DatePickerDetails gregorianSpinners;
     private DatePickerDetails gregorianMonthYear;
     private DatePickerDetails gregorianYear;
     private DatePickerDetails ethiopian;
     private DatePickerDetails ethiopianMonthYear;
     private DatePickerDetails ethiopianYear;
-
+    private DatePickerDetails coptic;
+    private DatePickerDetails copticMonthYear;
+    private DatePickerDetails copticYear;
+    private DatePickerDetails islamic;
+    private DatePickerDetails islamicMonthYear;
+    private DatePickerDetails islamicYear;
 
     @Before
     public void setUp() {
-        gregorianCalendar = new DatePickerDetails(DatePickerDetails.DatePickerType.GREGORIAN, DatePickerDetails.DatePickerMode.CALENDAR);
+        gregorian = new DatePickerDetails(DatePickerDetails.DatePickerType.GREGORIAN, DatePickerDetails.DatePickerMode.CALENDAR);
         gregorianSpinners = new DatePickerDetails(DatePickerDetails.DatePickerType.GREGORIAN, DatePickerDetails.DatePickerMode.SPINNERS);
         gregorianMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.GREGORIAN, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         gregorianYear = new DatePickerDetails(DatePickerDetails.DatePickerType.GREGORIAN, DatePickerDetails.DatePickerMode.YEAR);
         ethiopian = new DatePickerDetails(DatePickerDetails.DatePickerType.ETHIOPIAN, DatePickerDetails.DatePickerMode.SPINNERS);
         ethiopianMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ETHIOPIAN, DatePickerDetails.DatePickerMode.MONTH_YEAR);
         ethiopianYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ETHIOPIAN, DatePickerDetails.DatePickerMode.YEAR);
+        coptic = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.SPINNERS);
+        copticMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        copticYear = new DatePickerDetails(DatePickerDetails.DatePickerType.COPTIC, DatePickerDetails.DatePickerMode.YEAR);
+        islamic = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.SPINNERS);
+        islamicMonthYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.MONTH_YEAR);
+        islamicYear = new DatePickerDetails(DatePickerDetails.DatePickerType.ISLAMIC, DatePickerDetails.DatePickerMode.YEAR);
     }
 
     @Test
@@ -69,9 +80,9 @@ public class DateTimeUtilsTest {
 
     @Test
     public void getDatePickerDetailsTest() {
-        assertEquals(gregorianCalendar, DateTimeUtils.getDatePickerDetails(null));
+        assertEquals(gregorian, DateTimeUtils.getDatePickerDetails(null));
         String appearance = "something";
-        assertEquals(gregorianCalendar, DateTimeUtils.getDatePickerDetails(appearance));
+        assertEquals(gregorian, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "no-calendar";
         assertEquals(gregorianSpinners, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "NO-CALENDAR";
@@ -95,5 +106,27 @@ public class DateTimeUtilsTest {
         assertEquals(ethiopianYear, DateTimeUtils.getDatePickerDetails(appearance));
         appearance = "year ethiopian";
         assertEquals(ethiopianYear, DateTimeUtils.getDatePickerDetails(appearance));
+
+        appearance = "coptic";
+        assertEquals(coptic, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Coptic month-year";
+        assertEquals(copticMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year coptic";
+        assertEquals(copticMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Coptic year";
+        assertEquals(copticYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year coptic";
+        assertEquals(copticYear, DateTimeUtils.getDatePickerDetails(appearance));
+
+        appearance = "islamic";
+        assertEquals(islamic, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Islamic month-year";
+        assertEquals(islamicMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "month-year islamic";
+        assertEquals(islamicMonthYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "Islamic year";
+        assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
+        appearance = "year islamic";
+        assertEquals(islamicYear, DateTimeUtils.getDatePickerDetails(appearance));
     }
 }

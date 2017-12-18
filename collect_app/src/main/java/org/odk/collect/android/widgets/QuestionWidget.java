@@ -22,9 +22,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -45,12 +47,14 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ActivityLogger;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.injection.DependencyProvider;
 import org.odk.collect.android.listeners.AudioPlayListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.utilities.TextUtils;
 import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.widgets.interfaces.BaseImageWidget;
+import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
 import java.util.ArrayList;
@@ -70,7 +74,7 @@ public abstract class QuestionWidget
     private final int questionFontSize;
     private final FormEntryPrompt formEntryPrompt;
     private final MediaLayout questionMediaLayout;
-    private final MediaPlayer player;
+    private MediaPlayer player;
     private final TextView helpTextView;
 
     private Bundle state;
@@ -80,9 +84,12 @@ public abstract class QuestionWidget
 
     public QuestionWidget(Context context, FormEntryPrompt prompt) {
         super(context);
-
         if (context instanceof FormEntryActivity) {
             state = ((FormEntryActivity) context).getState();
+        }
+
+        if (context instanceof DependencyProvider) {
+            injectDependencies((DependencyProvider) context);
         }
 
         player = new MediaPlayer();
@@ -95,7 +102,7 @@ public abstract class QuestionWidget
 
         });
 
-        getPlayer().setOnErrorListener(new MediaPlayer.OnErrorListener() {
+        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 Timber.e("Error occured in MediaPlayer. what = %d, extra = %d",
@@ -117,6 +124,16 @@ public abstract class QuestionWidget
         addQuestionMediaLayout(getQuestionMediaLayout());
         addHelpTextView(getHelpTextView());
     }
+
+    /** Releases resources held by this widget */
+    public void release() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+    }
+
+    protected void injectDependencies(DependencyProvider dependencyProvider) {}
 
     private MediaLayout createQuestionMediaLayout(FormEntryPrompt prompt) {
         String promptText = prompt.getLongText();
@@ -370,23 +387,23 @@ public abstract class QuestionWidget
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         if (visibility == INVISIBLE || visibility == GONE) {
-            if (getPlayer().isPlaying()) {
-                getPlayer().stop();
-                getPlayer().reset();
-            }
+            stopAudio();
         }
     }
 
     public void stopAudio() {
-        if (getPlayer().isPlaying()) {
-            getPlayer().stop();
-            getPlayer().reset();
+        if (player != null && player.isPlaying()) {
+            Timber.i("stopAudio " + player);
+            player.stop();
+            player.reset();
         }
     }
 
-    protected Button getSimpleButton(String text) {
-        Button button = new Button(getContext());
-        button.setId(ViewIds.generateViewId());
+    protected Button getSimpleButton(String text, @IdRes final int withId) {
+        final QuestionWidget questionWidget = this;
+        final Button button = new Button(getContext());
+
+        button.setId(withId);
         button.setText(text);
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         button.setPadding(20, 20, 20, 20);
@@ -395,27 +412,48 @@ public abstract class QuestionWidget
         params.setMargins(7, 5, 7, 5);
 
         button.setLayoutParams(params);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (button.isClickable()) {
+                    disableViewForOneSecond(button);
+                    ((ButtonWidget) questionWidget).onButtonClick(withId);
+                }
+            }
+        });
         return button;
+    }
+
+    protected Button getSimpleButton(@IdRes int id) {
+        return getSimpleButton(null, id);
+    }
+
+    protected Button getSimpleButton(String text) {
+        return getSimpleButton(text, R.id.simple_button);
     }
 
     protected TextView getCenteredAnswerTextView() {
         TextView textView = getAnswerTextView();
         textView.setGravity(Gravity.CENTER);
+
         return textView;
     }
 
     protected TextView getAnswerTextView() {
         TextView textView = new TextView(getContext());
-        textView.setId(ViewIds.generateViewId());
+
+        textView.setId(R.id.answer_text);
         textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryTextColor));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
         textView.setPadding(20, 20, 20, 20);
+
         return textView;
     }
 
     protected ImageView getAnswerImageView(Bitmap bitmap) {
         final QuestionWidget questionWidget = this;
-        ImageView imageView = new ImageView(getContext());
+        final ImageView imageView = new ImageView(getContext());
         imageView.setId(ViewIds.generateViewId());
         imageView.setPadding(10, 10, 10, 10);
         imageView.setAdjustViewBounds(true);
@@ -424,11 +462,26 @@ public abstract class QuestionWidget
             @Override
             public void onClick(View v) {
                 if (questionWidget instanceof BaseImageWidget) {
-                    ((BaseImageWidget) questionWidget).onImageClick();
+                    if (imageView.isClickable()) {
+                        disableViewForOneSecond(imageView);
+                        ((BaseImageWidget) questionWidget).onImageClick();
+                    }
                 }
             }
         });
         return imageView;
+    }
+
+    // This method is used to avoid opening more than one dialog or activity when user quickly clicks the button several times:
+    // https://github.com/opendatakit/collect/issues/1624
+    protected void disableViewForOneSecond(final View view) {
+        view.setClickable(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setClickable(true);
+            }
+        }, 500);
     }
 
     /**

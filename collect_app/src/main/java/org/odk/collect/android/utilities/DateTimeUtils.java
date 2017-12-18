@@ -6,7 +6,9 @@ import android.os.Build;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
+import org.joda.time.chrono.CopticChronology;
 import org.joda.time.chrono.EthiopicChronology;
+import org.joda.time.chrono.IslamicChronology;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.DatePickerDetails;
 
@@ -21,7 +23,7 @@ public class DateTimeUtils {
         if (datePickerDetails.isGregorianType()) {
             return getGregorianDateTimeLabel(date, datePickerDetails, containsTime, null);
         } else {
-            return getEthiopianDateTimeLabel(date, datePickerDetails, containsTime, context);
+            return getCustomDateTimeLabel(date, datePickerDetails, containsTime, context);
         }
     }
 
@@ -37,22 +39,33 @@ public class DateTimeUtils {
         return dateFormatter.format(date);
     }
 
-    private static String getEthiopianDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
+    private static String getCustomDateTimeLabel(Date date, DatePickerDetails datePickerDetails, boolean containsTime, Context context) {
         String gregorianDateText = getGregorianDateTimeLabel(date, datePickerDetails, containsTime, Locale.US);
 
-        DateTime ethiopianDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
+        DateTime customDate;
+        String[] monthArray ;
+        if (datePickerDetails.isEthiopianType()) {
+            customDate = new DateTime(date).withChronology(EthiopicChronology.getInstance());
+            monthArray = context.getResources().getStringArray(R.array.ethiopian_months);
+        } else if (datePickerDetails.isCopticType()) {
+            customDate = new DateTime(date).withChronology(CopticChronology.getInstance());
+            monthArray = context.getResources().getStringArray(R.array.coptic_months);
+        } else {
+            customDate = new DateTime(date).withChronology(IslamicChronology.getInstance());
+            monthArray = context.getResources().getStringArray(R.array.islamic_months);
+        }
 
-        String day = datePickerDetails.isSpinnerMode() ? ethiopianDate.getDayOfMonth() + " " : "";
-        String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? context.getResources().getStringArray(R.array.ethiopian_months)[ethiopianDate.getMonthOfYear() - 1] + " " : "";
+        String day = datePickerDetails.isSpinnerMode() ? customDate.getDayOfMonth() + " " : "";
+        String month = datePickerDetails.isSpinnerMode() || datePickerDetails.isMonthYearMode() ? monthArray[customDate.getMonthOfYear() - 1] + " " : "";
 
-        String ethiopianDateText;
+        String customDateText;
         if (containsTime) {
             SimpleDateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            ethiopianDateText = day + month + ethiopianDate.getYear() + ", " + df.format(ethiopianDate.toDate());
+            customDateText = day + month + customDate.getYear() + ", " + df.format(customDate.toDate());
         } else {
-            ethiopianDateText = day + month + ethiopianDate.getYear();
+            customDateText = day + month + customDate.getYear();
         }
-        return String.format(context.getString(R.string.ethiopian_date), ethiopianDateText, gregorianDateText);
+        return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
     }
 
     private static String getDateTimePattern(boolean containsTime, DatePickerDetails datePickerDetails) {
@@ -72,8 +85,11 @@ public class DateTimeUtils {
 
     public static LocalDateTime skipDaylightSavingGapIfExists(LocalDateTime date) {
         final DateTimeZone dtz = DateTimeZone.getDefault();
-        while (dtz.isLocalDateTimeGap(date)) {
-            date = date.plusMinutes(1);
+
+        if (dtz != null) {
+            while (dtz.isLocalDateTimeGap(date)) {
+                date = date.plusMinutes(1);
+            }
         }
         return date;
     }
@@ -85,6 +101,12 @@ public class DateTimeUtils {
             appearance = appearance.toLowerCase(Locale.US);
             if (appearance.contains("ethiopian")) {
                 datePickerType = DatePickerDetails.DatePickerType.ETHIOPIAN;
+                datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
+            } else if (appearance.contains("coptic")) {
+                datePickerType = DatePickerDetails.DatePickerType.COPTIC;
+                datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
+            } else if (appearance.contains("islamic")) {
+                datePickerType = DatePickerDetails.DatePickerType.ISLAMIC;
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;
             } else if (appearance.contains("no-calendar")) {
                 datePickerMode = DatePickerDetails.DatePickerMode.SPINNERS;

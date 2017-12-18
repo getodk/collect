@@ -86,10 +86,12 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             if (o.getType() == 3) {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_back);
                 iv.setImageDrawable(d);
+                cb.setVisibility(View.GONE);
             }
             if (o.getType() == 2 || o.getType() == 4 || o.getType() == 5) {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_folder);
                 iv.setImageDrawable(d);
+                cb.setVisibility(View.GONE);
             }
 
             TextView t1 = (TextView) v.findViewById(R.id.text1);

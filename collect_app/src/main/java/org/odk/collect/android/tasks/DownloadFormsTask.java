@@ -33,8 +33,8 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.STFileUtils;
 import org.odk.collect.android.utilities.UrlUtils;
-import org.odk.collect.android.utilities.STFileUtils;		// smap
 import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
@@ -44,12 +44,6 @@ import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
 
-import android.content.ContentValues;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -95,7 +89,7 @@ public class DownloadFormsTask extends
 
 
     @Override
-    public HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {		// smap make public
+    protected HashMap<FormDetails, String> doInBackground(ArrayList<FormDetails>... values) {
         ArrayList<FormDetails> toDownload = values[0];
 
         formsDao = new FormsDao();
@@ -106,9 +100,6 @@ public class DownloadFormsTask extends
 
         final HashMap<FormDetails, String> result = new HashMap<>();
 
-        String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
-                .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);        // smap
-
         for (FormDetails fd : toDownload) {
             publishProgress(fd.formName, String.valueOf(count), String.valueOf(total));
 
@@ -118,13 +109,13 @@ public class DownloadFormsTask extends
                 break;
             }
 
-            String tempMediaPath = null;
-            String finalMediaPath = null;
-            FileResult fileResult = null;
-            try {
-                // get the xml file
-                // if we've downloaded a duplicate, this gives us the file
-                fileResult = downloadXform(fd.formName, fd.downloadUrl + "&deviceID=" + deviceId);  // smap add device id to request
+        String tempMediaPath = null;
+        final String finalMediaPath;
+        FileResult fileResult = null;
+        try {
+            // get the xml file
+            // if we've downloaded a duplicate, this gives us the file
+            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId);
 
                 if (fd.manifestUrl != null) {
                     // use a temporary media path until everything is ok.
@@ -176,12 +167,33 @@ public class DownloadFormsTask extends
                 message += e.getMessage();
             }
 
-            if (!isCancelled() && message.length() == 0 && fileResult != null) {
-                // install everything
-                UriResult uriResult = null;
-                try {
-                    uriResult = findExistingOrCreateNewUri(fileResult.getFile(), STFileUtils.getSource(fd.downloadUrl), fd.tasks_only);   // smap add source
-                    Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
+        boolean installed = false;
+
+        if (!isCancelled() && message.isEmpty() && parsedFields != null) {
+            if (isSubmissionOk(parsedFields)) {
+                installEverything(tempMediaPath, fileResult, parsedFields);
+                installed = true;
+            } else {
+                message += Collect.getInstance().getString(R.string.xform_parse_error,
+                        fileResult.file.getName(), "submission url");
+            }
+        }
+        if (!installed) {
+            cleanUp(fileResult, null, tempMediaPath);
+        }
+        return message;
+    }
+
+    private boolean isSubmissionOk(Map<String, String> parsedFields) {
+        String submission = parsedFields.get(FileUtils.SUBMISSIONURI);
+        return submission == null || UrlUtils.isValidUrl(submission);
+    }
+
+    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields) {
+        UriResult uriResult = null;
+        try {
+            uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields, STFileUtils.getSource(fd.downloadUrl), fd.tasks_only);
+            Timber.w("Form uri = %s, isNew = %b", uriResult.getUri().toString(), uriResult.isNew());
 
                     // move the media files in the media folder
                     if (tempMediaPath != null) {
@@ -271,7 +283,7 @@ public class DownloadFormsTask extends
      * @return a {@link org.odk.collect.android.tasks.DownloadFormsTask.UriResult} object
      * @throws TaskCancelledException if the user cancels the task during the download.
      */
-    private UriResult findExistingOrCreateNewUri(File formFile, String source, boolean tasks_only) throws TaskCancelledException {		// smap add source as a parameter
+    private UriResult findExistingOrCreateNewUri(File formFile) throws TaskCancelledException {
         Cursor cursor = null;
         Uri uri = null;
         String mediaPath;
@@ -307,9 +319,6 @@ public class DownloadFormsTask extends
                 v.put(FormsColumns.DISPLAY_NAME, formInfo.get(FileUtils.TITLE));
                 v.put(FormsColumns.JR_VERSION, formInfo.get(FileUtils.VERSION));
                 v.put(FormsColumns.JR_FORM_ID, formInfo.get(FileUtils.FORMID));
-                v.put(FormsColumns.PROJECT, formInfo.get(FileUtils.PROJECT));		// smap
-                v.put(FormsColumns.TASKS_ONLY, tasks_only ? "yes" : "no");		    // smap
-                v.put(FormsColumns.SOURCE, source);									// smap
                 v.put(FormsColumns.SUBMISSION_URI, formInfo.get(FileUtils.SUBMISSIONURI));
                 v.put(FormsColumns.BASE64_RSA_PUBLIC_KEY,
                         formInfo.get(FileUtils.BASE64_RSA_PUBLIC_KEY));
@@ -339,7 +348,8 @@ public class DownloadFormsTask extends
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    public FileResult downloadXform(String formName, String url) throws Exception {	// Smap (made public)
+    public FileResult downloadXform(String formName, String url)
+            throws IOException, TaskCancelledException, Exception {
         // clean up friendly form name...
         String rootName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         rootName = rootName.replaceAll("\\p{javaWhitespace}+", " ");
@@ -401,8 +411,10 @@ public class DownloadFormsTask extends
      * @param file        the final file
      * @param downloadUrl the url to get the contents from.
      */
-    public void downloadFile(File file, String downloadUrl) throws Exception {		// smap made public
-        File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION, new File(Collect.CACHE_PATH));
+    public void downloadFile(File file, String downloadUrl)
+            throws IOException, TaskCancelledException, URISyntaxException, Exception {
+        File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
+                new File(Collect.CACHE_PATH));
 
         URI uri;
         try {
@@ -434,22 +446,6 @@ public class DownloadFormsTask extends
 
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
 
-            // ---------------- Smap Start
-	    // Add credentials
-	    SharedPreferences sharedPreferences =
-	            PreferenceManager.getDefaultSharedPreferences(Collect.getInstance());
-
-	    String username = sharedPreferences.getString(PreferenceKeys.KEY_USERNAME, null);
-	    String password = sharedPreferences.getString(PreferenceKeys.KEY_PASSWORD, null);
-
-	    String server =
-	            sharedPreferences.getString(PreferenceKeys.KEY_SERVER_URL, null);
-
-	    if(username != null && password != null) {
-	        Uri u = Uri.parse(downloadUrl);
-	        WebUtils.addCredentials(username, password, u.getHost());
-	    }
-	    // Smap End
             // set up request...
             HttpGet req = WebUtils.createOpenRosaHttpGet(uri);
             req.addHeader(WebUtils.ACCEPT_ENCODING_HEADER, WebUtils.GZIP_CONTENT_ENCODING);
@@ -578,21 +574,21 @@ public class DownloadFormsTask extends
         }
     }
 
-    public static class FileResult {		// smap make public
+    private static class FileResult {
 
         private final File file;
         private final boolean isNew;
 
-        public FileResult(File file, boolean aNew) {	// smap make public
+        private FileResult(File file, boolean isNew) {
             this.file = file;
-            this.isNew = aNew;
+            this.isNew = isNew;
         }
 
-        public File getFile() {				// smap make public
+        private File getFile() {
             return file;
         }
 
-        public boolean isNew() {			// smap make public
+        private boolean isNew() {
             return isNew;
         }
     }

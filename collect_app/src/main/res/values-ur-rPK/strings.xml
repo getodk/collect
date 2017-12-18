@@ -183,7 +183,6 @@
   <string name="enter_admin_password">منتظم کا شناختی لفظ درج کریں</string>
   <string name="found_in_main">غیر نشان شدہ کرکے مرکزی فہرست میں چھپا لیں</string>
   <string name="found_in_settings">نشانی ہٹاکر عمومی سیٹنگز سے ہٹا دیں۔</string>
-  <string name="no_account">اکاونٹ نہیں ہے</string>
   <string name="save_preferences">سیٹنگزڈسک میں محفوظ کریں۔</string>
   <string name="form_forward">اگلا</string>
   <string name="form_backward">پچھلا</string>
@@ -204,4 +203,5 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

@@ -168,7 +168,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
             ArrayList<DriveListItem> dl = savedInstanceState
                     .getParcelableArrayList(DRIVE_ITEMS_KEY);
-            adapter = new FileArrayAdapter(GoogleDriveActivity.this, R.layout.two_item_image, dl);
+            adapter = new FileArrayAdapter(this, R.layout.two_item_image, dl);
             listView.setAdapter(adapter);
             adapter.setEnabled(true);
         } else {
@@ -363,9 +363,10 @@ public class GoogleDriveActivity extends AppCompatActivity implements
                 getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        credential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+                Intent intentChooseAccount = credential.newChooseAccountIntent();
+                intentChooseAccount.putExtra("overrideTheme", 1);
+                intentChooseAccount.putExtra("overrideCustomTheme", 0);
+                startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
@@ -699,7 +700,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         setProgressBarIndeterminateVisibility(true);
         adapter = null;
         retrieveDriveFileContentsAsyncTask = new RetrieveDriveFileContentsAsyncTask();
-        retrieveDriveFileContentsAsyncTask.setTaskListener(GoogleDriveActivity.this);
+        retrieveDriveFileContentsAsyncTask.setTaskListener(this);
         if (query != null) {
             retrieveDriveFileContentsAsyncTask.execute(dir, query);
         } else {
