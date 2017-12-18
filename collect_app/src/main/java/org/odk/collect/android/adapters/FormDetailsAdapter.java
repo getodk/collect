@@ -37,7 +37,7 @@ public class FormDetailsAdapter implements SpinnerAdapter {
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView v = new TextView(context);
-        v.setText(data.get(position).formName);
+        v.setText(data.get(position).getFormName());
         
         return v;
 	}
@@ -54,7 +54,7 @@ public class FormDetailsAdapter implements SpinnerAdapter {
 
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return Long.parseLong(data.get(position).formID);
+		return Long.parseLong(data.get(position).getFormID());
 	}
 
 	public int getItemViewType(int position) {

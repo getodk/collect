@@ -119,12 +119,9 @@ public class InstanceServerUploader extends InstanceUploader {
      * Uploads to urlString the submission identified by id with filepath of instance
      *
      * @param urlString        destination URL
-     * @param id
-     * @param instanceFilePath
      * @param toUpdate         - Instance URL for recording status update.
      * @param localContext     - context (e.g., credentials, cookies) for client connection
      * @param uriRemap         - mapping of Uris to avoid redirects on subsequent invocations
-     * @param outcome
      * @return false if credentials are required and we should terminate immediately.
      */
     private boolean uploadOneSubmission(String urlString, String id, String instanceFilePath,
@@ -223,7 +220,7 @@ public class InstanceServerUploader extends InstanceUploader {
                                 // Start Smap
                                 String deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                                         .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
-                                subissionUri = Uri.parse(u.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
+                                submissionUri = Uri.parse(newURI.toString() + "?deviceID=" + URLEncoder.encode(deviceId, "UTF-8"));
                                 // End Smap
                             } else {
                                 // Don't follow a redirection attempt to a different host.

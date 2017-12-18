@@ -287,17 +287,6 @@ public class SmapTaskMapFragment extends Fragment
         }
     }
 
-    private void hideSearchBox() {
-        inputSearch.setText("");
-        searchBoxLayout.setVisibility(View.GONE);
-        Collect.getInstance().hideKeyboard(inputSearch);
-    }
-
-    private void showSearchBox() {
-        searchBoxLayout.setVisibility(View.VISIBLE);
-        Collect.getInstance().showKeyboard(inputSearch);
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Timber.i("######## onMapReady");

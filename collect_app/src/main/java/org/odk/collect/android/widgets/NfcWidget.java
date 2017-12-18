@@ -29,12 +29,15 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.NFCActivity;
+import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -147,4 +150,18 @@ public class NfcWidget extends QuestionWidget implements BinaryWidget {
 		mStringAnswer.cancelLongPress();
 	}
 
+    @Override
+    public void onButtonClick(int buttonId) {
+
+        Collect.getInstance()
+                .getActivityLogger()
+                .logInstanceAction(this, "recordNfc", "click",
+                        getFormEntryPrompt().getIndex());
+
+        Intent i = new Intent(getContext(), NFCActivity.class);
+        Collect.getInstance().getFormController()
+                .setIndexWaitingForData(getFormEntryPrompt().getIndex());
+        ((Activity) getContext()).startActivityForResult(i,
+                ApplicationConstants.RequestCodes.NFC_CAPTURE);
+    }
 }

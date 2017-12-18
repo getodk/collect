@@ -435,7 +435,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 HashMap<FormDetails, String> outcome = synchroniseForms(tr.forms);
                 if(outcome != null) {
                     for (FormDetails key : outcome.keySet()) {
-                        results.put(key.formName, outcome.get(key));
+                        results.put(key.getFormName(), outcome.get(key));
                     }
                 }
 

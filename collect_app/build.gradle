@@ -81,6 +81,8 @@ android {
         archivesBaseName = 'collect'
     }
 
+    flavorDimensions "flavour"
+
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
@@ -116,14 +118,14 @@ android {
             resValue("bool", "FIREBASE_CRASH_ENABLED", "false")
         }
         // Release build for the original ODK Collect app
-        odkCollectRelease {
-            if (secrets.getProperty('RELEASE_STORE_FILE')) {
-                signingConfig signingConfigs.release
-            }
-            minifyEnabled(true)
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
-        }
+        //odkCollectRelease {
+        //    if (secrets.getProperty('RELEASE_STORE_FILE')) {
+        //        signingConfig signingConfigs.release
+        //    }
+        //    minifyEnabled(true)
+        //    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        //    resValue("bool", "FIREBASE_CRASH_ENABLED", "true")
+        //}
         debug {
             buildConfigField("String", "SENDER_ID", "\""+secrets['SENDER_ID']+"\"")    // smap
             buildConfigField("String", "AWS_MOBILEHUB_USER_AGENT", "\""+secrets['AWS_MOBILEHUB_USER_AGENT']+"\"")    // smap
@@ -265,21 +267,21 @@ dependencies {
     debugImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android', version: '1.5.4'
     // No-Op version of LeakCanary for release builds: no notifications, no analysis, nothing
     releaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
-    testImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
-    androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
-    odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    //testImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    //androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
+    //odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
 
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
     // smap aws
-    compile 'com.amazonaws:aws-android-sdk-core:2.4.2'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.4.2'
     // add the DynamoDB SDK and DynamoDB Object Mapper dependency
-    compile 'com.amazonaws:aws-android-sdk-ddb:2.4.2'
-    compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.4.2'
-    compile project(':AWSMobileHelper')
+    implementation 'com.amazonaws:aws-android-sdk-ddb:2.4.2'
+    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.4.2'
+    implementation project(':AWSMobileHelper')
 
     // charts
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
     // Testing-only dependencies
 // smap comment out testing

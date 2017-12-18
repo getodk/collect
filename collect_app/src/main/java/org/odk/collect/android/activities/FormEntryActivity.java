@@ -63,7 +63,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.common.collect.ImmutableList;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -93,8 +92,7 @@ import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
-import org.odk.collect.android.taskModel.FormDetail;
-import org.odk.collect.android.utilities.TimerLogger;
+import org.odk.collect.android.taskModel.FormDetail; // smap
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminSharedPreferences;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -114,6 +112,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.TimerLogger;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -388,8 +387,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             Collect.getInstance().setFormController(null);
             supportInvalidateOptionsMenu();
 
-            FirebaseCrash.log("on create");
-
             Intent intent = getIntent();
             if (intent != null) {
                 Uri uri = intent.getData();
@@ -404,7 +401,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
 
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
                     // get the formId and version for this instance...
-                    FirebaseCrash.log("Opened Instance");
                     String jrFormId = null;
                     //String jrVersion = null;   smap
                     {
@@ -421,16 +417,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                         .getString(instanceCursor
                                                 .getColumnIndex(
                                                         InstanceColumns.INSTANCE_FILE_PATH));
-                                mUpdated = instanceCursor
-                                        .getInt(instanceCursor
-                                                .getColumnIndex(
-                                                        InstanceColumns.T_UPDATED));
                                 Collect.getInstance()
                                         .getActivityLogger()
                                         .logAction(this, "instanceLoaded",
                                                 instancePath);
 
-                                jrFormId = instanceCursor           // smap
+                                jrFormId = instanceCursor
                                         .getString(instanceCursor
                                                 .getColumnIndex(InstanceColumns.JR_FORM_ID));
                                 int idxJrVersion = instanceCursor
@@ -509,7 +501,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 } else if (uriMimeType != null
                         && uriMimeType.equals(FormsColumns.CONTENT_ITEM_TYPE)) {
                     Cursor c = null;
-                    FirebaseCrash.log("Opened Form");
                     try {
                         c = getContentResolver().query(uri, null, null, null,
                                 null);
@@ -517,7 +508,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             this.createErrorDialog(getString(R.string.bad_uri, uri), EXIT);
                             return;
                         } else {
-                            FirebaseCrash.log("Creating form detail");
                             mFormDetail = new FormDetail();           // smap
                             c.moveToFirst();
                             mFormDetail.source = c.getString(c.getColumnIndex(FormsColumns.SOURCE));                    // smap
@@ -965,13 +955,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     public void refreshCurrentView() {
         FormController formController = Collect.getInstance()
                 .getFormController();
-
-        // SMAP start - seems to be a bug onresume when edit is completed by different engine
-        if (formController == null) {
-            return;
-        }
-        // SMAP end
-
         int event = formController.getEvent();
 
         // When we refresh, repeat dialog state isn't maintained, so step back
@@ -1384,7 +1367,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
 
-                    odkv = new ODKView(this, prompts, groups, advancingPage, formController.getCanUpdate()); // smap pass parameter indicating if view is updatable
+                    odkView = new ODKView(this, prompts, groups, advancingPage, formController.getCanUpdate()); // smap pass parameter indicating if view is updatable
                     Timber.i("Created view for group %s %s",
                             (groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]"),
                             (prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]"));
@@ -2052,7 +2035,6 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         // Smap end
 
         synchronized (saveDialogLock) {
-            FirebaseCrash.log("Call SaveToDiskTask: " + mFormDetail);
             saveToDiskTask = new SaveToDiskTask(getIntent().getData(), exit, complete,
                     updatedSaveName, mTaskId, formPath, surveyNotes, mCanUpdate, mFormDetail);    // smap added mTaskId, mFormPath, surveyNotes
             saveToDiskTask.setFormSavedListener(this);
