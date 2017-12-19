@@ -401,7 +401,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     }
 
     private boolean isNewerFormVersionAvailable(String md5Hash) {
-        return new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
+        return md5Hash != null && new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
