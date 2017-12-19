@@ -38,12 +38,13 @@ import static org.odk.collect.android.activities.FormDownloadList.FORM_ID_KEY;
 public class FormDownloadListAdapter extends ArrayAdapter {
 
     private ArrayList<HashMap<String, String>> filteredFormList;
-    private HashMap<String, FormDetails> formNamesAndURLs;
+    private HashMap<String, FormDetails> formIdsToDetails;
 
-    public FormDownloadListAdapter(Context context, ArrayList<HashMap<String, String>> filteredFormList, HashMap<String, FormDetails> formNamesAndURLs) {
+    public FormDownloadListAdapter(Context context, ArrayList<HashMap<String, String>> filteredFormList,
+                                   HashMap<String, FormDetails> formIdsToDetails) {
         super(context, R.layout.two_item_multiple_choice, filteredFormList);
         this.filteredFormList = filteredFormList;
-        this.formNamesAndURLs = formNamesAndURLs;
+        this.formIdsToDetails = formIdsToDetails;
     }
 
     private class ViewHolder {
@@ -76,8 +77,8 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         holder.text1.setText(formAtPosition.get(FORMNAME));
         holder.text2.setText(formAtPosition.get(FORMID_DISPLAY));
 
-        if (formNamesAndURLs.get(formIDAtPosition).isNewerFormVersionAvailable()
-                || formNamesAndURLs.get(formIDAtPosition).areNewerMediaFilesAvailable()) {
+        if (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()
+                || formIdsToDetails.get(formIDAtPosition).areNewerMediaFilesAvailable()) {
             holder.updateInfo.setVisibility(View.VISIBLE);
         } else {
             holder.updateInfo.setVisibility(View.GONE);
