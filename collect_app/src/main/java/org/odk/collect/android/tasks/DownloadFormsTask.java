@@ -706,7 +706,7 @@ public class DownloadFormsTask extends
                     String currentFileHash = FileUtils.getMd5Hash(finalMediaFile);
                     String downloadFileHash = getMd5Hash(toDownload.getHash());
 
-                    if (!currentFileHash.contentEquals(downloadFileHash)) {
+                    if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
                         // if the hashes match, it's the same file
                         // otherwise delete our current one and replace it with the new one
                         FileUtils.deleteAndReport(finalMediaFile);
@@ -755,6 +755,6 @@ public class DownloadFormsTask extends
     }
 
     static String getMd5Hash(String hash) {
-        return hash.substring(MD5_COLON_PREFIX.length());
+        return hash == null ? null : hash.substring(MD5_COLON_PREFIX.length());
     }
 }
