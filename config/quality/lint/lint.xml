@@ -9,7 +9,6 @@
         <ignore path="res/values/dimens.xml"/>
         <ignore regexp="ga_trackingId|google_crash_reporting_api_key"/>
     </issue>
-    <issue id="UnusedIds" severity="warning"/>
     <issue id="AppLinkUrlError" severity="warning" />
 
     <!-- require inputType attribute on all text fields -->
@@ -31,6 +30,7 @@
     <issue id="StringFormatInTimber" severity="error"/>
     <issue id="ApplySharedPref" severity="error"/>
     <issue id="IconLocation" severity="error"/>
+    <issue id="UnusedIds" severity="error"/>
     <issue id="UnusedNamespace" severity="error">
         <ignore path="res/values*"/>
     </issue>
