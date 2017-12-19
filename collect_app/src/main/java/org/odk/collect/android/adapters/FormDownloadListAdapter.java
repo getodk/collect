@@ -70,14 +70,19 @@ public class FormDownloadListAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        holder.text1.setText(filteredFormList.get(position).get(FORMNAME));
-        holder.text2.setText(filteredFormList.get(position).get(FORMID_DISPLAY));
+        final HashMap<String, String> formAtPosition = filteredFormList.get(position);
+        final String formIDAtPosition = formAtPosition.get(FORM_ID_KEY);
 
-        boolean isNewerFormVersionAvailable = formNamesAndURLs.get(filteredFormList.get(position).get(FORM_ID_KEY)).isNewerFormVersionAvailable();
-        boolean areNewerMediaFilesAvailable = formNamesAndURLs.get(filteredFormList.get(position).get(FORM_ID_KEY)).areNewerMediaFilesAvailable();
+        holder.text1.setText(formAtPosition.get(FORMNAME));
+        holder.text2.setText(formAtPosition.get(FORMID_DISPLAY));
 
-        holder.updateInfo.setVisibility(isNewerFormVersionAvailable || areNewerMediaFilesAvailable ? View.VISIBLE : View.GONE);
-
+        if (formNamesAndURLs.get(formIDAtPosition).isNewerFormVersionAvailable()
+                || formNamesAndURLs.get(formIDAtPosition).areNewerMediaFilesAvailable()) {
+            holder.updateInfo.setVisibility(View.VISIBLE);
+        } else {
+            holder.updateInfo.setVisibility(View.GONE);
+        }
+        
         return row;
     }
 }
