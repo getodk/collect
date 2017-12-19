@@ -78,17 +78,12 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             ImageView iv = v.findViewById(R.id.image);
             CheckBox cb = v.findViewById(R.id.checkbox);
 
-            if (o.getType() == 1) {
+            if (o.getType() == DriveListItem.FILE) {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_download);
                 iv.setImageDrawable(d);
                 cb.setVisibility(View.VISIBLE);
             }
-            if (o.getType() == 3) {
-                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_back);
-                iv.setImageDrawable(d);
-                cb.setVisibility(View.GONE);
-            }
-            if (o.getType() == 2 || o.getType() == 4 || o.getType() == 5) {
+            if (o.getType() == DriveListItem.DIR) {
                 Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_folder);
                 iv.setImageDrawable(d);
                 cb.setVisibility(View.GONE);
