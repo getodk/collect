@@ -259,6 +259,10 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         super.onStop();
     }
 
+    public void processAdminMenu() {
+        showDialog(PASSWORD_DIALOG);
+    }
+
     // Get tasks and forms from the server
     public void processGetTask() {
 

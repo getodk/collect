@@ -406,7 +406,7 @@ public class SmapTaskListFragment extends ListFragment
                             AdminPreferencesActivity.class);
                     startActivity(i);
                 } else {
-                    getActivity().showDialog(PASSWORD_DIALOG);
+                    ((SmapMain) getActivity()).processAdminMenu();
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "createAdminPasswordDialog", "show");
                 }
@@ -536,4 +536,6 @@ public class SmapTaskListFragment extends ListFragment
         }
         return true;
     }
+
+
 }

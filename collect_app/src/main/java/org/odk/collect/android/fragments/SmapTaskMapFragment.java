@@ -266,7 +266,7 @@ public class SmapTaskMapFragment extends Fragment
                             AdminPreferencesActivity.class);
                     startActivity(i);
                 } else {
-                    getActivity().showDialog(PASSWORD_DIALOG);
+                    ((SmapMain) getActivity()).processAdminMenu();
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "createAdminPasswordDialog", "show");
                 }
