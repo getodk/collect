@@ -79,7 +79,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             CheckBox cb = v.findViewById(R.id.checkbox);
 
             if (o.getType() == DriveListItem.FILE) {
-                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_download);
+                Drawable d = ContextCompat.getDrawable(context, R.drawable.ic_file_download);
                 iv.setImageDrawable(d);
                 cb.setVisibility(View.VISIBLE);
             }
