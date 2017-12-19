@@ -77,8 +77,9 @@ public class FormDownloadListAdapter extends ArrayAdapter {
         holder.text1.setText(formAtPosition.get(FORMNAME));
         holder.text2.setText(formAtPosition.get(FORMID_DISPLAY));
 
-        if (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()
-                || formIdsToDetails.get(formIDAtPosition).areNewerMediaFilesAvailable()) {
+        if (formIdsToDetails.get(formIDAtPosition) != null
+                && (formIdsToDetails.get(formIDAtPosition).isNewerFormVersionAvailable()
+                || formIdsToDetails.get(formIDAtPosition).areNewerMediaFilesAvailable())) {
             holder.updateInfo.setVisibility(View.VISIBLE);
         } else {
             holder.updateInfo.setVisibility(View.GONE);
