@@ -219,6 +219,12 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                                 manifestUrl = null;
                             }
                             break;
+                        case "hash":
+                            hash = XFormParser.getXMLText(child, true);
+                            if (hash != null && hash.length() == 0) {
+                                hash = null;
+                            }
+                            break;
                     }
                 }
                 if (formId == null || downloadUrl == null || formName == null) {
@@ -235,12 +241,15 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 }
                 boolean isNewerFormVersionAvailable = false;
                 boolean areNewerMediaFilesAvailable = false;
-                if (isThisFormAlreadyDownloaded(formId)) {
-                    isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
-                    if (!isNewerFormVersionAvailable && manifestUrl != null) {
-                        List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
-                        if (newMediaFiles != null) {
-                            areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
+
+                if(hash != null) {  // smap temporary work around for missing hash
+                    if (isThisFormAlreadyDownloaded(formId)) {
+                        isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
+                        if (!isNewerFormVersionAvailable && manifestUrl != null) {
+                            List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
+                            if (newMediaFiles != null) {
+                                areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
+                            }
                         }
                     }
                 }

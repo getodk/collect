@@ -87,8 +87,9 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                if(value < dsLabels.length) {
-                    return dsLabels[(int) value];
+                int idx = (int) value;
+                if(idx < dsLabels.length && dsLabels.length > 0) {
+                    return dsLabels[idx];
                 } else {
                     return "";
                 }
