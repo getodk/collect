@@ -275,11 +275,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         String path = getGroupsPath(groups);
 
         // build view
-        if (path.length() > 0) {
+        if (!path.isEmpty()) {
             TextView tv = new TextView(getContext());
             tv.setText(path);
-            int questionFontsize = Collect.getQuestionFontsize();
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize() - 4);
             tv.setPadding(0, 0, 0, 5);
             view.addView(tv, layout);
         }
