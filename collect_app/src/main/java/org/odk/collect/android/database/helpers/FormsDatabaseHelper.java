@@ -27,6 +27,8 @@ import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_DELETE;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.AUTO_SUBMIT;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.BASE64_RSA_PUBLIC_KEY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DATE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.DESCRIPTION;
@@ -48,7 +50,7 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -75,6 +77,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
             case 2:
             case 3:
                 success &= upgradeToVersion4(db, oldVersion);
+            case 4:
+                success &= upgradeToVersion5(db);
                 break;
             default:
                 Timber.i("Unknown version " + oldVersion);
@@ -249,6 +253,29 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
         return success;
     }
 
+    private boolean upgradeToVersion5(SQLiteDatabase db) {
+        boolean success = true;
+        try {
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_SUBMIT, "text")
+                    .end();
+
+            CustomSQLiteQueryBuilder
+                    .begin(db)
+                    .alter()
+                    .table(FORMS_TABLE_NAME)
+                    .addColumn(AUTO_DELETE, "text")
+                    .end();
+        } catch (SQLiteException e) {
+            Timber.e(e);
+            success = false;
+        }
+        return success;
+    }
+
     private void createFormsTable(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -264,6 +291,8 @@ public class FormsDatabaseHelper extends SQLiteOpenHelper {
                 + LANGUAGE + " text, "
                 + SUBMISSION_URI + " text, "
                 + BASE64_RSA_PUBLIC_KEY + " text, "
-                + JRCACHE_FILE_PATH + " text not null);");
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SUBMIT + " text,"
+                + AUTO_DELETE + " text);");
     }
 }
