@@ -286,20 +286,22 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
     public static String getGroupsPath(FormEntryCaption[] groups) {
         StringBuilder s = new StringBuilder("");
-        String t;
-        int i;
-        // list all groups in one string
-        for (FormEntryCaption g : groups) {
-            i = g.getMultiplicity() + 1;
-            t = g.getLongText();
-            if (t != null) {
-                s.append(t);
-                if (g.repeats() && i > 0) {
-                    s.append(" (")
-                            .append(i)
-                            .append(")");
+        if (groups != null) {
+            String t;
+            int i;
+            // list all groups in one string
+            for (FormEntryCaption g : groups) {
+                i = g.getMultiplicity() + 1;
+                t = g.getLongText();
+                if (t != null) {
+                    s.append(t);
+                    if (g.repeats() && i > 0) {
+                        s.append(" (")
+                                .append(i)
+                                .append(")");
+                    }
+                    s.append(" > ");
                 }
-                s.append(" > ");
             }
         }
 
