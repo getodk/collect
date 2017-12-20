@@ -406,15 +406,17 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
         String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
-        File[] localMediaFiles = new File(mediaDirPath).listFiles();
-        if (localMediaFiles != null) {
-            for (MediaFile newMediaFile : newMediaFiles) {
-                if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
-                    return true;
+        if (mediaDirPath != null) {
+            File[] localMediaFiles = new File(mediaDirPath).listFiles();
+            if (localMediaFiles != null) {
+                for (MediaFile newMediaFile : newMediaFiles) {
+                    if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
+                        return true;
+                    }
                 }
+            } else if (!newMediaFiles.isEmpty()) {
+                return true;
             }
-        } else if (!newMediaFiles.isEmpty()) {
-            return true;
         }
 
         return false;
