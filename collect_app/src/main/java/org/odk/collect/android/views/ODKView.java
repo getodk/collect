@@ -276,7 +276,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         // build view
         if (s.length() > 0) {
             TextView tv = new TextView(getContext());
-            tv.setText(s.substring(0, s.length() - 3));
+            tv.setText(s);
             int questionFontsize = Collect.getQuestionFontsize();
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
             tv.setPadding(0, 0, 0, 5);
@@ -289,6 +289,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         if (groups != null) {
             String t;
             int i;
+            int index = 1;
             // list all groups in one string
             for (FormEntryCaption g : groups) {
                 i = g.getMultiplicity() + 1;
@@ -300,7 +301,10 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                                 .append(i)
                                 .append(")");
                     }
-                    s.append(" > ");
+                    if (index < groups.length) {
+                        s.append(" > ");
+                    }
+                    index++;
                 }
             }
         }
