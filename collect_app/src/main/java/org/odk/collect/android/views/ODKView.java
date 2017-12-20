@@ -271,12 +271,12 @@ public class ODKView extends ScrollView implements OnLongClickListener {
      * // * Add a TextView containing the hierarchy of groups to which the question belongs. //
      */
     private void addGroupText(FormEntryCaption[] groups) {
-        String s = getGroupsPath(groups);
+        String path = getGroupsPath(groups);
 
         // build view
-        if (s.length() > 0) {
+        if (path.length() > 0) {
             TextView tv = new TextView(getContext());
-            tv.setText(s);
+            tv.setText(path);
             int questionFontsize = Collect.getQuestionFontsize();
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionFontsize - 4);
             tv.setPadding(0, 0, 0, 5);
@@ -285,7 +285,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     }
 
     public static String getGroupsPath(FormEntryCaption[] groups) {
-        StringBuilder s = new StringBuilder("");
+        StringBuilder path = new StringBuilder("");
         if (groups != null) {
             String t;
             int i;
@@ -295,21 +295,21 @@ public class ODKView extends ScrollView implements OnLongClickListener {
                 i = g.getMultiplicity() + 1;
                 t = g.getLongText();
                 if (t != null) {
-                    s.append(t);
+                    path.append(t);
                     if (g.repeats() && i > 0) {
-                        s.append(" (")
+                        path.append(" (")
                                 .append(i)
                                 .append(")");
                     }
                     if (index < groups.length) {
-                        s.append(" > ");
+                        path.append(" > ");
                     }
                     index++;
                 }
             }
         }
 
-        return s.toString();
+        return path.toString();
     }
 
     public void setFocus(Context context) {
