@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -284,6 +285,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
 
+    @NonNull
     public static String getGroupsPath(FormEntryCaption[] groups) {
         StringBuilder path = new StringBuilder("");
         if (groups != null) {
