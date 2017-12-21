@@ -182,12 +182,17 @@ public class ResetDialogPreference extends DialogPreference {
             }
         }
         if (!((AdminPreferencesActivity) getContext()).isInstanceStateSaved()) {
-            ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
-            try {
-                resetSettingsResultDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
-            } catch (ClassCastException e) {
-                Timber.i(e);
-            }
+            ((AdminPreferencesActivity) getContext()).runOnUiThread (new Thread(new Runnable() {
+                public void run() {
+                    ((AdminPreferencesActivity) getContext()).recreate();
+                    ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
+                    try {
+                        resetSettingsResultDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
+                    } catch (ClassCastException e) {
+                        Timber.i(e);
+                    }
+                }
+            }));
         }
     }
 }
