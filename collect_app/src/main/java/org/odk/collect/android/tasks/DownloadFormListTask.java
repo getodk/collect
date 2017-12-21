@@ -233,7 +233,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                     isNewerFormVersionAvailable = isNewerFormVersionAvailable(DownloadFormsTask.getMd5Hash(hash));
                     if (!isNewerFormVersionAvailable && manifestUrl != null) {
                         List<MediaFile> newMediaFiles = downloadMediaFileList(manifestUrl);
-                        if (newMediaFiles != null) {
+                        if (newMediaFiles != null && newMediaFiles.size() > 0) {
                             areNewerMediaFilesAvailable = areNewerMediaFilesAvailable(formId, version, newMediaFiles);
                         }
                     }
