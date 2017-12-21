@@ -93,6 +93,6 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
 
     @Override
     public void onDialogClosed() {
-
+        goToTheMainActivityAndCloseAllOthers();
     }
 }
