@@ -141,7 +141,7 @@ public class WidgetFactory {
                             }
                             if(chartType.equals("line")) {
                                 questionWidget = new SmapChartLineWidget(context, fep, appearance);
-                            } else if(chartType.equals("hori")){
+                            } else if(chartType.equals("horizontal_bar")){
                                 questionWidget = new SmapChartHorizontalBarWidget(context, fep, appearance);
                             } else {
                                 questionWidget = new SmapChartLineWidget(context, fep, appearance);

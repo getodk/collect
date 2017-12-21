@@ -50,13 +50,17 @@ import java.util.List;
 @SuppressLint("ViewConstructor")
 public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
-    boolean readOnly = true;
+    private boolean readOnly = true;
+    private BarData data = null;
+    private HorizontalBarChart chart = null;
+    String dString = null;
 
     public SmapChartHorizontalBarWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt, appearance);
 
-        String dString = prompt.getAnswerText();
-        BarData data;
+        if(dString == null) {
+            dString = getFormEntryPrompt().getAnswerText();
+        }
         if(isStacked()) {
             data = getStackedBarData(dString);
         } else {
@@ -64,7 +68,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         }
 
         // Add a Horizontal Bar Widget
-        HorizontalBarChart chart = new HorizontalBarChart(context);
+        chart = new HorizontalBarChart(context);
         addChart(chart);
 
         // Add data
@@ -73,7 +77,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             float barSpace = 0.02f; // x2 dataset
             float barWidth = 0.45f; // x2 dataset
             data.setBarWidth(barWidth); // set the width of each bar
-            chart.setData(data);
+            //chart.setData(data);
 
             if(!isStacked()) {
                 chart.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
@@ -100,18 +104,17 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
         xAxis.setValueFormatter(formatter);
 
+        chart.setData(data);
         chart.invalidate();
-
-        //addAnswerView(answerText);
     }
 
     private String [] getDataSetLabels(String sInput) {
-        String [] dsLabels = {};
+        String [] dsLabels = {"Std", "Now"};/*
         if(sInput != null && sInput.trim().length() > 0) {
 
             String[] components = sInput.split("==");
             if (components.length == 1) {
-                //No labels musj just be data
+                //No labels must just be data
             } else if (components.length >= 2) {
                 String sLabels = components[0];  // labels are first
 
@@ -121,6 +124,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
                 }
             }
         }
+        */
         return dsLabels;
     }
     private BarData getStackedBarData(String sInput) {
@@ -200,6 +204,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         String [] items = barData.split(" ");
         float [] values = new float [items.length];
 
+        float total = 0;
         for(int i = 0; i < items.length; i++) {
             float f = 0f;
             try {
@@ -207,7 +212,16 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             } catch (Exception e) {
                 // ignore errors
             }
+            if(isNormalised()) {
+                total += f;
+            }
             values[i] = f;
+        }
+
+        if(isNormalised() && total > 0) {
+            for(int i = 0; i < values.length; i++) {
+                values[i] = values[i] * 100 / total;
+            }
         }
 
         entry = new BarEntry(idx, values);
@@ -272,11 +286,6 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
         String s = getAnswerText();
         return !s.equals("") ? new StringData(s) : null;
-    }
-
-    @NonNull
-    public String getAnswerText() {
-        return "";
     }
 
     @Override

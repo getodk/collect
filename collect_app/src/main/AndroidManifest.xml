@@ -108,9 +108,11 @@ the specific language governing permissions and limitations under the License.
             android:name=".activities.SmapMain"
             android:configChanges="orientation"
             android:label="@string/app_name" />
+
+        <!--android:configChanges="orientation" smap - changed as per below for charts -->
         <activity
             android:name="org.odk.collect.android.activities.FormEntryActivity"
-            android:configChanges="orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize">
             <!--

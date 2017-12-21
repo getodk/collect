@@ -69,15 +69,23 @@ import timber.log.Timber;
 @SuppressLint("ViewConstructor")
 public abstract class SmapChartWidget extends QuestionWidget {
 
+    private static final String CHART_DATA = "chart_data";
     String appearance;
     boolean stacked = false;
+    boolean normalised = false;
 
     public SmapChartWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt);
         this.appearance = appearance;
+
         String stackString = prompt.getQuestion().getAdditionalAttribute(null, "stacked");
         if(stackString != null && (stackString.equals("yes") || stackString.equals("true"))) {
             stacked = true;
+        }
+
+        String normalisedString = prompt.getQuestion().getAdditionalAttribute(null, "normalised");
+        if(normalisedString != null && (normalisedString.equals("yes") || normalisedString.equals("true"))) {
+            normalised = true;
         }
     }
 
@@ -92,6 +100,10 @@ public abstract class SmapChartWidget extends QuestionWidget {
 
     boolean isStacked() {
        return stacked;
+    }
+
+    protected boolean isNormalised() {
+        return normalised;
     }
 
     @Override
@@ -110,7 +122,7 @@ public abstract class SmapChartWidget extends QuestionWidget {
 
     @NonNull
     public String getAnswerText() {
-        return "";
+        return getFormEntryPrompt().getAnswerText();
     }
 
     @Override
