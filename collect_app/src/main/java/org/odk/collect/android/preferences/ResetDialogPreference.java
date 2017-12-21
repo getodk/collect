@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.SimpleDialog;
+import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ResetUtility;
 import org.odk.collect.android.utilities.ToastUtils;
 
@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
 
 public class ResetDialogPreference extends DialogPreference {
     private CheckBox preferences;
@@ -180,21 +182,12 @@ public class ResetDialogPreference extends DialogPreference {
             }
         }
         if (!((AdminPreferencesActivity) getContext()).isInstanceStateSaved()) {
-            showResultDialog(String.valueOf(resultMessage));
-        }
-    }
-
-    private void showResultDialog(final String resultMessage) {
-        String dialogTitle = getContext().getString(R.string.reset_app_state_result);
-        int iconID = android.R.drawable.ic_dialog_info;
-        String buttonTitle = getContext().getString(R.string.ok);
-
-        SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, iconID, resultMessage, buttonTitle, false);
-
-        try {
-            simpleDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-        } catch (ClassCastException e) {
-            Timber.i(e);
+            ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
+            try {
+                resetSettingsResultDialog.show(((AdminPreferencesActivity) getContext()).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
+            } catch (ClassCastException e) {
+                Timber.i(e);
+            }
         }
     }
 }
