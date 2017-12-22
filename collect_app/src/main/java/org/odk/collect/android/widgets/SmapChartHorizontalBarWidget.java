@@ -69,6 +69,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
         // Add a Horizontal Bar Widget
         chart = new HorizontalBarChart(context);
+        chart.setScaleEnabled(false);
         addChart(chart);
 
         // Add data
@@ -78,6 +79,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             float barWidth = 0.45f; // x2 dataset
             data.setBarWidth(barWidth); // set the width of each bar
             //chart.setData(data);
+            data.setValueTextSize((float) 12.0);
 
             if(!isStacked()) {
                 chart.groupBars(0f, groupSpace, barSpace); // perform the "explicit" grouping
@@ -109,7 +111,8 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
     }
 
     private String [] getDataSetLabels(String sInput) {
-        String [] dsLabels = {"Std", "Now"};/*
+
+        String [] dsLabels = {""};
         if(sInput != null && sInput.trim().length() > 0) {
 
             String[] components = sInput.split("==");
@@ -119,12 +122,12 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
                 String sLabels = components[0];  // labels are first
 
                 String [] labelComponents = sLabels.split("::");
-                if(labelComponents.length >= 1) {
+                if(labelComponents.length > 1) {
                     dsLabels = labelComponents[0].split(":");
                 }
             }
         }
-        */
+
         return dsLabels;
     }
     private BarData getStackedBarData(String sInput) {
@@ -149,7 +152,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             String [] labelComponents = sLabels.split("::");
             if(labelComponents.length == 1) {
                 entryLabels = labelComponents[0].split(":");
-            } else   if(labelComponents.length >= 1) {
+            } else   if(labelComponents.length > 1) {
                 // data set labels at position 0
                 entryLabels = labelComponents[1].split(":");
             }
