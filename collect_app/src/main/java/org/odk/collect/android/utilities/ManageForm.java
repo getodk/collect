@@ -190,14 +190,10 @@ public class ManageForm {
 
                      Timber.i("   Delete Check: Found Form Id: " + formId + " : " + version);
 
-		             // Check to see if this form was downloaded
+		             // Make sure this form has not just been downloaded in which case it will be in the formMap
 		             if(formMap.get(formId + "_v_" + version) == null) {
 		            	 Timber.i("   Delete: " + formId + "_v_" + version);
                          formsToDelete.add(table_id);
-		            	 //if(!isIncompleteInstance(formId, version)) {
-		            	//	 Log.i("   Delete: ", "Candidate 2 !!!!!!!!!!!");
-		            	//	 formsToDelete.add(table_id);
-		            	 //}
 		             } else {
 		            	 Timber.i("   Don't Delete: Keep this one");
 		             }
