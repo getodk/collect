@@ -18,6 +18,9 @@
 
 package org.odk.collect.android.external.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Author: Meletis Margaritis
  * Date: 20/05/13
@@ -51,6 +54,13 @@ enum ExternalDataSearchType {
         protected String getSingleLikeArgument(String queriedValue) {
             return '%' + queriedValue;
         }
+    },
+
+    IN("in") {      // smap
+        @Override
+        protected String getSingleLikeArgument(String queriedValue) {
+            return queriedValue;
+        }
     };
 
     private final String keyword;
@@ -77,10 +87,11 @@ enum ExternalDataSearchType {
         return fallback;
     }
 
-    public String[] constructLikeArguments(String queriedValue, int times) {
-        String[] args = new String[times];
-        for (int i = 0; i < times; i++) {
-            args[i] = getSingleLikeArgument(queriedValue);
+    // smap change to work with an array list
+    public String[] constructLikeArguments(List<String> queriedValues) {
+        String[] args = new String[queriedValues.size()];
+        for (int i = 0; i < queriedValues.size(); i++) {
+            args[i] = getSingleLikeArgument(queriedValues.get(i));
         }
         return args;
     }

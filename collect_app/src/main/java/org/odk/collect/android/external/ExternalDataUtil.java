@@ -242,6 +242,20 @@ public final class ExternalDataUtil {
         return values;
     }
 
+    // smap
+    public static List<String> createListOfValues(String valueString) {
+        List<String> values = new ArrayList<String>();
+
+        List<String> commaSplitParts = splitTrimmed(valueString, COLUMN_SEPARATOR,
+                FALLBACK_COLUMN_SEPARATOR);
+
+        for (String commaSplitPart : commaSplitParts) {
+            values.add(commaSplitPart);
+        }
+
+        return values;
+    }
+
     protected static List<String> splitTrimmed(String displayColumns, String separator,
             String fallbackSeparator) {
         List<String> commaSplitParts = splitTrimmed(displayColumns, separator);

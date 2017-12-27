@@ -25,6 +25,9 @@ collect_app/src/pop/
 gradle.properties
 secrets.properties
 google-services.json
+collect_app/src/release/
+collect_app/src/debug/
+collect_app/standard/
 
 # built application files
 *.apk
