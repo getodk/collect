@@ -416,13 +416,13 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
     }
 
     private boolean isNewerFormVersionAvailable(String md5Hash) {
-        return new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
+        return md5Hash != null && new FormsDao().getFormsCursorForMd5Hash(md5Hash).getCount() == 0;
     }
 
     private boolean areNewerMediaFilesAvailable(String formId, String formVersion, List<MediaFile> newMediaFiles) {
-        if (newMediaFiles != null) {
-            String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
-            List<File> localMediaFiles = FileUtils.getAllFormMediaFiles(mediaDirPath);
+        String mediaDirPath = new FormsDao().getFormMediaPath(formId, formVersion);
+        if (mediaDirPath != null) {
+            File[] localMediaFiles = new File(mediaDirPath).listFiles();
             if (localMediaFiles != null) {
                 for (MediaFile newMediaFile : newMediaFiles) {
                     if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
@@ -437,7 +437,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
         return false;
     }
 
-    private boolean isMediaFileAlreadyDownloaded(List<File> localMediaFiles, MediaFile newMediaFile) {
+    private boolean isMediaFileAlreadyDownloaded(File[] localMediaFiles, MediaFile newMediaFile) {
         // TODO Zip files are ignored we should find a way to take them into account too
         if (newMediaFile.getFilename().endsWith(".zip")) {
             return true;
