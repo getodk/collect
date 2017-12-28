@@ -1,4 +1,4 @@
-package org.odk.collect.android.location;
+package org.odk.collect.android.location.client;
 
 import android.location.Location;
 import android.support.annotation.NonNull;

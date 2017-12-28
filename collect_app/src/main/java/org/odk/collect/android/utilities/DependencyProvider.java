@@ -1,4 +1,4 @@
-package org.odk.collect.android.injection;
+package org.odk.collect.android.utilities;
 
 public interface DependencyProvider<T> {
     T provide();
