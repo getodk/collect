@@ -143,8 +143,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dexOptions {
@@ -225,9 +225,33 @@ dependencies {
     androidTestImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
     odkCollectReleaseImplementation group: 'com.squareup.leakcanary', name: 'leakcanary-android-no-op', version: '1.5.4'
 
+    // Android Architecture Components:
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
-    implementation "android.arch.lifecycle:extensions:1.0.0"
+    // Dagger:
+    implementation 'com.google.dagger:dagger-android:2.11'
+    implementation 'com.google.dagger:dagger-android-support:2.11'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
+    // RxJava 2:
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
+
+    // Better "Subjects" for Rx:
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+
+    // Android bindings for Rx:
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
+    // RxLifecycle (binds subscription cleanup to component lifecycle):
+    implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
+
+    // Makes binding to Views easy:
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Testing-only dependencies
     testImplementation group: 'junit', name: 'junit', version: '4.12'

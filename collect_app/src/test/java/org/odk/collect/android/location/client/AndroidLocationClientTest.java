@@ -1,4 +1,4 @@
-package org.odk.collect.android.location;
+package org.odk.collect.android.location.client;
 
 import android.location.Location;
 import android.location.LocationManager;
@@ -22,10 +22,10 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.location.LocationClient.Priority.PRIORITY_BALANCED_POWER_ACCURACY;
-import static org.odk.collect.android.location.LocationClient.Priority.PRIORITY_HIGH_ACCURACY;
-import static org.odk.collect.android.location.LocationClient.Priority.PRIORITY_LOW_POWER;
-import static org.odk.collect.android.location.LocationClient.Priority.PRIORITY_NO_POWER;
+import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_HIGH_ACCURACY;
+import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_LOW_POWER;
+import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_NO_POWER;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AndroidLocationClientTest {

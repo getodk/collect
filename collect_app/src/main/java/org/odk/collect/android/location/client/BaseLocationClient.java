@@ -1,12 +1,10 @@
-package org.odk.collect.android.location;
+package org.odk.collect.android.location.client;
 
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-
-import static org.odk.collect.android.location.LocationClient.Priority.PRIORITY_HIGH_ACCURACY;
 
 
 /**
@@ -19,7 +17,7 @@ abstract class BaseLocationClient implements LocationClient {
     private final LocationManager locationManager;
 
     @NonNull
-    private Priority priority = PRIORITY_HIGH_ACCURACY;
+    private Priority priority = Priority.PRIORITY_HIGH_ACCURACY;
 
     /**
      * Constructs a new BaseLocationClient with the provided LocationManager.
