@@ -1,5 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Change the target package to use smap app identifier -->
     <Preference
         android:key="odk_preferences"
         android:summary="@string/admin_access_settings"
@@ -7,7 +8,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="org.odk.collect.android.preferences.PreferencesActivity"
-            android:targetPackage="org.odk.collect.android">
+            android:targetPackage="org.smap.smapTask.android">
             <extra
                 android:name="adminMode"
                 android:value="true" />
