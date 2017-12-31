@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -1255,6 +1256,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 };
                 saveAs.setFilters(new InputFilter[]{returnFilter});
 
+                boolean showInstanceName = PreferenceManager        // smap
+                        .getDefaultSharedPreferences(this)
+                        .getBoolean(PreferenceKeys.KEY_SMAP_ODK_INSTANCENAME, false);
+
                 if (formController.getSubmissionMetadata().instanceName == null) {
                     // no meta/instanceName field in the form -- see if we have a
                     // name for this instance from a previous save attempt...
@@ -1287,13 +1292,14 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    // sa.setVisibility(View.VISIBLE);   // smap
-                    saveAs.setText(saveName);
-                    saveAs.setEnabled(true);
-                    // saveAs.setVisibility(View.VISIBLE);  // smap
                     TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    //sa.setVisibility(View.VISIBLE); smap
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
+                    if(showInstanceName) {      // smap
+                        saveAs.setVisibility(View.VISIBLE);
+                        sa.setVisibility(View.VISIBLE);
+                    }
                     saveAs.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void afterTextChanged(Editable s) {
@@ -1317,7 +1323,9 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
-                    // saveAs.setVisibility(View.VISIBLE);   // smap
+                    if(showInstanceName) {      // smap
+                        saveAs.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 // override the visibility settings based upon admin preferences

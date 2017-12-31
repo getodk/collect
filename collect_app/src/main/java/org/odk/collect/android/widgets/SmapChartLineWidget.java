@@ -21,9 +21,17 @@ import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -44,30 +52,33 @@ import java.util.List;
 public class SmapChartLineWidget extends SmapChartWidget {
 
     boolean readOnly = true;
+    LineChart chart = null;
+    List<List<Entry>> datasets = null;
+
 
     public SmapChartLineWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt, appearance);
 
-        List<Entry> entries = new ArrayList<Entry>();
-        String s = prompt.getAnswerText();
-        if (s != null) {
-            String[] vArray = s.split(" ");
-            for(int i = 0; i < vArray.length; i++) {
-                try {
-                    entries.add(new Entry(i, Integer.parseInt(vArray[i])));
-                } catch (Exception e) {
-
-                }
-            }
-        }
+        String s = getFormEntryPrompt().getAnswerText();
+        datasets = getLineEntries(s);
+        xLabels = getXLabels(s);
 
         // programmatically create a LineChart
-        LineChart chart = new LineChart(context);
+        chart = new LineChart(context);
         addChart(chart);
 
-        if(entries.size() > 0) {
-            LineDataSet dataSet = new LineDataSet(entries, "Label");
-            LineData lineData = new LineData(dataSet);
+        if(datasets.size() > 0) {
+            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            for(List<Entry> ds : datasets) {
+                LineDataSet dataSet = new LineDataSet(ds, "Label");
+                dataSets.add(dataSet);
+            }
+            LineData lineData = new LineData(dataSets);
+
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+            xAxis.setValueFormatter(formatter);
+
             chart.setData(lineData);
         }
         chart.invalidate();
@@ -75,6 +86,52 @@ public class SmapChartLineWidget extends SmapChartWidget {
         //addAnswerView(answerText);
     }
 
+    private List<List<Entry>> getLineEntries(String sInput) {
+
+        List<List<Entry>> dataSets = new ArrayList<List<Entry>> ();
+
+        String sData = "";
+
+        if(sInput != null && sInput.trim().length() > 0) {
+
+            String [] components = sInput.split("==");
+            if(components.length == 1) {
+                sData = components[0];
+            } else if(components.length >= 2) {
+                sData = components[1];
+            }
+
+            // Get the data sets
+            String [] dsArray = sData.split("::");
+            for(int i = 0; i < dsArray.length; i++) {
+                List<Entry> entries = new ArrayList<Entry>();
+
+                String [] vArray = dsArray[i].split(" ");
+                for(int j = 0; j < vArray.length; j++) {
+                    String [] point = vArray[j].split(":");
+                    try {
+                        int x = j;
+                        float y;
+                        if(point.length > 1) {
+                            x = Integer.parseInt(point[0]);
+                            y = Float.parseFloat(point[1]);
+                        } else {
+                            y = Float.parseFloat(point[0]);
+                        }
+
+                        entries.add(new Entry(x, y));
+                    } catch (Exception e) {
+
+                    }
+                }
+                dataSets.add(entries);
+            }
+
+
+        }
+
+        return dataSets;
+    }
 
     @Override
     public void clearAnswer() {
@@ -88,11 +145,6 @@ public class SmapChartLineWidget extends SmapChartWidget {
 
         String s = getAnswerText();
         return !s.equals("") ? new StringData(s) : null;
-    }
-
-    @NonNull
-    public String getAnswerText() {
-        return "";
     }
 
     @Override

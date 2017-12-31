@@ -338,6 +338,17 @@ public class SmapTaskListFragment extends ListFragment
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
 
+        boolean adminMenu = PreferenceManager
+                .getDefaultSharedPreferences(getContext())
+                .getBoolean(PreferenceKeys.KEY_SMAP_ODK_ADMIN_MENU, false);
+
+        if(adminMenu) {
+            menu
+                    .add(0, R.id.menu_admin_preferences, 0,
+                            R.string.admin_preferences)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+       }
+
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);

@@ -38,9 +38,11 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
@@ -74,6 +76,9 @@ public abstract class SmapChartWidget extends QuestionWidget {
     boolean stacked = false;
     boolean normalised = false;
 
+    List<String> xLabels = null;
+    IAxisValueFormatter formatter = null;
+
     public SmapChartWidget(Context context, FormEntryPrompt prompt, String appearance) {
         super(context, prompt);
         this.appearance = appearance;
@@ -87,6 +92,19 @@ public abstract class SmapChartWidget extends QuestionWidget {
         if(normalisedString != null && (normalisedString.equals("yes") || normalisedString.equals("true"))) {
             normalised = true;
         }
+
+        formatter = new IAxisValueFormatter() {
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                int idx = (int) value;
+                if(idx < xLabels.size() && xLabels.size() > 0) {
+                    return xLabels.get(idx);
+                } else {
+                    return "";
+                }
+            }
+        };
     }
 
     void addChart(Chart chart) {
@@ -146,6 +164,29 @@ public abstract class SmapChartWidget extends QuestionWidget {
     public void cancelLongPress() {
         super.cancelLongPress();
 
+    }
+
+    protected List<String> getXLabels(String sInput) {
+
+        List<String> labels = new ArrayList<>();
+
+        String sLabels = null;
+        if(sInput != null && sInput.trim().length() > 0) {
+
+            String[] components = sInput.split("==");
+            if (components.length == 1) {
+                // no labels
+            } else if (components.length >= 2) {
+                sLabels = components[0];
+            }
+            if(sLabels != null) {
+                String [] vArray = sLabels.split(":");
+                for(int i = 0; i < vArray.length; i++) {
+                    labels.add(vArray[i]);
+                }
+            }
+        }
+        return labels;
     }
 
 }

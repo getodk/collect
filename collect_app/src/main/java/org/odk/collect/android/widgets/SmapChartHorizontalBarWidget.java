@@ -87,20 +87,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         }
 
         // the labels that should be drawn on the XAxis
-        final String[] dsLabels = getDataSetLabels(dString);
-
-        IAxisValueFormatter formatter = new IAxisValueFormatter() {
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                int idx = (int) value;
-                if(idx < dsLabels.length && dsLabels.length > 0) {
-                    return dsLabels[idx];
-                } else {
-                    return "";
-                }
-            }
-        };
+        xLabels = getXLabels(dString);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
@@ -110,26 +97,6 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         chart.invalidate();
     }
 
-    private String [] getDataSetLabels(String sInput) {
-
-        String [] dsLabels = {""};
-        if(sInput != null && sInput.trim().length() > 0) {
-
-            String[] components = sInput.split("==");
-            if (components.length == 1) {
-                //No labels must just be data
-            } else if (components.length >= 2) {
-                String sLabels = components[0];  // labels are first
-
-                String [] labelComponents = sLabels.split("::");
-                if(labelComponents.length > 1) {
-                    dsLabels = labelComponents[0].split(":");
-                }
-            }
-        }
-
-        return dsLabels;
-    }
     private BarData getStackedBarData(String sInput) {
         BarData data = null;
         int [] colors = ColorTemplate.PASTEL_COLORS;

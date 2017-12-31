@@ -186,48 +186,53 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             Collect.getInstance().setDownloading(true);
         }
 
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationManager mNotifyMgr =
-                (NotificationManager) Collect.getInstance().getBaseContext().getSystemService(NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = null;
+        Uri uri = null;
+        NotificationManager mNotifyMgr = null;
+        try {
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            mNotifyMgr =
+                    (NotificationManager) Collect.getInstance().getBaseContext().getSystemService(NOTIFICATION_SERVICE);
 
-        // Set refresh notification icon
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
-                        .setSmallIcon(R.drawable.notification_icon_go)
-                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                R.drawable.ic_launcher))
-                        .setProgress(0, 0, true)
-                        .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
-                        .setContentText(Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started));
-        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+            // Set refresh notification icon
+            mBuilder =
+                    new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
+                            .setSmallIcon(R.drawable.notification_icon_go)
+                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                    R.drawable.ic_launcher))
+                            .setProgress(0, 0, true)
+                            .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
+                            .setContentText(Collect.getInstance().getBaseContext().getString(R.string.smap_refresh_started));
+            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
 
-        synchronise();      // Synchronise the phone with the server
+            synchronise();      // Synchronise the phone with the server
+        } finally {
+            // Set refresh done notification icon
+            StringBuilder message = Utilities.getUploadMessage(results);
+
+            Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
+            notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
+            PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
+                    notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder =
+                    new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
+                            .setSmallIcon(R.drawable.notification_icon)
+                            .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
+                                    R.drawable.ic_launcher))
+                            .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
+                            .setProgress(0,0,false)
+                            .setSound(uri)
+                            .setContentIntent(pendingNotify)
+                            .setContentText(message.toString().trim());
+            mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
+
+            Collect.getInstance().setDownloading(false);
+        }
 
         // Refresh task list
         Intent intent = new Intent("org.smap.smapTask.refresh");
         LocalBroadcastManager.getInstance(Collect.getInstance()).sendBroadcast(intent);
-
-        // Set refresh done notification icon
-        StringBuilder message = Utilities.getUploadMessage(results);
-
-        Intent notifyIntent = new Intent(Collect.getInstance(), NotificationActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_KEY, message.toString().trim());
-        PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder =
-                new NotificationCompat.Builder(Collect.getInstance().getBaseContext())
-                        .setSmallIcon(R.drawable.notification_icon)
-                        .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                                R.drawable.ic_launcher))
-                        .setContentTitle(Collect.getInstance().getBaseContext().getString(R.string.app_name))
-                        .setProgress(0,0,false)
-                        .setSound(uri)
-                        .setContentIntent(pendingNotify)
-                        .setContentText(message.toString().trim());
-        mNotifyMgr.notify(NotificationActivity.NOTIFICATION_ID, mBuilder.build());
-
-        Collect.getInstance().setDownloading(false);
 
         return results;
     }
@@ -376,6 +381,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     editor.putBoolean(PreferenceKeys.KEY_STORE_SMAP_USER_TRAIL, tr.settings.ft_send_trail);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_LOCATION_TRIGGER, tr.settings.ft_location_trigger);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_STYLE_MENUS, tr.settings.ft_odk_style_menus);
+                    editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_INSTANCENAME, tr.settings.ft_specify_instancename);
+                    editor.putBoolean(PreferenceKeys.KEY_SMAP_ODK_ADMIN_MENU, tr.settings.ft_admin_menu);
                     editor.putBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, tr.settings.ft_review_final);
 
                     /*
