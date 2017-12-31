@@ -343,7 +343,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                                     Toast.makeText(
                                             SmapMain.this,
                                             getString(R.string.admin_password_incorrect),
-                                            Toast.LENGTH_SHORT).show();
+                                            Toast.LENGTH_LONG).show();
                                     Collect.getInstance()
                                             .getActivityLogger()
                                             .logAction(this, "adminPasswordDialog",
@@ -505,7 +505,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             Toast.makeText(
                     this,
                     R.string.smap_no_tasks_nfc,
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
         }
 
     }
@@ -544,7 +544,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
                     Toast.makeText(
                             SmapMain.this,
                             getString(R.string.smap_starting_task_from_nfc, result),
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
 
                     break;
                 }
@@ -554,7 +554,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
             Toast.makeText(
                     SmapMain.this,
                     getString(R.string.smap_no_matching_tasks_nfc, result),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -645,17 +645,18 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         String status = entry.taskStatus;
 
         // set the adhoc location
-        boolean canUpdate = false;
-        try {
-            canUpdate = Utilities.canComplete(status);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boolean canUpdate = Utilities.canComplete(status);
+        boolean isSubmitted = Utilities.isSubmitted(status);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean reviewFinal = sharedPreferences.getBoolean(PreferenceKeys.KEY_SMAP_REVIEW_FINAL, true);
 
-        if (!canUpdate && reviewFinal) {
+        if(isSubmitted) {
+            Toast.makeText(
+                    SmapMain.this,
+                    getString(R.string.smap_been_submitted),
+                    Toast.LENGTH_LONG).show();
+        } else if (!canUpdate && reviewFinal) {
             // Show a message if this task is read only
             Toast.makeText(
                     SmapMain.this,
@@ -670,7 +671,7 @@ public class SmapMain extends AppCompatActivity implements TaskDownloaderListene
         }
 
         // Open the task if it is editable or reviewable
-        if (canUpdate || reviewFinal) {
+        if ((canUpdate || reviewFinal) && !isSubmitted) {
             // Get the provider URI of the instance
             String where = InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH + "=?";
             String[] whereArgs = {

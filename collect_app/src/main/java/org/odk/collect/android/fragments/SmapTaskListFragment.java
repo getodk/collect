@@ -283,7 +283,7 @@ public class SmapTaskListFragment extends ListFragment
                 Toast.makeText(
                         getActivity(),
                         getString(R.string.smap_must_start_from_nfc),
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             } else {
                 ((SmapMain) getActivity()).completeTask(entry);
             }

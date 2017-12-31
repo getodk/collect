@@ -30,15 +30,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.PreferenceKeys;
-import org.odk.collect.android.preferences.PreferencesActivity;
-import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.taskModel.InstanceXML;
 import org.odk.collect.android.tasks.DownloadFormsTask;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.STFileUtils;
-import org.odk.collect.android.utilities.WebUtils;
 import org.opendatakit.httpclientandroidlib.Header;
 import org.opendatakit.httpclientandroidlib.HttpEntity;
 import org.opendatakit.httpclientandroidlib.HttpResponse;
@@ -46,8 +43,6 @@ import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
-import org.odk.collect.android.loaders.TaskEntry;
-import org.odk.collect.android.taskModel.InstanceXML;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,9 +58,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
@@ -272,7 +265,7 @@ public class Utilities {
                 }
                 String errMsg =
                         Collect.getInstance().getString(org.odk.collect.android.R.string.file_fetch_failed, downloadUrl,
-                                response.getStatusLine().getReasonPhrase(), statusCode);
+                                response.getStatusLine().getReasonPhrase(), String.valueOf(statusCode));
                 Log.e(t, errMsg);
                 throw new Exception(errMsg);
             }
@@ -630,7 +623,7 @@ public class Utilities {
      */
     public static boolean canReject(String currentStatus) {
         boolean valid = false;
-        if (currentStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
+        if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
             valid = true;
         }
         return valid;
@@ -642,7 +635,7 @@ public class Utilities {
     public static boolean canComplete(String currentStatus) {
 
         boolean valid = false;
-        if (currentStatus.equals(STATUS_T_ACCEPTED)) {
+        if (currentStatus != null && currentStatus.equals(STATUS_T_ACCEPTED)) {
             valid = true;
         }
 
@@ -654,12 +647,25 @@ public class Utilities {
      */
     public static boolean canAccept(String currentStatus) {
         boolean valid = false;
-        if (currentStatus.equals(STATUS_T_REJECTED)) {
+        if (currentStatus != null && currentStatus.equals(STATUS_T_REJECTED)) {
             valid = true;
         }
 
         return valid;
     }
+
+    /*
+     * Return true if the current task status allows it to be accepted
+     */
+    public static boolean isSubmitted(String currentStatus) {
+        boolean submitted = false;
+        if (currentStatus != null && currentStatus.equals(STATUS_T_SUBMITTED)) {
+            submitted = true;
+        }
+
+        return submitted;
+    }
+
 
     /*
      * Copy instance files to a new location

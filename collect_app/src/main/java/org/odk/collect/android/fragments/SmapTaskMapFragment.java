@@ -388,7 +388,7 @@ public class SmapTaskMapFragment extends Fragment
                     }
                 }
                 if(selMarker != null) {
-                    Toast.makeText(getActivity(), "marker selected: " + selMarker.getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "marker selected: " + selMarker.getTitle(), Toast.LENGTH_LONG).show();
 
                     Integer iPos = markerMap.get(selMarker);
                     if(iPos != null) {
@@ -401,7 +401,7 @@ public class SmapTaskMapFragment extends Fragment
                             Toast.makeText(
                                     getActivity(),
                                     getString(R.string.smap_must_start_from_nfc),
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         } else {
                             ((SmapMain) getActivity()).completeTask(entry);
                         }

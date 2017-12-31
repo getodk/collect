@@ -172,7 +172,7 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
     				completeTask(instancePath, formPath, taskEntry.id);
     			} else {
         			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_complete),
-    		                Toast.LENGTH_SHORT).show();
+    		                Toast.LENGTH_LONG).show();
     			}
 
     		} catch (Exception e) {
@@ -191,7 +191,7 @@ public class TaskAddressActivity extends Activity implements OnClickListener {
                     LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(intent);
 	    		} else {
 	    			Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
-			                Toast.LENGTH_SHORT).show();
+			                Toast.LENGTH_LONG).show();
 	    		}
 
 	    	} catch (Exception e) {

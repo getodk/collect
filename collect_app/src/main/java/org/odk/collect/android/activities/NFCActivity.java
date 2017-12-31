@@ -62,13 +62,13 @@ public class NFCActivity extends Activity implements NFCListener {
             Toast.makeText(
                     NFCActivity.this,
                     getString(R.string.smap_nfc_not_available),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
             finish();
         } else if (!mNfcAdapter.isEnabled()) {
             Toast.makeText(
                     NFCActivity.this,
                     getString(R.string.smap_nfc_not_enabled),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
             finish();
         } else {
             /*
@@ -90,7 +90,7 @@ public class NFCActivity extends Activity implements NFCListener {
             Toast.makeText(
                     NFCActivity.this,
                     getString(R.string.smap_nfc_is_available),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
 
         }
 
