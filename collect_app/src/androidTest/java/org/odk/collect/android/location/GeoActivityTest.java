@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertTrue;
 public class GeoActivityTest {
 
     @Rule
-    ActivityTestRule<GeoActivity> activityTestRule;
+    public ActivityTestRule<GeoActivity> activityTestRule;
 
     @Test
     public void shouldDoSomething() {
