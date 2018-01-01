@@ -43,6 +43,7 @@ import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.views.ODKView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,28 +196,19 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         refreshView();
     }
 
-
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
         // move to enclosing group...
         index = formController.stepIndexOut(index);
 
-        String path = "";
+        List<FormEntryCaption> groups = new ArrayList<>();
         while (index != null) {
-
-            path =
-                    formController.getCaptionPrompt(index).getLongText()
-                            + " ("
-                            + (formController.getCaptionPrompt(index)
-                            .getMultiplicity() + 1) + ") > " + path;
-
+            groups.add(0, formController.getCaptionPrompt(index));
             index = formController.stepIndexOut(index);
         }
-        // return path?
-        return path.substring(0, path.length() - 2);
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
     }
-
 
     public void refreshView() {
         try {
