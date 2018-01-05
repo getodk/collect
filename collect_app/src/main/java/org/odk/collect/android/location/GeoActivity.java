@@ -12,6 +12,10 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.common.base.Optional;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.architecture.rx.RxMVVMActivity;
@@ -24,9 +28,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
 import timber.log.Timber;
 
-public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleMap.OnMapLongClickListener {
+public class GeoActivity
+        extends RxMVVMActivity<GeoViewModel>
+        implements GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
 
     @Inject
     protected LoadMap loadMap;
@@ -58,6 +65,11 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
     @BindView(R.id.save_button)
     protected ImageButton saveButton;
 
+    private final BehaviorRelay<Optional<Marker>> markerRelay =
+            BehaviorRelay.createDefault(Optional.absent());
+
+    private final Observable<Optional<Marker>> marker = markerRelay.hide();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -83,6 +95,39 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
         getViewModel().shouldZoomToLatLng()
                 .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
                 .subscribe(this::updateCamera, Timber::e);
+
+        getViewModel().observeMarkerOptions()
+                .withLatestFrom(marker, (markerOptions, marker) -> {
+                    if (marker.isPresent()) {
+                        marker.get().remove();
+                    }
+
+                    return markerOptions;
+
+                }).withLatestFrom(currentMap.observe(), (markerOptionsOptional, googleMap) -> {
+                    Marker marker = null;
+
+                    if (markerOptionsOptional.isPresent()) {
+                        MarkerOptions markerOptions = markerOptionsOptional.get();
+                        marker = googleMap.addMarker(markerOptions);
+                    }
+
+                    return Optional.fromNullable(marker);
+
+                })
+                .withLatestFrom(isMarkerDraggable(), (marker, isMarkerDraggable) -> {
+                    if (marker.isPresent()) {
+                        marker.get().setDraggable(isMarkerDraggable);
+                    }
+
+                    return marker;
+                })
+                .subscribe(markerRelay);
+    }
+
+    private Observable<Boolean> isMarkerDraggable() {
+        return Observable.combineLatest(getViewModel().isDraggable(), getViewModel().isReadOnly(),
+                (isDraggable, isReadOnly) -> isDraggable && !isReadOnly);
     }
 
     @Override
@@ -142,7 +187,22 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        getViewModel().setLocationAtLatLng(latLng);
+        getViewModel().setMarkedLocation(latLng);
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
     }
 
     private void onMapReady(@NonNull GoogleMap googleMap) {
@@ -156,4 +216,5 @@ public class GeoActivity extends RxMVVMActivity<GeoViewModel> implements GoogleM
                 .subscribe(googleMap -> googleMap.animateCamera(cameraUpdate),
                         Timber::e);
     }
+
 }

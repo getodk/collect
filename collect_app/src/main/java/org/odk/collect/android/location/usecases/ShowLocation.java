@@ -13,7 +13,7 @@ public class ShowLocation {
     private final ShowZoomDialog showZoomDialog;
 
     @Inject
-    public ShowLocation(@NonNull ShowZoomDialog showZoomDialog) {
+    ShowLocation(@NonNull ShowZoomDialog showZoomDialog) {
         this.showZoomDialog = showZoomDialog;
     }
 

@@ -33,7 +33,7 @@ public interface LocationClient {
     /**
      * Begins requesting Location updates with the provided {@link LocationListener}
      *
-     * @param locationListener The LocationListener to pass location updates to.
+     * @param locationListener The LocationListener to pass getLocation updates to.
      */
     void requestLocationUpdates(@NonNull LocationListener locationListener);
 
@@ -53,7 +53,7 @@ public interface LocationClient {
 
     /**
      * Sets the LocationClient's {@link Priority} which will be used to determine
-     * which Provider (GPS, Network, etc.) will be used to retrieve the User's location.
+     * which Provider (GPS, Network, etc.) will be used to retrieve the User's getLocation.
      * <p>
      * If the LocationClient is already receiving updates, the new Priority will not
      * take effect until the next time Location updates are requested.

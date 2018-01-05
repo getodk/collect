@@ -47,11 +47,10 @@ public class CurrentMap {
     }
 
     public void update(@NonNull GoogleMap googleMap) {
-        mapRelay.accept(googleMap);
-
         MapHelper helper = new MapHelper(context, googleMap);
         helper.setBasemap();
 
+        mapRelay.accept(googleMap);
         helperRelay.accept(helper);
     }
 }

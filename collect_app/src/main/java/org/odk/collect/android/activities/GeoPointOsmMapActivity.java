@@ -172,7 +172,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
 
         });
 
-        // Focuses on marked location
+        // Focuses on marked getLocation
         showLocationButton = (ImageButton) findViewById(R.id.show_location);
         showLocationButton.setVisibility(View.VISIBLE);
         showLocationButton.setEnabled(false);
@@ -325,7 +325,7 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
     private void upMyLocationOverlayLayers() {
         showLocationButton.setClickable(marker != null);
 
-        // make sure we have a good location provider before continuing
+        // make sure we have a good getLocation provider before continuing
         locationClient.requestLocationUpdates(this);
 
         if (!locationClient.isLocationAvailable()) {
@@ -434,19 +434,19 @@ public class GeoPointOsmMapActivity extends FragmentActivity implements Location
             }
 
 
-            //if (location.getLatitude() != marker.getPosition().getLatitude() & location
+            //if (getLocation.getLatitude() != marker.getPosition().getLatitude() & getLocation
             // .getLongitude() != marker.getPosition().getLongitude()) {
             //reloadLocationButton.setEnabled(true);
             //}
             //
-            //If location is accurate enough, stop updating position and make the marker
+            //If getLocation is accurate enough, stop updating position and make the marker
             // draggable
-            //if (location.getAccuracy() <= mLocationAccuracy) {
+            //if (getLocation.getAccuracy() <= mLocationAccuracy) {
             //stopGeolocating();
             //}
 
         } else {
-            Timber.i("onLocationChanged(%d) null location", locationCount);
+            Timber.i("onLocationChanged(%d) null getLocation", locationCount);
         }
     }
 

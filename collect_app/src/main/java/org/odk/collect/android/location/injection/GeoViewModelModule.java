@@ -15,7 +15,7 @@ public class GeoViewModelModule {
 
     @Provides
     @PerViewModel
-    public LocationClient provideLocationClient(@NonNull Context context) {
+    LocationClient provideLocationClient(@NonNull Context context) {
         return LocationClients.clientForContext(context);
     }
 }

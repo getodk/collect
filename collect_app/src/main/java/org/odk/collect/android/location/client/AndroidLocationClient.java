@@ -14,7 +14,7 @@ import timber.log.Timber;
 /**
  * An implementation of {@link LocationClient} that uses the existing
  * Android Location Services (LocationManager) to retrieve the User's
- * location.
+ * getLocation.
  * <p>
  * Should be used whenever there Google Play Services is not present.
  * <p>

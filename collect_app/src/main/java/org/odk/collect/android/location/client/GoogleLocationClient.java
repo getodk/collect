@@ -20,7 +20,7 @@ import timber.log.Timber;
 
 /**
  * An implementation of {@link LocationClient} that uses Google Play
- * Services to retrieve the User's location.
+ * Services to retrieve the User's getLocation.
  * <p>
  * Should be used whenever there Google Play Services is present.
  * <p>
@@ -32,12 +32,12 @@ class GoogleLocationClient
         implements LocationClient, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     /**
-     * The default requested time between location updates, in milliseconds.
+     * The default requested time between getLocation updates, in milliseconds.
      */
     private static final long DEFAULT_UPDATE_INTERVAL = 5000;
 
     /**
-     * The default maximum rate at which location updates can arrive (other updates will be throttled),
+     * The default maximum rate at which getLocation updates can arrive (other updates will be throttled),
      * in milliseconds.
      */
     private static final long DEFAULT_FASTEST_UPDATE_INTERVAL = 2500;
@@ -78,7 +78,7 @@ class GoogleLocationClient
      * @param googleApiClient          The GoogleApiClient for managing the LocationClient's connection
      *                                 to Play Services.
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
-     *                                 location.
+     *                                 getLocation.
      */
     GoogleLocationClient(@NonNull GoogleApiClient googleApiClient,
                          @NonNull FusedLocationProviderApi fusedLocationProviderApi,

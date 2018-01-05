@@ -82,7 +82,7 @@ public class GeoPointOsmMapActivityTest {
 
         assertNull(activity.getZoomDialog());
 
-        // Second location should do something:
+        // Second getLocation should do something:
         Location secondLocation = newMockLocation();
         when(secondLocation.getProvider()).thenReturn("GPS");
         when(secondLocation.getAccuracy()).thenReturn(1.0f);

@@ -20,7 +20,7 @@ public class ShowLayers {
     private final LoadMap loadMap;
 
     @Inject
-    public ShowLayers(@NonNull Context context, @NonNull LoadMap loadMap) {
+    ShowLayers(@NonNull Context context, @NonNull LoadMap loadMap) {
         this.context = context;
         this.loadMap = loadMap;
     }

@@ -14,7 +14,7 @@ import io.reactivex.Completable;
 public class SetupMap {
 
     @Inject
-    public SetupMap() {
+    SetupMap() {
     }
 
     public Completable setup(@NonNull GoogleMap googleMap) {

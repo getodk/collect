@@ -22,7 +22,7 @@ public class ShowGpsDisabledAlert {
     private final Activity activity;
 
     @Inject
-    public ShowGpsDisabledAlert(@NonNull Activity activity) {
+    ShowGpsDisabledAlert(@NonNull Activity activity) {
         this.activity = activity;
     }
 

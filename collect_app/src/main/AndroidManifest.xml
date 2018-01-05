@@ -283,7 +283,7 @@ the specific language governing permissions and limitations under the License.
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBS-JQ-dnaZ_8qsbvSyr_I3rTPFd5fJsYI" />
+            android:value="AIzaSyD1D8OvyArqGg0OezuEPrx8U08uYb4e7XY" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"

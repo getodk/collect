@@ -1,9 +1,11 @@
 package org.odk.collect.android.location;
 
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.BehaviorRelay;
@@ -12,9 +14,9 @@ import com.jakewharton.rxrelay2.PublishRelay;
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
 import org.odk.collect.android.injection.config.scopes.PerViewModel;
 import org.odk.collect.android.location.usecases.CurrentLocation;
-import org.odk.collect.android.location.usecases.GetAnswer;
-import org.odk.collect.android.location.usecases.ReadParameters;
-import org.odk.collect.android.location.usecases.ShowGpsDisabledAlert;
+import org.odk.collect.android.location.usecases.IsDraggable;
+import org.odk.collect.android.location.usecases.IsReadOnly;
+import org.odk.collect.android.location.usecases.MarkedLocation;
 import org.odk.collect.android.location.usecases.WatchLocation;
 
 import javax.annotation.Nullable;
@@ -27,129 +29,95 @@ import io.reactivex.Observable;
 @PerViewModel
 public class GeoViewModel extends RxMVVMViewModel {
 
-    @NonNull
-    private final GetAnswer getAnswer;
+    private final BehaviorRelay<Boolean> isPauseVisible = BehaviorRelay.createDefault(false);
+    private final BehaviorRelay<Boolean> isReloadEnabled = BehaviorRelay.createDefault(false);
+    private final BehaviorRelay<Boolean> isShowEnabled = BehaviorRelay.createDefault(false);
+
+    private final BehaviorRelay<Optional<MarkerOptions>> markerOptions =
+            BehaviorRelay.createDefault(Optional.absent());
+
+    private final PublishRelay<LatLng> shouldZoomToLatLng = PublishRelay.create();
+    private final PublishRelay<Object> shouldShowGpsDisabledAlert = PublishRelay.create();
 
     @NonNull
-    private final CurrentLocation currentLocation;
+    private final IsDraggable isDraggable;
 
     @NonNull
-    private final ReadParameters readParameters;
+    private final IsReadOnly isReadOnly;
 
     @NonNull
     private final WatchLocation watchLocation;
 
     @NonNull
-    private final ShowGpsDisabledAlert showGpsDisabledAlert;
+    private final CurrentLocation currentLocation;
 
-    private BehaviorRelay<Boolean> isPauseVisible = BehaviorRelay.createDefault(false);
-    private BehaviorRelay<Boolean> isReloadEnabled = BehaviorRelay.createDefault(false);
-    private BehaviorRelay<Boolean> isShowEnabled = BehaviorRelay.createDefault(false);
-
-    private PublishRelay<LatLng> shouldZoomToLatLng = PublishRelay.create();
+    @NonNull
+    private final MarkedLocation markedLocation;
 
     @Inject
-    GeoViewModel(@NonNull GetAnswer getAnswer,
-                 @NonNull CurrentLocation currentLocation,
-                 @NonNull ReadParameters readParameters,
+    GeoViewModel(@NonNull IsDraggable isDraggable,
+                 @NonNull IsReadOnly isReadOnly,
                  @NonNull WatchLocation watchLocation,
-                 @NonNull ShowGpsDisabledAlert showGpsDisabledAlert) {
-        this.getAnswer = getAnswer;
-        this.currentLocation = currentLocation;
-        this.readParameters = readParameters;
+                 @NonNull CurrentLocation currentLocation,
+                 @NonNull MarkedLocation markedLocation) {
+
+        this.isDraggable = isDraggable;
+        this.isReadOnly = isReadOnly;
         this.watchLocation = watchLocation;
-        this.showGpsDisabledAlert = showGpsDisabledAlert;
+        this.currentLocation = currentLocation;
+        this.markedLocation = markedLocation;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle parameters) {
         super.onCreate(parameters);
-        readParameters.get(parameters);
 
         watchLocation.observeAvailability()
                 .compose(bindToLifecycle())
-                .subscribe(isAvailable -> {
-                    if (!isAvailable) {
-                        showGpsDisabledAlert.show();
-                    } else {
-
-//                        if (draggable && !readOnly) {
-//                            map.setOnMarkerDragListener(this);
-//                            map.setOnMapLongClickListener(this);
-//
-//                            if (marker != null) {
-//                                marker.setDraggable(true);
-//                            }
-//                        }
-                    }
-                });
+                .filter(isAvailable -> !isAvailable)
+                .subscribe(shouldShowGpsDisabledAlert);
 
         currentLocation.observe()
                 .compose(bindToLifecycle())
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .subscribe(currentLocation -> {
-                    // THIS IS ON START:
+                .map(location -> new LatLng(location.getLatitude(), location.getLongitude()))
+                .subscribe(latLng -> {
 
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    isShowEnabled.accept(true);
+                    isReloadEnabled.accept(true);
 
-                    markerOptions.position(latLng);
-
-//                    Marker marker = map.addMarker(markerOptions);
-                    shouldZoomToLatLng.accept(latLng);
-
-                    // THIS IS ON NEW LOCATIONS:
-//                    if (setClear) {
-//                        reloadLocation.setEnabled(true);
-//                    }
-//
-//                    Location previousLocation = this.location;
-//                    this.location = location;
-//
-//                    if (location != null) {
-//                        Timber.i("onLocationChanged(%d) location: %s", locationCount, location);
-//
-//                        if (previousLocation != null) {
-//                            enableShowLocation(true);
-//
-//                            if (!captureLocation && !setClear) {
-//                                latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//                                markerOptions.position(latLng);
-//                                marker = map.addMarker(markerOptions);
-//                                captureLocation = true;
-//                                reloadLocation.setEnabled(true);
-//                            }
-//
-//                            if (!foundFirstLocation) {
-//                                zoomToPoint();
-//                                showZoomDialog();
-//                                foundFirstLocation = true;
-//                            }
-//
-//                            String locationString = getAccuracyStringForLocation(location);
-//                            locationStatus.setText(locationString);
-//                        }
-//
-//                    } else {
-//                        Timber.i("onLocationChanged(%d) null location", locationCount);
-//                    }
+                    markedLocation.update(latLng);
                 });
+
+        currentLocation.observe()
+                .withLatestFrom(markedLocation.observe(), (__, latLngOptional) -> !latLngOptional.isPresent())
+                .subscribe(isReloadEnabled);
+
+        markedLocation.observe()
+                .map(latLngOptional -> {
+                    // Compiler was having trouble with the types unless I used this structure:
+                    MarkerOptions options = null;
+                    if (latLngOptional.isPresent()) {
+                        options= new MarkerOptions();
+                        options.position(latLngOptional.get());
+                    }
+
+                    return Optional.fromNullable(options);
+
+                }).subscribe(markerOptions);
+
+
     }
 
     Observable<Boolean> isLocationStatusVisible() {
-        return currentLocation.observe()
-                .map(Optional::isPresent);
+        return Observable.just(false);
     }
 
     Observable<Boolean> isLocationInfoVisible() {
-        return currentLocation.observe()
-                .map(Optional::isPresent);
+        return Observable.just(false);
     }
 
     Observable<Boolean> isShowLocationEnabled() {
-        return currentLocation.observe()
-                .map(Optional::isPresent);
+        return Observable.just(false);
     }
 
     Observable<LatLng> shouldZoomToLatLng() {
@@ -168,8 +136,20 @@ public class GeoViewModel extends RxMVVMViewModel {
         return isShowEnabled.hide();
     }
 
-    void addLocation() {
+    Observable<Optional<MarkerOptions>> observeMarkerOptions() {
+        return markerOptions.hide();
+    }
 
+    Observable<Boolean> isReadOnly() {
+        return isReadOnly.observe();
+    }
+
+    Observable<Boolean> isDraggable() {
+        return isDraggable.observe();
+    }
+
+    void addLocation() {
+        // Clear the marker.
     }
 
     void pause() {
@@ -188,6 +168,10 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     }
 
+    void setMarkedLocation(@NonNull LatLng latLng) {
+        markedLocation.update(latLng);
+    }
+
     void startWatchingLocation() {
         watchLocation.startWatching();
     }
@@ -196,23 +180,7 @@ public class GeoViewModel extends RxMVVMViewModel {
         watchLocation.stopWatching();
     }
 
-    void setLocationAtLatLng(@NonNull LatLng latLng) {
-//        this.latLng = latLng;
-//        if (marker == null) {
-//            markerOptions.position(latLng);
-//            marker = map.addMarker(markerOptions);
-//        } else {
-//            marker.setPosition(latLng);
-//        }
-//        enableShowLocation(true);
-//        marker.setDraggable(true);
-//        isDragged = true;
-//        setClear = false;
-//        captureLocation = true;
-    }
-
     Maybe<String> saveLocation() {
-        return getAnswer.get();
+        return null;
     }
-
 }

@@ -63,7 +63,7 @@ public class GeoPointMapActivityTest {
     public void testLocationClientLifecycle() {
         activityController.create();
 
-        // Create should prepare map async; onClientStartWill start location monitoring.
+        // Create should prepare map async; onClientStartWill start getLocation monitoring.
         // Whichever happens second will pass forward to upMyLocationOverlayLayers.
         when(locationClient.isMonitoringLocation()).thenReturn(true);
         activity.setMapReady(true);
@@ -107,7 +107,7 @@ public class GeoPointMapActivityTest {
     public void activityShouldOpenErrorDialogIfLocationIsUnavailable() {
         activityController.create();
 
-        // Create should prepare map async; onClientStartWill start location monitoring.
+        // Create should prepare map async; onClientStartWill start getLocation monitoring.
         // Whichever happens second will pass forward to upMyLocationOverlayLayers.
         when(locationClient.isMonitoringLocation()).thenReturn(true);
         activity.setMapReady(true);

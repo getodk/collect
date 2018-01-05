@@ -193,7 +193,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 }
             }
         } else {
-            // if it is read-only, hide the load-location button...
+            // if it is read-only, hide the load-getLocation button...
             if (readOnly) {
                 getLocationButton.setVisibility(View.GONE);
             } else {

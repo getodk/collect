@@ -40,6 +40,7 @@ public class LoadMap {
 
                 emitter.onSuccess(googleMap);
             });
+
             fragmentManager.beginTransaction()
                     .replace(R.id.map_container, mapFragment)
                     .commit();
