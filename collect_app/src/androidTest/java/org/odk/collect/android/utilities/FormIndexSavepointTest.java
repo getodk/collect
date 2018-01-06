@@ -17,69 +17,31 @@
 package org.odk.collect.android.utilities;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.instance.TreeReference;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNotNull;
 
+// Verify that a FormIndex can be saved to and restored from a file
 @RunWith(MockitoJUnitRunner.class)
 public class FormIndexSavepointTest {
 
-    private File instancePath;
-    @Mock
-    private FormController formController;
-
-    @Before
-    public void setUp() {
-        instancePath = new File(Collect.INSTANCES_PATH + File.separator + "test.xml");
-        when(formController.getInstancePath()).thenReturn(instancePath);
-        Collect.getInstance().setFormController(formController);
-    }
-
     @Test
-    public void saveAndReadFormIndexTest1() {
+    public void saveAndReadFormIndexTest() {
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();
-        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
+        File tempIndex = SaveToDiskTask.getFormIndexFile("test.xml");
         SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
 
         FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
-        assertFormIndexesEqual(originalFormIndex, readFormIndex);
-    }
 
-    @Test
-    public void saveAndReadFormIndexTest2() {
-        FormIndex originalFormIndex = new FormIndex(1, 2, null);
-        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
-        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
-
-        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
-        assertFormIndexesEqual(originalFormIndex, readFormIndex);
-    }
-
-    @Test
-    public void saveAndReadFormIndexTest3() {
-        TreeReference treeReference = TreeReference.rootRef();
-        FormIndex originalFormIndex = new FormIndex(1, 2, treeReference);
-        File tempIndex = SaveToDiskTask.getFormIndexFile(instancePath.getName());
-        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
-
-        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
-        assertFormIndexesEqual(originalFormIndex, readFormIndex);
-    }
-
-    private void assertFormIndexesEqual(FormIndex expected, FormIndex actual) {
-        assertEquals(expected, actual);
-        assertEquals(expected.getReference(), actual.getReference());
+        assertEquals(originalFormIndex, readFormIndex);
+        assertNotNull(readFormIndex);
+        assertEquals(originalFormIndex.getReference(), readFormIndex.getReference());
     }
 }

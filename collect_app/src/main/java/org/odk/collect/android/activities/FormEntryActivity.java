@@ -579,7 +579,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
-                new SaveFormIndexTask(this, Collect.getInstance().getFormController().getFormIndex()).execute();
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                }
             }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
@@ -2062,18 +2065,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         alertDialog.show();
     }
 
-    /**
-     * this method cleans up unneeded files when the user selects 'discard and
-     * exit'
-     */
+    // Cleanup when user exits a form without saving
     private void removeTempInstance() {
         FormController formController = Collect.getInstance().getFormController();
 
-        // attempt to remove any scratch file
-        File tempInstanceFile = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
-        File tempIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
-        FileUtils.deleteAndReport(tempInstanceFile);
-        FileUtils.deleteAndReport(tempIndexFile);
+        if (formController != null && formController.getInstancePath() != null) {
+            SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
+        }
 
         boolean erase;
 
