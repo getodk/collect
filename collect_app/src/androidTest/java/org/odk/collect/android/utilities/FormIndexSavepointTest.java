@@ -19,7 +19,10 @@ package org.odk.collect.android.utilities;
 import org.javarosa.core.model.FormIndex;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SaveToDiskTask;
 
@@ -27,16 +30,27 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 // Verify that a FormIndex can be saved to and restored from a file
 @RunWith(MockitoJUnitRunner.class)
 public class FormIndexSavepointTest {
 
+    @Mock
+    private FormController formController;
+
     @Test
     public void saveAndReadFormIndexTest() {
+        String instanceName = "test.xml";
+
+        // for loadFormIndexFromFile
+        File instancePath = new File(Collect.INSTANCES_PATH + File.separator + instanceName);
+        when(formController.getInstancePath()).thenReturn(instancePath);
+        Collect.getInstance().setFormController(formController);
+
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();
-        File tempIndex = SaveToDiskTask.getFormIndexFile("test.xml");
-        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, tempIndex);
+        File indexFile = SaveToDiskTask.getFormIndexFile(instanceName);
+        SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, indexFile);
 
         FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
 
