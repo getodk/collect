@@ -17,7 +17,6 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -127,12 +126,6 @@ public abstract class AbstractDateWidget extends QuestionWidget implements Binar
     private void createDateButton() {
         dateButton = getSimpleButton(getContext().getString(R.string.select_date));
         dateButton.setEnabled(!getFormEntryPrompt().isReadOnly());
-        dateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
     }
 
     private void addViews() {
