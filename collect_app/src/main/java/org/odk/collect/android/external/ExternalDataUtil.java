@@ -243,14 +243,19 @@ public final class ExternalDataUtil {
     }
 
     // smap
-    public static List<String> createListOfValues(String valueString) {
+    public static List<String> createListOfValues(String valueString, String searchType) {
         List<String> values = new ArrayList<String>();
 
-        List<String> commaSplitParts = splitTrimmed(valueString, COLUMN_SEPARATOR,
-                FALLBACK_COLUMN_SEPARATOR);
+        // Only split values for "in" type otherwise values that cntain spaces will not work
+        if(searchType.equals("in")) {
+            List<String> commaSplitParts = splitTrimmed(valueString, COLUMN_SEPARATOR,
+                    FALLBACK_COLUMN_SEPARATOR);
 
-        for (String commaSplitPart : commaSplitParts) {
-            values.add(commaSplitPart);
+            for (String commaSplitPart : commaSplitParts) {
+                values.add(commaSplitPart);
+            }
+        } else {
+            values.add(valueString);
         }
 
         return values;

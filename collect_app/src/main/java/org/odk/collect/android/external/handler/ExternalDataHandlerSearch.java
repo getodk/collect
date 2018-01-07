@@ -127,7 +127,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
 
         // smap
         if(queriedValue != null) {
-            queriedValues = ExternalDataUtil.createListOfValues(queriedValue);
+            queriedValues = ExternalDataUtil.createListOfValues(queriedValue, externalDataSearchType.getKeyword().trim());
         }
 
         String filterColumn = null;
