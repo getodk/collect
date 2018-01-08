@@ -1,0 +1,13 @@
+# remove the leading '#' to uncomment lines
+
+app_package_name 'org.odk.collect.android'
+#use_tests_in_packages ['org.odk.collect.android']
+
+#app_apk_path '/home/divya/collect/collect_app/build/outputs/apk/debug/collect-debug-v1.11.0-89-g7c10e43-dirty.apk'
+#tests_apk_path '/home/divya/collect/collect_app/build/outputs/apk/androidTest/debug/collect-debug-androidTest-v1.11.0-89-g7c10e43-dirty.apk'
+
+# clear all previously generated screenshots in your local output directory before creating new ones
+clear_previous_screenshots true
+
+# For more information about all available options run
+#   fastlane screengrab --help
