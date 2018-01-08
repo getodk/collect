@@ -1,6 +1,8 @@
 package org.odk.collect.android.location;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.google.common.base.Optional;
@@ -11,6 +13,7 @@ import org.odk.collect.android.location.model.LocationState;
 import org.odk.collect.android.location.usecases.CurrentLocation;
 import org.odk.collect.android.location.usecases.InfoText;
 import org.odk.collect.android.location.usecases.InitialLocation;
+import org.odk.collect.android.location.usecases.InitialState;
 import org.odk.collect.android.location.usecases.IsDraggable;
 import org.odk.collect.android.location.usecases.IsReadOnly;
 import org.odk.collect.android.location.usecases.MarkedLocation;
@@ -26,6 +29,9 @@ import timber.log.Timber;
 
 
 public class GeoViewModel extends RxMVVMViewModel {
+
+    @NonNull
+    private final InitialState initialState;
 
     // Inputs:
     @NonNull
@@ -61,7 +67,8 @@ public class GeoViewModel extends RxMVVMViewModel {
     // Outputs:
 
     @Inject
-    GeoViewModel(@NonNull IsDraggable isDraggable,
+    GeoViewModel(@NonNull InitialState initialState,
+                 @NonNull IsDraggable isDraggable,
                  @NonNull IsReadOnly isReadOnly,
                  @NonNull InitialLocation initialLocation,
                  @NonNull WatchLocation watchLocation,
@@ -70,6 +77,7 @@ public class GeoViewModel extends RxMVVMViewModel {
                  @NonNull InfoText infoText,
                  @NonNull StatusText statusText) {
 
+        this.initialState = initialState;
         this.isDraggable = isDraggable;
         this.isReadOnly = isReadOnly;
         this.initialLocation = initialLocation;
@@ -81,8 +89,9 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @Override
-    protected void onCreate() {
-        super.onCreate();
+    protected void onCreate(@Nullable Bundle bundle) {
+        super.onCreate(bundle);
+        initialState.set(bundle);
 
         // Show Zoom Dialog on first location:
         hasCurrentLocation()
@@ -166,11 +175,13 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     void showLocation() {
-
+        observeLocationState()
+                .compose(bindToLifecycle())
+                .subscribe(shouldShowZoomDialog, Timber::e);
     }
 
     void showLayers() {
-
+        shouldShowLayers.accept(this);
     }
 
     void clearLocation() {

@@ -2,6 +2,7 @@ package org.odk.collect.android.location.usecases;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
@@ -27,8 +28,10 @@ public class InitialState {
 
     }
 
-    public void set(@NonNull Bundle bundle) {
-        initialBundleRelay.accept(bundle);
+    public void set(@Nullable Bundle bundle) {
+        initialBundleRelay.accept(bundle != null
+                ? bundle
+                : Bundle.EMPTY);
     }
 
 

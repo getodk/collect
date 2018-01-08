@@ -16,15 +16,13 @@ import com.jakewharton.rxrelay2.PublishRelay;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.location.model.LocationState;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-
-/**
- * @author James Knight
- */
+import timber.log.Timber;
 
 @PerActivity
 public class ZoomDialog {
@@ -35,6 +33,9 @@ public class ZoomDialog {
     private static final int BUTTON_DISABLED_COLOR = Color.parseColor("#50e2e2e2");
     private static final int TEXT_DISABLED_COLOR = Color.parseColor("#FF979797");
 
+    @Nullable
+    private AlertDialog alertDialog;
+
     @NonNull
     private final Context context;
 
@@ -42,7 +43,7 @@ public class ZoomDialog {
     private final PublishRelay<LatLng> zoomToLocation = PublishRelay.create();
 
     @Inject
-    public ZoomDialog(@NonNull Context context) {
+    ZoomDialog(@NonNull GeoActivity context) {
         this.context = context;
     }
 
@@ -50,12 +51,14 @@ public class ZoomDialog {
 
         View zoomDialogView = getView(locationState);
 
-        new AlertDialog.Builder(context)
+        alertDialog = new AlertDialog.Builder(context)
                 .setView(zoomDialogView)
                 .setTitle(R.string.zoom_to_where)
                 .setNegativeButton(R.string.cancel, (d, __) -> d.cancel())
                 .setOnCancelListener(DialogInterface::cancel)
-                .show();
+                .create();
+
+        alertDialog.show();
     }
 
     private View getView(LocationState locationState) {
@@ -94,15 +97,28 @@ public class ZoomDialog {
         zoomPointButton.setTextColor(markedLocation != null ? TEXT_ENABLED_COLOR : TEXT_DISABLED_COLOR);
 
         if (markedLocation != null) {
-            zoomPointButton.setOnClickListener(__ -> zoomToLocation(markedLocation));
+            zoomPointButton.setOnClickListener(__ -> {
+                zoomToLocation(markedLocation);
+            });
         }
     }
 
     private void zoomToLocation(@NonNull LatLng latLng) {
+        AlertDialog alertDialog = getAlertDialog();
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
+
         zoomToLocation.accept(latLng);
     }
 
     public Observable<LatLng> zoomToLocation() {
-        return zoomToLocation.hide();
+        return zoomToLocation.hide()
+                .doOnNext(__ -> Timber.d("Zooming to location."));
+    }
+
+    @Nullable
+    public AlertDialog getAlertDialog() {
+        return alertDialog;
     }
 }

@@ -293,6 +293,7 @@ the specific language governing permissions and limitations under the License.
             android:name="firebase_crash_collection_enabled"
             android:value="@bool/FIREBASE_CRASH_ENABLED" />
 
+
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />

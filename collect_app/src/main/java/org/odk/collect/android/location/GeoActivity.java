@@ -110,8 +110,8 @@ public class GeoActivity
                 .subscribe(showButton::setEnabled);
 
         getViewModel().shouldShowLayers()
-                .compose(bindToLifecycle())
                 .withLatestFrom(currentMap, Rx::takeRight)
+                .compose(bindToLifecycle())
                 .subscribe(this::shouldShowLayers, Timber::e);
 
         getViewModel().shouldShowZoomDialog()
@@ -211,7 +211,8 @@ public class GeoActivity
     }
 
     private void updateCamera(@NonNull CameraUpdate cameraUpdate) {
-        currentMap.singleOrError()
+
+        currentMap.hide()
                 .compose(bindToLifecycle())
                 .subscribe(googleMap -> googleMap.animateCamera(cameraUpdate), Timber::e);
     }
