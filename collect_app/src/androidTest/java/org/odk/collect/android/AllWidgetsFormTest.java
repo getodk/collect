@@ -11,12 +11,14 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.rule.ActivityTestRule;
 
 import net.bytebuddy.utility.RandomString;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +37,10 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import tools.fastlane.screengrab.Screengrab;
+import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
+import tools.fastlane.screengrab.locale.LocaleTestRule;
+
 // import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
@@ -45,7 +51,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-// import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -59,7 +65,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-// import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
+import static org.odk.collect.android.activities.FormEntryActivity.BEARING_RESULT;
 import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
 
 @RunWith(AndroidJUnit4.class)
@@ -70,6 +76,9 @@ public class AllWidgetsFormTest {
 
     private final Random random = new Random();
     private ActivityResult okResult = new ActivityResult(RESULT_OK, new Intent());
+
+    @ClassRule
+    public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Rule
     public FormEntryActivityTestRule activityTestRule = new FormEntryActivityTestRule();
@@ -97,6 +106,10 @@ public class AllWidgetsFormTest {
         IOUtils.copy(inputStream, outputStream);
     }
 
+    @BeforeClass
+    public static void beforeAll() {
+        Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
+    }
     @Before
     public void prepareDependencies() {
         FormEntryActivity activity = activityTestRule.getActivity();
@@ -191,7 +204,9 @@ public class AllWidgetsFormTest {
     //region Widget tests.
 
     public void skipInitialLabel() {
+        Screengrab.screenshot("first");
         onView(withText(startsWith("This form"))).perform(swipeLeft());
+
     }
 
     public void testStringWidget() {
@@ -199,12 +214,15 @@ public class AllWidgetsFormTest {
 
         onVisibleEditText().perform(replaceText(stringWidgetText));
 
+        Screengrab.screenshot("Click");
+
         openWidgetList();
         onView(withText("String widget")).perform(click());
 
         onVisibleEditText().check(matches(withText(stringWidgetText)));
 
         onView(withText("String widget")).perform(swipeLeft());
+        Screengrab.screenshot("FabClick");
     }
 
     public void testStringNumberWidget() {
@@ -213,11 +231,14 @@ public class AllWidgetsFormTest {
         onVisibleEditText().perform(replaceText(stringNumberWidgetText));
 
         openWidgetList();
+
+        Screengrab.screenshot("stringNumber");
         onView(withText("String number widget")).perform(click());
 
         onVisibleEditText().check(matches(withText(stringNumberWidgetText)));
 
         onView(withText("String number widget")).perform(swipeLeft());
+        Screengrab.screenshot("string");
     }
 
     public void testUrlWidget() {
@@ -228,6 +249,7 @@ public class AllWidgetsFormTest {
 
         onView(withId(R.id.simple_button)).perform(click());
         onView(withText("URL widget")).perform(swipeLeft());
+        Screengrab.screenshot("URLClick");
     }
 
     public void testExStringWidget() {
@@ -275,7 +297,7 @@ public class AllWidgetsFormTest {
 
     public void testExPrinterWidget() {
         onView(withText("Initiate Printing")).perform(click());
-        
+
         intending(hasAction("org.opendatakit.sensors.ZebraPrinter"));
         intended(hasAction("org.opendatakit.sensors.ZebraPrinter"));
 
