@@ -354,7 +354,7 @@ public class Collect extends Application implements HasActivityInjector {
         AdminSharedPreferences.getInstance().reloadPreferences();
     }
 
-    // Preventing double, using threshold of 500 ms
+    // Preventing multiple clicks, using threshold of 500 ms
     public static boolean allowClick() {
         boolean allowClick = SystemClock.elapsedRealtime() - lastClickTime > 500;
         if (allowClick) {
