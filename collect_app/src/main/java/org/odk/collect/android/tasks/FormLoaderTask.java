@@ -188,7 +188,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         processItemSets(formMediaDir);
 
-        // This should load moved to the Application Class
+        // This should get moved to the Application Class
         if (ReferenceManager.instance().getFactories().length == 0) {
             // this is /sdcard/odk
             ReferenceManager.instance().addReferenceFactory(new FileReferenceFactory(Collect.ODK_ROOT));
@@ -228,7 +228,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         final File cachedForm = new File(Collect.CACHE_PATH + File.separator + formHash + ".formdef");
         if (cachedForm.exists()) {
-            Timber.i("Attempting to load %s from cached file: %s.",
+            Timber.i("Attempting to get %s from cached file: %s.",
                     formXml.getName(), cachedForm.getAbsolutePath());
             final long start = System.currentTimeMillis();
             final FormDef deserializedFormDef = deserializeFormDef(cachedForm);
@@ -248,7 +248,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         FileInputStream fis = null;
         // no binary, read from xml
         try {
-            Timber.i("Attempting to load from: %s", formXml.getAbsolutePath());
+            Timber.i("Attempting to get from: %s", formXml.getAbsolutePath());
             final long start = System.currentTimeMillis();
             fis = new FileInputStream(formXml);
             FormDef formDefFromXml = XFormUtils.getFormFromInputStream(fis);
@@ -283,7 +283,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             boolean readFile = false;
             final ItemsetDbAdapter ida = new ItemsetDbAdapter();
             ida.open();
-            // load the database entry (if exists) for this itemsets.csv, based
+            // get the database entry (if exists) for this itemsets.csv, based
             // on the path
             final Cursor c = ida.getItemsets(csv.getAbsolutePath());
             if (c != null) {
@@ -428,7 +428,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // convert files into a byte array
         byte[] fileBytes = FileUtils.getFileAsBytes(instanceFile);
 
-        // load the root of the saved and template instances
+        // get the root of the saved and template instances
         TreeElement savedRoot = XFormParser.restoreDataModel(fileBytes, null).getRoot();
         TreeElement templateRoot = fec.getModel().getForm().getInstance().getRoot().deepCopy(true);
 

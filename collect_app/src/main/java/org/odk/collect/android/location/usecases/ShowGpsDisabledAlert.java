@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.location.GeoActivity;
 
 import javax.inject.Inject;
 
@@ -22,11 +23,11 @@ public class ShowGpsDisabledAlert {
     private final Activity activity;
 
     @Inject
-    ShowGpsDisabledAlert(@NonNull Activity activity) {
+    ShowGpsDisabledAlert(@NonNull GeoActivity activity) {
         this.activity = activity;
     }
 
-    public void show() {
+    public void show(Object __) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
 
         alertDialogBuilder.setMessage(activity.getString(R.string.gps_enable_message))

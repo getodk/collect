@@ -5,13 +5,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-@PerViewModel
+@PerApplication
 public class InfoText {
 
     @NonNull

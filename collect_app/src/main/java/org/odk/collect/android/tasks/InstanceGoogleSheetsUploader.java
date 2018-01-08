@@ -181,7 +181,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // load spreadsheet id
+        // get spreadsheet id
         if (spreadsheetId == null) {
             try {
                 spreadsheetId = UrlUtils.getSpreadsheetID(id);
@@ -227,7 +227,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         HashMap<String, String> mediaToUpload = new HashMap<>();
         HashMap<String, String> uploadedMedia = new HashMap<>();
 
-        // load instance file
+        // get instance file
         File instanceFile = new File(instanceFilePath);
 
         // first check to see how many columns we have:
@@ -296,7 +296,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
          */
 
         // if we have any media files to upload,
-        // load the folder or create a new one
+        // get the folder or create a new one
         // then upload the media files
         if (mediaToUpload.size() > 0) {
 
@@ -454,7 +454,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
 
-        // we may have updated the feed, so load a new one
+        // we may have updated the feed, so get a new one
         // update the feed
 
         try {
@@ -509,7 +509,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
         }
 
-        // we may have updated the feed, so load a new one
+        // we may have updated the feed, so get a new one
         // update the feed
 
         try {
@@ -526,14 +526,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // first, load all the columns in the spreadsheet
+        // first, get all the columns in the spreadsheet
         ArrayList<String> sheetCols = new ArrayList<>();
         if (headerFeed != null) {
             for (Object column : headerFeed) {
                 sheetCols.add(column.toString());
             }
         } else {
-            outcome.results.put(id, "couldn't load header feed");
+            outcome.results.put(id, "couldn't get header feed");
             return false;
         }
 
@@ -558,7 +558,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             return false;
         }
 
-        // if we load here.. all has matched
+        // if we get here.. all has matched
         // so write the values
 
         // add photos to answer set
@@ -576,14 +576,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             } else if (columnNames.contains(path)) { // if column present in sheet
                 if (answersToUpload.containsKey(path)) {
                     answer = answersToUpload.get(path);
-                    // Check to see if answer is a location, if so, load rid of accuracy
+                    // Check to see if answer is a location, if so, get rid of accuracy
                     // and altitude
                     // try to match a fairly specific pattern to determine
                     // if it's a location
                     // [-]#.# [-]#.# #.# #.#
 
                     if (isValidLocation(answer)) {
-                        // load rid of everything after the second space
+                        // get rid of everything after the second space
                         int firstSpace = answer.indexOf(' ');
                         int secondSpace = answer.indexOf(" ", firstSpace + 1);
                         answer = answer.substring(0, secondSpace);
@@ -809,7 +809,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                          *  and submitted with the form.
                          *  Additional instances are called <secondary instances>.
                          *  So, we are breaking the loop after discovering the <primary instance> so that
-                         *  <secondary instances> don't load counted as field columns.
+                         *  <secondary instances> don't get counted as field columns.
                          *
                          *  For more info read [this](https://opendatakit.github.io/xforms-spec/#instance)
                          *
@@ -923,7 +923,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     /**
      * Fetches the spreadsheet with the provided spreadsheetId
      * <p>
-     * load(sheetId, range) method requires two parameters
+     * get(sheetId, range) method requires two parameters
      * <p>
      * since we want to search the whole sheet so we provide only the sheet name as range
      * <p>
@@ -969,7 +969,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 String selection = selectionBuf.toString();
 
                 String token = credential.getToken();
-                //Immediately invalidate so we load a different one if we have to try again
+                //Immediately invalidate so we get a different one if we have to try again
                 GoogleAuthUtil.invalidateToken(context, token);
 
                 getIDOfFolderWithName(GOOGLE_DRIVE_ROOT_FOLDER, null);

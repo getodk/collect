@@ -7,7 +7,7 @@ import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 import org.odk.collect.android.location.client.LocationClient;
 
 import javax.inject.Inject;
@@ -15,20 +15,23 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
-@PerViewModel
+@PerApplication
 public class WatchLocation {
 
     @NonNull
     private final LocationClient locationClient;
 
     @NonNull
-    private final PublishRelay<Location> locationUpdates = PublishRelay.create();
+    private final BehaviorRelay<Optional<Location>> locationUpdates =
+            BehaviorRelay.createDefault(Optional.absent());
 
     @NonNull
-    private final BehaviorRelay<Boolean> isLocationAvailable = BehaviorRelay.create();
+    private final BehaviorRelay<Boolean> isLocationAvailable =
+            BehaviorRelay.create();
 
     @NonNull
-    private final PublishRelay<Object> locationErrors = PublishRelay.create();
+    private final PublishRelay<Object> locationErrors =
+            PublishRelay.create();
 
     private int locationCount = 0;
 
@@ -42,16 +45,17 @@ public class WatchLocation {
                 locationClient.requestLocationUpdates(location -> {
                     if (location != null) {
                         Timber.i("onLocationChanged(%d) getLocation: %s", ++locationCount, location);
-                        locationUpdates.accept(location);
+                        locationUpdates.accept(Optional.of(location));
 
                     } else {
                         Timber.i("onLocationChanged(%d) null getLocation.", ++locationCount);
+                        locationUpdates.accept(Optional.absent());
                     }
 
                 });
-                if (!locationClient.isLocationAvailable()) {
-                    isLocationAvailable.accept(false);
-                }
+
+                boolean isAvailable = locationClient.isLocationAvailable();
+                isLocationAvailable.accept(isAvailable);
             }
 
             @Override
@@ -74,7 +78,9 @@ public class WatchLocation {
         locationClient.stop();
     }
 
-    Observable<Location> observeLocation() { return locationUpdates.hide(); }
+    public Observable<Optional<Location>> observeLocation() {
+        return locationUpdates.hide();
+    }
     public Observable<Boolean> observeAvailability() {
         return isLocationAvailable.hide();
     }

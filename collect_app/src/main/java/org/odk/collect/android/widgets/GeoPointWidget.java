@@ -33,9 +33,9 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPointOsmMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.utilities.PlayServicesUtil;
 import org.odk.collect.android.widgets.interfaces.BinaryWidget;
@@ -45,7 +45,7 @@ import java.text.DecimalFormat;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
- * GeoPointWidget is the widget that allows the user to load GPS readings.
+ * GeoPointWidget is the widget that allows the user to get GPS readings.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
@@ -120,7 +120,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 if (useMapsV2 && useMaps) {
                     if (mapSDK.equals(GOOGLE_MAP_KEY)) {
                         if (PlayServicesUtil.isGooglePlayServicesAvailable(getContext())) {
-                            i = new Intent(getContext(), GeoPointMapActivity.class);
+                            i = new Intent(getContext(), GeoActivity.class);
                         } else {
                             PlayServicesUtil.showGooglePlayServicesAvailabilityErrorDialog(getContext());
                             return;
@@ -193,7 +193,7 @@ public class GeoPointWidget extends QuestionWidget implements BinaryWidget {
                 }
             }
         } else {
-            // if it is read-only, hide the load-getLocation button...
+            // if it is read-only, hide the get-getLocation button...
             if (readOnly) {
                 getLocationButton.setVisibility(View.GONE);
             } else {

@@ -1,32 +1,30 @@
 package org.odk.collect.android.location.usecases;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-import static org.odk.collect.android.widgets.GeoPointWidget.DRAGGABLE_ONLY;
-
 /**
  * @author James Knight
  */
 
-@PerViewModel
+@PerApplication
 public class IsDraggable {
 
-    private final boolean isDraggable;
+    @NonNull
+    private final InitialState initialState;
 
     @Inject
-    IsDraggable(@NonNull Bundle extras) {
-        isDraggable = extras.getBoolean(DRAGGABLE_ONLY);
+    IsDraggable(@NonNull InitialState initialState) {
+        this.initialState = initialState;
     }
 
     @NonNull
-    public Observable<Boolean> observe() {
-        return Observable.just(isDraggable);
+    Observable<Boolean> observe() {
+        return initialState.isDraggable();
     }
 }

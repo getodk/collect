@@ -109,7 +109,7 @@ public class DownloadFormsTask extends
             String finalMediaPath = null;
             FileResult fileResult = null;
             try {
-                // load the xml file
+                // get the xml file
                 // if we've downloaded a duplicate, this gives us the file
                 fileResult = downloadXform(fd.formName, fd.downloadUrl);
 
@@ -383,7 +383,7 @@ public class DownloadFormsTask extends
      * so that garbage is not left over on cancel.
      *
      * @param file        the final file
-     * @param downloadUrl the url to load the contents from.
+     * @param downloadUrl the url to get the contents from.
      */
     private void downloadFile(File file, String downloadUrl) throws Exception {
         File tempFile = File.createTempFile(file.getName(), TEMP_DOWNLOAD_EXTENSION,
@@ -395,7 +395,7 @@ public class DownloadFormsTask extends
             URL url = new URL(downloadUrl);
             uri = url.toURI();
         } catch (MalformedURLException | URISyntaxException e) {
-            Timber.e(e, "Unable to load a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
+            Timber.e(e, "Unable to get a URI for download URL : %s  due to %s : ", downloadUrl, e.getMessage());
             throw e;
         }
 
@@ -414,7 +414,7 @@ public class DownloadFormsTask extends
                 Timber.i("Started downloading to %s from %s", tempFile.getAbsolutePath(), downloadUrl);
             }
 
-            // load shared HttpContext so that authentication and cookies are retained.
+            // get shared HttpContext so that authentication and cookies are retained.
             HttpContext localContext = Collect.getInstance().getHttpContext();
 
             HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);
@@ -591,7 +591,7 @@ public class DownloadFormsTask extends
                 String.valueOf(count), String.valueOf(total));
 
         List<MediaFile> files = new ArrayList<MediaFile>();
-        // load shared HttpContext so that authentication and cookies are retained.
+        // get shared HttpContext so that authentication and cookies are retained.
         HttpContext localContext = Collect.getInstance().getHttpContext();
 
         HttpClient httpclient = WebUtils.createHttpClient(WebUtils.CONNECTION_TIMEOUT);

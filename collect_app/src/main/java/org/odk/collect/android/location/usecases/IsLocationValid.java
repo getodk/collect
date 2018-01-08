@@ -4,7 +4,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
@@ -12,8 +12,8 @@ import javax.inject.Inject;
  * @author James Knight
  */
 
-@PerViewModel
-public class IsLocationValid {
+@PerApplication
+class IsLocationValid {
 
     private static final int VALID_WITHIN_SECONDS = 5;
 
@@ -22,7 +22,7 @@ public class IsLocationValid {
 
     }
 
-    public boolean isValid(@NonNull Location location) {
+    boolean isValid(@NonNull Location location) {
         long millis = DateTime.now().minus(location.getTime()).getMillis();
         return millis <= VALID_WITHIN_SECONDS * 1_000;
     }

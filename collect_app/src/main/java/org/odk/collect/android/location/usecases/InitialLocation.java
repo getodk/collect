@@ -1,35 +1,28 @@
 package org.odk.collect.android.location.usecases;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-import static org.odk.collect.android.widgets.GeoPointWidget.LOCATION;
-
-@PerViewModel
+@PerApplication
 public class InitialLocation {
 
-    @Nullable
-    private final LatLng latLng;
+    @NonNull
+    private final InitialState initialState;
 
     @Inject
-    InitialLocation(@NonNull Bundle extras) {
-        double[] locationArray = extras.getDoubleArray(LOCATION);
-        latLng = locationArray != null
-                ? new LatLng(locationArray[0], locationArray[1])
-                : null;
+    InitialLocation(@NonNull InitialState initialState) {
+        this.initialState = initialState;
     }
 
     public Observable<Optional<LatLng>> observe() {
-        return Observable.just(Optional.fromNullable(latLng));
+        return initialState.location();
     }
 }

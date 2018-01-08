@@ -74,18 +74,18 @@ public class SplashScreenActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.splash_screen);
 
-        // load the shared preferences object
+        // get the shared preferences object
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = sharedPreferences.edit();
 
-        // load the package info object with version number
+        // get the package info object with version number
         PackageInfo packageInfo = null;
         try {
             packageInfo =
                     getPackageManager().getPackageInfo(getPackageName(),
                             PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
-            Timber.e(e, "Unable to load package info");
+            Timber.e(e, "Unable to get package info");
         }
 
         boolean firstRun = sharedPreferences.getBoolean(PreferenceKeys.KEY_FIRST_RUN, true);

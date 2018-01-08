@@ -341,7 +341,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return;
         }
 
-        // Check to see if this is a screen flip or a new form load.
+        // Check to see if this is a screen flip or a new form get.
         Object data = getLastCustomNonConfigurationInstance();
         if (data instanceof FormLoaderTask) {
             formLoaderTask = (FormLoaderTask) data;
@@ -353,13 +353,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     refreshCurrentView();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    // we need to launch the form loader to load the form
+                    // we need to launch the form loader to get the form
                     // controller...
                     formLoaderTask = new FormLoaderTask(instancePath,
                             startingXPath, waitingXPath);
                     Collect.getInstance().getActivityLogger()
                             .logAction(this, "formReloaded", formPath);
-                    // TODO: this doesn' work (dialog does not load removed):
+                    // TODO: this doesn' work (dialog does not get removed):
                     // showDialog(PROGRESS_DIALOG);
                     // show dialog before we execute...
                     formLoaderTask.execute(formPath);
@@ -384,7 +384,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
                 } else if (uriMimeType != null && uriMimeType.equals(InstanceColumns.CONTENT_ITEM_TYPE)) {
-                    // load the formId and version for this instance...
+                    // get the formId and version for this instance...
                     String jrFormId = null;
                     String jrVersion = null;
                     {
@@ -892,7 +892,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void saveAudioVideoAnswer(Uri media) {
-        // For audio/video capture/chooser, we load the URI from the content
+        // For audio/video capture/chooser, we get the URI from the content
         // provider
         // then the widget copies the file and makes a new entry in the
         // content provider.
@@ -903,7 +903,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     /**
-     * Refreshes the current view. the controller and the displayed view can load
+     * Refreshes the current view. the controller and the displayed view can get
      * out of sync due to dialogs and restarts caused by screen orientation
      * changes, so they're resynchronized here.
      */
@@ -1417,7 +1417,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             FormController formController = Collect.getInstance()
                     .getFormController();
 
-            // load constraint behavior preference value with appropriate default
+            // get constraint behavior preference value with appropriate default
             String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                     .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
@@ -2710,7 +2710,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 formController.getTimerLogger().logTimerEvent(TimerLogger.EventTypes.CONSTRAINT_ERROR, 0, null, false, true);
                 refreshCurrentView();
 
-                // load constraint behavior preference value with appropriate default
+                // get constraint behavior preference value with appropriate default
                 String constraintBehavior = (String) GeneralSharedPreferences.getInstance()
                         .get(PreferenceKeys.KEY_CONSTRAINT_BEHAVIOR);
 
@@ -2720,7 +2720,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 if (constraintBehavior.equals(PreferenceKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 } else {
-                    // otherwise, we can load the proper toast(s) by saving with constraint check
+                    // otherwise, we can get the proper toast(s) by saving with constraint check
                     saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
                 }
 
@@ -2750,7 +2750,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         if (formController != null) {
             // if we're at the end of the form, then check the preferences
             if (end) {
-                // First load the value from the preferences
+                // First get the value from the preferences
                 complete = (boolean) GeneralSharedPreferences
                         .getInstance()
                         .get(PreferenceKeys.KEY_COMPLETED_DEFAULT);

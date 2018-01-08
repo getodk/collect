@@ -8,6 +8,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.location.GeoActivity;
+import org.odk.collect.android.spatial.MapHelper;
 
 import javax.inject.Inject;
 
@@ -17,15 +19,20 @@ import io.reactivex.Single;
 public class LoadMap {
 
     @NonNull
+    private final GeoActivity activity;
+
+    @NonNull
     private final FragmentManager fragmentManager;
 
     @NonNull
     private final SupportMapFragment mapFragment;
 
     @Inject
-    LoadMap(@NonNull FragmentManager fragmentManager,
+    LoadMap(@NonNull GeoActivity activity,
+            @NonNull FragmentManager fragmentManager,
             @NonNull SupportMapFragment mapFragment) {
 
+        this.activity = activity;
         this.fragmentManager = fragmentManager;
         this.mapFragment = mapFragment;
     }
@@ -38,13 +45,18 @@ public class LoadMap {
                 googleMap.getUiSettings().setMyLocationButtonEnabled(false);
                 googleMap.getUiSettings().setZoomControlsEnabled(false);
 
+                googleMap.setOnMapLongClickListener(activity);
+                googleMap.setOnMarkerDragListener(activity);
+
+                MapHelper helper = new MapHelper(activity, googleMap);
+                helper.setBasemap();
+
                 emitter.onSuccess(googleMap);
             });
 
             fragmentManager.beginTransaction()
                     .replace(R.id.map_container, mapFragment)
                     .commit();
-
         });
     }
 }

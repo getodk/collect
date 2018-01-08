@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.location.GeoActivity;
 
 import javax.inject.Inject;
 
@@ -21,7 +22,8 @@ public class OnMapError {
     private final ToastUtil toastUtil;
 
     @Inject
-    OnMapError(@NonNull Activity activity, @NonNull ToastUtil toastUtil) {
+    OnMapError(@NonNull GeoActivity activity,
+               @NonNull ToastUtil toastUtil) {
         this.activity = activity;
         this.toastUtil = toastUtil;
     }

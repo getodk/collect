@@ -450,7 +450,6 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
         if (latLng != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 16));
         }
-
     }
 
     public void showZoomDialog() {

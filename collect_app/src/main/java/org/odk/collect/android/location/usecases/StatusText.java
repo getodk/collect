@@ -6,13 +6,15 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import java.text.DecimalFormat;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
-@PerViewModel
+@PerApplication
 public class StatusText {
 
     @NonNull
@@ -24,6 +26,7 @@ public class StatusText {
     @NonNull
     private final DecimalFormat decimalFormat;
 
+    @Inject
     public StatusText(@NonNull Context context,
                       @NonNull CurrentLocation currentLocation,
                       @NonNull DecimalFormat decimalFormat) {
@@ -34,8 +37,9 @@ public class StatusText {
 
     public Observable<String> observe() {
         return currentLocation.observe()
-                .map(this::getStringForLocation)
-                .startWith(getDefaultString());
+                .map(currentLocation -> currentLocation.isPresent()
+                        ? getStringForLocation(currentLocation.get())
+                        : getDefaultString());
     }
 
     private String getStringForLocation(@NonNull Location location) {

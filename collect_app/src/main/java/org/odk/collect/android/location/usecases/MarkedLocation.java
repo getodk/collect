@@ -7,32 +7,37 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-@PerViewModel
+@PerApplication
 public class MarkedLocation {
 
     @NonNull
-    private final BehaviorRelay<Optional<LatLng>> markedLocation;
+    private final InitialLocation initialLocation;
+
+    @NonNull
+    private final BehaviorRelay<Optional<LatLng>> markedLocationRelay =
+            BehaviorRelay.create();
 
     @Inject
-    MarkedLocation(@Nullable Optional<LatLng> initialLocation) {
-        markedLocation = BehaviorRelay.createDefault(initialLocation);
+    MarkedLocation(@NonNull InitialLocation initialLocation) {
+        this.initialLocation = initialLocation;
     }
 
     public Observable<Optional<LatLng>> observe() {
-        return markedLocation.startWith().hide();
+        return markedLocationRelay.hide()
+                .startWith(initialLocation.observe());
     }
 
     public void update(@Nullable LatLng latLng) {
-        markedLocation.accept(Optional.fromNullable(latLng));
+        markedLocationRelay.accept(Optional.fromNullable(latLng));
     }
 
     public void clear() {
-        markedLocation.accept(Optional.absent());
+        markedLocationRelay.accept(Optional.absent());
     }
 }

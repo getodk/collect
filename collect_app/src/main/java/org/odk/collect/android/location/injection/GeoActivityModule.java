@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
 import org.odk.collect.android.injection.config.scopes.PerActivity;
+import org.odk.collect.android.location.GeoActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,7 +20,7 @@ public class GeoActivityModule {
     @NonNull
     @Provides
     @PerActivity
-    FragmentManager provideFragmentManager(@NonNull AppCompatActivity activity) {
+    FragmentManager provideFragmentManager(@NonNull GeoActivity activity) {
         return activity.getSupportFragmentManager();
     }
 

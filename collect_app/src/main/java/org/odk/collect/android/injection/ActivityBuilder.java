@@ -7,6 +7,7 @@ import org.odk.collect.android.location.GeoActivity;
 import org.odk.collect.android.location.injection.GeoActivityModule;
 
 import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
 /**
  * Module for binding injectable Activities.
@@ -16,9 +17,10 @@ import dagger.Module;
  * If you don't want to override InjectableActivity, make sure you call
  * {@link dagger.android.AndroidInjection#inject(Activity)} in your Activity's onCreate.
  */
-@Module(includes = GeoActivityModule.class)
+@Module
 public abstract class ActivityBuilder {
 
     @PerActivity
+    @ContributesAndroidInjector(modules = {GeoActivityModule.class})
     abstract GeoActivity bindGeoActivity();
 }

@@ -1,5 +1,7 @@
 package org.odk.collect.android.injection.config;
 
+import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.odk.collect.android.application.Collect;
@@ -21,6 +23,19 @@ import dagger.Provides;
  */
 @Module(includes = {ViewModelFactoryModule.class, ViewModelBuilder.class})
 class AppModule {
+
+    @PerApplication
+    @Provides
+    Collect provideApplication(Application application) {
+        return (Collect) application;
+    }
+
+
+    @PerApplication
+    @Provides
+    Context provideContext(Application application) {
+        return application;
+    }
 
     @PerApplication
     @Provides

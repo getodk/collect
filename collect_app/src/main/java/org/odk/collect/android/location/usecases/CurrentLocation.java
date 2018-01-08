@@ -4,14 +4,15 @@ package org.odk.collect.android.location.usecases;
 import android.location.Location;
 import android.support.annotation.NonNull;
 
-import org.joda.time.DateTime;
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import com.google.common.base.Optional;
+
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-@PerViewModel
+@PerApplication
 public class CurrentLocation {
 
     private final WatchLocation watchLocation;
@@ -23,13 +24,12 @@ public class CurrentLocation {
         this.isLocationValid = isLocationValid;
     }
 
-    public Observable<Location> observe() {
+    public Observable<Optional<Location>> observe() {
         return watchLocation.observeLocation()
-                .filter(isLocationValid::isValid);
-    }
-
-    private boolean isLocationRecent(@NonNull Location location) {
-        long millis = DateTime.now().minus(location.getTime()).getMillis();
-        return millis <= 5 * 1_000;
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(isLocationValid::isValid)
+                .map(Optional::of)
+                .startWith(Optional.absent());
     }
 }

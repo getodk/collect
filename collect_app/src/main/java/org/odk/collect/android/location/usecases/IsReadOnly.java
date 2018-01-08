@@ -1,29 +1,27 @@
 package org.odk.collect.android.location.usecases;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import org.odk.collect.android.injection.config.scopes.PerViewModel;
+import org.odk.collect.android.injection.config.scopes.PerApplication;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-import static org.odk.collect.android.widgets.GeoPointWidget.READ_ONLY;
 
-
-@PerViewModel
+@PerApplication
 public class IsReadOnly {
 
-    private final boolean isReadOnly;
+    @NonNull
+    private final InitialState initialState;
 
     @Inject
-    IsReadOnly(@NonNull Bundle extras) {
-        isReadOnly = extras.getBoolean(READ_ONLY, false);
+    IsReadOnly(@NonNull InitialState initialState) {
+        this.initialState = initialState;
     }
 
     @NonNull
     public Observable<Boolean> observe() {
-        return Observable.just(isReadOnly);
+        return initialState.isReadOnly();
     }
 }
