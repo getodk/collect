@@ -22,7 +22,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -416,8 +415,7 @@ public abstract class QuestionWidget
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (button.isClickable()) {
-                    disableViewForOneSecond(button);
+                if (Collect.allowClick()) {
                     ((ButtonWidget) questionWidget).onButtonClick(withId);
                 }
             }
@@ -461,27 +459,12 @@ public abstract class QuestionWidget
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (questionWidget instanceof BaseImageWidget) {
-                    if (imageView.isClickable()) {
-                        disableViewForOneSecond(imageView);
-                        ((BaseImageWidget) questionWidget).onImageClick();
-                    }
+                if (questionWidget instanceof BaseImageWidget && Collect.allowClick()) {
+                    ((BaseImageWidget) questionWidget).onImageClick();
                 }
             }
         });
         return imageView;
-    }
-
-    // This method is used to avoid opening more than one dialog or activity when user quickly clicks the button several times:
-    // https://github.com/opendatakit/collect/issues/1624
-    protected void disableViewForOneSecond(final View view) {
-        view.setClickable(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setClickable(true);
-            }
-        }, 500);
     }
 
     /**
