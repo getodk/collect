@@ -818,7 +818,6 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     if (folderId != null) {
-
                         List<com.google.api.services.drive.model.File> mediaFileList;
                         mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
 
@@ -828,8 +827,9 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                         }
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
-                            downloadFile(mediaFile.getId(), fileItem.getName());
-                            results.put(mediaDirName + File.separator + mediaFile.getName(), Collect.getInstance().getString(R.string.success));
+                            String filePath = mediaDirName + File.separator + mediaFile.getName();
+                            downloadFile(mediaFile.getId(), filePath);
+                            results.put(filePath, Collect.getInstance().getString(R.string.success));
                         }
                     }
                 } catch (Exception e) {

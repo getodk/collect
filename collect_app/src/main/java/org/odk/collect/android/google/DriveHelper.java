@@ -119,7 +119,7 @@ public class DriveHelper {
 
         if (files.size() == 1) {
             id = files.get(0).getId();
-        } else if (files.size() == 0 && shouldCreateIfNotFound) {
+        } else if (shouldCreateIfNotFound) {
             id = createFolderInDrive(name, inFolder);
         }
 
@@ -223,7 +223,8 @@ public class DriveHelper {
 
         List<com.google.api.services.drive.model.File> files = new ArrayList<>();
 
-        String requestString = generateSearchQuery(folderName, parentId, FOLDER_MIME_TYPE);
+        String mimeType = folderName != null ? FOLDER_MIME_TYPE : null;
+        String requestString = generateSearchQuery(folderName, parentId, mimeType);
         String fields = "nextPageToken, files(modifiedTime, id, name, mimeType)";
         Drive.Files.List request = buildRequest(requestString, fields);
 
