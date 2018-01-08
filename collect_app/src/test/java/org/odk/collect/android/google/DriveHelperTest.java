@@ -115,7 +115,7 @@ public class DriveHelperTest {
         clearInvocations(mockedDriveService);
 
         driveHelper.getFilesFromDrive(null, null);
-        verify(mockedDriveService, times(1)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
+        verify(mockedDriveService, times(0)).fetchAllFiles(any(Drive.Files.List.class), ArgumentMatchers.<File>anyList());
     }
 
     @Test
