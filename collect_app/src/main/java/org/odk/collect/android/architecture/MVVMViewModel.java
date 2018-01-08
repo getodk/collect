@@ -1,9 +1,7 @@
 package org.odk.collect.android.architecture;
 
 import android.arch.lifecycle.ViewModel;
-import android.os.Bundle;
 
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
@@ -14,17 +12,17 @@ public class MVVMViewModel extends ViewModel {
 
     private boolean wasCreated = false;
 
-    final synchronized void create(@Nullable Bundle parameters) {
+    final synchronized void create() {
         if (wasCreated) {
             return;
         }
 
-        onCreate(parameters);
+        onCreate();
         wasCreated = true;
     }
 
     @OverridingMethodsMustInvokeSuper
-    protected void onCreate(@Nullable Bundle parameters) {
+    protected void onCreate() {
 
     }
 }

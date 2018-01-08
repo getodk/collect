@@ -43,7 +43,7 @@ public abstract class MVVMActivity<V extends MVVMViewModel>
         setContentView(getLayoutId());
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(getViewModelClass());
-        viewModel.create(getExtras());
+        viewModel.create();
 
         unbinder = ButterKnife.bind(this);
     }
@@ -65,7 +65,7 @@ public abstract class MVVMActivity<V extends MVVMViewModel>
     public V getViewModel() {
         if (viewModel == null) {
             viewModel = ViewModelProviders.of(this, viewModelFactory).get(getViewModelClass());
-            viewModel.create(getExtras());
+            viewModel.create();
         }
 
         return viewModel;

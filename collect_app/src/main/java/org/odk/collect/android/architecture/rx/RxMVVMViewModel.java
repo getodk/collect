@@ -1,7 +1,6 @@
 package org.odk.collect.android.architecture.rx;
 
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -11,7 +10,6 @@ import com.trello.rxlifecycle2.RxLifecycle;
 import org.odk.collect.android.architecture.MVVMActivity;
 import org.odk.collect.android.architecture.MVVMViewModel;
 
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import io.reactivex.functions.Function;
@@ -29,8 +27,8 @@ public class RxMVVMViewModel extends MVVMViewModel {
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    protected void onCreate(@Nullable Bundle parameters) {
-        super.onCreate(parameters);
+    protected void onCreate() {
+        super.onCreate();
         lifecycleSubject.onNext(Event.ON_CREATE);
     }
 

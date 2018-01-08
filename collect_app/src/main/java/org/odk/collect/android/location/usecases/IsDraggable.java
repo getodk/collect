@@ -1,15 +1,15 @@
 package org.odk.collect.android.location.usecases;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-
-import com.google.common.base.Optional;
-import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.injection.config.scopes.PerViewModel;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+
+import static org.odk.collect.android.widgets.GeoPointWidget.DRAGGABLE_ONLY;
 
 /**
  * @author James Knight
@@ -18,25 +18,15 @@ import io.reactivex.Observable;
 @PerViewModel
 public class IsDraggable {
 
-    private final boolean isInitiallyDraggable;
-    private final BehaviorRelay<Boolean> isDraggableRelay;
+    private final boolean isDraggable;
 
     @Inject
-    IsDraggable(@NonNull InitialState initialState) {
-        isInitiallyDraggable = initialState.isDraggable();
-        isDraggableRelay = BehaviorRelay.createDefault(isInitiallyDraggable);
+    IsDraggable(@NonNull Bundle extras) {
+        isDraggable = extras.getBoolean(DRAGGABLE_ONLY);
     }
 
     @NonNull
     public Observable<Boolean> observe() {
-        return isDraggableRelay.hide();
-    }
-
-    public void update(boolean isDraggable) {
-        isDraggableRelay.accept(isDraggable);
-    }
-
-    public void reset() {
-        isDraggableRelay.accept(isInitiallyDraggable);
+        return Observable.just(isDraggable);
     }
 }

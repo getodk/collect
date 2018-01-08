@@ -1,5 +1,6 @@
 package org.odk.collect.android.location.usecases;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import org.odk.collect.android.injection.config.scopes.PerViewModel;
@@ -8,17 +9,17 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-/**
- * @author James Knight
- */
+import static org.odk.collect.android.widgets.GeoPointWidget.READ_ONLY;
+
+
 @PerViewModel
 public class IsReadOnly {
 
     private final boolean isReadOnly;
 
     @Inject
-    IsReadOnly(@NonNull InitialState initialState) {
-        isReadOnly = initialState.isReadOnly();
+    IsReadOnly(@NonNull Bundle extras) {
+        isReadOnly = extras.getBoolean(READ_ONLY, false);
     }
 
     @NonNull

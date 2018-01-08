@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -79,22 +78,19 @@ public class GeoActivity
                 .compose(bindToLifecycle())
                 .subscribe(this::onMapReady, onMapError::onError);
 
-        getViewModel().isPauseVisible()
+        getViewModel().hasInitialLocation()
                 .compose(bindToLifecycle())
-                .map(isVisible -> isVisible ? View.VISIBLE : View.GONE)
-                .subscribe(pauseButton::setVisibility, Timber::e);
+                .map(hasInitialLocation -> hasInitialLocation ? View.GONE : View.VISIBLE)
+                .subscribe(visibility -> {
+                    locationInfoText.setVisibility(visibility);
+                    locationStatusText.setVisibility(visibility);
 
-        getViewModel().isReloadEnabled()
-                .compose(bindToLifecycle())
-                .subscribe(addButton::setEnabled, Timber::e);
+                }, Timber::e);
 
-        getViewModel().isShowEnabled()
-                .compose(bindToLifecycle())
-                .subscribe(showButton::setEnabled, Timber::e);
 
-        getViewModel().shouldZoomToLatLng()
-                .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
-                .subscribe(this::updateCamera, Timber::e);
+//        getViewModel().shouldZoomToLatLng()
+//                .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
+//                .subscribe(this::updateCamera, Timber::e);
 
         getViewModel().observeMarkerOptions()
                 .withLatestFrom(marker, (markerOptions, marker) -> {

@@ -20,13 +20,12 @@ public class MarkedLocation {
     private final BehaviorRelay<Optional<LatLng>> markedLocation;
 
     @Inject
-    MarkedLocation(@NonNull InitialState initialState) {
-        LatLng initialLocation = initialState.getLocation();
-        markedLocation = BehaviorRelay.createDefault(Optional.fromNullable(initialLocation));
+    MarkedLocation(@Nullable Optional<LatLng> initialLocation) {
+        markedLocation = BehaviorRelay.createDefault(initialLocation);
     }
 
     public Observable<Optional<LatLng>> observe() {
-        return markedLocation.hide();
+        return markedLocation.startWith().hide();
     }
 
     public void update(@Nullable LatLng latLng) {
