@@ -38,6 +38,16 @@ public class TileSourceFactory {
                 return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
             }
         };
+     
+        usgsImg = new OnlineTileSourceBase(
+                context.getString(R.string.openmap_usgs_img),
+                0, 18, 256, "",
+                new String[]{"https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/"}) {
+            @Override
+            public String getTileURLString(MapTile tile) {
+                return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
+            }
+        };
 
         stamenTerrain = new XYTileSource(context.getString(R.string.openmap_stamen_terrain),
                 0, 18, 256, ".jpg", new String[] {
