@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.odk.collect.android.utilities.gdrive.SheetsHelper;
-import org.odk.collect.android.utilities.gdrive.SheetsService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -34,7 +33,7 @@ import static org.mockito.Mockito.verify;
 public class SheetsHelperTest {
 
     @Mock
-    private SheetsService sheetsService;
+    private SheetsHelper.SheetsService sheetsService;
 
     private SheetsHelper sheetsHelper;
 

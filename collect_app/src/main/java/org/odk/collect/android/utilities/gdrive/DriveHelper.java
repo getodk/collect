@@ -23,6 +23,7 @@ import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
@@ -271,5 +272,77 @@ public class DriveHelper {
     public void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files)
             throws IOException {
         driveService.fetchFilesForCurrentPage(request, files);
+    }
+
+
+    /**
+     * This class only makes API calls using the drives API and does not contain any business logic
+     *
+     * @author Shobhit Agarwal
+     */
+
+    public class DriveService {
+        private final Drive drive;
+
+        DriveService(Drive drive) {
+            this.drive = drive;
+        }
+
+        public String getFileId(String fileId, String fields) throws IOException {
+            return drive.files()
+                    .get(fileId)
+                    .setFields(fields)
+                    .execute()
+                    .getId();
+        }
+
+        public Drive.Files.List generateRequest(String query, String fields) throws IOException {
+            return drive.files()
+                    .list()
+                    .setQ(query)
+                    .setFields(fields);
+        }
+
+        public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
+            drive.files()
+                    .get(fileId)
+                    .executeMediaAndDownloadTo(fileOutputStream);
+        }
+
+        String uploadFile(com.google.api.services.drive.model.File metadata, FileContent fileContent, String fields) throws IOException {
+            return drive.files()
+                    .create(metadata, fileContent)
+                    .setFields(fields)
+                    .setIgnoreDefaultVisibility(true)
+                    .execute()
+                    .getId();
+        }
+
+        public String createFile(com.google.api.services.drive.model.File file, String fields) throws IOException {
+            return drive.files()
+                    .create(file)
+                    .setFields(fields)
+                    .execute()
+                    .getId();
+        }
+
+        public void setPermission(String folderId, String fields, Permission permission) throws IOException {
+            drive.permissions()
+                    .create(folderId, permission)
+                    .setFields(fields)
+                    .execute();
+        }
+
+        public void fetchAllFiles(Drive.Files.List request, List<com.google.api.services.drive.model.File> files) throws IOException {
+            do {
+                fetchFilesForCurrentPage(request, files);
+            } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+        }
+
+        void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files) throws IOException {
+            FileList fileList = request.execute();
+            files.addAll(fileList.getFiles());
+            request.setPageToken(fileList.getNextPageToken());
+        }
     }
 }

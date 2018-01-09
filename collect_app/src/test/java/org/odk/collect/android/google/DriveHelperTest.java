@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.odk.collect.android.utilities.gdrive.DriveHelper;
-import org.odk.collect.android.utilities.gdrive.DriveService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -38,7 +37,7 @@ import static org.mockito.Mockito.verify;
 public class DriveHelperTest {
 
     @Mock
-    private DriveService mockedDriveService;
+    private DriveHelper.DriveService mockedDriveService;
     @Mock
     private Drive.Files.List mockedRequest;
 

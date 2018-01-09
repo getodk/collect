@@ -21,6 +21,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.SheetProperties;
@@ -166,5 +167,49 @@ public class SheetsHelper {
         // updating the spreadsheet with the given id
         sheetsService.batchUpdate(spreadsheetId, requests);
         return spreadsheet;
+    }
+
+
+    /**
+     * This class only makes API calls using the sheets API and does not contain any business logic
+     *
+     * @author Shobhit Agarwal
+     */
+
+    public class SheetsService {
+        private final Sheets sheets;
+
+        SheetsService(Sheets sheets) {
+            this.sheets = sheets;
+        }
+
+        public void batchUpdate(String spreadsheetId, List<Request> requests) throws IOException {
+            sheets.spreadsheets()
+                    .batchUpdate(
+                            spreadsheetId,
+                            new BatchUpdateSpreadsheetRequest().setRequests(requests)
+                    ).execute();
+        }
+
+        public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+            sheets.spreadsheets().values()
+                    .append(spreadsheetId, sheetName, row)
+                    .setIncludeValuesInResponse(true)
+                    .setValueInputOption("USER_ENTERED").execute();
+        }
+
+        ValueRange getSpreadsheet(String spreadsheetId, String sheetName) throws IOException {
+            return sheets.spreadsheets()
+                    .values()
+                    .get(spreadsheetId, sheetName)
+                    .execute();
+        }
+
+        public Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
+            return sheets.spreadsheets()
+                    .get(spreadsheetId)
+                    .setIncludeGridData(false)
+                    .execute();
+        }
     }
 }
