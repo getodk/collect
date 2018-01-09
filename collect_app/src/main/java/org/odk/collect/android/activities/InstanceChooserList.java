@@ -22,8 +22,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -53,6 +55,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
     private InstanceSyncTask instanceSyncTask;
 
     private boolean editMode;
+    private LinearLayout llParent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         setContentView(R.layout.chooser_list_layout);
         super.onCreate(savedInstanceState);
 
+        llParent = findViewById(R.id.llParent);
         String formMode = getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
 
@@ -88,6 +92,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
         setupAdapter();
+        displayStatus(getString(R.string.form_scan_starting));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -172,8 +177,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = findViewById(R.id.status_text);
-        textView.setText(result);
+        displayStatus(result);
+    }
+
+    private void displayStatus(String message) {
+        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

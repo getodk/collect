@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
@@ -76,6 +75,7 @@ public class DataManagerList extends InstanceListFragment
         toggleButton.setOnClickListener(this);
 
         setupAdapter();
+        displayStatus(getString(R.string.form_scan_starting));
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
         instanceSyncTask.execute();
@@ -116,8 +116,7 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = rootView.findViewById(R.id.status_text);
-        textView.setText(result);
+        displayStatus(result);
     }
 
     private void setupAdapter() {

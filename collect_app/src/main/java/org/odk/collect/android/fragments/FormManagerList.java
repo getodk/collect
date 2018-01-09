@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.FormsDao;
@@ -72,6 +71,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
         toggleButton.setOnClickListener(this);
 
         setupAdapter();
+        displayStatus(getString(R.string.form_scan_starting));
 
         if (backgroundTasks == null) {
             backgroundTasks = new BackgroundTasks();
@@ -203,8 +203,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     @Override
     public void syncComplete(String result) {
         Timber.i("Disk scan complete");
-        TextView tv = rootView.findViewById(R.id.status_text);
-        tv.setText(result);
+        displayStatus(result);
     }
 
     @Override

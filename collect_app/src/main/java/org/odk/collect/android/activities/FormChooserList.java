@@ -22,9 +22,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -51,6 +52,8 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     private static final String syncMsgKey = "syncmsgkey";
 
     private DiskSyncTask diskSyncTask;
+    private LinearLayout llParent;
+    private String statusMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,9 +73,11 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
         setupAdapter();
 
+        llParent = findViewById(R.id.llParent);
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
-            TextView tv = findViewById(R.id.status_text);
-            tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
+            displayStatus(savedInstanceState.getString(syncMsgKey).trim());
+        } else {
+            displayStatus(getString(R.string.form_scan_starting));
         }
 
         // DiskSyncTask checks the disk for any forms not already in the content provider
@@ -90,6 +95,11 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         };
     }
 
+    private void displayStatus(String message) {
+        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
+        statusMessage = message;
+    }
+
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
@@ -101,8 +111,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        TextView tv = findViewById(R.id.status_text);
-        outState.putString(syncMsgKey, tv.getText().toString().trim());
+        outState.putString(syncMsgKey, statusMessage);
     }
 
 
@@ -173,8 +182,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     public void syncComplete(String result) {
         Timber.i("Disk sync task complete");
-        TextView tv = findViewById(R.id.status_text);
-        tv.setText(result.trim());
+        displayStatus(result.trim());
     }
 
     private void setupAdapter() {

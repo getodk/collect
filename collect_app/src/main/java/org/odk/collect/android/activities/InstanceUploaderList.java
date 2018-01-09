@@ -23,6 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +31,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.dao.InstancesDao;
@@ -76,6 +77,7 @@ public class InstanceUploaderList extends InstanceListActivity
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
+    private LinearLayout llParent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,7 @@ public class InstanceUploaderList extends InstanceListActivity
         setContentView(R.layout.instance_uploader_list);
         super.onCreate(savedInstanceState);
 
+        llParent = findViewById(R.id.llParent);
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
@@ -151,6 +154,7 @@ public class InstanceUploaderList extends InstanceListActivity
 
         // set title
         setTitle(getString(R.string.send_data));
+        displayStatus(getString(R.string.form_scan_starting));
 
         instanceSyncTask = new InstanceSyncTask();
         instanceSyncTask.setDiskSyncListener(this);
@@ -184,8 +188,11 @@ public class InstanceUploaderList extends InstanceListActivity
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = findViewById(R.id.status_text);
-        textView.setText(result);
+        displayStatus(result);
+    }
+
+    private void displayStatus(String message) {
+        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

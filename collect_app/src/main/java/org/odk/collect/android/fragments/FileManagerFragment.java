@@ -16,10 +16,12 @@ package org.odk.collect.android.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.odk.collect.android.R;
@@ -28,6 +30,7 @@ import org.odk.collect.android.R;
 public abstract class FileManagerFragment extends AppListFragment {
     protected Button deleteButton;
     protected Button toggleButton;
+    protected LinearLayout llParent;
 
     @Nullable
     @Override
@@ -37,9 +40,14 @@ public abstract class FileManagerFragment extends AppListFragment {
         deleteButton = rootView.findViewById(R.id.delete_button);
         deleteButton.setText(getString(R.string.delete_file));
         toggleButton = rootView.findViewById(R.id.toggle_button);
+        llParent = rootView.findViewById(R.id.llParent);
 
         setHasOptionsMenu(true);
         return rootView;
+    }
+
+    protected void displayStatus(String message) {
+        Snackbar.make(llParent, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

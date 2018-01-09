@@ -21,24 +21,11 @@ the License.
     <include layout="@layout/toolbar"/>
 
     <LinearLayout
+        android:id="@+id/llParent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/status_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#DDDDDD"
-            android:paddingBottom="4dip"
-            android:paddingEnd="8dip"
-            android:paddingLeft="8dip"
-            android:paddingRight="8dip"
-            android:paddingStart="8dip"
-            android:paddingTop="4dip"
-            android:text="@string/form_scan_starting"
-            android:textSize="14sp"/>
 
         <ListView
             android:id="@id/android:list"
