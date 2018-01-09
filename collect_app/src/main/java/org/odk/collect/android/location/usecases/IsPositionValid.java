@@ -13,12 +13,12 @@ import javax.inject.Inject;
  */
 
 @PerApplication
-class IsLocationValid {
+class IsPositionValid {
 
     private static final int VALID_WITHIN_SECONDS = 5;
 
     @Inject
-    IsLocationValid() {
+    IsPositionValid() {
 
     }
 

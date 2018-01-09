@@ -26,13 +26,12 @@ import org.odk.collect.android.location.usecases.ZoomDialog;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.Rx;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import timber.log.Timber;
 
 public class GeoActivity
@@ -74,14 +73,15 @@ public class GeoActivity
     @BindView(R.id.save_button)
     protected ImageButton saveButton;
 
-    private final BehaviorRelay<Optional<MarkerOptions>> markerOptions =
+    private final BehaviorRelay<GoogleMap> mapRelay =
             BehaviorRelay.create();
 
-    private final BehaviorRelay<Optional<Marker>> marker =
+    private final Observable<GoogleMap> observeMap = mapRelay.hide();
+
+    private final BehaviorRelay<Optional<Marker>> markerRelay =
             BehaviorRelay.createDefault(Optional.absent());
 
-    private final BehaviorRelay<GoogleMap> currentMap =
-            BehaviorRelay.create();
+    private final Observable<Optional<Marker>> observeMarker = markerRelay.hide();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,62 +91,81 @@ public class GeoActivity
         // Load Map:
         loadMap.load()
                 .compose(bindToLifecycle())
-                .subscribe(currentMap, onMapError::onError);
+                .subscribe(mapRelay, onMapError::onError);
+
+        GeoViewModel viewModel = getViewModel();
 
         // Bind Location Info:
-        getViewModel().locationInfoVisibility()
+        viewModel.locationInfoVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setVisibility, Timber::e);
 
-        getViewModel().locationInfoText()
+        viewModel.locationInfoText()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setText, Timber::e);
 
         // Bind Location Status:
-        getViewModel().locationStatusVisibility()
+        viewModel.locationStatusVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setVisibility, Timber::e);
 
-        getViewModel().locationStatusText()
+        viewModel.locationStatusText()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setText, Timber::e);
 
         // Bind Button Visibility:
-        getViewModel().pauseButtonVisibility()
+        viewModel.pauseButtonVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(pauseButton::setVisibility, Timber::e);
 
         // Bind Button Enable Status:
-        getViewModel().isAddLocationEnabled()
+        viewModel.isAddLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(addButton::setEnabled);
 
-        getViewModel().isShowLocationEnabled()
+        viewModel.isShowLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(showButton::setEnabled);
 
+        // Bind Button events:
+        viewModel.observeLocationCleared()
+                .compose(bindToLifecycle())
+                .subscribe(__ -> clearMarker(), Timber::e);
+
         // Bind Dialog events:
-        getViewModel().shouldShowZoomDialog()
+        viewModel.shouldShowZoomDialog()
                 .compose(bindToLifecycle())
                 .subscribe(zoomDialog::show, Timber::e);
 
-        getViewModel().shouldShowGpsAlert()
+        viewModel.shouldShowGpsAlert()
                 .compose(bindToLifecycle())
                 .subscribe(showGpsDisabledAlert::show, Timber::e);
 
-        getViewModel().shouldShowLayers()
-                .withLatestFrom(observeCurrentMap(), Rx::takeRight)
+        viewModel.shouldShowLayers()
+                .withLatestFrom(observeMap, Rx::takeRight)
                 .compose(bindToLifecycle())
                 .subscribe(this::shouldShowLayers, Timber::e);
 
         // Bind location Marks:
-
+        viewModel.observeMarkedLocation()
+                .compose(bindToLifecycle())
+                .subscribe(this::updateMarkerForPosition, Timber::e);
 
         // Bind Map Zoom:
         zoomDialog.zoomToLocation()
                 .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
                 .compose(bindToLifecycle())
                 .subscribe(this::updateCamera, Timber::e);
+
+        observeMarker.filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Marker::getPosition)
+                .compose(bindToLifecycle())
+                .subscribe(viewModel::markLocation, Timber::e);
+
+        observeMarker.filter(it -> !it.isPresent())
+                .compose(bindToLifecycle())
+                .subscribe(__ -> viewModel.clearMarkedLocation(), Timber::e);
     }
 
     @Override
@@ -176,27 +195,37 @@ public class GeoActivity
 
     @OnClick(R.id.add_button)
     protected void onAddClick() {
-        getViewModel().addLocation();
+        getViewModel().addLocation()
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
     }
 
     @OnClick(R.id.pause_button)
     protected void onPauseClick() {
-        getViewModel().pause();
+        getViewModel().pause()
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);;
     }
 
     @OnClick(R.id.show_button)
     protected void onShowClick() {
-        getViewModel().showLocation();
+        getViewModel().showLocation()
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
     }
 
     @OnClick(R.id.layers_button)
     protected void onLayersClick() {
-        getViewModel().showLayers();
+        getViewModel().showLayers()
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
     }
 
     @OnClick(R.id.clear_button)
     protected void onClearClick() {
-        getViewModel().clearLocation();
+        getViewModel().clearLocation()
+                .compose(bindToLifecycle())
+                .subscribe(Rx::noop, Timber::e);
     }
 
     @OnClick(R.id.save_button)
@@ -208,7 +237,7 @@ public class GeoActivity
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-
+        getViewModel().markLocation(latLng);
     }
 
     @Override
@@ -223,11 +252,7 @@ public class GeoActivity
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-
-    }
-
-    private Observable<GoogleMap> observeCurrentMap() {
-        return currentMap.hide();
+        markerRelay.accept(Optional.of(marker));
     }
 
     private void shouldShowLayers(@NonNull GoogleMap googleMap) {
@@ -236,15 +261,43 @@ public class GeoActivity
     }
 
     private void updateCamera(@NonNull CameraUpdate cameraUpdate) {
-        observeCurrentMap()
+        observeMap.firstOrError()
                 .compose(bindToLifecycle())
                 .subscribe(googleMap -> googleMap.animateCamera(cameraUpdate), Timber::e);
     }
 
-    @NonNull
-    private Optional<MarkerOptions> markerOptionsForPosition(@Nullable LatLng position) {
-        return position != null
-                ? Optional.of(new MarkerOptions().position(position))
-                : Optional.absent();
+    private void updateMarkerForPosition(@Nullable LatLng position) {
+        if (position == null) {
+            clearMarker();
+            return;
+        }
+
+        observeMarker.firstOrError()
+                .flatMap(markerOptional -> {
+
+                    if (markerOptional.isPresent()) {
+                        markerOptional.get().setPosition(position);
+
+                        return Single.just(markerOptional);
+                    }
+
+                    return observeMap.firstOrError()
+                            .map(googleMap -> googleMap.addMarker(new MarkerOptions().position(position)))
+                            .map(Optional::of);
+
+                }).subscribe(markerRelay, Timber::e);
     }
+
+    private void clearMarker() {
+        observeMarker.firstOrError()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .compose(bindToLifecycle())
+                .subscribe(marker -> {
+                    marker.remove();
+                    markerRelay.accept(Optional.absent());
+
+                }, Timber::e);
+    }
+
 }

@@ -8,11 +8,13 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
 import org.odk.collect.android.location.model.ZoomData;
-import org.odk.collect.android.location.usecases.CurrentLocation;
+import org.odk.collect.android.location.usecases.CurrentPosition;
 import org.odk.collect.android.location.usecases.InfoText;
 import org.odk.collect.android.location.usecases.InitialLocation;
 import org.odk.collect.android.location.usecases.InitialState;
@@ -20,11 +22,12 @@ import org.odk.collect.android.location.usecases.IsDraggable;
 import org.odk.collect.android.location.usecases.IsReadOnly;
 import org.odk.collect.android.location.usecases.MarkedLocation;
 import org.odk.collect.android.location.usecases.StatusText;
-import org.odk.collect.android.location.usecases.WatchLocation;
+import org.odk.collect.android.location.usecases.WatchPosition;
 import org.odk.collect.android.utilities.Rx;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import timber.log.Timber;
@@ -46,10 +49,10 @@ public class GeoViewModel extends RxMVVMViewModel {
     private final InitialLocation initialLocation;
 
     @NonNull
-    private final WatchLocation watchLocation;
+    private final WatchPosition watchPosition;
 
     @NonNull
-    private final CurrentLocation currentLocation;
+    private final CurrentPosition currentPosition;
 
     @NonNull
     private final MarkedLocation markedLocation;
@@ -66,6 +69,12 @@ public class GeoViewModel extends RxMVVMViewModel {
     @NonNull
     private final PublishRelay<ZoomData> shouldShowZoomDialog = PublishRelay.create();
 
+    @NonNull
+    private final PublishRelay<Object> onClearLocation = PublishRelay.create();
+
+    @NonNull
+    private final PublishRelay<LatLng> shouldMarkLocation = PublishRelay.create();
+
     // Outputs:
 
     @Inject
@@ -73,8 +82,8 @@ public class GeoViewModel extends RxMVVMViewModel {
                  @NonNull IsDraggable isDraggable,
                  @NonNull IsReadOnly isReadOnly,
                  @NonNull InitialLocation initialLocation,
-                 @NonNull WatchLocation watchLocation,
-                 @NonNull CurrentLocation currentLocation,
+                 @NonNull WatchPosition watchPosition,
+                 @NonNull CurrentPosition currentPosition,
                  @NonNull MarkedLocation markedLocation,
                  @NonNull InfoText infoText,
                  @NonNull StatusText statusText) {
@@ -83,8 +92,8 @@ public class GeoViewModel extends RxMVVMViewModel {
         this.isDraggable = isDraggable;
         this.isReadOnly = isReadOnly;
         this.initialLocation = initialLocation;
-        this.watchLocation = watchLocation;
-        this.currentLocation = currentLocation;
+        this.watchPosition = watchPosition;
+        this.currentPosition = currentPosition;
         this.markedLocation = markedLocation;
         this.infoText = infoText;
         this.statusText = statusText;
@@ -96,11 +105,6 @@ public class GeoViewModel extends RxMVVMViewModel {
         initialState.set(bundle);
 
         // Show Zoom Dialog on first location:
-        observeFirstLocation()
-                .map(this::locationToLatLng)
-                .compose(bindToLifecycle())
-                .subscribe(markedLocation::update, Timber::e);
-
         observeFirstLocation()
                 .withLatestFrom(observeZoomData(), Rx::takeRight)
                 .compose(bindToLifecycle())
@@ -146,11 +150,6 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
-    Observable<Optional<LatLng>> observeMarkedLocation() {
-        return markedLocation.observe();
-    }
-
-    @NonNull
     Observable<Boolean> isShowLocationEnabled() {
         return Observable.combineLatest(
                 hasCurrentLocation(),
@@ -162,7 +161,7 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     @NonNull
     Observable<Object> shouldShowGpsAlert() {
-        return watchLocation.observeAvailability()
+        return watchPosition.observeAvailability()
                 .filter(isAvailable -> !isAvailable)
                 .map(__ -> this);
     }
@@ -177,43 +176,95 @@ public class GeoViewModel extends RxMVVMViewModel {
         return shouldShowLayers.hide();
     }
 
-    void addLocation() {
+    @NonNull
+    private Observable<LatLng> observeInitialMarkedLocation() {
 
+        return Observable.amb(ImmutableList.of(
+                initialLocation.observe()
+                        .filter(Optional::isPresent)
+                        .map(Optional::get),
+
+                observeFirstLocation()
+                        .map(this::locationToLatLng)
+        ));
     }
 
-    void pause() {
-
+    @NonNull
+    Observable<LatLng> observeMarkedLocation() {
+        return Observable.merge(
+                observeInitialMarkedLocation(),
+                shouldMarkLocation.hide()
+        );
     }
 
-    void showLocation() {
-        observeZoomData()
+    @NonNull
+    Observable<Object> observeLocationCleared() {
+
+        return onClearLocation.hide();
+    }
+
+    Completable addLocation() {
+        return currentPosition.observe()
+                .doOnNext(locationOptional -> Timber.i("Hmm"))
+                .doOnError(throwable -> Timber.w("WTF"))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::locationToLatLng)
+                .flatMapCompletable(position -> Completable.defer(() -> {
+                    shouldMarkLocation.accept(position);
+                    return Completable.complete();
+                }));
+    }
+
+    Completable pause() {
+        return Completable.complete();
+    }
+
+    Completable showLocation() {
+        return observeZoomData()
                 .compose(bindToLifecycle())
-                .subscribe(shouldShowZoomDialog, Timber::e);
+                .flatMapCompletable(zoomData -> Completable.defer(() -> {
+                    shouldShowZoomDialog.accept(zoomData);
+                    return Completable.complete();
+                }));
     }
 
-    void showLayers() {
-        shouldShowLayers.accept(this);
+    Completable showLayers() {
+        return Completable.defer(() -> {
+            shouldShowLayers.accept(this);
+            return Completable.complete();
+        });
     }
 
-    void clearLocation() {
-
+    Completable clearLocation() {
+        return Completable.defer(() -> {
+            onClearLocation.accept(this);
+            return Completable.complete();
+        });
     }
 
-    void startWatchingLocation() {
-        watchLocation.startWatching();
+    void markLocation(@NonNull LatLng latLng) {
+        markedLocation.update(latLng);
     }
 
-    void stopWatchingLocation() {
-        watchLocation.stopWatching();
+    void clearMarkedLocation() {
+        markedLocation.clear();
     }
 
     Maybe<String> saveLocation() {
         return Maybe.empty();
     }
 
+    void startWatchingLocation() {
+        watchPosition.startWatching();
+    }
+    void stopWatchingLocation() {
+        watchPosition.stopWatching();
+    }
+
     @NonNull
     private Observable<Boolean> hasCurrentLocation() {
-        return currentLocation.observe()
+        return currentPosition.observe()
                 .map(Optional::isPresent)
                 .distinctUntilChanged();
     }
@@ -234,7 +285,7 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     @NonNull
     private Observable<ZoomData> observeZoomData() {
-        return Observable.combineLatest(currentLocation.observe(), markedLocation.observe(),
+        return Observable.combineLatest(currentPosition.observe(), markedLocation.observe(),
                 (current, marked) -> new ZoomData(
                         current.orNull(),
                         marked.orNull()
@@ -254,7 +305,7 @@ public class GeoViewModel extends RxMVVMViewModel {
     @NonNull
     private Observable<Location> observeFirstLocation() {
         return observeFirstLocationReceived()
-                .withLatestFrom(currentLocation.observe(), Rx::takeRight)
+                .withLatestFrom(currentPosition.observe(), Rx::takeRight)
                 .filter(Optional::isPresent)
                 .map(Optional::get);
     }

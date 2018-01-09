@@ -16,7 +16,7 @@ import io.reactivex.Observable;
 import timber.log.Timber;
 
 @PerApplication
-public class WatchLocation {
+public class WatchPosition {
 
     @NonNull
     private final LocationClient locationClient;
@@ -36,7 +36,7 @@ public class WatchLocation {
     private int locationCount = 0;
 
     @Inject
-    WatchLocation(@NonNull LocationClient locationClient) {
+    WatchPosition(@NonNull LocationClient locationClient) {
 
         this.locationClient = locationClient;
         this.locationClient.setListener(new LocationClient.LocationClientListener() {

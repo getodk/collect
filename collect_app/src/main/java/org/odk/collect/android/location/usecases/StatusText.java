@@ -21,22 +21,22 @@ public class StatusText {
     private final Context context;
 
     @NonNull
-    private final CurrentLocation currentLocation;
+    private final CurrentPosition currentPosition;
 
     @NonNull
     private final DecimalFormat decimalFormat;
 
     @Inject
     public StatusText(@NonNull Context context,
-                      @NonNull CurrentLocation currentLocation,
+                      @NonNull CurrentPosition currentPosition,
                       @NonNull DecimalFormat decimalFormat) {
         this.context = context;
-        this.currentLocation = currentLocation;
+        this.currentPosition = currentPosition;
         this.decimalFormat = decimalFormat;
     }
 
     public Observable<String> observe() {
-        return currentLocation.observe()
+        return currentPosition.observe()
                 .map(currentLocation -> currentLocation.isPresent()
                         ? getStringForLocation(currentLocation.get())
                         : getDefaultString());

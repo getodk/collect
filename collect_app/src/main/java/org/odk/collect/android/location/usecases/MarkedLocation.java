@@ -17,24 +17,20 @@ import io.reactivex.Observable;
 public class MarkedLocation {
 
     @NonNull
-    private final InitialLocation initialLocation;
-
-    @NonNull
     private final BehaviorRelay<Optional<LatLng>> markedLocationRelay =
             BehaviorRelay.create();
 
     @Inject
-    MarkedLocation(@NonNull InitialLocation initialLocation) {
-        this.initialLocation = initialLocation;
+    MarkedLocation() {
+
     }
 
     public Observable<Optional<LatLng>> observe() {
-        return markedLocationRelay.hide()
-                .startWith(initialLocation.observe());
+        return markedLocationRelay.hide();
     }
 
-    public void update(@Nullable LatLng latLng) {
-        markedLocationRelay.accept(Optional.fromNullable(latLng));
+    public void update(@NonNull LatLng latLng) {
+        markedLocationRelay.accept(Optional.of(latLng));
     }
 
     public void clear() {
