@@ -1391,7 +1391,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             FormIndex originalFormIndex = formController.getFormIndex();
             backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
-            if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+            if (formController.stepToPreviousEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 backButton.setEnabled(allowMovingBackwards);
             }
             formController.jumpToIndex(originalFormIndex);
