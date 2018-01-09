@@ -406,7 +406,7 @@ public class Camera2Fragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        textureView = (TextureView) view.findViewById(R.id.texture);
+        textureView = view.findViewById(R.id.texture);
         textureView.setOnClickListener(this);
     }
 

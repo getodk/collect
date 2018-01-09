@@ -170,7 +170,7 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = (TextView) findViewById(R.id.status_text);
+        TextView textView = findViewById(R.id.status_text);
         textView.setText(result);
     }
 

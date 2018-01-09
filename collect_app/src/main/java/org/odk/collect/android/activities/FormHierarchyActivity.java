@@ -75,10 +75,10 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
 
-        listView = (ListView) findViewById(android.R.id.list);
+        listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        emptyView = findViewById(android.R.id.empty);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FormController formController = Collect.getInstance().getFormController();
@@ -93,9 +93,9 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
 
         setTitle(formController.getFormTitle());
 
-        path = (TextView) findViewById(R.id.pathtext);
+        path = findViewById(R.id.pathtext);
 
-        jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
+        jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +105,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
+        Button jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +118,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
+        Button jumpEndButton = findViewById(R.id.jumpEndButton);
         jumpEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +135,7 @@ public class FormHierarchyActivity extends AppCompatActivity implements AdapterV
         if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
             Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
-            Button exitButton = (Button) findViewById(R.id.exitButton);
+            Button exitButton = findViewById(R.id.exitButton);
             exitButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
