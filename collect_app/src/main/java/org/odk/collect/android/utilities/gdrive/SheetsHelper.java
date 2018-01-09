@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.google;
+package org.odk.collect.android.utilities.gdrive;
 
 
 import android.support.annotation.NonNull;
@@ -50,7 +50,7 @@ public class SheetsHelper {
      * Constructs a new SheetsHelper with the provided Sheets Service.
      * This Constructor should only be used for testing.
      */
-    SheetsHelper(@NonNull SheetsService sheetsService) {
+    public SheetsHelper(@NonNull SheetsService sheetsService) {
         this.sheetsService = sheetsService;
     }
 

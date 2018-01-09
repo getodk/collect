@@ -40,7 +40,7 @@ import android.support.v7.app.AppCompatActivity;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.google.GoogleAccountsManager;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -54,7 +54,7 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.google.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_AUTHORIZATION;
 
 

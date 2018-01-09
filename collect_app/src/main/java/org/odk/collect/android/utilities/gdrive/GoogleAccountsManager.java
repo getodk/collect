@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.google;
+package org.odk.collect.android.utilities.gdrive;
 
 
 import android.Manifest;
@@ -91,9 +91,9 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     /**
      * This constructor should be used only for testing purposes
      */
-    GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
-                          @NonNull GeneralSharedPreferences preferences,
-                          @NonNull Intent intentChooseAccount) {
+    public GoogleAccountsManager(@NonNull GoogleAccountCredential credential,
+                                 @NonNull GeneralSharedPreferences preferences,
+                                 @NonNull Intent intentChooseAccount) {
         this.credential = credential;
         this.preferences = preferences;
         this.intentChooseAccount = intentChooseAccount;
@@ -152,7 +152,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    void requestAccountPermission() {
+    public void requestAccountPermission() {
         EasyPermissions.requestPermissions(
                 context,
                 context.getString(R.string.request_permissions_google_account),
@@ -162,7 +162,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
     /**
      * Returns true if has accounts permission otherwise false
      */
-    boolean checkAccountPermission() {
+    public boolean checkAccountPermission() {
         return EasyPermissions.hasPermissions(context, Manifest.permission.GET_ACCOUNTS);
     }
 
@@ -170,7 +170,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         return (String) preferences.get(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
     }
 
-    void showAccountPickerDialog() {
+    public void showAccountPickerDialog() {
         intentChooseAccount.putExtra("overrideTheme", THEME_LIGHT_ACCOUNT_PICKER);
         intentChooseAccount.putExtra("overrideCustomTheme", 0);
 
@@ -181,7 +181,7 @@ public class GoogleAccountsManager implements EasyPermissions.PermissionCallback
         }
     }
 
-    void selectAccount(String accountName) {
+    public void selectAccount(String accountName) {
         credential.setSelectedAccountName(accountName);
         if (listener != null) {
             listener.onGoogleAccountSelected(accountName);

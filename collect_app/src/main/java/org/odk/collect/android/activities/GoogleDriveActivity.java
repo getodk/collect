@@ -53,8 +53,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.google.DriveHelper;
-import org.odk.collect.android.google.GoogleAccountsManager;
+import org.odk.collect.android.utilities.gdrive.DriveHelper;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
@@ -72,7 +72,7 @@ import java.util.Stack;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.google.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 
 public class GoogleDriveActivity extends AppCompatActivity implements View.OnClickListener,
         TaskListener, GoogleDriveFormDownloadListener, AdapterView.OnItemClickListener,

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.google;
+package org.odk.collect.android.utilities.gdrive;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author Shobhit Agarwal
  */
 
-class DriveService {
+public class DriveService {
 
     private final Drive drive;
 
@@ -38,7 +38,7 @@ class DriveService {
         this.drive = drive;
     }
 
-    String getFileId(String fileId, String fields) throws IOException {
+    public String getFileId(String fileId, String fields) throws IOException {
         return drive.files()
                 .get(fileId)
                 .setFields(fields)
@@ -46,14 +46,14 @@ class DriveService {
                 .getId();
     }
 
-    Drive.Files.List generateRequest(String query, String fields) throws IOException {
+    public Drive.Files.List generateRequest(String query, String fields) throws IOException {
         return drive.files()
                 .list()
                 .setQ(query)
                 .setFields(fields);
     }
 
-    void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
+    public void downloadFile(String fileId, FileOutputStream fileOutputStream) throws IOException {
         drive.files()
                 .get(fileId)
                 .executeMediaAndDownloadTo(fileOutputStream);
@@ -68,7 +68,7 @@ class DriveService {
                 .getId();
     }
 
-    String createFile(File file, String fields) throws IOException {
+    public String createFile(File file, String fields) throws IOException {
         return drive.files()
                 .create(file)
                 .setFields(fields)
@@ -76,14 +76,14 @@ class DriveService {
                 .getId();
     }
 
-    void setPermission(String folderId, String fields, Permission permission) throws IOException {
+    public void setPermission(String folderId, String fields, Permission permission) throws IOException {
         drive.permissions()
                 .create(folderId, permission)
                 .setFields(fields)
                 .execute();
     }
 
-    void fetchAllFiles(Drive.Files.List request, List<File> files) throws IOException {
+    public void fetchAllFiles(Drive.Files.List request, List<File> files) throws IOException {
         do {
             fetchFilesForCurrentPage(request, files);
         } while (request.getPageToken() != null && request.getPageToken().length() > 0);

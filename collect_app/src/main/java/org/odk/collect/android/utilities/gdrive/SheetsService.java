@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.google;
+package org.odk.collect.android.utilities.gdrive;
 
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
@@ -29,14 +29,14 @@ import java.util.List;
  * @author Shobhit Agarwal
  */
 
-class SheetsService {
+public class SheetsService {
     private final Sheets sheets;
 
     SheetsService(Sheets sheets) {
         this.sheets = sheets;
     }
 
-    void batchUpdate(String spreadsheetId, List<Request> requests) throws IOException {
+    public void batchUpdate(String spreadsheetId, List<Request> requests) throws IOException {
         sheets.spreadsheets()
                 .batchUpdate(
                         spreadsheetId,
@@ -44,7 +44,7 @@ class SheetsService {
                 ).execute();
     }
 
-    void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
+    public void insertRow(String spreadsheetId, String sheetName, ValueRange row) throws IOException {
         sheets.spreadsheets().values()
                 .append(spreadsheetId, sheetName, row)
                 .setIncludeValuesInResponse(true)
@@ -58,7 +58,7 @@ class SheetsService {
                 .execute();
     }
 
-    Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
+    public Spreadsheet getSpreadsheet(String spreadsheetId) throws IOException {
         return sheets.spreadsheets()
                 .get(spreadsheetId)
                 .setIncludeGridData(false)
