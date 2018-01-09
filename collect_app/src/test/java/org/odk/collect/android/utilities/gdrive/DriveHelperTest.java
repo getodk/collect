@@ -96,16 +96,6 @@ public class DriveHelperTest {
     }
 
     @Test
-    public void getMediaDirNameTest() {
-        String expected = "sample-file-media";
-
-        assertEquals(expected, driveHelper.getMediaDirName("sample-file.xml"));
-        assertEquals(expected, driveHelper.getMediaDirName("sample-file.extension"));
-        assertEquals(expected, driveHelper.getMediaDirName("sample-file.123"));
-        assertEquals(expected, driveHelper.getMediaDirName("sample-file.docx"));
-    }
-
-    @Test
     public void getFilesFromDriveTest() throws IOException {
         doReturn(mockedRequest).when(mockedDriveService).generateRequest(anyString(), anyString());
 

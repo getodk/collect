@@ -265,10 +265,6 @@ public class DriveHelper {
         return query.toString();
     }
 
-    public String getMediaDirName(@NonNull String fileName) {
-        return fileName.substring(0, fileName.lastIndexOf('.')) + "-media";
-    }
-
     public void fetchFilesForCurrentPage(Drive.Files.List request, List<com.google.api.services.drive.model.File> files)
             throws IOException {
         driveService.fetchFilesForCurrentPage(request, files);

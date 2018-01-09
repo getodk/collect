@@ -53,12 +53,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.utilities.gdrive.DriveHelper;
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.listeners.GoogleDriveFormDownloadListener;
 import org.odk.collect.android.listeners.TaskListener;
 import org.odk.collect.android.logic.DriveListItem;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.gdrive.DriveHelper;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -807,7 +808,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                     downloadFile(fileItem.getDriveId(), fileItem.getName());
                     results.put(fileItem.getName(), Collect.getInstance().getString(R.string.success));
 
-                    String mediaDirName = driveHelper.getMediaDirName(fileItem.getName());
+                    String mediaDirName = FileUtils.constructMediaPath(fileItem.getName());
 
                     String folderId;
                     try {
@@ -821,10 +822,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements View.OnCli
                         List<com.google.api.services.drive.model.File> mediaFileList;
                         mediaFileList = driveHelper.getFilesFromDrive(null, folderId);
 
-                        File mediaDir = new File(Collect.FORMS_PATH + File.separator + mediaDirName);
-                        if (!mediaDir.exists()) {
-                            mediaDir.mkdir();
-                        }
+                        FileUtils.createFolder(Collect.FORMS_PATH + File.separator + mediaDirName);
 
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
