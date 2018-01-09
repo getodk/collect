@@ -14,6 +14,7 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
 public class TileSourceFactory {
     public final OnlineTileSourceBase usgsTopo;
     public final OnlineTileSourceBase usgsSat;
+    public final OnlineTileSourceBase usgsImg;
     public final OnlineTileSourceBase stamenTerrain;
     public final OnlineTileSourceBase cartoDbPositron;
     public final OnlineTileSourceBase cartoDbDarkMatter;
@@ -68,6 +69,10 @@ public class TileSourceFactory {
 
     public OnlineTileSourceBase getUsgsSat() {
         return usgsSat;
+    }
+ 
+     public OnlineTileSourceBase getUsgsImg() {
+        return usgsImg;
     }
 
     public OnlineTileSourceBase getStamenTerrain() {
