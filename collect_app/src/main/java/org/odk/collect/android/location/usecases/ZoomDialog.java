@@ -17,7 +17,7 @@ import com.jakewharton.rxrelay2.PublishRelay;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.scopes.PerActivity;
 import org.odk.collect.android.location.GeoActivity;
-import org.odk.collect.android.location.model.LocationState;
+import org.odk.collect.android.location.model.ZoomData;
 
 import javax.inject.Inject;
 
@@ -47,9 +47,9 @@ public class ZoomDialog {
         this.context = context;
     }
 
-    public void show(LocationState locationState) {
+    public void show(ZoomData zoomData) {
 
-        View zoomDialogView = getView(locationState);
+        View zoomDialogView = getView(zoomData);
 
         alertDialog = new AlertDialog.Builder(context)
                 .setView(zoomDialogView)
@@ -61,7 +61,7 @@ public class ZoomDialog {
         alertDialog.show();
     }
 
-    private View getView(LocationState locationState) {
+    private View getView(ZoomData zoomData) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
@@ -69,10 +69,10 @@ public class ZoomDialog {
         View zoomDialogView = layoutInflater.inflate(R.layout.geopoint_zoom_dialog, null);
 
         Button zoomLocationButton = zoomDialogView.findViewById(R.id.zoom_location);
-        setupZoomToLocationButton(zoomLocationButton, locationState.getCurrentLocation());
+        setupZoomToLocationButton(zoomLocationButton, zoomData.getCurrentLocation());
 
         Button zoomPointButton = zoomDialogView.findViewById(R.id.zoom_point);
-        setupZoomToPointButton(zoomPointButton, locationState.getMarkedLocation());
+        setupZoomToPointButton(zoomPointButton, zoomData.getMarkedLocation());
 
         return zoomDialogView;
     }

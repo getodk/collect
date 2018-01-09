@@ -5,6 +5,8 @@ package org.odk.collect.android.utilities;
  */
 
 public class Rx {
+    public static <T> T id(T t) { return t; }
+
     public static <L, R> L takeLeft(L l, R r) {
         return l;
     }
@@ -21,6 +23,10 @@ public class Rx {
         return !b;
     }
 
+    public static boolean not(boolean b) {
+        return !b;
+    }
+
     public static boolean and(boolean a, boolean b) {
         return a && b;
     }
@@ -28,4 +34,18 @@ public class Rx {
     public static boolean or(boolean a, boolean b) {
         return a || b;
     }
+
+    public static boolean xor(boolean a, boolean b) {
+        return a ^ b;
+    }
+
+    public static boolean nand(boolean a, boolean b) {
+        return not(and(a, b));
+    }
+
+    public static boolean nor(boolean a, boolean b) {
+        return not(or(a, b));
+    }
+
+    public static void noop(Object... vars) {}
 }

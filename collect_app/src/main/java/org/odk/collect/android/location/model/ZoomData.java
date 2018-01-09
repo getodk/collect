@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class LocationState {
+public class ZoomData {
 
     @Nullable
     private final LatLng currentLocation;
@@ -13,8 +13,8 @@ public class LocationState {
     @Nullable
     private final LatLng markedLocation;
 
-    public LocationState(@Nullable Location currentLocation,
-                         @Nullable LatLng markedLocation) {
+    public ZoomData(@Nullable Location currentLocation,
+                    @Nullable LatLng markedLocation) {
         this.currentLocation = currentLocation != null
                 ? new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())
                 : null;

@@ -12,6 +12,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.odk.collect.android.R;
@@ -24,10 +26,13 @@ import org.odk.collect.android.location.usecases.ZoomDialog;
 import org.odk.collect.android.spatial.MapHelper;
 import org.odk.collect.android.utilities.Rx;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
 import timber.log.Timber;
 
 public class GeoActivity
@@ -69,6 +74,12 @@ public class GeoActivity
     @BindView(R.id.save_button)
     protected ImageButton saveButton;
 
+    private final BehaviorRelay<Optional<MarkerOptions>> markerOptions =
+            BehaviorRelay.create();
+
+    private final BehaviorRelay<Optional<Marker>> marker =
+            BehaviorRelay.createDefault(Optional.absent());
+
     private final BehaviorRelay<GoogleMap> currentMap =
             BehaviorRelay.create();
 
@@ -77,30 +88,35 @@ public class GeoActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
+        // Load Map:
         loadMap.load()
                 .compose(bindToLifecycle())
                 .subscribe(currentMap, onMapError::onError);
 
+        // Bind Location Info:
         getViewModel().locationInfoVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setVisibility, Timber::e);
-
-        getViewModel().locationStatusVisibility()
-                .compose(bindToLifecycle())
-                .subscribe(locationStatusText::setVisibility, Timber::e);
 
         getViewModel().locationInfoText()
                 .compose(bindToLifecycle())
                 .subscribe(locationInfoText::setText, Timber::e);
 
+        // Bind Location Status:
+        getViewModel().locationStatusVisibility()
+                .compose(bindToLifecycle())
+                .subscribe(locationStatusText::setVisibility, Timber::e);
+
         getViewModel().locationStatusText()
                 .compose(bindToLifecycle())
                 .subscribe(locationStatusText::setText, Timber::e);
 
+        // Bind Button Visibility:
         getViewModel().pauseButtonVisibility()
                 .compose(bindToLifecycle())
                 .subscribe(pauseButton::setVisibility, Timber::e);
 
+        // Bind Button Enable Status:
         getViewModel().isAddLocationEnabled()
                 .compose(bindToLifecycle())
                 .subscribe(addButton::setEnabled);
@@ -109,11 +125,7 @@ public class GeoActivity
                 .compose(bindToLifecycle())
                 .subscribe(showButton::setEnabled);
 
-        getViewModel().shouldShowLayers()
-                .withLatestFrom(currentMap, Rx::takeRight)
-                .compose(bindToLifecycle())
-                .subscribe(this::shouldShowLayers, Timber::e);
-
+        // Bind Dialog events:
         getViewModel().shouldShowZoomDialog()
                 .compose(bindToLifecycle())
                 .subscribe(zoomDialog::show, Timber::e);
@@ -122,6 +134,15 @@ public class GeoActivity
                 .compose(bindToLifecycle())
                 .subscribe(showGpsDisabledAlert::show, Timber::e);
 
+        getViewModel().shouldShowLayers()
+                .withLatestFrom(observeCurrentMap(), Rx::takeRight)
+                .compose(bindToLifecycle())
+                .subscribe(this::shouldShowLayers, Timber::e);
+
+        // Bind location Marks:
+
+
+        // Bind Map Zoom:
         zoomDialog.zoomToLocation()
                 .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
                 .compose(bindToLifecycle())
@@ -205,15 +226,25 @@ public class GeoActivity
 
     }
 
+    private Observable<GoogleMap> observeCurrentMap() {
+        return currentMap.hide();
+    }
+
     private void shouldShowLayers(@NonNull GoogleMap googleMap) {
         new MapHelper(this, googleMap)
                 .showLayersDialog(this);
     }
 
     private void updateCamera(@NonNull CameraUpdate cameraUpdate) {
-
-        currentMap.hide()
+        observeCurrentMap()
                 .compose(bindToLifecycle())
                 .subscribe(googleMap -> googleMap.animateCamera(cameraUpdate), Timber::e);
+    }
+
+    @NonNull
+    private Optional<MarkerOptions> markerOptionsForPosition(@Nullable LatLng position) {
+        return position != null
+                ? Optional.of(new MarkerOptions().position(position))
+                : Optional.absent();
     }
 }

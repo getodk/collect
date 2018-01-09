@@ -1,15 +1,17 @@
 package org.odk.collect.android.location;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.PublishRelay;
 
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
-import org.odk.collect.android.location.model.LocationState;
+import org.odk.collect.android.location.model.ZoomData;
 import org.odk.collect.android.location.usecases.CurrentLocation;
 import org.odk.collect.android.location.usecases.InfoText;
 import org.odk.collect.android.location.usecases.InitialLocation;
@@ -62,7 +64,7 @@ public class GeoViewModel extends RxMVVMViewModel {
     private final PublishRelay<Object> shouldShowLayers = PublishRelay.create();
 
     @NonNull
-    private final PublishRelay<LocationState> shouldShowZoomDialog = PublishRelay.create();
+    private final PublishRelay<ZoomData> shouldShowZoomDialog = PublishRelay.create();
 
     // Outputs:
 
@@ -94,9 +96,13 @@ public class GeoViewModel extends RxMVVMViewModel {
         initialState.set(bundle);
 
         // Show Zoom Dialog on first location:
-        hasCurrentLocation()
-                .filter(Rx::isTrue)
-                .withLatestFrom(observeLocationState(), Rx::takeRight)
+        observeFirstLocation()
+                .map(this::locationToLatLng)
+                .compose(bindToLifecycle())
+                .subscribe(markedLocation::update, Timber::e);
+
+        observeFirstLocation()
+                .withLatestFrom(observeZoomData(), Rx::takeRight)
                 .compose(bindToLifecycle())
                 .subscribe(shouldShowZoomDialog, Timber::e);
     }
@@ -140,6 +146,11 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
+    Observable<Optional<LatLng>> observeMarkedLocation() {
+        return markedLocation.observe();
+    }
+
+    @NonNull
     Observable<Boolean> isShowLocationEnabled() {
         return Observable.combineLatest(
                 hasCurrentLocation(),
@@ -157,7 +168,7 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
-    Observable<LocationState> shouldShowZoomDialog() {
+    Observable<ZoomData> shouldShowZoomDialog() {
         return shouldShowZoomDialog.hide();
     }
 
@@ -175,7 +186,7 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     void showLocation() {
-        observeLocationState()
+        observeZoomData()
                 .compose(bindToLifecycle())
                 .subscribe(shouldShowZoomDialog, Timber::e);
     }
@@ -222,12 +233,34 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
-    private Observable<LocationState> observeLocationState() {
+    private Observable<ZoomData> observeZoomData() {
         return Observable.combineLatest(currentLocation.observe(), markedLocation.observe(),
-                (currentLocation, markedLocation) -> new LocationState(
-                        currentLocation.orNull(),
-                        markedLocation.orNull()
+                (current, marked) -> new ZoomData(
+                        current.orNull(),
+                        marked.orNull()
                 )
         );
+    }
+
+    @NonNull
+    private Observable<Object> observeFirstLocationReceived() {
+        return hasCurrentLocation()
+                .filter(Rx::isTrue)
+                .withLatestFrom(hasInitialLocation(), Rx::takeRight) // Check initial location.
+                .filter(Rx::isFalse) // Only trigger if we don't have one.
+                .cast(Object.class);
+    }
+
+    @NonNull
+    private Observable<Location> observeFirstLocation() {
+        return observeFirstLocationReceived()
+                .withLatestFrom(currentLocation.observe(), Rx::takeRight)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
+
+    @NonNull
+    private LatLng locationToLatLng(@NonNull Location location) {
+        return new LatLng(location.getLatitude(), location.getLongitude());
     }
 }
