@@ -47,7 +47,7 @@ public class CaptureSelfieActivity extends Activity {
                 .LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_capture_selfie);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        FrameLayout preview = findViewById(R.id.camera_preview);
 
         try {
             camera = getCameraInstance();
@@ -116,7 +116,7 @@ public class CaptureSelfieActivity extends Activity {
 
         if (camera == null) {
             setContentView(R.layout.activity_capture_selfie);
-            FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+            FrameLayout preview = findViewById(R.id.camera_preview);
 
             try {
                 camera = getCameraInstance();

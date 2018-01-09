@@ -71,7 +71,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         setupAdapter();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(syncMsgKey)) {
-            TextView tv = (TextView) findViewById(R.id.status_text);
+            TextView tv = findViewById(R.id.status_text);
             tv.setText((savedInstanceState.getString(syncMsgKey)).trim());
         }
 
@@ -101,7 +101,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        TextView tv = (TextView) findViewById(R.id.status_text);
+        TextView tv = findViewById(R.id.status_text);
         outState.putString(syncMsgKey, tv.getText().toString().trim());
     }
 
@@ -171,7 +171,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     @Override
     public void syncComplete(String result) {
         Timber.i("Disk sync task complete");
-        TextView tv = (TextView) findViewById(R.id.status_text);
+        TextView tv = findViewById(R.id.status_text);
         tv.setText(result.trim());
     }
 

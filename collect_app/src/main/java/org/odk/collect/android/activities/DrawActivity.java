@@ -103,13 +103,13 @@ public class DrawActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        fabActions = (FloatingActionButton) findViewById(R.id.fab_actions);
-        final FloatingActionButton fabSetColor = (FloatingActionButton) findViewById(R.id.fab_set_color);
-        final CardView cardViewSetColor = (CardView) findViewById(R.id.cv_set_color);
-        final FloatingActionButton fabSaveAndClose = (FloatingActionButton) findViewById(R.id.fab_save_and_close);
-        final CardView cardViewSaveAndClose = (CardView) findViewById(R.id.cv_save_and_close);
-        final FloatingActionButton fabClear = (FloatingActionButton) findViewById(R.id.fab_clear);
-        final CardView cardViewClear = (CardView) findViewById(R.id.cv_clear);
+        fabActions = findViewById(R.id.fab_actions);
+        final FloatingActionButton fabSetColor = findViewById(R.id.fab_set_color);
+        final CardView cardViewSetColor = findViewById(R.id.cv_set_color);
+        final FloatingActionButton fabSaveAndClose = findViewById(R.id.fab_save_and_close);
+        final CardView cardViewSaveAndClose = findViewById(R.id.cv_save_and_close);
+        final FloatingActionButton fabClear = findViewById(R.id.fab_clear);
+        final CardView cardViewClear = findViewById(R.id.cv_clear);
 
         fabActions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +203,7 @@ public class DrawActivity extends AppCompatActivity {
                     getString(R.string.draw_image));
         }
 
-        drawView = (DrawView) findViewById(R.id.drawView);
+        drawView = findViewById(R.id.drawView);
         drawView.setupView(OPTION_SIGNATURE.equals(loadOption));
     }
 

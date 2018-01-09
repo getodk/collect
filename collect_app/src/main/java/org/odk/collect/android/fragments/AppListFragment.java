@@ -166,7 +166,7 @@ abstract class AppListFragment extends ListFragment {
     private void setupBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.MaterialDialogSheet);
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-        final RecyclerView recyclerView = (RecyclerView) sheetView.findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
         final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override

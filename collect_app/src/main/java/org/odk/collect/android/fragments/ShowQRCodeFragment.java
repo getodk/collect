@@ -84,18 +84,18 @@ public class ShowQRCodeFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.import_export_settings));
         ((AdminPreferencesActivity) getActivity()).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-        qrImageView = (ImageView) view.findViewById(R.id.qr_iv);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        editQRCode = (TextView) view.findViewById(R.id.edit_qrcode);
+        qrImageView = view.findViewById(R.id.qr_iv);
+        progressBar = view.findViewById(R.id.progressBar);
+        editQRCode = view.findViewById(R.id.edit_qrcode);
         editQRCode.setOnClickListener(this);
-        Button scan = (Button) view.findViewById(R.id.btnScan);
+        Button scan = view.findViewById(R.id.btnScan);
         scan.setOnClickListener(this);
-        Button select = (Button) view.findViewById(R.id.btnSelect);
+        Button select = view.findViewById(R.id.btnSelect);
         select.setOnClickListener(this);
         generateCode();
         return view;

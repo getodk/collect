@@ -52,12 +52,12 @@ public class ResetDialogPreference extends DialogPreference {
 
     @Override
     public void onBindDialogView(View view) {
-        preferences = (CheckBox) view.findViewById(R.id.preferences);
-        instances = (CheckBox) view.findViewById(R.id.instances);
-        forms = (CheckBox) view.findViewById(R.id.forms);
-        layers = (CheckBox) view.findViewById(R.id.layers);
-        cache = (CheckBox) view.findViewById(R.id.cache);
-        osmDroid = (CheckBox) view.findViewById(R.id.osmdroid);
+        preferences = view.findViewById(R.id.preferences);
+        instances = view.findViewById(R.id.instances);
+        forms = view.findViewById(R.id.forms);
+        layers = view.findViewById(R.id.layers);
+        cache = view.findViewById(R.id.cache);
+        osmDroid = view.findViewById(R.id.osmdroid);
         super.onBindDialogView(view);
     }
 
