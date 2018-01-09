@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.Selection;
@@ -72,6 +73,11 @@ import timber.log.Timber;
 public abstract class SmapChartWidget extends QuestionWidget {
 
     private static final String CHART_DATA = "chart_data";
+    public static final int[] DEFAULT_COLORS = {    // green, red, blue, yellow, purple, orange, light blue
+            rgb("#037c1e"), rgb("#e2180d"), rgb("#0744ed"), rgb("#f9f10c"), rgb("#6c33e8"),
+            rgb("#ed5d04"), rgb("#07ceed")
+    };
+
     String appearance;
     boolean stacked = false;
     boolean normalised = false;
@@ -92,6 +98,9 @@ public abstract class SmapChartWidget extends QuestionWidget {
         if(normalisedString != null && (normalisedString.equals("yes") || normalisedString.equals("true"))) {
             normalised = true;
         }
+
+        // the labels that should be drawn on the XAxis - These labels are added by the SmapChartWidget
+        xLabels = getXLabels(prompt.getAnswerText());
 
         formatter = new IAxisValueFormatter() {
 
@@ -187,6 +196,14 @@ public abstract class SmapChartWidget extends QuestionWidget {
             }
         }
         return labels;
+    }
+
+    public static int rgb(String hex) {
+        int color = (int) Long.parseLong(hex.replace("#", ""), 16);
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = (color >> 0) & 0xFF;
+        return Color.rgb(r, g, b);
     }
 
 }

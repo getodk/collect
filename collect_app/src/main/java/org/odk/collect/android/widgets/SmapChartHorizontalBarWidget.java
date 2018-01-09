@@ -23,6 +23,7 @@ import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -70,6 +71,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         // Add a Horizontal Bar Widget
         chart = new HorizontalBarChart(context);
         chart.setScaleEnabled(false);
+
         addChart(chart);
 
         // Add data
@@ -86,12 +88,11 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             }
         }
 
-        // the labels that should be drawn on the XAxis
-        xLabels = getXLabels(dString);
-
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
         xAxis.setValueFormatter(formatter);
+
+        YAxis yAxis = chart.getAxisLeft();
 
         chart.setData(data);
         chart.invalidate();
@@ -99,7 +100,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
     private BarData getStackedBarData(String sInput) {
         BarData data = null;
-        int [] colors = ColorTemplate.PASTEL_COLORS;
+        int [] colors = DEFAULT_COLORS;
         String sData = "";
         String sLabels = "";
 
@@ -120,7 +121,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             if(labelComponents.length == 1) {
                 entryLabels = labelComponents[0].split(":");
             } else   if(labelComponents.length > 1) {
-                // data set labels at position 0
+                // data set labels at position 1
                 entryLabels = labelComponents[1].split(":");
             }
 
@@ -171,7 +172,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
     private BarEntry getStackedBarEntry(float idx, String barData) {
         BarEntry entry;
-        String [] items = barData.split(" ");
+        String [] items = barData.split(":");
         float [] values = new float [items.length];
 
         float total = 0;
@@ -214,7 +215,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             String [] dataComponents = sData.split("::");
             if(dataComponents.length >= 1) {
                 for(int i = 0; i < dataComponents.length; i++) {
-                    String [] entries = dataComponents[0].split(" ");
+                    String [] entries = dataComponents[0].split(":");
                     if(entries.length > length) {
                         length = entries.length;
                     }

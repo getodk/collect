@@ -106,9 +106,9 @@ public class SmapChartLineWidget extends SmapChartWidget {
             for(int i = 0; i < dsArray.length; i++) {
                 List<Entry> entries = new ArrayList<Entry>();
 
-                String [] vArray = dsArray[i].split(" ");
+                String [] vArray = dsArray[i].split(":");
                 for(int j = 0; j < vArray.length; j++) {
-                    String [] point = vArray[j].split(":");
+                    String [] point = vArray[j].split("#");
                     try {
                         int x = j;
                         float y;
