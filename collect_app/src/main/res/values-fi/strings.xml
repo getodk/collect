@@ -28,7 +28,6 @@
   <string name="data_saved_error">Pahoittelut, lomakkeen tallennus epäonnistui!</string>
   <string name="data_saved_ok">Lomake tallennettu!</string>
   <string name="save_point_error">Virhe tallentaessa palautuspistettä: %s</string>
-  <string name="save_form_index_error">Virhe tallentaessa palautuslomakkeen indeksiä: 1%s</string>
   <string name="default_completed">Oletusarvona lomakkeen merkitseminen valmiiksi</string>
   <string name="default_completed_summary">Merkitse lomake oletusarvona valmiiksi</string>
   <string name="delete_confirm">Poista %s lomake/lomakkeet?</string>
