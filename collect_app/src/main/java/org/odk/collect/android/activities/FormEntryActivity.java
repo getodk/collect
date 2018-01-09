@@ -1015,8 +1015,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                             0, null, false, true);
                 }
 
-                Intent i = new Intent(this, FormHierarchyActivity.class);
-                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                Intent i = new Intent(this, EditFormHierarchyActivity.class);
                 startActivityForResult(i, RequestCodes.HIERARCHY_ACTIVITY);
                 return true;
             case R.id.menu_preferences:
@@ -2649,16 +2648,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     }
                 }
 
-                Intent i = new Intent(this, FormHierarchyActivity.class);
                 String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                 if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                    i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-                    startActivity(i);
+                    startActivity(new Intent(this, EditFormHierarchyActivity.class));
                     return; // so we don't show the intro screen before jumping to the hierarchy
                 } else {
                     if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                        i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-                        startActivity(i);
+                        startActivity(new Intent(this, ViewFormHierarchyActivity.class));
                     }
                     finish();
                 }
