@@ -47,7 +47,7 @@ public class BasePreferenceFragment extends PreferenceFragment {
 
             if (getActivity() instanceof PreferencesActivity) {
                 root = (LinearLayout) ((ViewGroup) view.findViewById(android.R.id.list).getRootView()).getChildAt(0);
-                toolbar = (Toolbar) root.findViewById(R.id.toolbar);
+                toolbar = root.findViewById(R.id.toolbar);
 
             } else {
                 root = (LinearLayout) view.findViewById(android.R.id.list).getParent().getParent();

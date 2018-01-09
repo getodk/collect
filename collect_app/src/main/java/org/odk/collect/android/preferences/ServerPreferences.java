@@ -62,7 +62,7 @@ public class ServerPreferences extends ServerPreferencesFragment implements Pref
     }
 
     private void addPreferencesResource(CharSequence value) {
-        if (value.equals(getString(R.string.protocol_odk_default))) {
+        if (value == null || value.equals(getString(R.string.protocol_odk_default))) {
             setDefaultAggregatePaths();
             addAggregatePreferences();
         } else if (value.equals(getString(R.string.protocol_google_sheets))) {

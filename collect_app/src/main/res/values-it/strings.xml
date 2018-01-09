@@ -409,8 +409,6 @@
   <string name="exit">Esci</string>
   <string name="instance_scan_completed">Scansione completata</string>
   <string name="instance_scan_count">%1$d moduli aggiunti.</string>
-  <string name="instance_sync">Importa i moduli salvati come completati.</string>
-  <string name="instance_sync_summary">Importa i moduli salvati dalla cartella instances</string>
   <string name="sort_by_name_asc">Nome, A-Z</string>
   <string name="sort_by_name_desc">Nome, Z-A</string>
   <string name="sort_the_list">Ordina la lista</string>
@@ -435,4 +433,5 @@
   <string name="qr_code">Codice QR</string>
   <string name="server_settings_title">Server</string>
   <string name="server">Server</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

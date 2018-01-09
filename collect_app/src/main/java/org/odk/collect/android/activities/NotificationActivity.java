@@ -23,7 +23,7 @@ public class NotificationActivity extends AppCompatActivity {
             note = getString(R.string.notification_error);
         }
 
-        TextView notificationText = (TextView) findViewById(R.id.notification);
+        TextView notificationText = findViewById(R.id.notification);
         notificationText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Collect.getQuestionFontsize());
         notificationText.setTypeface(null, Typeface.BOLD);
         notificationText.setPadding(0, 0, 0, 7);

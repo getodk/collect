@@ -398,6 +398,5 @@
   <string name="exit">Wyjdź</string>
   <string name="instance_scan_completed">Skanowanie zakończone.</string>
   <string name="instance_scan_count">Dodano %1$d formularzy.</string>
-  <string name="instance_sync">Importuj zapisane formularze jak zakończone</string>
-  <string name="instance_sync_summary">Importuje zapisane formularze z folderu formularzy</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

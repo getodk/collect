@@ -116,7 +116,7 @@ public class DataManagerList extends InstanceListFragment
 
     @Override
     public void syncComplete(String result) {
-        TextView textView = (TextView) rootView.findViewById(R.id.status_text);
+        TextView textView = rootView.findViewById(R.id.status_text);
         textView.setText(result);
     }
 

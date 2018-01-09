@@ -69,7 +69,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
 
         View view = inflate(context, R.layout.spinner_layout, null);
 
-        spinner = (Spinner) view.findViewById(R.id.spinner);
+        spinner = view.findViewById(R.id.spinner);
         choices = new String[items.size() + 1];
         for (int i = 0; i < items.size(); i++) {
             choices[i] = prompt.getSelectChoiceText(items.get(i));
@@ -208,7 +208,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
                 convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
             }
 
-            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
+            TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(20, 10, 10, 10);
 
@@ -243,7 +243,7 @@ public class SpinnerWidget extends QuestionWidget implements MultiChoiceWidget {
                 convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
             }
 
-            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
+            TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
             tv.setPadding(10, 10, 10, 10);
             tv.setText(items[position]);

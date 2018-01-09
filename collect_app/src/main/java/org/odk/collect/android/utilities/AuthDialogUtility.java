@@ -42,8 +42,8 @@ public class AuthDialogUtility {
         final View dialogView = LayoutInflater.from(context)
                 .inflate(R.layout.server_auth_dialog, null);
 
-        final EditText username = (EditText) dialogView.findViewById(R.id.username_edit);
-        final EditText password = (EditText) dialogView.findViewById(R.id.password_edit);
+        final EditText username = dialogView.findViewById(R.id.username_edit);
+        final EditText password = dialogView.findViewById(R.id.password_edit);
 
         username.setText(getUserName());
         password.setText(getPassword());

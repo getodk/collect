@@ -121,13 +121,13 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
 
     private void setUpLayoutElements() {
         if (!isPickerAppearance) {
-            TextView minValue = (TextView) view.findViewById(R.id.min_value);
+            TextView minValue = view.findViewById(R.id.min_value);
             minValue.setText(String.valueOf(rangeStart));
 
-            TextView maxValue = (TextView) view.findViewById(R.id.max_value);
+            TextView maxValue = view.findViewById(R.id.max_value);
             maxValue.setText(String.valueOf(rangeEnd));
 
-            currentValue = (TextView) view.findViewById(R.id.current_value);
+            currentValue = view.findViewById(R.id.current_value);
         }
 
         if (isWidgetValid()) {
@@ -252,7 +252,7 @@ public abstract class RangeWidget extends QuestionWidget implements ButtonWidget
 
     private void loadAppearance(@LayoutRes int layoutId, @IdRes int seekBarId) {
         view = (LinearLayout) getLayoutInflater().inflate(layoutId, this, false);
-        seekBar = (SeekBar) view.findViewById(seekBarId);
+        seekBar = view.findViewById(seekBarId);
 
         @IdRes int hiddenSeekBarId;
         if (seekBarId == R.id.seek_bar) {

@@ -56,8 +56,8 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.PlayServicesUtil;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.SharedPreferencesUtils;
+import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -110,7 +110,7 @@ public class MainMenuActivity extends AppCompatActivity {
         initToolbar();
 
         // enter data button. expects a result.
-        enterDataButton = (Button) findViewById(R.id.enter_data);
+        enterDataButton = findViewById(R.id.enter_data);
         enterDataButton.setText(getString(R.string.enter_data_button));
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -124,7 +124,7 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
         // review data button. expects a result.
-        reviewDataButton = (Button) findViewById(R.id.review_data);
+        reviewDataButton = findViewById(R.id.review_data);
         reviewDataButton.setText(getString(R.string.review_data_button));
         reviewDataButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -139,7 +139,7 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
         // send data button. expects a result.
-        sendDataButton = (Button) findViewById(R.id.send_data);
+        sendDataButton = findViewById(R.id.send_data);
         sendDataButton.setText(getString(R.string.send_data_button));
         sendDataButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -153,7 +153,7 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
         //View sent forms
-        viewSentFormsButton = (Button) findViewById(R.id.view_sent_forms);
+        viewSentFormsButton = findViewById(R.id.view_sent_forms);
         viewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +167,7 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
         // manage forms button. no result expected.
-        getFormsButton = (Button) findViewById(R.id.get_forms);
+        getFormsButton = findViewById(R.id.get_forms);
         getFormsButton.setText(getString(R.string.get_forms));
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -197,7 +197,7 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
         // manage forms button. no result expected.
-        manageFilesButton = (Button) findViewById(R.id.manage_forms);
+        manageFilesButton = findViewById(R.id.manage_forms);
         manageFilesButton.setText(getString(R.string.manage_files));
         manageFilesButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -222,7 +222,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         {
             // dynamically construct the "ODK Collect vA.B" string
-            TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
+            TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
             mainMenuMessageLabel.setText(Collect.getInstance()
                     .getVersionedAppName());
         }
@@ -308,7 +308,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.main_menu));
         setSupportActionBar(toolbar);
     }
@@ -502,8 +502,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 LayoutInflater inflater = this.getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.dialogbox_layout, null);
                 passwordDialog.setView(dialogView, 20, 10, 20, 10);
-                final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBox);
-                final EditText input = (EditText) dialogView.findViewById(R.id.editText);
+                final CheckBox checkBox = dialogView.findViewById(R.id.checkBox);
+                final EditText input = dialogView.findViewById(R.id.editText);
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

@@ -363,7 +363,7 @@
   <string name="go_back">वापस जायें</string>
   <string name="download_selected">डाउनलोड चयनित</string>
   <string name="record_geopoint">रिकॉर्ड जिओपॉइंट</string>
-  <string name="gps_result">अक्षांश:%% %1$s\n nदेशांतर:%2$s \n ऊंचाई:%% %3$s \nशुद्धता:%4$sm</string>
+  <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <string name="parser_exception">XPathParser अपवाद:\"%s\"</string>
   <string name="selected_answer">चयनित :%s</string>
   <string name="version_number">संस्करण: %s</string>
@@ -417,8 +417,6 @@
   <string name="exit">बाहर आयें</string>
   <string name="instance_scan_completed">स्कैनिंग समाप्त.</string>
   <string name="instance_scan_count">%1$dफॉर्म जोड दिया.</string>
-  <string name="instance_sync">संरक्षित फॉर्म को फाइनल रूप में आयात करें</string>
-  <string name="instance_sync_summary">संरक्षित फॉर्म इंस्टैंस फोल्डर से आयत करें  </string>
   <string name="sort_by_name_asc">नाम, A-Z</string>
   <string name="sort_by_name_desc">नाम, Z-A</string>
   <string name="sort_by_date_asc">दिनांक, नयी पहले </string>
@@ -492,4 +490,5 @@
   <string name="form_entry">फॉर्म एंट्री से छुपाने के लिए चेक हटायें</string>
   <string name="use_device_language">डिवाइस की भाषा प्रयोग करें </string>
   <string name="not_supported_offline_layer_format">चयनित ऑफलाइन लेयर फाइल PBF फॉर्मेट उपयोग करती है जो कि समर्थित नहीं है! </string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
 </resources>

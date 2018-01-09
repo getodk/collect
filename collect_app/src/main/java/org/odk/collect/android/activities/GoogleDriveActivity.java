@@ -133,7 +133,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
     private TextView emptyView;
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.google_drive));
         setSupportActionBar(toolbar);
     }
@@ -146,9 +146,9 @@ public class GoogleDriveActivity extends AppCompatActivity implements
 
         setProgressBarVisibility(true);
         setContentView(R.layout.drive_layout);
-        listView = (ListView) findViewById(android.R.id.list);
+        listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        emptyView = (TextView) findViewById(android.R.id.empty);
+        emptyView = findViewById(android.R.id.empty);
 
         initToolbar();
 
@@ -208,7 +208,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
             createAlertDialog(alertMsg);
         }
 
-        rootButton = (Button) findViewById(R.id.root_button);
+        rootButton = findViewById(R.id.root_button);
         if (myDrive) {
             rootButton.setText(getString(R.string.go_shared));
         } else {
@@ -216,14 +216,14 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         }
         rootButton.setOnClickListener(this);
 
-        backButton = (Button) findViewById(R.id.back_button);
+        backButton = findViewById(R.id.back_button);
         backButton.setEnabled(parentId != null);
         backButton.setOnClickListener(this);
 
-        downloadButton = (Button) findViewById(R.id.download_button);
+        downloadButton = findViewById(R.id.download_button);
         downloadButton.setOnClickListener(this);
 
-        searchText = (EditText) findViewById(R.id.search_text);
+        searchText = findViewById(R.id.search_text);
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -234,7 +234,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
                 return false;
             }
         });
-        searchButton = (ImageButton) findViewById(R.id.search_button);
+        searchButton = findViewById(R.id.search_button);
         searchButton.setOnClickListener(this);
 
         // Initialize credentials and service object.
@@ -429,7 +429,7 @@ public class GoogleDriveActivity extends AppCompatActivity implements
         } else {
             adapter.setEnabled(true);
             // file clicked, download the file, mark checkbox.
-            CheckBox cb = (CheckBox) view.findViewById(R.id.checkbox);
+            CheckBox cb = view.findViewById(R.id.checkbox);
             cb.setChecked(!cb.isChecked());
 
             if (toDownload.contains(o) && !cb.isChecked()) {

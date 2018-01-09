@@ -34,7 +34,7 @@ public class OpenSourceLicensesActivity extends AppCompatActivity {
 
         initToolbar();
 
-        WebView webViewOpenSourceLicenses = (WebView) findViewById(R.id.web_view_open_source_licenses);
+        WebView webViewOpenSourceLicenses = findViewById(R.id.web_view_open_source_licenses);
         webViewOpenSourceLicenses.getSettings().setLoadWithOverviewMode(true);
         webViewOpenSourceLicenses.getSettings().setUseWideViewPort(true);
         webViewOpenSourceLicenses.getSettings().setTextSize(WebSettings.TextSize.LARGEST);
@@ -42,7 +42,7 @@ public class OpenSourceLicensesActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.all_open_source_licenses));
         setSupportActionBar(toolbar);
     }

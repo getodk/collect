@@ -10,8 +10,8 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en"
-           tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
+           tools:locale="en">
     <string name="show_password">Show password</string>
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="add_another">Add Group</string>
@@ -40,7 +40,6 @@
     <string name="data_saved_error">Sorry, form save failed!</string>
     <string name="data_saved_ok">Form successfully saved!</string>
     <string name="save_point_error">Error saving recovery point: %s</string>
-    <string name="save_form_index_error">Error saving recovery form index: %s</string>
     <string name="default_completed">Default to finalized</string>
     <string name="default_completed_summary">Mark form as finalized by default</string>
     <string name="delete_confirm">Delete %s form(s)?</string>

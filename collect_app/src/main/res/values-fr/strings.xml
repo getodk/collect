@@ -418,7 +418,6 @@
   <string name="instance_scan_completed">Recherche terminée.</string>
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="instance_sync">Importer les formulaires enregistrés comme terminés</string>
-  <string name="instance_sync_summary">Importe les formulaires enregistrés à partir du dossier instances</string>
   <string name="sort_by_name_asc">Nom, A-Z</string>
   <string name="sort_by_name_desc">Nom, Z-A</string>
   <string name="sort_by_date_asc">Date, la plus récente en premier</string>
@@ -466,6 +465,7 @@
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
   <string name="share_qrcode">Partager le QR code</string>
   <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
+  <string name="error_front_camera_unavailable">Caméra frontale non disponible sur cet appareil</string>
   <string name="request_permission">Cette application nécessite les droits d\'utilisation de votre appareil photo.</string>
   <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
   <string name="invalid_range_widget">Les paramètres de ce widget sont invalides!</string>
@@ -511,5 +511,35 @@
   <string name="image_size_small">Petite (1024px)</string>
   <string name="image_size_very_small">Très petite (640px)</string>
   <string name="image_size_original">Taille originale de la caméra (défaut)</string>
+  <string name="image_size_dialog_title">Nombre de pixels maximum pour le coté de l\'image le plus long</string>
   <string name="bearing_lack_of_sensors">L\'orientement n\'est pas disponible: l\'appareil n\'a pas d\'accéléromètre ou de capteur de champ magnétique.</string>
+  <string name="ethiopian_month_1">Mäskäräm</string>
+  <string name="ethiopian_month_2">Teqemt</string>
+  <string name="ethiopian_month_3">Hedar</string>
+  <string name="ethiopian_month_4">Tahesas</string>
+  <string name="ethiopian_month_5">Ter</string>
+  <string name="ethiopian_month_6">Yäkatit</string>
+  <string name="ethiopian_month_7">Mägabit</string>
+  <string name="ethiopian_month_8">Miyazya</string>
+  <string name="ethiopian_month_9">Guenbot</string>
+  <string name="ethiopian_month_10">Säné</string>
+  <string name="ethiopian_month_11">Hamlé</string>
+  <string name="ethiopian_month_12">Nähasé</string>
+  <string name="ethiopian_month_13">Pagumén</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="multiple_media_folders_detected_notification">Plusieurs répertoires média détectés, retirez-en un puis réessayer svp</string>
 </resources>

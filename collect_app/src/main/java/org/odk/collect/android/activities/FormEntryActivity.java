@@ -85,7 +85,7 @@ import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.injection.DependencyProvider;
+import org.odk.collect.android.utilities.DependencyProvider;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
@@ -273,11 +273,11 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         inAnimation = null;
         outAnimation = null;
         gestureDetector = new GestureDetector(this, this);
-        questionHolder = (LinearLayout) findViewById(R.id.questionholder);
+        questionHolder = findViewById(R.id.questionholder);
 
         initToolbar();
 
-        nextButton = (ImageButton) findViewById(R.id.form_forward_button);
+        nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,7 +286,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             }
         });
 
-        backButton = (ImageButton) findViewById(R.id.form_back_button);
+        backButton = findViewById(R.id.form_back_button);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -564,7 +564,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setTitle(getString(R.string.loading_form));
         setSupportActionBar(toolbar);
     }
@@ -579,7 +579,10 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
-                new SaveFormIndexTask(this, Collect.getInstance().getFormController().getFormIndex()).execute();
+                FormController formController = Collect.getInstance().getFormController();
+                if (formController != null) {
+                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                }
             }
         } catch (Exception e) {
             Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
@@ -1179,8 +1182,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                                 formController.getFormTitle()));
 
                 // checkbox for if finished or ready to send
-                final CheckBox instanceComplete = ((CheckBox) endView
-                        .findViewById(R.id.mark_finished));
+                final CheckBox instanceComplete = endView
+                        .findViewById(R.id.mark_finished);
                 instanceComplete.setChecked(isInstanceComplete(true));
 
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_MARK_AS_FINALIZED)) {
@@ -1188,7 +1191,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 }
 
                 // edittext to change the displayed name of the instance
-                final EditText saveAs = (EditText) endView.findViewById(R.id.save_name);
+                final EditText saveAs = endView.findViewById(R.id.save_name);
 
                 // disallow carriage returns in the name
                 InputFilter returnFilter = new InputFilter() {
@@ -1236,7 +1239,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                         saveName = formController.getFormTitle();
                     }
                     // present the prompt to allow user to name the form
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.VISIBLE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(true);
@@ -1260,7 +1263,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                     // revisions
                     // display only the name, not the prompt, and disable edits
                     saveName = formController.getSubmissionMetadata().instanceName;
-                    TextView sa = (TextView) endView.findViewById(R.id.save_form_as);
+                    TextView sa = endView.findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                     saveAs.setText(saveName);
                     saveAs.setEnabled(false);
@@ -1270,7 +1273,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                 // override the visibility settings based upon admin preferences
                 if (!(boolean) AdminSharedPreferences.getInstance().get(AdminKeys.KEY_SAVE_AS)) {
                     saveAs.setVisibility(View.GONE);
-                    TextView sa = (TextView) endView
+                    TextView sa = endView
                             .findViewById(R.id.save_form_as);
                     sa.setVisibility(View.GONE);
                 }
@@ -1387,7 +1390,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         try {
             FormIndex originalFormIndex = formController.getFormIndex();
             backButton.setEnabled(!formController.isCurrentQuestionFirstInForm() && allowMovingBackwards);
-            if (formController.stepToNextScreenEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
+            if (formController.stepToPreviousEvent() == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
                 backButton.setEnabled(allowMovingBackwards);
             }
             formController.jumpToIndex(originalFormIndex);
@@ -1731,7 +1734,7 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         View view = inflater.inflate(R.layout.toast_view, null);
 
         // set the text in the view
-        TextView tv = (TextView) view.findViewById(R.id.message);
+        TextView tv = view.findViewById(R.id.message);
         tv.setText(message);
 
         Toast t = new Toast(this);
@@ -2061,18 +2064,13 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         alertDialog.show();
     }
 
-    /**
-     * this method cleans up unneeded files when the user selects 'discard and
-     * exit'
-     */
+    // Cleanup when user exits a form without saving
     private void removeTempInstance() {
         FormController formController = Collect.getInstance().getFormController();
 
-        // attempt to remove any scratch file
-        File tempInstanceFile = SaveToDiskTask.getSavepointFile(formController.getInstancePath().getName());
-        File tempIndexFile = SaveToDiskTask.getFormIndexFile(formController.getInstancePath().getName());
-        FileUtils.deleteAndReport(tempInstanceFile);
-        FileUtils.deleteAndReport(tempIndexFile);
+        if (formController != null && formController.getInstancePath() != null) {
+            SaveToDiskTask.removeSavepointFiles(formController.getInstancePath().getName());
+        }
 
         boolean erase;
 

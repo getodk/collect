@@ -84,7 +84,9 @@ public class FormsDao {
                     + FormsProviderAPI.FormsColumns.JR_VERSION + "=?";
         }
 
-        Cursor cursor = getFormsCursor(selection, selectionArgs);
+        String order = FormsProviderAPI.FormsColumns.DATE + " DESC"; //as long as we allow to store multiple forms with the same id and version number, choose the newest one
+
+        Cursor cursor = getFormsCursor(null, selection, selectionArgs, order);
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {

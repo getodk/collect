@@ -203,7 +203,7 @@ public class FormManagerList extends FormListFragment implements DiskSyncListene
     @Override
     public void syncComplete(String result) {
         Timber.i("Disk scan complete");
-        TextView tv = (TextView) rootView.findViewById(R.id.status_text);
+        TextView tv = rootView.findViewById(R.id.status_text);
         tv.setText(result);
     }
 

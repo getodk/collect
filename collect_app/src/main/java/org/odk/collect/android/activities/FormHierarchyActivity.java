@@ -41,6 +41,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.views.ODKView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +73,10 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
 
-        listView = (ListView) findViewById(android.R.id.list);
+        listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
-        TextView emptyView = (TextView) findViewById(android.R.id.empty);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView emptyView = findViewById(android.R.id.empty);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FormController formController = Collect.getInstance().getFormController();
@@ -90,9 +91,9 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
 
         setTitle(formController.getFormTitle());
 
-        path = (TextView) findViewById(R.id.pathtext);
+        path = findViewById(R.id.pathtext);
 
-        jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
+        jumpPreviousButton = findViewById(R.id.jumpPreviousButton);
         jumpPreviousButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +103,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             }
         });
 
-        jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
+        jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
         jumpBeginningButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +116,7 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
             }
         });
 
-        jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
+        jumpEndButton = findViewById(R.id.jumpEndButton);
         jumpEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,28 +175,19 @@ public abstract class FormHierarchyActivity extends AppCompatActivity implements
         refreshView();
     }
 
-
     private String getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
         // move to enclosing group...
         index = formController.stepIndexOut(index);
 
-        String path = "";
+        List<FormEntryCaption> groups = new ArrayList<>();
         while (index != null) {
-
-            path =
-                    formController.getCaptionPrompt(index).getLongText()
-                            + " ("
-                            + (formController.getCaptionPrompt(index)
-                            .getMultiplicity() + 1) + ") > " + path;
-
+            groups.add(0, formController.getCaptionPrompt(index));
             index = formController.stepIndexOut(index);
         }
-        // return path?
-        return path.substring(0, path.length() - 2);
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]));
     }
-
 
     public void refreshView() {
         try {
