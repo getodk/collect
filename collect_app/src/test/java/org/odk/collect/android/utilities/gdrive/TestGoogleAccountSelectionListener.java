@@ -1,8 +1,6 @@
-package org.odk.collect.android.google;
+package org.odk.collect.android.utilities.gdrive;
 
 import android.support.annotation.Nullable;
-
-import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 
 /**
  * @author Shobhit Agarwal

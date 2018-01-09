@@ -1,4 +1,4 @@
-package org.odk.collect.android.google;
+package org.odk.collect.android.utilities.gdrive;
 
 import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.odk.collect.android.utilities.gdrive.SheetsHelper;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 

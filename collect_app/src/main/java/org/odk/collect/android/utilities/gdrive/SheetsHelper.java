@@ -51,7 +51,7 @@ public class SheetsHelper {
      * Constructs a new SheetsHelper with the provided Sheets Service.
      * This Constructor should only be used for testing.
      */
-    public SheetsHelper(@NonNull SheetsService sheetsService) {
+    SheetsHelper(@NonNull SheetsService sheetsService) {
         this.sheetsService = sheetsService;
     }
 

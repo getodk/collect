@@ -58,7 +58,7 @@ public class DriveHelper {
      * Constructs a new DriveHelper with the provided Drive Service.
      * This Constructor should only be used for testing.
      */
-    public DriveHelper(DriveService driveService) {
+    DriveHelper(DriveService driveService) {
         this.driveService = driveService;
     }
 
