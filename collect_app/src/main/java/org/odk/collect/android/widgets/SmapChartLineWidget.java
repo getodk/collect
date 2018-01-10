@@ -61,18 +61,26 @@ public class SmapChartLineWidget extends SmapChartWidget {
 
         String s = getFormEntryPrompt().getAnswerText();
         datasets = getLineEntries(s);
-        xLabels = getXLabels(s);
 
         // programmatically create a LineChart
         chart = new LineChart(context);
         addChart(chart);
 
+        String label = "";
         if(datasets.size() > 0) {
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            int idx = 0;
             for(List<Entry> ds : datasets) {
-                LineDataSet dataSet = new LineDataSet(ds, "Label");
+                if(dsLabels.size() > idx) {
+                    label = dsLabels.get(idx);
+                }
+                LineDataSet dataSet = new LineDataSet(ds, label);
                 dataSets.add(dataSet);
+                dataSet.setColors(DEFAULT_COLORS[idx]);
+                dataSet.setLineWidth(4f);
+                idx++;
             }
+
             LineData lineData = new LineData(dataSets);
 
             XAxis xAxis = chart.getXAxis();

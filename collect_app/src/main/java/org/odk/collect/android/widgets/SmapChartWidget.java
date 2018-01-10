@@ -82,7 +82,8 @@ public abstract class SmapChartWidget extends QuestionWidget {
     boolean stacked = false;
     boolean normalised = false;
 
-    List<String> xLabels = null;
+    protected List<String> xLabels = null;
+    protected List<String> dsLabels = null;
     IAxisValueFormatter formatter = null;
 
     public SmapChartWidget(Context context, FormEntryPrompt prompt, String appearance) {
@@ -100,15 +101,19 @@ public abstract class SmapChartWidget extends QuestionWidget {
         }
 
         // the labels that should be drawn on the XAxis - These labels are added by the SmapChartWidget
-        xLabels = getXLabels(prompt.getAnswerText());
+        getLabels(prompt.getAnswerText());
 
         formatter = new IAxisValueFormatter() {
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
+                List<String> labels = xLabels;
+                if(isStacked()) {
+                    labels = dsLabels;
+                }
                 int idx = (int) value;
-                if(idx < xLabels.size() && xLabels.size() > 0) {
-                    return xLabels.get(idx);
+                if(labels != null && idx < labels.size() && labels.size() > 0) {
+                    return labels.get(idx);
                 } else {
                     return "";
                 }
@@ -175,27 +180,42 @@ public abstract class SmapChartWidget extends QuestionWidget {
 
     }
 
-    protected List<String> getXLabels(String sInput) {
+    private void getLabels(String sInput) {
 
-        List<String> labels = new ArrayList<>();
+        xLabels = new ArrayList<>();
+        dsLabels = new ArrayList<>();
 
-        String sLabels = null;
+        String labelsString = null;
+        String xLabelString = null;
+        String dsLabelString = null;
         if(sInput != null && sInput.trim().length() > 0) {
 
             String[] components = sInput.split("==");
             if (components.length == 1) {
-                // no labels
+                // No Labels
             } else if (components.length >= 2) {
-                sLabels = components[0];
+                labelsString = components[0];
+                components = labelsString.split("::");
+                if(components.length == 1) {
+                    xLabelString = components[0];
+                } else if (components.length >= 2) {
+                    xLabelString = components[0];
+                    dsLabelString = components[1];
+                }
             }
-            if(sLabels != null) {
-                String [] vArray = sLabels.split(":");
+            if(xLabelString != null) {
+                String [] vArray = xLabelString.split(":");
                 for(int i = 0; i < vArray.length; i++) {
-                    labels.add(vArray[i]);
+                    xLabels.add(vArray[i]);
+                }
+            }
+            if(dsLabelString != null) {
+                String [] vArray = dsLabelString.split(":");
+                for(int i = 0; i < vArray.length; i++) {
+                    dsLabels.add(vArray[i]);
                 }
             }
         }
-        return labels;
     }
 
     public static int rgb(String hex) {

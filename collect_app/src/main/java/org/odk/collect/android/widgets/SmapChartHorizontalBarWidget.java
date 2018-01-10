@@ -92,8 +92,6 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
         xAxis.setValueFormatter(formatter);
 
-        YAxis yAxis = chart.getAxisLeft();
-
         chart.setData(data);
         chart.invalidate();
     }
@@ -102,9 +100,6 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
         BarData data = null;
         int [] colors = DEFAULT_COLORS;
         String sData = "";
-        String sLabels = "";
-
-        String [] entryLabels = {""};
 
         if(sInput != null && sInput.trim().length() > 0) {
 
@@ -112,17 +107,7 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
             if(components.length == 1) {
                 sData = components[0];
             } else if(components.length >= 2) {
-                sLabels = components[0];
                 sData = components[1];
-            }
-
-            // Get the labels
-            String [] labelComponents = sLabels.split("::");
-            if(labelComponents.length == 1) {
-                entryLabels = labelComponents[0].split(":");
-            } else   if(labelComponents.length > 1) {
-                // data set labels at position 1
-                entryLabels = labelComponents[1].split(":");
             }
 
             // Get the data sets
@@ -140,7 +125,13 @@ public class SmapChartHorizontalBarWidget extends SmapChartWidget {
 
             BarDataSet bds = new BarDataSet(entries, "");
             bds.setColors(finalColors);
-            bds.setStackLabels(entryLabels);
+
+            if(xLabels.size() > 0) {
+                String[] xLabelArray = new String[xLabels.size()];
+                xLabelArray = xLabels.toArray(xLabelArray);
+                bds.setStackLabels(xLabelArray);
+            }
+
             data = new BarData(bds);
         }
 
