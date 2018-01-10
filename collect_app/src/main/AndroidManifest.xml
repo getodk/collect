@@ -198,7 +198,10 @@ the specific language governing permissions and limitations under the License.
             android:label="@string/app_name"
             android:theme="@style/AppTheme.SettingsTheme" />
         <activity
-            android:name=".activities.FormHierarchyActivity"
+            android:name=".activities.ViewFormHierarchyActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activities.EditFormHierarchyActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GeoPointActivity"

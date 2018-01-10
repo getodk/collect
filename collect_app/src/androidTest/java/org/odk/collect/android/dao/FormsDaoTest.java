@@ -17,6 +17,7 @@
 package org.odk.collect.android.dao;
 
 import android.database.Cursor;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
@@ -306,7 +307,7 @@ public class FormsDaoTest {
                 ResetUtility.ResetAction.RESET_CACHE, ResetUtility.ResetAction.RESET_OSM_DROID
         );
 
-        List<Integer> failedResetActions = new ResetUtility().reset(resetActions);
+        List<Integer> failedResetActions = new ResetUtility().reset(InstrumentationRegistry.getTargetContext(), resetActions);
         assertEquals(0, failedResetActions.size());
     }
 }
