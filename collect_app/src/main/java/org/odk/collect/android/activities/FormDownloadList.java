@@ -235,7 +235,6 @@ public class FormDownloadList extends FormListActivity implements FormListDownlo
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
-        listView.setAdapter(new FormDownloadListAdapter(this, filteredFormList, formNamesAndURLs));
 
         sortingOptions = new String[]{
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc)
