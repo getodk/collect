@@ -14,6 +14,7 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
 public class TileSourceFactory {
     public final OnlineTileSourceBase usgsTopo;
     public final OnlineTileSourceBase usgsSat;
+    public final OnlineTileSourceBase usgsImg;
     public final OnlineTileSourceBase stamenTerrain;
     public final OnlineTileSourceBase cartoDbPositron;
     public final OnlineTileSourceBase cartoDbDarkMatter;
@@ -33,6 +34,16 @@ public class TileSourceFactory {
                 context.getString(R.string.openmap_usgs_sat),
                 0, 18, 256, "",
                 new String[]{"https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/"}) {
+            @Override
+            public String getTileURLString(MapTile tile) {
+                return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
+            }
+        };
+     
+        usgsImg = new OnlineTileSourceBase(
+                context.getString(R.string.openmap_usgs_img),
+                0, 18, 256, "",
+                new String[]{"https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/"}) {
             @Override
             public String getTileURLString(MapTile tile) {
                 return getBaseUrl() + tile.getZoomLevel() + "/" + tile.getY() + "/" + tile.getX();
@@ -58,6 +69,10 @@ public class TileSourceFactory {
 
     public OnlineTileSourceBase getUsgsSat() {
         return usgsSat;
+    }
+ 
+     public OnlineTileSourceBase getUsgsImg() {
+        return usgsImg;
     }
 
     public OnlineTileSourceBase getStamenTerrain() {
