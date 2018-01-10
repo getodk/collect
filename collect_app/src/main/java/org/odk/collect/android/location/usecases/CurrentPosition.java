@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import org.odk.collect.android.injection.config.scopes.PerApplication;
+import org.odk.collect.android.utilities.Rx;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,7 @@ public class CurrentPosition {
     @Inject
     CurrentPosition(@NonNull WatchPosition watchPosition, IsPositionValid isPositionValid) {
         observable = watchPosition.observeLocation()
+                .doOnNext(Rx.logi("Position received."))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(isPositionValid::isValid)

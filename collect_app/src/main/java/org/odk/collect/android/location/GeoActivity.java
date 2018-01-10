@@ -155,6 +155,7 @@ public class GeoActivity
         zoomDialog.zoomToLocation()
                 .map(latLng -> CameraUpdateFactory.newLatLngZoom(latLng, 16))
                 .compose(bindToLifecycle())
+                .doOnNext(Rx.logi("Zooming to location."))
                 .subscribe(this::updateCamera, Timber::e);
 
         observeMarker.filter(Optional::isPresent)

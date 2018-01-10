@@ -9,7 +9,6 @@ import android.view.View;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.PublishRelay;
 
 import org.odk.collect.android.architecture.rx.RxMVVMViewModel;
@@ -64,10 +63,10 @@ public class GeoViewModel extends RxMVVMViewModel {
     private final StatusText statusText;
 
     @NonNull
-    private final PublishRelay<Object> shouldShowLayers = PublishRelay.create();
+    private final PublishRelay<Object> onShowLocation = PublishRelay.create();
 
     @NonNull
-    private final PublishRelay<ZoomData> shouldShowZoomDialog = PublishRelay.create();
+    private final PublishRelay<Object> onShowLayers = PublishRelay.create();
 
     @NonNull
     private final PublishRelay<Object> onClearLocation = PublishRelay.create();
@@ -103,12 +102,6 @@ public class GeoViewModel extends RxMVVMViewModel {
     protected void onCreate(@Nullable Bundle bundle) {
         super.onCreate(bundle);
         initialState.set(bundle);
-
-        // Show Zoom Dialog on first location:
-        observeFirstLocation()
-                .withLatestFrom(observeZoomData(), Rx::takeRight)
-                .compose(bindToLifecycle())
-                .subscribe(shouldShowZoomDialog, Timber::e);
     }
 
     @NonNull
@@ -168,12 +161,15 @@ public class GeoViewModel extends RxMVVMViewModel {
 
     @NonNull
     Observable<ZoomData> shouldShowZoomDialog() {
-        return shouldShowZoomDialog.hide();
+        return Observable.combineLatest(onShowLocation.hide(), observeFirstLocation(), Rx::consume)
+                .withLatestFrom(currentPosition.observe(), Rx::takeRight)
+                .withLatestFrom(markedLocation.observe(), (current, marked) ->
+                        new ZoomData(current.orNull(), marked.orNull())).hide();
     }
 
     @NonNull
     Observable<Object> shouldShowLayers() {
-        return shouldShowLayers.hide();
+        return onShowLayers.hide();
     }
 
     @NonNull
@@ -221,17 +217,15 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     Completable showLocation() {
-        return observeZoomData()
-                .compose(bindToLifecycle())
-                .flatMapCompletable(zoomData -> Completable.defer(() -> {
-                    shouldShowZoomDialog.accept(zoomData);
-                    return Completable.complete();
-                }));
+        return currentPosition.observe()
+                .doOnNext(Rx.logi("Calling should show zoom dialog."))
+                .doOnNext(onShowLocation)
+                .flatMapCompletable(__ -> Completable.complete());
     }
 
     Completable showLayers() {
         return Completable.defer(() -> {
-            shouldShowLayers.accept(this);
+            onShowLayers.accept(this);
             return Completable.complete();
         });
     }
@@ -258,6 +252,7 @@ public class GeoViewModel extends RxMVVMViewModel {
     void startWatchingLocation() {
         watchPosition.startWatching();
     }
+
     void stopWatchingLocation() {
         watchPosition.stopWatching();
     }
@@ -265,7 +260,9 @@ public class GeoViewModel extends RxMVVMViewModel {
     @NonNull
     private Observable<Boolean> hasCurrentLocation() {
         return currentPosition.observe()
+                .doOnNext(Rx.logi("Received location."))
                 .map(Optional::isPresent)
+                .doOnNext(Rx.logi("Is present."))
                 .distinctUntilChanged();
     }
 
@@ -284,21 +281,13 @@ public class GeoViewModel extends RxMVVMViewModel {
     }
 
     @NonNull
-    private Observable<ZoomData> observeZoomData() {
-        return Observable.combineLatest(currentPosition.observe(), markedLocation.observe(),
-                (current, marked) -> new ZoomData(
-                        current.orNull(),
-                        marked.orNull()
-                )
-        );
-    }
-
-    @NonNull
     private Observable<Object> observeFirstLocationReceived() {
         return hasCurrentLocation()
                 .filter(Rx::isTrue)
+                .doOnNext(Rx.logi("First location received."))
                 .withLatestFrom(hasInitialLocation(), Rx::takeRight) // Check initial location.
                 .filter(Rx::isFalse) // Only trigger if we don't have one.
+                .doOnNext(Rx.logi("Initial location is false."))
                 .cast(Object.class);
     }
 

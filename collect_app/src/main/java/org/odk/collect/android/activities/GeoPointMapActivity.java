@@ -472,6 +472,7 @@ public class GeoPointMapActivity extends FragmentActivity implements OnMarkerDra
                     });
             zoomDialog = builder.create();
         }
+
         //If feature enable zoom to button else disable
         if (zoomLocationButton != null) {
             if (location != null) {
