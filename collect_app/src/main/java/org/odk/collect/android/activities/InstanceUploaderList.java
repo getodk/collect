@@ -111,7 +111,6 @@ public class InstanceUploaderList extends InstanceListActivity
                     if (checkedItemCount > 0) {
                         // items selected
                         uploadSelectedFiles();
-                        InstanceUploaderList.this.listView.clearChoices();
                     } else {
                         // no items selected
                         ToastUtils.showLongToast(R.string.noselect_error);
