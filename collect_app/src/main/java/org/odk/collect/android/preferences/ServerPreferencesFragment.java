@@ -16,7 +16,6 @@
 
 package org.odk.collect.android.preferences;
 
-import android.Manifest;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +24,7 @@ import android.net.Uri;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,14 +34,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -50,20 +48,16 @@ import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.utilities.WebUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import pub.devrel.easypermissions.EasyPermissions;
-
-import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.utilities.gdrive.GoogleAccountsManager.REQUEST_ACCOUNT_PICKER;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.PreferenceKeys.KEY_SUBMISSION_URL;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_ACCOUNT_PICKER;
-import static org.odk.collect.android.tasks.InstanceGoogleSheetsUploader.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 
-public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener, Preference.OnPreferenceChangeListener {
+public class ServerPreferencesFragment extends BasePreferenceFragment implements View.OnTouchListener,
+        Preference.OnPreferenceChangeListener, GoogleAccountsManager.GoogleAccountSelectionListener {
     private static final String KNOWN_URL_LIST = "knownUrlList";
     protected EditTextPreference serverUrlPreference;
     protected EditTextPreference usernamePreference;
@@ -74,7 +68,7 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     private ListPopupWindow listPopupWindow;
     private List<String> urlList;
     private Preference selectedGoogleAccountPreference;
-    private GoogleAccountCredential credential;
+    private GoogleAccountsManager accountsManager;
 
 
     public void addAggregatePreferences() {
@@ -159,28 +153,26 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
     }
 
     public void initAccountPreferences() {
-        credential =  GoogleAccountCredential.usingOAuth2(getActivity(), Collections.singletonList(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff());
+        accountsManager = new GoogleAccountsManager(this);
+        accountsManager.setListener(this);
+        accountsManager.disableAutoChooseAccount();
 
+        selectedGoogleAccountPreference.setSummary(accountsManager.getSelectedAccount());
         selectedGoogleAccountPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.GET_ACCOUNTS)) {
-                    Intent intentChooseAccount = credential.newChooseAccountIntent();
-                    intentChooseAccount.putExtra("overrideTheme", 1);
-                    intentChooseAccount.putExtra("overrideCustomTheme", 0);
-                    startActivityForResult(intentChooseAccount,REQUEST_ACCOUNT_PICKER);
-                } else {
-                    EasyPermissions.requestPermissions(this,
-                            getString(R.string.request_permissions_google_account),
-                            REQUEST_PERMISSION_GET_ACCOUNTS,
-                            Manifest.permission.GET_ACCOUNTS);
-                }
+                accountsManager.chooseAccount();
                 return true;
             }
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        accountsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     private void addUrlToPreferencesList(String url, SharedPreferences prefs) {
         urlList.add(0, url);
@@ -354,21 +346,14 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(PreferenceKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
-                        editor.apply();
-                        selectedGoogleAccountPreference.setSummary(accountName);
-                        credential.setSelectedAccountName(accountName);
-                    }
+                    accountsManager.setSelectedAccountName(accountName);
                 }
                 break;
         }
-        if (resultCode == RESULT_CANCELED) {
-            ToastUtils.showShortToast("Account selection cancelled");
-        }
-
     }
 
+    @Override
+    public void onGoogleAccountSelected(String accountName) {
+        selectedGoogleAccountPreference.setSummary(accountName);
+    }
 }
