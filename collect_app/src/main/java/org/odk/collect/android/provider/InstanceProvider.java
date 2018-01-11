@@ -163,25 +163,30 @@ public class InstanceProvider extends ContentProvider {
     }
 
     private String getDisplaySubtext(String state, Date date) {
-        if (state == null) {
-            return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-            return new SimpleDateFormat(
-                    getContext().getString(R.string.sending_failed_on_date_at_time),
-                    Locale.getDefault()).format(date);
-        } else {
-            return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
-                    Locale.getDefault()).format(date);
+        try {
+            if (state == null) {
+                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            } else if (InstanceProviderAPI.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
+                return new SimpleDateFormat(getContext().getString(R.string.saved_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            } else if (InstanceProviderAPI.STATUS_COMPLETE.equalsIgnoreCase(state)) {
+                return new SimpleDateFormat(getContext().getString(R.string.finalized_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            } else if (InstanceProviderAPI.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
+                return new SimpleDateFormat(getContext().getString(R.string.sent_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            } else if (InstanceProviderAPI.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
+                return new SimpleDateFormat(
+                        getContext().getString(R.string.sending_failed_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            } else {
+                return new SimpleDateFormat(getContext().getString(R.string.added_on_date_at_time),
+                        Locale.getDefault()).format(date);
+            }
+        } catch (IllegalArgumentException e) {
+            Timber.e(e);
+            return "";
         }
     }
 
